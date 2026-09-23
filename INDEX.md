@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-271 files; 34 quoted by a lesson, 56 shown or named by one.
+271 files; 36 quoted by a lesson, 58 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -17,7 +17,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `INDEX.md` | doc | - | - |
 | `INDEXING.md` | doc | - | - |
 | `INFRASTRUCTURE.md` | doc | - | - |
-| `Makefile` | code | 3.3 | 3.2, 4.2 |
+| `Makefile` | code | 3.3 | 3.2, 4.2, 5.2 |
 | `README.md` | doc | - | - |
 | `UNOWNED.md` | doc | - | - |
 | `cloudbuild.yaml` | config | - | - |
@@ -25,8 +25,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
 | `commands/git-source.sh` | code | - | - |
 | `commands/infrastructure.py` | code | - | - |
-| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
-| `commands/lane.py` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
+| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `commands/lane.py` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
 | `commands/lesson-12.1.sh` | code | - | - |
 | `commands/lesson-12.2.sh` | code | - | - |
 | `commands/lesson-12.3.sh` | code | - | - |
@@ -35,9 +35,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/lesson-12.8.sh` | code | - | - |
 | `commands/lesson-7.2.sh` | code | - | - |
 | `commands/lesson-8.4.sh` | code | - | - |
-| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1 |
-| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1 |
-| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
+| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1, 5.2 |
+| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
 | `commands/tests/terraform_reapply.tftest.hcl` | code | - | - |
 | `commands/tests/test_check_firestore_fallback.py` | code | - | - |
 | `commands/tests/test_document_embeddings.py` | code | - | 3.3 |
@@ -53,9 +53,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_verify_vector_index.py` | code | - | - |
 | `commands/vector-status.sh` | code | 3.4 | - |
 | `commands/verify-vector-index.py` | code | - | 3.4 |
-| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
+| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
 | `evals/README.md` | doc | - | - |
-| `evals/ablate.py` | code | - | - |
+| `evals/ablate.py` | code | 5.2 | - |
 | `evals/build_corpus.py` | code | - | - |
 | `evals/build_golden.py` | code | - | - |
 | `evals/build_media.py` | code | - | - |
@@ -137,8 +137,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `gke/README.md` | doc | - | - |
 | `gke/vllm-deployment.yaml` | config | - | - |
 | `mk/README.md` | doc | - | - |
-| `mk/ingestion.mk` | code | 3.3, 4.1 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1 |
-| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1 |
+| `mk/ingestion.mk` | code | 3.3, 4.1 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1, 5.2 |
 | `operators/remirror_missing.py` | code | - | - |
 | `operators/tests/test_remirror_missing.py` | code | - | - |
 | `run-service.yaml` | config | - | 5.1 |
@@ -184,12 +184,12 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/ingest/contracts.py` | code | 3.1, 4.1, 4.3 | 4.2 |
 | `services/ingest/graph.py` | code | - | - |
 | `services/ingest/idempotency.py` | code | 3.1, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4 | - |
-| `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2 | - |
+| `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2, 5.2 | - |
 | `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3 | - |
 | `services/ingest/managed.py` | code | - | - |
 | `services/ingest/parser.py` | code | 3.2 | - |
 | `services/ingest/reconcile.py` | code | 4.3, 4.4 | 3.3 |
-| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
+| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
 | `services/litellm/Dockerfile` | code | - | - |
 | `services/litellm/config.yaml` | config | - | - |
 | `services/litellm/dlp_audit.py` | code | - | - |
@@ -200,7 +200,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/litellm/requirements.txt` | config | - | - |
 | `services/litellm/token_proxy.py` | code | - | - |
 | `services/mcp/Dockerfile` | code | - | - |
-| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
+| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
 | `services/mcp/server.py` | code | - | - |
 | `services/rag-api/Dockerfile` | code | - | - |
 | `services/rag-api/auth.py` | code | 5.1 | - |
@@ -208,16 +208,16 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/rag-api/budget.py` | code | - | - |
 | `services/rag-api/cache_admin.py` | code | - | - |
 | `services/rag-api/cache_manager.py` | code | - | - |
-| `services/rag-api/config.py` | code | 3.3, 5.1 | - |
+| `services/rag-api/config.py` | code | 3.3, 5.1, 5.2 | - |
 | `services/rag-api/context_budget.py` | code | - | - |
 | `services/rag-api/cost.py` | code | - | - |
 | `services/rag-api/generator.py` | code | - | - |
 | `services/rag-api/guard.py` | code | - | - |
-| `services/rag-api/hybrid.py` | code | 3.3, 5.1 | - |
-| `services/rag-api/main.py` | code | 5.1 | - |
+| `services/rag-api/hybrid.py` | code | 3.3, 5.1, 5.2 | - |
+| `services/rag-api/main.py` | code | 5.1, 5.2 | - |
 | `services/rag-api/media.py` | code | - | - |
-| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
-| `services/rag-api/retriever.py` | code | 3.3, 3.4, 4.3, 5.1 | - |
+| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `services/rag-api/retriever.py` | code | 3.3, 3.4, 4.3, 5.1, 5.2 | - |
 | `services/rag-api/router.py` | code | - | - |
 | `services/rag-api/schemas.py` | code | 5.1 | - |
 | `services/rag-api/semantic_cache.py` | code | - | - |
@@ -237,8 +237,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/local_corpus.py` | code | - | - |
 | `shared/pii.py` | code | - | - |
 | `shared/profile.py` | code | - | - |
-| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1 |
-| `shared/sparse_encoder.py` | code | 3.3 | - |
+| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `shared/sparse_encoder.py` | code | 3.3 | 5.2 |
 | `shared/tenancy.py` | code | 3.1, 5.1 | - |
 | `smoke/preflight.sh` | code | - | - |
 | `smoke/smoke.py` | code | - | - |
@@ -275,7 +275,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/sink.tf` | code | - | - |
 | `terraform/spanner.tf` | code | - | - |
 | `terraform/sql/chunk_metadata.sql` | code | - | - |
-| `terraform/sql/tenant_daily.sql` | code | - | - |
+| `terraform/sql/tenant_daily.sql` | code | 5.2 | - |
 | `terraform/storage.tf` | code | - | - |
 | `terraform/variables.tf` | code | 3.3 | - |
 | `terraform/vector.tf` | code | 3.3 | - |
