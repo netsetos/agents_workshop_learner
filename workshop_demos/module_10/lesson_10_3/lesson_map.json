@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "10.3",
   "title": "Diagnose tool arguments, access failures and timeouts",
   "source_kind": "main_html",
@@ -122,142 +122,209 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 359,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "10.3",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2, s3",
+      "windows": [
+        3,
+        10
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source_lines": [
+        359,
+        431
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_venv.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 359,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Five failures through the kit's LangChain brain",
+          "subheading": "Do it: the venv",
+          "purpose": "Do it: the venv",
+          "label": "bash — run in the operator shell, in the kit (the venv from lesson 10.2, made if it is missing)",
+          "expected": "graph-venv ok: langchain 1.4.0",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_02_the_venv",
+          "window": 10,
+          "source_line": 431,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_tool_failure_cases.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 365,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_tool_failure_cases",
       "lesson": "10.3",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_tool_failure_cases.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 tool failure cases",
+      "purpose": "Exercise the five argument/refusal/budget/timeout failures in the actual harness.",
+      "anchor": "s3",
+      "windows": [
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source_lines": [
+        438
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Five failures through the kit's LangChain brain",
+          "subheading": "Do it: five failures",
+          "purpose": "Do it: five failures",
+          "label": "bash — run in the operator shell, in the kit (five failures through the kit's LangChain brain; no model, no network beyond your machine)",
+          "expected": "blocked     0.0 s  refusals ['delete_document']\n              result [error] {\"error\": \"delete_document requires manual approval\"}\n  bad args    0.0 s  refusals ['calculate_processing_cost']\n              result [error] Error invoking tool 'calculate_processing_cost' with kwargs {'total_page\n  no such     0.0 s  refusals ['summon_rain']\n              result [error] Error: summon_rain is not a valid tool, try one of [retrieve, calculate_\n  timed out   0.5 s  refusals []\n              result [success] {\"error\": \"document search is unavailable\", \"citations\": [], \"answerable\n  over budget 0.0 s  refusals []\n              result [success] {\"num_documents\": 1, \"total_pages\": 283, \"processing_type\": \"priority\", \n  the log lines, from the guard, the adapter and the one retrieve():\n    WARNING refused delete_document (blocked list)\n    INFO    calculate_processing_cost took 0.00s (budget 10s)\n    INFO    summon_rain took 0.00s (budget 30s)\n    WARNING retrieve failed: HTTPConnectionPool(host='127.0.0.1', port=PORT): Read timed out. (\n    INFO    retrieve took 0.51s\n    INFO    retrieve took 0.51s\n    WARNING rag-api query failed: document retrieval is unavailable\n    INFO    retrieve took 0.51s (budget 30s)\n    WARNING calculate_processing_cost took 0.00s (budget 0s)",
+          "adaptations": [],
+          "id": "source_12",
+          "function": "step_01_five_failures",
+          "window": 12,
+          "source_line": 438,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_chat_access_failures.py"
+    },
+    {
+      "id": "demo_02_chat_access_failures",
+      "lesson": "10.3",
+      "file": "demo_02_chat_access_failures.py",
+      "category": "required",
+      "requires": [
+        "demo_01_tool_failure_cases"
+      ],
+      "heading": "demo 02 chat access failures",
+      "purpose": "Test access failures at the chat service's admission and identity gates.",
+      "anchor": "s4",
+      "windows": [
+        15
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source_lines": [
+        524
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Access failures at the chat service's door",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (three identities at the chat service's door)",
+          "expected": "403  {\"detail\":\"not a member of any tenant\"}\n  401  {\"detail\":\"the bearer token carries no verified email\"}\n  200  {\"answer\":\"Gratuity becomes payable after not less than five years of continuous service [1].\",\"tool",
+          "adaptations": [],
+          "id": "source_15",
+          "function": "step_01_example",
+          "window": 15,
+          "source_line": 524,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_unanswerable_arguments.py"
+    },
+    {
+      "id": "demo_03_unanswerable_arguments",
+      "lesson": "10.3",
+      "file": "demo_03_unanswerable_arguments.py",
+      "category": "required",
+      "requires": [
+        "demo_02_chat_access_failures"
+      ],
+      "heading": "demo 03 unanswerable arguments",
+      "purpose": "Send an argument the corpus cannot satisfy and inspect its returned failure.",
+      "anchor": "s5",
+      "windows": [
+        17
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source_lines": [
+        551
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "An argument the corpus cannot honour",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (one question with and without a doc_type filter, then rag-api's rows)",
+          "expected": "doc_type None     5 citations | answerable True | The total payable on invoice INV-2026-0412 is Rs 1,84,500 \n  doc_type invoice  0 citations | answerable False | The corpus holds nothing near this question: no passage of\n  pool 20  answerable True   backend vertex  Rs 0.2831\n  pool  0  answerable False  backend none    Rs 0.0000",
+          "adaptations": [],
+          "id": "source_17",
+          "function": "step_01_example",
+          "window": 17,
+          "source_line": 551,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "10.3",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s2",
+      "windows": [
+        5
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source_lines": [
+        365
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_venv.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 10,
-      "label": "bash — run in the operator shell, in the kit (the venv from lesson 10.2, made if it is missing)",
-      "heading": "Five failures through the kit's LangChain brain",
-      "subheading": "Do it: the venv",
-      "anchor": "s3",
-      "purpose": "Do it: the venv",
-      "expected": "graph-venv ok: langchain 1.4.0",
-      "line": 431,
-      "id": "demo_03_01_do_it_the_venv",
-      "lesson": "10.3",
-      "file": "demo_03_01_do_it_the_venv.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": false,
-      "next": "demo_03_02_do_it_five_failures.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 12,
-      "label": "bash — run in the operator shell, in the kit (five failures through the kit's LangChain brain; no model, no network beyond your machine)",
-      "heading": "Five failures through the kit's LangChain brain",
-      "subheading": "Do it: five failures",
-      "anchor": "s3",
-      "purpose": "Do it: five failures",
-      "expected": "blocked     0.0 s  refusals ['delete_document']\n              result [error] {\"error\": \"delete_document requires manual approval\"}\n  bad args    0.0 s  refusals ['calculate_processing_cost']\n              result [error] Error invoking tool 'calculate_processing_cost' with kwargs {'total_page\n  no such     0.0 s  refusals ['summon_rain']\n              result [error] Error: summon_rain is not a valid tool, try one of [retrieve, calculate_\n  timed out   0.5 s  refusals []\n              result [success] {\"error\": \"document search is unavailable\", \"citations\": [], \"answerable\n  over budget 0.0 s  refusals []\n              result [success] {\"num_documents\": 1, \"total_pages\": 283, \"processing_type\": \"priority\", \n  the log lines, from the guard, the adapter and the one retrieve():\n    WARNING refused delete_document (blocked list)\n    INFO    calculate_processing_cost took 0.00s (budget 10s)\n    INFO    summon_rain took 0.00s (budget 30s)\n    WARNING retrieve failed: HTTPConnectionPool(host='127.0.0.1', port=PORT): Read timed out. (\n    INFO    retrieve took 0.51s\n    INFO    retrieve took 0.51s\n    WARNING rag-api query failed: document retrieval is unavailable\n    INFO    retrieve took 0.51s (budget 30s)\n    WARNING calculate_processing_cost took 0.00s (budget 0s)",
-      "line": 438,
-      "id": "demo_03_02_do_it_five_failures",
-      "lesson": "10.3",
-      "file": "demo_03_02_do_it_five_failures.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_venv"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 365,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": true,
-      "next": "demo_04_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 15,
-      "label": "bash — run in the operator shell, in the kit (three identities at the chat service's door)",
-      "heading": "Access failures at the chat service's door",
-      "subheading": "Do it",
-      "anchor": "s4",
-      "purpose": "Do it",
-      "expected": "403  {\"detail\":\"not a member of any tenant\"}\n  401  {\"detail\":\"the bearer token carries no verified email\"}\n  200  {\"answer\":\"Gratuity becomes payable after not less than five years of continuous service [1].\",\"tool",
-      "line": 524,
-      "id": "demo_04_01_do_it",
-      "lesson": "10.3",
-      "file": "demo_04_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_03_02_do_it_five_failures"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 17,
-      "label": "bash — run in the operator shell, in the kit (one question with and without a doc_type filter, then rag-api's rows)",
-      "heading": "An argument the corpus cannot honour",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": "doc_type None     5 citations | answerable True | The total payable on invoice INV-2026-0412 is Rs 1,84,500 \n  doc_type invoice  0 citations | answerable False | The corpus holds nothing near this question: no passage of\n  pool 20  answerable True   backend vertex  Rs 0.2831\n  pool  0  answerable False  backend none    Rs 0.0000",
-      "line": 551,
-      "id": "demo_05_01_do_it",
-      "lesson": "10.3",
-      "file": "demo_05_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -339,5 +406,8 @@
       "line": 570
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The deployed chat lane; the framework failure harness runs in its own lesson venv."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "4.2",
   "title": "Reindex a changed section and measure embedding reuse",
   "source_kind": "main_html",
@@ -155,188 +155,241 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 366,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "4.2",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2",
+      "windows": [
+        3
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source_lines": [
+        366
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_offline_gate_scoped_to_the_handbook_rs.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 366,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_gate_and_reuse_plan.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 372,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_gate_and_reuse_plan",
       "lesson": "4.2",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_gate_and_reuse_plan.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 gate and reuse plan",
+      "purpose": "Run the handbook's offline gate and compare six edits through the worker's planner.",
+      "anchor": "s3, s4",
+      "windows": [
+        9,
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source_lines": [
+        453,
+        513
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The gate: the golden set, scoped to one document",
+          "subheading": "Do it: the offline gate, scoped to the handbook, Rs 0",
+          "purpose": "Do it: the offline gate, scoped to the handbook, Rs 0",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (no credentials, no cost)",
+          "expected": "== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [PASS] falsifiable\n  [PASS] anchors\n  [PASS] coverage\n\n  The golden set is sound. It can go red, and it still contains the rows that would.\n\n  rows citing hr_policy_2026.md: 10 - the scoped live gate judges these\n    lk-01  lookup    What is the per-trip cap on domestic travel reimbursement?\n    lk-02  lookup    By when is Form 16 issued?\n    lk-03  lookup    How many days of earned leave can I carry forward?\n    lk-04  lookup    What notice period applies during probation?\n    lk-05  lookup    Are USB drives allowed on a company laptop?\n    lk-06  lookup    What is the notice period for a confirmed E3?\n    lk-07  lookup    At what rate does earned leave accrue?\n    lk-08  lookup    Who approves a purchase of Rs 3,00,000?\n    lk-09  lookup    How many days a month can I work remotely?\n    vr-01  version   What is the notice period for a confirmed E3?",
+          "adaptations": [],
+          "id": "source_9",
+          "function": "step_01_the_offline_gate_scoped_to_the_handbook_rs",
+          "window": 9,
+          "source_line": 453,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Measure reuse: six kinds of edit, Rs 0",
+          "subheading": "Do it: the six edits through the worker's planner",
+          "purpose": "Do it: the six edits through the worker's planner",
+          "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+          "expected": "a figure in NP-03 (60 to 90)         chunks 283 -> 283  reused 282  embedded  1    234 chars  ['NP-03']\na figure in PB-02 (15 to 20)         chunks 283 -> 283  reused 282  embedded  1    212 chars  ['PB-02']\nNP-03 re-wrapped (whitespace only)   chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nNP-03's heading renamed              chunks 283 -> 283  reused 282  embedded  1    250 chars  ['NP-03']\na clause inserted before PB-02       chunks 283 -> 284  reused 283  embedded  1     84 chars  ['NP-04']\nNP-03 and PB-02 swapped              chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nwages: a sentence added on page 2    chunks  65 ->  65  reused  63  embedded  2   3261 chars  ['p2-0', 'p2-1']",
+          "adaptations": [],
+          "id": "source_13",
+          "function": "step_02_the_six_edits_through_the_worker_s_planner",
+          "window": 13,
+          "source_line": 513,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_reissue_and_measure.py"
+    },
+    {
+      "id": "demo_02_reissue_and_measure",
+      "lesson": "4.2",
+      "file": "demo_02_reissue_and_measure.py",
+      "category": "required",
+      "requires": [
+        "demo_01_gate_and_reuse_plan"
+      ],
+      "heading": "demo 02 reissue and measure",
+      "purpose": "Upload revision 3 and inspect its ledger, claims and reused vectors.",
+      "anchor": "s5, s6",
+      "windows": [
+        15,
+        17
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source_lines": [
+        558,
+        590
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Do it: revision 3 of the handbook, on the lane",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (writes the revision to your home directory, then one re-issue)",
+          "expected": "/home/you/hr_policy_2026_rev3.md | version key acme_54337b4ba3f0...\n>> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tacme_54337b4ba3f0109a...\t283\t281\t2\t283\t2026-11-01\n>> retired (doc_keys, chunks, expire days): [u'acme_497809ffbaa603c4...']\t283\t30\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
+          "adaptations": [],
+          "id": "source_15",
+          "function": "step_01_example",
+          "window": 15,
+          "source_line": 558,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Inspect: the ledger row, the claims, the vectors",
+          "subheading": "Read the three",
+          "purpose": "Read the three",
+          "label": "bash — run in the operator shell (the ledger row from the API, then the claims and the vectors from Firestore)",
+          "expected": "acme/hr_policy_2026.md chunks 283 reused 281 embedded 2 retired 283 effective 2026-11-01 text-embedding-005@1\n3 claims (versions) for hr_policy_2026.md, oldest first\n  acme_497809ff...  superseded chunks 283  reused 0  embedded 283  superseded_by acme_54337b4b...  reactivated once\n  acme_55603088...  superseded chunks 283  reused 281  embedded 2  superseded_by acme_497809ff...\n  acme_54337b4b...  indexed    chunks 283  reused 281  embedded 2\nrows: 849 | current: 283 | retired: 566\n  LV-01  current hash ff463cede286  version 1's hash ff463cede286  same vector: True\n  NP-03  current hash 876232171dec  version 1's hash f4512754ae41  same vector: False",
+          "adaptations": [],
+          "id": "source_17",
+          "function": "step_02_read_the_three",
+          "window": 17,
+          "source_line": 590,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_failing_gate_and_undo.py"
+    },
+    {
+      "id": "demo_03_failing_gate_and_undo",
+      "lesson": "4.2",
+      "file": "demo_03_failing_gate_and_undo.py",
+      "category": "required",
+      "requires": [
+        "demo_02_reissue_and_measure"
+      ],
+      "heading": "demo 03 failing gate and undo",
+      "purpose": "Observe the expected live-gate failure, undo the revision and prove recovery.",
+      "anchor": "s7",
+      "windows": [
+        21,
+        23
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source_lines": [
+        658,
+        690
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The gate goes red, and the two ways back to green",
+          "subheading": "Do it: the live gate, red",
+          "purpose": "Ten questions to the API, each a generation call: a few rupees at most. The target mints two identity tokens, the UI's account as the member and the outsider's for the isolation rows, which is why it takes a moment to start.",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (ten questions; a few rupees)",
+          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  scoped to hr_policy_2026.md: 10 row(s) cite it\n  10 rows (10 answerable, 0 not) against https://documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)\n  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)\n  [FAIL] must_contain_rate      80.0%  (threshold 85%; 10 rows)\n  [PASS] correct_rate           80.0%  (threshold 68%; 10 rows)\n  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)\n  ...\n\n  shape        rows   ok   pass\n  lookup          9    9      8\n  version         1    1      0\n  latency ms  p50  2410  p95  3980   (round trip, 10 rows)\n\n  rows that cost a point (2):\n    lk-06  lookup    acme    missing '60' | What is the notice period for a confirmed E3?\n    vr-01  version   acme    missing '60' | What is the notice period for a confirmed E3?\n\n  required rows that did not pass (1) - each one blocks on its own:\n    vr-01: missing '60'\n\n  Blocked: must_contain_rate: 80% < 85%; required: 1 mandatory row(s) did not pass",
+          "adaptations": [
+            "Require a fresh report with evaluated answers that fail assertions; preserve the expected nonzero exit without treating authentication or command failure as the lesson's proof."
+          ],
+          "id": "source_21",
+          "function": "step_01_the_live_gate_red",
+          "window": 21,
+          "source_line": 658,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The gate goes red, and the two ways back to green",
+          "subheading": "The undo, then the gate, green",
+          "purpose": "Version 1's bytes again, through the same release command. The offline gate passes, the upload lands, and the worker finds a version it has retired within the window: ingest_reactivated, nothing embedded, revision 3 retired in turn. The live gate then passes with the rows as they are.",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (the undo, then ten questions again)",
+          "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>\n...\n  [PASS] must_contain_rate     100.0%  (threshold 85%; 10 rows)\n  ...\n  shape        rows   ok   pass\n  lookup          9    9      9\n  version         1    1      1\n  All thresholds met.",
+          "adaptations": [],
+          "id": "source_23",
+          "function": "step_02_the_undo_then_the_gate_green",
+          "window": 23,
+          "source_line": 690,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "4.2",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s2",
+      "windows": [
+        5
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source_lines": [
+        372
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_offline_gate_scoped_to_the_handbook_rs.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 9,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (no credentials, no cost)",
-      "heading": "The gate: the golden set, scoped to one document",
-      "subheading": "Do it: the offline gate, scoped to the handbook, Rs 0",
-      "anchor": "s3",
-      "purpose": "Do it: the offline gate, scoped to the handbook, Rs 0",
-      "expected": "== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [PASS] falsifiable\n  [PASS] anchors\n  [PASS] coverage\n\n  The golden set is sound. It can go red, and it still contains the rows that would.\n\n  rows citing hr_policy_2026.md: 10 - the scoped live gate judges these\n    lk-01  lookup    What is the per-trip cap on domestic travel reimbursement?\n    lk-02  lookup    By when is Form 16 issued?\n    lk-03  lookup    How many days of earned leave can I carry forward?\n    lk-04  lookup    What notice period applies during probation?\n    lk-05  lookup    Are USB drives allowed on a company laptop?\n    lk-06  lookup    What is the notice period for a confirmed E3?\n    lk-07  lookup    At what rate does earned leave accrue?\n    lk-08  lookup    Who approves a purchase of Rs 3,00,000?\n    lk-09  lookup    How many days a month can I work remotely?\n    vr-01  version   What is the notice period for a confirmed E3?",
-      "line": 453,
-      "id": "demo_03_01_do_it_the_offline_gate_scoped_to_the_handbook_rs",
-      "lesson": "4.2",
-      "file": "demo_03_01_do_it_the_offline_gate_scoped_to_the_handbook_rs.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": true,
-      "next": "demo_04_01_do_it_the_six_edits_through_the_worker_s_planner.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 13,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Measure reuse: six kinds of edit, Rs 0",
-      "subheading": "Do it: the six edits through the worker's planner",
-      "anchor": "s4",
-      "purpose": "Do it: the six edits through the worker's planner",
-      "expected": "a figure in NP-03 (60 to 90)         chunks 283 -> 283  reused 282  embedded  1    234 chars  ['NP-03']\na figure in PB-02 (15 to 20)         chunks 283 -> 283  reused 282  embedded  1    212 chars  ['PB-02']\nNP-03 re-wrapped (whitespace only)   chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nNP-03's heading renamed              chunks 283 -> 283  reused 282  embedded  1    250 chars  ['NP-03']\na clause inserted before PB-02       chunks 283 -> 284  reused 283  embedded  1     84 chars  ['NP-04']\nNP-03 and PB-02 swapped              chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nwages: a sentence added on page 2    chunks  65 ->  65  reused  63  embedded  2   3261 chars  ['p2-0', 'p2-1']",
-      "line": 513,
-      "id": "demo_04_01_do_it_the_six_edits_through_the_worker_s_planner",
-      "lesson": "4.2",
-      "file": "demo_04_01_do_it_the_six_edits_through_the_worker_s_planner.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_offline_gate_scoped_to_the_handbook_rs"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 372,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 15,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (writes the revision to your home directory, then one re-issue)",
-      "heading": "Do it: revision 3 of the handbook, on the lane",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": "/home/you/hr_policy_2026_rev3.md | version key acme_54337b4ba3f0...\n>> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tacme_54337b4ba3f0109a...\t283\t281\t2\t283\t2026-11-01\n>> retired (doc_keys, chunks, expire days): [u'acme_497809ffbaa603c4...']\t283\t30\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
-      "line": 558,
-      "id": "demo_05_01_do_it",
-      "lesson": "4.2",
-      "file": "demo_05_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it_the_six_edits_through_the_worker_s_planner"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_read_the_three.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 17,
-      "label": "bash — run in the operator shell (the ledger row from the API, then the claims and the vectors from Firestore)",
-      "heading": "Inspect: the ledger row, the claims, the vectors",
-      "subheading": "Read the three",
-      "anchor": "s6",
-      "purpose": "Read the three",
-      "expected": "acme/hr_policy_2026.md chunks 283 reused 281 embedded 2 retired 283 effective 2026-11-01 text-embedding-005@1\n3 claims (versions) for hr_policy_2026.md, oldest first\n  acme_497809ff...  superseded chunks 283  reused 0  embedded 283  superseded_by acme_54337b4b...  reactivated once\n  acme_55603088...  superseded chunks 283  reused 281  embedded 2  superseded_by acme_497809ff...\n  acme_54337b4b...  indexed    chunks 283  reused 281  embedded 2\nrows: 849 | current: 283 | retired: 566\n  LV-01  current hash ff463cede286  version 1's hash ff463cede286  same vector: True\n  NP-03  current hash 876232171dec  version 1's hash f4512754ae41  same vector: False",
-      "line": 590,
-      "id": "demo_06_01_read_the_three",
-      "lesson": "4.2",
-      "file": "demo_06_01_read_the_three.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_01_do_it_the_live_gate_red.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 21,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (ten questions; a few rupees)",
-      "heading": "The gate goes red, and the two ways back to green",
-      "subheading": "Do it: the live gate, red",
-      "anchor": "s7",
-      "purpose": "Ten questions to the API, each a generation call: a few rupees at most. The target mints two identity tokens, the UI's account as the member and the outsider's for the isolation rows, which is why it takes a moment to start.",
-      "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  scoped to hr_policy_2026.md: 10 row(s) cite it\n  10 rows (10 answerable, 0 not) against https://documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)\n  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)\n  [FAIL] must_contain_rate      80.0%  (threshold 85%; 10 rows)\n  [PASS] correct_rate           80.0%  (threshold 68%; 10 rows)\n  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)\n  ...\n\n  shape        rows   ok   pass\n  lookup          9    9      8\n  version         1    1      0\n  latency ms  p50  2410  p95  3980   (round trip, 10 rows)\n\n  rows that cost a point (2):\n    lk-06  lookup    acme    missing '60' | What is the notice period for a confirmed E3?\n    vr-01  version   acme    missing '60' | What is the notice period for a confirmed E3?\n\n  required rows that did not pass (1) - each one blocks on its own:\n    vr-01: missing '60'\n\n  Blocked: must_contain_rate: 80% < 85%; required: 1 mandatory row(s) did not pass",
-      "line": 658,
-      "id": "demo_07_01_do_it_the_live_gate_red",
-      "lesson": "4.2",
-      "file": "demo_07_01_do_it_the_live_gate_red.py",
-      "category": "required",
-      "requires": [
-        "demo_06_01_read_the_three"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_02_the_undo_then_the_gate_green.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 23,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (the undo, then ten questions again)",
-      "heading": "The gate goes red, and the two ways back to green",
-      "subheading": "The undo, then the gate, green",
-      "anchor": "s7",
-      "purpose": "Version 1's bytes again, through the same release command. The offline gate passes, the upload lands, and the worker finds a version it has retired within the window: ingest_reactivated, nothing embedded, revision 3 retired in turn. The live gate then passes with the rows as they are.",
-      "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>\n...\n  [PASS] must_contain_rate     100.0%  (threshold 85%; 10 rows)\n  ...\n  shape        rows   ok   pass\n  lookup          9    9      9\n  version         1    1      1\n  All thresholds met.",
-      "line": 690,
-      "id": "demo_07_02_the_undo_then_the_gate_green",
-      "lesson": "4.2",
-      "file": "demo_07_02_the_undo_then_the_gate_green.py",
-      "category": "required",
-      "requires": [
-        "demo_07_01_do_it_the_live_gate_red"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -460,5 +513,8 @@
       "line": 740
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The original handbook and unchanged golden set; the live gate deliberately fails for revision 3."
 }

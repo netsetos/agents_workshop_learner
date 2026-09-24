@@ -1,88 +1,69 @@
 # Lesson 9.2: Test cache scope, configuration changes and freshness
 
-**Summary:** the miss after `make reindex`; a hit again after `make cache`. The files below follow the main HTML's runnable checkpoints and preserve its examples.
+## What to run
 
-Source: [main lesson HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html); Git blob `11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7`. Native Python cells can be stepped through in the IDE. Command workflows use the shared Bash/Make/gcloud helper because these are the kit's actual operations.
+Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-## Before running
-
-Use `/home/user/rag-shell-venv/bin/python`, run `workshop_demos/setup/bootstrap.py`, and check `workshop_demos/setup/config/settings.local.json`. Open the learner kit root in your IDE. Each file can be Run independently; the session helper sets the working directory and carries this lesson's variables forward.
-
-Run the required files in the table order. A failed step does not satisfy the next file's prerequisite. Read its saved output before continuing. Optional and recovery files are explicit choices; finish files are run at the end even though some HTML pages show their commands in the setup section. Do not use Run All.
-
-**Execution is not live verification:** these examples have source/compile checks, not a recorded run against your GCP project. Numerical sample output is illustrative; use the checks and explanations below. Commands can change cloud resources as described by their HTML instruction.
-
-## Required run order
-
-| HTML | File | Instruction / purpose |
+| Order | File | What it demonstrates |
 |---|---|---|
-| s2 · window 3 | [demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) | bash — run in the operator shell now, before the lesson's first step |
-| s3 · window 8 | [demo_03_01_do_it_the_two_caches.py](demo_03_01_do_it_the_two_caches.py) | bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on) |
-| s3 · window 10 | [demo_03_02_do_it_the_state_and_three_asks.py](demo_03_02_do_it_the_state_and_three_asks.py) | bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks) |
-| s4 · window 13 | [demo_04_01_do_it.py](demo_04_01_do_it.py) | bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes) |
-| s5 · window 17 | [demo_05_01_do_it_the_release.py](demo_05_01_do_it_the_release.py) | bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release) |
-| s5 · window 19 | [demo_05_02_do_it_the_state_both_asks_and_the_log.py](demo_05_02_do_it_the_state_both_asks_and_the_log.py) | bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines) |
-| s6 · window 22 | [demo_06_01_do_it.py](demo_06_01_do_it.py) | bash — run in the operator shell, in the kit (the pack again, under the new fingerprint) |
-| s7 · window 24 | [demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ.py](demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ.py) | bash — run in the operator shell, in the kit (version 1's bytes again: the undo) |
-| s7 · window 26 | [demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ.py](demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ.py) | bash — run in the operator shell, in the kit (the state, and the candidate's ask) |
-| s7 · window 28 | [demo_07_03_every_row_of_the_walk.py](demo_07_03_every_row_of_the_walk.py) | bash — run in the operator shell, in the kit (every acme usage row since the start; reads only) |
-| s7 · window 30 | [demo_07_04_clean_up.py](demo_07_04_clean_up.py) | bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted) |
+| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
+| 2 | [demo_01_cache_state_and_scope.py](demo_01_cache_state_and_scope.py) | Inspect both caches and vary request scope while keeping question words fixed. |
+| 3 | [demo_02_reissue_and_refresh.py](demo_02_reissue_and_refresh.py) | Release revision 2, observe both cache reactions and refresh the context cache. |
+| 4 | [demo_03_undo_and_compare_rows.py](demo_03_undo_and_compare_rows.py) | Restore revision 1 and explain how old answers relate to the restored fingerprint. |
 
-## Finish and restore settings
+## Before starting
 
-- [finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) — bash — run in the operator shell when you finish the lesson, not now
+Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-## Checkpoints and explanation
+The shared workshop setup and the deployed/local inputs described in the reading guide.
 
-### demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
+Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+## Resume and recovery
+
+Completed functions are saved and skipped when an unfinished demo is run again. A failed/interrupted function may have made partial changes: inspect its attempt under `workshop_demos/results/`, repair the cause, then set `RETRY_FAILED_STEP = True` in that demo to retry only unfinished functions. `REPEAT = True` deliberately replays the entire file. It is not a repair shortcut.
+
+Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
+
+After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+
+## Finish and restore
+
+- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+
+## Functions, observations and effects
+
+The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
+
+### setup/prepare.py
+
+Prepare this lesson's saved settings and dependencies before its live experiments.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
-Run instruction: bash — run in the operator shell now, before the lesson's first step.
+Operation: bash — run in the operator shell now, before the lesson's first step.
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
 
-IDE adaptations:
-
-- Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 acme: retrieval_backend=vector
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_01_cache_state_and_scope.py
 
-### finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
+Inspect both caches and vary request scope while keeping question words fixed.
 
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
-
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
-
-Run instruction: bash — run in the operator shell when you finish the lesson, not now.
-
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-IDE adaptations:
-
-- Run at lesson end despite its early HTML position, as the source label explicitly instructs.
-
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_03_01_do_it_the_two_caches.py
-
-**HTML: Both caches, and the corpus they follow / Do it: the two caches**
+**`step_01_the_two_caches(session)` — Both caches, and the corpus they follow / Do it: the two caches**
 
 Do it: the two caches
 
-Run instruction: bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on).
+Operation: bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \
@@ -99,19 +80,13 @@ gcloud run services update documind-api --region asia-south1 --project documind-
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_03_02_do_it_the_state_and_three_asks.py
-
-**HTML: Both caches, and the corpus they follow / Do it: the state, and three asks**
+**`step_02_the_state_and_three_asks(session)` — Both caches, and the corpus they follow / Do it: the state, and three asks**
 
 Do it: the state, and three asks
 
-Run instruction: bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks).
+Operation: bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed from 1ef46119bd89b143: current
@@ -120,19 +95,13 @@ ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed fro
   cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_04_01_do_it.py
-
-**HTML: Scope: the same words under other settings / Do it**
+**`step_03_example(session)` — Scope: the same words under other settings / Do it**
 
 Do it
 
-Run instruction: bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes).
+Operation: bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade E3 or above serves a
@@ -143,19 +112,17 @@ vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade
   scope prompt v4  1d409edacc15c1d1
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_02_reissue_and_refresh.py
 
-### demo_05_01_do_it_the_release.py
+Release revision 2, observe both cache reactions and refresh the context cache.
 
-**HTML: The corpus moves: revision 2, and both caches react / Do it: the release**
+**`step_01_the_release(session)` — The corpus moves: revision 2, and both caches react / Do it: the release**
 
 Do it: the release
 
-Run instruction: bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release).
+Operation: bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 >> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
@@ -164,19 +131,13 @@ Expected shape from the HTML (actual counts/timing can differ):
 >> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_05_02_do_it_the_state_both_asks_and_the_log.py
-
-**HTML: The corpus moves: revision 2, and both caches react / Do it: the state, both asks, and the log**
+**`step_02_the_state_both_asks_and_the_log(session)` — The corpus moves: revision 2, and both caches react / Do it: the state, both asks, and the log**
 
 Do it: the state, both asks, and the log
 
-Run instruction: bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines).
+Operation: bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1ef46119bd89b143: STALE
@@ -186,19 +147,13 @@ ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache p
   cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_06_01_do_it.py
-
-**HTML: make cache again: attached again, and what it packed / Do it**
+**`step_03_example(session)` — make cache again: attached again, and what it packed / Do it**
 
 Do it
 
-Run instruction: bash — run in the operator shell, in the kit (the pack again, under the new fingerprint).
+Operation: bash — run in the operator shell, in the kit (the pack again, under the new fingerprint).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \
@@ -211,19 +166,17 @@ cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=
   vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_03_undo_and_compare_rows.py
 
-### demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ.py
+Restore revision 1 and explain how old answers relate to the restored fingerprint.
 
-**HTML: The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
+**`step_01_the_corpus_comes_back_version_1_and_the_ol(session)` — The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
 
 Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.
 
-Run instruction: bash — run in the operator shell, in the kit (version 1's bytes again: the undo).
+Operation: bash — run in the operator shell, in the kit (version 1's bytes again: the undo).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 >> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
@@ -232,38 +185,26 @@ Expected shape from the HTML (actual counts/timing can differ):
 >> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ.py
-
-**HTML: The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
+**`step_02_the_corpus_comes_back_version_1_and_the_ol(session)` — The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
 
 Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.
 
-Run instruction: bash — run in the operator shell, in the kit (the state, and the candidate's ask).
+Operation: bash — run in the operator shell, in the kit (the state, and the candidate's ask).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 ledger 1ef46119bd89b143 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: STALE
   cache  semantic in      0 cached      0   165 ms | A confirmed employee at grade E3 or above serves a
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_07_03_every_row_of_the_walk.py
-
-**HTML: The corpus comes back: version 1, and the old answer with it / Every row of the walk**
+**`step_03_every_row_of_the_walk(session)` — The corpus comes back: version 1, and the old answer with it / Every row of the walk**
 
 Every row of the walk
 
-Run instruction: bash — run in the operator shell, in the kit (every acme usage row since the start; reads only).
+Operation: bash — run in the operator shell, in the kit (every acme usage row since the start; reads only).
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 00041-kqz  vertex  in  43109  cached  41259  Rs 1.0201   2480 ms
@@ -277,19 +218,17 @@ Expected shape from the HTML (actual counts/timing can differ):
   00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### setup/finish.py
 
-### demo_07_04_clean_up.py
+Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
 
-**HTML: The corpus comes back: version 1, and the old answer with it / Clean up**
+**`step_01_clean_up(session)` — The corpus comes back: version 1, and the old answer with it / Clean up**
 
 Clean up
 
-Run instruction: bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted).
+Operation: bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 Updating traffic...done.
@@ -302,16 +241,14 @@ cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=
   deleted acme's cache
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-## Source coverage
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-31 code windows mapped: 12 IDE demo files, 1 shared setup blocks, 18 read-only excerpts/output blocks. `lesson_map.json` records every window and source line. Reading-only headings and UI observations remain in the source lesson; they are not turned into fake runnable examples.
+Operation: bash — run in the operator shell when you finish the lesson, not now.
 
-## Helper functions
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
-- `DemoSession`: resumes this lesson, checks prerequisite files and records attempts.
-- `session.shell(code)`: invokes the existing CLI workflow, preserving named variables and shell functions between IDE runs.
-- `session.service_environment(service, keys)`: reads the actual serving configuration as JSON, without saving secrets.
-- `session.pin_vector()` / `restore_backend()`: save and restore the prior tenant setting when the lesson has the common vector setup.
-- `session.command(args)`: runs a CLI argument list and retains its actual output/exit status.
+## Source and coverage
+
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html). All 31 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7`.

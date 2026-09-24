@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "2.3",
   "title": "Check readiness, save progress and close the session",
   "source_kind": "course_plan_and_kit",
@@ -15,64 +15,109 @@
   ],
   "demos": [
     {
+      "id": "demo_01_check_readiness_and_smoke",
       "lesson": "2.3",
       "file": "demo_01_check_readiness_and_smoke.py",
-      "id": "demo_01_check_readiness_and_smoke",
-      "anchor": "plan-1",
-      "heading": "Check readiness and smoke",
-      "subheading": "Check readiness and smoke",
-      "purpose": "Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL.",
-      "label": "Course-plan experiment \u2014 live deployment",
       "category": "required",
       "requires": [],
-      "expected": "",
+      "heading": "demo 01 check readiness and smoke",
+      "purpose": "Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL.",
+      "anchor": "plan-1",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Check readiness and smoke",
+          "subheading": "Check readiness and smoke",
+          "purpose": "Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "",
+          "id": "source_demo_01_check_readiness_and_smoke",
+          "function": "step_01_check_readiness_and_smoke",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_record_restart_inputs.py"
     },
     {
+      "id": "demo_02_record_restart_inputs",
       "lesson": "2.3",
       "file": "demo_02_record_restart_inputs.py",
-      "id": "demo_02_record_restart_inputs",
-      "anchor": "plan-2",
-      "heading": "Record restart inputs",
-      "subheading": "Record restart inputs",
-      "purpose": "Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.",
-      "label": "Course-plan experiment \u2014 local Python/kit inspection",
       "category": "required",
       "requires": [
         "demo_01_check_readiness_and_smoke"
       ],
-      "expected": "",
+      "heading": "demo 02 record restart inputs",
+      "purpose": "Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.",
+      "anchor": "plan-2",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": true,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Record restart inputs",
+          "subheading": "Record restart inputs",
+          "purpose": "Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.",
+          "label": "Course-plan experiment — local Python/kit inspection",
+          "expected": "",
+          "id": "source_demo_02_record_restart_inputs",
+          "function": "step_01_record_restart_inputs",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
+      "id": "setup_finish",
       "lesson": "2.3",
-      "file": "finish_03_lower_service_floors_at_session_end.py",
-      "id": "finish_03_lower_service_floors_at_session_end",
-      "anchor": "plan-3",
-      "heading": "Lower service floors at session end",
-      "subheading": "Lower service floors at session end",
-      "purpose": "Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.",
-      "label": "Course-plan experiment \u2014 live deployment",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "expected": "",
+      "heading": "finish",
+      "purpose": "Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.",
+      "anchor": "plan-3",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Lower service floors at session end",
+          "subheading": "Lower service floors at session end",
+          "purpose": "Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "",
+          "id": "source_finish_03_lower_service_floors_at_session_end",
+          "function": "step_01_lower_service_floors_at_session_end",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
-  "live_verification": "Not performed; main HTML has not yet been authored."
+  "live_verification": "Not performed; main HTML has not yet been authored.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "9.2",
   "title": "Test cache scope, configuration changes and freshness",
   "source_kind": "main_html",
@@ -158,280 +158,299 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 374,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "9.2",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2",
+      "windows": [
+        3
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source_lines": [
+        374
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_two_caches.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 374,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_cache_state_and_scope.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 380,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_cache_state_and_scope",
       "lesson": "9.2",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_cache_state_and_scope.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 cache state and scope",
+      "purpose": "Inspect both caches and vary request scope while keeping question words fixed.",
+      "anchor": "s3, s4",
+      "windows": [
+        8,
+        10,
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source_lines": [
+        426,
+        445,
+        509
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Both caches, and the corpus they follow",
+          "subheading": "Do it: the two caches",
+          "purpose": "Do it: the two caches",
+          "label": "bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on)",
+          "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1ef46119bd89b143\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\ngcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00045-tqm (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
+          "adaptations": [],
+          "id": "source_8",
+          "function": "step_01_the_two_caches",
+          "window": 8,
+          "source_line": 426,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Both caches, and the corpus they follow",
+          "subheading": "Do it: the state, and three asks",
+          "purpose": "Do it: the state, and three asks",
+          "label": "bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks)",
+          "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed from 1ef46119bd89b143: current\n  vertex none     in  43109 cached  41259  2480 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2530 ms | A confirmed employee at grade E3 or above serves a\n  cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_02_the_state_and_three_asks",
+          "window": 10,
+          "source_line": 445,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Scope: the same words under other settings",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes)",
+          "expected": "vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2440 ms | A confirmed employee at grade E3 or above serves a\n  scope as asked   7a0875abc72b0f7b\n  scope top_k 8    bcc480117460bf66\n  scope kind: text 8d8d4a1d9912dc52\n  scope prompt v4  1d409edacc15c1d1",
+          "adaptations": [],
+          "id": "source_13",
+          "function": "step_03_example",
+          "window": 13,
+          "source_line": 509,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_reissue_and_refresh.py"
+    },
+    {
+      "id": "demo_02_reissue_and_refresh",
+      "lesson": "9.2",
+      "file": "demo_02_reissue_and_refresh.py",
+      "category": "required",
+      "requires": [
+        "demo_01_cache_state_and_scope"
+      ],
+      "heading": "demo 02 reissue and refresh",
+      "purpose": "Release revision 2, observe both cache reactions and refresh the context cache.",
+      "anchor": "s5, s6",
+      "windows": [
+        17,
+        19,
+        22
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source_lines": [
+        555,
+        564,
+        603
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The corpus moves: revision 2, and both caches react",
+          "subheading": "Do it: the release",
+          "purpose": "Do it: the release",
+          "label": "bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release)",
+          "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_5560308823a62dc8...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
+          "adaptations": [],
+          "id": "source_17",
+          "function": "step_01_the_release",
+          "window": 17,
+          "source_line": 555,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus moves: revision 2, and both caches react",
+          "subheading": "Do it: the state, both asks, and the log",
+          "purpose": "Do it: the state, both asks, and the log",
+          "label": "bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines)",
+          "expected": "ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1ef46119bd89b143: STALE\n  vertex none     in   1880 cached      0  2390 ms | From 1 October 2026 the notice period for a confir\n  vertex none     in   1880 cached      0  2455 ms | From 1 October 2026 the notice period for a confir\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13",
+          "adaptations": [],
+          "id": "source_19",
+          "function": "step_02_the_state_both_asks_and_the_log",
+          "window": 19,
+          "source_line": 564,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "make cache again: attached again, and what it packed",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the pack again, under the new fingerprint)",
+          "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1441fb4775d21e13\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\n  ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: current\n  vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir",
+          "adaptations": [],
+          "id": "source_22",
+          "function": "step_03_example",
+          "window": 22,
+          "source_line": 603,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_undo_and_compare_rows.py"
+    },
+    {
+      "id": "demo_03_undo_and_compare_rows",
+      "lesson": "9.2",
+      "file": "demo_03_undo_and_compare_rows.py",
+      "category": "required",
+      "requires": [
+        "demo_02_reissue_and_refresh"
+      ],
+      "heading": "demo 03 undo and compare rows",
+      "purpose": "Restore revision 1 and explain how old answers relate to the restored fingerprint.",
+      "anchor": "s7",
+      "windows": [
+        24,
+        26,
+        28
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source_lines": [
+        624,
+        631,
+        642
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "The corpus comes back: version 1, and the old answer with it",
+          "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
+          "label": "bash — run in the operator shell, in the kit (version 1's bytes again: the undo)",
+          "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
+          "adaptations": [],
+          "id": "source_24",
+          "function": "step_01_the_corpus_comes_back_version_1_and_the_ol",
+          "window": 24,
+          "source_line": 624,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "The corpus comes back: version 1, and the old answer with it",
+          "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
+          "label": "bash — run in the operator shell, in the kit (the state, and the candidate's ask)",
+          "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: STALE\n  cache  semantic in      0 cached      0   165 ms | A confirmed employee at grade E3 or above serves a",
+          "adaptations": [],
+          "id": "source_26",
+          "function": "step_02_the_corpus_comes_back_version_1_and_the_ol",
+          "window": 26,
+          "source_line": 631,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "Every row of the walk",
+          "purpose": "Every row of the walk",
+          "label": "bash — run in the operator shell, in the kit (every acme usage row since the start; reads only)",
+          "expected": "00041-kqz  vertex  in  43109  cached  41259  Rs 1.0201   2480 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2530 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    170 ms\n  00045-tqm  vertex  in  43349  cached  41259  Rs 1.0507   2610 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2440 ms\n  00041-kqz  vertex  in   1880  cached      0  Rs 0.4978   2390 ms\n  00045-tqm  vertex  in   1880  cached      0  Rs 0.4978   2455 ms\n  00041-kqz  vertex  in  43139  cached  41259  Rs 1.0239   2575 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms",
+          "adaptations": [],
+          "id": "source_28",
+          "function": "step_03_every_row_of_the_walk",
+          "window": 28,
+          "source_line": 642,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "9.2",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
-      ],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_03_01_do_it_the_two_caches.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 8,
-      "label": "bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on)",
-      "heading": "Both caches, and the corpus they follow",
-      "subheading": "Do it: the two caches",
-      "anchor": "s3",
-      "purpose": "Do it: the two caches",
-      "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1ef46119bd89b143\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\ngcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00045-tqm (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
-      "line": 426,
-      "id": "demo_03_01_do_it_the_two_caches",
-      "lesson": "9.2",
-      "file": "demo_03_01_do_it_the_two_caches.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s7, s2",
+      "windows": [
+        30,
+        5
       ],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_03_02_do_it_the_state_and_three_asks.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 10,
-      "label": "bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks)",
-      "heading": "Both caches, and the corpus they follow",
-      "subheading": "Do it: the state, and three asks",
-      "anchor": "s3",
-      "purpose": "Do it: the state, and three asks",
-      "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed from 1ef46119bd89b143: current\n  vertex none     in  43109 cached  41259  2480 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2530 ms | A confirmed employee at grade E3 or above serves a\n  cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a",
-      "line": 445,
-      "id": "demo_03_02_do_it_the_state_and_three_asks",
-      "lesson": "9.2",
-      "file": "demo_03_02_do_it_the_state_and_three_asks.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_two_caches"
+      "source_lines": [
+        666,
+        380
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
       "offline": false,
-      "next": "demo_04_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 13,
-      "label": "bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes)",
-      "heading": "Scope: the same words under other settings",
-      "subheading": "Do it",
-      "anchor": "s4",
-      "purpose": "Do it",
-      "expected": "vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2440 ms | A confirmed employee at grade E3 or above serves a\n  scope as asked   7a0875abc72b0f7b\n  scope top_k 8    bcc480117460bf66\n  scope kind: text 8d8d4a1d9912dc52\n  scope prompt v4  1d409edacc15c1d1",
-      "line": 509,
-      "id": "demo_04_01_do_it",
-      "lesson": "9.2",
-      "file": "demo_04_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_03_02_do_it_the_state_and_three_asks"
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "Clean up",
+          "purpose": "Clean up",
+          "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted)",
+          "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-00041-kqz      (the live revision, as before; no candidate tag)\ncd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  deleted acme's cache",
+          "adaptations": [],
+          "id": "source_30",
+          "function": "step_01_clean_up",
+          "window": 30,
+          "source_line": 666,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 380,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it_the_release.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 17,
-      "label": "bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release)",
-      "heading": "The corpus moves: revision 2, and both caches react",
-      "subheading": "Do it: the release",
-      "anchor": "s5",
-      "purpose": "Do it: the release",
-      "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_5560308823a62dc8...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
-      "line": 555,
-      "id": "demo_05_01_do_it_the_release",
-      "lesson": "9.2",
-      "file": "demo_05_01_do_it_the_release.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_02_do_it_the_state_both_asks_and_the_log.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 19,
-      "label": "bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines)",
-      "heading": "The corpus moves: revision 2, and both caches react",
-      "subheading": "Do it: the state, both asks, and the log",
-      "anchor": "s5",
-      "purpose": "Do it: the state, both asks, and the log",
-      "expected": "ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1ef46119bd89b143: STALE\n  vertex none     in   1880 cached      0  2390 ms | From 1 October 2026 the notice period for a confir\n  vertex none     in   1880 cached      0  2455 ms | From 1 October 2026 the notice period for a confir\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13",
-      "line": 564,
-      "id": "demo_05_02_do_it_the_state_both_asks_and_the_log",
-      "lesson": "9.2",
-      "file": "demo_05_02_do_it_the_state_both_asks_and_the_log.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it_the_release"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 22,
-      "label": "bash — run in the operator shell, in the kit (the pack again, under the new fingerprint)",
-      "heading": "make cache again: attached again, and what it packed",
-      "subheading": "Do it",
-      "anchor": "s6",
-      "purpose": "Do it",
-      "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1441fb4775d21e13\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\n  ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: current\n  vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir",
-      "line": 603,
-      "id": "demo_06_01_do_it",
-      "lesson": "9.2",
-      "file": "demo_06_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_05_02_do_it_the_state_both_asks_and_the_log"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 24,
-      "label": "bash — run in the operator shell, in the kit (version 1's bytes again: the undo)",
-      "heading": "The corpus comes back: version 1, and the old answer with it",
-      "subheading": "The corpus comes back: version 1, and the old answer with it",
-      "anchor": "s7",
-      "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
-      "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
-      "line": 624,
-      "id": "demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ",
-      "lesson": "9.2",
-      "file": "demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ.py",
-      "category": "required",
-      "requires": [
-        "demo_06_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 26,
-      "label": "bash — run in the operator shell, in the kit (the state, and the candidate's ask)",
-      "heading": "The corpus comes back: version 1, and the old answer with it",
-      "subheading": "The corpus comes back: version 1, and the old answer with it",
-      "anchor": "s7",
-      "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
-      "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: STALE\n  cache  semantic in      0 cached      0   165 ms | A confirmed employee at grade E3 or above serves a",
-      "line": 631,
-      "id": "demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ",
-      "lesson": "9.2",
-      "file": "demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ.py",
-      "category": "required",
-      "requires": [
-        "demo_07_01_the_corpus_comes_back_version_1_and_the_old_answ"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_03_every_row_of_the_walk.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 28,
-      "label": "bash — run in the operator shell, in the kit (every acme usage row since the start; reads only)",
-      "heading": "The corpus comes back: version 1, and the old answer with it",
-      "subheading": "Every row of the walk",
-      "anchor": "s7",
-      "purpose": "Every row of the walk",
-      "expected": "00041-kqz  vertex  in  43109  cached  41259  Rs 1.0201   2480 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2530 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    170 ms\n  00045-tqm  vertex  in  43349  cached  41259  Rs 1.0507   2610 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2440 ms\n  00041-kqz  vertex  in   1880  cached      0  Rs 0.4978   2390 ms\n  00045-tqm  vertex  in   1880  cached      0  Rs 0.4978   2455 ms\n  00041-kqz  vertex  in  43139  cached  41259  Rs 1.0239   2575 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms",
-      "line": 642,
-      "id": "demo_07_03_every_row_of_the_walk",
-      "lesson": "9.2",
-      "file": "demo_07_03_every_row_of_the_walk.py",
-      "category": "required",
-      "requires": [
-        "demo_07_02_the_corpus_comes_back_version_1_and_the_old_answ"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_04_clean_up.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 30,
-      "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted)",
-      "heading": "The corpus comes back: version 1, and the old answer with it",
-      "subheading": "Clean up",
-      "anchor": "s7",
-      "purpose": "Clean up",
-      "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-00041-kqz      (the live revision, as before; no candidate tag)\ncd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  deleted acme's cache",
-      "line": 666,
-      "id": "demo_07_04_clean_up",
-      "lesson": "9.2",
-      "file": "demo_07_04_clean_up.py",
-      "category": "required",
-      "requires": [
-        "demo_07_03_every_row_of_the_walk"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -562,5 +581,8 @@
       "line": 670
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

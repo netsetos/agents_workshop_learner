@@ -1,25 +1,28 @@
-"""Lesson 1.2 / plan-2: Break an assertion in memory
+"""Lesson 1.2: demo 02 break an assertion in memory
 
-Summary and purpose:
 Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_01_run_the_actual_offline_gate
-Expected observation: A named must_contain failure followed by a passing original row.
+Run order inside this file:
+1. Break an assertion in memory (source window plan-2)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_01_run_the_actual_offline_gate.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_break_an_assertion_in_memory(session):
     """Run Break an assertion in memory at this checkpoint.
 
     Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited.
@@ -43,9 +46,15 @@ def demonstrate(session):
     assert not run_eval.check_falsifiable([original], corpus)
     print("Restored original: checker passes; disk data was unchanged.")
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_02_break_an_assertion_in_memory', step_01_break_an_assertion_in_memory),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

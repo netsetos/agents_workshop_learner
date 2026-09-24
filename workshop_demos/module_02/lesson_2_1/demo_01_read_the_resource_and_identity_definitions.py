@@ -1,25 +1,28 @@
-"""Lesson 2.1 / plan-1: Read the resource and identity definitions
+"""Lesson 2.1: demo 01 read the resource and identity definitions
 
-Summary and purpose:
 Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: shared setup; see README
-Expected observation: Compare the printed observations with this heading in README.md.
+Run order inside this file:
+1. Read the resource and identity definitions (source window plan-1)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: workshop setup; see this lesson README.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_read_the_resource_and_identity_definitions(session):
     """Run Read the resource and identity definitions at this checkpoint.
 
     Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.
@@ -37,9 +40,15 @@ def demonstrate(session):
             print(path.name, resources)
     print(Path("INFRASTRUCTURE.md").read_text(encoding="utf-8"))
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_01_read_the_resource_and_identity_definitions', step_01_read_the_resource_and_identity_definitions),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

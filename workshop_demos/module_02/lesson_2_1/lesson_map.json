@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "2.1",
   "title": "Understand the project, identities and resource map",
   "source_kind": "course_plan_and_kit",
@@ -15,45 +15,76 @@
   ],
   "demos": [
     {
+      "id": "demo_01_read_the_resource_and_identity_definitions",
       "lesson": "2.1",
       "file": "demo_01_read_the_resource_and_identity_definitions.py",
-      "id": "demo_01_read_the_resource_and_identity_definitions",
-      "anchor": "plan-1",
-      "heading": "Read the resource and identity definitions",
-      "subheading": "Read the resource and identity definitions",
-      "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
-      "label": "Course-plan experiment \u2014 local Python/kit inspection",
       "category": "required",
       "requires": [],
-      "expected": "",
+      "heading": "demo 01 read the resource and identity definitions",
+      "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
+      "anchor": "plan-1",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": true,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Read the resource and identity definitions",
+          "subheading": "Read the resource and identity definitions",
+          "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
+          "label": "Course-plan experiment — local Python/kit inspection",
+          "expected": "",
+          "id": "source_demo_01_read_the_resource_and_identity_definitions",
+          "function": "step_01_read_the_resource_and_identity_definitions",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_create_a_saved_infrastructure_plan.py"
     },
     {
+      "id": "demo_02_create_a_saved_infrastructure_plan",
       "lesson": "2.1",
       "file": "demo_02_create_a_saved_infrastructure_plan.py",
-      "id": "demo_02_create_a_saved_infrastructure_plan",
-      "anchor": "plan-2",
-      "heading": "Create a saved infrastructure plan",
-      "subheading": "Create a saved infrastructure plan",
-      "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
-      "label": "Course-plan experiment \u2014 live deployment",
       "category": "required",
       "requires": [
         "demo_01_read_the_resource_and_identity_definitions"
       ],
-      "expected": "A saved checked plan and its resource changes; inspect them before the apply lesson.",
+      "heading": "demo 02 create a saved infrastructure plan",
+      "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
+      "anchor": "plan-2",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Create a saved infrastructure plan",
+          "subheading": "Create a saved infrastructure plan",
+          "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "A saved checked plan and its resource changes; inspect them before the apply lesson.",
+          "id": "source_demo_02_create_a_saved_infrastructure_plan",
+          "function": "step_01_create_a_saved_infrastructure_plan",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
-  "live_verification": "Not performed; main HTML has not yet been authored."
+  "live_verification": "Not performed; main HTML has not yet been authored.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

@@ -1,86 +1,69 @@
 # Lesson 13.3: Exercise model routing, budgets and shutdown controls
 
-**Summary:** the tier changes at 85 percent; zero instances after `make off`. The files below follow the main HTML's runnable checkpoints and preserve its examples.
+## What to run
 
-Source: [main lesson HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html); Git blob `98282e525bfaa2998c591ba8f3312851781f0218`. Native Python cells can be stepped through in the IDE. Command workflows use the shared Bash/Make/gcloud helper because these are the kit's actual operations.
+Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-## Before running
-
-Use `/home/user/rag-shell-venv/bin/python`, run `workshop_demos/setup/bootstrap.py`, and check `workshop_demos/setup/config/settings.local.json`. Open the learner kit root in your IDE. Each file can be Run independently; the session helper sets the working directory and carries this lesson's variables forward.
-
-Run the required files in the table order. A failed step does not satisfy the next file's prerequisite. Read its saved output before continuing. Optional and recovery files are explicit choices; finish files are run at the end even though some HTML pages show their commands in the setup section. Do not use Run All.
-
-**Execution is not live verification:** these examples have source/compile checks, not a recorded run against your GCP project. Numerical sample output is illustrative; use the checks and explanations below. Commands can change cloud resources as described by their HTML instruction.
-
-## Required run order
-
-| HTML | File | Instruction / purpose |
+| Order | File | What it demonstrates |
 |---|---|---|
-| s2 · window 3 | [demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) | bash — run in the operator shell now, before the lesson's first step |
-| s3 · window 9 | [demo_03_01_do_it.py](demo_03_01_do_it.py) | bash — run in the operator shell, in the kit (the controls as the kit writes them down; no network) |
-| s4 · window 11 | [demo_04_01_do_it.py](demo_04_01_do_it.py) | bash — run in the operator shell, in the kit (reads only) |
-| s5 · window 13 | [demo_05_01_do_it_routing_on_the_month_as_it_is.py](demo_05_01_do_it_routing_on_the_month_as_it_is.py) | bash — run in the operator shell, in the kit (a candidate revision, no traffic, ROUTING on; three questions) |
-| s5 · window 15 | [demo_05_02_do_it_the_same_three_at_85_percent.py](demo_05_02_do_it_the_same_three_at_85_percent.py) | bash — run in the operator shell, in the kit (the same candidate at 85 percent; the same three questions) |
-| s5 · window 17 | [demo_05_03_do_it_undo_the_candidate.py](demo_05_03_do_it_undo_the_candidate.py) | bash — run in the operator shell, in the kit (the variables off the template, the tag dropped) |
-| s6 · window 20 | [demo_06_01_do_it_the_floor_then_the_switch.py](demo_06_01_do_it_the_floor_then_the_switch.py) | bash — run in the operator shell, in the kit (a floor, then the switch, then the nightly job's entry) |
-| s6 · window 22 | [demo_06_02_do_it_the_instances_after_fifteen_minutes.py](demo_06_02_do_it_the_instances_after_fifteen_minutes.py) | bash — run in the operator shell, in the kit (after 15 minutes; reads only) |
-| s6 · window 24 | [demo_06_03_do_it_the_ceiling.py](demo_06_03_do_it_the_ceiling.py) | bash — run in the operator shell, in the kit (lowers one quota; make gpu-cap-off takes it back) |
+| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
+| 2 | [demo_01_routing_and_budget_configuration.py](demo_01_routing_and_budget_configuration.py) | Read routing/budget/shutdown controls and establish the baseline. |
+| 3 | [demo_02_budget_candidate.py](demo_02_budget_candidate.py) | Compare routing at current spend and at 85 percent, then undo the candidate. |
+| 4 | [demo_03_shutdown_and_instance_counts.py](demo_03_shutdown_and_instance_counts.py) | Lower floors, inspect shutdown behavior after the idle interval and read ceilings. |
 
-## Finish and restore settings
+## Before starting
 
-- [finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) — bash — run in the operator shell when you finish the lesson, not now
+Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-## Checkpoints and explanation
+The shared workshop setup and the deployed/local inputs described in the reading guide.
 
-### demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
+Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+## Resume and recovery
+
+Completed functions are saved and skipped when an unfinished demo is run again. A failed/interrupted function may have made partial changes: inspect its attempt under `workshop_demos/results/`, repair the cause, then set `RETRY_FAILED_STEP = True` in that demo to retry only unfinished functions. `REPEAT = True` deliberately replays the entire file. It is not a repair shortcut.
+
+Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
+
+After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+
+## Finish and restore
+
+- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+
+## Functions, observations and effects
+
+The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
+
+### setup/prepare.py
+
+Prepare this lesson's saved settings and dependencies before its live experiments.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
-Run instruction: bash — run in the operator shell now, before the lesson's first step.
+Operation: bash — run in the operator shell now, before the lesson's first step.
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
 
-IDE adaptations:
-
-- Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 acme: retrieval_backend=vector
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_01_routing_and_budget_configuration.py
 
-### finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
+Read routing/budget/shutdown controls and establish the baseline.
 
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
-
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
-
-Run instruction: bash — run in the operator shell when you finish the lesson, not now.
-
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-IDE adaptations:
-
-- Run at lesson end despite its early HTML position, as the source label explicitly instructs.
-
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_03_01_do_it.py
-
-**HTML: The controls, as the kit writes them down / Do it**
+**`step_01_example(session)` — The controls, as the kit writes them down / Do it**
 
 Do it
 
-Run instruction: bash — run in the operator shell, in the kit (the controls as the kit writes them down; no network).
+Operation: bash — run in the operator shell, in the kit (the controls as the kit writes them down; no network).
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 per answer: ROUTING=off on the lane (lesson-12.2.sh). With it on, gemini-3.1-flash-lite labels each question SIMPLE, MEDIUM, COMPLEX, and breakers.choose_model() picks the model:
@@ -98,19 +81,13 @@ per hour: documind-off runs 0 23 * * * Asia/Kolkata and floors documind-slm, doc
   make gpu-cap: the GPU quota in us-central1 capped at 1; alerts.tf's gpu_left_warm pages when one stays up two hours
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_04_01_do_it.py
-
-**HTML: The month so far / Do it**
+**`step_02_example(session)` — The month so far / Do it**
 
 Do it
 
-Run instruction: bash — run in the operator shell, in the kit (reads only).
+Operation: bash — run in the operator shell, in the kit (reads only).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 documind-api: ROUTING=off, BUDGET_USD=100, SPEND_PCT=unset
@@ -123,19 +100,17 @@ Total NVIDIA L4 GPU allocation without zonal redundancy
   1/{project}/{region}         us-central1  effective 3 (default 3)
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_02_budget_candidate.py
 
-### demo_05_01_do_it_routing_on_the_month_as_it_is.py
+Compare routing at current spend and at 85 percent, then undo the candidate.
 
-**HTML: The tier at 85 percent / Do it: routing on, the month as it is**
+**`step_01_routing_on_the_month_as_it_is(session)` — The tier at 85 percent / Do it: routing on, the month as it is**
 
 Do it: routing on, the month as it is
 
-Run instruction: bash — run in the operator shell, in the kit (a candidate revision, no traffic, ROUTING on; three questions).
+Operation: bash — run in the operator shell, in the kit (a candidate revision, no traffic, ROUTING on; three questions).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 gemini-3.1-flash-lite    What is the notice period for a confirmed E3?
@@ -146,19 +121,13 @@ gemini-3.1-flash-lite    What is the notice period for a confirmed E3?
                            Each trip is reimbursed up to the cap of Rs 40,000 [1]: Rs 38,000 + Rs 40,000 + Rs 22,000 = Rs 1,00,000; the Rs 5,000 above the cap ...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_05_02_do_it_the_same_three_at_85_percent.py
-
-**HTML: The tier at 85 percent / Do it: the same three at 85 percent**
+**`step_02_the_same_three_at_85_percent(session)` — The tier at 85 percent / Do it: the same three at 85 percent**
 
 Do it: the same three at 85 percent
 
-Run instruction: bash — run in the operator shell, in the kit (the same candidate at 85 percent; the same three questions).
+Operation: bash — run in the operator shell, in the kit (the same candidate at 85 percent; the same three questions).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 gemini-3.1-flash-lite    What is the notice period for a confirmed E3?
@@ -169,37 +138,29 @@ gemini-3.1-flash-lite    What is the notice period for a confirmed E3?
                            Each trip is reimbursed up to the cap of Rs 40,000 [1]: Rs 38,000 + Rs 40,000 + Rs 22,000 = Rs 1,00,000; the Rs 5,000 above the cap ...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_05_03_do_it_undo_the_candidate.py
-
-**HTML: The tier at 85 percent / Do it: undo the candidate**
+**`step_03_undo_the_candidate(session)` — The tier at 85 percent / Do it: undo the candidate**
 
 Do it: undo the candidate
 
-Run instruction: bash — run in the operator shell, in the kit (the variables off the template, the tag dropped).
+Operation: bash — run in the operator shell, in the kit (the variables off the template, the tag dropped).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 100	documind-api-00031-kez
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_03_shutdown_and_instance_counts.py
 
-### demo_06_01_do_it_the_floor_then_the_switch.py
+Lower floors, inspect shutdown behavior after the idle interval and read ceilings.
 
-**HTML: Off at night, and the ceiling under it / Do it: the floor, then the switch**
+**`step_01_the_floor_then_the_switch(session)` — Off at night, and the ceiling under it / Do it: the floor, then the switch**
 
 Do it: the floor, then the switch
 
-Run instruction: bash — run in the operator shell, in the kit (a floor, then the switch, then the nightly job's entry).
+Operation: bash — run in the operator shell, in the kit (a floor, then the switch, then the nightly job's entry).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 gcloud run services update documind-slm --region us-central1 --project documind-ai-YOUR-ID --min-instances 0 --quiet
@@ -218,19 +179,15 @@ documind-ui: min-instances 0
 0 23 * * *	Asia/Kolkata	ENABLED	2026-09-23T17:30:03.184Z
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_06_02_do_it_the_instances_after_fifteen_minutes.py
-
-**HTML: Off at night, and the ceiling under it / Do it: the instances, after fifteen minutes**
+**`step_02_the_instances_after_fifteen_minutes(session)` — Off at night, and the ceiling under it / Do it: the instances, after fifteen minutes**
 
 A floor of zero lets the service scale to zero, but an idle instance can stay up for up to fifteen minutes after its last request. The cell waits, then reads the UI's instance count from Cloud Monitoring for the last half hour, a sample a minute.
 
-Run instruction: bash — run in the operator shell, in the kit (after 15 minutes; reads only).
+Operation: bash — run in the operator shell, in the kit (after 15 minutes; reads only).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
+Manual action: Allow the documented fifteen-minute idle interval after make off. Stop and rerun this demo later if needed; completed shutdown steps will not run again. Type done when ready to inspect monitoring.
 
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 documind-ui, container instances (active and idle), a sample a minute, last 30 minutes:
@@ -240,19 +197,13 @@ documind-ui, container instances (active and idle), a sample a minute, last 30 m
 zero instances since 12:09 IST
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_06_03_do_it_the_ceiling.py
-
-**HTML: Off at night, and the ceiling under it / Do it: the ceiling**
+**`step_03_the_ceiling(session)` — Off at night, and the ceiling under it / Do it: the ceiling**
 
 make gpu-cap writes a consumer quota override on the L4 quotas in us-central1, capping them at one card. --max-instances belongs to one service. The quota belongs to the project, so a second GPU service, a GPU candidate or a typo cannot allocate a second card. Lowering a quota needs no approval; raising it again does.
 
-Run instruction: bash — run in the operator shell, in the kit (lowers one quota; make gpu-cap-off takes it back).
+Operation: bash — run in the operator shell, in the kit (lowers one quota; make gpu-cap-off takes it back).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 python services/slm/gpu_quota.py --project documind-ai-YOUR-ID --region us-central1 --cap 1
@@ -266,16 +217,18 @@ Total NVIDIA L4 GPU allocation without zonal redundancy
   Total NVIDIA L4 GPU allocation without zonal red 1/{project}/{region}       effective 1 (default 3, override 1)
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### setup/finish.py
 
-## Source coverage
+Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
 
-25 code windows mapped: 10 IDE demo files, 1 shared setup blocks, 14 read-only excerpts/output blocks. `lesson_map.json` records every window and source line. Reading-only headings and UI observations remain in the source lesson; they are not turned into fake runnable examples.
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-## Helper functions
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-- `DemoSession`: resumes this lesson, checks prerequisite files and records attempts.
-- `session.shell(code)`: invokes the existing CLI workflow, preserving named variables and shell functions between IDE runs.
-- `session.service_environment(service, keys)`: reads the actual serving configuration as JSON, without saving secrets.
-- `session.pin_vector()` / `restore_backend()`: save and restore the prior tenant setting when the lesson has the common vector setup.
-- `session.command(args)`: runs a CLI argument list and retains its actual output/exit status.
+Operation: bash — run in the operator shell when you finish the lesson, not now.
+
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
+
+## Source and coverage
+
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html). All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `98282e525bfaa2998c591ba8f3312851781f0218`.

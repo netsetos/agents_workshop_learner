@@ -1,45 +1,97 @@
 # Lesson 1.1: Reproduce the local environment and read the master diagram
 
-**Summary:** the Rs 0 lane answers the notice-period question with citations.
+## What to run
 
-**Source:** this lesson has no main HTML yet. These examples are authored from the existing course plan and actual kit entry points, not presented as an HTML conversion. Read the module prerequisites and each file's top summary before Run.
+Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-Use the existing rag-shell-venv interpreter and workshop setup. Each file is independent to Run/Debug; session state persists. Optional long-running services run in a separate console. Cloud-changing steps are separate from inspection/planning steps.
+| Order | File | What it demonstrates |
+|---|---|---|
+| 1 | [demo_01_inspect_the_workstation_and_corpus.py](demo_01_inspect_the_workstation_and_corpus.py) | Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server. |
+| 2 | [demo_02_start_the_local_chat_lane.py](demo_02_start_the_local_chat_lane.py) | Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process. |
+| 3 | [demo_03_ask_the_local_notice_period_question.py](demo_03_ask_the_local_notice_period_question.py) | Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval. |
 
-## Run order
+## Before starting
+
+Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
+
+The shared workshop setup and the deployed/local inputs described in the reading guide.
+
+Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
+
+## Resume and recovery
+
+Completed functions are saved and skipped when an unfinished demo is run again. A failed/interrupted function may have made partial changes: inspect its attempt under `workshop_demos/results/`, repair the cause, then set `RETRY_FAILED_STEP = True` in that demo to retry only unfinished functions. `REPEAT = True` deliberately replays the entire file. It is not a repair shortcut.
+
+Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
+
+After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+
+## Finish and restore
+
+- [setup/finish.py](setup/finish.py) — Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.
+
+## Functions, observations and effects
+
+The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
 
 ### demo_01_inspect_the_workstation_and_corpus.py
 
-[Inspect the workstation and corpus](demo_01_inspect_the_workstation_and_corpus.py) — required
+Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server.
+
+**`step_01_inspect_the_workstation_and_corpus(session)` — Inspect the workstation and corpus / Inspect the workstation and corpus**
 
 Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server.
 
-Expected observation: The IDE interpreter and tool paths are visible; the ACME handbook exists.
+Operation: Course-plan experiment — local Python/kit inspection.
+
+Expected shape, not a promised result:
+
+```text
+The IDE interpreter and tool paths are visible; the ACME handbook exists.
+```
 
 ### demo_02_start_the_local_chat_lane.py
 
-[Start the local chat lane](demo_02_start_the_local_chat_lane.py) — required
+Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.
+
+**`step_01_start_the_local_chat_lane(session)` — Start the local chat lane / Start the local chat lane**
 
 Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.
 
-Expected observation: The local chat server listens on port 8081. Ollama and the model must already be available; inspect the actual service output.
+Operation: Course-plan experiment — local Python/kit inspection.
+
+Expected shape, not a promised result:
+
+```text
+The local chat server listens on port 8081. Ollama and the model must already be available; inspect the actual service output.
+```
 
 ### demo_03_ask_the_local_notice_period_question.py
 
-[Ask the local notice-period question](demo_03_ask_the_local_notice_period_question.py) — required
+Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.
+
+**`step_01_ask_the_local_notice_period_question(session)` — Ask the local notice-period question / Ask the local notice-period question**
 
 Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.
 
-Expected observation: A local answer with citations. Starting the server is a prerequisite even though it runs in another console.
+Operation: Course-plan experiment — local Python/kit inspection.
 
-### finish_04_stop_this_local_chat_service.py
+Expected shape, not a promised result:
 
-[Stop this local chat service](finish_04_stop_this_local_chat_service.py) — cleanup
+```text
+A local answer with citations. Starting the server is a prerequisite even though it runs in another console.
+```
+
+### setup/finish.py
 
 Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.
 
-Expected observation: Inspect the actual command/read output; a nonzero exit stops the attempt.
+**`step_01_stop_this_local_chat_service(session)` — Stop this local chat service / Stop this local chat service**
 
-## Limits and evidence
+Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.
 
-These additions have offline source/runtime checks but have not been run against your GCP project. They do not replace the missing lesson prose, browser/UI observations, or a human review of the capstone rubric. Evidence is saved under workshop_demos/results; credentials are not copied into handover data.
+Operation: Course-plan experiment — local Python/kit inspection.
+
+## Source and coverage
+
+This lesson has no authored main HTML yet. These experiments come from the course plan and actual kit entry points, not an invented HTML sequence. `lesson_map.json` records their attribution.

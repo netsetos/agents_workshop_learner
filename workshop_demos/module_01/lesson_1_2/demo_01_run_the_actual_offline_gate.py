@@ -1,25 +1,28 @@
-"""Lesson 1.2 / plan-1: Run the actual offline gate
+"""Lesson 1.2: demo 01 run the actual offline gate
 
-Summary and purpose:
 Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: shared setup; see README
-Expected observation: No failed checks; actual tool-dependent skips are reported.
+Run order inside this file:
+1. Run the actual offline gate (source window plan-1)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: workshop setup; see this lesson README.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_run_the_actual_offline_gate(session):
     """Run Run the actual offline gate at this checkpoint.
 
     Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes.
@@ -33,9 +36,15 @@ def demonstrate(session):
     session.command([sys.executable, "validate.py"])
     session.command([sys.executable, "evals/run_eval.py"])
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_01_run_the_actual_offline_gate', step_01_run_the_actual_offline_gate),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

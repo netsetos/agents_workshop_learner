@@ -1,25 +1,28 @@
-"""Lesson 14.4 / plan-2: Write an evidence handover
+"""Lesson 14.4: demo 02 write an evidence handover
 
-Summary and purpose:
 Summarize actual lesson attempts and retain the exact candidate gate, failures and evidence locations. This is an evidence index for a human capstone review, not an automatic rubric score.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_01_run_the_operational_gate
-Expected observation: Compare the printed observations with this heading in README.md.
+Run order inside this file:
+1. Write an evidence handover (source window plan-2)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_01_run_the_operational_gate.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_write_an_evidence_handover(session):
     """Run Write an evidence handover at this checkpoint.
 
     Summarize actual lesson attempts and retain the exact candidate gate, failures and evidence locations. This is an evidence index for a human capstone review, not an automatic rubric score.
@@ -41,9 +44,15 @@ def demonstrate(session):
     print("Evidence index:", session.attempt / "handover.json")
     print("Review the capstone rubric against the actual artifacts; no score was invented.")
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_02_write_an_evidence_handover', step_01_write_an_evidence_handover),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

@@ -1,25 +1,28 @@
-"""Lesson 2.2 / plan-2: Apply and deploy the prepared kit
+"""Lesson 2.2: demo 02 apply and deploy the prepared kit
 
-Summary and purpose:
 Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.
 
-HTML instruction: Course-plan experiment — live deployment
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_01_check_the_saved_plan
-Expected observation: The actual kit deployment finishes; any failed build or readiness step stops the demo.
+Run order inside this file:
+1. Apply and deploy the prepared kit (source window plan-2)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_01_check_the_saved_plan.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_apply_and_deploy_the_prepared_kit(session):
     """Run Apply and deploy the prepared kit at this checkpoint.
 
     Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.
@@ -32,9 +35,15 @@ def demonstrate(session):
     import sys
     session.command(["make", "up", "PROJECT=" + session.config.project, "REGION=" + session.config.cloud_run_region, "PY=" + sys.executable])
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_02_apply_and_deploy_the_prepared_kit', step_01_apply_and_deploy_the_prepared_kit),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

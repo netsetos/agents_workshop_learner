@@ -1,25 +1,28 @@
-"""Lesson 1.1 / plan-3: Ask the local notice-period question
+"""Lesson 1.1: demo 03 ask the local notice period question
 
-Summary and purpose:
 Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_02_start_the_local_chat_lane
-Expected observation: A local answer with citations. Starting the server is a prerequisite even though it runs in another console.
+Run order inside this file:
+1. Ask the local notice-period question (source window plan-3)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_02_start_the_local_chat_lane.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_ask_the_local_notice_period_question(session):
     """Run Ask the local notice-period question at this checkpoint.
 
     Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.
@@ -38,9 +41,15 @@ def demonstrate(session):
     print(json.dumps(answer, indent=2))
     assert answer.get("citations"), "The local answer has no citations; inspect its retrieval trace."
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_03_ask_the_local_notice_period_question', step_01_ask_the_local_notice_period_question),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

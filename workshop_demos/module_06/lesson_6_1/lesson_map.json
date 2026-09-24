@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "6.1",
   "title": "Pack evidence within the context budget",
   "source_kind": "main_html",
@@ -165,213 +165,258 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 376,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "6.1",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2",
+      "windows": [
+        3,
+        6
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source_lines": [
+        376,
+        392
+      ],
       "offline": false,
-      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.",
+            "Temporarily disable an enabled answer cache for this retrieval/generation experiment and save its prior value. This changes the shared API; finish restores it. Cache lessons in Module 9 are unaffected."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 376,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT, once per shell",
+          "expected": "context: 8000 (default)  answer: 2048 (default)  model: gemini-3.6-flash (default)  prompt: v3 (default)  usd_inr: 85 (default)",
+          "adaptations": [
+            "Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed."
+          ],
+          "id": "source_6",
+          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 6,
+          "source_line": 392,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_packing_and_token_counts.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 382,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_packing_and_token_counts",
       "lesson": "6.1",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_packing_and_token_counts.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 packing and token counts",
+      "purpose": "Run the kit packer and compare its estimate with exact model token counts.",
+      "anchor": "s3, s4",
+      "windows": [
+        14,
+        17
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source_lines": [
+        482,
+        563
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "The budget's lines and the packer, offline on the kit's own documents",
+          "subheading": "Do it: the lines, then two pools twice, then a counter",
+          "purpose": "Do it: the lines, then two pools twice, then a counter",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: nothing leaves the machine)",
+          "expected": "4.5's teaching split: system 1500 | tenant_pack 40000 | chunks 6000 | history 2000 | answer 2000 | input_total 49500\nthe API's, this question: system 168 (the fixed prompt, 672 characters) | chunks 7832 | tenant_pack 0 | history 0 | answer 2048 | input_total 8000\n\nhandbook sections, top_k 5: packed 5, dropped 0, context 301 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] hr_policy_2026.md, p.1  (32 tokens)\n\nhandbook sections, top_k 20: packed 20, dropped 0, context 2009 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] hr_policy_2026.md, p.1  (32 tokens)\n\nfull Act pages, top_k 5: packed 5, dropped 0, context 1667 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] cgst_act_2017.md, p.116  (508 tokens)\n\nfull Act pages, top_k 20: packed 17, dropped 3, context 7774 tokens | log: context_budget_drop packed=17 dropped=3 | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] cgst_act_2017.md, p.116  (508 tokens)\n\nfull Act pages, top_k 20, with a counter injected that reads 60 percent more: packed 11, dropped 9, trimmed from the tail after the estimate had packed them",
+          "adaptations": [],
+          "id": "source_14",
+          "function": "step_01_the_lines_then_two_pools_twice_then_a_coun",
+          "window": 14,
+          "source_line": 482,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count",
+          "subheading": "Do it: three texts, two counters, one pool twice",
+          "purpose": "Do it: three texts, two counters, one pool twice",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; a handful of count_tokens calls)",
+          "expected": "NP-03, English     chars   234  estimate  58  counted  1xx  ratio x.xx  (near one)\na clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (well above one)\none Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)\ntwenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter\ntwenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter",
+          "adaptations": [],
+          "id": "source_17",
+          "function": "step_02_three_texts_two_counters_one_pool_twice",
+          "window": 17,
+          "source_line": 563,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_answer_cost_and_dated_evidence.py"
+    },
+    {
+      "id": "demo_02_answer_cost_and_dated_evidence",
+      "lesson": "6.1",
+      "file": "demo_02_answer_cost_and_dated_evidence.py",
+      "category": "required",
+      "requires": [
+        "demo_01_packing_and_token_counts"
+      ],
+      "heading": "demo 02 answer cost and dated evidence",
+      "purpose": "Inspect an answer's tokens/price and follow a dated document through a stream.",
+      "anchor": "s5, s6",
+      "windows": [
+        21,
+        27
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source_lines": [
+        624,
+        703
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "One answer's tokens: the packed set's estimate, the model's count, and the price",
+          "subheading": "Do it: one question, its tokens, its price, and the estimate beside it",
+          "purpose": "Do it: one question, its tokens, its price, and the estimate beside it",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one question, a rupee)",
+          "expected": "the answer: tokens_in 1xxx | cached_tokens 0 | tokens_out 4xx | cost_usd 0.00xxxx | citations 3 | model gemini-3.6-flash\ncost.price(): $0.00xxxx = Rs 0.xxxx at 85.0 | in 1xxx out 4xx cached 0\nthe estimate for the same packed set: fixed 168 + context 8xx = 1xxx | the model counted 1xxx | ratio 0.9x",
+          "adaptations": [],
+          "id": "source_21",
+          "function": "step_01_one_question_its_tokens_its_price_and_the",
+          "window": 21,
+          "source_line": 624,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "A dated document on the lane: the header's date, the rule in the prompt, the citation event",
+          "subheading": "Do it: the dated revision in, the stream read, revision 1 back",
+          "purpose": "Do it: the dated revision in, the stream read, revision 1 back",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (one upload, one streamed question, one upload; paise)",
+          "expected": ">> event chunks embedded effective_from: ingest_reactivated\t3\t0\t2026-10-01\ncitation 1 smoke_note.md | effective_from 2026-10-01 | quote 'The smoke lantern is kept in bay 7 of the Pune wa'\ndone: tokens_in 1xxx | tokens_out 3xx | latency_ms 2xxx | the price is on the row, not in the event\nanswer: The smoke lantern is kept in bay 7 of the Pune warehouse [1], effective from 1 October 2026 ...\n>> event chunks embedded effective_from: ingest_reactivated\t3\t0\tNone",
+          "adaptations": [],
+          "id": "source_27",
+          "function": "step_02_the_dated_revision_in_the_stream_read_revi",
+          "window": 27,
+          "source_line": 703,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_usage_and_small_budget.py"
+    },
+    {
+      "id": "demo_03_usage_and_small_budget",
+      "lesson": "6.1",
+      "file": "demo_03_usage_and_small_budget.py",
+      "category": "required",
+      "requires": [
+        "demo_02_answer_cost_and_dated_evidence"
+      ],
+      "heading": "demo 03 usage and small budget",
+      "purpose": "Read token usage/retry evidence and test an undersized context budget on a candidate.",
+      "anchor": "s7, s8",
+      "windows": [
+        32,
+        34
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source_lines": [
+        768,
+        797
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The answer's reserve, the retry, and the tokens on the rows",
+          "subheading": "Do it: the day's tokens, and the retries there were not",
+          "purpose": "Do it: the day's tokens, and the retries there were not",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: two log reads)",
+          "expected": "by tenant\ntenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans\n------------------------------------------------------------------------------------\nacme                        NN     xxxxx     xxxx    0.0xxx      x.xx    4xxx   0.0x\n2026-09-2xT1x:xx:xx.xxxxxxZ\tcontext_budget_drop\t\t1x\tx",
+          "adaptations": [],
+          "id": "source_32",
+          "function": "step_01_the_day_s_tokens_and_the_retries_there_wer",
+          "window": 32,
+          "source_line": 768,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "What the budget costs, the knob on a candidate, and the lines this lesson leaves empty",
+          "subheading": "The knob: a budget too small, on a candidate that takes no traffic",
+          "purpose": "max_context_tokens is a setting, so the way to see the drop on the live corpus without touching the live service is a candidate revision, as in lessons 5.2 to 5.4: a budget of 600 tokens leaves room for about three handbook sections after the fixed prompt, so the same question at top_k 5 packs three, drops two, logs the drop, and answers from what it packed. The variable is not set on the live service, so the undo removes it and the default returns.",
+          "label": "bash — run in the operator shell (one new revision, no traffic; one question; one log read; then the undo)",
+          "expected": "candidate: tokens_in 6xx | citations 2 | answerable True | pool 20\n2026-09-2xT1x:xx:xx.xxxxxxZ\t3\t2\ntemplate now:\n(empty means unset: the default, 8000)",
+          "adaptations": [],
+          "id": "source_34",
+          "function": "step_02_the_knob_a_budget_too_small_on_a_candidate",
+          "window": 34,
+          "source_line": 797,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "6.1",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
-      ],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 6,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT, once per shell",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
       "anchor": "s2",
-      "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.",
-      "expected": "context: 8000 (default)  answer: 2048 (default)  model: gemini-3.6-flash (default)  prompt: v3 (default)  usd_inr: 85 (default)",
-      "line": 392,
-      "id": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own",
-      "lesson": "6.1",
-      "file": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      "windows": [
+        5
       ],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [
-        "Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed."
+      "source_lines": [
+        382
       ],
-      "live_verified": false,
       "offline": false,
-      "next": "demo_03_01_do_it_the_lines_then_two_pools_twice_then_a_coun.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 14,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: nothing leaves the machine)",
-      "heading": "The budget's lines and the packer, offline on the kit's own documents",
-      "subheading": "Do it: the lines, then two pools twice, then a counter",
-      "anchor": "s3",
-      "purpose": "Do it: the lines, then two pools twice, then a counter",
-      "expected": "4.5's teaching split: system 1500 | tenant_pack 40000 | chunks 6000 | history 2000 | answer 2000 | input_total 49500\nthe API's, this question: system 168 (the fixed prompt, 672 characters) | chunks 7832 | tenant_pack 0 | history 0 | answer 2048 | input_total 8000\n\nhandbook sections, top_k 5: packed 5, dropped 0, context 301 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] hr_policy_2026.md, p.1  (32 tokens)\n\nhandbook sections, top_k 20: packed 20, dropped 0, context 2009 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] hr_policy_2026.md, p.1  (32 tokens)\n\nfull Act pages, top_k 5: packed 5, dropped 0, context 1667 tokens | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] cgst_act_2017.md, p.116  (508 tokens)\n\nfull Act pages, top_k 20: packed 17, dropped 3, context 7774 tokens | log: context_budget_drop packed=17 dropped=3 | the dated rule is added\n   [Source 1] hr_policy_2026.md, p.1, NP-03 — Notice period  (72 tokens)\n   [Source 2] smoke_note.md, p.1, effective from 2026-10-01  (66 tokens)\n   [Source 3] cgst_act_2017.md, p.116  (508 tokens)\n\nfull Act pages, top_k 20, with a counter injected that reads 60 percent more: packed 11, dropped 9, trimmed from the tail after the estimate had packed them",
-      "line": 482,
-      "id": "demo_03_01_do_it_the_lines_then_two_pools_twice_then_a_coun",
-      "lesson": "6.1",
-      "file": "demo_03_01_do_it_the_lines_then_two_pools_twice_then_a_coun.py",
-      "category": "required",
-      "requires": [
-        "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": true,
-      "next": "demo_04_01_do_it_three_texts_two_counters_one_pool_twice.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 17,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; a handful of count_tokens calls)",
-      "heading": "The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count",
-      "subheading": "Do it: three texts, two counters, one pool twice",
-      "anchor": "s4",
-      "purpose": "Do it: three texts, two counters, one pool twice",
-      "expected": "NP-03, English     chars   234  estimate  58  counted  1xx  ratio x.xx  (near one)\na clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (well above one)\none Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)\ntwenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter\ntwenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter",
-      "line": 563,
-      "id": "demo_04_01_do_it_three_texts_two_counters_one_pool_twice",
-      "lesson": "6.1",
-      "file": "demo_04_01_do_it_three_texts_two_counters_one_pool_twice.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_lines_then_two_pools_twice_then_a_coun"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs.",
+            "Restore the saved answer-cache value and tenant backend, including after a failed experiment."
+          ],
+          "id": "source_5",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 382,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it_one_question_its_tokens_its_price_and_the.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 21,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one question, a rupee)",
-      "heading": "One answer's tokens: the packed set's estimate, the model's count, and the price",
-      "subheading": "Do it: one question, its tokens, its price, and the estimate beside it",
-      "anchor": "s5",
-      "purpose": "Do it: one question, its tokens, its price, and the estimate beside it",
-      "expected": "the answer: tokens_in 1xxx | cached_tokens 0 | tokens_out 4xx | cost_usd 0.00xxxx | citations 3 | model gemini-3.6-flash\ncost.price(): $0.00xxxx = Rs 0.xxxx at 85.0 | in 1xxx out 4xx cached 0\nthe estimate for the same packed set: fixed 168 + context 8xx = 1xxx | the model counted 1xxx | ratio 0.9x",
-      "line": 624,
-      "id": "demo_05_01_do_it_one_question_its_tokens_its_price_and_the",
-      "lesson": "6.1",
-      "file": "demo_05_01_do_it_one_question_its_tokens_its_price_and_the.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it_three_texts_two_counters_one_pool_twice"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_do_it_the_dated_revision_in_the_stream_read_revi.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 27,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (one upload, one streamed question, one upload; paise)",
-      "heading": "A dated document on the lane: the header's date, the rule in the prompt, the citation event",
-      "subheading": "Do it: the dated revision in, the stream read, revision 1 back",
-      "anchor": "s6",
-      "purpose": "Do it: the dated revision in, the stream read, revision 1 back",
-      "expected": ">> event chunks embedded effective_from: ingest_reactivated\t3\t0\t2026-10-01\ncitation 1 smoke_note.md | effective_from 2026-10-01 | quote 'The smoke lantern is kept in bay 7 of the Pune wa'\ndone: tokens_in 1xxx | tokens_out 3xx | latency_ms 2xxx | the price is on the row, not in the event\nanswer: The smoke lantern is kept in bay 7 of the Pune warehouse [1], effective from 1 October 2026 ...\n>> event chunks embedded effective_from: ingest_reactivated\t3\t0\tNone",
-      "line": 703,
-      "id": "demo_06_01_do_it_the_dated_revision_in_the_stream_read_revi",
-      "lesson": "6.1",
-      "file": "demo_06_01_do_it_the_dated_revision_in_the_stream_read_revi.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it_one_question_its_tokens_its_price_and_the"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_01_do_it_the_day_s_tokens_and_the_retries_there_wer.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 32,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: two log reads)",
-      "heading": "The answer's reserve, the retry, and the tokens on the rows",
-      "subheading": "Do it: the day's tokens, and the retries there were not",
-      "anchor": "s7",
-      "purpose": "Do it: the day's tokens, and the retries there were not",
-      "expected": "by tenant\ntenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans\n------------------------------------------------------------------------------------\nacme                        NN     xxxxx     xxxx    0.0xxx      x.xx    4xxx   0.0x\n2026-09-2xT1x:xx:xx.xxxxxxZ\tcontext_budget_drop\t\t1x\tx",
-      "line": 768,
-      "id": "demo_07_01_do_it_the_day_s_tokens_and_the_retries_there_wer",
-      "lesson": "6.1",
-      "file": "demo_07_01_do_it_the_day_s_tokens_and_the_retries_there_wer.py",
-      "category": "required",
-      "requires": [
-        "demo_06_01_do_it_the_dated_revision_in_the_stream_read_revi"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_08_01_the_knob_a_budget_too_small_on_a_candidate_that.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 34,
-      "label": "bash — run in the operator shell (one new revision, no traffic; one question; one log read; then the undo)",
-      "heading": "What the budget costs, the knob on a candidate, and the lines this lesson leaves empty",
-      "subheading": "The knob: a budget too small, on a candidate that takes no traffic",
-      "anchor": "s8",
-      "purpose": "max_context_tokens is a setting, so the way to see the drop on the live corpus without touching the live service is a candidate revision, as in lessons 5.2 to 5.4: a budget of 600 tokens leaves room for about three handbook sections after the fixed prompt, so the same question at top_k 5 packs three, drops two, logs the drop, and answers from what it packed. The variable is not set on the live service, so the undo removes it and the default returns.",
-      "expected": "candidate: tokens_in 6xx | citations 2 | answerable True | pool 20\n2026-09-2xT1x:xx:xx.xxxxxxZ\t3\t2\ntemplate now:\n(empty means unset: the default, 8000)",
-      "line": 797,
-      "id": "demo_08_01_the_knob_a_budget_too_small_on_a_candidate_that",
-      "lesson": "6.1",
-      "file": "demo_08_01_the_knob_a_budget_too_small_on_a_candidate_that.py",
-      "category": "required",
-      "requires": [
-        "demo_07_01_do_it_the_day_s_tokens_and_the_retries_there_wer"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -551,5 +596,8 @@
       "line": 809
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

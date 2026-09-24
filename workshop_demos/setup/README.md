@@ -25,3 +25,11 @@ Run these files with the same interpreter as the demos. They replace repeated sh
 Setup does not create an index, invent an endpoint ID or renew credentials invisibly. A lesson either discovers its resource from the serving configuration or runs the real kit provisioning step that introduces it. Split traffic requires an explicit decision because one environment snapshot cannot describe two serving revisions.
 
 The original small helper modules (`config`, `auth`, `discovery`, `api`, `artifacts`, `kit`, `context`, `reconciliation`) provide reusable operations. `DemoSession` adds cross-file state, ordered attempts and the CLI bridge used by the full course. Native examples execute in the lesson's `demonstrate` function so their educational logic remains visible to the debugger.
+
+## Grouped experiments
+
+`steps.run_steps(session, steps)` calls the lesson’s named functions and saves a checkpoint after each successful function. `manual_checkpoint()` pauses for browser actions or delayed observations. Failed/interrupted functions need explicit retry after inspection; successful functions are skipped on resume. Cleanup tries every restoration and reports all failures. Each source cell keeps an independent import path/module context, so successive examples can load the kit’s different `config` modules without reusing the wrong one.
+
+`steps.backup_files()` and `restore_files()` preserve exact learner bytes before/after evaluation edits. `gates.expect_failure()` validates the intended nonzero exit and diagnostic; `gates.live_gate()` retains fresh evaluation reports for inspection. `poison` limits the lesson 4.1 drill and cleanup to its saved object generation. All state, ownership records and logs stay in the ignored results directory.
+
+For lessons 5.2–5.4 and 6.1–6.3, preparation saves and temporarily disables an enabled answer cache to expose retrieval/generation. This can create an API revision and affects its tenants; finish restores the original setting. Module 9 intentionally demonstrates caching and is unchanged. Lesson 5.3 checks actual response stages before accepting a comparison.

@@ -1,25 +1,28 @@
-"""Lesson 14.4 / plan-1: Run the operational gate
+"""Lesson 14.4: demo 01 run the operational gate
 
-Summary and purpose:
 Run the real smoke-all gate and preserve its output, including unavailable optional services and failures. Do not mark the capstone complete merely because earlier individual demos ran.
 
-HTML instruction: Course-plan experiment — live deployment
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: shared setup; see README
-Expected observation: Compare the printed observations with this heading in README.md.
+Run order inside this file:
+1. Run the operational gate (source window plan-1)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: workshop setup; see this lesson README.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_run_the_operational_gate(session):
     """Run Run the operational gate at this checkpoint.
 
     Run the real smoke-all gate and preserve its output, including unavailable optional services and failures. Do not mark the capstone complete merely because earlier individual demos ran.
@@ -32,9 +35,15 @@ def demonstrate(session):
     import sys
     session.command(["make", "smoke-all", "PROJECT=" + session.config.project, "REGION=" + session.config.cloud_run_region, "PY=" + sys.executable])
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_01_run_the_operational_gate', step_01_run_the_operational_gate),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

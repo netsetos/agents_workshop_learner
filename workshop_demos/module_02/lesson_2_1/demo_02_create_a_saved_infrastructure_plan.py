@@ -1,25 +1,28 @@
-"""Lesson 2.1 / plan-2: Create a saved infrastructure plan
+"""Lesson 2.1: demo 02 create a saved infrastructure plan
 
-Summary and purpose:
 Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.
 
-HTML instruction: Course-plan experiment — live deployment
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_01_read_the_resource_and_identity_definitions
-Expected observation: A saved checked plan and its resource changes; inspect them before the apply lesson.
+Run order inside this file:
+1. Create a saved infrastructure plan (source window plan-2)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_01_read_the_resource_and_identity_definitions.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_create_a_saved_infrastructure_plan(session):
     """Run Create a saved infrastructure plan at this checkpoint.
 
     Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.
@@ -32,9 +35,15 @@ def demonstrate(session):
     import sys
     session.command([sys.executable, "commands/infrastructure.py", "plan", "--project", session.config.project, "--region", session.config.cloud_run_region])
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_02_create_a_saved_infrastructure_plan', step_01_create_a_saved_infrastructure_plan),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

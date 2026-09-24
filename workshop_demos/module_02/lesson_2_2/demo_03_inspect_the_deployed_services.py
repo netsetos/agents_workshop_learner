@@ -1,25 +1,28 @@
-"""Lesson 2.2 / plan-3: Inspect the deployed services
+"""Lesson 2.2: demo 03 inspect the deployed services
 
-Summary and purpose:
 List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.
 
-HTML instruction: Course-plan experiment — live deployment
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_02_apply_and_deploy_the_prepared_kit
-Expected observation: Compare the printed observations with this heading in README.md.
+Run order inside this file:
+1. Inspect the deployed services (source window plan-3)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_02_apply_and_deploy_the_prepared_kit.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_inspect_the_deployed_services(session):
     """Run Inspect the deployed services at this checkpoint.
 
     List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.
@@ -32,9 +35,15 @@ def demonstrate(session):
     session.command(["gcloud", "run", "services", "list", "--project", session.config.project, "--region", session.config.cloud_run_region,
                      "--format=table(metadata.name,spec.template.spec.serviceAccountName,status.url)"])
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_03_inspect_the_deployed_services', step_01_inspect_the_deployed_services),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

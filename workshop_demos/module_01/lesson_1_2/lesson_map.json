@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "1.2",
   "title": "Prove a first success and diagnose a first failure",
   "source_kind": "course_plan_and_kit",
@@ -15,45 +15,76 @@
   ],
   "demos": [
     {
+      "id": "demo_01_run_the_actual_offline_gate",
       "lesson": "1.2",
       "file": "demo_01_run_the_actual_offline_gate.py",
-      "id": "demo_01_run_the_actual_offline_gate",
-      "anchor": "plan-1",
-      "heading": "Run the actual offline gate",
-      "subheading": "Run the actual offline gate",
-      "purpose": "Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes.",
-      "label": "Course-plan experiment \u2014 local Python/kit inspection",
       "category": "required",
       "requires": [],
-      "expected": "No failed checks; actual tool-dependent skips are reported.",
+      "heading": "demo 01 run the actual offline gate",
+      "purpose": "Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes.",
+      "anchor": "plan-1",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": true,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Run the actual offline gate",
+          "subheading": "Run the actual offline gate",
+          "purpose": "Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes.",
+          "label": "Course-plan experiment — local Python/kit inspection",
+          "expected": "No failed checks; actual tool-dependent skips are reported.",
+          "id": "source_demo_01_run_the_actual_offline_gate",
+          "function": "step_01_run_the_actual_offline_gate",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_break_an_assertion_in_memory.py"
     },
     {
+      "id": "demo_02_break_an_assertion_in_memory",
       "lesson": "1.2",
       "file": "demo_02_break_an_assertion_in_memory.py",
-      "id": "demo_02_break_an_assertion_in_memory",
-      "anchor": "plan-2",
-      "heading": "Break an assertion in memory",
-      "subheading": "Break an assertion in memory",
-      "purpose": "Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited.",
-      "label": "Course-plan experiment \u2014 local Python/kit inspection",
       "category": "required",
       "requires": [
         "demo_01_run_the_actual_offline_gate"
       ],
-      "expected": "A named must_contain failure followed by a passing original row.",
+      "heading": "demo 02 break an assertion in memory",
+      "purpose": "Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited.",
+      "anchor": "plan-2",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": true,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Break an assertion in memory",
+          "subheading": "Break an assertion in memory",
+          "purpose": "Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited.",
+          "label": "Course-plan experiment — local Python/kit inspection",
+          "expected": "A named must_contain failure followed by a passing original row.",
+          "id": "source_demo_02_break_an_assertion_in_memory",
+          "function": "step_01_break_an_assertion_in_memory",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
-  "live_verification": "Not performed; main HTML has not yet been authored."
+  "live_verification": "Not performed; main HTML has not yet been authored.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "18.3",
   "title": "Inspect the vLLM service and the GKE alternative",
   "source_kind": "main_html",
@@ -119,165 +119,224 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 383,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "18.3",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2",
+      "windows": [
+        3
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source_lines": [
+        383
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 383,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_vllm_service.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 389,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_vllm_service",
       "lesson": "18.3",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_vllm_service.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 vllm service",
+      "purpose": "Read the implemented vLLM service and its serving constraints.",
+      "anchor": "s3",
+      "windows": [
+        10
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source_lines": [
+        466
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "The vLLM service, read",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (reads the service's files; no network)",
+          "expected": "the image: FROM vllm/vllm-openai:v0.28.0, then python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  weights in the image: none - no step fetches them, and the HF_TOKEN build-arg cloudbuild.yaml passes has no ARG to land in\n  so the engine downloads google/gemma-3-4b-it when it starts, from Hugging Face\n  the environment make deploy-vllm gives it: GOOGLE_CLOUD_PROJECT - no Hugging Face token\nthe service: 1 nvidia-l4, 8 vCPU, 32Gi; 0 to 1 instance; 32 requests at a time; startup probe 120 s + 5 x 30 s = 270 s\nits door: every chat completion needs an X-API-Key header, hashed and looked up in Firestore (api_keys then tenants)\n  what the gateway's token proxy sends: its own ID token as Authorization, and no X-API-Key\n  code elsewhere in the kit that writes an api_keys document: none\n  roles Terraform grants documind-vllm-sa, the account it runs as: none\nits request log: BigQuery table 'project.dataset.inference_logs'\nthe gateway's route to it: documind-inference, http://127.0.0.1:8090/vllm/v1, falling back to documind-slm, documind-general",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_01_example",
+          "window": 10,
+          "source_line": 466,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_gke_manifest_and_cluster.py"
+    },
+    {
+      "id": "demo_02_gke_manifest_and_cluster",
+      "lesson": "18.3",
+      "file": "demo_02_gke_manifest_and_cluster.py",
+      "category": "required",
+      "requires": [
+        "demo_01_vllm_service"
+      ],
+      "heading": "demo 02 gke manifest and cluster",
+      "purpose": "Inspect the alternative manifest and the lane's actual cluster state.",
+      "anchor": "s4, s5",
+      "windows": [
+        14,
+        17,
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source_lines": [
+        577,
+        649,
+        685
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The manifest, read",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (reads the manifest and the image it runs; no network)",
+          "expected": "Deployment documind-vllm: 1 replica, and no autoscaler\n  its node: nodeSelector cloud.google.com/gke-accelerator=nvidia-l4, so Autopilot provisions an L4 node for the pod\n  image: ${IMAGE}, which make gke-up fills in: asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/gemma-vllm:latest\n  limits: 1 GPU, 6 vCPU, 24Gi (requests default to the limits)\n  env: HF_HUB_OFFLINE=1\n  startup probe: GET /health every 10 s, 60 failures allowed: 600 s to load\n  args: --model=google/gemma-3-4b-it --dtype=bfloat16 --gpu-memory-utilization=0.90 --max-model-len=4096 --port=8080\nService documind-vllm: ClusterIP (no type named, so the default), port 80 to 8080: no address outside the cluster\nthe image it runs: ENTRYPOINT [], CMD python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  the manifest sets args and no command, and the ENTRYPOINT is empty: the container runs '--model=google/gemma-3-4b-it' as its program\n  main.py takes its model from the environment (MODEL_NAME), and reads none of those args\n  the image holds no weights (step 3), and HF_HUB_OFFLINE=1 forbids the download\nverdict: as written, this pod cannot start",
+          "adaptations": [],
+          "id": "source_14",
+          "function": "step_01_example",
+          "window": 14,
+          "source_line": 577,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The lane's cluster, inspected",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (read-only: describes the lane's cluster, looks for the vLLM service and image)",
+          "expected": "documind-autopilot: STANDARD, a regional control plane in asia-south1, on documind-vpc, RUNNING\n  node pool documind-lab: 1 x e2-standard-2 in asia-south1-a, 30 GB pd-standard, GPU: none\n  what it bills while it exists: $0.10 an hour for the control plane (the free tier covers only zonal and Autopilot clusters) + $0.0805 for the node = $0.1805 an hour, Rs 15.34; Rs 11,199 for a 730-hour month, plus the disk\ndocumind-vllm on Cloud Run (us-central1): not deployed\nthe gemma-vllm image in asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind: not built",
+          "adaptations": [],
+          "id": "source_17",
+          "function": "step_02_example",
+          "window": 17,
+          "source_line": 649,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The lane's cluster, inspected",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab)",
+          "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:695: gke-up] Error 1",
+          "adaptations": [],
+          "id": "source_19",
+          "function": "step_03_example",
+          "window": 19,
+          "source_line": 685,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_duty_cycle_cost.py"
+    },
+    {
+      "id": "demo_03_duty_cycle_cost",
+      "lesson": "18.3",
+      "file": "demo_03_duty_cycle_cost.py",
+      "category": "required",
+      "requires": [
+        "demo_02_gke_manifest_and_cluster"
+      ],
+      "heading": "demo 03 duty cycle cost",
+      "purpose": "Compute the serving alternatives' duty-cycle cost from the supplied assumptions.",
+      "anchor": "s6",
+      "windows": [
+        22
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source_lines": [
+        722
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The duty-cycle sum",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell (arithmetic only; no network)",
+          "expected": "your pattern: 8 bursts a day of 30 minutes, on 22 days a month\nCloud Run, on demand: each burst, then up to 10 idle minutes - an instance lives 320 minutes a day\n  the duty-cycle sum: 320 min x 22 days = 117.3 hours of 730 (16.1%) x $1.4209 = $166.72, Rs 14,171 a month\nGKE Autopilot, always on, for all 730 hours:\n  us-central1  $0.9558 an hour (node 0.8536 + L4 0.0670 + 8 vCPU 0.0240 + 32 GiB 0.0112): Rs 59,309; with the $0.10 cluster fee, Rs 65,514\n               cheaper than Cloud Run above 67.3% of the month (74.3% with the fee)\n  asia-south1  $1.0113 an hour (node 0.8886 + L4 0.0805 + 8 vCPU 0.0288 + 32 GiB 0.0134): Rs 62,753; with the $0.10 cluster fee, Rs 68,958\n               cheaper than Cloud Run above 71.2% of the month (78.2% with the fee)\nat 16.1%: Cloud Run is cheaper - Rs 14,171 against Rs 59,309 for the cheapest GKE line",
+          "adaptations": [],
+          "id": "source_22",
+          "function": "step_01_example",
+          "window": 22,
+          "source_line": 722,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "18.3",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s2",
+      "windows": [
+        5
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source_lines": [
+        389
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 10,
-      "label": "bash — run in the operator shell, in the kit (reads the service's files; no network)",
-      "heading": "The vLLM service, read",
-      "subheading": "Do it",
-      "anchor": "s3",
-      "purpose": "Do it",
-      "expected": "the image: FROM vllm/vllm-openai:v0.28.0, then python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  weights in the image: none - no step fetches them, and the HF_TOKEN build-arg cloudbuild.yaml passes has no ARG to land in\n  so the engine downloads google/gemma-3-4b-it when it starts, from Hugging Face\n  the environment make deploy-vllm gives it: GOOGLE_CLOUD_PROJECT - no Hugging Face token\nthe service: 1 nvidia-l4, 8 vCPU, 32Gi; 0 to 1 instance; 32 requests at a time; startup probe 120 s + 5 x 30 s = 270 s\nits door: every chat completion needs an X-API-Key header, hashed and looked up in Firestore (api_keys then tenants)\n  what the gateway's token proxy sends: its own ID token as Authorization, and no X-API-Key\n  code elsewhere in the kit that writes an api_keys document: none\n  roles Terraform grants documind-vllm-sa, the account it runs as: none\nits request log: BigQuery table 'project.dataset.inference_logs'\nthe gateway's route to it: documind-inference, http://127.0.0.1:8090/vllm/v1, falling back to documind-slm, documind-general",
-      "line": 466,
-      "id": "demo_03_01_do_it",
-      "lesson": "18.3",
-      "file": "demo_03_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": true,
-      "next": "demo_04_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 14,
-      "label": "bash — run in the operator shell, in the kit (reads the manifest and the image it runs; no network)",
-      "heading": "The manifest, read",
-      "subheading": "Do it",
-      "anchor": "s4",
-      "purpose": "Do it",
-      "expected": "Deployment documind-vllm: 1 replica, and no autoscaler\n  its node: nodeSelector cloud.google.com/gke-accelerator=nvidia-l4, so Autopilot provisions an L4 node for the pod\n  image: ${IMAGE}, which make gke-up fills in: asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/gemma-vllm:latest\n  limits: 1 GPU, 6 vCPU, 24Gi (requests default to the limits)\n  env: HF_HUB_OFFLINE=1\n  startup probe: GET /health every 10 s, 60 failures allowed: 600 s to load\n  args: --model=google/gemma-3-4b-it --dtype=bfloat16 --gpu-memory-utilization=0.90 --max-model-len=4096 --port=8080\nService documind-vllm: ClusterIP (no type named, so the default), port 80 to 8080: no address outside the cluster\nthe image it runs: ENTRYPOINT [], CMD python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  the manifest sets args and no command, and the ENTRYPOINT is empty: the container runs '--model=google/gemma-3-4b-it' as its program\n  main.py takes its model from the environment (MODEL_NAME), and reads none of those args\n  the image holds no weights (step 3), and HF_HUB_OFFLINE=1 forbids the download\nverdict: as written, this pod cannot start",
-      "line": 577,
-      "id": "demo_04_01_do_it",
-      "lesson": "18.3",
-      "file": "demo_04_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 389,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": true,
-      "next": "demo_05_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 17,
-      "label": "bash — run in the operator shell, in the kit (read-only: describes the lane's cluster, looks for the vLLM service and image)",
-      "heading": "The lane's cluster, inspected",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": "documind-autopilot: STANDARD, a regional control plane in asia-south1, on documind-vpc, RUNNING\n  node pool documind-lab: 1 x e2-standard-2 in asia-south1-a, 30 GB pd-standard, GPU: none\n  what it bills while it exists: $0.10 an hour for the control plane (the free tier covers only zonal and Autopilot clusters) + $0.0805 for the node = $0.1805 an hour, Rs 15.34; Rs 11,199 for a 730-hour month, plus the disk\ndocumind-vllm on Cloud Run (us-central1): not deployed\nthe gemma-vllm image in asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind: not built",
-      "line": 649,
-      "id": "demo_05_01_do_it",
-      "lesson": "18.3",
-      "file": "demo_05_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_02_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 19,
-      "label": "bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab)",
-      "heading": "The lane's cluster, inspected",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:695: gke-up] Error 1",
-      "line": 685,
-      "id": "demo_05_02_do_it",
-      "lesson": "18.3",
-      "file": "demo_05_02_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 22,
-      "label": "bash — run in the operator shell (arithmetic only; no network)",
-      "heading": "The duty-cycle sum",
-      "subheading": "Do it",
-      "anchor": "s6",
-      "purpose": "Do it",
-      "expected": "your pattern: 8 bursts a day of 30 minutes, on 22 days a month\nCloud Run, on demand: each burst, then up to 10 idle minutes - an instance lives 320 minutes a day\n  the duty-cycle sum: 320 min x 22 days = 117.3 hours of 730 (16.1%) x $1.4209 = $166.72, Rs 14,171 a month\nGKE Autopilot, always on, for all 730 hours:\n  us-central1  $0.9558 an hour (node 0.8536 + L4 0.0670 + 8 vCPU 0.0240 + 32 GiB 0.0112): Rs 59,309; with the $0.10 cluster fee, Rs 65,514\n               cheaper than Cloud Run above 67.3% of the month (74.3% with the fee)\n  asia-south1  $1.0113 an hour (node 0.8886 + L4 0.0805 + 8 vCPU 0.0288 + 32 GiB 0.0134): Rs 62,753; with the $0.10 cluster fee, Rs 68,958\n               cheaper than Cloud Run above 71.2% of the month (78.2% with the fee)\nat 16.1%: Cloud Run is cheaper - Rs 14,171 against Rs 59,309 for the cheapest GKE line",
-      "line": 722,
-      "id": "demo_06_01_do_it",
-      "lesson": "18.3",
-      "file": "demo_06_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_05_02_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": true,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -387,5 +446,8 @@
       "line": 749
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "Read the vLLM/GKE definitions even if the optional GKE cluster has not been deployed; absence is not a serving comparison."
 }
