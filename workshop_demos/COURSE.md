@@ -7,7 +7,7 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [2.1: Understand the project, identities and resource map](module_02/lesson_2_1/README.md) — 2 files; course_plan_and_kit
 - [2.2: Review and start the prepared deployment](module_02/lesson_2_2/README.md) — 3 files; course_plan_and_kit
 - [2.3: Check readiness, save progress and close the session](module_02/lesson_2_3/README.md) — 3 files; course_plan_and_kit
-- [3.1: Understand source, tenant, page and chunk contracts](module_03/lesson_3_1/README.md) — 13 files; main_html
+- [3.1: Understand source, tenant, page and chunk contracts](module_03/lesson_3_1/README.md) — 5 files; main_html
 - [3.2: Parse documents and compare chunk boundaries](module_03/lesson_3_2/README.md) — 11 files; main_html
 - [3.3: Create and validate compatible embeddings](module_03/lesson_3_3/README.md) — 14 files; main_html
 - [3.4: Write, inspect and verify indexed records](module_03/lesson_3_4/README.md) — 12 files; main_html

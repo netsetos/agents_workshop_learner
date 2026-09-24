@@ -1,0 +1,256 @@
+"""Reusable I/O for lesson 3.1; the experiments remain in the three demo files.
+
+Clients are created only inside an active DemoSession. HTTP evidence includes
+status and body, never bearer tokens. Exact-version polling replaces arbitrary
+sleeps and unrelated 'latest ingest' logs. Cloud writes are limited to the
+explicit preparation, roster command and fixture-upload checkpoints.
+"""
+from __future__ import annotations
+
+import json
+import os
+import time
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
+
+from .artifacts import write_json
+from .auth import gcloud
+from .discovery import read_serving
+
+
+def require(condition, message):
+    """Keep evidence checks active even if Python is launched with optimization."""
+    if not condition:
+        raise RuntimeError(message)
+
+
+def require_fresh_vector(answer):
+    """A backend pin alone cannot prove a fresh index read; inspect its stages."""
+    stages = answer.get("stages") or {}
+    require(answer.get("cache_hit") == "none", "Cached answer: rerun setup/prepare.py after cleanup; no fresh retrieval was demonstrated.")
+    require(stages.get("retrieval_backend") == "vector" and stages.get("pool", 0) > 0
+            and stages.get("vector_chunks", 0) > 0,
+            "No fresh Vector Search contribution. Inspect saved stages, index deployment and API logs; a Firestore fallback is not this proof.")
+
+
+def version_ready(expected, source, claim, chunks):
+    """Require this object's generation, content key and complete current rows.
+
+    A document claim identifies CONTENT. Its generation can be an earlier upload
+    of those same bytes; the source ledger identifies the current generation.
+    Empty/missing claims and unrelated indexed documents must never pass.
+    """
+    return bool(source and claim and chunks
+                and source.get("tenant_id") == expected["tenant"]
+                and source.get("name") == expected["name"]
+                and source.get("gcs_uri") == expected["uri"]
+                and source.get("doc_key") == expected["doc_key"]
+                and source.get("sha256") == expected["sha256"]
+                and str(source.get("generation")) == expected["generation"]
+                and source.get("status") == claim.get("status") == "indexed"
+                and claim.get("tenant_id") == expected["tenant"]
+                and claim.get("gcs_uri") == expected["uri"]
+                and source.get("chunks") == claim.get("chunks") == len(chunks)
+                and all(row.get("current") is True
+                        and row.get("doc_key") == expected["doc_key"]
+                        and row.get("tenant_id") == expected["tenant"]
+                        and row.get("source_uri") == expected["uri"] for row in chunks.values()))
+
+
+def poll_until(read, ready, seconds, interval, *, clock=time.monotonic, sleep=time.sleep):
+    """Poll bounded SDK reads; timeout reports the last observed state, not success."""
+    deadline = clock() + seconds
+    while True:
+        value = read()
+        if ready(value):
+            return value
+        remaining = deadline - clock()
+        if remaining <= 0:
+            raise TimeoutError(f"Indexing did not reach the expected version in {seconds}s. Last state: {value['summary']}")
+        print("Waiting:", value["summary"], flush=True)
+        sleep(min(interval, remaining))
+
+
+def prepare_cache(session, disable=True):
+    """Save the cache setting before changing it; cleanup can recover a failed update.
+
+    This creates a Cloud Run revision only when caching is enabled. It affects
+    all tenants using this API. Require a single latest revision serving traffic
+    so deployment cannot silently target an inactive revision or split traffic.
+    """
+    config = session.config
+    serving = read_serving(config, config.api_service)
+    value = serving.environment.get("SEMANTIC_CACHE")
+    if value != "on":
+        return
+    require(disable, "SEMANTIC_CACHE=on. Set DISABLE_ANSWER_CACHE=True in prepare.py to temporarily disable it, or disable it yourself before this lesson.")
+    flags = (f"--project={config.project}", f"--region={config.cloud_run_region}")
+    service = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json"))
+    traffic = [row for row in service.get("spec", {}).get("traffic", []) if row.get("percent", 0) > 0]
+    require(len(traffic) == 1 and traffic[0].get("latestRevision") is True
+            and service.get("status", {}).get("latestReadyRevisionName") == serving.revision,
+            "Cache preparation needs 100% traffic to the latest ready revision. Inspect Cloud Run traffic before changing this service.")
+    saved = session.state.setdefault("lesson31_cache", {"previous": value, "restore_required": True})
+    require(saved["previous"] == value, "Cache setting changed outside this session; inspect before overwriting it.")
+    saved["restore_required"] = True
+    session.save()  # Intent is durable even if the deployment times out.
+    print("Temporarily disabling the API answer cache for all tenants; cleanup restores it.")
+    gcloud("run", "services", "update", config.api_service, *flags,
+           "--update-env-vars=SEMANTIC_CACHE=off", "--quiet", timeout=600)
+    require(read_serving(config, config.api_service).environment.get("SEMANTIC_CACHE") == "off",
+            "Cache update did not reach the serving revision. Run cleanup and inspect Cloud Run.")
+
+
+def restore_cache(session):
+    """Restore only the saved cache variable, preserving other service settings."""
+    saved = session.state.get("lesson31_cache") or {}
+    if not saved.get("restore_required"):
+        return
+    config = session.config
+    serving = read_serving(config, config.api_service)
+    current = serving.environment.get("SEMANTIC_CACHE")
+    require(current in {"off", saved["previous"]}, "Cache setting changed outside this lesson; inspect it before restoration.")
+    if current != saved["previous"]:
+        # Do not shift traffic on behalf of a lesson after an unrelated deployment.
+        flags = (f"--project={config.project}", f"--region={config.cloud_run_region}")
+        service = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json"))
+        traffic = [r for r in service.get("spec", {}).get("traffic", []) if r.get("percent", 0) > 0]
+        require(len(traffic) == 1 and traffic[0].get("latestRevision") is True,
+                "Traffic changed since preparation. Restore SEMANTIC_CACHE manually and rerun cleanup.")
+        gcloud("run", "services", "update", config.api_service, *flags,
+               f"--update-env-vars=SEMANTIC_CACHE={saved['previous']}", "--quiet", timeout=600)
+        require(read_serving(config, config.api_service).environment.get("SEMANTIC_CACHE") == saved["previous"],
+                "Cache restoration is not serving yet; inspect Cloud Run and rerun cleanup.")
+    saved["restore_required"] = False
+    session.save()
+
+
+class LessonCloud:
+    """Share authentication, clients and evidence between short teaching functions."""
+
+    def __init__(self, session):
+        """Use the IDE's ADC and explicit project; never inherit a terminal's token."""
+        from google.cloud import firestore, storage
+        require(session.config.tenant_id == "acme", "Lesson 3.1 uses the course's acme/zeta fixtures; set tenant_id to acme.")
+        self.session = session
+        self.db = firestore.Client(project=session.config.project, credentials=session.credentials)
+        self.bucket = storage.Client(project=session.config.project, credentials=session.credentials).bucket(session.config.uploads_bucket)
+
+    def save(self, name, value):
+        """Retain a complete response locally before selecting a short display view."""
+        write_json(self.session.attempt / f"{name}.json", value)
+
+    def document(self, path):
+        """Read one document without a multi-minute implicit retry loop."""
+        return self.db.document(path).get(retry=None, timeout=15).to_dict() or {}
+
+    def rows(self, collection, **equal):
+        """Read matching rows; dictionaries preserve IDs beside their payloads."""
+        from google.cloud.firestore_v1.base_query import FieldFilter
+        query = self.db.collection(collection)
+        for field, value in equal.items():
+            query = query.where(filter=FieldFilter(field, "==", value))
+        return {row.id: row.to_dict() for row in query.stream(retry=None, timeout=15)}
+
+    def chunks(self, tenant, name):
+        """Retired rows cannot satisfy a current-version or locator demonstration."""
+        return self.rows("chunks", tenant_id=tenant, source_uri=f"gs://{self.bucket.name}/{tenant}/{name}", current=True)
+
+    def request(self, name, path, body=None, identity="member", expected_status=200):
+        """Consume the entire HTTP body, record refusals and enforce the expected status."""
+        headers = {"Content-Type": "application/json"}
+        require(identity in {"member", "outsider", "none"}, "Unknown request identity.")
+        if identity != "none":
+            headers["Authorization"] = "Bearer " + self.session.identity_token(outsider=identity == "outsider")
+        request = Request(os.environ["API"].rstrip("/") + path,
+                          data=json.dumps(body).encode() if body is not None else None, headers=headers)
+        try:
+            response = urlopen(request, timeout=self.session.config.answer_wait_seconds)
+        except HTTPError as error:
+            response = error  # A refusal is evidence, not a failed JSON parse.
+        with response:
+            text = response.read().decode("utf-8", errors="replace")
+            status, content_type = response.code, response.headers.get("Content-Type", "")
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError:
+            payload = None
+        self.save(name, {"status": status, "content_type": content_type, "json": payload, "body": text})
+        print(f"{name}: HTTP {status}", text[:200])
+        require(status == expected_status, f"{name}: expected HTTP {expected_status}, got {status}; inspect {name}.json.")
+        return {"json": payload, "body": text, "content_type": content_type}
+
+    def query(self, name, question, *, filters=None, fresh=True):
+        """Ask ACME and optionally require evidence that Vector Search ran now."""
+        # The API caches tenant settings for 60s. Only wait out what remains of
+        # this preparation's propagation window, then still inspect real stages.
+        while True:
+            remaining = self.session.state.get("lesson31_pin_ready_after", 0) - time.time()
+            if remaining <= 0:
+                break
+            print(f"Allowing the API's tenant-settings cache to expire: {remaining:.0f}s", flush=True)
+            time.sleep(min(5, remaining))
+        body = {"query": question, "tenant_id": "acme", "stream": False}
+        if filters is not None:
+            body["filters"] = filters
+        result = self.request(name, "/v1/query", body)["json"]
+        require(isinstance(result, dict), "The API did not return a JSON object.")
+        if fresh:
+            require_fresh_vector(result)
+        return result
+
+    def fixture(self, tenant, filename, data, *, upload):
+        """Use exact bytes and a generation guard; never overwrite a different file.
+
+        UI mode only verifies the existing object. Operator mode creates a missing
+        fixture and reuses an identical existing object, avoiding duplicate-upload
+        events whose content claim may already have been completed.
+        """
+        from google.api_core.exceptions import NotFound
+        from services.ingest.contracts import DocumentContract, sha256_of
+        name = f"{tenant}/{filename}"
+        blob = self.bucket.blob(name)
+        try:
+            blob.reload(retry=None, timeout=15)
+        except NotFound:
+            require(upload, f"Upload evals/demo/{filename} in the ACME UI (Documents -> Upload -> Index documents), then rerun demo 2. Or explicitly choose ACME_UPLOAD='operator' in that file.")
+            blob.upload_from_string(data, content_type="text/markdown", if_generation_match=0, timeout=60)
+            print("Operator uploaded:", name)
+        require(blob.size == len(data), f"{name} has different bytes. Use the exact kit fixture; this demo will not overwrite it.")
+        remote = blob.download_as_bytes(if_generation_match=blob.generation, retry=None, timeout=30)
+        require(remote == data, f"{name} differs from the local fixture (including line endings). Inspect it before continuing.")
+        contract = DocumentContract(tenant_id=tenant, sha256=sha256_of(data), gcs_uri=f"gs://{self.bucket.name}/{name}", pages=0)
+        return {"tenant": tenant, "name": name, "uri": contract.gcs_uri,
+                "sha256": contract.sha256, "doc_key": contract.doc_key, "generation": str(blob.generation)}
+
+    def wait_indexed(self, expected):
+        """Wait for this exact version, then save the ledger, claim and current chunks."""
+        from services.ingest.idempotency import source_id_for
+
+        def read():
+            source = self.document("sources/" + source_id_for(expected["tenant"], expected["name"]))
+            claim = self.document("documents/" + expected["doc_key"])
+            chunks = self.chunks(expected["tenant"], expected["name"].split("/", 1)[1])
+            result = {"source": source, "claim": claim, "chunks": chunks,
+                      "summary": {"source_status": source.get("status"), "generation": source.get("generation"),
+                                  "expected_generation": expected["generation"], "doc_key": source.get("doc_key"),
+                                  "claim_status": claim.get("status"), "current_chunks": len(chunks)}}
+            self.save(expected["tenant"] + "_index_observation", result)
+            require(source.get("status") != "withdrawn", "This source was withdrawn. Inspect it and use the lesson 4.4 restore procedure deliberately.")
+            require(claim.get("status") != "failed", f"Worker failed: {claim.get('error')}; inspect the saved claim and ingest logs.")
+            return result
+
+        return poll_until(read, lambda r: version_ready(expected, r["source"], r["claim"], r["chunks"]),
+                          self.session.config.ingest_wait_seconds, self.session.config.poll_seconds)
+
+    def worker_logs(self, expected):
+        """Show only this tenant/key/generation's events; absence is not success evidence."""
+        values = {"resource.type": "cloud_run_revision", "resource.labels.service_name": self.session.config.ingest_service,
+                  "jsonPayload.tenant": expected["tenant"], "jsonPayload.doc_key": expected["doc_key"],
+                  "jsonPayload.generation": expected["generation"]}
+        query = " AND ".join(f"{key}={json.dumps(value)}" for key, value in values.items())
+        rows = json.loads(gcloud("logging", "read", query, f"--project={self.session.config.project}",
+                                 "--limit=10", "--freshness=30d", "--format=json"))
+        self.save(expected["tenant"] + "_worker_logs", rows)
+        print("Exact-version worker events:", [r.get("jsonPayload", {}).get("event") for r in rows]
+              or "none retained/visible yet; ledger + claim + chunks are the indexing evidence")

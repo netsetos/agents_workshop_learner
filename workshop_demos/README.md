@@ -1,6 +1,6 @@
 # Run the workshop from your IDE
 
-All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. There are 507 checkpoints: 249 native Python examples and 258 Python entry points for existing kit command workflows.
+All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. There are 499 checkpoints: 247 native Python examples and 252 Python entry points for existing kit command workflows.
 
 The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. Reading-only sections, diagrams and browser interactions remain in the lesson page.
 

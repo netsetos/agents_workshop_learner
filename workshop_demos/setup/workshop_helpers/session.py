@@ -58,8 +58,12 @@ class DemoSession:
         """Locate this file in its lesson map and resolve the lesson-specific state directory."""
         self.script = Path(script).resolve()
         self.lesson_dir = self.script.parent
+        # Lesson-specific preparation/cleanup can live in a setup/ subdirectory.
+        if not (self.lesson_dir / "lesson_map.json").exists():
+            self.lesson_dir = self.lesson_dir.parent
         self.mapping = json.loads((self.lesson_dir / "lesson_map.json").read_text(encoding="utf-8"))
-        self.step = next(item for item in self.mapping["demos"] if item["file"] == self.script.name)
+        relative_script = self.script.relative_to(self.lesson_dir).as_posix()
+        self.step = next(item for item in self.mapping["demos"] if item["file"] == relative_script)
         self.config = config or load_config()
         self.live, self.repeat = live, repeat
         self.lesson = self.mapping["lesson"]
