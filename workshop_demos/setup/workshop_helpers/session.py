@@ -95,12 +95,16 @@ class DemoSession:
                 self.state = json.loads((self.directory / "session.json").read_text(encoding="utf-8"))
                 if self.state["identity"] != identity:
                     raise RuntimeError("Active lesson belongs to a different project/tenant/kit/region. Restore its settings before starting a new session.")
-                if self.state.get("source_sha") != self.mapping.get("source_sha"):
+                if self.state.get("source_sha") != self.mapping.get("source_sha") and self.step.get("category") not in {"cleanup", "recovery"}:
                     raise RuntimeError("Lesson source changed during this run. Finish/recover the saved run before starting the updated sequence.")
+                if self.state.get("layout_version", 1) != self.mapping.get("layout_version", 1) and self.step.get("category") not in {"cleanup", "recovery"}:
+                    raise RuntimeError("This active run uses the old file layout. Run this lesson's setup/finish.py to restore saved settings, then setup/start_new_session.py before starting the new sequence.")
+                if self.state.get("lifecycle_complete") and self.step.get("category") != "cleanup":
+                    raise RuntimeError("This lesson run has been finished. Use setup/start_new_session.py for a new run.")
             else:
                 self.directory = self.base / uuid.uuid4().hex[:16]
                 self.directory.mkdir()
-                self.state = {"lesson": self.lesson, "identity": identity, "source_sha": self.mapping.get("source_sha"),
+                self.state = {"lesson": self.lesson, "identity": identity, "source_sha": self.mapping.get("source_sha"), "layout_version": self.mapping.get("layout_version", 1),
                               "created_at": utc_now(), "completed": [], "attempts": [], "environment": {}}
                 write_json(pointer, {"run_id": self.directory.name})
                 self.save()
@@ -207,11 +211,12 @@ class DemoSession:
                     self.state["environment"][key] = str(value)
         self.save()
 
-    def identity_token(self, audience=None, outsider=False):
+    def identity_token(self, audience=None, outsider=False, include_email=True):
         """Mint a fresh audience-bound token; returning it never persists it to disk."""
         from .auth import gcloud
         account = f"documind-outsider-sa@{self.config.project}.iam.gserviceaccount.com" if outsider else self.config.ui_service_account
-        return gcloud("auth", "print-identity-token", "--include-email", f"--audiences={audience or os.environ['API']}",
+        email_flag = ("--include-email",) if include_email else ()
+        return gcloud("auth", "print-identity-token", *email_flag, f"--audiences={audience or os.environ['API']}",
                       f"--impersonate-service-account={account}", f"--project={self.config.project}")
 
     def service_environment(self, service, keys):
@@ -332,8 +337,10 @@ class DemoSession:
             self.save()
         self.command([sys.executable, "commands/lane.py", "--project", self.config.project,
                       "tenant-backend", self.config.tenant_id, "vector"])
+        self.state["pin_ready_after"] = time.time() + 65  # API tenant-settings TTL is 60s.
+        self.save()
 
-    def start_local_service(self, args, health_url):
+    def start_local_service(self, args, health_url, *, expected_health=None):
         """Start an owned local process without holding the lesson lock indefinitely.
 
         Logs are redirected before detaching, and the PID is saved before polling.
@@ -364,7 +371,8 @@ class DemoSession:
             try:
                 with urllib.request.urlopen(health_url, timeout=2) as response:
                     health = json.load(response)
-                if health.get("status") == "ok" and health.get("profile") == "local":
+                expected = expected_health if expected_health is not None else {"status": "ok", "profile": "local"}
+                if all(health.get(key) == value for key, value in expected.items()):
                     print("Local service ready:", health)
                     return
             except OSError:
@@ -392,6 +400,9 @@ class DemoSession:
         """Restore the saved pin; refuse to overwrite an unrelated later pin change."""
         from google.cloud import firestore
         previous = self.state.get("original_backend")
+        if previous is None and not self.state.get("backend_restore_required"):
+            print("No tenant pin was changed by this session.")
+            return
         if previous not in {"vector", "firestore", "rag_engine", "vertex_search", "default"}:
             raise RuntimeError("No valid original backend was saved for this session.")
         db = firestore.Client(project=self.config.project)

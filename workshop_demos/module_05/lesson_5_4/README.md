@@ -1,92 +1,67 @@
 # Lesson 5.4: Test fallback without losing tenant or metadata filters
 
-**Summary:** `found_by: firestore` with the filter still applied. The files below follow the main HTML's runnable checkpoints and preserve its examples.
+## What to run
 
-Source: [main lesson HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html); Git blob `9553c89dce4181161137e7caeba0cf202f30a3ac`. Native Python cells can be stepped through in the IDE. Command workflows use the shared Bash/Make/gcloud helper because these are the kit's actual operations.
+Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-## Before running
-
-Use `/home/user/rag-shell-venv/bin/python`, run `workshop_demos/setup/bootstrap.py`, and check `workshop_demos/setup/config/settings.local.json`. Open the learner kit root in your IDE. Each file can be Run independently; the session helper sets the working directory and carries this lesson's variables forward.
-
-Run the required files in the table order. A failed step does not satisfy the next file's prerequisite. Read its saved output before continuing. Optional and recovery files are explicit choices; finish files are run at the end even though some HTML pages show their commands in the setup section. Do not use Run All.
-
-**Execution is not live verification:** these examples have source/compile checks, not a recorded run against your GCP project. Numerical sample output is illustrative; use the checks and explanations below. Commands can change cloud resources as described by their HTML instruction.
-
-## Required run order
-
-| HTML | File | Instruction / purpose |
+| Order | File | What it demonstrates |
 |---|---|---|
-| s2 · window 3 | [demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) | bash — run in the operator shell now, before the lesson's first step |
-| s2 · window 6 | [demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py](demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py) | bash — run in the operator shell, in $DEMO_ROOT, once per shell |
-| s3 · window 11 | [demo_03_01_do_it_the_rung_under_three_predicate_sets.py](demo_03_01_do_it_the_rung_under_three_predicate_sets.py) | bash — run in the operator shell (a Python cell; one embedding, a few dozen Firestore reads) |
-| s4 · window 16 | [demo_04_01_do_it_pin_acme_beneath_the_index_and_wait_for_th.py](demo_04_01_do_it_pin_acme_beneath_the_index_and_wait_for_th.py) | bash — run in the operator shell, in $DEMO_ROOT (one field written; up to nine questions while the minute passes) |
-| s4 · window 18 | [demo_04_02_do_it_the_same_predicates_on_the_chosen_rung_and.py](demo_04_02_do_it_the_same_predicates_on_the_chosen_rung_and.py) | bash — run in the operator shell (four questions, a few rupees) |
-| s4 · window 20 | [demo_04_03_do_it_the_smoke_s_line_for_a_chosen_rung_then_th.py](demo_04_03_do_it_the_smoke_s_line_for_a_chosen_rung_then_th.py) | bash — run in the operator shell, in $DEMO_ROOT (two smokes, a rupee each; one field written) |
-| s5 · window 25 | [demo_05_01_do_it_a_candidate_that_cannot_reach_the_index.py](demo_05_01_do_it_a_candidate_that_cannot_reach_the_index.py) | bash — run in the operator shell (one new revision, no traffic; one question to it; one log read; ask() from step 4) |
-| s5 · window 27 | [demo_05_02_do_it_a_candidate_that_cannot_reach_the_index.py](demo_05_02_do_it_a_candidate_that_cannot_reach_the_index.py) | bash — run in the operator shell (the undo: the real name back on the template, the tag dropped, the live service asked once) |
-| s6 · window 31 | [demo_06_01_do_it_the_probe_then_its_evidence.py](demo_06_01_do_it_the_probe_then_its_evidence.py) | bash — run in the operator shell, in $DEMO_ROOT (one embedding read off a row, a few dozen Firestore reads; nothing written to the cloud) |
-| s7 · window 37 | [demo_07_01_do_it_count_the_tier_plan_its_refill_read_the_ro.py](demo_07_01_do_it_count_the_tier_plan_its_refill_read_the_ro.py) | bash — run in the operator shell, in $DEMO_ROOT (read-only: the plan writes nothing without --apply) |
-| s8 · window 42 | [demo_08_01_the_policy_that_sends_a_tenant_home.py](demo_08_01_the_policy_that_sends_a_tenant_home.py) | bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0) |
+| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
+| 2 | [demo_01_firestore_predicates.py](demo_01_firestore_predicates.py) | Run the fallback rung directly with the same authorization/current/metadata predicates. |
+| 3 | [demo_02_tenant_pin_and_chaos_candidate.py](demo_02_tenant_pin_and_chaos_candidate.py) | Choose the Firestore rung, restore the pin, then force an unavailable index on a candidate. |
+| 4 | [demo_03_probe_backfill_and_policy.py](demo_03_probe_backfill_and_policy.py) | Read the combined-filter probe, tier/backfill evidence and residency policy decision. |
 
-## Finish and restore settings
+## Before starting
 
-- [finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py](finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py) — bash — run in the operator shell when you finish the lesson, not now
+Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-## Checkpoints and explanation
+The shared workshop setup and the deployed/local inputs described in the reading guide.
 
-### demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
+Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+## Resume and recovery
+
+Completed functions are saved and skipped when an unfinished demo is run again. A failed/interrupted function may have made partial changes: inspect its attempt under `workshop_demos/results/`, repair the cause, then set `RETRY_FAILED_STEP = True` in that demo to retry only unfinished functions. `REPEAT = True` deliberately replays the entire file. It is not a repair shortcut.
+
+Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
+
+After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+
+## Finish and restore
+
+- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+
+## Functions, observations and effects
+
+The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
+
+### setup/prepare.py
+
+Prepare this lesson's saved settings and dependencies before its live experiments.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
-Run instruction: bash — run in the operator shell now, before the lesson's first step.
+Operation: bash — run in the operator shell now, before the lesson's first step.
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine. Temporarily disable an enabled answer cache for this retrieval/generation experiment and save its prior value. This changes the shared API; finish restores it. Cache lessons in Module 9 are unaffected.
 
-IDE adaptations:
-
-- Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 acme: retrieval_backend=vector
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py
-
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
-
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
-
-Run instruction: bash — run in the operator shell when you finish the lesson, not now.
-
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-IDE adaptations:
-
-- Run at lesson end despite its early HTML position, as the source label explicitly instructs.
-
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py
-
-**HTML: Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index names and the retrieval settings live in the API's environment; a name the service does not set is unset rather than exported empty, because the kit's settings class reads an empty variable as a value, and steps 5 and 6 import the kit. The pins live in Firestore, one document per tenant, and the lane helper prints them.
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT, once per shell.
+Operation: bash — run in the operator shell, in $DEMO_ROOT, once per shell.
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
+IDE adaptation: Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed.
 
-IDE adaptations:
-
-- Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876543210987654321  deployed: documind_chunks_v1
@@ -96,19 +71,17 @@ zeta: retrieval_backend=default (the deployment RETRIEVAL_BACKEND)
 acme: data_region=any
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_01_firestore_predicates.py
 
-### demo_03_01_do_it_the_rung_under_three_predicate_sets.py
+Run the fallback rung directly with the same authorization/current/metadata predicates.
 
-**HTML: The Firestore rung by hand: the API's three predicates on Firestore's own vector index / Do it: the rung under three predicate sets**
+**`step_01_the_rung_under_three_predicate_sets(session)` — The Firestore rung by hand: the API's three predicates on Firestore's own vector index / Do it: the rung under three predicate sets**
 
 Run the cell as it is, then twice more with a filter in front of its first line: F='{"doc_type":"policy"}' python - <<'PY' and F='{"kind":"text"}' python - <<'PY', the rest unchanged. The worker stamped the lane's uploads doc_type: unknown, so the first filter empties the pool on this rung exactly as it did on the index in lesson 5.1, and the second keeps it whole.
 
-Run instruction: bash — run in the operator shell (a Python cell; one embedding, a few dozen Firestore reads).
+Operation: bash — run in the operator shell (a Python cell; one embedding, a few dozen Firestore reads).
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 predicates: tenant_id -> 20 rows, every one found_by firestore
@@ -125,19 +98,17 @@ predicates: tenant_id, kind (kind=text) -> 20 rows, every one found_by firestore
 index needed: (tenant_id, kind, embedding) | reads billed, at most: 1x for 1xxx index entries + 20 documents
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_02_tenant_pin_and_chaos_candidate.py
 
-### demo_04_01_do_it_pin_acme_beneath_the_index_and_wait_for_th.py
+Choose the Firestore rung, restore the pin, then force an unavailable index on a candidate.
 
-**HTML: Moving one tenant beneath the index by hand, and back / Do it: pin acme beneath the index, and wait for the API to notice**
+**`step_01_pin_acme_beneath_the_index_and_wait_for_th(session)` — Moving one tenant beneath the index by hand, and back / Do it: pin acme beneath the index, and wait for the API to notice**
 
 Do it: pin acme beneath the index, and wait for the API to notice
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT (one field written; up to nine questions while the minute passes).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (one field written; up to nine questions while the minute passes).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 acme: retrieval_backend=firestore
@@ -145,19 +116,13 @@ backend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True 
 backend firestore | vector_chunks 0 | pool 20 | retrieve_ms 5xx | answerable True | first 1 hr_policy_2026.md | A confirmed employee in grade E3 ...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_04_02_do_it_the_same_predicates_on_the_chosen_rung_and.py
-
-**HTML: Moving one tenant beneath the index by hand, and back / Do it: the same predicates on the chosen rung, and two tenants that do not cross**
+**`step_02_the_same_predicates_on_the_chosen_rung_and(session)` — Moving one tenant beneath the index by hand, and back / Do it: the same predicates on the chosen rung, and two tenants that do not cross**
 
 Do it: the same predicates on the chosen rung, and two tenants that do not cross
 
-Run instruction: bash — run in the operator shell (four questions, a few rupees).
+Operation: bash — run in the operator shell (four questions, a few rupees).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 backend firestore | vector_chunks 0 | pool 0 | retrieve_ms 4xx | answerable False | first - | The corpus holds nothing near this question: no passage of this
@@ -166,19 +131,13 @@ backend firestore | vector_chunks 0 | pool 20 | retrieve_ms 5xx | answerable Tru
 backend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True | first x hr_policy_zeta_2026.md | ... Rs 25,000 ...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_04_03_do_it_the_smoke_s_line_for_a_chosen_rung_then_th.py
-
-**HTML: Moving one tenant beneath the index by hand, and back / Do it: the smoke's line for a chosen rung, then the pin back**
+**`step_03_the_smoke_s_line_for_a_chosen_rung_then_th(session)` — Moving one tenant beneath the index by hand, and back / Do it: the smoke's line for a chosen rung, then the pin back**
 
 Do it: the smoke's line for a chosen rung, then the pin back
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT (two smokes, a rupee each; one field written).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (two smokes, a rupee each; one field written).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 [ -- ] vector tier  this request ran on firestore — skipped
@@ -187,19 +146,13 @@ backend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True 
   [PASS] vector tier  20 of 20 chunks came from the index
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_05_01_do_it_a_candidate_that_cannot_reach_the_index.py
-
-**HTML: The chaos rung: an index that will not answer, on a candidate that takes no traffic / Do it: a candidate that cannot reach the index**
+**`step_04_a_candidate_that_cannot_reach_the_index(session)` — The chaos rung: an index that will not answer, on a candidate that takes no traffic / Do it: a candidate that cannot reach the index**
 
 Do it: a candidate that cannot reach the index
 
-Run instruction: bash — run in the operator shell (one new revision, no traffic; one question to it; one log read; ask() from step 4).
+Operation: bash — run in the operator shell (one new revision, no traffic; one question to it; one log read; ask() from step 4).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 candidate: backend vector | vector_chunks 0 | pool 20 | answerable True | citations 3
@@ -207,19 +160,13 @@ the smoke would say: [FAIL] vector tier  RETRIEVAL_BACKEND=vector and no chunk c
 2026-09-2xT1x:xx:xx.xxxxxxZ	acme	... documind_chunks_nonesuch ...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_05_02_do_it_a_candidate_that_cannot_reach_the_index.py
-
-**HTML: The chaos rung: an index that will not answer, on a candidate that takes no traffic / Do it: a candidate that cannot reach the index**
+**`step_05_a_candidate_that_cannot_reach_the_index(session)` — The chaos rung: an index that will not answer, on a candidate that takes no traffic / Do it: a candidate that cannot reach the index**
 
 Do it: a candidate that cannot reach the index
 
-Run instruction: bash — run in the operator shell (the undo: the real name back on the template, the tag dropped, the live service asked once).
+Operation: bash — run in the operator shell (the undo: the real name back on the template, the tag dropped, the live service asked once).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 template now: documind_chunks_v1
@@ -227,19 +174,17 @@ backend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True 
 100;documind-api-00048-xyz
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### demo_03_probe_backfill_and_policy.py
 
-### demo_06_01_do_it_the_probe_then_its_evidence.py
+Read the combined-filter probe, tier/backfill evidence and residency policy decision.
 
-**HTML: The probe: the kit's read-only check of the combined filters / Do it: the probe, then its evidence**
+**`step_01_the_probe_then_its_evidence(session)` — The probe: the kit's read-only check of the combined filters / Do it: the probe, then its evidence**
 
 Do it: the probe, then its evidence
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT (one embedding read off a row, a few dozen Firestore reads; nothing written to the cloud).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (one embedding read off a row, a few dozen Firestore reads; nothing written to the cloud).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 {"project": "documind-ai-YOUR-ID", "collection": "chunks", "source_uri": "gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md", "source_status": "indexed", "source_doc_key": "acme_497809ff..."}
@@ -251,19 +196,13 @@ PASS: both Firestore filter modes verified. Evidence: operator-evidence/firestor
 evidence: {'doc_type': 'unknown', 'kind': 'text'} | current off: 5 rows | current on: 5 rows | doc_key acme_497809ff...
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_07_01_do_it_count_the_tier_plan_its_refill_read_the_ro.py
-
-**HTML: The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung / Do it: count the tier, plan its refill, read the rows by rung, Rs 0**
+**`step_02_count_the_tier_plan_its_refill_read_the_ro(session)` — The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung / Do it: count the tier, plan its refill, read the rows by rung, Rs 0**
 
 Do it: count the tier, plan its refill, read the rows by rung, Rs 0
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT (read-only: the plan writes nothing without --apply).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (read-only: the plan writes nothing without --apply).
 
-Implementation: the existing kit command workflow through session.shell(). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 index: documind-chunks  datapoints: 4xxx  shards: 1  update: STREAM_UPDATE
@@ -277,19 +216,13 @@ firestore                    5      xxxx      xxx    0.0xxx      x.xx    2xxx   
 vector                       6      xxxx      xxx    0.0xxx      x.xx    2xxx   0.00
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
-
-### demo_08_01_the_policy_that_sends_a_tenant_home.py
-
-**HTML: What the rung costs, where it cannot go, and the policy that sends a tenant home / The policy that sends a tenant home**
+**`step_03_the_policy_that_sends_a_tenant_home(session)` — What the rung costs, where it cannot go, and the policy that sends a tenant home / The policy that sends a tenant home**
 
 A tenant's data_region says where its text may be held: any lets the managed mirror copy its current versions abroad, in keeps it on the kit's rows in India, and a missing or unknown value is in, because an unreadable policy is the strict one. retrieval_backend_for() holds every request's backend against it: a managed pin for an in tenant is served from the kit's own rung instead, the deployment's if that is vector or firestore, otherwise Firestore, with policy_fallback 1 on the row, which the warehouse sums into a column. The cell runs the two pure functions behind that decision offline; nothing leaves the machine.
 
-Run instruction: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0).
 
-Implementation: native Python in demonstrate(session). The shared helper supplies credentials/settings, preserves this lesson's state and records failures; the file contains the actual example.
-
-Expected shape from the HTML (actual counts/timing can differ):
+Expected shape, not a promised result:
 
 ```text
 {}                       -> policy in
@@ -302,16 +235,18 @@ in   tenant, a store in global       -> may not
 any  tenant, a store in us-central1  -> may hold it
 ```
 
-If it fails, inspect this attempt under `workshop_demos/results/`, plus any report path printed by the example. Keep the session and its fixture files for recovery. Do not rerun a cloud mutation merely to obtain another output line.
+### setup/finish.py
 
-## Source coverage
+Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
 
-43 code windows mapped: 12 IDE demo files, 1 shared setup blocks, 30 read-only excerpts/output blocks. `lesson_map.json` records every window and source line. Reading-only headings and UI observations remain in the source lesson; they are not turned into fake runnable examples.
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-## Helper functions
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-- `DemoSession`: resumes this lesson, checks prerequisite files and records attempts.
-- `session.shell(code)`: invokes the existing CLI workflow, preserving named variables and shell functions between IDE runs.
-- `session.service_environment(service, keys)`: reads the actual serving configuration as JSON, without saving secrets.
-- `session.pin_vector()` / `restore_backend()`: save and restore the prior tenant setting when the lesson has the common vector setup.
-- `session.command(args)`: runs a CLI argument list and retains its actual output/exit status.
+Operation: bash — run in the operator shell when you finish the lesson, not now.
+
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
+
+## Source and coverage
+
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html). All 43 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9553c89dce4181161137e7caeba0cf202f30a3ac`.

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "11.2",
   "title": "Configure and inspect durable conversation storage",
   "source_kind": "main_html",
@@ -127,165 +127,224 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 361,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "11.2",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2, s3",
+      "windows": [
+        3,
+        7
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source_lines": [
+        361,
+        399
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_venv.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 361,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "What a turn writes",
+          "subheading": "Do it: the venv",
+          "purpose": "Do it: the venv",
+          "label": "bash — run in the operator shell, in the kit (lesson 10.2's venv, with the Cloud SQL connector added)",
+          "expected": "graph-venv ok: connector 1.22.0",
+          "adaptations": [],
+          "id": "source_7",
+          "function": "step_02_the_venv",
+          "window": 7,
+          "source_line": 399,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_turns_and_writes.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 367,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_turns_and_writes",
       "lesson": "11.2",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_turns_and_writes.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 turns and writes",
+      "purpose": "Run two turns and identify the durable records they create.",
+      "anchor": "s3",
+      "windows": [
+        9
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source_lines": [
+        408
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "What a turn writes",
+          "subheading": "Do it: two turns",
+          "purpose": "Do it: two turns",
+          "label": "bash — run in the operator shell, in the kit (two turns, their checkpoints and versions counted; no model, no network)",
+          "expected": "a turn with no tool   +3 checkpoints, +2 versions of messages\na turn with retrieve  +5 checkpoints, +4 versions of messages\nthe messages channel, every version kept:\n   version 1  1 message      211 bytes\n   version 2  2 messages     472 bytes\n   version 3  3 messages     687 bytes\n   version 4  4 messages   1,001 bytes\n   version 5  5 messages   2,720 bytes\n   version 6  6 messages   2,981 bytes\n   8,072 bytes kept, for a conversation whose latest version is 2,981 bytes\nthe ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:\nWARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feature. Please install it by running: pip install google-adk[db]); using memory\n   it keeps its sessions in InMemorySessionService",
+          "adaptations": [],
+          "id": "source_9",
+          "function": "step_01_two_turns",
+          "window": 9,
+          "source_line": 408,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_deployed_storage_and_tables.py"
+    },
+    {
+      "id": "demo_02_deployed_storage_and_tables",
+      "lesson": "11.2",
+      "file": "demo_02_deployed_storage_and_tables.py",
+      "category": "required",
+      "requires": [
+        "demo_01_turns_and_writes"
+      ],
+      "heading": "demo 02 deployed storage and tables",
+      "purpose": "Read the deployed storage configuration and inspect the checkpoint tables.",
+      "anchor": "s4, s5",
+      "windows": [
+        14,
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source_lines": [
+        529,
+        581
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "What your lane runs",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (what holds the conversations on your lane)",
+          "expected": "instance      documind-checkpoint: POSTGRES_16, db-f1-micro, zonal, 10 GB\n  backups       off\n  network       public IP on, 0 authorized networks\n  databases     postgres, documind\n  users         chat, postgres\n  the DSN       secret documind-checkpoint-dsn, 1 version(s), the latest enabled\n  setup job     last run 2026-09-12T10:41, succeeded 1\n  images        job chat:3f9c2a1d0b7e, service chat:8e41d7c2f5a9 - DIFFERENT\n  ADK sessions  in memory: ADK DatabaseSessionService unavailable (The 'sqlalchemy' packa",
+          "adaptations": [],
+          "id": "source_14",
+          "function": "step_01_example",
+          "window": 14,
+          "source_line": 529,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The tables, and one row per thread",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the tables, their rows, and one row per thread)",
+          "expected": "documind-ai-YOUR-ID:asia-south1:documind-checkpoint, database documind, as chat: 4 tables\n  checkpoint_blobs           35 rows\n  checkpoint_migrations      10 rows\n  checkpoint_writes          37 rows\n  checkpoints                29 rows\nsetup() has applied migrations 0 to 9\none row per thread, the latest first:\n  acme  documind-ui-sa  lesson111-4242-b     8 checkpoints  step  6  2026-09-23T10:03\n  acme  documind-ui-sa  lesson111-4242       6 checkpoints  step  4  2026-09-23T10:02\n  acme  documind-ui-sa  smoke-langgraph      5 checkpoints  step  3  2026-09-23T09:16\n  acme  documind-ui-sa  smoke-langchain      5 checkpoints  step  3  2026-09-23T09:15\n  acme  documind-ui-sa  lesson103            5 checkpoints  step  3  2026-09-23T08:41\nno ADK tables: the ADK brain's sessions are not in this database",
+          "adaptations": [],
+          "id": "source_16",
+          "function": "step_02_example",
+          "window": 16,
+          "source_line": 581,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_thread_timeline.py"
+    },
+    {
+      "id": "demo_03_thread_timeline",
+      "lesson": "11.2",
+      "file": "demo_03_thread_timeline.py",
+      "category": "required",
+      "requires": [
+        "demo_02_deployed_storage_and_tables"
+      ],
+      "heading": "demo 03 thread timeline",
+      "purpose": "Follow one thread through its stored steps.",
+      "anchor": "s6",
+      "windows": [
+        18
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source_lines": [
+        635
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "One thread, step by step",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the latest thread, step by step)",
+          "expected": "the latest thread, session lesson111-4242-b: its checkpoints in order\n  step -1  input  messages unchanged\n  step  0  loop   messages, version 1:    175 bytes\n  step  1  loop   messages, version 2:    412 bytes\n  step  2  input  messages unchanged\n  step  3  loop   messages, version 3:    586 bytes\n  step  4  loop   messages, version 4:    866 bytes\n  step  5  loop   messages, version 5:  2,285 bytes\n  step  6  loop   messages, version 6:  2,522 bytes\nevery version kept: 6,846 bytes; the latest alone: 2,522 bytes",
+          "adaptations": [],
+          "id": "source_18",
+          "function": "step_01_example",
+          "window": 18,
+          "source_line": 635,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "11.2",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s2",
+      "windows": [
+        5
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source_lines": [
+        367
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_venv.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 7,
-      "label": "bash — run in the operator shell, in the kit (lesson 10.2's venv, with the Cloud SQL connector added)",
-      "heading": "What a turn writes",
-      "subheading": "Do it: the venv",
-      "anchor": "s3",
-      "purpose": "Do it: the venv",
-      "expected": "graph-venv ok: connector 1.22.0",
-      "line": 399,
-      "id": "demo_03_01_do_it_the_venv",
-      "lesson": "11.2",
-      "file": "demo_03_01_do_it_the_venv.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": false,
-      "next": "demo_03_02_do_it_two_turns.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 9,
-      "label": "bash — run in the operator shell, in the kit (two turns, their checkpoints and versions counted; no model, no network)",
-      "heading": "What a turn writes",
-      "subheading": "Do it: two turns",
-      "anchor": "s3",
-      "purpose": "Do it: two turns",
-      "expected": "a turn with no tool   +3 checkpoints, +2 versions of messages\na turn with retrieve  +5 checkpoints, +4 versions of messages\nthe messages channel, every version kept:\n   version 1  1 message      211 bytes\n   version 2  2 messages     472 bytes\n   version 3  3 messages     687 bytes\n   version 4  4 messages   1,001 bytes\n   version 5  5 messages   2,720 bytes\n   version 6  6 messages   2,981 bytes\n   8,072 bytes kept, for a conversation whose latest version is 2,981 bytes\nthe ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:\nWARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feature. Please install it by running: pip install google-adk[db]); using memory\n   it keeps its sessions in InMemorySessionService",
-      "line": 408,
-      "id": "demo_03_02_do_it_two_turns",
-      "lesson": "11.2",
-      "file": "demo_03_02_do_it_two_turns.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_venv"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 367,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": true,
-      "next": "demo_04_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 14,
-      "label": "bash — run in the operator shell, in the kit (what holds the conversations on your lane)",
-      "heading": "What your lane runs",
-      "subheading": "Do it",
-      "anchor": "s4",
-      "purpose": "Do it",
-      "expected": "instance      documind-checkpoint: POSTGRES_16, db-f1-micro, zonal, 10 GB\n  backups       off\n  network       public IP on, 0 authorized networks\n  databases     postgres, documind\n  users         chat, postgres\n  the DSN       secret documind-checkpoint-dsn, 1 version(s), the latest enabled\n  setup job     last run 2026-09-12T10:41, succeeded 1\n  images        job chat:3f9c2a1d0b7e, service chat:8e41d7c2f5a9 - DIFFERENT\n  ADK sessions  in memory: ADK DatabaseSessionService unavailable (The 'sqlalchemy' packa",
-      "line": 529,
-      "id": "demo_04_01_do_it",
-      "lesson": "11.2",
-      "file": "demo_04_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_03_02_do_it_two_turns"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 16,
-      "label": "bash — run in the operator shell, in the kit (the tables, their rows, and one row per thread)",
-      "heading": "The tables, and one row per thread",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": "documind-ai-YOUR-ID:asia-south1:documind-checkpoint, database documind, as chat: 4 tables\n  checkpoint_blobs           35 rows\n  checkpoint_migrations      10 rows\n  checkpoint_writes          37 rows\n  checkpoints                29 rows\nsetup() has applied migrations 0 to 9\none row per thread, the latest first:\n  acme  documind-ui-sa  lesson111-4242-b     8 checkpoints  step  6  2026-09-23T10:03\n  acme  documind-ui-sa  lesson111-4242       6 checkpoints  step  4  2026-09-23T10:02\n  acme  documind-ui-sa  smoke-langgraph      5 checkpoints  step  3  2026-09-23T09:16\n  acme  documind-ui-sa  smoke-langchain      5 checkpoints  step  3  2026-09-23T09:15\n  acme  documind-ui-sa  lesson103            5 checkpoints  step  3  2026-09-23T08:41\nno ADK tables: the ADK brain's sessions are not in this database",
-      "line": 581,
-      "id": "demo_05_01_do_it",
-      "lesson": "11.2",
-      "file": "demo_05_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_do_it.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 18,
-      "label": "bash — run in the operator shell, in the kit (the latest thread, step by step)",
-      "heading": "One thread, step by step",
-      "subheading": "Do it",
-      "anchor": "s6",
-      "purpose": "Do it",
-      "expected": "the latest thread, session lesson111-4242-b: its checkpoints in order\n  step -1  input  messages unchanged\n  step  0  loop   messages, version 1:    175 bytes\n  step  1  loop   messages, version 2:    412 bytes\n  step  2  input  messages unchanged\n  step  3  loop   messages, version 3:    586 bytes\n  step  4  loop   messages, version 4:    866 bytes\n  step  5  loop   messages, version 5:  2,285 bytes\n  step  6  loop   messages, version 6:  2,522 bytes\nevery version kept: 6,846 bytes; the latest alone: 2,522 bytes",
-      "line": 635,
-      "id": "demo_06_01_do_it",
-      "lesson": "11.2",
-      "file": "demo_06_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -367,5 +426,8 @@
       "line": 661
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "A lane with the durable conversation store configured; read configuration before inspecting SQL."
 }

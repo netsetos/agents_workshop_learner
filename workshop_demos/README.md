@@ -1,8 +1,8 @@
 # Run the workshop from your IDE
 
-All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. There are 499 checkpoints: 247 native Python examples and 252 Python entry points for existing kit command workflows.
+All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each lesson has **two or three complete teaching demos** (173 in total), with preparation, cleanup and conditional extensions kept separate. There are 288 runnable files including those supporting actions.
 
-The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. Reading-only sections, diagrams and browser interactions remain in the lesson page.
+The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. A `GUIDE.md` beside each converted lesson retains the main HTML prose, including browser actions. Required manual actions also pause at the relevant function; read-only code and diagrams remain reference material.
 
 ## Folder structure
 
@@ -24,9 +24,14 @@ workshop_demos/
     lesson_4_4/
       README.md                 # sequence, heading mapping, purpose and observations
       lesson_map.json           # exact source windows and prerequisite identifiers
-      demo_*.py                 # Run/Debug one checkpoint at a time
-      recover_*.py              # conditional repair, only when its condition applies
-      finish_*.py               # cleanup/restoration after the examples
+      GUIDE.md                  # source prose and UI/wait instructions
+      demo_01_reconciliation_decisions.py
+      demo_02_create_and_repair_a_gap.py
+      demo_03_restore_the_exact_bytes.py
+      setup/prepare.py          # lesson settings/dependencies, when needed
+      setup/finish.py           # restore after success or failure
+      recovery/                 # conditional repairs, chosen explicitly
+      optional/                 # independent extensions, chosen explicitly
   module_05/ ... module_18/
   results/                      # local attempts, state and command output; ignored
 ```
@@ -41,13 +46,13 @@ The authoring repository holds this tree under `deploy/workshop_demos/`. The lea
 4. If the workstation lacks the kit's Python dependencies, run `setup/install_dependencies.py` with the appropriate profile. Framework-specific isolated venvs remain at the lesson checkpoints that introduce them.
 5. If Python reports expired ADC, run `setup/authenticate.py` and complete the browser sign-in. `gcloud auth login` and Python application-default credentials are separate identities.
 6. For an **already deployed** project, run `setup/check_setup.py`. Modules 1 and 2 can run their own local/bootstrap examples before the cloud services exist; they do not require that deployed-lane preflight to pass.
-7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside `demonstrate(session)` to inspect native Python variables.
+7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside the named `step_...` functions to inspect native Python variables. `demonstrate(session)` shows their complete call sequence. Lesson 3.1 retains its authored descriptive function names.
 
 All examples retain the course's `acme`, `zeta` and `globex` fixtures. Keep `tenant_id: "acme"` for the standard course sequence; changing that setting does not rewrite hard-coded fixture tenants in source examples. Empty endpoint fields are discovered from the serving service at the relevant lesson checkpoint, rather than guessed or hard-coded.
 
 ## What happens when you press Run
 
-Each file imports `DemoSession`, resumes this lesson's active run, selects the kit working directory and executes one `demonstrate(session)` function. Python cells remain real Python. Bash/Make/gcloud sequences appear as readable `COMMANDS` in their own `.py` entry point and run through `session.shell()`. Their individual shell commands cannot be stepped through with the Python debugger; the wrapper and helper can.
+Each file imports `DemoSession`, resumes this lesson's active run, selects the kit working directory and executes the named functions listed by `demonstrate(session)`, in lesson order. Python cells remain real Python. Bash/Make/gcloud sequences appear as readable `COMMANDS_01`, `COMMANDS_02`, etc. beside the function that uses them and run through `session.shell()`. Their individual shell commands cannot be stepped through with the Python debugger; the wrapper and helper can.
 
 The helper carries the lesson's named variables and Bash functions across separate IDE launches. It checks required predecessors and records failed attempts. You do not need to copy terminal exports into every Run Configuration. Source code that writes specific files such as `/tmp/ans53_5.json` retains those paths so later checkpoints can read them.
 
@@ -56,6 +61,8 @@ Do **not** use Run All. Some checkpoints change or remove the lesson's cloud fix
 ## Reruns and evidence
 
 An attempt is stored under `results/module_NN/lesson_N_M/<run>/attempts/`. `session.json` records its status; command workflows retain their stdout/stderr in `command_*.log`. Native Python output appears in the IDE console, and the example retains any report files it creates. A completed process is not an assertion that a model answered correctly or that every illustrative count matched.
+
+Each completed function is saved. Rerunning an unfinished demo skips those successful functions. A failed or interrupted function needs `RETRY_FAILED_STEP = True` after you inspect its partial effects; it is not automatically safe to repeat. A manual checkpoint can be resumed directly after the browser action or wait.
 
 A completed file will not run again accidentally. For a deliberate repeat within the same experiment, inspect its effects and set its `REPEAT = True` constant. For a new experiment, finish the current lesson, edit `LESSON` in `setup/start_new_session.py`, and Run that file. Prior evidence is preserved. After a killed process, use `setup/recover_session.py` only after checking that no demo is still running.
 
@@ -78,4 +85,10 @@ python deploy/workshop_demos/tests/run_tests.py
 
 Stage the new kit paths, then regenerate `deploy/INDEX.md` with `python tools/kit_index.py`. CI checks generated-file drift, complete source-window coverage, Python imports, Bash syntax and the offline session contracts. The nine course-plan lessons are maintained explicitly in `tools/workshop_demo_additions.py`; they are never presented as existing HTML conversions.
 
-**Validation scope:** local checks do not run the 507 checkpoints against GCP. IAM, service availability, model behavior, live latency, resource costs and rollback observations must be verified on the intended workstation and project. Follow each lesson's expected observations and record the actual result.
+**Validation scope:** local checks do not run the live experiments against GCP. IAM, service availability, model behavior, live latency, resource costs and rollback observations must be verified on the intended workstation and project. Follow each lesson's expected observations and record the actual result.
+
+## Updating from the older per-window layout
+
+Use `git pull --ff-only origin main` on your learner checkout. Git removes the old tracked fragments and brings in the grouped demos; do not delete your project directory. Keep local settings, the existing venv, and results. Finish any saved older lesson run before starting a fresh session with the new sequence. Each README names its preparation and finish files.
+
+The grouping is maintained in `tools/workshop_demo_groups.py` in the authoring repo and locked to reviewed HTML digests. An HTML edit requires reviewing its grouping and manual prerequisites; regeneration cannot silently turn a new Copy box into an extra demo. All 1,476 source windows remain accounted for.

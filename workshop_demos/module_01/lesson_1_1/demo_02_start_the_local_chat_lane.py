@@ -1,25 +1,28 @@
-"""Lesson 1.1 / plan-2: Start the local chat lane
+"""Lesson 1.1: demo 02 start the local chat lane
 
-Summary and purpose:
 Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.
 
-HTML instruction: Course-plan experiment — local Python/kit inspection
-Category: required. Read the matching README checkpoint before Run.
-Prerequisites: demo_01_inspect_the_workstation_and_corpus
-Expected observation: The local chat server listens on port 8081. Ollama and the model must already be available; inspect the actual service output.
+Run order inside this file:
+1. Start the local chat lane (source window plan-2)
 
-Evidence: the active lesson session records this attempt and command output.
-A completed process is not proof that every sample value matches your lane.
-Source: https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md#L1
+Prerequisites: demo_01_inspect_the_workstation_and_corpus.
+Use the existing rag-shell-venv interpreter; Run or Debug this file.
+The functions below contain the lesson examples in source order. Helpers
+supply configuration, authentication, state and CLI execution. See README.md
+for expected observations, effects and the next file; GUIDE.md retains prose.
+A successful process is not proof that a live result matched the sample.
 
 """
 from workshop_helpers.session import DemoSession
+from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# Change only for a deliberate replay after inspecting this step's effects.
+# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
+# A failed function may have partial effects. Inspect its saved attempt first.
+RETRY_FAILED_STEP = False
 
 
-def demonstrate(session):
+def step_01_start_the_local_chat_lane(session):
     """Run Start the local chat lane at this checkpoint.
 
     Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.
@@ -32,9 +35,15 @@ def demonstrate(session):
     import sys
     session.start_local_service(["make", "chat-local", "PY=" + sys.executable], "http://127.0.0.1:8081/health")
 
+def demonstrate(session):
+    """Run this experiment in order, resuming only completed checkpoints safely."""
+    run_steps(session, [
+        ('source_demo_02_start_the_local_chat_lane', step_01_start_the_local_chat_lane),
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+
 
 def main():
-    """Resume this lesson and execute only this checkpoint in the IDE interpreter."""
+    """Open the lesson session with the selected IDE interpreter and explicit settings."""
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

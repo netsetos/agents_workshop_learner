@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "2.2",
   "title": "Review and start the prepared deployment",
   "source_kind": "course_plan_and_kit",
@@ -15,66 +15,111 @@
   ],
   "demos": [
     {
+      "id": "demo_01_check_the_saved_plan",
       "lesson": "2.2",
       "file": "demo_01_check_the_saved_plan.py",
-      "id": "demo_01_check_the_saved_plan",
-      "anchor": "plan-1",
-      "heading": "Check the saved plan",
-      "subheading": "Check the saved plan",
-      "purpose": "Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time.",
-      "label": "Course-plan experiment \u2014 live deployment",
       "category": "required",
       "requires": [],
-      "expected": "",
+      "heading": "demo 01 check the saved plan",
+      "purpose": "Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time.",
+      "anchor": "plan-1",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Check the saved plan",
+          "subheading": "Check the saved plan",
+          "purpose": "Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "",
+          "id": "source_demo_01_check_the_saved_plan",
+          "function": "step_01_check_the_saved_plan",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_apply_and_deploy_the_prepared_kit.py"
     },
     {
+      "id": "demo_02_apply_and_deploy_the_prepared_kit",
       "lesson": "2.2",
       "file": "demo_02_apply_and_deploy_the_prepared_kit.py",
-      "id": "demo_02_apply_and_deploy_the_prepared_kit",
-      "anchor": "plan-2",
-      "heading": "Apply and deploy the prepared kit",
-      "subheading": "Apply and deploy the prepared kit",
-      "purpose": "Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.",
-      "label": "Course-plan experiment \u2014 live deployment",
       "category": "required",
       "requires": [
         "demo_01_check_the_saved_plan"
       ],
-      "expected": "The actual kit deployment finishes; any failed build or readiness step stops the demo.",
+      "heading": "demo 02 apply and deploy the prepared kit",
+      "purpose": "Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.",
+      "anchor": "plan-2",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Apply and deploy the prepared kit",
+          "subheading": "Apply and deploy the prepared kit",
+          "purpose": "Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "The actual kit deployment finishes; any failed build or readiness step stops the demo.",
+          "id": "source_demo_02_apply_and_deploy_the_prepared_kit",
+          "function": "step_01_apply_and_deploy_the_prepared_kit",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_inspect_the_deployed_services.py"
     },
     {
+      "id": "demo_03_inspect_the_deployed_services",
       "lesson": "2.2",
       "file": "demo_03_inspect_the_deployed_services.py",
-      "id": "demo_03_inspect_the_deployed_services",
-      "anchor": "plan-3",
-      "heading": "Inspect the deployed services",
-      "subheading": "Inspect the deployed services",
-      "purpose": "List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.",
-      "label": "Course-plan experiment \u2014 live deployment",
       "category": "required",
       "requires": [
         "demo_02_apply_and_deploy_the_prepared_kit"
       ],
-      "expected": "",
+      "heading": "demo 03 inspect the deployed services",
+      "purpose": "List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.",
+      "anchor": "plan-3",
+      "windows": [],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
-      "line": 1,
+      "source_lines": [
+        1
+      ],
       "offline": false,
       "live_verified": false,
-      "next": "Read the next checkpoint in README.md",
-      "implementation": "native_python"
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Inspect the deployed services",
+          "subheading": "Inspect the deployed services",
+          "purpose": "List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "",
+          "id": "source_demo_03_inspect_the_deployed_services",
+          "function": "step_01_inspect_the_deployed_services",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
-  "live_verification": "Not performed; main HTML has not yet been authored."
+  "live_verification": "Not performed; main HTML has not yet been authored.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

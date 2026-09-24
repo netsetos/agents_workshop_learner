@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 3,
   "lesson": "7.3",
   "title": "Compare one controlled change against a baseline",
   "source_kind": "main_html",
@@ -140,211 +140,254 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 370,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "setup_prepare",
       "lesson": "7.3",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      "heading": "prepare",
+      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "anchor": "s2",
+      "windows": [
+        3
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
+      "source_lines": [
+        370
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_candidate.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "label": "bash — run in the operator shell now, before the lesson's first step",
+          "expected": "acme: retrieval_backend=vector",
+          "adaptations": [
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+          ],
+          "id": "source_3",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 3,
+          "source_line": 370,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_01_one_change_candidate.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 376,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01_one_change_candidate",
       "lesson": "7.3",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_one_change_candidate.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "demo 01 one change candidate",
+      "purpose": "Create a no-traffic candidate and prove the baseline differs in exactly one setting.",
+      "anchor": "s3",
+      "windows": [
+        8,
+        10
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
+      "source_lines": [
+        418,
+        431
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
+          "subheading": "Do it: the candidate",
+          "purpose": "Do it: the candidate",
+          "label": "bash — run in the operator shell, in the kit (a new revision with no traffic; nothing moves for users)",
+          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.1-flash-lite|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|...\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
+          "adaptations": [],
+          "id": "source_8",
+          "function": "step_01_the_candidate",
+          "window": 8,
+          "source_line": 418,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
+          "subheading": "Do it: prove it is one change",
+          "purpose": "The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.",
+          "label": "bash — run in the operator shell, in the kit (reads both revisions; changes nothing)",
+          "expected": "live documind-api-000NN-xxx   candidate documind-api-000NN-yyy\n  GENERATOR_MODEL        gemini-3.6-flash           -> gemini-3.1-flash-lite\n1 setting(s) differ",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_02_prove_it_is_one_change",
+          "window": 10,
+          "source_line": 431,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_02_paired_quality_comparison.py"
+    },
+    {
+      "id": "demo_02_paired_quality_comparison",
+      "lesson": "7.3",
+      "file": "demo_02_paired_quality_comparison.py",
+      "category": "required",
+      "requires": [
+        "demo_01_one_change_candidate"
+      ],
+      "heading": "demo 02 paired quality comparison",
+      "purpose": "Run the same scoped gate on both revisions and compare pairwise judgments.",
+      "anchor": "s4, s5",
+      "windows": [
+        14,
+        16,
+        21
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
+      "source_lines": [
+        478,
+        518,
+        589
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The scoped gate on both revisions, and the rows that moved",
+          "subheading": "Do it: the gate on the live revision, then on the candidate",
+          "purpose": "Do it: the gate on the live revision, then on the candidate",
+          "label": "bash — run in the operator shell, in the kit (the 10 rows that cite the handbook, on each revision: a few minutes)",
+          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n\n  report: evals/reports/base73.json\n  All thresholds met.\n>> https://candidate---documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  scoped to hr_policy_2026.md: 10 row(s) cite it\n  10 rows (10 answerable, 0 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)\n  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)\n  [PASS] must_contain_rate      90.0%  (threshold 85%; 10 rows)\n  [PASS] correct_rate           90.0%  (threshold 68%; 10 rows)\n  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)\n  [ -- ] media_kind_rate         0.0%  (threshold 80%; no rows in scope; 0 rows)\n  [ -- ] isolation_403_rate      0.0%  (threshold 100%; no rows in scope; 0 rows)\n  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)\n\n  shape        rows   ok   pass\n  lookup          9    9      8\n  version         1    1      1\n  latency ms  p50   ...  p95   ...   (round trip, 10 rows)\n  retrieve_ms p50   ...  p95   ...\n  rerank_ms   p50   ...  p95   ...\n  generate_ms p50   ...  p95   ...\n  pool        avg   ...   semantic cache hits ...\n\n  rows that cost a point (1):\n    lk-04  lookup    acme    answered without ['15'] | 'the documents cover this [1].'\n\n  report: evals/reports/cand73.json\n  All thresholds met.",
+          "adaptations": [],
+          "id": "source_14",
+          "function": "step_01_the_gate_on_the_live_revision_then_on_the",
+          "window": 14,
+          "source_line": 478,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The scoped gate on both revisions, and the rows that moved",
+          "subheading": "Do it: the gate on the live revision, then on the candidate",
+          "purpose": "Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.",
+          "label": "bash — run in the operator shell, in the kit (reads the two reports; changes nothing)",
+          "expected": "live  candidate  needs\n  request_success_rate   100.0%     100.0%   100%\n  answerable_rate        100.0%     100.0%    80%\n  citation_rate          100.0%     100.0%    95%\n  citation_valid_rate    100.0%     100.0%   100%\n  must_contain_rate      100.0%      90.0%    85%\n  correct_rate           100.0%      90.0%    68%\n  lk-04: pass on live, fail on the candidate (answered without ['15'])\n  1 row(s) changed verdict; median round trip ... ms live, ... ms candidate",
+          "adaptations": [],
+          "id": "source_16",
+          "function": "step_02_the_gate_on_the_live_revision_then_on_the",
+          "window": 16,
+          "source_line": 518,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The pairwise judge: which answer is better, row by row",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (twenty rows on each revision, then the Evaluation service)",
+          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n  20/20 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)\n  20/20 candidate answers from https://candidate---documind-api-NUMBER.asia-south1.run.app\n  context: .../... cited chunks read in full from the store\n  trajectories: off (no --chat-url)\n  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070)\n  judge: the service default (pass --judge-model to pin one)\n\n  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070:\n    groundedness/mean                                ...\n    groundedness/mean[join]                          ...\n    groundedness/mean[lookup]                        ...\n    groundedness/std                                 ...\n    instruction_following/mean                       ...\n    instruction_following/std                        ...\n    pairwise_question_answering_quality/baseline_model_win_rate ...\n    pairwise_question_answering_quality/candidate_model_win_rate ...\n    row_count                                        20.000\n\n  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.",
+          "adaptations": [],
+          "id": "source_21",
+          "function": "step_03_example",
+          "window": 21,
+          "source_line": 589,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_03_usage_cost_delta.py"
+    },
+    {
+      "id": "demo_03_usage_cost_delta",
+      "lesson": "7.3",
+      "file": "demo_03_usage_cost_delta.py",
+      "category": "required",
+      "requires": [
+        "demo_02_paired_quality_comparison"
+      ],
+      "heading": "demo 03 usage cost delta",
+      "purpose": "Compute cost differences from actual usage rows before removing the candidate.",
+      "anchor": "s6",
+      "windows": [
+        24
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
+      "source_lines": [
+        636
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "The rupee delta, from the usage rows",
+          "subheading": "The rupee delta, from the usage rows",
+          "purpose": "Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.",
+          "label": "bash — run in the operator shell, in the kit (the last hour of usage rows, by model)",
+          "expected": "gemini-3.6-flash          ... answers  Rs ...  Rs ... an answer\n  gemini-3.1-flash-lite     ... answers  Rs ...  Rs ... an answer\n  the candidate costs Rs ... less an answer: Rs ... per 1,000 answers",
+          "adaptations": [],
+          "id": "source_24",
+          "function": "step_01_the_rupee_delta_from_the_usage_rows",
+          "window": 24,
+          "source_line": 636,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "7.3",
+      "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      "heading": "finish",
+      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "anchor": "s8, s2",
+      "windows": [
+        26,
+        5
       ],
-      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
+      "source_lines": [
+        688,
+        376
+      ],
       "offline": false,
-      "next": "demo_03_01_do_it_the_candidate.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 8,
-      "label": "bash — run in the operator shell, in the kit (a new revision with no traffic; nothing moves for users)",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-      "subheading": "Do it: the candidate",
-      "anchor": "s3",
-      "purpose": "Do it: the candidate",
-      "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.1-flash-lite|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|...\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
-      "line": 418,
-      "id": "demo_03_01_do_it_the_candidate",
-      "lesson": "7.3",
-      "file": "demo_03_01_do_it_the_candidate.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": false,
-      "next": "demo_03_02_do_it_prove_it_is_one_change.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 10,
-      "label": "bash — run in the operator shell, in the kit (reads both revisions; changes nothing)",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-      "subheading": "Do it: prove it is one change",
-      "anchor": "s3",
-      "purpose": "The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.",
-      "expected": "live documind-api-000NN-xxx   candidate documind-api-000NN-yyy\n  GENERATOR_MODEL        gemini-3.6-flash           -> gemini-3.1-flash-lite\n1 setting(s) differ",
-      "line": 431,
-      "id": "demo_03_02_do_it_prove_it_is_one_change",
-      "lesson": "7.3",
-      "file": "demo_03_02_do_it_prove_it_is_one_change.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_do_it_the_candidate"
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Deciding, the confounds that fake a result, and removing the candidate",
+          "subheading": "Do it: remove the candidate's tag",
+          "purpose": "This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.",
+          "label": "bash — run in the operator shell, in the kit (the candidate's tag and its recorded name removed; the live revision is untouched)",
+          "expected": "...\nthe candidate URL now: HTTP 404",
+          "adaptations": [],
+          "id": "source_26",
+          "function": "step_01_remove_the_candidate_s_tag",
+          "window": 26,
+          "source_line": 688,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Before you run anything: set up the shell",
+          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "label": "bash — run in the operator shell when you finish the lesson, not now",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+          ],
+          "id": "source_5",
+          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
+          "window": 5,
+          "source_line": 376,
+          "manual_checkpoint": null
+        }
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_04_01_do_it_the_gate_on_the_live_revision_then_on_the.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 14,
-      "label": "bash — run in the operator shell, in the kit (the 10 rows that cite the handbook, on each revision: a few minutes)",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "subheading": "Do it: the gate on the live revision, then on the candidate",
-      "anchor": "s4",
-      "purpose": "Do it: the gate on the live revision, then on the candidate",
-      "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n\n  report: evals/reports/base73.json\n  All thresholds met.\n>> https://candidate---documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  scoped to hr_policy_2026.md: 10 row(s) cite it\n  10 rows (10 answerable, 0 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)\n  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)\n  [PASS] must_contain_rate      90.0%  (threshold 85%; 10 rows)\n  [PASS] correct_rate           90.0%  (threshold 68%; 10 rows)\n  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)\n  [ -- ] media_kind_rate         0.0%  (threshold 80%; no rows in scope; 0 rows)\n  [ -- ] isolation_403_rate      0.0%  (threshold 100%; no rows in scope; 0 rows)\n  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)\n\n  shape        rows   ok   pass\n  lookup          9    9      8\n  version         1    1      1\n  latency ms  p50   ...  p95   ...   (round trip, 10 rows)\n  retrieve_ms p50   ...  p95   ...\n  rerank_ms   p50   ...  p95   ...\n  generate_ms p50   ...  p95   ...\n  pool        avg   ...   semantic cache hits ...\n\n  rows that cost a point (1):\n    lk-04  lookup    acme    answered without ['15'] | 'the documents cover this [1].'\n\n  report: evals/reports/cand73.json\n  All thresholds met.",
-      "line": 478,
-      "id": "demo_04_01_do_it_the_gate_on_the_live_revision_then_on_the",
-      "lesson": "7.3",
-      "file": "demo_04_01_do_it_the_gate_on_the_live_revision_then_on_the.py",
-      "category": "required",
-      "requires": [
-        "demo_03_02_do_it_prove_it_is_one_change"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_04_02_do_it_the_gate_on_the_live_revision_then_on_the.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 16,
-      "label": "bash — run in the operator shell, in the kit (reads the two reports; changes nothing)",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "subheading": "Do it: the gate on the live revision, then on the candidate",
-      "anchor": "s4",
-      "purpose": "Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.",
-      "expected": "live  candidate  needs\n  request_success_rate   100.0%     100.0%   100%\n  answerable_rate        100.0%     100.0%    80%\n  citation_rate          100.0%     100.0%    95%\n  citation_valid_rate    100.0%     100.0%   100%\n  must_contain_rate      100.0%      90.0%    85%\n  correct_rate           100.0%      90.0%    68%\n  lk-04: pass on live, fail on the candidate (answered without ['15'])\n  1 row(s) changed verdict; median round trip ... ms live, ... ms candidate",
-      "line": 518,
-      "id": "demo_04_02_do_it_the_gate_on_the_live_revision_then_on_the",
-      "lesson": "7.3",
-      "file": "demo_04_02_do_it_the_gate_on_the_live_revision_then_on_the.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_do_it_the_gate_on_the_live_revision_then_on_the"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": true,
-      "next": "demo_05_01_do_it.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 21,
-      "label": "bash — run in the operator shell, in the kit (twenty rows on each revision, then the Evaluation service)",
-      "heading": "The pairwise judge: which answer is better, row by row",
-      "subheading": "Do it",
-      "anchor": "s5",
-      "purpose": "Do it",
-      "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n  20/20 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)\n  20/20 candidate answers from https://candidate---documind-api-NUMBER.asia-south1.run.app\n  context: .../... cited chunks read in full from the store\n  trajectories: off (no --chat-url)\n  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070)\n  judge: the service default (pass --judge-model to pin one)\n\n  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070:\n    groundedness/mean                                ...\n    groundedness/mean[join]                          ...\n    groundedness/mean[lookup]                        ...\n    groundedness/std                                 ...\n    instruction_following/mean                       ...\n    instruction_following/std                        ...\n    pairwise_question_answering_quality/baseline_model_win_rate ...\n    pairwise_question_answering_quality/candidate_model_win_rate ...\n    row_count                                        20.000\n\n  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.",
-      "line": 589,
-      "id": "demo_05_01_do_it",
-      "lesson": "7.3",
-      "file": "demo_05_01_do_it.py",
-      "category": "required",
-      "requires": [
-        "demo_04_02_do_it_the_gate_on_the_live_revision_then_on_the"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_the_rupee_delta_from_the_usage_rows.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 24,
-      "label": "bash — run in the operator shell, in the kit (the last hour of usage rows, by model)",
-      "heading": "The rupee delta, from the usage rows",
-      "subheading": "The rupee delta, from the usage rows",
-      "anchor": "s6",
-      "purpose": "Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.",
-      "expected": "gemini-3.6-flash          ... answers  Rs ...  Rs ... an answer\n  gemini-3.1-flash-lite     ... answers  Rs ...  Rs ... an answer\n  the candidate costs Rs ... less an answer: Rs ... per 1,000 answers",
-      "line": 636,
-      "id": "demo_06_01_the_rupee_delta_from_the_usage_rows",
-      "lesson": "7.3",
-      "file": "demo_06_01_the_rupee_delta_from_the_usage_rows.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_08_01_do_it_remove_the_candidate_s_tag.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 26,
-      "label": "bash — run in the operator shell, in the kit (the candidate's tag and its recorded name removed; the live revision is untouched)",
-      "heading": "Deciding, the confounds that fake a result, and removing the candidate",
-      "subheading": "Do it: remove the candidate's tag",
-      "anchor": "s8",
-      "purpose": "This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.",
-      "expected": "...\nthe candidate URL now: HTTP 404",
-      "line": 688,
-      "id": "demo_08_01_do_it_remove_the_candidate_s_tag",
-      "lesson": "7.3",
-      "file": "demo_08_01_do_it_remove_the_candidate_s_tag.py",
-      "category": "required",
-      "requires": [
-        "demo_06_01_the_rupee_delta_from_the_usage_rows"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "kit_cli_workflow"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     }
   ],
   "read_only_windows": [
@@ -468,5 +511,8 @@
       "line": 692
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
+  "layout_version": 2,
+  "curated": true,
+  "prerequisites": "Lesson 7.2's judge environment and a single baseline revision; no other lesson should own the candidate tag."
 }
