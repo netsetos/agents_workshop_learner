@@ -1,5 +1,6 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "curated": true,
   "lesson": "3.1",
   "title": "Understand source, tenant, page and chunk contracts",
   "source_kind": "main_html",
@@ -16,7 +17,6 @@
     "NUMBER",
     "PROJECT",
     "REGION",
-    "T",
     "TENANT"
   ],
   "headings": [
@@ -183,303 +183,131 @@
   ],
   "demos": [
     {
-      "window": 3,
-      "label": "bash — run in the operator shell now, before the lesson's first step",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
-      "expected": "acme: retrieval_backend=vector",
-      "line": 394,
-      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "prepare",
       "lesson": "3.1",
-      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "setup/prepare.py",
+      "windows": [
+        3
+      ],
       "category": "required",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [
-        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
-      ],
-      "live_verified": false,
+      "anchor": "s2",
+      "heading": "Preparation",
+      "purpose": "Save backend/cache settings and require a deployed vector endpoint.",
+      "implementation": "native_python",
       "offline": false,
-      "next": "demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c.py",
-      "implementation": "native_python"
+      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source_lines": [
+        394
+      ],
+      "next": "demo_01_tenant_and_source_contracts.py"
     },
     {
-      "window": 5,
-      "label": "bash — run in the operator shell when you finish the lesson, not now",
-      "heading": "Before you run anything: set up the shell",
-      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-      "anchor": "s2",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
-      "expected": "",
-      "line": 400,
-      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "id": "demo_01",
       "lesson": "3.1",
-      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "file": "demo_01_tenant_and_source_contracts.py",
+      "windows": [
+        9,
+        10,
+        12,
+        16,
+        18
+      ],
+      "category": "required",
+      "requires": [
+        "prepare"
+      ],
+      "anchor": "s3-s4",
+      "heading": "Tenant and source contracts",
+      "purpose": "Verify membership and refusals, then trace the same source through Storage, API and Firestore.",
+      "implementation": "native_python",
+      "offline": false,
+      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source_lines": [
+        459,
+        463,
+        491,
+        557,
+        593
+      ],
+      "next": "demo_02_document_versions.py"
+    },
+    {
+      "id": "demo_02",
+      "lesson": "3.1",
+      "file": "demo_02_document_versions.py",
+      "windows": [
+        21,
+        23
+      ],
+      "category": "required",
+      "requires": [
+        "demo_01"
+      ],
+      "anchor": "s5",
+      "heading": "Document versions",
+      "purpose": "Verify ACME's UI upload, upload identical bytes to Zeta, wait for exact generations and inspect both claims.",
+      "implementation": "native_python",
+      "offline": false,
+      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source_lines": [
+        647,
+        666
+      ],
+      "next": "demo_03_citations_chunks_and_filters.py"
+    },
+    {
+      "id": "demo_03",
+      "lesson": "3.1",
+      "file": "demo_03_citations_chunks_and_filters.py",
+      "windows": [
+        26,
+        28,
+        32,
+        34
+      ],
+      "category": "required",
+      "requires": [
+        "demo_02"
+      ],
+      "anchor": "s6-s7",
+      "heading": "Citations, chunks and filters",
+      "purpose": "Read fresh Markdown/PDF citations, locators and filters, then compare tenant chunks and exercise local validators.",
+      "implementation": "native_python",
+      "offline": false,
+      "live_verified": false,
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source_lines": [
+        722,
+        733,
+        801,
+        822
+      ],
+      "next": "setup/finish.py"
+    },
+    {
+      "id": "finish",
+      "lesson": "3.1",
+      "file": "setup/finish.py",
+      "windows": [
+        5
+      ],
       "category": "cleanup",
       "requires": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [
-        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
-      ],
-      "live_verified": false,
+      "anchor": "s2",
+      "heading": "Restore saved settings",
+      "purpose": "Restore the actual backend and cache setting after success or failure; retain fixtures and evidence.",
+      "implementation": "native_python",
       "offline": false,
-      "next": "demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 9,
-      "label": "bash — run in the operator shell",
-      "heading": "Tenant: something you are, never something you send",
-      "subheading": "Call it: the roster from the shell, and two REST calls",
-      "anchor": "s3",
-      "purpose": "First, see how a tenant is created and a member added on your lane. make roster adds every address in MEMBERS to TENANT, then puts the UI's and the MCP server's accounts on all three golden tenants. Run it with your own address - $ME, the account gcloud is signed in as - once; a second run is harmless, it sets the same document again.",
-      "expected": "",
-      "line": 459,
-      "id": "demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c",
-      "lesson": "3.1",
-      "file": "demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c.py",
-      "category": "required",
-      "requires": [
-        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
       "live_verified": false,
-      "offline": false,
-      "next": "demo_03_02_call_it_the_roster_from_the_shell_and_two_rest_c.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 10,
-      "label": "bash — run in the operator shell",
-      "heading": "Tenant: something you are, never something you send",
-      "subheading": "Call it: the roster from the shell, and two REST calls",
-      "anchor": "s3",
-      "purpose": "First, see how a tenant is created and a member added on your lane. make roster adds every address in MEMBERS to TENANT, then puts the UI's and the MCP server's accounts on all three golden tenants. Run it with your own address - $ME, the account gcloud is signed in as - once; a second run is harmless, it sets the same document again. Now the same question through the API three times. As the UI's account, which is on acme's roster, a query for acme is answered. As the outsider account - a fixture account that IAM admits into the service but no roster lists - the same request gets through Cloud Run's door and is then refused by the roster. With no token at all, Cloud Run's door refuses it before the API ever runs. Both refusals are 403s, so print the body too: the roster's refusal is a one-line JSON from the API, the door's is Cloud Run's HTML page. That difference is the tenant contract at work: the second caller got in, and was still told no.",
-      "expected": "...,\"latency_ms\":1840,\"stages\":{\"retrieval_backend\":\"vector\",...},\"cache_hit\":\"none\"}\nHTTP 200\n{\"detail\":\"not a member of this tenant\"}\nHTTP 403\n<html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>403 Forbidden</title> ...\nHTTP 403",
-      "line": 463,
-      "id": "demo_03_02_call_it_the_roster_from_the_shell_and_two_rest_c",
-      "lesson": "3.1",
-      "file": "demo_03_02_call_it_the_roster_from_the_shell_and_two_rest_c.py",
-      "category": "required",
-      "requires": [
-        "demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c"
-      ],
       "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_03_03_read_it_in_firestore.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 12,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Tenant: something you are, never something you send",
-      "subheading": "Read it in Firestore",
-      "anchor": "s3",
-      "purpose": "Three reads, in a Python cell. The first lists acme's roster. The second is the UI's reverse lookup, run by you. The third is the tenant's settings document - the data_region: any the Documents page caption showed you.",
-      "expected": "documind-mcp-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com | {'email': 'documind-mcp-sa@...', 'added_at': DatetimeWithNanoseconds(...)}\ndocumind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com  | {'email': 'documind-ui-sa@...', 'added_at': DatetimeWithNanoseconds(...)}\nyou@your-company.com                                        | {'email': 'you@your-company.com', 'added_at': DatetimeWithNanoseconds(...)}\ntenant for you: ['acme']\n{'data_region': 'any', 'data_region_set_at': DatetimeWithNanoseconds(...)}",
-      "line": 491,
-      "id": "demo_03_03_read_it_in_firestore",
-      "lesson": "3.1",
-      "file": "demo_03_03_read_it_in_firestore.py",
-      "category": "required",
-      "requires": [
-        "demo_03_02_call_it_the_roster_from_the_shell_and_two_rest_c"
+      "source_lines": [
+        400
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_04_01_call_it_the_bucket_then_the_api.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 16,
-      "label": "bash — run in the operator shell",
-      "heading": "Source: the object path is the document's identity",
-      "subheading": "Call it: the bucket, then the API",
-      "anchor": "s4",
-      "purpose": "The source lives in two places that must agree: the object in the bucket, and the ledger row. Cloud Storage numbers every rewrite of an object with a generation; the ledger records the generation it indexed. List the tenant's folder, describe one object, then ask the API for the ledger.",
-      "expected": "gs://documind-ai-YOUR-ID-uploads/acme/annual_report_2026.md\ngs://documind-ai-YOUR-ID-uploads/acme/code_on_wages_2019.pdf\ngs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md\n...\n1758540123456789    40096    text/markdown\n{\n    \"tenant_id\": \"acme\",\n    \"versions\": 18,\n    \"fingerprint\": \"3fd2258b1264f744\",\n    \"last_event\": \"ingest_ok\",\n    \"data_region\": \"any\",\n    \"sources\": [\n        {\n            \"name\": \"acme/hr_policy_2026.md\",\n            \"status\": \"indexed\",\n            \"doc_key\": \"acme_497809ff...\",\n            \"generation\": \"1758540123456789\",\n            \"chunks\": 283,\n            \"reused\": 0,\n            \"embedded\": 283,\n            \"retired\": 0,\n            \"effective_from\": null,\n            \"embedding\": \"text-embedding-005@1\",\n            \"indexed_at\": \"2026-09-22T...\",\n            \"mirrored\": {}\n        },\n        ...",
-      "line": 557,
-      "id": "demo_04_01_call_it_the_bucket_then_the_api",
-      "lesson": "3.1",
-      "file": "demo_04_01_call_it_the_bucket_then_the_api.py",
-      "category": "required",
-      "requires": [
-        "demo_03_03_read_it_in_firestore"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_04_02_read_it_in_firestore.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 18,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Source: the object path is the document's identity",
-      "subheading": "Read it in Firestore",
-      "anchor": "s4",
-      "purpose": "Read it in Firestore",
-      "expected": "acme~annual_report_2026.md                    indexed  chunks=   4 gen=1758540... key=acme_6b0c2f4d1e...\nacme~code_on_wages_2019.pdf                   indexed  chunks=  67 gen=1758540... key=acme_a3f9d0c7b2...\nacme~hr_policy_2026.md                        indexed  chunks= 283 gen=1758540... key=acme_497809ff2a...\n...\n{'tenant_id': 'acme', 'name': 'acme/hr_policy_2026.md', 'gcs_uri': 'gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md',\n 'doc_key': 'acme_497809ff...', 'generation': '1758540123456789', 'sha256': '497809ff...', 'chunks': 283,\n 'effective_from': None, 'status': 'indexed', 'reused': 0, 'embedded': 283, 'retired': 0,\n 'indexed_at': DatetimeWithNanoseconds(...), 'embedding_model': 'text-embedding-005', 'embedding_version': '1'}",
-      "line": 593,
-      "id": "demo_04_02_read_it_in_firestore",
-      "lesson": "3.1",
-      "file": "demo_04_02_read_it_in_firestore.py",
-      "category": "required",
-      "requires": [
-        "demo_04_01_call_it_the_bucket_then_the_api"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_01_do_it_one_file_two_tenants.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 21,
-      "label": "bash — run in the operator shell, in $DEMO_ROOT",
-      "heading": "Version: the bytes decide, and the same file in two tenants proves it",
-      "subheading": "Do it: one file, two tenants",
-      "anchor": "s5",
-      "purpose": "The UI wrote the object under your tenant's folder as its own service account; it never touched Firestore. The worker did the rest. \"Upload complete\" is not \"indexed\" - the page says so itself. From the shell, the same bytes to zeta. There is no UI session for zeta here, so the copy goes straight to the bucket, which is exactly what the UI does behind its Upload button.",
-      "expected": "5b62d236e0c1...  evals/demo/gratuity_amendment_2026.md\nacme    acme_5b62d236e0c1...    3    3\nzeta    zeta_5b62d236e0c1...    3    3",
-      "line": 647,
-      "id": "demo_05_01_do_it_one_file_two_tenants",
-      "lesson": "3.1",
-      "file": "demo_05_01_do_it_one_file_two_tenants.py",
-      "category": "required",
-      "requires": [
-        "demo_04_02_read_it_in_firestore"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_05_02_read_it_in_firestore.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 23,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Version: the bytes decide, and the same file in two tenants proves it",
-      "subheading": "Read it in Firestore",
-      "anchor": "s5",
-      "purpose": "The per-version claim lives in documents/{doc_key}. Build both keys from the local hash and read both claims. They differ in exactly one field.",
-      "expected": "acme indexed 3 acme gs://documind-ai-YOUR-ID-uploads/acme/gratuity_amendment_2026.md\nzeta indexed 3 zeta gs://documind-ai-YOUR-ID-uploads/zeta/gratuity_amendment_2026.md",
-      "line": 666,
-      "id": "demo_05_02_read_it_in_firestore",
-      "lesson": "3.1",
-      "file": "demo_05_02_read_it_in_firestore.py",
-      "category": "required",
-      "requires": [
-        "demo_05_01_do_it_one_file_two_tenants"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_01_call_it_a_question_and_the_page_on_each_citation.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 26,
-      "label": "bash — run in the operator shell",
-      "heading": "Page and section: where inside the document",
-      "subheading": "Call it: a question, and the page on each citation",
-      "anchor": "s6",
-      "purpose": "Call it: a question, and the page on each citation",
-      "expected": "A confirmed employee at grade E3 or above serves a notice period of 60 days [Source 1].\nacme:497809ff...#1 hr_policy_2026.md page None | NP-03 — Notice period Confirmed employees at\nacme:497809ff...#2 hr_policy_2026.md page None | PB-02 — Probation ...",
-      "line": 722,
-      "id": "demo_06_01_call_it_a_question_and_the_page_on_each_citation",
-      "lesson": "3.1",
-      "file": "demo_06_01_call_it_a_question_and_the_page_on_each_citation.py",
-      "category": "required",
-      "requires": [
-        "demo_05_02_read_it_in_firestore"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_06_02_read_it_in_firestore.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 28,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Page and section: where inside the document",
-      "subheading": "Read it in Firestore",
-      "anchor": "s6",
-      "purpose": "Read it in Firestore",
-      "expected": "hr_policy_2026.md -> 283 current chunks\n     0  locator=preamble   page_start=None  section=None\n     1  locator=NP-03      page_start=None  section=NP-03 — Notice period\n     2  locator=PB-02      page_start=None  section=PB-02 — Probation\n     3  locator=LV-01      page_start=None  section=LV-01 — Earned leave\n     ...\ncode_on_wages_2019.pdf -> 67 current chunks\n     0  locator=p1-0       page_start=1     section=None\n     1  locator=p1-1       page_start=1     section=None\n     2  locator=p2-0       page_start=2     section=None",
-      "line": 733,
-      "id": "demo_06_02_read_it_in_firestore",
-      "lesson": "3.1",
-      "file": "demo_06_02_read_it_in_firestore.py",
-      "category": "required",
-      "requires": [
-        "demo_06_01_call_it_a_question_and_the_page_on_each_citation"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_01_call_it_a_filter_the_contract_allows_one_that_fi.py",
-      "implementation": "native_python"
-    },
-    {
-      "window": 32,
-      "label": "bash — run in the operator shell",
-      "heading": "Chunk: the unit a question can find",
-      "subheading": "Call it: a filter the contract allows, one that finds nothing, and one it refuses",
-      "anchor": "s7",
-      "purpose": "The API lets a caller narrow a search by kind or doc_type, because both are stamps on every row. It refuses any other key with a 400 that names the allowed ones - including tenant_id and current, which a caller might try to use as a filter and which are never theirs to set. One honest detail first: the worker stamps kind itself (text, or figure and segment for media), but it does not classify text documents, so every PDF and Markdown file it ingests carries doc_type: unknown. A doc_type: policy filter is allowed, and on your lane it matches nothing, so the API refuses to answer for lack of evidence. A filter is only as good as the stamp the writer put on the row.",
-      "expected": "True ['acme:497809ff...#1', 'acme:497809ff...#2', 'acme:497809ff...#4']\nFalse []\n{\"detail\":\"unknown filter key(s) tenant_id; allowed: doc_type, kind\"}",
-      "line": 801,
-      "id": "demo_07_01_call_it_a_filter_the_contract_allows_one_that_fi",
-      "lesson": "3.1",
-      "file": "demo_07_01_call_it_a_filter_the_contract_allows_one_that_fi.py",
-      "category": "required",
-      "requires": [
-        "demo_06_02_read_it_in_firestore"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "demo_07_02_read_it_in_firestore_the_twin_rows_from_step_5.py",
-      "implementation": "kit_cli_workflow"
-    },
-    {
-      "window": 34,
-      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
-      "heading": "Chunk: the unit a question can find",
-      "subheading": "Read it in Firestore: the twin rows from step 5",
-      "anchor": "s7",
-      "purpose": "The file you uploaded to both tenants is the cleanest proof of the two identities. Read its chunk rows on each side and compare: the same number of rows, no id in common, and the same set of hashes.",
-      "expected": "rows: 3 3\nids in common: set()\nsame hashes: True\ntenant_id              acme\ndoc_key                acme_5b62d236e0c1...\ncurrent                True\nlocator                preamble\nchunk_hash             9c1e6f2a...\nembedding_model        text-embedding-005\nembedding_task_type    RETRIEVAL_DOCUMENT\nschema_version         2\nid: acme:5b62d236e0c1...#0 | vector dims: 768",
-      "line": 822,
-      "id": "demo_07_02_read_it_in_firestore_the_twin_rows_from_step_5",
-      "lesson": "3.1",
-      "file": "demo_07_02_read_it_in_firestore_the_twin_rows_from_step_5.py",
-      "category": "required",
-      "requires": [
-        "demo_07_01_call_it_a_filter_the_contract_allows_one_that_fi"
-      ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
-      "adaptations": [],
-      "live_verified": false,
-      "offline": false,
-      "next": "See README: optional extensions, then all finish_*.py files",
-      "implementation": "native_python"
+      "next": "Lesson complete; start_new_session.py enables an intentional replay."
     }
   ],
   "read_only_windows": [
@@ -638,5 +466,31 @@
       "line": 897
     }
   ],
-  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+  "prose_checkpoints": [
+    {
+      "html_line": 636,
+      "file": "demo_02_document_versions.py",
+      "function": "upload_same_bytes",
+      "proof": "ACME UI upload required; operator mode is a labelled alternative."
+    },
+    {
+      "html_line": 730,
+      "file": "demo_03_citations_chunks_and_filters.py",
+      "function": "inspect_citations",
+      "proof": "Ask the PDF-specific question too."
+    },
+    {
+      "html_line": 875,
+      "file": "demo_03_citations_chunks_and_filters.py",
+      "function": "prove_local_contract_rules",
+      "proof": "Rewrapped text keeps its chunk hash."
+    },
+    {
+      "html_line": 909,
+      "file": "demo_03_citations_chunks_and_filters.py",
+      "function": "prove_local_contract_rules",
+      "proof": "Local root-object rejection only; live ingest_poison remains a cloud checklist exercise."
+    }
+  ],
+  "live_verification": "Offline regressions and source review; run on the workstation to verify IAM, indexing and model output."
 }

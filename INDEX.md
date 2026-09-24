@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-944 files; 108 quoted by a lesson, 148 shown or named by one.
+938 files; 108 quoted by a lesson, 148 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -313,20 +313,12 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_02/lesson_2_3/lesson_map.json` | config | - | - |
 | `workshop_demos/module_03/README.md` | doc | - | - |
 | `workshop_demos/module_03/lesson_3_1/README.md` | doc | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_03_01_call_it_the_roster_from_the_shell_and_two_rest_c.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_03_02_call_it_the_roster_from_the_shell_and_two_rest_c.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_03_03_read_it_in_firestore.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_04_01_call_it_the_bucket_then_the_api.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_04_02_read_it_in_firestore.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_05_01_do_it_one_file_two_tenants.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_05_02_read_it_in_firestore.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_06_01_call_it_a_question_and_the_page_on_each_citation.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_06_02_read_it_in_firestore.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_07_01_call_it_a_filter_the_contract_allows_one_that_fi.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/demo_07_02_read_it_in_firestore_the_twin_rows_from_step_5.py` | code | - | - |
-| `workshop_demos/module_03/lesson_3_1/finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py` | code | - | - |
+| `workshop_demos/module_03/lesson_3_1/demo_01_tenant_and_source_contracts.py` | code | - | - |
+| `workshop_demos/module_03/lesson_3_1/demo_02_document_versions.py` | code | - | - |
+| `workshop_demos/module_03/lesson_3_1/demo_03_citations_chunks_and_filters.py` | code | - | - |
 | `workshop_demos/module_03/lesson_3_1/lesson_map.json` | config | - | - |
+| `workshop_demos/module_03/lesson_3_1/setup/finish.py` | code | - | - |
+| `workshop_demos/module_03/lesson_3_1/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_03/lesson_3_2/README.md` | doc | - | - |
 | `workshop_demos/module_03/lesson_3_2/demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py` | code | - | - |
 | `workshop_demos/module_03/lesson_3_2/demo_03_01_call_it_which_reader_does_your_lane_have.py` | code | - | - |
@@ -948,9 +940,11 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/setup/workshop_helpers/context.py` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/discovery.py` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/kit.py` | code | - | - |
+| `workshop_demos/setup/workshop_helpers/lesson31.py` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/reconciliation.py` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/session.py` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/shell_helpers.sh` | code | - | - |
 | `workshop_demos/setup/workshop_helpers/shell_state.py` | code | - | - |
 | `workshop_demos/tests/run_tests.py` | code | - | - |
+| `workshop_demos/tests/test_lesson31.py` | code | - | - |
 | `workshop_demos/tests/test_sessions.py` | code | - | - |
