@@ -53,8 +53,13 @@ SYSTEM = (
 
 def _summary(messages) -> dict:
     """The same three keys from every brain, so agent.py and the UI never branch on the brain."""
+    # Gemini 3 through langchain-google-genai can send a turn's content as blocks - [{"type": "text", "text": ...}], a
+    # thought signature beside them - where older models sent a string. The answer is the text blocks' text, a string
+    # either way: until 24 September 2026 the list itself went out, and lesson 11.1's cell failed on .split().
+    last = messages[-1].content if messages else ""
     return {
-        "answer": messages[-1].content if messages else "",
+        "answer": last if isinstance(last, str) else "".join(b if isinstance(b, str) else b.get("text", "") for b in last
+                                                             if isinstance(b, str) or b.get("type") == "text"),
         "tool_calls": [tc["name"] for m in messages for tc in (getattr(m, "tool_calls", None) or [])],
         "refusals": [m.name for m in messages if isinstance(m, ToolMessage) and m.status == "error"],
     }
@@ -260,7 +265,10 @@ class DirectBrain:
         ctx = "\n".join(f"[Source {i}] {c['quote']}" for i, c in enumerate(r["citations"], 1))
         msg = (self.llm or build_llm()).invoke(
             f"{SYSTEM}\nAnswer only from the context and cite [Source N].\n\nContext:\n{ctx}\n\nQuestion: {question}")
-        return {"answer": getattr(msg, "content", str(msg)), "tool_calls": ["retrieve"],
+        said = getattr(msg, "content", str(msg))
+        if not isinstance(said, str):                      # content blocks, as in _summary: the text blocks' text
+            said = "".join(b if isinstance(b, str) else b.get("text", "") for b in said if isinstance(b, str) or b.get("type") == "text")
+        return {"answer": said, "tool_calls": ["retrieve"],
                 "refusals": [], "citations": r["citations"]}
 
 

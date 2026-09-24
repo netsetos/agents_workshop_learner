@@ -6,38 +6,38 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-271 files; 36 quoted by a lesson, 58 shown or named by one.
+271 files; 108 quoted by a lesson, 148 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
 | `.gitattributes` | config | - | - |
-| `.github/workflows/documind-cd.yml` | config | - | - |
-| `.github/workflows/documind-dryrun.yml` | config | - | - |
+| `.github/workflows/documind-cd.yml` | config | 7.2 | - |
+| `.github/workflows/documind-dryrun.yml` | config | 7.2 | - |
 | `.gitignore` | config | - | - |
 | `INDEX.md` | doc | - | - |
-| `INDEXING.md` | doc | - | - |
+| `INDEXING.md` | doc | - | 7.3 |
 | `INFRASTRUCTURE.md` | doc | - | - |
-| `Makefile` | code | 3.3 | 3.2, 4.2, 5.2 |
+| `Makefile` | code | 3.3 | 3.2, 4.2, 5.2, 5.3, 7.1, 7.2, 7.3, 8.3, 13.3, 15.3, 15.4, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `README.md` | doc | - | - |
-| `UNOWNED.md` | doc | - | - |
-| `cloudbuild.yaml` | config | - | - |
-| `commands/check-firestore-fallback.py` | code | - | 3.4 |
+| `UNOWNED.md` | doc | - | 18.3 |
+| `cloudbuild.yaml` | config | - | 18.3 |
+| `commands/check-firestore-fallback.py` | code | 5.4, 13.1 | 3.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
 | `commands/git-source.sh` | code | - | - |
-| `commands/infrastructure.py` | code | - | - |
-| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `commands/lane.py` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `commands/infrastructure.py` | code | - | 13.2 |
+| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/lane.py` | code | 8.1, 12.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `commands/lesson-12.1.sh` | code | - | - |
-| `commands/lesson-12.2.sh` | code | - | - |
+| `commands/lesson-12.2.sh` | code | 8.1 | 7.3, 8.2, 13.3 |
 | `commands/lesson-12.3.sh` | code | - | - |
-| `commands/lesson-12.4.sh` | code | - | - |
+| `commands/lesson-12.4.sh` | code | 6.4 | - |
 | `commands/lesson-12.5.sh` | code | 4.1 | - |
-| `commands/lesson-12.8.sh` | code | - | - |
-| `commands/lesson-7.2.sh` | code | - | - |
-| `commands/lesson-8.4.sh` | code | - | - |
-| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1, 5.2 |
-| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `commands/lesson-12.8.sh` | code | - | 10.1, 11.1 |
+| `commands/lesson-7.2.sh` | code | 12.2 | 12.3 |
+| `commands/lesson-8.4.sh` | code | 12.3 | - |
+| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `commands/tests/terraform_reapply.tftest.hcl` | code | - | - |
 | `commands/tests/test_check_firestore_fallback.py` | code | - | - |
 | `commands/tests/test_document_embeddings.py` | code | - | 3.3 |
@@ -48,21 +48,21 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_session_restart.py` | code | - | - |
 | `commands/tests/test_smoke_agent_expectations.py` | code | - | - |
 | `commands/tests/test_smoke_mcp_setup.py` | code | - | - |
-| `commands/tests/test_spanner_graph.py` | code | - | - |
+| `commands/tests/test_spanner_graph.py` | code | - | 15.2 |
 | `commands/tests/test_terraform_reapply.sh` | code | - | - |
 | `commands/tests/test_verify_vector_index.py` | code | - | - |
-| `commands/vector-status.sh` | code | 3.4 | - |
-| `commands/verify-vector-index.py` | code | - | 3.4 |
-| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `evals/README.md` | doc | - | - |
-| `evals/ablate.py` | code | 5.2 | - |
+| `commands/vector-status.sh` | code | 3.4 | 5.4 |
+| `commands/verify-vector-index.py` | code | - | 3.4, 13.1 |
+| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `evals/README.md` | doc | - | 8.3 |
+| `evals/ablate.py` | code | 5.2, 15.4 | 5.3, 13.1 |
 | `evals/build_corpus.py` | code | - | - |
-| `evals/build_golden.py` | code | - | - |
-| `evals/build_media.py` | code | - | - |
-| `evals/cache_threshold.py` | code | - | - |
+| `evals/build_golden.py` | code | 7.1 | - |
+| `evals/build_media.py` | code | - | 16.1 |
+| `evals/cache_threshold.py` | code | 7.1, 9.3 | - |
 | `evals/corpus/acme/annual_report_2026.md` | data | - | - |
 | `evals/corpus/acme/annual_report_2026_fig3.png` | data | - | - |
-| `evals/corpus/acme/cgst_act_2017.md` | data | - | - |
+| `evals/corpus/acme/cgst_act_2017.md` | data | - | 5.3, 6.1 |
 | `evals/corpus/acme/cgst_act_2017.pdf` | data | - | 4.1 |
 | `evals/corpus/acme/code_on_social_security_2020.md` | data | - | - |
 | `evals/corpus/acme/code_on_social_security_2020.pdf` | data | - | - |
@@ -70,7 +70,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/corpus/acme/code_on_wages_2019.pdf` | data | - | - |
 | `evals/corpus/acme/dpdp_act_2023.md` | data | - | - |
 | `evals/corpus/acme/dpdp_act_2023.pdf` | data | - | - |
-| `evals/corpus/acme/hr_policy_2026.md` | data | - | 3.2, 3.3, 4.2, 4.3 |
+| `evals/corpus/acme/hr_policy_2026.md` | data | - | 3.2, 3.3, 4.2, 4.3, 6.1, 6.2, 7.1, 9.2, 13.1 |
 | `evals/corpus/acme/industrial_relations_code_2020.md` | data | - | - |
 | `evals/corpus/acme/industrial_relations_code_2020.pdf` | data | - | - |
 | `evals/corpus/acme/inv_2026_0412.md` | data | - | - |
@@ -102,7 +102,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/corpus/zeta/code_on_social_security_2020.pdf` | data | - | - |
 | `evals/corpus/zeta/code_on_wages_2019.md` | data | - | - |
 | `evals/corpus/zeta/code_on_wages_2019.pdf` | data | - | - |
-| `evals/corpus/zeta/hr_policy_zeta_2026.md` | data | - | - |
+| `evals/corpus/zeta/hr_policy_zeta_2026.md` | data | - | 15.4 |
 | `evals/corpus/zeta/industrial_relations_code_2020.md` | data | - | - |
 | `evals/corpus/zeta/industrial_relations_code_2020.pdf` | data | - | - |
 | `evals/corpus/zeta/labour_codes_compliance_handbook.md` | data | - | - |
@@ -112,172 +112,172 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/corpus/zeta/osh_code_2020.pdf` | data | - | - |
 | `evals/demo/README.md` | data | - | - |
 | `evals/demo/gratuity_amendment_2026.md` | data | - | 3.1 |
-| `evals/demo/hr_policy_2026_v2.md` | data | - | 3.3, 4.2 |
-| `evals/demo/smoke_note_v1.md` | data | - | 3.4 |
-| `evals/demo/smoke_note_v2.md` | data | - | - |
+| `evals/demo/hr_policy_2026_v2.md` | data | 9.2 | 3.3, 4.2, 7.1, 13.1 |
+| `evals/demo/smoke_note_v1.md` | data | - | 3.4, 4.3, 6.1 |
+| `evals/demo/smoke_note_v2.md` | data | - | 6.1 |
 | `evals/demo_corpus_gate.py` | code | - | - |
 | `evals/fetch_real.py` | code | - | - |
-| `evals/golden.jsonl` | data | - | 4.2 |
-| `evals/judge.py` | code | - | - |
-| `evals/make_evalset.py` | code | - | - |
-| `evals/make_trainset.py` | code | - | - |
+| `evals/golden.jsonl` | data | - | 4.2, 7.1, 7.2, 9.3, 17.1, 17.2, 17.3, 18.4 |
+| `evals/judge.py` | code | 7.2, 7.3, 17.3 | - |
+| `evals/make_evalset.py` | code | 7.1 | - |
+| `evals/make_trainset.py` | code | 17.1 | 17.2 |
 | `evals/manifest.json` | config | - | - |
-| `evals/paraphrases.jsonl` | data | - | - |
+| `evals/paraphrases.jsonl` | data | 9.3 | 7.1 |
 | `evals/real_sources.json` | config | - | - |
-| `evals/required.json` | config | - | - |
-| `evals/run_eval.py` | code | 4.2 | - |
+| `evals/required.json` | config | 7.1 | - |
+| `evals/run_eval.py` | code | 4.2, 7.1, 7.2, 7.3, 8.2, 16.1 | 18.2 |
 | `evals/sft/documind_sft_v1.chat.jsonl` | data | - | - |
 | `evals/sft/documind_sft_v1.manifest.json` | data | - | - |
 | `evals/sft/documind_sft_v1.vertex.jsonl` | data | - | - |
 | `evals/tests/test_fetch_real.py` | code | - | - |
-| `evals/tune.py` | code | - | - |
-| `evals/upload.sh` | code | - | - |
-| `evals/usage_rows.py` | code | - | - |
+| `evals/tune.py` | code | 17.1, 17.2 | - |
+| `evals/upload.sh` | code | 16.1 | - |
+| `evals/usage_rows.py` | code | 5.3, 5.4, 6.3, 9.3, 13.2, 17.3 | 10.4 |
 | `extract_documind.py` | code | - | - |
-| `gke/README.md` | doc | - | - |
-| `gke/vllm-deployment.yaml` | config | - | - |
+| `gke/README.md` | doc | - | 18.3 |
+| `gke/vllm-deployment.yaml` | config | 18.3 | - |
 | `mk/README.md` | doc | - | - |
-| `mk/ingestion.mk` | code | 3.3, 4.1 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1, 5.2 |
+| `mk/ingestion.mk` | code | 3.3, 4.1, 5.4 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `operators/remirror_missing.py` | code | - | - |
 | `operators/tests/test_remirror_missing.py` | code | - | - |
-| `run-service.yaml` | config | - | 5.1 |
+| `run-service.yaml` | config | - | 5.1, 8.1 |
 | `services/admin/Dockerfile` | code | - | - |
-| `services/admin/admin_dashboard.py` | code | - | - |
+| `services/admin/admin_dashboard.py` | code | 8.3 | - |
 | `services/admin/app.py` | code | - | - |
-| `services/admin/audit.py` | code | - | - |
+| `services/admin/audit.py` | code | 8.3 | - |
 | `services/admin/auth.py` | code | - | - |
 | `services/admin/dlp.py` | code | - | - |
 | `services/admin/requirements.txt` | config | - | - |
-| `services/agent/Dockerfile` | code | - | - |
-| `services/agent/agent.py` | code | - | - |
-| `services/agent/requirements.txt` | config | - | - |
+| `services/agent/Dockerfile` | code | - | 12.3 |
+| `services/agent/agent.py` | code | 12.3 | - |
+| `services/agent/requirements.txt` | config | - | 12.3 |
 | `services/chat/Dockerfile` | code | - | - |
-| `services/chat/agent.py` | code | - | - |
-| `services/chat/brains.py` | code | - | - |
-| `services/chat/migrate.py` | code | - | - |
+| `services/chat/agent.py` | code | 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3 | 8.1 |
+| `services/chat/brains.py` | code | 10.1, 10.2, 10.3, 10.4, 11.1, 11.2 | - |
+| `services/chat/migrate.py` | code | 11.2 | - |
 | `services/chat/requirements-local.txt` | config | - | - |
 | `services/chat/requirements.txt` | config | - | - |
-| `services/chat/tools.py` | code | - | - |
+| `services/chat/tools.py` | code | 10.1, 10.2, 10.3, 10.4 | - |
 | `services/frontend/.streamlit/config.toml` | config | - | - |
 | `services/frontend/Dockerfile` | code | - | - |
 | `services/frontend/admin_dashboard.py` | code | - | - |
 | `services/frontend/app.py` | code | - | - |
-| `services/frontend/auth.py` | code | 3.1 | - |
-| `services/frontend/chat.py` | code | - | - |
-| `services/frontend/citations.py` | code | - | - |
-| `services/frontend/documents.py` | code | - | - |
+| `services/frontend/auth.py` | code | 3.1, 6.4, 8.1 | - |
+| `services/frontend/chat.py` | code | 6.3, 6.4, 8.1 | - |
+| `services/frontend/citations.py` | code | 6.4, 16.1 | - |
+| `services/frontend/documents.py` | code | 6.4 | - |
 | `services/frontend/requirements.txt` | config | - | - |
-| `services/frontend/studio.py` | code | - | - |
-| `services/frontend/voice.py` | code | - | - |
-| `services/gemma-vllm/Dockerfile` | code | - | - |
-| `services/gemma-vllm/auth.py` | code | - | - |
+| `services/frontend/studio.py` | code | - | 16.2 |
+| `services/frontend/voice.py` | code | 16.2 | - |
+| `services/gemma-vllm/Dockerfile` | code | 18.3 | - |
+| `services/gemma-vllm/auth.py` | code | 18.3 | - |
 | `services/gemma-vllm/cloudbuild.yaml` | config | - | - |
 | `services/gemma-vllm/documind.py` | code | - | - |
-| `services/gemma-vllm/logging_module.py` | code | - | - |
-| `services/gemma-vllm/main.py` | code | - | - |
+| `services/gemma-vllm/logging_module.py` | code | - | 18.3 |
+| `services/gemma-vllm/main.py` | code | 18.3 | - |
 | `services/gemma-vllm/requirements.txt` | config | - | - |
 | `services/gemma-vllm/schemas.py` | code | - | - |
 | `services/gemma-vllm/streaming.py` | code | - | - |
 | `services/ingest/Dockerfile` | code | - | - |
 | `services/ingest/batch.py` | code | - | - |
-| `services/ingest/contracts.py` | code | 3.1, 4.1, 4.3 | 4.2 |
-| `services/ingest/graph.py` | code | - | - |
-| `services/ingest/idempotency.py` | code | 3.1, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4 | - |
-| `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2, 5.2 | - |
-| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3 | - |
-| `services/ingest/managed.py` | code | - | - |
+| `services/ingest/contracts.py` | code | 3.1, 4.1, 4.3, 6.1 | 4.2 |
+| `services/ingest/graph.py` | code | 15.1 | - |
+| `services/ingest/idempotency.py` | code | 3.1, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 9.2 | - |
+| `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2, 5.2, 6.1 | 5.1 |
+| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 8.3, 15.4, 16.1 | - |
+| `services/ingest/managed.py` | code | 15.3, 15.4 | - |
 | `services/ingest/parser.py` | code | 3.2 | - |
-| `services/ingest/reconcile.py` | code | 4.3, 4.4 | 3.3 |
-| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `services/ingest/reconcile.py` | code | 4.3, 4.4, 5.4, 15.4 | 3.3 |
+| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `services/litellm/Dockerfile` | code | - | - |
-| `services/litellm/config.yaml` | config | - | - |
+| `services/litellm/config.yaml` | config | 18.2, 18.3 | 18.1, 18.4 |
 | `services/litellm/dlp_audit.py` | code | - | - |
-| `services/litellm/documind_classifier.py` | code | - | - |
-| `services/litellm/documind_router.py` | code | - | - |
+| `services/litellm/documind_classifier.py` | code | 18.1 | - |
+| `services/litellm/documind_router.py` | code | 18.1 | - |
 | `services/litellm/entrypoint.sh` | code | - | - |
-| `services/litellm/gcp_id_token.py` | code | - | - |
-| `services/litellm/requirements.txt` | config | - | - |
-| `services/litellm/token_proxy.py` | code | - | - |
+| `services/litellm/gcp_id_token.py` | code | 18.1 | - |
+| `services/litellm/requirements.txt` | config | - | 18.1 |
+| `services/litellm/token_proxy.py` | code | 18.1 | 18.3 |
 | `services/mcp/Dockerfile` | code | - | - |
-| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `services/mcp/server.py` | code | - | - |
+| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `services/mcp/server.py` | code | 12.1, 12.2 | 8.1 |
 | `services/rag-api/Dockerfile` | code | - | - |
-| `services/rag-api/auth.py` | code | 5.1 | - |
-| `services/rag-api/breakers.py` | code | - | - |
-| `services/rag-api/budget.py` | code | - | - |
-| `services/rag-api/cache_admin.py` | code | - | - |
-| `services/rag-api/cache_manager.py` | code | - | - |
-| `services/rag-api/config.py` | code | 3.3, 5.1, 5.2 | - |
-| `services/rag-api/context_budget.py` | code | - | - |
-| `services/rag-api/cost.py` | code | - | - |
-| `services/rag-api/generator.py` | code | - | - |
-| `services/rag-api/guard.py` | code | - | - |
+| `services/rag-api/auth.py` | code | 5.1, 8.1, 8.2 | - |
+| `services/rag-api/breakers.py` | code | 13.3 | - |
+| `services/rag-api/budget.py` | code | 13.3 | - |
+| `services/rag-api/cache_admin.py` | code | 9.1 | - |
+| `services/rag-api/cache_manager.py` | code | 9.1, 9.2 | - |
+| `services/rag-api/config.py` | code | 3.3, 5.1, 5.2, 5.3, 6.1, 7.3, 18.2 | - |
+| `services/rag-api/context_budget.py` | code | 6.1, 16.1, 17.1 | - |
+| `services/rag-api/cost.py` | code | 6.1, 7.3, 9.1, 17.3 | 17.1, 17.2 |
+| `services/rag-api/generator.py` | code | 5.3, 6.1, 6.2, 6.3, 9.1, 9.2, 17.2, 18.1, 18.2 | 17.1 |
+| `services/rag-api/guard.py` | code | 6.3, 8.3 | - |
 | `services/rag-api/hybrid.py` | code | 3.3, 5.1, 5.2 | - |
-| `services/rag-api/main.py` | code | 5.1, 5.2 | - |
-| `services/rag-api/media.py` | code | - | - |
-| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
-| `services/rag-api/retriever.py` | code | 3.3, 3.4, 4.3, 5.1, 5.2 | - |
-| `services/rag-api/router.py` | code | - | - |
-| `services/rag-api/schemas.py` | code | 5.1 | - |
-| `services/rag-api/semantic_cache.py` | code | - | - |
-| `services/rag-api/telemetry.py` | code | - | - |
-| `services/slm/Dockerfile` | code | - | - |
+| `services/rag-api/main.py` | code | 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 8.1, 8.2, 8.3, 9.1, 9.2, 13.1, 13.3, 15.3, 17.3 | 16.1 |
+| `services/rag-api/media.py` | code | 16.2 | - |
+| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `services/rag-api/retriever.py` | code | 3.3, 3.4, 4.3, 5.1, 5.2, 5.3, 5.4, 6.3, 8.2, 13.1, 15.2, 15.3 | - |
+| `services/rag-api/router.py` | code | - | 13.3 |
+| `services/rag-api/schemas.py` | code | 5.1, 5.4, 6.2 | - |
+| `services/rag-api/semantic_cache.py` | code | 9.1, 9.2, 9.3, 17.3 | - |
+| `services/rag-api/telemetry.py` | code | 6.3 | - |
+| `services/slm/Dockerfile` | code | 18.2 | - |
 | `services/slm/Modelfile` | other | - | - |
-| `services/slm/compare_backends.py` | code | - | - |
-| `services/slm/gpu_quota.py` | code | - | - |
-| `services/slm/make_modelfile.py` | code | - | - |
-| `services/slm/requirements.txt` | config | - | - |
-| `shared/audit_log.py` | code | 3.4 | - |
-| `shared/documind_corpus.py` | code | 3.2, 3.3, 4.2 | - |
-| `shared/documind_graph.py` | code | - | - |
-| `shared/documind_schemas.py` | code | - | - |
-| `shared/documind_tools.py` | code | - | - |
-| `shared/iap.py` | code | - | - |
+| `services/slm/compare_backends.py` | code | 18.4 | - |
+| `services/slm/gpu_quota.py` | code | - | 13.3 |
+| `services/slm/make_modelfile.py` | code | 18.2 | - |
+| `services/slm/requirements.txt` | config | - | 18.2 |
+| `shared/audit_log.py` | code | 3.4, 8.3 | - |
+| `shared/documind_corpus.py` | code | 3.2, 3.3, 4.2 | 6.1, 17.1 |
+| `shared/documind_graph.py` | code | 15.2 | - |
+| `shared/documind_schemas.py` | code | 5.3, 6.2, 16.1 | 9.1, 17.1 |
+| `shared/documind_tools.py` | code | 10.1, 10.3, 18.4 | - |
+| `shared/iap.py` | code | 6.4, 8.1 | 10.3 |
 | `shared/local_corpus.py` | code | - | - |
-| `shared/pii.py` | code | - | - |
+| `shared/pii.py` | code | 8.3 | 7.1, 17.2 |
 | `shared/profile.py` | code | - | - |
-| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2 |
+| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `shared/sparse_encoder.py` | code | 3.3 | 5.2 |
-| `shared/tenancy.py` | code | 3.1, 5.1 | - |
+| `shared/tenancy.py` | code | 3.1, 5.1, 5.4, 8.1, 8.2, 15.3, 17.2 | - |
 | `smoke/preflight.sh` | code | - | - |
-| `smoke/smoke.py` | code | - | - |
+| `smoke/smoke.py` | code | 5.3, 5.4, 8.2 | - |
 | `smoke/smoke_agent.py` | code | - | - |
-| `smoke/smoke_chat.py` | code | - | - |
-| `smoke/smoke_gateway.py` | code | - | - |
+| `smoke/smoke_chat.py` | code | 8.2 | - |
+| `smoke/smoke_gateway.py` | code | 18.1 | - |
 | `smoke/smoke_mcp.py` | code | - | - |
-| `smoke/smoke_media.py` | code | - | - |
+| `smoke/smoke_media.py` | code | - | 16.1 |
 | `smoke/smoke_reindex.py` | code | 4.4 | - |
-| `smoke/smoke_slm.py` | code | - | - |
-| `terraform/alerts.tf` | code | 4.4 | - |
+| `smoke/smoke_slm.py` | code | 18.2 | - |
+| `terraform/alerts.tf` | code | 4.4, 13.2, 18.4 | - |
 | `terraform/backend.tf` | code | - | - |
 | `terraform/batch.tf` | code | 4.1 | - |
 | `terraform/budget.tf` | code | - | - |
 | `terraform/clouddeploy.tf` | code | - | - |
-| `terraform/cloudsql.tf` | code | - | - |
+| `terraform/cloudsql.tf` | code | 11.2 | 11.1 |
 | `terraform/dataplex.tf` | code | 3.4 | - |
 | `terraform/docai.tf` | code | - | 3.2 |
 | `terraform/eventarc.tf` | code | 4.1 | - |
 | `terraform/firestore.tf` | code | - | - |
-| `terraform/firestore_indexes.tf` | code | 3.4, 4.3 | - |
+| `terraform/firestore_indexes.tf` | code | 3.4, 4.3, 5.4 | - |
 | `terraform/gateway.tf` | code | - | - |
 | `terraform/gke.tf` | code | - | - |
 | `terraform/managed.tf` | code | - | - |
-| `terraform/model_armor.tf` | code | - | - |
+| `terraform/model_armor.tf` | code | 8.3 | - |
 | `terraform/network.tf` | code | - | - |
-| `terraform/off.tf` | code | - | - |
+| `terraform/off.tf` | code | 13.3 | 18.4 |
 | `terraform/org_policy.tf` | code | - | - |
 | `terraform/quota.tf` | code | - | - |
 | `terraform/reconcile.tf` | code | 4.4 | - |
 | `terraform/registry.tf` | code | - | - |
-| `terraform/sa.tf` | code | - | - |
+| `terraform/sa.tf` | code | 6.4, 8.2 | 12.2, 12.3 |
 | `terraform/secrets.tf` | code | - | - |
-| `terraform/sink.tf` | code | - | - |
-| `terraform/spanner.tf` | code | - | - |
+| `terraform/sink.tf` | code | 13.2, 16.2 | - |
+| `terraform/spanner.tf` | code | 15.2 | - |
 | `terraform/sql/chunk_metadata.sql` | code | - | - |
-| `terraform/sql/tenant_daily.sql` | code | 5.2 | - |
-| `terraform/storage.tf` | code | - | - |
+| `terraform/sql/tenant_daily.sql` | code | 5.2, 5.3, 5.4, 13.2 | 16.2 |
+| `terraform/storage.tf` | code | 6.4, 8.3 | - |
 | `terraform/variables.tf` | code | 3.3 | - |
-| `terraform/vector.tf` | code | 3.3 | - |
+| `terraform/vector.tf` | code | 3.3 | 5.1 |
 | `terraform/wif.tf` | code | - | - |
 | `validate.py` | code | - | - |

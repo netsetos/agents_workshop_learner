@@ -6,7 +6,7 @@
 # person on no roster is a 403. Needs google-cloud-firestore locally
 # (pip install -r services/rag-api/requirements.txt once).
 roster: guard-project
-	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) commands/lane.py roster --project $(PROJECT) --tenant $(TENANT) --members "$(MEMBERS)"
+	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) commands/lane.py --project $(PROJECT) roster --tenant $(TENANT) --members "$(MEMBERS)"
 
 # Where ONE tenant's text may be held: tenant_settings/{TENANT}.data_region (shared/tenancy.py). `in` keeps it on
 # the kit's rows (asia-south1); `any` lets the managed mirror copy its current versions into RAG Engine (us-central1)

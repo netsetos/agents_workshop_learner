@@ -357,6 +357,36 @@ resource "google_monitoring_alert_policy" "reconcile_failed" {
   }
 }
 
+# The dead-letter queue, watched (24 September 2026, lesson 13.2). An upload the worker refused twelve times lands in
+# documind-ingest-dlq (eventarc.tf), and until now nothing read ingest-dlq-sub unless someone ran make dlq: quota.tf
+# listed a dlq_depth alert, and no resource declared it. num_undelivered_messages is a gauge Pub/Sub samples once a
+# minute; above zero for a minute opens an incident, and it closes when the subscription is drained (read the
+# message with make dlq, then acknowledge it). A poison upload (make poison) reaches it about an hour later.
+resource "google_monitoring_alert_policy" "dlq_depth" {
+  display_name = "Ingest dead-letter queue holds messages"
+  combiner     = "OR"
+  conditions {
+    display_name = "ingest-dlq-sub: undelivered messages > 0 for a minute"
+    condition_threshold {
+      filter          = "resource.type=\"pubsub_subscription\" AND resource.labels.subscription_id=\"${google_pubsub_subscription.ingest_dlq_sub.name}\" AND metric.type=\"pubsub.googleapis.com/subscription/num_undelivered_messages\""
+      comparison      = "COMPARISON_GT"
+      threshold_value = 0
+      duration        = "60s"
+      aggregations {
+        alignment_period     = "60s"
+        per_series_aligner   = "ALIGN_MAX"
+        cross_series_reducer = "REDUCE_SUM"
+      }
+    }
+  }
+  notification_channels = local.alert_channel_ids
+  alert_strategy { auto_close = "1800s" }
+  documentation {
+    content   = "An upload reached the dead-letter queue: the worker refused it twelve times. make dlq PROJECT=<project> shows it (objectId, eventTime, deliveryAttempt); fix or remove the object, then acknowledge the message: gcloud pubsub subscriptions pull ingest-dlq-sub --auto-ack --limit 1. The incident closes when the subscription is empty."
+    mime_type = "text/markdown"
+  }
+}
+
 # The e-mail channel. PagerDuty is the on-call when pagerduty_key is set; the admins' addresses are the on-call otherwise
 # (make up passes ALERT_EMAILS, derived from ADMIN_EMAILS unless that is still the placeholder), and every policy
 # in this file notifies both channels when both exist.

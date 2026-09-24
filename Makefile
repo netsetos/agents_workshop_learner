@@ -185,7 +185,7 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
              commands/lesson-12.4.sh commands/lesson-12.8.sh \
              commands/lesson-7.2.sh commands/lesson-8.4.sh
 
-.PHONY: dryrun extract check validate eval eval-live plan up secrets build deploy-services \
+.PHONY: dryrun extract check validate eval eval-live plan up secrets build deploy-services tf-backend \
         wait-index roster ingest-corpus smoke down guard-project bq-views features make-evalset \
         chat-local deploy-slm slm-off ablate smoke-mcp smoke-chat smoke-agent \
         trainset cache judge tune candidate \
@@ -311,6 +311,22 @@ build: guard-project
 	  fi; \
 	done
 
+# A checkout that was never connected to the lane's state - a fresh clone, a new workstation, lesson 3.1's clone
+# block - cannot read terraform output, and deploy-services stopped at "Backend initialization required" (24 September
+# 2026). This connects it to the state make up wrote (TFSTATE_BUCKET and TFSTATE_PREFIX above), and only when that
+# state exists: never an empty backend, never a migration (INFRASTRUCTURE.md). A connected checkout is left alone.
+tf-backend: guard-project
+	@if ! grep -qs '"type": "gcs"' $(TF_DIR)/.terraform/terraform.tfstate; then \
+	  if gcloud storage ls "gs://$(TFSTATE_BUCKET)/$(TFSTATE_PREFIX)/default.tfstate" >/dev/null 2>&1; then \
+	    echo ">> connecting $(TF_DIR) to the lane's state, gs://$(TFSTATE_BUCKET)/$(TFSTATE_PREFIX)"; \
+	    cd $(TF_DIR) && $(TF_INIT) >/dev/null; \
+	  else \
+	    echo "ERROR: $(TF_DIR) is not connected to a state, and gs://$(TFSTATE_BUCKET)/$(TFSTATE_PREFIX)/default.tfstate does not exist."; \
+	    echo "       Set TFSTATE_BUCKET and TFSTATE_PREFIX to the bucket and prefix make up used, then run this again (INFRASTRUCTURE.md)."; \
+	    exit 1; \
+	  fi; \
+	fi
+
 # The deploy scripts read their inputs from the environment: the project number for the
 # deterministic run.app URLs and the IAP audiences, the processor terraform created, the
 # Vector Search names from the state, and RETRIEVAL_BACKEND=vector as the deployment's default
@@ -319,7 +335,7 @@ build: guard-project
 # --no-traffic pins the service to a named revision, and Cloud Run then leaves every later deploy at 0% - the routing
 # flip on 10 September ran on the old revision for an hour before anyone read status.traffic (F44). By NAME, read
 # from status.latestCreatedRevisionName, never "the latest revision" (12 September 2026): the flip names what it moved to.
-deploy-services: guard-project
+deploy-services: guard-project tf-backend
 	@[ -n "$(SCRIPTS)" ] || (echo "ERROR: SCRIPTS names no deploy script"; exit 1)
 	@set -e; \
 	PROJECT_NUMBER=$$(gcloud projects describe $(PROJECT) --format='value(projectNumber)'); \
@@ -605,7 +621,7 @@ SLM_REGION ?= us-central1
 # may invoke it, and the caller's ID token is the door (no master key). Its token proxy fronts the SLM (and the vLLM
 # engine when built) with an ID token per call; its spend logs and tag budgets live in the Cloud SQL instance
 # gateway.tf declares, mounted here as DATABASE_URL through the connector (15 September 2026, with the one shape).
-deploy-gateway: guard-project
+deploy-gateway: guard-project tf-backend
 	@NUMBER=$$(gcloud projects describe $(PROJECT) --format='value(projectNumber)'); \
 	SLM=https://documind-slm-$$NUMBER.$(SLM_REGION).run.app; VLLM=$${GEMMA_VLLM_URL:-https://documind-vllm-$$NUMBER.$(SLM_REGION).run.app}; \
 	DB=$$(cd $(TF_DIR) && terraform output -raw gateway_database_url); \
