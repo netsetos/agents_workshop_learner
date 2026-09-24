@@ -1,0 +1,603 @@
+{
+  "schema_version": 1,
+  "lesson": "4.3",
+  "title": "Publish versions, retire documents and reject stale events",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+  "source_sha": "f336737e3da708a11e2863a2d9742fafed531016",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 38,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "G",
+    "GEN",
+    "HOME",
+    "LINE",
+    "ME",
+    "NUMBER",
+    "PROJECT",
+    "REGION",
+    "SINCE",
+    "SIZE",
+    "TENANT"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Publish versions, retire documents and reject stale events: one current version, three ways to stop being it, and the event that must not count"
+    },
+    {
+      "level": 3,
+      "heading": "What \"current\" means"
+    },
+    {
+      "level": 4,
+      "heading": "Play the lifecycle"
+    },
+    {
+      "level": 3,
+      "heading": "The words: staged, swap, superseded, retired, withdrawn, generation, tombstone"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "Publish: the swap, and the reader's guard"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read the handbook's versions, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the purge plan, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "Stale: the generation guard, and three replayed events"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: three events, three verdicts, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "Withdrawn: retire a document by hand, then restore it"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: withdraw the note, test the tombstone, restore it"
+    },
+    {
+      "level": 3,
+      "heading": "The three states side by side"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read the ledger as the operator does, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "The swap window, effective dates, and what a version costs"
+    },
+    {
+      "level": 4,
+      "heading": "The two-commit window"
+    },
+    {
+      "level": 4,
+      "heading": "Effective dates, and the gap the ledger leaves open"
+    },
+    {
+      "level": 4,
+      "heading": "The index and the cache follow the flag"
+    },
+    {
+      "level": 4,
+      "heading": "What a version costs"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 372,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "4.3",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_read_the_handbook_s_versions_rs_0.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 378,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "4.3",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_read_the_handbook_s_versions_rs_0.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 9,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Publish: the swap, and the reader's guard",
+      "subheading": "Read the handbook's versions, Rs 0",
+      "anchor": "s3",
+      "purpose": "Read the handbook's versions, Rs 0",
+      "expected": "acme_497809ff...  rows 283  current 283  retired   0\nacme_55603088...  rows 283  current   0  retired 283  superseded_by acme_497809ff...  expire_at 2026-10-22  effective_to None\nacme_54337b4b...  rows 283  current   0  retired 283  superseded_by acme_497809ff...  expire_at 2026-10-22  effective_to None\ncurrent versions: 1 | staged rows: 0",
+      "line": 454,
+      "id": "demo_03_01_read_the_handbook_s_versions_rs_0",
+      "lesson": "4.3",
+      "file": "demo_03_01_read_the_handbook_s_versions_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_01_do_it_the_purge_plan_rs_0.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 14,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (read-only without APPLY=1)",
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "subheading": "Do it: the purge plan, Rs 0",
+      "anchor": "s4",
+      "purpose": "Do it: the purge plan, Rs 0",
+      "expected": "{\"event\": \"reconcile_purge_plan\", \"expired\": 0, \"retired\": 566, \"applied\": false, \"note\": \"the TTL policy on chunks.expire_at (firestore_indexes.tf) deletes these on its own within a day; this is the manual twin for a lane that has not applied it\"}",
+      "line": 515,
+      "id": "demo_04_01_do_it_the_purge_plan_rs_0",
+      "lesson": "4.3",
+      "file": "demo_04_01_do_it_the_purge_plan_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_read_the_handbook_s_versions_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_01_do_it_three_events_three_verdicts_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 19,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (three messages; nothing is indexed)",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "subheading": "Do it: three events, three verdicts, Rs 0",
+      "anchor": "s5",
+      "purpose": "The block reads the handbook's generation off the ledger, then publishes three records into the ingest topic exactly as Cloud Storage would, with the generation before the ledger's, the ledger's own, and one after it. The push subscription delivers them to the worker, and the worker's three lines say what it did with each. Nothing on the lane changes.",
+      "expected": "the ledger's generation for the handbook: 1758554107123456\nTIMESTAMP                 EVENT               GENERATION        LEDGER_GENERATION  REASON\n2026-09-22T15:02:31.512Z  ingest_stale_event  1758554107123457                     generation gone: the object was overwritten\n2026-09-22T15:02:30.907Z  ingest_duplicate\n2026-09-22T15:02:30.211Z  ingest_stale_event  1758554107123455  1758554107123456   older than the ledger",
+      "line": 574,
+      "id": "demo_05_01_do_it_three_events_three_verdicts_rs_0",
+      "lesson": "4.3",
+      "file": "demo_05_01_do_it_three_events_three_verdicts_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_do_it_the_purge_plan_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_01_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 25,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (the object, or its last generation; then the hash against the ledger)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "subheading": "Do it: withdraw the note, test the tombstone, restore it",
+      "anchor": "s6",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "expected": "ledger abcdef0123456789 | file abcdef0123456789 | the same bytes",
+      "line": 668,
+      "id": "demo_06_01_do_it_withdraw_the_note_test_the_tombstone_resto",
+      "lesson": "4.3",
+      "file": "demo_06_01_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_do_it_three_events_three_verdicts_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_02_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 27,
+      "label": "bash — only if the check said DIFFERENT or the bucket had nothing (rebuilds the note from the kit's fixture and the ledger's hash)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "subheading": "Do it: withdraw the note, test the tombstone, restore it",
+      "anchor": "s6",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "expected": "rebuilt, dated 2026-09-DD",
+      "line": 681,
+      "id": "recover_06_01_do_it_withdraw_the_note_test_the_tombstone_resto",
+      "lesson": "4.3",
+      "file": "recover_06_01_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "category": "recovery",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_02_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 29,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (the withdrawal, then two reads)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "subheading": "Do it: withdraw the note, test the tombstone, restore it",
+      "anchor": "s6",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "expected": "{\"event\": \"reconcile_withdrawn\", \"gcs_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md\", \"fingerprint\": \"7c2e91a4d05b3f68\", \"retired_doc_keys\": [\"acme_9c41d0e2b7f5...\"], \"retired_ids\": [\"acme:9c41d0e2b7f5...#0\", \"acme:9c41d0e2b7f5...#1\", \"acme:9c41d0e2b7f5...#2\"], \"retired_chunks\": 3, \"note\": \"a tombstone: the object is kept and nothing automatic re-ingests it; make restore SOURCE= does\"}\nacme/smoke_note_v1.md withdrawn chunks 3\nfingerprint 7c2e91a4d05b3f68 | last event reconcile_withdrawn\n3 rows | current: 0 | with expire_at: 3 | superseded_by: {'None'}",
+      "line": 697,
+      "id": "demo_06_02_do_it_withdraw_the_note_test_the_tombstone_resto",
+      "lesson": "4.3",
+      "file": "demo_06_02_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_do_it_withdraw_the_note_test_the_tombstone_resto"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_03_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 31,
+      "label": "bash — run in the operator shell (one question; paise)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "subheading": "Do it: withdraw the note, test the tombstone, restore it",
+      "anchor": "s6",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "expected": "answerable False | citations 0 | The corpus holds nothing near this question: no passage of this tenant's current documents",
+      "line": 717,
+      "id": "demo_06_03_do_it_withdraw_the_note_test_the_tombstone_resto",
+      "lesson": "4.3",
+      "file": "demo_06_03_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "category": "required",
+      "requires": [
+        "demo_06_02_do_it_withdraw_the_note_test_the_tombstone_resto"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_04_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 33,
+      "label": "bash — run in the operator shell (the same bytes again: refused; then the restore)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "subheading": "Do it: withdraw the note, test the tombstone, restore it",
+      "anchor": "s6",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "expected": "ingest_withdrawn\tacme_9c41d0e2b7f5...\tmake restore SOURCE= clears the tombstone\n{\"event\": \"reconcile_restored\", \"gcs_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md\", \"generation\": \"1758555302345678\", \"next\": \"ingest_reactivated inside the undo window, ingest_ok (a fresh version) after it\"}\n>> event chunks reused embedded: ingest_reactivated\t3\t3\t0\nacme/smoke_note_v1.md indexed reused 3 embedded 0\nanswerable True | The smoke lantern is kept in bay 4 of the Pune warehouse ... [Source 1]",
+      "line": 723,
+      "id": "demo_06_04_do_it_withdraw_the_note_test_the_tombstone_resto",
+      "lesson": "4.3",
+      "file": "demo_06_04_do_it_withdraw_the_note_test_the_tombstone_resto.py",
+      "category": "required",
+      "requires": [
+        "demo_06_03_do_it_withdraw_the_note_test_the_tombstone_resto"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_read_the_ledger_as_the_operator_does_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 36,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT",
+      "heading": "The three states side by side",
+      "subheading": "Read the ledger as the operator does, Rs 0",
+      "anchor": "s7",
+      "purpose": "Read the ledger as the operator does, Rs 0",
+      "expected": "source                                       status            gen chunks reused embed retired effective  embedding              indexed_at\nacme/code_on_wages_2019.pdf                  indexed    ...2671234567     67      0    67       0 -          text-embedding-005@1   2026-09-20T09:14:02\nacme/hr_policy_2026.md                       indexed    ...4107123456    283    283     0     283 -          text-embedding-005@1   2026-09-22T13:41:55\nacme/smoke_note_v1.md                        indexed    ...5302345678      3      3     0       0 -          text-embedding-005@1   2026-09-22T15:21:40\n...\n{\"ledger\": \"acme\", \"fingerprint\": \"3a9f0c17e5d2b846\", \"versions\": 9, \"last_event\": \"ingest_reactivated\"}",
+      "line": 777,
+      "id": "demo_07_01_read_the_ledger_as_the_operator_does_rs_0",
+      "lesson": "4.3",
+      "file": "demo_07_01_read_the_ledger_as_the_operator_does_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_06_04_do_it_withdraw_the_note_test_the_tombstone_resto"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 342
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 374
+    },
+    {
+      "window": 6,
+      "label": "services/ingest/idempotency.py - swap_versions(): the docstring, and the new version first",
+      "heading": "Publish: the swap, and the reader's guard",
+      "anchor": "s3",
+      "line": 393
+    },
+    {
+      "window": 7,
+      "label": "services/ingest/idempotency.py - _retire(): the four fields, nothing else",
+      "heading": "Publish: the swap, and the reader's guard",
+      "anchor": "s3",
+      "line": 420
+    },
+    {
+      "window": 8,
+      "label": "services/rag-api/retriever.py - newest_per_source() and prefer_current(): the reader's guard",
+      "heading": "Publish: the swap, and the reader's guard",
+      "anchor": "s3",
+      "line": 428
+    },
+    {
+      "window": 10,
+      "label": "expected after lessons 3.3 and 4.2 (the dates are thirty days after your undos)",
+      "heading": "Publish: the swap, and the reader's guard",
+      "anchor": "s3",
+      "line": 473
+    },
+    {
+      "window": 11,
+      "label": "services/ingest/idempotency.py - retire_previous(): a flag, never a delete",
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "anchor": "s4",
+      "line": 488
+    },
+    {
+      "window": 12,
+      "label": "terraform/firestore_indexes.tf - the TTL policy: the only deleter",
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "anchor": "s4",
+      "line": 498
+    },
+    {
+      "window": 13,
+      "label": "mk/lifecycle.mk - purge: the policy's manual twin",
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "anchor": "s4",
+      "line": 508
+    },
+    {
+      "window": 15,
+      "label": "expected (566 retired rows after 3.3 and 4.2; none expired before 22 October)",
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "anchor": "s4",
+      "line": 517
+    },
+    {
+      "window": 16,
+      "label": "services/ingest/main.py - push(): the generation guard, and the download by generation",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "anchor": "s5",
+      "line": 529
+    },
+    {
+      "window": 17,
+      "label": "services/ingest/idempotency.py - stale_generation(): the ledger's number against the event's",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "anchor": "s5",
+      "line": 548
+    },
+    {
+      "window": 18,
+      "label": "services/ingest/contracts.py - is_stale(): the rule, on its own",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "anchor": "s5",
+      "line": 561
+    },
+    {
+      "window": 20,
+      "label": "expected (newest first; your generation numbers differ)",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "anchor": "s5",
+      "line": 586
+    },
+    {
+      "window": 21,
+      "label": "services/ingest/idempotency.py - withdrawn(): the tombstone, asked twice",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 602
+    },
+    {
+      "window": 22,
+      "label": "services/ingest/reconcile.py - --retire: what make retire writes",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 608
+    },
+    {
+      "window": 23,
+      "label": "services/ingest/reconcile.py - --restore: the way back",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 621
+    },
+    {
+      "window": 24,
+      "label": "mk/lifecycle.mk - retire and restore, as make runs them",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 653
+    },
+    {
+      "window": 26,
+      "label": "expected (the hash is your note's)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 680
+    },
+    {
+      "window": 28,
+      "label": "expected",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 696
+    },
+    {
+      "window": 30,
+      "label": "expected (your keys, ids and fingerprint differ)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 712
+    },
+    {
+      "window": 32,
+      "label": "expected (your wording differs; answerable is the point)",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 721
+    },
+    {
+      "window": 34,
+      "label": "expected",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "anchor": "s6",
+      "line": 742
+    },
+    {
+      "window": 35,
+      "label": "services/ingest/reconcile.py - the walk's plan: withdrawn is kept, retired is re-ingested",
+      "heading": "The three states side by side",
+      "anchor": "s7",
+      "line": 762
+    },
+    {
+      "window": 37,
+      "label": "expected (trimmed; every row of acme is indexed again after step 6)",
+      "heading": "The three states side by side",
+      "anchor": "s7",
+      "line": 779
+    },
+    {
+      "window": 38,
+      "label": "services/ingest/idempotency.py - refresh_fingerprint(): the cache follows the ledger",
+      "heading": "The swap window, effective dates, and what a version costs",
+      "anchor": "s8",
+      "line": 800
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

@@ -1,0 +1,617 @@
+{
+  "schema_version": 1,
+  "lesson": "4.1",
+  "title": "Follow upload events, retries, dead-letter handling and the batch lane",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+  "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 40,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "BATCH_JOB",
+    "LINE",
+    "ME",
+    "NUMBER",
+    "POISON_SINCE",
+    "PROJECT",
+    "REGION",
+    "SINCE",
+    "TENANT"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Follow upload events, retries, dead-letter handling and the batch lane: one object, one message, one verdict"
+    },
+    {
+      "level": 3,
+      "heading": "What an upload event is"
+    },
+    {
+      "level": 4,
+      "heading": "Follow one delivery"
+    },
+    {
+      "level": 3,
+      "heading": "The words: notification, push, ack, backoff, dead letter, queued claim"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "The plumbing: read the notification, the topic and the subscription off your lane"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read it off the platform"
+    },
+    {
+      "level": 3,
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read the two records your 3.4 upload left"
+    },
+    {
+      "level": 3,
+      "heading": "Poison: a message that can never succeed, and the retries you can watch"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: start the drill, then watch the first retries"
+    },
+    {
+      "level": 3,
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read the lane, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "Dead letters: reading the queue, deciding, cleaning up"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read it, when it has landed"
+    },
+    {
+      "level": 4,
+      "heading": "Decide, then clean up"
+    },
+    {
+      "level": 3,
+      "heading": "At-least-once, and what it costs"
+    },
+    {
+      "level": 4,
+      "heading": "Three surprises, three defences"
+    },
+    {
+      "level": 4,
+      "heading": "The hazard the ceiling exists for"
+    },
+    {
+      "level": 4,
+      "heading": "What deliveries bill, and what they do not"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 366,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "4.1",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 372,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "4.1",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 6,
+      "label": "bash — run in the operator shell, once per shell",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. Whether the batch job is declared on your lane is a fact the worker carries in its environment as BATCH_JOB. Read it once; step 6 uses it.",
+      "expected": "batch job declared: no (BATCH_JOB is empty)",
+      "line": 382,
+      "id": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "4.1",
+      "file": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_read_it_off_the_platform.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 10,
+      "label": "bash — run in the operator shell (all read-only)",
+      "heading": "The plumbing: read the notification, the topic and the subscription off your lane",
+      "subheading": "Read it off the platform",
+      "anchor": "s3",
+      "purpose": "Read it off the platform",
+      "expected": "---\nevent_types:\n- OBJECT_FINALIZE\nid: '1'\npayload_format: JSON_API_V1\ntopic: //pubsub.googleapis.com/projects/documind-ai-YOUR-ID/topics/documind-ingest\nackDeadlineSeconds: 600\ndeadLetterPolicy:\n  deadLetterTopic: projects/documind-ai-YOUR-ID/topics/documind-ingest-dlq\n  maxDeliveryAttempts: 12\npushConfig:\n  oidcToken:\n    serviceAccountEmail: documind-ingest-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\n  pushEndpoint: https://documind-ingest-NUMBER.asia-south1.run.app\nretryPolicy:\n  maximumBackoff: 600s\n  minimumBackoff: 10s\nprojects/documind-ai-YOUR-ID/topics/documind-ingest-dlq\nspec:\n  template:\n    metadata:\n      annotations:\n        autoscaling.knative.dev/maxScale: '30'\n        run.googleapis.com/execution-environment: gen2\n    spec:\n      containerConcurrency: 1\n      timeoutSeconds: 600",
+      "line": 448,
+      "id": "demo_03_01_read_it_off_the_platform",
+      "lesson": "4.1",
+      "file": "demo_03_01_read_it_off_the_platform.py",
+      "category": "required",
+      "requires": [
+        "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_01_read_the_two_records_your_3_4_upload_left.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 16,
+      "label": "bash — run in the operator shell (both read-only)",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "subheading": "Read the two records your 3.4 upload left",
+      "anchor": "s4",
+      "purpose": "Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.",
+      "expected": "TIMESTAMP                 REQUEST_METHOD  STATUS  LATENCY\n2026-09-22T12:06:41.118Z  POST            200     7.412s\n2026-09-22T11:58:07.902Z  POST            200     0.611s\nTIMESTAMP                 EVENT             DOC_KEY                 CHUNKS  LANE\n2026-09-22T12:06:41.001Z  ingest_ok         acme_9c41d0e2b7f5...    3       push\n2026-09-22T11:58:07.844Z  ingest_duplicate  acme_111510fcf0a6...",
+      "line": 553,
+      "id": "demo_04_01_read_the_two_records_your_3_4_upload_left",
+      "lesson": "4.1",
+      "file": "demo_04_01_read_the_two_records_your_3_4_upload_left.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_read_it_off_the_platform"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_01_do_it_start_the_drill_then_watch_the_first_retri.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 19,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0)",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "subheading": "Do it: start the drill, then watch the first retries",
+      "anchor": "s5",
+      "purpose": "The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.",
+      "expected": ">> zero-byte object in: poison-1758542871.pdf\n>> the worker refused it (400): 1 validation error for IngestMessage\nsize\n  Input should be greater than or equal to 1 [type=greater_than_equal, input_value='0', input_type=str]\n>> Pub/Sub retries a non-2xx with backoff (10 s to 600 s, twelve attempts: eventarc.tf), then ingest-dlq: make dlq about an hour after this line",
+      "line": 598,
+      "id": "demo_05_01_do_it_start_the_drill_then_watch_the_first_retri",
+      "lesson": "4.1",
+      "file": "demo_05_01_do_it_start_the_drill_then_watch_the_first_retri.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_read_the_two_records_your_3_4_upload_left"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_02_do_it_start_the_drill_then_watch_the_first_retri.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 21,
+      "label": "bash — run in the operator shell, a few minutes later (read-only)",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "subheading": "Do it: start the drill, then watch the first retries",
+      "anchor": "s5",
+      "purpose": "The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.",
+      "expected": "",
+      "line": 607,
+      "id": "demo_05_02_do_it_start_the_drill_then_watch_the_first_retri",
+      "lesson": "4.1",
+      "file": "demo_05_02_do_it_start_the_drill_then_watch_the_first_retri.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_do_it_start_the_drill_then_watch_the_first_retri"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_01_read_the_lane_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 27,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (read-only)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "subheading": "Read the lane, Rs 0",
+      "anchor": "s6",
+      "purpose": "The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker.",
+      "expected": "0 queued document(s)\nno batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)",
+      "line": 699,
+      "id": "demo_06_01_read_the_lane_rs_0",
+      "lesson": "4.1",
+      "file": "demo_06_01_read_the_lane_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_05_02_do_it_start_the_drill_then_watch_the_first_retri"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_02_read_the_lane_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 30,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (the join is free; the upload starts the paid parse if the job is declared)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "subheading": "Read the lane, Rs 0",
+      "anchor": "s6",
+      "purpose": "The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker. The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and make queued shows it. Decide before you upload.",
+      "expected": "bundle pages: 270\n>> queued: pages, consumer: 270\tdocumind-ingest-batch started (run requested); the hourly schedule backstops it\n1 queued document(s)\n  acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678",
+      "line": 730,
+      "id": "demo_06_02_read_the_lane_rs_0",
+      "lesson": "4.1",
+      "file": "demo_06_02_read_the_lane_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_read_the_lane_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_read_it_when_it_has_landed.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 34,
+      "label": "bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged)",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "subheading": "Read it, when it has landed",
+      "anchor": "s7",
+      "purpose": "The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.",
+      "expected": "MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT\n12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1\n{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}",
+      "line": 778,
+      "id": "demo_07_01_read_it_when_it_has_landed",
+      "lesson": "4.1",
+      "file": "demo_07_01_read_it_when_it_has_landed.py",
+      "category": "required",
+      "requires": [
+        "demo_06_02_read_the_lane_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_02_decide_then_clean_up.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 36,
+      "label": "bash — run in the operator shell (removes the dead letter and the empty object; nothing else)",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "subheading": "Decide, then clean up",
+      "anchor": "s7",
+      "purpose": "This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.",
+      "expected": "acme/poison-1758542871.pdf\nRemoving gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...",
+      "line": 789,
+      "id": "demo_07_02_decide_then_clean_up",
+      "lesson": "4.1",
+      "file": "demo_07_02_decide_then_clean_up.py",
+      "category": "required",
+      "requires": [
+        "demo_07_01_read_it_when_it_has_landed"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 336
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 368
+    },
+    {
+      "window": 7,
+      "label": "expected on a lane deployed with the defaults",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 385
+    },
+    {
+      "window": 8,
+      "label": "terraform/eventarc.tf - the topics, the grant, and the bucket notification",
+      "heading": "The plumbing: read the notification, the topic and the subscription off your lane",
+      "anchor": "s3",
+      "line": 394
+    },
+    {
+      "window": 9,
+      "label": "terraform/eventarc.tf - the push subscription: the token, the policy, the ceiling",
+      "heading": "The plumbing: read the notification, the topic and the subscription off your lane",
+      "anchor": "s3",
+      "line": 413
+    },
+    {
+      "window": 11,
+      "label": "expected (your numbers differ; the shape and the settings are the point)",
+      "heading": "The plumbing: read the notification, the topic and the subscription off your lane",
+      "anchor": "s3",
+      "line": 458
+    },
+    {
+      "window": 12,
+      "label": "services/ingest/main.py - push(): the envelope, the contract, and the 400",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 496
+    },
+    {
+      "window": 13,
+      "label": "services/ingest/main.py - push(): the acknowledged verdicts after a lost claim",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 509
+    },
+    {
+      "window": 14,
+      "label": "services/ingest/main.py - push(): the only 500",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 519
+    },
+    {
+      "window": 15,
+      "label": "services/ingest/contracts.py - IngestMessage: the fields, and what makes a message poison",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 524
+    },
+    {
+      "window": 17,
+      "label": "expected (your times and keys differ; widen the window if 3.4 was longer ago)",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 559
+    },
+    {
+      "window": 18,
+      "label": "commands/poison.sh - what make poison runs",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "anchor": "s5",
+      "line": 576
+    },
+    {
+      "window": 20,
+      "label": "expected",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "anchor": "s5",
+      "line": 601
+    },
+    {
+      "window": 22,
+      "label": "expected, about five minutes in (newest first; your seconds differ)",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "anchor": "s5",
+      "line": 612
+    },
+    {
+      "window": 23,
+      "label": "services/ingest/main.py - index_document(): the decision, before Document AI",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 632
+    },
+    {
+      "window": 24,
+      "label": "services/ingest/main.py - _enqueue_batch(): the two records and the hand-off",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 642
+    },
+    {
+      "window": 25,
+      "label": "services/ingest/idempotency.py - take_batch(): the job takes a queued claim in a transaction",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 659
+    },
+    {
+      "window": 26,
+      "label": "terraform/batch.tf - the job: the ingest image, a different command, no platform retries",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 681
+    },
+    {
+      "window": 28,
+      "label": "expected on a lane without the job (the default; a Firestore UserWarning line may precede the count)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 717
+    },
+    {
+      "window": 29,
+      "label": "expected on a lane where make batch-job has run",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 720
+    },
+    {
+      "window": 31,
+      "label": "expected (the consumer line depends on BATCH_JOB)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 749
+    },
+    {
+      "window": 32,
+      "label": "mk/ingestion.mk - dlq: a peek, not a pull",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 766
+    },
+    {
+      "window": 33,
+      "label": "terraform/eventarc.tf - where the dead letters are read from",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 769
+    },
+    {
+      "window": 35,
+      "label": "expected (your ids and times differ; the last column is this subscription's own count, not the twelve)",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 783
+    },
+    {
+      "window": 37,
+      "label": "expected",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 792
+    },
+    {
+      "window": 38,
+      "label": "services/ingest/idempotency.py - claim(): why a transaction",
+      "heading": "At-least-once, and what it costs",
+      "anchor": "s8",
+      "line": 809
+    },
+    {
+      "window": 39,
+      "label": "commands/lesson-12.5.sh - the worker's own limits: one request per instance, 600 seconds, thirty instances",
+      "heading": "At-least-once, and what it costs",
+      "anchor": "s8",
+      "line": 819
+    },
+    {
+      "window": 40,
+      "label": "terraform/batch.tf - two hours, and the claim carries the retry",
+      "heading": "At-least-once, and what it costs",
+      "anchor": "s8",
+      "line": 832
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

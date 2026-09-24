@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "lesson": "10.1",
+  "title": "Understand tool contracts and the direct agent loop",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+  "source_sha": "f1868f835bc67f911ec89f0027a86e55fa9969ab",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 25,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "B",
+    "CHAT",
+    "DOCUMIND_IMPERSONATE_SA",
+    "ME",
+    "NUMBER",
+    "PROJECT",
+    "Q",
+    "REGION",
+    "SINCE101",
+    "TENANT",
+    "TOKEN"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Understand tool contracts and the direct agent loop: what the model reads, what the runtime adds, one retrieve() for every brain, and the floor they must beat"
+    },
+    {
+      "level": 3,
+      "heading": "A tool is a contract, and the direct brain is the floor"
+    },
+    {
+      "level": 4,
+      "heading": "One turn, two brains"
+    },
+    {
+      "level": 3,
+      "heading": "The words: tool, schema, runtime context, adapter, brain, tool_calls, refusals"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "The chat service, in your lane's region"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: deploy"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: where it points, and its brains"
+    },
+    {
+      "level": 3,
+      "heading": "The contract: what the model reads of each tool"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The one retrieve(), from your shell"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The direct brain: one retrieve(), no loop"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The loop: the model chooses its tools"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The rows: what each brain cost, and what no row records"
+    },
+    {
+      "level": 3,
+      "heading": "Why the contract is shaped this way, what it costs, and what the kit does not do yet"
+    },
+    {
+      "level": 4,
+      "heading": "What it costs"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 370,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "10.1",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_do_it_deploy.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 376,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "10.1",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_do_it_deploy.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 6,
+      "label": "bash — run in the operator shell, in the kit (the chat service built and deployed in your region; several minutes)",
+      "heading": "The chat service, in your lane's region",
+      "subheading": "Do it: deploy",
+      "anchor": "s3",
+      "purpose": "Do it: deploy",
+      "expected": ">> commands/lesson-12.8.sh (DEPLOY block)\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT\nDeploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-chat-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-chat].   (twice: documind-ui-sa, documind-outsider-sa)\n... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)\nExecution [documind-checkpoint-setup-xxxxx] has successfully completed.\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
+      "line": 394,
+      "id": "demo_03_01_do_it_deploy",
+      "lesson": "10.1",
+      "file": "demo_03_01_do_it_deploy.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_02_do_it_where_it_points_and_its_brains.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 8,
+      "label": "bash — run in the operator shell, in the kit (where the chat service points, and its brains)",
+      "heading": "The chat service, in your lane's region",
+      "subheading": "Do it: where it points, and its brains",
+      "anchor": "s3",
+      "purpose": "Do it: where it points, and its brains",
+      "expected": "RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain\n{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\"}",
+      "line": 412,
+      "id": "demo_03_02_do_it_where_it_points_and_its_brains",
+      "lesson": "10.1",
+      "file": "demo_03_02_do_it_where_it_points_and_its_brains.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_do_it_deploy"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_01_do_it.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 12,
+      "label": "bash — run in the operator shell, in the kit (what the model reads of each tool; reads the source, installs nothing)",
+      "heading": "The contract: what the model reads of each tool",
+      "subheading": "Do it",
+      "anchor": "s4",
+      "purpose": "Do it",
+      "expected": "retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime\n      Retrieve grounded passages from DocuMind's corpus.\n  calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')\n      Estimate document processing cost in USD and INR.\n  get_usage_stats(metric: str, days: int = 7)    hidden: runtime\n      Get DocuMind RAG pipeline usage statistics.",
+      "line": 465,
+      "id": "demo_04_01_do_it",
+      "lesson": "10.1",
+      "file": "demo_04_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_03_02_do_it_where_it_points_and_its_brains"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_05_01_do_it.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 15,
+      "label": "bash — run in the operator shell, in the kit (the one retrieve(), called from your shell as a roster member)",
+      "heading": "The one retrieve(), from your shell",
+      "subheading": "Do it",
+      "anchor": "s5",
+      "purpose": "Do it",
+      "expected": "5 citations | answerable True | confidence high | 2.7 s\n  first: {'chunk_id': 'acme:aaaaaaaa#0', 'page': 3, 'score': 0.94}\n  rag-api's own answer: Gratuity is payable on termination after not less than five years of continuous service [1",
+      "line": 526,
+      "id": "demo_05_01_do_it",
+      "lesson": "10.1",
+      "file": "demo_05_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_do_it"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_01_do_it.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 19,
+      "label": "bash — run in the operator shell, in the kit (a small chat function, and the direct brain)",
+      "heading": "The direct brain: one retrieve(), no loop",
+      "subheading": "Do it",
+      "anchor": "s6",
+      "purpose": "Do it",
+      "expected": "direct    tool_calls ['retrieve']  refusals []  citations 5  3180 ms\n      Gratuity is payable on termination after not less than five years of continuous service [1].",
+      "line": 580,
+      "id": "demo_06_01_do_it",
+      "lesson": "10.1",
+      "file": "demo_06_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_do_it"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_do_it.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 22,
+      "label": "bash — run in the operator shell, in the kit (the LangChain loop on the same question, then a cost question on both brains)",
+      "heading": "The loop: the model chooses its tools",
+      "subheading": "Do it",
+      "anchor": "s7",
+      "purpose": "Do it",
+      "expected": "langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms\n      After five years of continuous service, under the Payment of Gratuity Act, 1972.\n  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 0  11350 ms\n      At the priority tier (USD 0.12 a page), 283 pages cost USD 33.96, about Rs 2,886.60.\n  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms\n      The documents give no per-page price for processing the handbook; the April invoice bills priori",
+      "line": 628,
+      "id": "demo_07_01_do_it",
+      "lesson": "10.1",
+      "file": "demo_07_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_do_it"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_08_01_the_rows_what_each_brain_cost_and_what_no_row_re.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 24,
+      "label": "bash — run in the operator shell, in the kit (the rows both services wrote since the retrieve cell; reads only)",
+      "heading": "The rows: what each brain cost, and what no row records",
+      "subheading": "The rows: what each brain cost, and what no row records",
+      "anchor": "s8",
+      "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
+      "expected": "rag-api, one row per retrieve():\n    brain ui         in   1790  out   96  Rs 0.2894   2600 ms\n    brain direct     in   1790  out   96  Rs 0.2894   2710 ms\n    brain langchain  in   1812  out  101  Rs 0.2954   2840 ms\n    brain langchain  in   1650  out   88  Rs 0.2665   2390 ms\n    brain direct     in   1705  out   92  Rs 0.2760   2620 ms\n  the chat service, one row per turn:\n    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)",
+      "line": 647,
+      "id": "demo_08_01_the_rows_what_each_brain_cost_and_what_no_row_re",
+      "lesson": "10.1",
+      "file": "demo_08_01_the_rows_what_each_brain_cost_and_what_no_row_re.py",
+      "category": "required",
+      "requires": [
+        "demo_07_01_do_it"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 340
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 372
+    },
+    {
+      "window": 7,
+      "label": "expected shape (Cloud Build's and gcloud's own lines are cut down)",
+      "heading": "The chat service, in your lane's region",
+      "anchor": "s3",
+      "line": 396
+    },
+    {
+      "window": 9,
+      "label": "expected (the cell's parsing over a stand-in of the service; your URLs carry your project number)",
+      "heading": "The chat service, in your lane's region",
+      "anchor": "s3",
+      "line": 417
+    },
+    {
+      "window": 10,
+      "label": "services/chat/tools.py - the chat adapter: the tenant from the runtime, never from the model",
+      "heading": "The contract: what the model reads of each tool",
+      "anchor": "s4",
+      "line": 431
+    },
+    {
+      "window": 11,
+      "label": "services/chat/agent.py - the request has nowhere to name a tenant",
+      "heading": "The contract: what the model reads of each tool",
+      "anchor": "s4",
+      "line": 451
+    },
+    {
+      "window": 13,
+      "label": "expected (this cell run on the kit's own tools.py; the build checks it against LangChain's own schema)",
+      "heading": "The contract: what the model reads of each tool",
+      "anchor": "s4",
+      "line": 478
+    },
+    {
+      "window": 14,
+      "label": "shared/documind_tools.py - retrieve(): THE single retrieval entry point, and failures returned as data",
+      "heading": "The one retrieve(), from your shell",
+      "anchor": "s5",
+      "line": 496
+    },
+    {
+      "window": 16,
+      "label": "expected (the kit's retrieve() against a local stub of rag-api; your citations and time differ)",
+      "heading": "The one retrieve(), from your shell",
+      "anchor": "s5",
+      "line": 538
+    },
+    {
+      "window": 17,
+      "label": "services/chat/agent.py - the tenant looked up, then carried in the runtime context",
+      "heading": "The direct brain: one retrieve(), no loop",
+      "anchor": "s6",
+      "line": 552
+    },
+    {
+      "window": 18,
+      "label": "services/chat/brains.py - DirectBrain: no loop, one retrieve(), rag-api's own answer",
+      "heading": "The direct brain: one retrieve(), no loop",
+      "anchor": "s6",
+      "line": 560
+    },
+    {
+      "window": 20,
+      "label": "expected (against a local stub of the chat service; your words and times differ)",
+      "heading": "The direct brain: one retrieve(), no loop",
+      "anchor": "s6",
+      "line": 599
+    },
+    {
+      "window": 21,
+      "label": "services/chat/brains.py - _summary(): the same three keys from every brain",
+      "heading": "The loop: the model chooses its tools",
+      "anchor": "s7",
+      "line": 613
+    },
+    {
+      "window": 23,
+      "label": "expected (against a local stub; the model decides which tools it calls, and your lists are the truth)",
+      "heading": "The loop: the model chooses its tools",
+      "anchor": "s7",
+      "line": 632
+    },
+    {
+      "window": 25,
+      "label": "expected (against a fake gcloud, priced by the kit's own price(); your numbers differ)",
+      "heading": "The rows: what each brain cost, and what no row records",
+      "anchor": "s8",
+      "line": 663
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

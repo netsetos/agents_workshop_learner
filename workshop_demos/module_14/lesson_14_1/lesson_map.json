@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lesson": "14.1",
+  "title": "Build and deploy using keyless identity",
+  "source_kind": "course_plan_and_kit",
+  "source_sha": "498aab6b58c49a1c3c3b5ca5bef83fb2278c2cedd0df90ada706473abd017546",
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "PROJECT",
+    "REGION",
+    "TENANT",
+    "ME",
+    "NUMBER"
+  ],
+  "demos": [
+    {
+      "lesson": "14.1",
+      "file": "demo_01_inspect_the_keyless_build_identity.py",
+      "id": "demo_01_inspect_the_keyless_build_identity",
+      "anchor": "plan-1",
+      "heading": "Inspect the keyless build identity",
+      "subheading": "Inspect the keyless build identity",
+      "purpose": "Read the kit's workload-identity and build definitions. Verify repository/ref conditions in the real deployment configuration before submitting a build; no service-account key is generated.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "14.1",
+      "file": "demo_02_build_the_deployment_images.py",
+      "id": "demo_02_build_the_deployment_images",
+      "anchor": "plan-2",
+      "heading": "Build the deployment images",
+      "subheading": "Build the deployment images",
+      "purpose": "Use the actual kit build target and the current authenticated identity. Record the build output and image tags; a successful local credential check alone does not prove a deployed GitHub workload-identity run.",
+      "label": "Course-plan experiment \u2014 live deployment",
+      "category": "required",
+      "requires": [
+        "demo_01_inspect_the_keyless_build_identity"
+      ],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": false,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    }
+  ],
+  "live_verification": "Not performed; main HTML has not yet been authored."
+}

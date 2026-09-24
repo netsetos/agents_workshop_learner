@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "lesson": "1.1",
+  "title": "Reproduce the local environment and read the master diagram",
+  "source_kind": "course_plan_and_kit",
+  "source_sha": "569e1c3a869e1c0fab34248795d34e51e027b5bd528a51044dab408c0ef54c30",
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "PROJECT",
+    "REGION",
+    "TENANT",
+    "ME",
+    "NUMBER"
+  ],
+  "demos": [
+    {
+      "lesson": "1.1",
+      "file": "demo_01_inspect_the_workstation_and_corpus.py",
+      "id": "demo_01_inspect_the_workstation_and_corpus",
+      "anchor": "plan-1",
+      "heading": "Inspect the workstation and corpus",
+      "subheading": "Inspect the workstation and corpus",
+      "purpose": "Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [],
+      "expected": "The IDE interpreter and tool paths are visible; the ACME handbook exists.",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "1.1",
+      "file": "demo_02_start_the_local_chat_lane.py",
+      "id": "demo_02_start_the_local_chat_lane",
+      "anchor": "plan-2",
+      "heading": "Start the local chat lane",
+      "subheading": "Start the local chat lane",
+      "purpose": "Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [
+        "demo_01_inspect_the_workstation_and_corpus"
+      ],
+      "expected": "The local chat server listens on port 8081. Ollama and the model must already be available; inspect the actual service output.",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "1.1",
+      "file": "demo_03_ask_the_local_notice_period_question.py",
+      "id": "demo_03_ask_the_local_notice_period_question",
+      "anchor": "plan-3",
+      "heading": "Ask the local notice-period question",
+      "subheading": "Ask the local notice-period question",
+      "purpose": "Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [
+        "demo_02_start_the_local_chat_lane"
+      ],
+      "expected": "A local answer with citations. Starting the server is a prerequisite even though it runs in another console.",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "1.1",
+      "file": "finish_04_stop_this_local_chat_service.py",
+      "id": "finish_04_stop_this_local_chat_service",
+      "anchor": "plan-4",
+      "heading": "Stop this local chat service",
+      "subheading": "Stop this local chat service",
+      "purpose": "Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "cleanup",
+      "requires": [],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    }
+  ],
+  "live_verification": "Not performed; main HTML has not yet been authored."
+}

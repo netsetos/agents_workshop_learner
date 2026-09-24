@@ -1,0 +1,825 @@
+{
+  "schema_version": 1,
+  "lesson": "4.4",
+  "title": "Restore documents and reconcile index differences",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+  "source_sha": "52d1fbe549bb76a2fe1064f01171f2107c260a11",
+  "shared_setup_windows": [
+    8
+  ],
+  "source_window_count": 44,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "CH44_GENERATION",
+    "CH44_SINCE",
+    "DEMO_DIR",
+    "DEMO_ROOT",
+    "DOC_KEY",
+    "GOOGLE_CLOUD_PROJECT",
+    "ME",
+    "NOTE",
+    "NUMBER",
+    "OBJECT",
+    "PROJECT",
+    "PWD",
+    "QUESTION",
+    "REGION",
+    "RUN_ID",
+    "SOURCE",
+    "TENANT",
+    "previous",
+    "token"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Restore documents and reconcile index differences: one document, a visible gap, and a verified return"
+    },
+    {
+      "level": 3,
+      "heading": "Create a gap, repair it, restore the document"
+    },
+    {
+      "level": 3,
+      "heading": "How reconciliation decides"
+    },
+    {
+      "level": 4,
+      "heading": "How do we know a PDF is queued?"
+    },
+    {
+      "level": 4,
+      "heading": "The planner's rules, verbatim"
+    },
+    {
+      "level": 4,
+      "heading": "Explore a different bucket and ledger"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Keep the backend change with the demo"
+    },
+    {
+      "level": 3,
+      "heading": "Credentials, backend and a clean baseline"
+    },
+    {
+      "level": 3,
+      "heading": "Create this chapter's note and the checks"
+    },
+    {
+      "level": 4,
+      "heading": "Load the checks once"
+    },
+    {
+      "level": 3,
+      "heading": "Prove the document works"
+    },
+    {
+      "level": 3,
+      "heading": "Delete the cloud file and show the stale index"
+    },
+    {
+      "level": 3,
+      "heading": "Plan retirement, apply it, then prove zero drift"
+    },
+    {
+      "level": 4,
+      "heading": "The code that applies the plan"
+    },
+    {
+      "level": 3,
+      "heading": "Restore the exact bytes and prove reuse"
+    },
+    {
+      "level": 4,
+      "heading": "Why the undo counts first"
+    },
+    {
+      "level": 3,
+      "heading": "Watch an incomplete undo refuse"
+    },
+    {
+      "level": 3,
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Read the deployed job and backfill plan"
+    },
+    {
+      "level": 3,
+      "heading": "Run the broader module validation separately"
+    },
+    {
+      "level": 3,
+      "heading": "Verify the story and restore the original backend"
+    }
+  ],
+  "demos": [
+    {
+      "window": "queued-example",
+      "label": "Python — simulated facts, actual kit planner; no network",
+      "heading": "How reconciliation decides",
+      "subheading": "How do we know a PDF is queued?",
+      "anchor": "s2",
+      "purpose": "Explain the page's two-PDF illustration. Reconciliation leaves the matching queued generation to the batch lane; only the new Act contributes to drift.",
+      "expected": "reingest 1, queued 1, drift 1; applied false",
+      "line": 335,
+      "id": "demo_02_01_how_do_we_know_a_pdf_is_queued",
+      "lesson": "4.4",
+      "file": "demo_02_01_how_do_we_know_a_pdf_is_queued.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_02_02_explore_a_different_bucket_and_ledger.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": "widget",
+      "label": "Python — simulated facts, actual kit planner; no network",
+      "heading": "How reconciliation decides",
+      "subheading": "Explore a different bucket and ledger",
+      "anchor": "s2",
+      "purpose": "Reproduce the five default widget documents before exploring its known-bytes and queued variations. The real plan(), decide_bytes() and drift_of() functions make the decisions.",
+      "expected": "ok 1, retire 1, touch 1, reingest 1, withdrawn 1; drift 2",
+      "line": 431,
+      "id": "demo_02_02_explore_a_different_bucket_and_ledger",
+      "lesson": "4.4",
+      "file": "demo_02_02_explore_a_different_bucket_and_ledger.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_how_do_we_know_a_pdf_is_queued"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_03_01_credentials_backend_and_a_clean_baseline.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 10,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT; prepare once per demonstration",
+      "heading": "Credentials, backend and a clean baseline",
+      "subheading": "Credentials, backend and a clean baseline",
+      "anchor": "s3",
+      "purpose": "Do this before presenting. Stop at an error; do not paste the next stage until its checkpoint passes. Use the same operator shell and virtual environment throughout. Create a chapter directory before changing the backend, save its original pin, and run the offline planner check. These files are local demo state; keep them out of commits.",
+      "expected": "",
+      "line": 500,
+      "id": "demo_03_01_credentials_backend_and_a_clean_baseline",
+      "lesson": "4.4",
+      "file": "demo_03_01_credentials_backend_and_a_clean_baseline.py",
+      "category": "required",
+      "requires": [
+        "demo_02_02_explore_a_different_bucket_and_ledger"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [
+        "Persist that backend cleanup is required even if baseline preparation fails."
+      ],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_04_01_create_this_chapter_s_note_and_the_checks.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 11,
+      "label": "bash — run once; keep the note and its checksum unchanged",
+      "heading": "Create this chapter's note and the checks",
+      "subheading": "Create this chapter's note and the checks",
+      "anchor": "s4",
+      "purpose": "A fresh name, a new fact and an unchanged local copy remove the dependencies on earlier lessons. This chapter does not use ~/lesson34_note.md or the smoke-lantern question. Another smoke note may still answer that question even after one copy is retired. Our primary checks are the exact source name, its object generation and its citation; a bare answerable True is insufficient.",
+      "expected": "",
+      "line": 522,
+      "id": "demo_04_01_create_this_chapter_s_note_and_the_checks",
+      "lesson": "4.4",
+      "file": "demo_04_01_create_this_chapter_s_note_and_the_checks.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_credentials_backend_and_a_clean_baseline"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_02_load_the_checks_once.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 12,
+      "label": "bash — save and load the chapter checks; no cloud writes in this block",
+      "heading": "Create this chapter's note and the checks",
+      "subheading": "Load the checks once",
+      "anchor": "s4",
+      "purpose": "The helper block is preparation, not a slide to type live. It stops on failed uploads, polls the exact source and generation, checks citations, and refuses to apply an unexplained tenant-wide plan. The log filter includes both the version key and generation, so another acme upload cannot satisfy the wait. To resume after reopening a shell, first run the shared shell setup, then source this directory's session.env and helpers.sh; do not create a new note midway through a restore.",
+      "expected": "",
+      "line": 544,
+      "id": "demo_04_02_load_the_checks_once",
+      "lesson": "4.4",
+      "file": "demo_04_02_load_the_checks_once.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_create_this_chapter_s_note_and_the_checks"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_01_prove_the_document_works.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 13,
+      "label": "bash — upload, wait for this generation, then ask and record N",
+      "heading": "Prove the document works",
+      "subheading": "Prove the document works",
+      "anchor": "s5",
+      "purpose": "Show the source ledger in the UI and the same source's evidence from the API. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it.",
+      "expected": "",
+      "line": 645,
+      "id": "demo_05_01_prove_the_document_works",
+      "lesson": "4.4",
+      "file": "demo_05_01_prove_the_document_works.py",
+      "category": "required",
+      "requires": [
+        "demo_04_02_load_the_checks_once"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_02_prove_the_document_works.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 14,
+      "label": "bash — after the checkpoint passes, save the observed chunk count",
+      "heading": "Prove the document works",
+      "subheading": "Prove the document works",
+      "anchor": "s5",
+      "purpose": "On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. Checkpoint: source indexed at this upload's generation, a cited answer naming locker Q7 in Jaipur, and no pending repair. If the source is indexed but the query has not caught up, repeat ch44_ask present and inspect its evidence; do not upload again merely to wait.",
+      "expected": "",
+      "line": 647,
+      "id": "demo_05_02_prove_the_document_works",
+      "lesson": "4.4",
+      "file": "demo_05_02_prove_the_document_works.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_prove_the_document_works"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_06_01_delete_the_cloud_file_and_show_the_stale_index.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 15,
+      "label": "bash — check the backup before deleting; observe before running reconciliation",
+      "heading": "Delete the cloud file and show the stale index",
+      "subheading": "Delete the cloud file and show the stale index",
+      "anchor": "s6",
+      "purpose": "The local original stays safe. Delete only this demonstration's live object.",
+      "expected": "",
+      "line": 660,
+      "id": "demo_06_01_delete_the_cloud_file_and_show_the_stale_index",
+      "lesson": "4.4",
+      "file": "demo_06_01_delete_the_cloud_file_and_show_the_stale_index.py",
+      "category": "required",
+      "requires": [
+        "demo_05_02_prove_the_document_works"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_plan_retirement_apply_it_then_prove_zero_drift.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 16,
+      "label": "bash — read-only: require exactly one repair, for this fixture",
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "subheading": "Plan retirement, apply it, then prove zero drift",
+      "anchor": "s7",
+      "purpose": "Keep preview, mutation and verification as three visible operations.",
+      "expected": "",
+      "line": 667,
+      "id": "demo_07_01_plan_retirement_apply_it_then_prove_zero_drift",
+      "lesson": "4.4",
+      "file": "demo_07_01_plan_retirement_apply_it_then_prove_zero_drift.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_delete_the_cloud_file_and_show_the_stale_index"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_02_plan_retirement_apply_it_then_prove_zero_drift.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 17,
+      "label": "bash — recheck immediately before the tenant-wide apply",
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "subheading": "Plan retirement, apply it, then prove zero drift",
+      "anchor": "s7",
+      "purpose": "Keep preview, mutation and verification as three visible operations. The action must be retire for $SOURCE, with reason gone from the bucket, applied: false and drift 1. A plan is evidence, not a repair. Pause other uploads during the demonstration; the kit's apply does not execute a saved, source-scoped plan.",
+      "expected": "",
+      "line": 669,
+      "id": "demo_07_02_plan_retirement_apply_it_then_prove_zero_drift",
+      "lesson": "4.4",
+      "file": "demo_07_02_plan_retirement_apply_it_then_prove_zero_drift.py",
+      "category": "required",
+      "requires": [
+        "demo_07_01_plan_retirement_apply_it_then_prove_zero_drift"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_03_the_code_that_applies_the_plan.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 20,
+      "label": "bash — verify retirement, citations and the next read-only plan",
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "subheading": "The code that applies the plan",
+      "anchor": "s7",
+      "purpose": "The code that applies the plan",
+      "expected": "",
+      "line": 698,
+      "id": "demo_07_03_the_code_that_applies_the_plan",
+      "lesson": "4.4",
+      "file": "demo_07_03_the_code_that_applies_the_plan.py",
+      "category": "required",
+      "requires": [
+        "demo_07_02_plan_retirement_apply_it_then_prove_zero_drift"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_08_01_restore_the_exact_bytes_and_prove_reuse.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 21,
+      "label": "bash — upload only if the original checksum still passes; wait for the new generation",
+      "heading": "Restore the exact bytes and prove reuse",
+      "subheading": "Restore the exact bytes and prove reuse",
+      "anchor": "s8",
+      "purpose": "A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.",
+      "expected": "",
+      "line": 712,
+      "id": "recover_08_01_restore_the_exact_bytes_and_prove_reuse",
+      "lesson": "4.4",
+      "file": "recover_08_01_restore_the_exact_bytes_and_prove_reuse.py",
+      "category": "recovery",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_08_01_restore_the_exact_bytes_and_prove_reuse.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 22,
+      "label": "bash — show this upload's event, restored citation and clean plan",
+      "heading": "Restore the exact bytes and prove reuse",
+      "subheading": "Restore the exact bytes and prove reuse",
+      "anchor": "s8",
+      "purpose": "A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.",
+      "expected": "",
+      "line": 725,
+      "id": "demo_08_01_restore_the_exact_bytes_and_prove_reuse",
+      "lesson": "4.4",
+      "file": "demo_08_01_restore_the_exact_bytes_and_prove_reuse.py",
+      "category": "required",
+      "requires": [
+        "demo_07_03_the_code_that_applies_the_plan"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 25,
+      "label": "bash — read the retained version; this writes only the verified local backup",
+      "heading": "Restore the exact bytes and prove reuse",
+      "subheading": "Why the undo counts first",
+      "anchor": "s8",
+      "purpose": "You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration. Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.",
+      "expected": "",
+      "line": 763,
+      "id": "recover_08_02_why_the_undo_counts_first",
+      "lesson": "4.4",
+      "file": "recover_08_02_why_the_undo_counts_first.py",
+      "category": "recovery",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    },
+    {
+      "window": 26,
+      "label": "bash — retire the fixture again; require the exact one-item plan",
+      "heading": "Watch an incomplete undo refuse",
+      "subheading": "Watch an incomplete undo refuse",
+      "anchor": "s9",
+      "purpose": "Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.",
+      "expected": "",
+      "line": 788,
+      "id": "demo_09_01_optional_watch_an_incomplete_undo_refuse",
+      "lesson": "4.4",
+      "file": "demo_09_01_optional_watch_an_incomplete_undo_refuse.py",
+      "category": "optional",
+      "requires": [
+        "demo_08_01_restore_the_exact_bytes_and_prove_reuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 27,
+      "label": "bash — optional deliberate fault: remove one verified retired row of this fixture",
+      "heading": "Watch an incomplete undo refuse",
+      "subheading": "Watch an incomplete undo refuse",
+      "anchor": "s9",
+      "purpose": "Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.",
+      "expected": "",
+      "line": 793,
+      "id": "demo_09_02_optional_watch_an_incomplete_undo_refuse",
+      "lesson": "4.4",
+      "file": "demo_09_02_optional_watch_an_incomplete_undo_refuse.py",
+      "category": "optional",
+      "requires": [
+        "demo_09_01_optional_watch_an_incomplete_undo_refuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    },
+    {
+      "window": 28,
+      "label": "bash — return the same bytes, then inspect the refused undo and fresh ingestion",
+      "heading": "Watch an incomplete undo refuse",
+      "subheading": "Watch an incomplete undo refuse",
+      "anchor": "s9",
+      "purpose": "Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.",
+      "expected": "",
+      "line": 813,
+      "id": "demo_09_03_optional_watch_an_incomplete_undo_refuse",
+      "lesson": "4.4",
+      "file": "demo_09_03_optional_watch_an_incomplete_undo_refuse.py",
+      "category": "optional",
+      "requires": [
+        "demo_09_02_optional_watch_an_incomplete_undo_refuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 29,
+      "label": "bash — read the undo refusal for this version; no cloud writes",
+      "heading": "Watch an incomplete undo refuse",
+      "subheading": "Watch an incomplete undo refuse",
+      "anchor": "s9",
+      "purpose": "The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. Checkpoint: a reactivate_incomplete event explains the shortfall, followed by fresh ingest_ok; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude reactivate_incomplete because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.",
+      "expected": "",
+      "line": 818,
+      "id": "demo_09_04_optional_watch_an_incomplete_undo_refuse",
+      "lesson": "4.4",
+      "file": "demo_09_04_optional_watch_an_incomplete_undo_refuse.py",
+      "category": "optional",
+      "requires": [
+        "demo_09_03_optional_watch_an_incomplete_undo_refuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 35,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (all read-only; the backfill is printed, not applied)",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "subheading": "Read the deployed job and backfill plan",
+      "anchor": "s10",
+      "purpose": "Read the deployed job and backfill plan",
+      "expected": "no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform apply)\nno schedule either: make reconcile from a shell is the walk until then\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}\n\ndocumind-reconcile\n30 23 * * *\tAsia/Kolkata\tENABLED\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}",
+      "line": 939,
+      "id": "demo_10_01_optional_read_the_deployed_job_and_backfill_plan",
+      "lesson": "4.4",
+      "file": "demo_10_01_optional_read_the_deployed_job_and_backfill_plan.py",
+      "category": "optional",
+      "requires": [
+        "demo_08_01_restore_the_exact_bytes_and_prove_reuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 39,
+      "label": "bash — optional module smoke; retain its exit status and inspect any failure",
+      "heading": "Run the broader module validation separately",
+      "subheading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "purpose": "The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair. make smoke-reindex uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.",
+      "expected": "",
+      "line": 976,
+      "id": "demo_11_01_optional_run_the_broader_module_validation_separately",
+      "lesson": "4.4",
+      "file": "demo_11_01_optional_run_the_broader_module_validation_separately.py",
+      "category": "optional",
+      "requires": [
+        "demo_08_01_restore_the_exact_bytes_and_prove_reuse"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 40,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (the worker's lines for the smoke's uploads; the kit pulled; the subscription's endpoint)",
+      "heading": "Run the broader module validation separately",
+      "subheading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "purpose": "The smoke leaves its own fixture indexed. That does not demonstrate that $SOURCE was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL.",
+      "expected": "2026-09-2xT1x:xx:xx.xxxxxxZ\tingest_duplicate\tacme_9c41d0e2b7f5...\n1\nhttps://documind-ingest-NUMBER.asia-south1.run.app",
+      "line": 980,
+      "id": "recover_11_01_run_the_broader_module_validation_separately",
+      "lesson": "4.4",
+      "file": "recover_11_01_run_the_broader_module_validation_separately.py",
+      "category": "recovery",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [
+        "Do not discard local smoke-script edits; a fast-forward update refuses conflicts so they can be inspected."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 42,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (the note withdrawn, the smoke, the note restored)",
+      "heading": "Run the broader module validation separately",
+      "subheading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "purpose": "Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, acme/smoke_note_v1.md, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.",
+      "expected": "{\"event\": \"reconcile_withdrawn\", \"gcs_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md\", ...}\n  ...\n  6 pass · 0 fail\n{\"event\": \"reconcile_restored\", \"gcs_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md\", \"generation\": \"...\", ...}",
+      "line": 990,
+      "id": "recover_11_02_run_the_broader_module_validation_separately",
+      "lesson": "4.4",
+      "file": "recover_11_02_run_the_broader_module_validation_separately.py",
+      "category": "recovery",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [
+        "Restore the temporarily withdrawn smoke note even when the separate smoke fails."
+      ],
+      "live_verified": false,
+      "offline": true,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    },
+    {
+      "window": 44,
+      "label": "bash — finish the demo, then restore the pin saved before it began",
+      "heading": "Verify the story and restore the original backend",
+      "subheading": "Verify the story and restore the original backend",
+      "anchor": "s12",
+      "purpose": "Use the state transition and the exact evidence, then return the tenant to its saved configuration. Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.",
+      "expected": "",
+      "line": 1007,
+      "id": "finish_12_01_verify_the_story_and_restore_the_original_backen",
+      "lesson": "4.4",
+      "file": "finish_12_01_verify_the_story_and_restore_the_original_backen.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "adaptations": [
+        "Restore the saved backend in finally even when the final observation fails; the failed observation remains a failure."
+      ],
+      "live_verified": false,
+      "offline": true,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 1,
+      "label": "services/ingest/main.py - the worker records the queued claim",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 337
+    },
+    {
+      "window": 2,
+      "label": "services/ingest/reconcile.py - matching the queued object and generation",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 345
+    },
+    {
+      "window": 3,
+      "label": "expected — example decisions, read the reason as well as the action",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 358
+    },
+    {
+      "window": 4,
+      "label": "services/ingest/reconcile.py - plan(): one decision per live object",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 363
+    },
+    {
+      "window": 5,
+      "label": "services/ingest/reconcile.py - plan(): the ledger rows whose object was not seen",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 394
+    },
+    {
+      "window": 6,
+      "label": "services/ingest/reconcile.py - decide_bytes(): touch, backfill, queued or reingest",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 408
+    },
+    {
+      "window": 7,
+      "label": "services/ingest/reconcile.py - drift_of(): the night's number",
+      "heading": "How reconciliation decides",
+      "anchor": "s2",
+      "line": 421
+    },
+    {
+      "window": 9,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 467
+    },
+    {
+      "window": 18,
+      "label": "services/ingest/reconcile.py - the apply: retire, touch, backfill, reingest",
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "anchor": "s7",
+      "line": 673
+    },
+    {
+      "window": 19,
+      "label": "services/ingest/reconcile.py - the last line",
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "anchor": "s7",
+      "line": 694
+    },
+    {
+      "window": 23,
+      "label": "services/ingest/idempotency.py - reactivate(): why it counts",
+      "heading": "Restore the exact bytes and prove reuse",
+      "anchor": "s8",
+      "line": 730
+    },
+    {
+      "window": 24,
+      "label": "services/ingest/idempotency.py - reactivate(): the count and the clock, before anything flips",
+      "heading": "Restore the exact bytes and prove reuse",
+      "anchor": "s8",
+      "line": 745
+    },
+    {
+      "window": 30,
+      "label": "terraform/reconcile.tf - the job: the ingest image, --apply, no platform retries",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 829
+    },
+    {
+      "window": 31,
+      "label": "terraform/reconcile.tf - 23:30 IST, after the night switch",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 845
+    },
+    {
+      "window": 32,
+      "label": "terraform/alerts.tf - the drift, read off the last line",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 854
+    },
+    {
+      "window": 33,
+      "label": "terraform/alerts.tf - the pager: two nights, not one",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 904
+    },
+    {
+      "window": 34,
+      "label": "mk/lifecycle.mk - reconcile, reconcile-job and backfill-current",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 919
+    },
+    {
+      "window": 36,
+      "label": "expected on a lane deployed with the defaults (the second form on a lane where make reconcile-job has run)",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "anchor": "s10",
+      "line": 946
+    },
+    {
+      "window": 37,
+      "label": "smoke/smoke_reindex.py - the six checks",
+      "heading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "line": 959
+    },
+    {
+      "window": 38,
+      "label": "mk/lifecycle.mk - smoke-reindex",
+      "heading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "line": 969
+    },
+    {
+      "window": 41,
+      "label": "expected (a duplicate line with an empty tenant column is the worker doing its job; the old smoke could not see it)",
+      "heading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "line": 984
+    },
+    {
+      "window": 43,
+      "label": "expected (the smoke's lines as above, between the two)",
+      "heading": "Run the broader module validation separately",
+      "anchor": "s11",
+      "line": 993
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

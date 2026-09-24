@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lesson": "14.3",
+  "title": "Promote, roll back and repair a controlled failure",
+  "source_kind": "course_plan_and_kit",
+  "source_sha": "35a5853e3f68fd31c2c646c2c934e299b8cefaaaa0e8a12cf40487b3f7103548",
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "PROJECT",
+    "REGION",
+    "TENANT",
+    "ME",
+    "NUMBER"
+  ],
+  "demos": [
+    {
+      "lesson": "14.3",
+      "file": "demo_01_promote_the_gated_revision.py",
+      "id": "demo_01_promote_the_gated_revision",
+      "anchor": "plan-1",
+      "heading": "Promote the gated revision",
+      "subheading": "Promote the gated revision",
+      "purpose": "Require the saved gate from 14.2 to match this project, region and candidate, then use the kit's by-name promotion. The kit records the previous serving revision for rollback.",
+      "label": "Course-plan experiment \u2014 live deployment",
+      "category": "required",
+      "requires": [],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": false,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "14.3",
+      "file": "demo_02_roll_back_and_verify_recovery.py",
+      "id": "demo_02_roll_back_and_verify_recovery",
+      "anchor": "plan-2",
+      "heading": "Roll back and verify recovery",
+      "subheading": "Roll back and verify recovery",
+      "purpose": "Return traffic to the exact previous revision recorded by the kit. Measure actual elapsed time, then run smoke; a quick traffic command alone is not proof of a healthy recovered service.",
+      "label": "Course-plan experiment \u2014 live deployment",
+      "category": "required",
+      "requires": [
+        "demo_01_promote_the_gated_revision"
+      ],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": false,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    }
+  ],
+  "live_verification": "Not performed; main HTML has not yet been authored."
+}

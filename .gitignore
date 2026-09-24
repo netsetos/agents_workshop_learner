@@ -1,4 +1,10 @@
 # Workstation/project configuration and Terraform state never belong in Git.
+# IDE-run Python examples and imported kit modules create these locally.
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
 terraform/.terraform/
 terraform/*.tfstate
 terraform/*.tfstate.*
