@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "15.3",
   "title": "Configure and query managed retrieval mirrors",
   "source_kind": "main_html",
@@ -128,9 +128,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -158,31 +162,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_managed_mirror_configuration.py"
+      "next": "demo_03_the_mirror_s_rules_run.py"
     },
     {
-      "id": "demo_01_managed_mirror_configuration",
+      "id": "demo_03_the_mirror_s_rules_run",
       "lesson": "15.3",
-      "file": "demo_01_managed_mirror_configuration.py",
+      "file": "demo_03_the_mirror_s_rules_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 managed mirror configuration",
-      "purpose": "Inspect managed mirror configuration and residency policy.",
-      "anchor": "s3, s4",
+      "heading": "The mirror's rules, run",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        13
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
-        480,
-        592
+        480
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The mirror's rules, run",
@@ -192,11 +198,40 @@
           "expected": "policy_of: {'None': 'in', 'any': 'any', 'ANY ': 'any', 'us': 'in'}\npermits: {'any -> us-central1': True, 'any -> global': True, 'any -> asia-south1': True, 'in -> us-central1': False, 'in -> global': False, 'in -> asia-south1': True}\n1. acme (any) makes version v1 current:\n     mirror_ok              rag_engine    upsert            acme_v1 uploaded\n     mirror_ok              vertex_search upsert            acme_v1 uploaded\n   held {'rag_engine': 'us-central1', 'vertex_search': 'global'}\n2. globex (in) adds a note:\n     mirror_policy_skipped  rag_engine    upsert            in\n     mirror_policy_skipped  vertex_search upsert            in\n   held {}\n3. globex adds a second note:\n   held {}\n4. acme's policy is turned to in, and version v2 becomes current:\n     mirror_policy_skipped  rag_engine    upsert            in\n     mirror_policy_skipped  vertex_search upsert            in\n   held {}\n   the stores still hold {'rag_engine': ['acme_v1'], 'vertex_search': ['acme_v1']}\n5. v1 is retired:\n     mirror_ok              rag_engine    delete:superseded 1\n     mirror_ok              vertex_search delete:superseded 1\n   the stores hold {'rag_engine': [], 'vertex_search': []}\nthe audit trail:\n   doc.mirror upsert rag_engine acme_v1\n   doc.mirror upsert vertex_search acme_v1\n   doc.mirror delete:superseded rag_engine acme_v1\n   doc.mirror delete:superseded vertex_search acme_v1",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_mirror_s_rules_run",
           "window": 9,
           "source_line": 480,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_policies_the_pins_and_the_stores.py"
+    },
+    {
+      "id": "demo_04_the_policies_the_pins_and_the_stores",
+      "lesson": "15.3",
+      "file": "demo_04_the_policies_the_pins_and_the_stores.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_mirror_s_rules_run"
+      ],
+      "heading": "The policies, the pins and the stores",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
+      "source_lines": [
+        592
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The policies, the pins and the stores",
           "subheading": "Do it",
@@ -205,25 +240,29 @@
           "expected": "acme: data_region=any\nacme: retrieval_backend=vector\nzeta: data_region=any\nzeta: retrieval_backend=vertex_search\nglobex: data_region=in\nglobex: retrieval_backend=default (the deployment RETRIEVAL_BACKEND)\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID RAG_LOCATION=us-central1 AUDIT_BUCKET=documind-ai-YOUR-ID-audit \\\n  python managed.py --project documind-ai-YOUR-ID --status --mode both\n{\"tenant\": \"acme\", \"store\": \"rag_engine\", \"ledger_current\": 21, \"held\": 18, \"missing\": 3, \"orphans\": 0, \"status\": \"drift\", \"missing_doc_keys\": [\"acme_0994e77d201672aa703e6d5a9a00590d117ad98239b319e900a0d6a787ede170\", \"acme_80403acbbf9b2ada3bb37bfa6983bd864696ed45ca459a5ad7cf0296596ca987\", \"acme_ef63c85dc631e96e6c46364c3188f3f7a9a9283ad2e88074494d378399e1a71b\"], \"orphan_doc_keys\": []}\n{\"tenant\": \"acme\", \"store\": \"vertex_search\", \"ledger_current\": 21, \"held\": 18, \"missing\": 3, \"orphans\": 0, \"status\": \"drift\", \"missing_doc_keys\": [\"acme_0994e77d201672aa703e6d5a9a00590d117ad98239b319e900a0d6a787ede170\", \"acme_80403acbbf9b2ada3bb37bfa6983bd864696ed45ca459a5ad7cf0296596ca987\", \"acme_ef63c85dc631e96e6c46364c3188f3f7a9a9283ad2e88074494d378399e1a71b\"], \"orphan_doc_keys\": []}\n{\"tenant\": \"globex\", \"store\": \"rag_engine\", \"ledger_current\": 3, \"status\": \"no store\", \"hint\": \"no RAG Engine corpus 'documind-globex' in us-central1: make rag-corpus TENANT=globex\"}\n{\"tenant\": \"globex\", \"store\": \"vertex_search\", \"ledger_current\": 3, \"status\": \"no store\", \"hint\": \"no Vertex AI Search data store 'documind-globex' in global: MANAGED_SEARCH=true make plan / make up declares one per tenant (managed.tf)\"}\n{\"tenant\": \"zeta\", \"store\": \"rag_engine\", \"ledger_current\": 7, \"held\": 7, \"missing\": 0, \"orphans\": 0, \"status\": \"in sync\", \"missing_doc_keys\": [], \"orphan_doc_keys\": []}\n{\"tenant\": \"zeta\", \"store\": \"vertex_search\", \"ledger_current\": 7, \"held\": 7, \"missing\": 0, \"orphans\": 0, \"status\": \"in sync\", \"missing_doc_keys\": [], \"orphan_doc_keys\": []}",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_02_example",
+          "function": "step_01_the_policies_the_pins_and_the_stores",
           "window": 13,
           "source_line": 592,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_rag_engine_queries.py"
+      "next": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk.py"
     },
     {
-      "id": "demo_02_rag_engine_queries",
+      "id": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk",
       "lesson": "15.3",
-      "file": "demo_02_rag_engine_queries.py",
+      "file": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk.py",
       "category": "required",
       "requires": [
-        "demo_01_managed_mirror_configuration"
+        "demo_04_the_policies_the_pins_and_the_stores"
       ],
-      "heading": "demo 02 rag engine queries",
-      "purpose": "Query the RAG Engine mirror and inspect its returned records.",
+      "heading": "Ask the stores, and find who found the cited chunk",
+      "purpose": "Do it The answer's citation carries no found_by, because the kit's Citation has no such field. The stamp is on the chunk in the pool. This cell asks the API again, then runs the kit's own retrieve() in your shell with backend rag_engine, the call the API made, and looks for the cited chunk in that pool.",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         17,
         19
@@ -245,7 +284,7 @@
           "expected": "acme: retrieval_backend=rag_engine\nacme: retrieval_backend rag_engine, policy_fallback 0; pool 17, 14 from a managed store\n  A: A confirmed employee at grade E3 or above serves a notice period of 60 days [2].\n  cites acme:acme_497809ff...#rag-c31c1f459b60 (hr_policy_2026.md)\nzeta: retrieval_backend vertex_search, policy_fallback 0; pool 12, 12 from a managed store\n  A: A confirmed employee at grade L4 or above serves a notice period of 30 days [1].\n  cites zeta:zeta_e920a147...#vs-9b9cb379153b (hr_policy_zeta_2026.md)\nglobex: retrieval_backend vector, policy_fallback 0; pool 20, 0 from a managed store\n  A: Either party may terminate the agreement for convenience on 120 days' written notice [1].\n  cites globex:a0d13745...#2 (msa_globex_2026.md)",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_01_example",
+          "function": "step_01_ask_the_stores_and_find_who_found_the_cite",
           "window": 17,
           "source_line": 649,
           "manual_checkpoint": null
@@ -258,25 +297,29 @@
           "expected": "the API: retrieval_backend rag_engine, 14 of the pool's 17 chunks from the store\nthe same question through the kit's retrieve(), backend rag_engine: 17 chunks\n  found_by rag_engine    14   for example acme:acme_497809ff...#rag-c31c1f459b60\n  found_by (none)         3   for example acme:0994e77d...#0\nthe chunk the answer cites: acme:acme_497809ff...#rag-c31c1f459b60\n  found_by rag_engine, score 0.706 (1 minus its distance), from hr_policy_2026.md",
           "adaptations": [],
           "id": "source_19",
-          "function": "step_02_example",
+          "function": "step_02_ask_the_stores_and_find_who_found_the_cite",
           "window": 19,
           "source_line": 695,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_vertex_search_queries.py"
+      "next": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides.py"
     },
     {
-      "id": "demo_03_vertex_search_queries",
+      "id": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides",
       "lesson": "15.3",
-      "file": "demo_03_vertex_search_queries.py",
+      "file": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides.py",
       "category": "required",
       "requires": [
-        "demo_02_rag_engine_queries"
+        "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk"
       ],
-      "heading": "demo 03 vertex search queries",
-      "purpose": "Query the Vertex AI Search mirror, compare its records and restore the pin.",
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+      "purpose": "Do it Then read what the worker's mirror said about the note, and the ledger row it stamped: If your lines are missing, the worker instance that took the note had already said it: the skip is said once per tenant and store per instance. The cell then prints the last week's lines instead, and the empty mirrored on the row is the record for this document. Last, try to move globex's text with a pin:",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         21,
         23,
@@ -300,7 +343,7 @@
           "expected": "...\n>> gs://documind-ai-YOUR-ID-uploads/globex/globex_visitor_note_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tglobex_f03a05df186ad39dec858f13c24a17424d7d35438eb57faf83d2f1144d9aee29\t1\t0\t1\t0\t\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=globex_visitor_note_2026.md API=<candidate url>",
           "adaptations": [],
           "id": "source_21",
-          "function": "step_01_example",
+          "function": "step_01_globex_stays_home_the_skip_the_ledger_row",
           "window": 21,
           "source_line": 747,
           "manual_checkpoint": null
@@ -313,7 +356,7 @@
           "expected": "the worker's mirror lines for globex since 2026-09-24T07:30:00Z:\n  07:30:09 mirror_policy_skipped  store rag_engine    region us-central1 data_region in\n  07:30:10 mirror_policy_skipped  store vertex_search region global      data_region in\nthe ledger row for globex/globex_visitor_note_2026.md: status indexed, mirrored {}\nglobex's data_region, as GET /v1/sources reports it: in",
           "adaptations": [],
           "id": "source_23",
-          "function": "step_02_example",
+          "function": "step_02_globex_stays_home_the_skip_the_ledger_row",
           "window": 23,
           "source_line": 765,
           "manual_checkpoint": null
@@ -326,7 +369,7 @@
           "expected": "globex: retrieval_backend=rag_engine\nglobex: retrieval_backend vector, policy_fallback 1; pool 20, 0 from a managed store\n  A: Either party may terminate the agreement for convenience on 120 days' written notice [1].\n  cites globex:a0d13745...#2 (msa_globex_2026.md)\nglobex: retrieval_backend=default",
           "adaptations": [],
           "id": "source_25",
-          "function": "step_03_example",
+          "function": "step_03_globex_stays_home_the_skip_the_ledger_row",
           "window": 25,
           "source_line": 814,
           "manual_checkpoint": null
@@ -335,14 +378,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "15.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -371,6 +418,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "15.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -378,14 +445,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 370
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 402
     },
     {
@@ -488,7 +555,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Configured RAG Engine/Vertex AI Search mirrors and tenant residency policies that permit those regions."
+  "prerequisites": "Configured RAG Engine/Vertex AI Search mirrors and tenant residency policies that permit those regions.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

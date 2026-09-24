@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_mirror_freshness_contract.py](demo_01_mirror_freshness_contract.py) | Read the implemented propagation paths and establish a controlled quality baseline. |
-| 3 | [demo_02_update_freshness.py](demo_02_update_freshness.py) | Change the source and inspect when each retrieval store sees the new version. |
-| 4 | [demo_03_withdrawal_and_restore_freshness.py](demo_03_withdrawal_and_restore_freshness.py) | Withdraw and restore the source, checking each store's resulting evidence. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_four_events_through_the_kit_s_mirror_run.py](demo_03_the_four_events_through_the_kit_s_mirror_run.py) | The four events through the kit's mirror, run |
+| 4 | [demo_04_six_arms_one_golden_set_is_a_store_as_good.py](demo_04_six_arms_one_golden_set_is_a_store_as_good.py) | Six arms, one golden set: is a store as good? |
+| 5 | [demo_05_a_new_version_then_the_undo.py](demo_05_a_new_version_then_the_undo.py) | A new version, then the undo |
+| 6 | [demo_06_a_withdrawal_then_the_restore.py](demo_06_a_withdrawal_then_the_restore.py) | A withdrawal, then the restore |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_mirror_freshness_contract.py
+### demo_03_the_four_events_through_the_kit_s_mirror_run.py
 
-Read the implemented propagation paths and establish a controlled quality baseline.
+Do it
 
-**`step_01_example(session)` — The four events through the kit's mirror, run / Do it**
+**`step_01_the_four_events_through_the_kit_s_mirror_r(session)` — The four events through the kit's mirror, run / Do it**
 
 Do it
 
@@ -98,7 +102,11 @@ Expected shape, not a promised result:
    make managed-status: vertex_search drift, missing ['v1']
 ```
 
-**`step_02_example(session)` — Six arms, one golden set: is a store as good? / Do it**
+### demo_04_six_arms_one_golden_set_is_a_store_as_good.py
+
+Do it
+
+**`step_01_six_arms_one_golden_set_is_a_store_as_good(session)` — Six arms, one golden set: is a store as good? / Do it**
 
 Do it
 
@@ -159,11 +167,11 @@ the hybrid row says whether a BM25 leg is worth wiring - twenty of the anchors a
 the rag_engine row (--arms all) is 4.3's corpus against the lane's own rows - a managed chunk that splits a clause from its code shows up as a miss.
 ```
 
-### demo_02_update_freshness.py
+### demo_05_a_new_version_then_the_undo.py
 
-Change the source and inspect when each retrieval store sees the new version.
+Do it Now the undo: the same name, with the first version's bytes, straight from the kit's corpus. This is the worker's branch for a version it has seen before:
 
-**`step_01_example(session)` — A new version, then the undo / Do it**
+**`step_01_a_new_version_then_the_undo(session)` — A new version, then the undo / Do it**
 
 Do it
 
@@ -192,7 +200,7 @@ zeta, answered from vertex_search: A confirmed employee at grade L4 or above ser
   cites zeta:zeta_025c4143...#vs-f44cd45f3eb8
 ```
 
-**`step_02_example(session)` — A new version, then the undo / Do it**
+**`step_02_a_new_version_then_the_undo(session)` — A new version, then the undo / Do it**
 
 Now the undo: the same name, with the first version's bytes, straight from the kit's corpus. This is the worker's branch for a version it has seen before:
 
@@ -220,11 +228,11 @@ zeta, answered from vertex_search: A confirmed employee at grade L4 or above ser
   cites zeta:zeta_e920a147...#vs-e9fd5992049d
 ```
 
-### demo_03_withdrawal_and_restore_freshness.py
+### demo_06_a_withdrawal_then_the_restore.py
 
-Withdraw and restore the source, checking each store's resulting evidence.
+Do it Then the restore:
 
-**`step_01_example(session)` — A withdrawal, then the restore / Do it**
+**`step_01_a_withdrawal_then_the_restore(session)` — A withdrawal, then the restore / Do it**
 
 Do it
 
@@ -244,7 +252,7 @@ make managed-status TENANT_ONLY=zeta, until the stores match the ledger (the han
 zeta, answered from vertex_search: The context does not say.
 ```
 
-**`step_02_example(session)` — A withdrawal, then the restore / Do it**
+**`step_02_a_withdrawal_then_the_restore(session)` — A withdrawal, then the restore / Do it**
 
 Then the restore:
 
@@ -266,9 +274,9 @@ zeta, answered from vertex_search: A confirmed employee at grade L4 or above ser
   cites zeta:zeta_e920a147...#vs-e9fd5992049d
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -278,6 +286,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `66b57f935533d5d3d7f44538e669dbf20a968426`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

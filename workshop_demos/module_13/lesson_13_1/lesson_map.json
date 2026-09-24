@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "13.1",
   "title": "Debug a wrong answer through the complete pipeline",
   "source_kind": "main_html",
@@ -136,9 +136,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -166,31 +170,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_inspect_debugging_instruments.py"
+      "next": "demo_03_the_trail_as_the_kit_writes_it_down.py"
     },
     {
-      "id": "demo_01_inspect_debugging_instruments",
+      "id": "demo_03_the_trail_as_the_kit_writes_it_down",
       "lesson": "13.1",
-      "file": "demo_01_inspect_debugging_instruments.py",
+      "file": "demo_03_the_trail_as_the_kit_writes_it_down.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 inspect debugging instruments",
-      "purpose": "Read the available trace instruments and establish the question's baseline.",
-      "anchor": "s3, s4",
+      "heading": "The trail, as the kit writes it down",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        11
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
-        464,
-        530
+        464
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The trail, as the kit writes it down",
@@ -200,11 +206,40 @@
           "expected": "the envelope on every answer, beyond the contract (schemas.py, RAGResponse):\n  model, backend, cost_usd, tokens_in, tokens_out, cached_tokens, latency_ms, stages, cache_hit\nstages, as query() fills them (main.py):\n  generate_ms, graph_chunks, managed_chunks, policy_fallback, pool, rerank_fallback, rerank_ms, retrieval_backend, retrieve_ms, vector_chunks\nfound_by, the rung that put a chunk in the pool (retriever.py):\n  firestore, graph, rag_engine, vector, vertex_search\nGET /version, what is serving (main.py):\n  model_backend, generator_model, prompt, retrieval_mode, retrieval_backend, retrieval_graph, graph_backend, embedding, retrieval_current_only, semantic_cache, git_sha\nthe events a degraded answer leaves in documind-api's log:\n  routing_fallback         main.py:96\n  retrieval_pin_ignored    main.py:135\n  rag_engine_fallback      retriever.py:200\n  rag_engine_fallback      retriever.py:212\n  vertex_search_fallback   retriever.py:302\n  vector_search_fallback   retriever.py:382\n  rerank_fallback          retriever.py:503\n  tier_exhausted           generator.py:304\n  generation_truncated     generator.py:402\n  tier_exhausted           generator.py:493\n  cache_stale              cache_manager.py:119",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_trail_as_the_kit_writes_it_down",
           "window": 9,
           "source_line": 464,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_a_right_answer_and_its_trail.py"
+    },
+    {
+      "id": "demo_04_a_right_answer_and_its_trail",
+      "lesson": "13.1",
+      "file": "demo_04_a_right_answer_and_its_trail.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_trail_as_the_kit_writes_it_down"
+      ],
+      "heading": "A right answer, and its trail",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        11
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
+      "source_lines": [
+        530
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "A right answer, and its trail",
           "subheading": "Do it",
@@ -213,35 +248,35 @@
           "expected": "A confirmed employee at grade E3 or above serves a notice period of 60 days [1].\n  [1] hr_policy_2026.md  version 497809ffbaa6  chunk 1  'serves a notice period of 60 days'\n  cache_hit none | backend vertex | answerable True\n  store vector | vector_chunks 20 | pool 20 | rerank_fallback 0 | policy_fallback 0\n  kept in ~/ask131-before.json",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_02_example",
+          "function": "step_01_a_right_answer_and_its_trail",
           "window": 11,
           "source_line": 530,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_introduce_and_trace_wrong_answer.py"
+      "next": "demo_05_break_it_a_version_reaches_the_lane.py"
     },
     {
-      "id": "demo_02_introduce_and_trace_wrong_answer",
+      "id": "demo_05_break_it_a_version_reaches_the_lane",
       "lesson": "13.1",
-      "file": "demo_02_introduce_and_trace_wrong_answer.py",
+      "file": "demo_05_break_it_a_version_reaches_the_lane.py",
       "category": "required",
       "requires": [
-        "demo_01_inspect_debugging_instruments"
+        "demo_04_a_right_answer_and_its_trail"
       ],
-      "heading": "demo 02 introduce and trace wrong answer",
-      "purpose": "Introduce the lesson's version change and follow the resulting answer trace.",
-      "anchor": "s5, s6",
+      "heading": "Break it: a version reaches the lane",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        13,
-        15,
-        17
+        13
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
-        582,
-        620,
-        737
+        582
       ],
       "offline": false,
       "live_verified": false,
@@ -255,11 +290,44 @@
           "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_5560308823a62dc8...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>\nFrom 1 October 2026, a confirmed employee at grade E3 or above serves a notice period of 90 days [1].\n  [1] hr_policy_2026.md  version 5560308823a6  chunk 1  'serves a notice period of 90 days'\n  cache_hit none | backend vertex | answerable True\n  store vector | vector_chunks 20 | pool 20 | rerank_fallback 0 | policy_fallback 0\n  kept in ~/ask131-after.json",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_01_example",
+          "function": "step_01_break_it_a_version_reaches_the_lane",
           "window": 13,
           "source_line": 582,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_trace_it_name_the_cause_put_it_back.py"
+    },
+    {
+      "id": "demo_06_trace_it_name_the_cause_put_it_back",
+      "lesson": "13.1",
+      "file": "demo_06_trace_it_name_the_cause_put_it_back.py",
+      "category": "required",
+      "requires": [
+        "demo_05_break_it_a_version_reaches_the_lane"
+      ],
+      "heading": "Trace it, name the cause, put it back",
+      "purpose": "Do it: the trace Do it: the versions view and the two probes Do it: put version 1 back",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        15,
+        17,
+        20
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
+      "source_lines": [
+        620,
+        737,
+        772
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Trace it, name the cause, put it back",
           "subheading": "Do it: the trace",
@@ -268,7 +336,7 @@
           "expected": "serving: COMMIT, gemini-3.6-flash via vertex, prompt documind-rag@v3, text-embedding-005@1, current-only off, answer cache off\nevents since the break: none\nthe trail of ~/ask131-after.json, in the order the answer was made:\n  1 the answer cache         clean  cache_hit none: retrieval ran\n  2 the store and its rungs  clean  vector: 20 of the pool's 20 from its own index; no fallback event\n  3 the pool                 clean  20 of the 20 the ablation decided\n  4 the reranker             clean  the Ranking API ordered the pool\n  5 the version              OFF    acme/hr_policy_2026.md: the ledger's current since 2026-09-23T10:41 is 5560308823a6, not the golden set's 497809ffbaa6; it declares effective_from 2026-10-01\n  6 the model                clean  answered from 1 citation; groundedness is make judge's\nCAUSE: a version (link 5) - every link before it is clean",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_02_the_trace",
+          "function": "step_01_the_trace",
           "window": 15,
           "source_line": 620,
           "manual_checkpoint": null
@@ -281,36 +349,11 @@
           "expected": "source                                       status                  gen chunks reused embed retired effective  embedding              indexed_at\nacme/hr_policy_2026.md                       indexed    1758624067215604    283    283     0     283 -          text-embedding-005@1   2026-09-23T10:41:07\nProject: documind-ai-YOUR-ID (NUMBER)\nTerraform index: projects/documind-ai-YOUR-ID/locations/asia-south1/indexes/1234567890123456789\nTerraform endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876543210987654321\nAPI index: projects/NUMBER/locations/asia-south1/indexes/1234567890123456789\nAPI endpoint: projects/NUMBER/locations/asia-south1/indexEndpoints/9876543210987654321\nIndex dimensions: 768; update method: STREAM_UPDATE\nGlobal vector count: 1745\nDeployment: documind_chunks_v1\nDeployment sync time: 2026-09-23T10:42:18.000Z\nPASS: the expected index is attached to the expected endpoint.\nThis verifies attachment and configuration; ingestion and query checks are separate.\n{\"project\": \"documind-ai-YOUR-ID\", \"collection\": \"chunks\", \"source_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md\", \"source_status\": \"indexed\", \"source_doc_key\": \"acme_5560308823a62dc812a39ca44b777bd73ccd12146b02f1f9506a3d15ed208c71\"}\nSTOP: HR source ledger does not match the selected local HR file; review the source version.",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_03_the_versions_view_and_the_two_probes",
+          "function": "step_02_the_versions_view_and_the_two_probes",
           "window": 17,
           "source_line": 737,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_03_restore_and_verify_answer.py"
-    },
-    {
-      "id": "demo_03_restore_and_verify_answer",
-      "lesson": "13.1",
-      "file": "demo_03_restore_and_verify_answer.py",
-      "category": "required",
-      "requires": [
-        "demo_02_introduce_and_trace_wrong_answer"
-      ],
-      "heading": "demo 03 restore and verify answer",
-      "purpose": "Put version 1 back and verify recovery through the same pipeline.",
-      "anchor": "s6",
-      "windows": [
-        20
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
-      "source_lines": [
-        772
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
+        },
         {
           "heading": "Trace it, name the cause, put it back",
           "subheading": "Do it: put version 1 back",
@@ -319,7 +362,7 @@
           "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>\nA confirmed employee at grade E3 or above serves a notice period of 60 days [1].\n  [1] hr_policy_2026.md  version 497809ffbaa6  chunk 1  'serves a notice period of 60 days'\n  cache_hit none | backend vertex | answerable True\n  store vector | vector_chunks 20 | pool 20 | rerank_fallback 0 | policy_fallback 0\n  kept in ~/ask131-restored.json\nPASS: both Firestore filter modes verified. Evidence: operator-evidence/firestore-combined-filters.json",
           "adaptations": [],
           "id": "source_20",
-          "function": "step_01_put_version_1_back",
+          "function": "step_03_put_version_1_back",
           "window": 20,
           "source_line": 772,
           "manual_checkpoint": null
@@ -328,14 +371,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "13.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -364,6 +411,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "13.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -371,14 +438,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 374
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 406
     },
     {
@@ -453,7 +520,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The original HR fixture; the controlled version change is undone before completion."
+  "prerequisites": "The original HR fixture; the controlled version change is undone before completion.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

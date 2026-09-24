@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_compare_adapters.py](demo_01_compare_adapters.py) | Run the LangChain and ADK adapters over the same tool contract. |
-| 3 | [demo_02_four_brains_and_gate.py](demo_02_four_brains_and_gate.py) | Inspect the four deployed brains and run the module's actual gate. |
-| 4 | [demo_03_costs_and_missing_observability.py](demo_03_costs_and_missing_observability.py) | Compare recorded cost lines and identify work those rows do not measure. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_two_adapters_over_one_tool_side_by_side.py](demo_03_two_adapters_over_one_tool_side_by_side.py) | Two adapters over one tool, side by side |
+| 4 | [demo_04_four_brains_on_health_and_the_module_s_gate.py](demo_04_four_brains_on_health_and_the_module_s_gate.py) | Four brains on /health, and the module's gate |
+| 5 | [demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py](demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py) | Four cost lines, as rag-api's rows draw them |
+| 6 | [demo_06_the_half_the_rows_cannot_see.py](demo_06_the_half_the_rows_cannot_see.py) | The half the rows cannot see |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,7 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-**`step_02_the_venv(session)` — Two adapters over one tool, side by side / Do it: the venv**
+### demo_03_two_adapters_over_one_tool_side_by_side.py
+
+Do it: the venv Do it: side by side
+
+**`step_01_the_venv(session)` — Two adapters over one tool, side by side / Do it: the venv**
 
 Do it: the venv
 
@@ -65,11 +73,7 @@ Expected shape, not a promised result:
 graph-venv ok: google-adk 2.8.0 langchain 1.4.0
 ```
 
-### demo_01_compare_adapters.py
-
-Run the LangChain and ADK adapters over the same tool contract.
-
-**`step_01_side_by_side(session)` — Two adapters over one tool, side by side / Do it: side by side**
+**`step_02_side_by_side(session)` — Two adapters over one tool, side by side / Do it: side by side**
 
 Do it: side by side
 
@@ -79,7 +83,7 @@ Expected shape, not a promised result:
 
 ```text
 1. what each model is shown for retrieve (* = required)
-   langchain query*, doc_type, top_k                                465 characters
+   langchain query*, doc_type, top_k                                481 characters
    adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters
    langchain tools: retrieve, calculate_processing_cost, get_usage_stats
    adk tools:       retrieve, calculate_processing_cost
@@ -109,11 +113,11 @@ Expected shape, not a promised result:
 4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn
 ```
 
-### demo_02_four_brains_and_gate.py
+### demo_04_four_brains_on_health_and_the_module_s_gate.py
 
-Inspect the four deployed brains and run the module's actual gate.
+Do it
 
-**`step_01_example(session)` — Four brains on /health, and the module's gate / Do it**
+**`step_01_four_brains_on_health_and_the_module_s_gat(session)` — Four brains on /health, and the module's gate / Do it**
 
 Do it
 
@@ -136,11 +140,11 @@ Expected shape, not a promised result:
   6 passed, 0 failed
 ```
 
-### demo_03_costs_and_missing_observability.py
+### demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py
 
-Compare recorded cost lines and identify work those rows do not measure.
+Do it
 
-**`step_01_example(session)` — Four cost lines, as rag-api's rows draw them / Do it**
+**`step_01_four_cost_lines_as_rag_api_s_rows_draw_the(session)` — Four cost lines, as rag-api's rows draw them / Do it**
 
 Do it
 
@@ -155,7 +159,11 @@ direct    1 retrieve()  in  2,561  out   68  Rs 0.3699
   adk       1 retrieve()  in  2,537  out   71  Rs 0.3687
 ```
 
-**`step_02_example(session)` — The half the rows cannot see / Do it**
+### demo_06_the_half_the_rows_cannot_see.py
+
+Do it
+
+**`step_01_the_half_the_rows_cannot_see(session)` — The half the rows cannot see / Do it**
 
 Do it
 
@@ -164,19 +172,19 @@ Operation: bash — run in the operator shell, in the kit (the kit's three agent
 Expected shape, not a promised result:
 
 ```text
-langchain 2 model calls  in  1,429  out    51 (thinking     0)  Rs 0.2147
-  langgraph 2 model calls  in  1,429  out    51 (thinking     0)  Rs 0.2147
+langchain 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175
+  langgraph 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175
   adk       2 model calls  in  2,477  out    47 (thinking     0)  Rs 0.3458
 the four cost lines, whole: the brain's own model calls + rag-api's, from step 5
   direct    Rs 0.0000 + Rs 0.3699 = Rs 0.3699
-  langchain Rs 0.2147 + Rs 0.3593 = Rs 0.5740
-  langgraph Rs 0.2147 + Rs 0.3613 = Rs 0.5760
+  langchain Rs 0.2175 + Rs 0.3593 = Rs 0.5768
+  langgraph Rs 0.2175 + Rs 0.3613 = Rs 0.5788
   adk       Rs 0.3458 + Rs 0.3687 = Rs 0.7145
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -186,6 +194,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`. All 20 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4d85e128644454856f18a930ac9e3dfcec8d55e1`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`. All 20 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f3598f8936669b98d54a99f356e98faea20a469a`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

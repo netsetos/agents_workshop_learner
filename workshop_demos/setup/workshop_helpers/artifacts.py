@@ -7,7 +7,10 @@ import uuid
 
 
 def json_default(value):
-    """Encode paths and dates in evidence; reject values with no defined JSON representation."""
+    """Encode paths and dates in evidence; reject values with no defined JSON representation.
+    
+    Example: json.dumps({"path": Path("report.json")}, default=json_default)
+    """
     if isinstance(value, Path):
         return str(value)
     if isinstance(value, (datetime, date)):
@@ -16,7 +19,10 @@ def json_default(value):
 
 
 def write_json(path, value):
-    """Replace one JSON checkpoint atomically so an interrupted write leaves the previous state readable."""
+    """Replace one JSON checkpoint atomically so an interrupted write leaves the previous state readable.
+    
+    Example: write_json(path, value)
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -25,8 +31,15 @@ def write_json(path, value):
 
 
 class ArtifactStore:
+    """Keep a separate evidence directory and outcome manifest for one local demonstration.
+    
+    Example: store = ArtifactStore(config, "planner"); store.save("plan", report)
+    """
     def __init__(self, config, demo, module=4, lesson="4.4"):
-        """Create a unique local evidence directory and an initial running manifest."""
+        """Create a unique local evidence directory and an initial running manifest.
+        
+        Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
+        """
         if not re.fullmatch(r"[0-9]{2}", demo):
             raise ValueError("Demo IDs use two digits.")
         if not isinstance(module, int) or module < 1 or not re.fullmatch(r"[0-9]+\.[0-9]+", lesson):
@@ -43,7 +56,10 @@ class ArtifactStore:
         self.save("run", self.manifest)
 
     def save(self, name, value):
-        """Save a named JSON artifact in this run and return its path."""
+        """Save a named JSON artifact in this run and return its path.
+        
+        Example: self.save('run', self.manifest)
+        """
         if not re.fullmatch(r"[A-Za-z0-9_-]+", name):
             raise ValueError("Artifact names must be simple filenames.")
         path = self.directory / f"{name}.json"
@@ -51,7 +67,10 @@ class ArtifactStore:
         return path
 
     def finish(self, error=None):
-        """Record completion or the actual exception without deleting evidence."""
+        """Record completion or the actual exception without deleting evidence.
+        
+        Example: self.finish(error) in the owning lesson/helper context
+        """
         self.manifest.update(status="failed" if error else "complete",
                              finished_at=datetime.now(timezone.utc).isoformat())
         if error:

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "15.1",
   "title": "Build graph evidence from source documents",
   "source_kind": "main_html",
@@ -124,9 +124,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -154,19 +158,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_graph_contracts.py"
+      "next": "demo_03_the_rules_run.py"
     },
     {
-      "id": "demo_01_graph_contracts",
+      "id": "demo_03_the_rules_run",
       "lesson": "15.1",
-      "file": "demo_01_graph_contracts.py",
+      "file": "demo_03_the_rules_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 graph contracts",
-      "purpose": "Read graph evidence and the code that derives it from source documents.",
+      "heading": "The rules, run",
+      "purpose": "Do it",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         9
       ],
@@ -186,33 +194,35 @@
           "expected": "extraction: gemini-3.1-flash-lite, entity types person, org, product, policy, system, location, date\nresolution: normalise(), then text-embedding-005 cosine >= 0.92\n  normalise('ACME Pvt. Ltd.'        ) = 'acme'\n  normalise('Acme Private Limited'  ) = 'acme'\n  normalise('ACME Inc'              ) = 'acme'\n  normalise('function head'         ) = 'function head'\n  normalise('Function Head'         ) = 'function head'\n  normalise('CFO'                   ) = 'cfo'\n  normalise('Chief Financial Officer') = 'chief financial officer'\nresolve_entities(), with an embedding that tells every name apart:\n  'ACME Pvt. Ltd.'         -> 'ACME Pvt. Ltd.'\n  'Acme Private Limited'   -> 'ACME Pvt. Ltd.'\n  'ACME Inc'               -> 'ACME Pvt. Ltd.'\n  'function head'          -> 'function head'\n  'Function Head'          -> 'function head'\n  'CFO'                    -> 'CFO'\n  'Chief Financial Officer' -> 'Chief Financial Officer'\nbuild_graph() on two passages:\n  node 'CFO'                    person  id f3f1496ddec9...  cited by ['c1']\n  node 'Purchase approval'      policy  id 36787430c7d6...  cited by ['c1']\n  node 'Travel reimbursement'   policy  id 0cbc68db5bda...  cited by ['c2']\n  node 'function head'          person  id b4468c254418...  cited by ['c1', 'c2']\n  edge CFO -[APPROVES]-> Purchase approval  from c1, confidence 0.9\n  edge function head -[APPROVES]-> Travel reimbursement  from c2, confidence 0.9\n  2 relations dropped: 'board' is no entity (dangling), and Function Head -[IS]-> itself",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_rules_run",
           "window": 9,
           "source_line": 464,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_build_and_inspect_graph.py"
+      "next": "demo_04_build_the_handbook_s_graph.py"
     },
     {
-      "id": "demo_02_build_and_inspect_graph",
+      "id": "demo_04_build_the_handbook_s_graph",
       "lesson": "15.1",
-      "file": "demo_02_build_and_inspect_graph.py",
+      "file": "demo_04_build_the_handbook_s_graph.py",
       "category": "required",
       "requires": [
-        "demo_01_graph_contracts"
+        "demo_03_the_rules_run"
       ],
-      "heading": "demo 02 build and inspect graph",
-      "purpose": "Build the graph and inspect its nodes/edges against the source material.",
-      "anchor": "s4, s5",
+      "heading": "Build the handbook's graph",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
-        12,
-        14
+        12
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
-        551,
-        581
+        551
       ],
       "offline": false,
       "live_verified": false,
@@ -226,11 +236,40 @@
           "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --source hr_policy_2026.md --dry-run\n11 current text chunks for tenant 'acme' from 'hr_policy_2026.md'\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --source hr_policy_2026.md --rebuild\n11 current text chunks for tenant 'acme' from 'hr_policy_2026.md'\n{\"event\": \"graph_extracted\", \"tenant\": \"acme\", \"chunks\": 11, \"extracted\": 11, \"fresh\": 11}\ntenant acme: 0 graph_edges deleted\ntenant acme: 0 graph_nodes deleted\n25 nodes, 15 edges written for tenant acme (Firestore)\n{\"event\": \"graph_built\", \"tenant\": \"acme\", \"backend\": \"firestore\", \"chunks\": 11, \"surface_forms\": 28, \"nodes\": 25, \"edges\": 15}",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_01_example",
+          "function": "step_01_build_the_handbook_s_graph",
           "window": 12,
           "source_line": 551,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_read_it_back_the_counts_and_one_edge_with_its_source.py"
+    },
+    {
+      "id": "demo_05_read_it_back_the_counts_and_one_edge_with_its_source",
+      "lesson": "15.1",
+      "file": "demo_05_read_it_back_the_counts_and_one_edge_with_its_source.py",
+      "category": "required",
+      "requires": [
+        "demo_04_build_the_handbook_s_graph"
+      ],
+      "heading": "Read it back: the counts, and one edge with its source",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        14
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
+      "source_lines": [
+        581
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Read it back: the counts, and one edge with its source",
           "subheading": "Do it",
@@ -239,25 +278,29 @@
           "expected": "tenant acme: 25 nodes, 15 edges in Firestore\nthe nodes the most chunks cite:\n  Earned leave                     policy  3 chunk(s)\n  Notice period                    policy  2 chunk(s)\n  function head                    person  2 chunk(s)\n  probation                        policy  2 chunk(s)\none edge, read back with its source chunk:\n  CFO -[APPROVES_ABOVE_RS_2_00_000]-> Purchase approval   confidence 0.9\n  stated in acme:497809ffbaa6...#9 (FIN-02, hr_policy_2026.md):\n    FIN-02 — Purchase approval\n    Purchases up to Rs 2,00,000 are approved by the function head. Above that, the CFO\n    approves. Splitting a purchase to stay under a threshold is a disciplinary matter.\n  both names in the passage as written: CFO yes, Purchase approval yes",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_02_example",
+          "function": "step_01_read_it_back_the_counts_and_one_edge_with",
           "window": 14,
           "source_line": 581,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_graph_retrieval.py"
+      "next": "demo_06_audit_an_extraction_and_build_again.py"
     },
     {
-      "id": "demo_03_graph_retrieval",
+      "id": "demo_06_audit_an_extraction_and_build_again",
       "lesson": "15.1",
-      "file": "demo_03_graph_retrieval.py",
+      "file": "demo_06_audit_an_extraction_and_build_again.py",
       "category": "required",
       "requires": [
-        "demo_02_build_and_inspect_graph"
+        "demo_05_read_it_back_the_counts_and_one_edge_with_its_source"
       ],
-      "heading": "demo 03 graph retrieval",
-      "purpose": "Run the lane's graph retrieval example and inspect the evidence.",
+      "heading": "Audit an extraction, and build again",
+      "purpose": "Do it",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         16
       ],
@@ -277,7 +320,7 @@
           "expected": "the extraction cached for FIN-02 (gemini-3.1-flash-lite), beside its passage:\n  | FIN-02 — Purchase approval\n  | Purchases up to Rs 2,00,000 are approved by the function head. Above that, the CFO\n  | approves. Splitting a purchase to stay under a threshold is a disciplinary matter.\n  entity   'Purchase approval'    policy  in the passage as written\n  entity   'function head'        person  in the passage as written\n  entity   'CFO'                  person  in the passage as written\n  relation function head -[APPROVES_UP_TO_RS_2_00_000]-> Purchase approval  0.9  both ends are entities\n  relation CFO -[APPROVES_ABOVE_RS_2_00_000]-> Purchase approval  0.9  both ends are entities\n3 of 3 entity names are in the passage as written; 11 extractions cached for acme\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --source hr_policy_2026.md\n11 current text chunks for tenant 'acme' from 'hr_policy_2026.md'\n{\"event\": \"graph_extracted\", \"tenant\": \"acme\", \"chunks\": 11, \"extracted\": 11, \"fresh\": 0}\n25 nodes, 15 edges written for tenant acme (Firestore)\n{\"event\": \"graph_built\", \"tenant\": \"acme\", \"backend\": \"firestore\", \"chunks\": 11, \"surface_forms\": 28, \"nodes\": 25, \"edges\": 15}",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_01_example",
+          "function": "step_01_audit_an_extraction_and_build_again",
           "window": 16,
           "source_line": 635,
           "manual_checkpoint": null
@@ -286,14 +329,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "15.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -322,6 +369,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "15.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -329,14 +396,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 347
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 379
     },
     {
@@ -397,7 +464,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

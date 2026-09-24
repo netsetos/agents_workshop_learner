@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_sanitize_and_validate.py](demo_01_sanitize_and_validate.py) | Run the sanitization/validation gates and inspect the accepted dataset. |
-| 3 | [demo_02_submit_managed_tuning.py](demo_02_submit_managed_tuning.py) | Submit the reviewed dataset and retain the exact tuning job identity. |
-| 4 | [demo_03_poll_and_inspect_tuned_endpoint.py](demo_03_poll_and_inspect_tuned_endpoint.py) | Resume polling that job and inspect its resulting endpoint and configuration. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_checks_that_run_before_the_spend.py](demo_03_the_checks_that_run_before_the_spend.py) | The checks that run before the spend |
+| 4 | [demo_04_the_frozen_file_validated.py](demo_04_the_frozen_file_validated.py) | The frozen file, validated |
+| 5 | [demo_05_the_job_submitted.py](demo_05_the_job_submitted.py) | The job, submitted |
+| 6 | [demo_06_the_endpoint_and_where_it_answers.py](demo_06_the_endpoint_and_where_it_answers.py) | The endpoint, and where it answers |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_sanitize_and_validate.py
+### demo_03_the_checks_that_run_before_the_spend.py
 
-Run the sanitization/validation gates and inspect the accepted dataset.
+Do it
 
-**`step_01_example(session)` — The checks that run before the spend / Do it**
+**`step_01_the_checks_that_run_before_the_spend(session)` — The checks that run before the spend / Do it**
 
 Do it
 
@@ -75,7 +79,11 @@ make tune's defaults: {'epoch_count': 3, 'adapter_size': 'ADAPTER_SIZE_FOUR', 't
 an endpoint whose path says us is called at: us; with GENERATOR_LOCATION=us-central1: us-central1
 ```
 
-**`step_02_example(session)` — The frozen file, validated / Do it**
+### demo_04_the_frozen_file_validated.py
+
+Do it
+
+**`step_01_the_frozen_file_validated(session)` — The frozen file, validated / Do it**
 
 Do it
 
@@ -100,11 +108,11 @@ verdict: ready to tune: the manifest's bytes, the trainer's shape, no golden row
          1 row carries a finding make trainset never looked for: read the chunks before you pay
 ```
 
-### demo_02_submit_managed_tuning.py
+### demo_05_the_job_submitted.py
 
-Submit the reviewed dataset and retain the exact tuning job identity.
+Do it
 
-**`step_01_example(session)` — The job, submitted / Do it**
+**`step_01_the_job_submitted(session)` — The job, submitted / Do it**
 
 Do it
 
@@ -120,9 +128,9 @@ python evals/tune.py --project documind-ai-YOUR-ID --dataset gs://documind-ai-YO
 JOB=projects/NUMBER/locations/us-central1/tuningJobs/7240862654976436473
 ```
 
-### demo_03_poll_and_inspect_tuned_endpoint.py
+### demo_06_the_endpoint_and_where_it_answers.py
 
-Resume polling that job and inspect its resulting endpoint and configuration.
+The first cell polls the job once a minute until it ends. The poll only reads, so it costs nothing, and after a disconnect it is safe to run again: it takes the job from step 5's log. When the job succeeds, tune.py prints: The cell keeps the endpoint in ~/poll172.log and in ENDPOINT. The cell keeps the endpoint in ~/poll172.log and in ENDPOINT. The second cell asks the endpoint one question the way the generator would. It sends SYSTEM, one source under its header and the question, with generator._call's settings: ModelDraft's schema, 2,048 tokens and thinking at LOW. The chunk is not one the rows were written from, and the question is not a golden one. The cell asks in three places: us-central1, the job's region; global, where the served model answers; and the location the generator would use, from the path.
 
 **`step_01_definition(session)` — The endpoint, and where it answers / Definition**
 
@@ -166,9 +174,9 @@ the endpoint's path says us; the generator would call it at us
   the price: Rs 0.0322 as Google bills a tuned Gemini 3 endpoint (1.5 x flash-lite); cost.py would log Rs 0.0215
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -178,6 +186,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `375a22387caec2be91dbd584d47b3fc5c7046157`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

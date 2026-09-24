@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "1.1",
   "title": "Reproduce the local environment and read the master diagram",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_inspect_the_workstation_and_corpus.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 inspect the workstation and corpus",
+      "heading": "Inspect the workstation and corpus",
       "purpose": "Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_inspect_the_workstation_and_corpus"
       ],
-      "heading": "demo 02 start the local chat lane",
+      "heading": "Start the local chat lane",
       "purpose": "Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
@@ -90,9 +98,13 @@
       "requires": [
         "demo_02_start_the_local_chat_lane"
       ],
-      "heading": "demo 03 ask the local notice period question",
+      "heading": "Ask the local notice-period question",
       "purpose": "Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.",
       "anchor": "plan-3",
+      "anchors": [
+        "plan-3"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
@@ -123,9 +135,13 @@
       "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
+      "heading": "Stop this local chat service",
       "purpose": "Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.",
       "anchor": "plan-4",
+      "anchors": [
+        "plan-4"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
@@ -152,7 +168,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "11.1",
   "title": "Distinguish agent state, conversation history and knowledge",
   "source_kind": "main_html",
@@ -139,21 +139,23 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2, s3",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
-        3,
-        8
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        362,
-        403
+        362
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Before you run anything: set up the shell",
@@ -169,7 +171,38 @@
           "window": 3,
           "source_line": 362,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_03_one_turn_taken_apart.py"
+    },
+    {
+      "id": "demo_03_one_turn_taken_apart",
+      "lesson": "11.1",
+      "file": "demo_03_one_turn_taken_apart.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "One turn, taken apart",
+      "purpose": "Do it: the venv Do it: one turn",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
+      "windows": [
+        8,
+        10
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
+      "source_lines": [
+        403,
+        412
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "One turn, taken apart",
           "subheading": "Do it: the venv",
@@ -178,38 +211,11 @@
           "expected": "graph-venv ok: fastapi 0.141.1",
           "adaptations": [],
           "id": "source_8",
-          "function": "step_02_the_venv",
+          "function": "step_01_the_venv",
           "window": 8,
           "source_line": 403,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_01_state_and_checkpoint.py"
-    },
-    {
-      "id": "demo_01_state_and_checkpoint",
-      "lesson": "11.1",
-      "file": "demo_01_state_and_checkpoint.py",
-      "category": "required",
-      "requires": [
-        "setup_prepare"
-      ],
-      "heading": "demo 01 state and checkpoint",
-      "purpose": "Take apart one turn and inspect the memory-checkpointer record.",
-      "anchor": "s3, s4",
-      "windows": [
-        10,
-        13
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
-      "source_lines": [
-        412,
-        502
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
+        },
         {
           "heading": "One turn, taken apart",
           "subheading": "Do it: one turn",
@@ -218,11 +224,40 @@
           "expected": "1. turn 1, the LangChain brain, thread acme:you@example.com:lesson111\n   kept  HumanMessage What is the notice period?\n   kept  AIMessage    retrieve(...)\n   kept  ToolMessage  {\"citations\": [{\"chunk_id\": \"acme:hr_policy_2026#NP-03\", \"quote\"\n   kept  AIMessage    Sixty days [1].\n   the system prompt among them: False; checkpoints written: 5\n2. turn 2, the LangGraph brain, the same thread: 6 messages, turn 1's among them\n   the history still quotes: The notice period is 60 days.\n   the corpus now says:      The notice period is 90 days.\n3. a new session, the same person: 0 messages",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_01_one_turn",
+          "function": "step_02_one_turn",
           "window": 10,
           "source_line": 412,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_memory_checkpointer_and_the_line_it_logs.py"
+    },
+    {
+      "id": "demo_04_the_memory_checkpointer_and_the_line_it_logs",
+      "lesson": "11.1",
+      "file": "demo_04_the_memory_checkpointer_and_the_line_it_logs.py",
+      "category": "required",
+      "requires": [
+        "demo_03_one_turn_taken_apart"
+      ],
+      "heading": "The memory checkpointer, and the line it logs",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
+      "source_lines": [
+        502
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The memory checkpointer, and the line it logs",
           "subheading": "Do it",
@@ -231,25 +266,29 @@
           "expected": "1. the chat service's own checkpointer, with CHECKPOINT_DSN=memory\nWARNING documind.chat.agent: CHECKPOINT_DSN=memory: conversations die with the instance (8.5). Tests only - never a deployment.\n   InMemorySaver: 2 messages in acme:you@example.com:lesson111\nWARNING documind.chat.agent: CHECKPOINT_DSN=memory: conversations die with the instance (8.5). Tests only - never a deployment.\n   after a restart: 0 messages\n2. the laptop lane's SqliteSaver, a file (agent.py's DOCUMIND_PROFILE=local branch)\n   after a restart: 2 messages",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_02_example",
+          "function": "step_01_the_memory_checkpointer_and_the_line_it_lo",
           "window": 13,
           "source_line": 502,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_history_across_brains.py"
+      "next": "demo_05_one_conversation_four_brains_two_sessions.py"
     },
     {
-      "id": "demo_02_history_across_brains",
+      "id": "demo_05_one_conversation_four_brains_two_sessions",
       "lesson": "11.1",
-      "file": "demo_02_history_across_brains.py",
+      "file": "demo_05_one_conversation_four_brains_two_sessions.py",
       "category": "required",
       "requires": [
-        "demo_01_state_and_checkpoint"
+        "demo_04_the_memory_checkpointer_and_the_line_it_logs"
       ],
-      "heading": "demo 02 history across brains",
-      "purpose": "Compare conversation history across four brains and two sessions.",
+      "heading": "One conversation, four brains, two sessions",
+      "purpose": "Do it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         16
       ],
@@ -269,25 +308,29 @@
           "expected": "langchain session A  tools []            tamarind yes  \"Got it: tamarind. I'll keep it for this \"\n  langgraph session A  tools []            tamarind yes  'You asked me to remember \"tamarind\".'\n  adk       session A  tools []            tamarind no   \"I don't have a word from you in this con\"\n  direct    session A  tools ['retrieve']  tamarind no   'The documents do not say which word you '\n  langchain session B  tools []            tamarind no   \"I don't have a word from you in this con\"\n  langchain session B  tools ['retrieve']  tamarind no   'Gratuity becomes payable after not less '",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_01_example",
+          "function": "step_01_one_conversation_four_brains_two_sessions",
           "window": 16,
           "source_line": 561,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_deployed_checkpointer.py"
+      "next": "demo_06_which_checkpointer_your_lane_runs.py"
     },
     {
-      "id": "demo_03_deployed_checkpointer",
+      "id": "demo_06_which_checkpointer_your_lane_runs",
       "lesson": "11.1",
-      "file": "demo_03_deployed_checkpointer.py",
+      "file": "demo_06_which_checkpointer_your_lane_runs.py",
       "category": "required",
       "requires": [
-        "demo_02_history_across_brains"
+        "demo_05_one_conversation_four_brains_two_sessions"
       ],
-      "heading": "demo 03 deployed checkpointer",
-      "purpose": "Read which checkpointer the deployed lane actually uses.",
+      "heading": "Which checkpointer your lane runs",
+      "purpose": "Do it",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         18
       ],
@@ -307,7 +350,7 @@
           "expected": "CHECKPOINT_DSN  from the secret documind-checkpoint-dsn, version latest\n  Cloud SQL       documind-ai-YOUR-ID:asia-south1:documind-checkpoint\n  the memory warning in 30 days of the service's log: none",
           "adaptations": [],
           "id": "source_18",
-          "function": "step_01_example",
+          "function": "step_01_which_checkpointer_your_lane_runs",
           "window": 18,
           "source_line": 606,
           "manual_checkpoint": null
@@ -316,14 +359,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "11.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -352,6 +399,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "11.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -359,14 +426,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 332
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 364
     },
     {
@@ -434,7 +501,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Module 10's deployed chat lane and the framework venv created during preparation."
+  "prerequisites": "Module 10's deployed chat lane and the framework venv created during preparation.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

@@ -4,11 +4,13 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+This lesson has no authored main HTML. Its file numbers follow the explicitly listed course-plan experiments; they do not claim an HTML heading match. Run those plan steps in the order below.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [demo_01_check_the_saved_plan.py](demo_01_check_the_saved_plan.py) | Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time. |
-| 2 | [demo_02_apply_and_deploy_the_prepared_kit.py](demo_02_apply_and_deploy_the_prepared_kit.py) | Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect. |
-| 3 | [demo_03_inspect_the_deployed_services.py](demo_03_inspect_the_deployed_services.py) | List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment. |
+| Plan step 1 | [demo_01_check_the_saved_plan.py](demo_01_check_the_saved_plan.py) | Check the saved plan |
+| Plan step 2 | [demo_02_apply_and_deploy_the_prepared_kit.py](demo_02_apply_and_deploy_the_prepared_kit.py) | Apply and deploy the prepared kit |
+| Plan step 3 | [demo_03_inspect_the_deployed_services.py](demo_03_inspect_the_deployed_services.py) | Inspect the deployed services |
 
 ## Before starting
 
@@ -24,7 +26,7 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Conditional recovery
 

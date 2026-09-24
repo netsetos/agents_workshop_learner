@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "15.2",
   "title": "Compare Firestore and Spanner graph paths",
   "source_kind": "main_html",
@@ -126,9 +126,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -156,29 +160,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_firestore_graph_baseline.py"
+      "next": "demo_03_the_seeders_run.py"
     },
     {
-      "id": "demo_01_firestore_graph_baseline",
+      "id": "demo_03_the_seeders_run",
       "lesson": "15.2",
-      "file": "demo_01_firestore_graph_baseline.py",
+      "file": "demo_03_the_seeders_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 firestore graph baseline",
-      "purpose": "Read the graph backend and establish the Firestore path.",
-      "anchor": "s3, s4",
+      "heading": "The seeders, run",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        11
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
-        461,
-        521
+        461
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
@@ -190,11 +196,40 @@
           "expected": "eight names from the handbook's graph: Purchase approval, function head, CFO, Travel reimbursement, Notice period, probation, India, Remote work\nWho signs off on a big purchase?\n  candidate names ['who signs off on a big purchase?']\n  seeds by containment: none   auto: vector\nWhich purchases need the CFO?\n  candidate names ['which purchases need the cfo?']\n  seeds by containment: CFO   auto: graph\nWhat does the CFO approve?\n  candidate names ['what does the cfo approve?']\n  seeds by containment: CFO   auto: vector\nWho approves a purchase above two lakh?\n  candidate names ['who approves a purchase above two lakh?']\n  seeds by containment: none   auto: vector\nWho approves a Purchase above two lakh?\n  candidate names ['purchase']\n  seeds by containment: Purchase approval   auto: graph\nWho handles Indian travel claims?\n  candidate names ['indian']\n  seeds by containment: India   auto: graph\n........\n----------------------------------------------------------------------\nRan 8 tests in 0.004s\n\nOK",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_seeders_run",
           "window": 9,
           "source_line": 461,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_firestore_path_a_name_the_question_contains.py"
+    },
+    {
+      "id": "demo_04_the_firestore_path_a_name_the_question_contains",
+      "lesson": "15.2",
+      "file": "demo_04_the_firestore_path_a_name_the_question_contains.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_seeders_run"
+      ],
+      "heading": "The Firestore path: a name the question contains",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        11
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
+      "source_lines": [
+        521
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The Firestore path: a name the question contains",
           "subheading": "Do it",
@@ -203,25 +238,29 @@
           "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --ask \"Who signs off on a big purchase?\"\n{\n \"question\": \"Who signs off on a big purchase?\",\n \"backend\": \"firestore\",\n \"seeded_by\": \"containment\",\n \"seeds\": [],\n \"nodes\": [],\n \"chunk_ids\": []\n}\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --ask \"Which purchases need the CFO?\"\n{\n \"question\": \"Which purchases need the CFO?\",\n \"backend\": \"firestore\",\n \"seeded_by\": \"containment\",\n \"seeds\": [\n  \"CFO\"\n ],\n \"nodes\": [\n  \"CFO\",\n  \"Purchase approval\"\n ],\n \"chunk_ids\": [\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#9\"\n ]\n}",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_02_example",
+          "function": "step_01_the_firestore_path_a_name_the_question_con",
           "window": 11,
           "source_line": 521,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_spanner_graph_path.py"
+      "next": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning.py"
     },
     {
-      "id": "demo_02_spanner_graph_path",
+      "id": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning",
       "lesson": "15.2",
-      "file": "demo_02_spanner_graph_path.py",
+      "file": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning.py",
       "category": "required",
       "requires": [
-        "demo_01_firestore_graph_baseline"
+        "demo_04_the_firestore_path_a_name_the_question_contains"
       ],
-      "heading": "demo 02 spanner graph path",
-      "purpose": "Run the Spanner graph path and inspect its corresponding evidence.",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "purpose": "Do it The CFO's edge came back two ways. As tables, GraphEdge is joined to GraphNode twice, for the names at both ends. As a graph, the kit's GQL walk goes from the CFO. Both reach Purchase approval and FIN-02. Now the kit's question, seeded by meaning. On Spanner, --ask prints the five nearest names, each with its distance and whether it passed 0.4. Then it walks from the names that passed.",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         15,
         17
@@ -243,7 +282,7 @@
           "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend spanner --source hr_policy_2026.md --rebuild\n11 current text chunks for tenant 'acme' from 'hr_policy_2026.md'\n{\"event\": \"graph_extracted\", \"tenant\": \"acme\", \"chunks\": 11, \"extracted\": 11, \"fresh\": 0}\n{\"event\": \"graph_built\", \"tenant\": \"acme\", \"backend\": \"spanner\", \"chunks\": 11, \"surface_forms\": 28, \"nodes\": 25, \"edges\": 15}\ntenant acme: 25 nodes (25 with a 768-number vector), 15 edges in Spanner\nthe edges that name the CFO, as tables (the names joined from GraphNode):\n  CFO -[APPROVES_ABOVE_RS_2_00_000]-> Purchase approval   stated in FIN-02\none hop from CFO, by the kit's GQL walk: CFO, Purchase approval\n  the chunks they cite: FIN-02",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_01_example",
+          "function": "step_01_the_spanner_path_build_it_read_it_walk_it",
           "window": 15,
           "source_line": 616,
           "manual_checkpoint": null
@@ -256,25 +295,29 @@
           "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend spanner --ask \"Who signs off on a big purchase?\"\n{\n \"question\": \"Who signs off on a big purchase?\",\n \"backend\": \"spanner\",\n \"seeded_by\": \"meaning\",\n \"seed_distance\": 0.4,\n \"nearest\": [\n  {\n   \"name\": \"Purchase approval\",\n   \"kind\": \"policy\",\n   \"distance\": 0.183,\n   \"seeded\": true\n  },\n  {\n   \"name\": \"CFO\",\n   \"kind\": \"person\",\n   \"distance\": 0.415,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"approved cloud bucket\",\n   \"kind\": \"system\",\n   \"distance\": 0.434,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"tax clearance\",\n   \"kind\": \"policy\",\n   \"distance\": 0.434,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"Travel reimbursement\",\n   \"kind\": \"policy\",\n   \"distance\": 0.459,\n   \"seeded\": false\n  }\n ],\n \"seeds\": [\n  \"Purchase approval\"\n ],\n \"nodes\": [\n  \"Purchase approval\",\n  \"function head\",\n  \"CFO\"\n ],\n \"chunk_ids\": [\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#5\",\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#9\"\n ]\n}",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_02_example",
+          "function": "step_02_the_spanner_path_build_it_read_it_walk_it",
           "window": 17,
           "source_line": 665,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_compare_graph_candidate.py"
+      "next": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py"
     },
     {
-      "id": "demo_03_compare_graph_candidate",
+      "id": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate",
       "lesson": "15.2",
-      "file": "demo_03_compare_graph_candidate.py",
+      "file": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py",
       "category": "required",
       "requires": [
-        "demo_02_spanner_graph_path"
+        "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning"
       ],
-      "heading": "demo 03 compare graph candidate",
-      "purpose": "Compare a no-traffic graph candidate and restore its configuration.",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "purpose": "First with the walk from Firestore: First with the walk from Firestore: Then the same candidate, walking from Spanner: Choose a value just past the purchase or approval name, and below the first name that has nothing to do with purchases. The undo below removes it. Last, put the template back. Environment variables carry over from one revision to the next, so the candidate's settings would ride into the next gcloud run services update of the API. The undo writes RETRIEVAL_GRAPH=off and GRAPH_BACKEND=firestore, removes any GRAPH_SEED_DISTANCE, drops the tag, and deletes .candidate-revision.",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         21,
         23,
@@ -298,7 +341,7 @@
           "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|...|RETRIEVAL_GRAPH=auto|GRAPH_BACKEND=firestore|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\n/version: retrieval_graph=auto graph_backend=firestore embedding=text-embedding-005@1\nQ: Who signs off on a big purchase?\nA: Purchases up to Rs 2,00,000 are approved by the function head; above that, the CFO approves [1].\npool 20: the walk put 0 chunk(s) first; retrieval_backend vector\ncites FIN-02 (hr_policy_2026.md): Purchases up to Rs 2,00,000 are approved by the function head.\nthe word CFO: not in the question, in the answer",
           "adaptations": [],
           "id": "source_21",
-          "function": "step_01_example",
+          "function": "step_01_the_walk_in_front_of_the_dense_pool_on_a_c",
           "window": 21,
           "source_line": 755,
           "manual_checkpoint": null
@@ -311,7 +354,7 @@
           "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|...|RETRIEVAL_GRAPH=auto|GRAPH_BACKEND=spanner|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\n/version: retrieval_graph=auto graph_backend=spanner embedding=text-embedding-005@1\nQ: Who signs off on a big purchase?\nA: Purchases up to Rs 2,00,000 are approved by the function head; above that, the CFO approves [1].\npool 20: the walk put 2 chunk(s) first; retrieval_backend vector\ncites FIN-02 (hr_policy_2026.md): Purchases up to Rs 2,00,000 are approved by the function head.\nthe word CFO: not in the question, in the answer",
           "adaptations": [],
           "id": "source_23",
-          "function": "step_02_example",
+          "function": "step_02_the_walk_in_front_of_the_dense_pool_on_a_c",
           "window": 23,
           "source_line": 796,
           "manual_checkpoint": null
@@ -324,7 +367,7 @@
           "expected": "100\tdocumind-api-000NN-xxx",
           "adaptations": [],
           "id": "source_26",
-          "function": "step_03_example",
+          "function": "step_03_the_walk_in_front_of_the_dense_pool_on_a_c",
           "window": 26,
           "source_line": 830,
           "manual_checkpoint": null
@@ -333,14 +376,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "recovery_repair_graph_baseline",
+      "id": "recovery_demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate",
       "lesson": "15.2",
-      "file": "recovery/repair_graph_baseline.py",
+      "file": "recovery/demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py",
       "category": "recovery",
       "requires": [],
-      "heading": "repair graph baseline",
-      "purpose": "Explicit recovery: repair graph baseline",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "purpose": "Notice what the first answer says, too. Dense retrieval found FIN-02 without any graph, because the handbook is small and the clause says \"purchase\". The Spanner walk made sure FIN-02 was in the pool whatever the dense ranking did. On a corpus where the answer's words are far from the question's, that is the difference. Set the threshold on the candidate alone, from your own numbers, and ask again. make candidate cannot pass it (step 7 says why), so this is a gcloud line:",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         25
       ],
@@ -360,7 +407,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_25",
-          "function": "step_01_example",
+          "function": "step_01_the_walk_in_front_of_the_dense_pool_on_a_c",
           "window": 25,
           "source_line": 823,
           "manual_checkpoint": null
@@ -369,14 +416,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "15.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -405,6 +456,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "15.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -412,14 +483,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 360
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 392
     },
     {
@@ -522,7 +593,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The Firestore graph from 15.1 and an explicitly configured Spanner graph for the alternative path."
+  "prerequisites": "The Firestore graph from 15.1 and an explicitly configured Spanner graph for the alternative path.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

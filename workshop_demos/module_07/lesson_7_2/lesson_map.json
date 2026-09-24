@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "7.2",
   "title": "Separate offline checks, live scoring and LLM judgment",
   "source_kind": "main_html",
@@ -143,9 +143,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -173,19 +177,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_offline_gate_and_ci.py"
+      "next": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py"
     },
     {
-      "id": "demo_01_offline_gate_and_ci",
+      "id": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run",
       "lesson": "7.2",
-      "file": "demo_01_offline_gate_and_ci.py",
+      "file": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 offline gate and ci",
-      "purpose": "Run the offline gate and inspect the CI result for this kit commit.",
+      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
+      "purpose": "Do it: the gate as CI runs it, and CI's result on your commit The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         8,
         10
@@ -226,19 +234,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_live_gate_and_report.py"
+      "next": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py"
     },
     {
-      "id": "demo_02_live_gate_and_report",
+      "id": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes",
       "lesson": "7.2",
-      "file": "demo_02_live_gate_and_report.py",
+      "file": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py",
       "category": "required",
       "requires": [
-        "demo_01_offline_gate_and_ci"
+        "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run"
       ],
-      "heading": "demo 02 live gate and report",
-      "purpose": "Run the live gate, retain its actual exit code and inspect the row-level report.",
+      "heading": "The live half: every row, two identities, nine rates, three exit codes",
+      "purpose": "Do it: the live gate, with a report Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         18,
         20,
@@ -296,31 +308,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_judge_and_disagreements.py"
+      "next": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py"
     },
     {
-      "id": "demo_03_judge_and_disagreements",
+      "id": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite",
       "lesson": "7.2",
-      "file": "demo_03_judge_and_disagreements.py",
+      "file": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py",
       "category": "required",
       "requires": [
-        "demo_02_live_gate_and_report"
+        "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes"
       ],
-      "heading": "demo 03 judge and disagreements",
-      "purpose": "Prepare the judge, run it on lane answers and compare disagreements/trajectory judgments.",
-      "anchor": "s5, s6, s7",
+      "heading": "The judge: the lane's own answers, read with the context they cite",
+      "purpose": "Do it: the judge's venv and its self-test --reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         31,
-        33,
-        35,
-        38
+        33
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         698,
-        707,
-        747,
-        792
+        707
       ],
       "offline": false,
       "live_verified": false,
@@ -351,7 +363,36 @@
           "window": 33,
           "source_line": 707,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py"
+    },
+    {
+      "id": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row",
+      "lesson": "7.2",
+      "file": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py",
+      "category": "required",
+      "requires": [
+        "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite"
+      ],
+      "heading": "Where the gate and the judge disagree: read the row",
+      "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        35
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
+      "source_lines": [
+        747
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Where the gate and the judge disagree: read the row",
           "subheading": "Where the gate and the judge disagree: read the row",
@@ -360,11 +401,40 @@
           "expected": "2 row(s) cost the gate a point. The judge's own run answered them:\n  jn-06  gate: answered without ['EMEA', '11.4']\n         judge's answer: 'EMEA revenue fell in FY2026 [1].', 1 cited\n         EMEA present; 11.4 absent\n  lk-27  gate: refused\n         judge's answer: 'The documents do not say.', 0 cited\n         twenty per cent absent",
           "adaptations": [],
           "id": "source_35",
-          "function": "step_03_where_the_gate_and_the_judge_disagree_read",
+          "function": "step_01_where_the_gate_and_the_judge_disagree_read",
           "window": 35,
           "source_line": 747,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py"
+    },
+    {
+      "id": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3",
+      "lesson": "7.2",
+      "file": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py",
+      "category": "required",
+      "requires": [
+        "demo_06_where_the_gate_and_the_judge_disagree_read_the_row"
+      ],
+      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
+      "purpose": "The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns.",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        38
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
+      "source_lines": [
+        792
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
           "subheading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
@@ -373,7 +443,7 @@
           "expected": "no documind-chat service on this lane: trajectories need one",
           "adaptations": [],
           "id": "source_38",
-          "function": "step_04_the_judge_s_other_two_modes_trajectories_n",
+          "function": "step_01_the_judge_s_other_two_modes_trajectories_n",
           "window": 38,
           "source_line": 792,
           "manual_checkpoint": null
@@ -382,14 +452,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "7.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -418,6 +492,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "7.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -425,14 +519,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 355
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 387
     },
     {
@@ -619,7 +713,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The live deployed lane, the golden set, and the CI account/access needed by the source's optional CI inspection."
+  "prerequisites": "The live deployed lane, the golden set, and the CI account/access needed by the source's optional CI inspection.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

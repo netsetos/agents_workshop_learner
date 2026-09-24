@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_token_and_roster.py](demo_01_token_and_roster.py) | Inspect audiences, token claims and both membership lookup directions. |
-| 3 | [demo_02_surface_identity_and_forged_header.py](demo_02_surface_identity_and_forged_header.py) | Trace shared verification across services and test a forged user header. |
-| 4 | [demo_03_signed_in_person.py](demo_03_signed_in_person.py) | Follow the UI's assertion path from a signed-in person to the API. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_door_and_the_verifier_who_may_knock_and_what_makes_a_token_count.py](demo_03_the_door_and_the_verifier_who_may_knock_and_what_makes_a_token_count.py) | The door and the verifier: who may knock, and what makes a token count |
+| 4 | [demo_04_the_roster_one_document_per_member_two_ways_to_read_it_one_writer.py](demo_04_the_roster_one_document_per_member_two_ways_to_read_it_one_writer.py) | The roster: one document per member, two ways to read it, one writer |
+| 5 | [demo_05_the_surfaces_who_calls_the_shared_verifier_and_who_still_keeps_a_copy.py](demo_05_the_surfaces_who_calls_the_shared_verifier_and_who_still_keeps_a_copy.py) | The surfaces: who calls the shared verifier, and who still keeps a copy |
+| 6 | [demo_06_one_request_end_to_end_a_forged_header_and_the_row_that_ignores_it.py](demo_06_one_request_end_to_end_a_forged_header_and_the_row_that_ignores_it.py) | One request, end to end: a forged header, and the row that ignores it |
+| 7 | [demo_07_the_person_s_leg_how_a_signed_in_person_reaches_the_api_through_the_ui.py](demo_07_the_person_s_leg_how_a_signed_in_person_reaches_the_api_through_the_ui.py) | The person's leg: how a signed-in person reaches the API through the UI |
 
 ## Before starting
 
@@ -25,11 +29,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +58,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_token_and_roster.py
+### demo_03_the_door_and_the_verifier_who_may_knock_and_what_makes_a_token_count.py
 
-Inspect audiences, token claims and both membership lookup directions.
+Do it: the API's audiences, and who may invoke it The cell mints two tokens for the API as documind-ui-sa: one the way tok does, and one without --include-email. It reads their claims without verifying them; the API does the verifying. Nothing is sent.
 
 **`step_01_the_api_s_audiences_and_who_may_invoke_it(session)` — The door and the verifier: who may knock, and what makes a token count / Do it: the API's audiences, and who may invoke it**
 
@@ -90,7 +95,11 @@ BARE: aud https://documind-api-NUMBER.asia-south1.run.app
        email (none), email_verified (none), iss https://accounts.google.com, 59 minutes left
 ```
 
-**`step_03_the_three_rosters_as_firestore_holds_them(session)` — The roster: one document per member, two ways to read it, one writer / Do it: the three rosters, as Firestore holds them**
+### demo_04_the_roster_one_document_per_member_two_ways_to_read_it_one_writer.py
+
+Do it: the three rosters, as Firestore holds them make roster runs this command without --dry-run. The dry run prints the memberships and the data-region policies it would set, and writes nothing.
+
+**`step_01_the_three_rosters_as_firestore_holds_them(session)` — The roster: one document per member, two ways to read it, one writer / Do it: the three rosters, as Firestore holds them**
 
 Do it: the three rosters, as Firestore holds them
 
@@ -115,7 +124,7 @@ globex  3 member(s)
     documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com
 ```
 
-**`step_04_the_plan_make_roster_would_write_for_you(session)` — The roster: one document per member, two ways to read it, one writer / Do it: the plan make roster would write for you**
+**`step_02_the_plan_make_roster_would_write_for_you(session)` — The roster: one document per member, two ways to read it, one writer / Do it: the plan make roster would write for you**
 
 make roster runs this command without --dry-run. The dry run prints the memberships and the data-region policies it would set, and writes nothing.
 
@@ -140,9 +149,9 @@ would set zeta: data_region=any
 would set globex: data_region=in
 ```
 
-### demo_02_surface_identity_and_forged_header.py
+### demo_05_the_surfaces_who_calls_the_shared_verifier_and_who_still_keeps_a_copy.py
 
-Trace shared verification across services and test a forged user header.
+Do it: which services call the shared verifier
 
 **`step_01_which_services_call_the_shared_verifier(session)` — The surfaces: who calls the shared verifier, and who still keeps a copy / Do it: which services call the shared verifier**
 
@@ -158,7 +167,11 @@ services/mcp/server.py
 services/rag-api/auth.py
 ```
 
-**`step_02_one_request_end_to_end_a_forged_header_and(session)` — One request, end to end: a forged header, and the row that ignores it / One request, end to end: a forged header, and the row that ignores it**
+### demo_06_one_request_end_to_end_a_forged_header_and_the_row_that_ignores_it.py
+
+Two questions to acme, one claiming to be the CEO, and the two usage rows they leave. The cell asks the same question twice with run_eval.py's own ask(), which sets an x-user-email header on every request. The first names the eval account; the second claims to be ceo@acme.example. Both carry your token and no assertion, so the bearer leg names the caller. After twenty seconds for the logs to land, the cell reads the two newest query rows for acme.
+
+**`step_01_one_request_end_to_end_a_forged_header_and(session)` — One request, end to end: a forged header, and the row that ignores it / One request, end to end: a forged header, and the row that ignores it**
 
 Two questions to acme, one claiming to be the CEO, and the two usage rows they leave. The cell asks the same question twice with run_eval.py's own ask(), which sets an x-user-email header on every request. The first names the eval account; the second claims to be ceo@acme.example. Both carry your token and no assertion, so the bearer leg names the caller. After twenty seconds for the logs to land, the cell reads the two newest query rows for acme.
 
@@ -173,9 +186,9 @@ YYYY-MM-DDTHH:MM:SS.ssssssZ	documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccou
 YYYY-MM-DDTHH:MM:SS.ssssssZ	documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com	acme
 ```
 
-### demo_03_signed_in_person.py
+### demo_07_the_person_s_leg_how_a_signed_in_person_reaches_the_api_through_the_ui.py
 
-Follow the UI's assertion path from a signed-in person to the API.
+IAP in front of the UI, the assertion forwarded beside the UI's token, and every caller the API recorded in a day. A person never calls the API directly. They sign in at IAP in front of the UI, which admits only accounts granted the sign-in role. IAP hands the UI a signed assertion with every request. When the UI calls the API, it sends two credentials, as its _headers() shows in step 5: its own token, which gets past the door, and the person's assertion, forwarded unchanged. The API's verifier sees the assertion first and takes the person's email from it. The roster check and the usage row are then about the person, which is what lesson 6.4 saw in Chat. The cell counts every caller the API recorded in the last day.
 
 **`step_01_the_person_s_leg_how_a_signed_in_person_re(session)` — The person's leg: how a signed-in person reaches the API through the UI / The person's leg: how a signed-in person reaches the API through the UI**
 
@@ -194,9 +207,9 @@ NN documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com
       N you@example.com
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -206,6 +219,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.1_Identity_Tenancy_WIX.html`. All 30 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4a2c528ee001991a66c0c2fdde1d412dbe008472`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

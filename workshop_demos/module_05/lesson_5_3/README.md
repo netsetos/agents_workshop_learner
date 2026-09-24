@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_answer_pool_and_reranker.py](demo_01_answer_pool_and_reranker.py) | Compare top_k answers, then reconstruct and rerank their candidate pool. |
-| 3 | [demo_02_fallback_and_stage_latency.py](demo_02_fallback_and_stage_latency.py) | Run the saved-pool fallback, force a candidate timeout and inspect usage rows. |
-| 4 | [demo_03_retrieval_origins_and_packing.py](demo_03_retrieval_origins_and_packing.py) | Join citations to retrieval origins, run smoke and inspect the packed evidence set. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py](demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py) | One answer, read end to end: the citations, their scores, the stages |
+| 4 | [demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py](demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py) | The Ranking API by hand: the API's pool, the API's request, the API's order |
+| 5 | [demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py](demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py) | The fallback: the pool by retrieval score, flagged on the row, forced on a candidate |
+| 6 | [demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py](demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py) | make usage: where the time went, p95 per stage, and the view behind it |
+| 7 | [demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py](demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py) | found_by: stamped on every chunk, counted on the answer, absent from the citation |
+| 8 | [demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py](demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py) | What the funnel costs, its knobs, and the packed set the citations come from |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint and the deployed index are for step 4's pool; the reranker's settings say what the API is running with, and an empty value means the setting's default. Step 4's rank call and the in-process calls in steps 5 and 7 need the API's Ranking client in the venv at the API's own pin; the pip line is harmless if it is already there. A name the service does not set is unset here rather than exported empty, because the kit's settings class reads an empty variable as a value, not as an absence, and a cell that imports the kit would refuse it.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -69,9 +75,9 @@ backend: vector  mode: dense (default)  top_k_retrieve: 20 (default)
 rerank timeout: 5.0 (default)  answer cache: off (default)
 ```
 
-### demo_01_answer_pool_and_reranker.py
+### demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py
 
-Compare top_k answers, then reconstruct and rerank their candidate pool.
+The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.
 
 **`step_01_the_same_question_at_top_k_5_and_top_k_20(session)` — One answer, read end to end: the citations, their scores, the stages / Do it: the same question at top_k 5 and top_k 20**
 
@@ -98,7 +104,11 @@ top_k 20: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 3xx
 saved /tmp/ans53_5.json and /tmp/ans53_20.json for steps 4, 7 and 8
 ```
 
-**`step_02_embed_pool_rank_compare(session)` — The Ranking API by hand: the API's pool, the API's request, the API's order / Do it: embed, pool, rank, compare**
+### demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py
+
+Do it: embed, pool, rank, compare
+
+**`step_01_embed_pool_rank_compare(session)` — The Ranking API by hand: the API's pool, the API's request, the API's order / Do it: embed, pool, rank, compare**
 
 Do it: embed, pool, rank, compare
 
@@ -117,9 +127,9 @@ every citation is in the by-hand top 5: True | in the same relative order: True
 saved /tmp/pool53.json for steps 5, 7 and 8
 ```
 
-### demo_02_fallback_and_stage_latency.py
+### demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py
 
-Run the saved-pool fallback, force a candidate timeout and inspect usage rows.
+Do it, offline: the kit's fallback on the pool you saved Do it, on a candidate: a deadline no call can meet
 
 **`step_01_offline_the_kit_s_fallback_on_the_pool_you(session)` — The fallback: the pool by retrieval score, flagged on the row, forced on a candidate / Do it, offline: the kit's fallback on the pool you saved**
 
@@ -168,7 +178,11 @@ live: rerank_fallback 0 | rerank_ms 3xx | first score 0.9xxx
 100;documind-api-00044-xyz
 ```
 
-**`step_04_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
+### demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py
+
+Do it: the selftest, then the lane's last day, then its rows into the reader
+
+**`step_01_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
 
 Do it: the selftest, then the lane's last day, then its rows into the reader
 
@@ -192,7 +206,7 @@ acme                         2    1400       220     130       990   20.0
 selftest OK - grouped like tenant_daily: dearest tenant first, tokens summed, p95 the 95th latency, unanswerable a rate, p95 per stage and the pool beside it
 ```
 
-**`step_05_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
+**`step_02_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
 
 Do it: the selftest, then the lane's last day, then its rows into the reader
 
@@ -205,9 +219,9 @@ NN rows; 1 with rerank_fallback 1; 0 with an empty pool
 {"event": "query", "tenant": "acme", "user": "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com", "tokens_in": xxxx.0, "tokens_out": xxx.0, "cached_tokens": 0.0, "cost_usd": 0.00xxxx, "latency_ms": 2xxx.0, "answerable": true, "retrieve_ms": 6xx.0, "rerank_ms": 3xx.0, "generate_ms": 1xxx.0, "pool": 20.0, "rerank_fallback": 0.0, ...
 ```
 
-### demo_03_retrieval_origins_and_packing.py
+### demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py
 
-Join citations to retrieval origins, run smoke and inspect the packed evidence set.
+Do it: the join, then the kit's own retrieval in your process, then the smoke
 
 **`step_01_the_join_then_the_kit_s_own_retrieval_in_y(session)` — found_by: stamped on every chunk, counted on the answer, absent from the citation / Do it: the join, then the kit's own retrieval in your process, then the smoke**
 
@@ -257,7 +271,11 @@ Expected shape, not a promised result:
   ...
 ```
 
-**`step_04_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
+### demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py
+
+The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
+
+**`step_01_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
 
 The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
 
@@ -273,7 +291,7 @@ twenty full CGST Act pages   packed 15, dropped  5, context  7633 tokens
 the first header the model reads: [Source 1] hr_policy_2026.md
 ```
 
-**`step_05_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
+**`step_02_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
 
 The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
 
@@ -286,9 +304,9 @@ pool 20 | citations 2 | generate_ms 3xxx | tokens_in 8xxx | sources ['cgst_act_2
 2026-09-2xT1x:xx:xx.xxxxxxZ	1x	x
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -298,6 +316,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.3_Rerank_WIX.html`. All 46 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `57bf349b566019103069ed16a192beac3c631f19`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

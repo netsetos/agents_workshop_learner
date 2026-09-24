@@ -4,11 +4,13 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+This lesson has no authored main HTML. Its file numbers follow the explicitly listed course-plan experiments; they do not claim an HTML heading match. Run those plan steps in the order below.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [demo_01_inspect_the_workstation_and_corpus.py](demo_01_inspect_the_workstation_and_corpus.py) | Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server. |
-| 2 | [demo_02_start_the_local_chat_lane.py](demo_02_start_the_local_chat_lane.py) | Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process. |
-| 3 | [demo_03_ask_the_local_notice_period_question.py](demo_03_ask_the_local_notice_period_question.py) | Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval. |
+| Plan step 1 | [demo_01_inspect_the_workstation_and_corpus.py](demo_01_inspect_the_workstation_and_corpus.py) | Inspect the workstation and corpus |
+| Plan step 2 | [demo_02_start_the_local_chat_lane.py](demo_02_start_the_local_chat_lane.py) | Start the local chat lane |
+| Plan step 3 | [demo_03_ask_the_local_notice_period_question.py](demo_03_ask_the_local_notice_period_question.py) | Ask the local notice-period question |
 
 ## Before starting
 
@@ -24,7 +26,7 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 

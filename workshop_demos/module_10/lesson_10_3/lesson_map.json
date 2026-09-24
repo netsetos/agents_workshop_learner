@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "10.3",
   "title": "Diagnose tool arguments, access failures and timeouts",
   "source_kind": "main_html",
@@ -128,21 +128,23 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2, s3",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
-        3,
-        10
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
-        359,
-        431
+        359
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Before you run anything: set up the shell",
@@ -158,7 +160,38 @@
           "window": 3,
           "source_line": 359,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_03_five_failures_through_the_kit_s_langchain_brain.py"
+    },
+    {
+      "id": "demo_03_five_failures_through_the_kit_s_langchain_brain",
+      "lesson": "10.3",
+      "file": "demo_03_five_failures_through_the_kit_s_langchain_brain.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "Five failures through the kit's LangChain brain",
+      "purpose": "Do it: the venv Do it: five failures",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
+      "windows": [
+        10,
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
+      "source_lines": [
+        431,
+        438
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Five failures through the kit's LangChain brain",
           "subheading": "Do it: the venv",
@@ -167,36 +200,11 @@
           "expected": "graph-venv ok: langchain 1.4.0",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_02_the_venv",
+          "function": "step_01_the_venv",
           "window": 10,
           "source_line": 431,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_01_tool_failure_cases.py"
-    },
-    {
-      "id": "demo_01_tool_failure_cases",
-      "lesson": "10.3",
-      "file": "demo_01_tool_failure_cases.py",
-      "category": "required",
-      "requires": [
-        "setup_prepare"
-      ],
-      "heading": "demo 01 tool failure cases",
-      "purpose": "Exercise the five argument/refusal/budget/timeout failures in the actual harness.",
-      "anchor": "s3",
-      "windows": [
-        12
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
-      "source_lines": [
-        438
-      ],
-      "offline": true,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
+        },
         {
           "heading": "Five failures through the kit's LangChain brain",
           "subheading": "Do it: five failures",
@@ -205,25 +213,29 @@
           "expected": "blocked     0.0 s  refusals ['delete_document']\n              result [error] {\"error\": \"delete_document requires manual approval\"}\n  bad args    0.0 s  refusals ['calculate_processing_cost']\n              result [error] Error invoking tool 'calculate_processing_cost' with kwargs {'total_page\n  no such     0.0 s  refusals ['summon_rain']\n              result [error] Error: summon_rain is not a valid tool, try one of [retrieve, calculate_\n  timed out   0.5 s  refusals []\n              result [success] {\"error\": \"document search is unavailable\", \"citations\": [], \"answerable\n  over budget 0.0 s  refusals []\n              result [success] {\"num_documents\": 1, \"total_pages\": 283, \"processing_type\": \"priority\", \n  the log lines, from the guard, the adapter and the one retrieve():\n    WARNING refused delete_document (blocked list)\n    INFO    calculate_processing_cost took 0.00s (budget 10s)\n    INFO    summon_rain took 0.00s (budget 30s)\n    WARNING retrieve failed: HTTPConnectionPool(host='127.0.0.1', port=PORT): Read timed out. (\n    INFO    retrieve took 0.51s\n    INFO    retrieve took 0.51s\n    WARNING rag-api query failed: document retrieval is unavailable\n    INFO    retrieve took 0.51s (budget 30s)\n    WARNING calculate_processing_cost took 0.00s (budget 0s)",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_01_five_failures",
+          "function": "step_02_five_failures",
           "window": 12,
           "source_line": 438,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_chat_access_failures.py"
+      "next": "demo_04_access_failures_at_the_chat_service_s_door.py"
     },
     {
-      "id": "demo_02_chat_access_failures",
+      "id": "demo_04_access_failures_at_the_chat_service_s_door",
       "lesson": "10.3",
-      "file": "demo_02_chat_access_failures.py",
+      "file": "demo_04_access_failures_at_the_chat_service_s_door.py",
       "category": "required",
       "requires": [
-        "demo_01_tool_failure_cases"
+        "demo_03_five_failures_through_the_kit_s_langchain_brain"
       ],
-      "heading": "demo 02 chat access failures",
-      "purpose": "Test access failures at the chat service's admission and identity gates.",
+      "heading": "Access failures at the chat service's door",
+      "purpose": "Do it",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         15
       ],
@@ -243,25 +255,29 @@
           "expected": "403  {\"detail\":\"not a member of any tenant\"}\n  401  {\"detail\":\"the bearer token carries no verified email\"}\n  200  {\"answer\":\"Gratuity becomes payable after not less than five years of continuous service [1].\",\"tool",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_01_example",
+          "function": "step_01_access_failures_at_the_chat_service_s_door",
           "window": 15,
           "source_line": 524,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_unanswerable_arguments.py"
+      "next": "demo_05_an_argument_the_corpus_cannot_honour.py"
     },
     {
-      "id": "demo_03_unanswerable_arguments",
+      "id": "demo_05_an_argument_the_corpus_cannot_honour",
       "lesson": "10.3",
-      "file": "demo_03_unanswerable_arguments.py",
+      "file": "demo_05_an_argument_the_corpus_cannot_honour.py",
       "category": "required",
       "requires": [
-        "demo_02_chat_access_failures"
+        "demo_04_access_failures_at_the_chat_service_s_door"
       ],
-      "heading": "demo 03 unanswerable arguments",
-      "purpose": "Send an argument the corpus cannot satisfy and inspect its returned failure.",
+      "heading": "An argument the corpus cannot honour",
+      "purpose": "Do it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         17
       ],
@@ -281,7 +297,7 @@
           "expected": "doc_type None     5 citations | answerable True | The total payable on invoice INV-2026-0412 is Rs 1,84,500 \n  doc_type invoice  0 citations | answerable False | The corpus holds nothing near this question: no passage of\n  pool 20  answerable True   backend vertex  Rs 0.2831\n  pool  0  answerable False  backend none    Rs 0.0000",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_01_example",
+          "function": "step_01_an_argument_the_corpus_cannot_honour",
           "window": 17,
           "source_line": 551,
           "manual_checkpoint": null
@@ -290,14 +306,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "10.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -326,6 +346,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "10.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -333,14 +373,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 329
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 361
     },
     {
@@ -408,7 +448,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The deployed chat lane; the framework failure harness runs in its own lesson venv."
+  "prerequisites": "The deployed chat lane; the framework failure harness runs in its own lesson venv.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

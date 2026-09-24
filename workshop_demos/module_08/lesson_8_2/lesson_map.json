@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "8.2",
   "title": "Test valid access, denied access and cross-tenant requests",
   "source_kind": "main_html",
@@ -133,9 +133,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -163,27 +167,29 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_refusal_ladder_and_isolation.py"
+      "next": "demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side.py"
     },
     {
-      "id": "demo_01_refusal_ladder_and_isolation",
+      "id": "demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side",
       "lesson": "8.2",
-      "file": "demo_01_refusal_ladder_and_isolation.py",
+      "file": "demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 refusal ladder and isolation",
-      "purpose": "Compare admission/authentication/authorization refusals and cross-tenant golden rows.",
-      "anchor": "s3, s4",
+      "heading": "The refusal ladder: the door, a 401 and a 403 side by side",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        8,
-        12
+        8
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
-        427,
-        483
+        427
       ],
       "offline": false,
       "live_verified": false,
@@ -197,11 +203,40 @@
           "expected": "no token                   403  (Cloud Run's own page: the request never reached the API)\n  a token without its email  401  {\"detail\":\"the bearer token carries no verified email\"}\n  the outsider's token       403  {\"detail\":\"not a member of this tenant\"}\n  documind-ui-sa's token     200  {\"answer\":\"A confirmed employee at grade E3 or above serves a noti",
           "adaptations": [],
           "id": "source_8",
-          "function": "step_01_example",
+          "function": "step_01_the_refusal_ladder_the_door_a_401_and_a_40",
           "window": 8,
           "source_line": 427,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member.py"
+    },
+    {
+      "id": "demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member",
+      "lesson": "8.2",
+      "file": "demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side"
+      ],
+      "heading": "Cross-tenant: every isolation row, as the outsider and as a member",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
+      "source_lines": [
+        483
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Cross-tenant: every isolation row, as the outsider and as a member",
           "subheading": "Do it",
@@ -210,33 +245,35 @@
           "expected": "the outsider, on 11 isolation rows: 403 on 100%\n  iso-01 as zeta   HTTP 200  answerable True   no '40,000'\n  iso-02 as globex HTTP 200  answerable False  no '1,84,500'\n  iso-03 as globex HTTP 200  answerable False  no '15 June'\n  iso-04 as zeta   HTTP 200  answerable False  no '1,005'\n  iso-05 as zeta   HTTP 200  answerable False  no 'AAAPZ1234C'\n  iso-06 as globex HTTP 200  answerable False  no 'twenty-six weeks'\n  iso-07 as globex HTTP 200  answerable False  no \"fifteen days' wages\"\n  iso-08 as zeta   HTTP 200  answerable False  no 'recommendations of the Council'\n  iso-09 as zeta   HTTP 200  answerable False  no 'single point of contact'\n  iso-10 as globex HTTP 200  answerable False  no 'twice the rate of wages'\n  mm-04  as zeta   HTTP 200  answerable False  no '5.2 per cent'",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_02_example",
+          "function": "step_01_cross_tenant_every_isolation_row_as_the_ou",
           "window": 12,
           "source_line": 483,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_residency_and_backend_pin.py"
+      "next": "demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it.py"
     },
     {
-      "id": "demo_02_residency_and_backend_pin",
+      "id": "demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it",
       "lesson": "8.2",
-      "file": "demo_02_residency_and_backend_pin.py",
+      "file": "demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it.py",
       "category": "required",
       "requires": [
-        "demo_01_refusal_ladder_and_isolation"
+        "demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member"
       ],
-      "heading": "demo 02 residency and backend pin",
-      "purpose": "Read tenant policies and exercise a pin that residency rules override.",
-      "anchor": "s5, s6",
+      "heading": "Residency: each tenant's data_region, and the rule that applies it",
+      "purpose": "Do it: the three policies",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        17,
-        19
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
-        558,
-        572
+        558
       ],
       "offline": false,
       "live_verified": false,
@@ -254,7 +291,36 @@
           "window": 17,
           "source_line": 558,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it.py"
+    },
+    {
+      "id": "demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it",
+      "lesson": "8.2",
+      "file": "demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it.py",
+      "category": "required",
+      "requires": [
+        "demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it"
+      ],
+      "heading": "The policy against a pin: a tenant kept in India, pinned to a store outside it",
+      "purpose": "A pin set, a minute's wait, one question, its usage row, and the pin cleared. The cell pins globex to rag_engine, a managed store in us-central1, then waits a minute, because the API reads each tenant's settings once a minute. It asks one of globex's own questions and reads the question's usage row: which backend served, and policy_fallback. Then it clears the pin. RETRIEVAL_BACKEND is given on each make line on purpose, because a value exported in your shell would otherwise win.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
+      "source_lines": [
+        572
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The policy against a pin: a tenant kept in India, pinned to a store outside it",
           "subheading": "The policy against a pin: a tenant kept in India, pinned to a store outside it",
@@ -263,25 +329,29 @@
           "expected": "globex: retrieval_backend=rag_engine\nglobex asked: HTTP 200, answerable True\nvector\t1\nglobex: retrieval_backend=default",
           "adaptations": [],
           "id": "source_19",
-          "function": "step_02_the_policy_against_a_pin_a_tenant_kept_in",
+          "function": "step_01_the_policy_against_a_pin_a_tenant_kept_in",
           "window": 19,
           "source_line": 572,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_authorization_regressions.py"
+      "next": "demo_07_the_kit_s_own_tests_of_the_same_refusals.py"
     },
     {
-      "id": "demo_03_authorization_regressions",
+      "id": "demo_07_the_kit_s_own_tests_of_the_same_refusals",
       "lesson": "8.2",
-      "file": "demo_03_authorization_regressions.py",
+      "file": "demo_07_the_kit_s_own_tests_of_the_same_refusals.py",
       "category": "required",
       "requires": [
-        "demo_02_residency_and_backend_pin"
+        "demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it"
       ],
-      "heading": "demo 03 authorization regressions",
-      "purpose": "Run the kit's actual tests for the same refusal and isolation contracts.",
+      "heading": "The kit's own tests of the same refusals",
+      "purpose": "The smoke test's check 3b, and the chat service's check 4. The kit asserts these refusals itself, so a deploy that opened a door would fail its own smoke test. smoke/smoke.py sends its question again with no token and passes only on 401 or 403. smoke/smoke_chat.py asks the chat service as the outsider and passes only on a 403 from the roster, not a 401 from the verifier. The MCP server's smoke test does the same. The cell runs the API's smoke test and keeps two of its lines.",
       "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
         23
       ],
@@ -312,14 +382,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "8.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -348,6 +422,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "8.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -355,14 +449,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 343
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 375
     },
     {
@@ -465,7 +559,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

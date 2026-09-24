@@ -11,6 +11,10 @@ WORKSHOP_DIR = SETUP_DIR.parent
 
 @dataclass(frozen=True)
 class DemoConfig:
+    """Hold validated kit paths, project, region, service names and local result locations for every lesson.
+    
+    Example: config = load_config(); print(config.kit_root, config.project)
+    """
     project: str
     cloud_run_region: str
     tenant_id: str
@@ -31,7 +35,10 @@ class DemoConfig:
 
 
 def load_config(path=None) -> DemoConfig:
-    """Merge local settings with defaults, validate the tenant/kit paths and return resolved configuration."""
+    """Merge local settings with defaults, validate the tenant/kit paths and return resolved configuration.
+    
+    Example: config = load_config() reads settings.local.json and retains its explicit project
+    """
     path = Path(path or os.environ.get("WORKSHOP_DEMO_CONFIG") or
                 SETUP_DIR / "config" / "settings.local.json")
     defaults = json.loads((SETUP_DIR / "config" / "settings.example.json").read_text())

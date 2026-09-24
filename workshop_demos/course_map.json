@@ -42,266 +42,266 @@
       "title": "Understand source, tenant, page and chunk contracts",
       "source_sha": "9be3b915fa81df25778e35f6eaa825f0b365ec21",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "3.2",
       "title": "Parse documents and compare chunk boundaries",
       "source_sha": "5b333c8a6d51ef5416793e5ae594068511fda01e",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "3.3",
       "title": "Create and validate compatible embeddings",
       "source_sha": "517b23e8586183331850aae2cc29914890bc82df",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "3.4",
       "title": "Write, inspect and verify indexed records",
       "source_sha": "919ad0b568337556ab3556373116e42e432c4488",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "4.1",
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
       "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 10
     },
     {
       "lesson": "4.2",
       "title": "Reindex a changed section and measure embedding reuse",
       "source_sha": "04da291943e43a6795223f296f39e4dafd0a5d8c",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "4.3",
       "title": "Publish versions, retire documents and reject stale events",
       "source_sha": "f336737e3da708a11e2863a2d9742fafed531016",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 9
     },
     {
       "lesson": "4.4",
       "title": "Restore documents and reconcile index differences",
       "source_sha": "52d1fbe549bb76a2fe1064f01171f2107c260a11",
       "source_kind": "main_html",
-      "demos": 11
+      "demos": 14
     },
     {
       "lesson": "5.1",
       "title": "Apply query embeddings and authorized filters",
       "source_sha": "71dc43310c171099ca29431ddb48a29c6af8965e",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 9
     },
     {
       "lesson": "5.2",
       "title": "Compare dense and hybrid retrieval",
       "source_sha": "b281bd202e28501bb0b9d45ea85ed4b27f37555d",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "5.3",
       "title": "Rerank and inspect retrieved candidates",
       "source_sha": "57bf349b566019103069ed16a192beac3c631f19",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "5.4",
       "title": "Test fallback without losing tenant or metadata filters",
       "source_sha": "9553c89dce4181161137e7caeba0cf202f30a3ac",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "6.1",
       "title": "Pack evidence within the context budget",
       "source_sha": "fd0703c559853dc14669ad353f31423ca6ccef55",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "6.2",
       "title": "Generate structured answers, citations and refusals",
       "source_sha": "c8fdaf018887ed16c078e2078289794f62ff081b",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "6.3",
       "title": "Stream answers and handle failures",
       "source_sha": "c6e58b623f6b0a931efccb868a7e7dc1ba3f7f54",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "6.4",
       "title": "Complete the Streamlit upload-to-answer journey",
       "source_sha": "1434ee937aa77b8465276e8080c069b3d951e632",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "7.1",
       "title": "Build a useful evaluation dataset",
       "source_sha": "085f18eff4b225ef3c249a8efd624fb5b739da9d",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 10
     },
     {
       "lesson": "7.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
       "source_sha": "035b7ce9098bd5e839d3c9896e605aacda3edf63",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "7.3",
       "title": "Compare one controlled change against a baseline",
       "source_sha": "26b60d600a32c21f22d0a2778fe03515b0235248",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "8.1",
       "title": "Trace authenticated identity into tenant membership",
       "source_sha": "4a2c528ee001991a66c0c2fdde1d412dbe008472",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "8.2",
       "title": "Test valid access, denied access and cross-tenant requests",
       "source_sha": "2bfa77b0d346884ddcee1c93f3b8bb4643d84862",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "8.3",
       "title": "Exercise DLP, guardrails and audit behavior",
       "source_sha": "0f79843e15e5d20e67a5ce3f41943aca173c2e5d",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 10
     },
     {
       "lesson": "9.1",
       "title": "Compare context caching and answer caching",
       "source_sha": "ee993d0dd1999f045798aa2dc6a500e1d3d86122",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "9.2",
       "title": "Test cache scope, configuration changes and freshness",
       "source_sha": "11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "9.3",
       "title": "Measure latency, avoided calls and false cache hits",
       "source_sha": "ab26cd1a53661cdbf477d3268f9e721275f57273",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 8
     },
     {
       "lesson": "10.1",
       "title": "Understand tool contracts and the direct agent loop",
       "source_sha": "f1868f835bc67f911ec89f0027a86e55fa9969ab",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 9
     },
     {
       "lesson": "10.2",
       "title": "Implement the main LangGraph workflow",
       "source_sha": "73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 6
     },
     {
       "lesson": "10.3",
       "title": "Diagnose tool arguments, access failures and timeouts",
       "source_sha": "8c8650c57c7da57795b534e5c7b86462f1357233",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 6
     },
     {
       "lesson": "10.4",
       "title": "Compare the LangChain and ADK adapters",
-      "source_sha": "4d85e128644454856f18a930ac9e3dfcec8d55e1",
+      "source_sha": "f3598f8936669b98d54a99f356e98faea20a469a",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "11.1",
       "title": "Distinguish agent state, conversation history and knowledge",
       "source_sha": "6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "11.2",
       "title": "Configure and inspect durable conversation storage",
       "source_sha": "8ff81098aa551cfdfcea7b74a70b6d674c710765",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "11.3",
       "title": "Verify restart recovery and session isolation",
       "source_sha": "0f3fb29f23b886b2a6493c5a3474f442b8af3c17",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "12.1",
       "title": "Expose, discover and invoke MCP tools",
       "source_sha": "b81be587a267019af54628b140280c63f1a4bd46",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "12.2",
       "title": "Deploy MCP and verify authorized access",
       "source_sha": "5e857fb7dd11d3ce82883c1fde49b0fa597e457a",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 8
     },
     {
       "lesson": "12.3",
       "title": "Trace the implemented A2A peer and its permissions",
       "source_sha": "2d4eced3a474cc6fd41eaa365bb525484d950cc5",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "13.1",
       "title": "Debug a wrong answer through the complete pipeline",
       "source_sha": "c7abb19efcfadcbf3543f389b135fca680b1166c",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "13.2",
       "title": "Reconcile usage events, reports and alerts",
       "source_sha": "22c11174ed320d7ad4355dfac348e510cefca82b",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "13.3",
       "title": "Exercise model routing, budgets and shutdown controls",
       "source_sha": "98282e525bfaa2998c591ba8f3312851781f0218",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "14.1",
@@ -336,91 +336,91 @@
       "title": "Build graph evidence from source documents",
       "source_sha": "d74daf0dbbc7f95660f0a56970362cc9c013c26a",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "15.2",
       "title": "Compare Firestore and Spanner graph paths",
       "source_sha": "7bdd37f0afd091fd34fa8e7a5d9f1fd4a8127ad2",
       "source_kind": "main_html",
-      "demos": 6
+      "demos": 8
     },
     {
       "lesson": "15.3",
       "title": "Configure and query managed retrieval mirrors",
       "source_sha": "f3b8566f506ca71dad40790c01d60af2bf9f2df5",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "15.4",
       "title": "Compare quality and test update/withdrawal freshness",
       "source_sha": "66b57f935533d5d3d7f44538e669dbf20a968426",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "16.1",
       "title": "Query a video clip and validate media citations",
       "source_sha": "6580ee3d4f24d9fb786f5672f22d54789f8a197a",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "16.2",
       "title": "Exercise implemented Studio and voice features",
       "source_sha": "f90dc609bf1dfc9befdb00d185c8e8f4286c122d",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "17.1",
       "title": "Decide whether tuning is justified and prepare data",
       "source_sha": "055368732655b9c9c490603445fb3ef0f506e36b",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "17.2",
       "title": "Validate sanitized datasets and run managed tuning",
       "source_sha": "375a22387caec2be91dbd584d47b3fc5c7046157",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "17.3",
       "title": "Compare the tuned candidate with an uncontaminated baseline",
       "source_sha": "c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "18.1",
       "title": "Trace and authorize gateway routes",
       "source_sha": "99278f7195b558586eb8943607137376aa5cbb66",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "18.2",
       "title": "Serve a supplied or stock model using Ollama",
       "source_sha": "d166600ec95e7f9de71575062e0a57c623378f5c",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 8
     },
     {
       "lesson": "18.3",
       "title": "Inspect the vLLM service and the GKE alternative",
-      "source_sha": "21dd5be3863147eb2597fe93610d080fce9979d1",
+      "source_sha": "b9a486aa693e132b0be189a1e993dc03d0d1bab2",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     },
     {
       "lesson": "18.4",
       "title": "Compare actual backends and verify shutdown behavior",
       "source_sha": "e7f21fbe70306e17ea9822bec16d034a4a8176cc",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 7
     }
   ]
 }

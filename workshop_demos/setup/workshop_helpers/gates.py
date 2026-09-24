@@ -5,7 +5,10 @@ from pathlib import Path
 
 
 def expect_failure(session, args, *, status, messages):
-    """Require both the expected exit code and the intended diagnostic in its log."""
+    """Require both the expected exit code and the intended diagnostic in its log.
+    
+    Example: expect_failure(session, args, status=2, messages=["expected diagnostic"])
+    """
     before = set(session.attempt.glob("command_*.log"))
     actual = session.command(args, check=False)
     logs = set(session.attempt.glob("command_*.log")) - before
@@ -17,11 +20,13 @@ def expect_failure(session, args, *, status, messages):
 
 def expect_guard(session, args, *, stop):
     """Run a command whose guard is meant to stop it on this lab; the stop and its message are the observation.
-
-Make exits 2 when a recipe fails. Exit 2 with the guard's own message is what the
-page shows; exit 0 means the guard let the command through, because this lab is
-not the kind it stops. Any other exit, or a 2 without the message, is an error.
-"""
+    
+    Make exits 2 when a recipe fails. Exit 2 with the guard's own message is what the
+    page shows; exit 0 means the guard let the command through, because this lab is
+    not the kind it stops. Any other exit, or a 2 without the message, is an error.
+    
+    Example: expect_guard(session, args, stop="STOP") checks the guard text as well as exit 2
+    """
     before = set(session.attempt.glob("command_*.log"))
     status = session.command(args, check=False)
     output = "\n".join(p.read_text(encoding="utf-8") for p in set(session.attempt.glob("command_*.log")) - before)
@@ -36,12 +41,14 @@ not the kind it stops. Any other exit, or a 2 without the message, is an error.
 
 def live_gate(session, *, report, source=None, expect_red=False, api=None):
     """Keep a live gate's report and status so later functions can inspect red rows.
-
-Make wraps evaluator nonzero exits as 2. A fresh structured report distinguishes
-quality failure from a failed command/token/import. HTTP/malformed failures
-cannot satisfy the deliberate handbook-revision quality-failure experiment.
-``api`` sends the gate to another revision (a candidate's URL) instead of the API.
-"""
+    
+    Make wraps evaluator nonzero exits as 2. A fresh structured report distinguishes
+    quality failure from a failed command/token/import. HTTP/malformed failures
+    cannot satisfy the deliberate handbook-revision quality-failure experiment.
+    ``api`` sends the gate to another revision (a candidate's URL) instead of the API.
+    
+    Example: live_gate(session, report="/tmp/gate.json", api=candidate_url) retains a fresh candidate report
+    """
     path = Path(report)
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():

@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_one_change_candidate.py](demo_01_one_change_candidate.py) | Create a no-traffic candidate and prove the baseline differs in exactly one setting. |
-| 3 | [demo_02_paired_quality_comparison.py](demo_02_paired_quality_comparison.py) | Run the same scoped gate on both revisions and compare pairwise judgments. |
-| 4 | [demo_03_usage_cost_delta.py](demo_03_usage_cost_delta.py) | Compute cost differences from actual usage rows before removing the candidate. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py](demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py) | The candidate: a new revision with no traffic, and the proof that one setting differs |
+| 4 | [demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py](demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py) | The scoped gate on both revisions, and the rows that moved |
+| 5 | [demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py](demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py) | The pairwise judge: which answer is better, row by row |
+| 6 | [demo_06_the_rupee_delta_from_the_usage_rows.py](demo_06_the_rupee_delta_from_the_usage_rows.py) | The rupee delta, from the usage rows |
 
 ## Before starting
 
@@ -25,11 +28,13 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py](cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py) — At lesson end: This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +58,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_one_change_candidate.py
+### demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py
 
-Create a no-traffic candidate and prove the baseline differs in exactly one setting.
+Do it: the candidate The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.
 
 **`step_01_the_candidate(session)` — The candidate: a new revision with no traffic, and the proof that one setting differs / Do it: the candidate**
 
@@ -88,9 +93,9 @@ live documind-api-000NN-xxx   candidate documind-api-000NN-yyy
 1 setting(s) differ
 ```
 
-### demo_02_paired_quality_comparison.py
+### demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py
 
-Run the same scoped gate on both revisions and compare pairwise judgments.
+Do it: the gate on the live revision, then on the candidate Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.
 
 **`step_01_the_gate_on_the_live_revision_then_on_the(session)` — The scoped gate on both revisions, and the rows that moved / Do it: the gate on the live revision, then on the candidate**
 
@@ -159,7 +164,11 @@ live  candidate  needs
   1 row(s) changed verdict; median round trip ... ms live, ... ms candidate
 ```
 
-**`step_03_example(session)` — The pairwise judge: which answer is better, row by row / Do it**
+### demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py
+
+Do it
+
+**`step_01_the_pairwise_judge_which_answer_is_better(session)` — The pairwise judge: which answer is better, row by row / Do it**
 
 Do it
 
@@ -190,9 +199,9 @@ Expected shape, not a promised result:
   the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.
 ```
 
-### demo_03_usage_cost_delta.py
+### demo_06_the_rupee_delta_from_the_usage_rows.py
 
-Compute cost differences from actual usage rows before removing the candidate.
+Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.
 
 **`step_01_the_rupee_delta_from_the_usage_rows(session)` — The rupee delta, from the usage rows / The rupee delta, from the usage rows**
 
@@ -208,9 +217,9 @@ gemini-3.6-flash          ... answers  Rs ...  Rs ... an answer
   the candidate costs Rs ... less an answer: Rs ... per 1,000 answers
 ```
 
-### setup/finish.py
+### cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.
 
 **`step_01_remove_the_candidate_s_tag(session)` — Deciding, the confounds that fake a result, and removing the candidate / Do it: remove the candidate's tag**
 
@@ -225,7 +234,11 @@ Expected shape, not a promised result:
 the candidate URL now: HTTP 404
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -233,6 +246,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `26b60d600a32c21f22d0a2778fe03515b0235248`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

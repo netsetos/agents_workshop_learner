@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "5.2",
   "title": "Compare dense and hybrid retrieval",
   "source_kind": "main_html",
@@ -174,9 +174,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint, the deployed index and the retrieval settings live in the API's environment; steps 3, 4 and 7 use them. An empty value means the setting's default, which the page names where it matters; a name the service does not set is unset rather than exported empty, because the kit's settings class reads an empty variable as a value, and step 8's cell imports the kit. The ablation's sparse leg needs rank_bm25, which the kit's images do not carry because no service runs it; the pip line puts it in the venv once.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -222,27 +226,29 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_dense_and_sparse_lists.py"
+      "next": "demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows.py"
     },
     {
-      "id": "demo_01_dense_and_sparse_lists",
+      "id": "demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows",
       "lesson": "5.2",
-      "file": "demo_01_dense_and_sparse_lists.py",
+      "file": "demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 dense and sparse lists",
-      "purpose": "Compare the two sparse rulers and obtain dense, sparse-only and hybrid index lists.",
-      "anchor": "s3, s4",
+      "heading": "The lane runs dense, and two sparse rulers over its own rows",
+      "purpose": "The cell reads the text of every current acme row, no vectors, and scores each row twice for the invoice question; then run it again for the notice-period clause. Firestore reads of this size sit inside the free quota.",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        12,
-        16
+        12
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        467,
-        564
+        467
       ],
       "offline": false,
       "live_verified": false,
@@ -260,7 +266,36 @@
           "window": 12,
           "source_line": 467,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_three_ways_through_the_index_dense_sparse_only_fused.py"
+    },
+    {
+      "id": "demo_04_three_ways_through_the_index_dense_sparse_only_fused",
+      "lesson": "5.2",
+      "file": "demo_04_three_ways_through_the_index_dense_sparse_only_fused.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows"
+      ],
+      "heading": "Three ways through the index: dense, sparse only, fused",
+      "purpose": "Do it: dense, alpha 0, alpha 0.7",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
+      "source_lines": [
+        564
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Three ways through the index: dense, sparse only, fused",
           "subheading": "Do it: dense, alpha 0, alpha 0.7",
@@ -269,37 +304,39 @@
           "expected": "dense  first five (anchor at rank 1 of 20):\n   p1-0       inv_2026_0412.md                     <- anchor\n   p36-0      cgst_act_2017.pdf\n   ...\n\nsparse first five (anchor at rank None of 20):\n   p28-1      industrial_relations_code_2020.pdf\n   p32-0      cgst_act_2017.pdf\n   ...\n\nhybrid first five (anchor at rank 2 of 20):\n   p36-0      cgst_act_2017.pdf\n   p1-0       inv_2026_0412.md                     <- anchor\n   ...\n\noverlap of 20: dense/hybrid 18 | dense/sparse 2\nsaved /tmp/legs52.json for step 5",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_02_dense_alpha_0_alpha_0_7",
+          "function": "step_01_dense_alpha_0_alpha_0_7",
           "window": 16,
           "source_line": 564,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_rrf_and_ablation.py"
+      "next": "demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order.py"
     },
     {
-      "id": "demo_02_rrf_and_ablation",
+      "id": "demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order",
       "lesson": "5.2",
-      "file": "demo_02_rrf_and_ablation.py",
+      "file": "demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order.py",
       "category": "required",
       "requires": [
-        "demo_01_dense_and_sparse_lists"
+        "demo_04_three_ways_through_the_index_dense_sparse_only_fused"
       ],
-      "heading": "demo 02 rrf and ablation",
-      "purpose": "Fuse the saved ranks by hand and compare controlled retrieval arms.",
-      "anchor": "s5, s6",
+      "heading": "RRF by hand: the kit's rule reproduces the server's order",
+      "purpose": "Do it: fuse the saved lists, compare with the index's fused list",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        20,
-        26
+        20
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        649,
-        736
+        649
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "RRF by hand: the kit's rule reproduces the server's order",
@@ -313,7 +350,36 @@
           "window": 20,
           "source_line": 649,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop.py"
+    },
+    {
+      "id": "demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop",
+      "lesson": "5.2",
+      "file": "demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop.py",
+      "category": "required",
+      "requires": [
+        "demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order"
+      ],
+      "heading": "The ablation: one knob per arm, no model in the loop",
+      "purpose": "The first run takes five rows and about a minute; the second takes acme's 40 rows and a few minutes, and appends one JSON line per arm to a ledger you keep. make ablate passes your exported REGION as the embedding region, which is where the API embeds; the direct call is the same line without make.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        26
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
+      "source_lines": [
+        736
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The ablation: one knob per arm, no model in the loop",
           "subheading": "Do it: a wiring check, then acme's rows with a ledger",
@@ -322,37 +388,39 @@
           "expected": "40 rows with anchors, NN anchors, one knob per arm (project documind-ai-YOUR-ID, embeddings in asia-south1, ranker on global)\n\narm                                          recall@depth  recall@5    mrr rows@1.0  p95 ms\ndense 5, no reranker                                 0.9x      0.9x   0.8x       3x    xxxx\ndense 20 -> rerank 5   (the lane)                    0.9x      0.9x   0.9x       3x    xxxx\n       lost: lk-xx: PB-02 - ranked out (in the candidates, not the five)\ndense 50 -> rerank 5                                 0.9x      0.9x   0.9x       3x    xxxx\nhybrid 20 -> rerank 5  (4.5, not wired)              0.9x      0.9x   0.9x       3x    xxxx\n\nRead it in this order: recall@depth is the reranker's ceiling - if the 20 and 50 rows agree, depth is not the knob;\nrecall@5 of the lane's row minus the first row is the reranker's lift, and p95 is what it costs;\nthe hybrid row says whether a BM25 leg is worth wiring - twenty of the anchors are clause codes, its home ground;\nthe rag_engine row (--arms all) is 4.3's corpus against the lane's own rows - a managed chunk that splits a clause from its code shows up as a miss.",
           "adaptations": [],
           "id": "source_26",
-          "function": "step_02_a_wiring_check_then_acme_s_rows_with_a_led",
+          "function": "step_01_a_wiring_check_then_acme_s_rows_with_a_led",
           "window": 26,
           "source_line": 736,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_hybrid_candidate.py"
+      "next": "demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed.py"
     },
     {
-      "id": "demo_03_hybrid_candidate",
+      "id": "demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed",
       "lesson": "5.2",
-      "file": "demo_03_hybrid_candidate.py",
+      "file": "demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed.py",
       "category": "required",
       "requires": [
-        "demo_02_rrf_and_ablation"
+        "demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop"
       ],
-      "heading": "demo 03 hybrid candidate",
-      "purpose": "Create a no-traffic hybrid candidate, compare the two questions and inspect policy limits.",
-      "anchor": "s7, s8",
+      "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
+      "purpose": "Do it: hybrid on a candidate, the same two questions to both revisions, then undo",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
         31,
         33,
-        35,
-        38
+        35
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         794,
         805,
-        819,
-        857
+        819
       ],
       "offline": false,
       "live_verified": false,
@@ -396,7 +464,36 @@
           "window": 35,
           "source_line": 819,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure.py"
+    },
+    {
+      "id": "demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure",
+      "lesson": "5.2",
+      "file": "demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure.py",
+      "category": "required",
+      "requires": [
+        "demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed"
+      ],
+      "heading": "What hybrid costs, where it cannot go, and what the harness does not measure",
+      "purpose": "Two places, one at startup and one at runtime. A managed backend has no sparse leg to fuse and the Firestore rung's vector index takes one dense vector and nothing else, so check_retrieval_modes() refuses both pairs before the service serves; a tenant pinned to a managed store under hybrid mode is served from the deployment's backend with a retrieval_pin_ignored line instead. At runtime the chaos rung applies to hybrid as to dense: an unreachable index degrades to the Firestore rung, which is dense only, with a vector_search_fallback line and never a 500. The cell asks the validator the two questions offline.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        38
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
+      "source_lines": [
+        857
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "What hybrid costs, where it cannot go, and what the harness does not measure",
           "subheading": "Where hybrid cannot go",
@@ -405,7 +502,7 @@
           "expected": "vector     hybrid -> allowed\nfirestore  hybrid -> refused: RETRIEVAL_MODE=hybrid needs RETRIEVAL_BACKEND=vector: the Firestore backend is dense-only. Set RETR...\nrag_engine hybrid -> refused: RETRIEVAL_MODE=hybrid needs RETRIEVAL_BACKEND=vector: rag_engine embeds and searches on its own ...\nfirestore  dense  -> allowed",
           "adaptations": [],
           "id": "source_38",
-          "function": "step_04_where_hybrid_cannot_go",
+          "function": "step_01_where_hybrid_cannot_go",
           "window": 38,
           "source_line": 857,
           "manual_checkpoint": null
@@ -414,14 +511,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "5.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -451,6 +552,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "5.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -458,21 +579,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 349
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 381
     },
     {
       "window": 7,
       "label": "expected (your ids differ; a lane deployed by make up has no RETRIEVAL_MODE in its environment, so the default shows)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 402
     },
     {
@@ -652,7 +773,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Loaded invoice and HR fixtures, a hybrid-capable index, and the API's actual serving configuration."
+  "prerequisites": "Loaded invoice and HR fixtures, a hybrid-capable index, and the API's actual serving configuration.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

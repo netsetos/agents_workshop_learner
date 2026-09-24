@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "12.2",
   "title": "Deploy MCP and verify authorized access",
   "source_kind": "main_html",
@@ -139,9 +139,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -169,33 +173,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_mcp_identity_and_deployment.py"
+      "next": "demo_03_the_door_as_the_kit_writes_it_down.py"
     },
     {
-      "id": "demo_01_mcp_identity_and_deployment",
+      "id": "demo_03_the_door_as_the_kit_writes_it_down",
       "lesson": "12.2",
-      "file": "demo_01_mcp_identity_and_deployment.py",
+      "file": "demo_03_the_door_as_the_kit_writes_it_down.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 mcp identity and deployment",
-      "purpose": "Read the MCP identity, build/deploy the server and inspect the deployed configuration.",
-      "anchor": "s3, s4",
+      "heading": "The door, as the kit writes it down",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        11,
-        14
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
-        413,
-        459,
-        489
+        413
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The door, as the kit writes it down",
@@ -205,11 +209,42 @@
           "expected": "documind-mcp, as commands/lesson-7.2.sh deploys it:\n  --no-allow-unauthenticated  --ingress=all  --min-instances=${MIN_INSTANCES:-0}  --service-account=documind-mcp-sa\n  SELF_URL=https://documind-mcp-$PROJECT_NUMBER.${REGION:-us-central1}.run.app\n  RAG_API_URL=https://documind-api-$PROJECT_NUMBER.${REGION:-us-central1}.run.app\n  FASTMCP_STATELESS_HTTP=true\n  RAG_TIMEOUT_S=90\nwho may call it (roles/run.invoker): documind-ui-sa, documind-agent-sa, documind-outsider-sa\nthe tenants each caller may read through it (lane.py's roster_plan):\n  documind-ui-sa         acme, zeta, globex\n  documind-agent-sa      acme\n  documind-outsider-sa   none\nthe account rag-api sees for every MCP retrieval: documind-mcp-sa, on acme, zeta, globex",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_door_as_the_kit_writes_it_down",
           "window": 9,
           "source_line": 413,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_deploy_and_read_it_back.py"
+    },
+    {
+      "id": "demo_04_deploy_and_read_it_back",
+      "lesson": "12.2",
+      "file": "demo_04_deploy_and_read_it_back.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_door_as_the_kit_writes_it_down"
+      ],
+      "heading": "Deploy, and read it back",
+      "purpose": "Do it: build and deploy Do it: read it back",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        11,
+        14
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
+      "source_lines": [
+        459,
+        489
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Deploy, and read it back",
           "subheading": "Do it: build and deploy",
@@ -218,7 +253,7 @@
           "expected": ">> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/mcp:COMMIT from services/mcp\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/mcp:COMMIT\n>> commands/lesson-7.2.sh (DEPLOY block)\nDeploying container to Cloud Run service [documind-mcp] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-mcp-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-mcp].   (three times: ui, agent, outsider)\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_02_build_and_deploy",
+          "function": "step_01_build_and_deploy",
           "window": 11,
           "source_line": 459,
           "manual_checkpoint": null
@@ -231,25 +266,69 @@
           "expected": "serving     documind-mcp-00004-k7w at https://documind-mcp-NUMBER.asia-south1.run.app\n  runs as     documind-mcp-sa\n  ingress     all\n  SELF_URL    https://documind-mcp-NUMBER.asia-south1.run.app\n  invokers    documind-agent-sa, documind-outsider-sa, documind-ui-sa\n  the script  documind-agent-sa, documind-outsider-sa, documind-ui-sa - the same",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_03_read_it_back",
+          "function": "step_02_read_it_back",
           "window": 14,
           "source_line": 489,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_invoke_deployed_mcp.py"
+      "next": "demo_05_the_gate_make_smoke_mcp.py"
     },
     {
-      "id": "demo_02_invoke_deployed_mcp",
+      "id": "recovery_demo_04_deploy_and_read_it_back",
       "lesson": "12.2",
-      "file": "demo_02_invoke_deployed_mcp.py",
+      "file": "recovery/demo_04_deploy_and_read_it_back.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "Deploy, and read it back",
+      "purpose": "Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
+      "source_lines": [
+        478
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Deploy, and read it back",
+          "subheading": "Do it: build and deploy",
+          "purpose": "Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.",
+          "label": "bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get",
+          "expected": "",
+          "adaptations": [],
+          "id": "source_13",
+          "function": "step_01_build_and_deploy",
+          "window": 13,
+          "source_line": 478,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_05_the_gate_make_smoke_mcp.py"
+    },
+    {
+      "id": "demo_05_the_gate_make_smoke_mcp",
+      "lesson": "12.2",
+      "file": "demo_05_the_gate_make_smoke_mcp.py",
       "category": "required",
       "requires": [
-        "demo_01_mcp_identity_and_deployment"
+        "demo_04_deploy_and_read_it_back"
       ],
-      "heading": "demo 02 invoke deployed mcp",
-      "purpose": "Discover and invoke tools on the deployed server.",
+      "heading": "The gate: make smoke-mcp",
+      "purpose": "Do it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         16
       ],
@@ -269,25 +348,29 @@
           "expected": "DocuMind MCP - live smoke test\n  target: https://documind-mcp-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] health  {\"status\":\"ok\",\"profile\":\"gcp\",\"self_url\":\"https://documind-mcp-NUMBER.asia-south1.run.app\"}\n  [PASS] tools/list  ['calculate_processing_cost', 'corpus_stats', 'list_documents', 'retrieve']\n  [PASS] retrieve  answerable=True citations=5  'Five years of continuous service [1].'\n  [PASS] outsider refused  documind-outsider-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com is not on tenant 'acme''s roster\n  --------------------------------------------------------\n  4 passed, 0 failed",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_01_example",
+          "function": "step_01_the_gate_make_smoke_mcp",
           "window": 16,
           "source_line": 525,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_mcp_access_boundaries.py"
+      "next": "demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py"
     },
     {
-      "id": "demo_03_mcp_access_boundaries",
+      "id": "demo_06_one_call_at_each_door_and_both_sides_of_the_answer",
       "lesson": "12.2",
-      "file": "demo_03_mcp_access_boundaries.py",
+      "file": "demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py",
       "category": "required",
       "requires": [
-        "demo_02_invoke_deployed_mcp"
+        "demo_05_the_gate_make_smoke_mcp"
       ],
-      "heading": "demo 03 mcp access boundaries",
-      "purpose": "Test every admission/authorization gate and read both sides of the call.",
+      "heading": "One call at each door, and both sides of the answer",
+      "purpose": "Do it: every door Do it: both sides",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         19,
         21
@@ -331,50 +414,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "recovery_grant_the_build_account",
+      "id": "setup_restore_settings",
       "lesson": "12.2",
-      "file": "recovery/grant_the_build_account.py",
-      "category": "recovery",
-      "requires": [],
-      "heading": "grant the build account",
-      "purpose": "Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.",
-      "anchor": "s4",
-      "windows": [
-        13
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
-      "source_lines": [
-        478
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "Deploy, and read it back",
-          "subheading": "Do it: build and deploy",
-          "purpose": "Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.",
-          "label": "bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get",
-          "expected": "",
-          "adaptations": [],
-          "id": "source_13",
-          "function": "step_01_build_and_deploy",
-          "window": 13,
-          "source_line": 478,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
-    },
-    {
-      "id": "setup_finish",
-      "lesson": "12.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -403,6 +454,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "12.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -410,14 +481,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 333
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 365
     },
     {
@@ -492,7 +563,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

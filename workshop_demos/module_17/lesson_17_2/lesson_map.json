@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "17.2",
   "title": "Validate sanitized datasets and run managed tuning",
   "source_kind": "main_html",
@@ -123,9 +123,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -153,29 +157,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_sanitize_and_validate.py"
+      "next": "demo_03_the_checks_that_run_before_the_spend.py"
     },
     {
-      "id": "demo_01_sanitize_and_validate",
+      "id": "demo_03_the_checks_that_run_before_the_spend",
       "lesson": "17.2",
-      "file": "demo_01_sanitize_and_validate.py",
+      "file": "demo_03_the_checks_that_run_before_the_spend.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 sanitize and validate",
-      "purpose": "Run the sanitization/validation gates and inspect the accepted dataset.",
-      "anchor": "s3, s4",
+      "heading": "The checks that run before the spend",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        12
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
-        454,
-        511
+        454
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
@@ -187,11 +193,40 @@
           "expected": "selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds\nselftest: an untunable base and a rank the SDK cannot spell are refused before submission; adapter 4 is ADAPTER_SIZE_FOUR and the SDK accepts it\ngemini-3.6-flash, adapter 4: refused before submission: managed SFT accepts ['gemini-3.1-flash-lite', 'gemini-3.5-flash'] as of 2026-09-04\ngemini-3.1-flash-lite, adapter 3: refused before submission: the LoRA rank must be one of [1, 2, 4, 8, 16, 32]\ngemini-3.1-flash-lite, adapter 32: accepted, ADAPTER_SIZE_THIRTY_TWO\nmake tune's defaults: {'epoch_count': 3, 'adapter_size': 'ADAPTER_SIZE_FOUR', 'tuned_model_display_name': 'documind-sft-v1'}\nan endpoint whose path says us is called at: us; with GENERATOR_LOCATION=us-central1: us-central1",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_checks_that_run_before_the_spend",
           "window": 9,
           "source_line": 454,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_frozen_file_validated.py"
+    },
+    {
+      "id": "demo_04_the_frozen_file_validated",
+      "lesson": "17.2",
+      "file": "demo_04_the_frozen_file_validated.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_checks_that_run_before_the_spend"
+      ],
+      "heading": "The frozen file, validated",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
+      "source_lines": [
+        511
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The frozen file, validated",
           "subheading": "Do it",
@@ -200,25 +235,29 @@
           "expected": "the file make tune VERSION=v2 reads: gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v2.vertex.jsonl\n  vertex sha256 as the manifest says\n  chat   sha256 as the manifest says\n1. the shape: 315 of 315 rows are a system instruction, a user turn and a model turn, text only; the chat file says the same in 315; targets that parse as ModelDraft: 315\n2. the test set: the golden set (65 rows) would drop 0 of 315\n3. personal data, by the kit's own scan (DLP in asia-south1, LIKELY or above; findings, never the values):\n   in the questions and answers, which make trainset scans: 0 rows\n   in the chunks the user turns carry, which it does not: 1 row\n     acme:cgst_act_2017#p1-0: EMAIL_ADDRESS\n4. residency: the rows are acme's, whose data_region is any; may they be held in us-central1? True\n5. the size: about 203,451 tokens an epoch by the kit's estimate (characters / 4); the longest row about 863 of the 131,072 Google allows\n   3 epochs: about 610,353 training tokens, about Rs 156 at USD 3.00 a million\nverdict: ready to tune: the manifest's bytes, the trainer's shape, no golden row, nothing where make trainset looks, and acme may leave India\n         1 row carries a finding make trainset never looked for: read the chunks before you pay",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_02_example",
+          "function": "step_01_the_frozen_file_validated",
           "window": 12,
           "source_line": 511,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_submit_managed_tuning.py"
+      "next": "demo_05_the_job_submitted.py"
     },
     {
-      "id": "demo_02_submit_managed_tuning",
+      "id": "demo_05_the_job_submitted",
       "lesson": "17.2",
-      "file": "demo_02_submit_managed_tuning.py",
+      "file": "demo_05_the_job_submitted.py",
       "category": "required",
       "requires": [
-        "demo_01_sanitize_and_validate"
+        "demo_04_the_frozen_file_validated"
       ],
-      "heading": "demo 02 submit managed tuning",
-      "purpose": "Submit the reviewed dataset and retain the exact tuning job identity.",
+      "heading": "The job, submitted",
+      "purpose": "Do it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         16
       ],
@@ -238,25 +277,29 @@
           "expected": "python evals/tune.py --project documind-ai-YOUR-ID --dataset gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_${VERSION:-v1}.vertex.jsonl \\\n  --base gemini-3.1-flash-lite --epochs 3 --adapter 4 --display-name documind-sft-v2 --no-wait\n  submitted projects/NUMBER/locations/us-central1/tuningJobs/7240862654976436473 on gemini-3.1-flash-lite: 3 epochs, adapter 4, dataset gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v2.vertex.jsonl\n  poll later: python evals/tune.py --project documind-ai-YOUR-ID --poll projects/NUMBER/locations/us-central1/tuningJobs/7240862654976436473\nJOB=projects/NUMBER/locations/us-central1/tuningJobs/7240862654976436473",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_01_example",
+          "function": "step_01_the_job_submitted",
           "window": 16,
           "source_line": 625,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_poll_and_inspect_tuned_endpoint.py"
+      "next": "demo_06_the_endpoint_and_where_it_answers.py"
     },
     {
-      "id": "demo_03_poll_and_inspect_tuned_endpoint",
+      "id": "demo_06_the_endpoint_and_where_it_answers",
       "lesson": "17.2",
-      "file": "demo_03_poll_and_inspect_tuned_endpoint.py",
+      "file": "demo_06_the_endpoint_and_where_it_answers.py",
       "category": "required",
       "requires": [
-        "demo_02_submit_managed_tuning"
+        "demo_05_the_job_submitted"
       ],
-      "heading": "demo 03 poll and inspect tuned endpoint",
-      "purpose": "Resume polling that job and inspect its resulting endpoint and configuration.",
+      "heading": "The endpoint, and where it answers",
+      "purpose": "The first cell polls the job once a minute until it ends. The poll only reads, so it costs nothing, and after a disconnect it is safe to run again: it takes the job from step 5's log. When the job succeeds, tune.py prints: The cell keeps the endpoint in ~/poll172.log and in ENDPOINT. The cell keeps the endpoint in ~/poll172.log and in ENDPOINT. The second cell asks the endpoint one question the way the generator would. It sends SYSTEM, one source under its header and the question, with generator._call's settings: ModelDraft's schema, 2,048 tokens and thinking at LOW. The chunk is not one the rows were written from, and the question is not a golden one. The cell asks in three places: us-central1, the job's region; global, where the served model answers; and the location the generator would use, from the path.",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         19,
         21
@@ -300,14 +343,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "17.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -336,6 +383,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "17.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -343,14 +410,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 362
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 394
     },
     {
@@ -439,7 +506,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The reviewed sanitized datasets from 17.1. Submission creates a billed tuning job; resume polling the saved job instead of resubmitting."
+  "prerequisites": "The reviewed sanitized datasets from 17.1. Submission creates a billed tuning job; resume polling the saved job instead of resubmitting.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

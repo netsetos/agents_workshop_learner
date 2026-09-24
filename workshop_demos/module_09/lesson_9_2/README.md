@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_cache_state_and_scope.py](demo_01_cache_state_and_scope.py) | Inspect both caches and vary request scope while keeping question words fixed. |
-| 3 | [demo_02_reissue_and_refresh.py](demo_02_reissue_and_refresh.py) | Release revision 2, observe both cache reactions and refresh the context cache. |
-| 4 | [demo_03_undo_and_compare_rows.py](demo_03_undo_and_compare_rows.py) | Restore revision 1 and explain how old answers relate to the restored fingerprint. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_both_caches_and_the_corpus_they_follow.py](demo_03_both_caches_and_the_corpus_they_follow.py) | Both caches, and the corpus they follow |
+| 4 | [demo_04_scope_the_same_words_under_other_settings.py](demo_04_scope_the_same_words_under_other_settings.py) | Scope: the same words under other settings |
+| 5 | [demo_05_the_corpus_moves_revision_2_and_both_caches_react.py](demo_05_the_corpus_moves_revision_2_and_both_caches_react.py) | The corpus moves: revision 2, and both caches react |
+| 6 | [demo_06_make_cache_again_attached_again_and_what_it_packed.py](demo_06_make_cache_again_attached_again_and_what_it_packed.py) | make cache again: attached again, and what it packed |
+| 7 | [demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py](demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py) | The corpus comes back: version 1, and the old answer with it |
 
 ## Before starting
 
@@ -25,11 +29,13 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py](cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py) — At lesson end: Clean up
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +59,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_cache_state_and_scope.py
+### demo_03_both_caches_and_the_corpus_they_follow.py
 
-Inspect both caches and vary request scope while keeping question words fixed.
+Do it: the two caches Do it: the state, and three asks
 
 **`step_01_the_two_caches(session)` — Both caches, and the corpus they follow / Do it: the two caches**
 
@@ -95,7 +101,11 @@ ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed fro
   cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a
 ```
 
-**`step_03_example(session)` — Scope: the same words under other settings / Do it**
+### demo_04_scope_the_same_words_under_other_settings.py
+
+Do it
+
+**`step_01_scope_the_same_words_under_other_settings(session)` — Scope: the same words under other settings / Do it**
 
 Do it
 
@@ -112,9 +122,9 @@ vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade
   scope prompt v4  1d409edacc15c1d1
 ```
 
-### demo_02_reissue_and_refresh.py
+### demo_05_the_corpus_moves_revision_2_and_both_caches_react.py
 
-Release revision 2, observe both cache reactions and refresh the context cache.
+Do it: the release Do it: the state, both asks, and the log
 
 **`step_01_the_release(session)` — The corpus moves: revision 2, and both caches react / Do it: the release**
 
@@ -147,7 +157,11 @@ ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache p
   cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13
 ```
 
-**`step_03_example(session)` — make cache again: attached again, and what it packed / Do it**
+### demo_06_make_cache_again_attached_again_and_what_it_packed.py
+
+Do it
+
+**`step_01_make_cache_again_attached_again_and_what_i(session)` — make cache again: attached again, and what it packed / Do it**
 
 Do it
 
@@ -166,9 +180,9 @@ cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=
   vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir
 ```
 
-### demo_03_undo_and_compare_rows.py
+### demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py
 
-Restore revision 1 and explain how old answers relate to the restored fingerprint.
+Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too. Every row of the walk
 
 **`step_01_the_corpus_comes_back_version_1_and_the_ol(session)` — The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
 
@@ -218,9 +232,9 @@ Expected shape, not a promised result:
   00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms
 ```
 
-### setup/finish.py
+### cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: Clean up
 
 **`step_01_clean_up(session)` — The corpus comes back: version 1, and the old answer with it / Clean up**
 
@@ -241,7 +255,11 @@ cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=
   deleted acme's cache
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -249,6 +267,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html`. All 31 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "12.3",
   "title": "Trace the implemented A2A peer and its permissions",
   "source_kind": "main_html",
@@ -131,9 +131,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -161,31 +165,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_peer_contract_and_deployment.py"
+      "next": "demo_03_the_peer_s_permissions_as_the_kit_writes_them.py"
     },
     {
-      "id": "demo_01_peer_contract_and_deployment",
+      "id": "demo_03_the_peer_s_permissions_as_the_kit_writes_them",
       "lesson": "12.3",
-      "file": "demo_01_peer_contract_and_deployment.py",
+      "file": "demo_03_the_peer_s_permissions_as_the_kit_writes_them.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 peer contract and deployment",
-      "purpose": "Inspect the implemented A2A peer and deploy/read its advertised contract.",
-      "anchor": "s3, s4",
+      "heading": "The peer's permissions, as the kit writes them",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        10,
-        12
+        10
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
-        427,
-        469
+        427
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The peer's permissions, as the kit writes them",
@@ -195,11 +201,40 @@
           "expected": "documind-agent, as commands/lesson-8.4.sh deploys it:\n  runs as documind-agent-sa  model gemini-3.6-flash  knows one URL: MCP_URL\n  who may call it: documind-ui-sa, documind-chat-sa\n  documind-agent-sa may call documind-mcp: True\n  its project roles: aiplatform.user, logging.logWriter, cloudtrace.agent\n  the rosters it is on: acme\n  agent.py imports: __future__, google, logging, os, starlette, urllib, uvicorn\n  the image copies: services/agent/requirements.txt, services/agent/",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_01_example",
+          "function": "step_01_the_peer_s_permissions_as_the_kit_writes_t",
           "window": 10,
           "source_line": 427,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_card_refused_without_a_token_read_with_one.py"
+    },
+    {
+      "id": "demo_04_the_card_refused_without_a_token_read_with_one",
+      "lesson": "12.3",
+      "file": "demo_04_the_card_refused_without_a_token_read_with_one.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_peer_s_permissions_as_the_kit_writes_them"
+      ],
+      "heading": "The card: refused without a token, read with one",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
+      "source_lines": [
+        469
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The card: refused without a token, read with one",
           "subheading": "Do it",
@@ -208,25 +243,29 @@
           "expected": "the card without a token: HTTP 403\nthe card with a token: documind_peer, version 0.0.1\n  answers at https://documind-agent-NUMBER.asia-south1.run.app over JSONRPC, A2A 1.0\n  streaming False, input ['text/plain'], output ['text/plain']\n  skills: model",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_02_example",
+          "function": "step_01_the_card_refused_without_a_token_read_with",
           "window": 12,
           "source_line": 469,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_peer_permissions.py"
+      "next": "demo_05_the_gate_make_smoke_agent.py"
     },
     {
-      "id": "demo_02_peer_permissions",
+      "id": "demo_05_the_gate_make_smoke_agent",
       "lesson": "12.3",
-      "file": "demo_02_peer_permissions.py",
+      "file": "demo_05_the_gate_make_smoke_agent.py",
       "category": "required",
       "requires": [
-        "demo_01_peer_contract_and_deployment"
+        "demo_04_the_card_refused_without_a_token_read_with_one"
       ],
-      "heading": "demo 02 peer permissions",
-      "purpose": "Exercise the peer's actual access boundaries.",
+      "heading": "The gate: make smoke-agent",
+      "purpose": "Do it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         14
       ],
@@ -246,25 +285,29 @@
           "expected": "DocuMind A2A peer - live smoke test\n  target: https://documind-agent-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  question: After how many years of continuous service does gratuity become payable?\n  expected answer pattern: \\b(?:five|5)(?:\\s*\\(\\s*(?:five|5)\\s*\\))?[\\s-]+years?\\b\n  [PASS] card refused without a token  status=403\n  [PASS] agent card  name=documind_peer url=https://documind-agent-NUMBER.asia-south1.run.app skills=['documind_peer']\n  [PASS] task answered  state=completed  'Gratuity is payable after not less than five years of continuous service [1]. Source: paym'\n  [PASS] zeta refused by the roster  'The DocuMind server refused this: documind-agent-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com is not on tena'\n  [PASS] outsider refused at the door  status=403\n  --------------------------------------------------------\n  5 passed, 0 failed",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_01_example",
+          "function": "step_01_the_gate_make_smoke_agent",
           "window": 14,
           "source_line": 507,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_peer_task_and_trace.py"
+      "next": "demo_06_one_task_traced.py"
     },
     {
-      "id": "demo_03_peer_task_and_trace",
+      "id": "demo_06_one_task_traced",
       "lesson": "12.3",
-      "file": "demo_03_peer_task_and_trace.py",
+      "file": "demo_06_one_task_traced.py",
       "category": "required",
       "requires": [
-        "demo_02_peer_permissions"
+        "demo_05_the_gate_make_smoke_agent"
       ],
-      "heading": "demo 03 peer task and trace",
-      "purpose": "Submit the task and inspect the lane's corresponding records.",
+      "heading": "One task, traced",
+      "purpose": "Do it: the task Do it: what the lane saw",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         16,
         18
@@ -308,14 +351,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "12.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -344,6 +391,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "12.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -351,14 +418,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 335
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 367
     },
     {
@@ -426,7 +493,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

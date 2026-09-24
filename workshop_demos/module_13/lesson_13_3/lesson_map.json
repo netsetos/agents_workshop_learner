@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "13.3",
   "title": "Exercise model routing, budgets and shutdown controls",
   "source_kind": "main_html",
@@ -142,9 +142,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -172,31 +176,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_routing_and_budget_configuration.py"
+      "next": "demo_03_the_controls_as_the_kit_writes_them_down.py"
     },
     {
-      "id": "demo_01_routing_and_budget_configuration",
+      "id": "demo_03_the_controls_as_the_kit_writes_them_down",
       "lesson": "13.3",
-      "file": "demo_01_routing_and_budget_configuration.py",
+      "file": "demo_03_the_controls_as_the_kit_writes_them_down.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 routing and budget configuration",
-      "purpose": "Read routing/budget/shutdown controls and establish the baseline.",
-      "anchor": "s3, s4",
+      "heading": "The controls, as the kit writes them down",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        11
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
-        462,
-        523
+        462
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The controls, as the kit writes them down",
@@ -206,11 +212,40 @@
           "expected": "per answer: ROUTING=off on the lane (lesson-12.2.sh). With it on, gemini-3.1-flash-lite labels each question SIMPLE, MEDIUM, COMPLEX, and breakers.choose_model() picks the model:\n  spend   SIMPLE                  MEDIUM                  COMPLEX\n  0%      gemini-3.1-flash-lite   gemini-3.6-flash        gemini-3.1-pro-preview\n  79.9%   gemini-3.1-flash-lite   gemini-3.6-flash        gemini-3.1-pro-preview\n  80%     gemini-3.1-flash-lite   gemini-3.1-flash-lite   gemini-3.6-flash\n  85%     gemini-3.1-flash-lite   gemini-3.1-flash-lite   gemini-3.6-flash\n  100%    gemini-3.1-flash-lite   gemini-3.1-flash-lite   gemini-3.6-flash\n  120%    gemini-3.1-flash-lite   gemini-3.1-flash-lite   gemini-3.6-flash\n  the spend: Firestore budget/<month, UTC>, USD added by every answer, over BUDGET_USD (100 on the lane); SPEND_PCT replaces it\n  BUDGET_FLOOR_PCT = 100 (the comment's min-instances 0): read by nothing\nper month: DocuMind monthly budget, BUDGET_AMOUNT 5000 in the billing account's currency; it emails at 50%, 80%, 100% and at a 120% forecast\nper hour: documind-off runs 0 23 * * * Asia/Kolkata and floors documind-slm, documind-vllm, documind-gateway, documind-ui to min-instances 0; make off does the same by hand\n  make gpu-cap: the GPU quota in us-central1 capped at 1; alerts.tf's gpu_left_warm pages when one stays up two hours",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_controls_as_the_kit_writes_them_down",
           "window": 9,
           "source_line": 462,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_month_so_far.py"
+    },
+    {
+      "id": "demo_04_the_month_so_far",
+      "lesson": "13.3",
+      "file": "demo_04_the_month_so_far.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_controls_as_the_kit_writes_them_down"
+      ],
+      "heading": "The month so far",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        11
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
+      "source_lines": [
+        523
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The month so far",
           "subheading": "Do it",
@@ -219,25 +254,29 @@
           "expected": "documind-api: ROUTING=off, BUDGET_USD=100, SPEND_PCT=unset\nthe counter, budget/2026-09: USD 7.8412 of 100 = 7.84% - the breaker would read 'normal'\nthe billing budget: 5000 INR a month on the whole project; emails at 50%, 80%, 100%, 120% forecast\npython services/slm/gpu_quota.py --project documind-ai-YOUR-ID --region us-central1\n\nTotal NVIDIA L4 GPU allocation without zonal redundancy\n  run.googleapis.com/nvidia_l4_gpu_allocation_no_zonal_redundancy\n  1/{project}/{region}         us-central1  effective 3 (default 3)",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_02_example",
+          "function": "step_01_the_month_so_far",
           "window": 11,
           "source_line": 523,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_budget_candidate.py"
+      "next": "demo_05_the_tier_at_85_percent.py"
     },
     {
-      "id": "demo_02_budget_candidate",
+      "id": "demo_05_the_tier_at_85_percent",
       "lesson": "13.3",
-      "file": "demo_02_budget_candidate.py",
+      "file": "demo_05_the_tier_at_85_percent.py",
       "category": "required",
       "requires": [
-        "demo_01_routing_and_budget_configuration"
+        "demo_04_the_month_so_far"
       ],
-      "heading": "demo 02 budget candidate",
-      "purpose": "Compare routing at current spend and at 85 percent, then undo the candidate.",
+      "heading": "The tier at 85 percent",
+      "purpose": "Do it: routing on, the month as it is Do it: the same three at 85 percent Do it: undo the candidate",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         13,
         15,
@@ -293,19 +332,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_shutdown_and_instance_counts.py"
+      "next": "demo_06_off_at_night_and_the_ceiling_under_it.py"
     },
     {
-      "id": "demo_03_shutdown_and_instance_counts",
+      "id": "demo_06_off_at_night_and_the_ceiling_under_it",
       "lesson": "13.3",
-      "file": "demo_03_shutdown_and_instance_counts.py",
+      "file": "demo_06_off_at_night_and_the_ceiling_under_it.py",
       "category": "required",
       "requires": [
-        "demo_02_budget_candidate"
+        "demo_05_the_tier_at_85_percent"
       ],
-      "heading": "demo 03 shutdown and instance counts",
-      "purpose": "Lower floors, inspect shutdown behavior after the idle interval and read ceilings.",
+      "heading": "Off at night, and the ceiling under it",
+      "purpose": "Do it: the floor, then the switch A floor of zero lets the service scale to zero, but an idle instance can stay up for up to fifteen minutes after its last request. The cell waits, then reads the UI's instance count from Cloud Monitoring for the last half hour, a sample a minute. make gpu-cap writes a consumer quota override on the L4 quotas in us-central1, capping them at one card. --max-instances belongs to one service. The quota belongs to the project, so a second GPU service, a GPU candidate or a typo cannot allocate a second card. Lowering a quota needs no approval; raising it again does.",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         20,
         22,
@@ -367,14 +410,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "13.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -403,6 +450,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "13.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -410,14 +477,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 353
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 385
     },
     {
@@ -506,7 +573,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "6.4",
   "title": "Complete the Streamlit upload-to-answer journey",
   "source_kind": "main_html",
@@ -173,9 +173,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The UI's own environment says how it signs people in, where it uploads and which API it calls. The block prints the five names that matter and exports the UI's address for the steps below. An empty CHAT_URL means the chat service is not deployed on this lane, and then Chat has no brain picker. The page streams from the API directly, which is the journey this lesson follows.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -218,19 +222,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_authenticated_front_door.py"
+      "next": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in.py"
     },
     {
-      "id": "demo_01_authenticated_front_door",
+      "id": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in",
       "lesson": "6.4",
-      "file": "demo_01_authenticated_front_door.py",
+      "file": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 authenticated front door",
-      "purpose": "Read IAP, service identity and admission evidence before using the browser UI.",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "purpose": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         11
       ],
@@ -258,29 +266,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_browser_upload_and_answer.py"
+      "next": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger.py"
     },
     {
-      "id": "demo_02_browser_upload_and_answer",
+      "id": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger",
       "lesson": "6.4",
-      "file": "demo_02_browser_upload_and_answer.py",
+      "file": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger.py",
       "category": "required",
       "requires": [
-        "demo_01_authenticated_front_door"
+        "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in"
       ],
-      "heading": "demo 02 browser upload and answer",
-      "purpose": "Write the visitor note, upload it in the UI, follow indexing and compare browser/API answers.",
-      "anchor": "s4, s5",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. In the browser, open Documents, choose the file, and click Index documents. The page reports the object it wrote and its generation, then says the upload is complete and indexing is still in progress. Wait half a minute and click Refresh indexing status until the note appears in Versions. Then follow it from the shell:",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         16,
-        17,
-        23
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         527,
-        545,
-        609
+        545
       ],
       "offline": false,
       "live_verified": false,
@@ -314,7 +324,36 @@
           "window": 17,
           "source_line": 545,
           "manual_checkpoint": "In the ACME UI, Documents -> Upload: choose the exact ~/pune_visitor_rules.md created in the previous step, then Index documents. Refresh until indexed. If your browser runs elsewhere, download this exact file from the workstation first. Type done after the UI checkpoint."
-        },
+        }
+      ],
+      "next": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you.py"
+    },
+    {
+      "id": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you",
+      "lesson": "6.4",
+      "file": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you.py",
+      "category": "required",
+      "requires": [
+        "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger"
+      ],
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "purpose": "In the browser, open Chat and ask: What colour badge do visitors wear at the Pune warehouse? The sources arrive first and the answer streams after them. The answer ends with a pill. Hover over it to see the note's clause, and open Sources under the answer. Then ask the same question from the shell and read the two newest rows:",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        23
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
+      "source_lines": [
+        609
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The answer: asked in Chat, streamed, and the row that names you",
           "subheading": "Do it: ask in the browser, ask from the shell, read both rows",
@@ -325,33 +364,35 @@
             "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
           ],
           "id": "source_23",
-          "function": "step_03_ask_in_the_browser_ask_from_the_shell_read",
+          "function": "step_01_ask_in_the_browser_ask_from_the_shell_read",
           "window": 23,
           "source_line": 609,
           "manual_checkpoint": "In the deployed UI Chat, ask the visitor-badge question from this lesson and wait for the cited answer. Type done to compare the browser and operator API records."
         }
       ],
-      "next": "demo_03_citations_and_ui_permissions.py"
+      "next": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam.py"
     },
     {
-      "id": "demo_03_citations_and_ui_permissions",
+      "id": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam",
       "lesson": "6.4",
-      "file": "demo_03_citations_and_ui_permissions.py",
+      "file": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam.py",
       "category": "required",
       "requires": [
-        "demo_02_browser_upload_and_answer"
+        "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you"
       ],
-      "heading": "demo 03 citations and ui permissions",
-      "purpose": "Open a cited source, render the transcript and inspect the UI account's grants.",
-      "anchor": "s6, s7",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "purpose": "In the browser, under the answer from step 5, open Sources and click Open source on the note. A new tab shows the note's text from the bucket, through a link that stops working in 15 minutes. Then capture the same answer as a transcript and paste it into the renderer in step 1:",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
-        28,
-        33
+        28
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        678,
-        731
+        678
       ],
       "offline": false,
       "live_verified": false,
@@ -371,7 +412,36 @@
           "window": 28,
           "source_line": 678,
           "manual_checkpoint": "Open the answer's citation/source in the UI and inspect the signed link. Type done to render and inspect the transcript from Python."
-        },
+        }
+      ],
+      "next": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first.py"
+    },
+    {
+      "id": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first",
+      "lesson": "6.4",
+      "file": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first.py",
+      "category": "required",
+      "requires": [
+        "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam"
+      ],
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "purpose": "Do it: read the account's grants, Rs 0",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        33
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
+      "source_lines": [
+        731
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The UI's account: what it may do, and the checks the page makes first",
           "subheading": "Do it: read the account's grants, Rs 0",
@@ -380,7 +450,7 @@
           "expected": "project roles:\nroles/aiplatform.user\nroles/datastore.user\nroles/documentai.apiUser\nroles/secretmanager.secretAccessor\nroles/speech.editor\nuploads bucket: ['roles/storage.objectAdmin']\nmay invoke documind-api: ['roles/run.invoker']\nmay invoke documind-chat: ['roles/run.invoker']\nmay invoke documind-ingest: none\non itself: ['roles/iam.serviceAccountTokenCreator']",
           "adaptations": [],
           "id": "source_33",
-          "function": "step_02_read_the_account_s_grants_rs_0",
+          "function": "step_01_read_the_account_s_grants_rs_0",
           "window": 33,
           "source_line": 731,
           "manual_checkpoint": null
@@ -389,14 +459,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "6.4",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -425,6 +499,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "6.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -432,21 +526,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 357
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 389
     },
     {
       "window": 7,
       "label": "expected (your ids differ; CHAT_URL is empty on a lane without the chat service)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 407
     },
     {
@@ -605,7 +699,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "An ACME browser login through IAP and a deployed Streamlit UI, API and ingest lane."
+  "prerequisites": "An ACME browser login through IAP and a deployed Streamlit UI, API and ingest lane.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

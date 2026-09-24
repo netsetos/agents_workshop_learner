@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_pii_scan_and_findings.py](demo_01_pii_scan_and_findings.py) | Upload the synthetic PII note and inspect its findings in Firestore and the DLP UI. |
-| 3 | [demo_02_guarded_candidate.py](demo_02_guarded_candidate.py) | Inspect Model Armor and compare plain, injected and PAN-bearing requests on a candidate. |
-| 4 | [demo_03_audit_records.py](demo_03_audit_records.py) | Inspect immutable audit objects and the records used by the admin console. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_pii_scan_one_list_and_a_note_that_trips_it.py](demo_03_the_pii_scan_one_list_and_a_note_that_trips_it.py) | The PII scan: one list, and a note that trips it |
+| 4 | [demo_04_the_findings_types_and_offsets_in_firestore_and_in_the_dlp_tab.py](demo_04_the_findings_types_and_offsets_in_firestore_and_in_the_dlp_tab.py) | The findings: types and offsets, in Firestore and in the DLP tab |
+| 5 | [demo_05_model_armor_the_template_the_guard_and_a_candidate_with_armor_on.py](demo_05_model_armor_the_template_the_guard_and_a_candidate_with_armor_on.py) | Model Armor: the template, the guard, and a candidate with ARMOR=on |
+| 6 | [demo_06_four_questions_to_the_candidate_plain_two_injections_a_pan.py](demo_06_four_questions_to_the_candidate_plain_two_injections_a_pan.py) | Four questions to the candidate: plain, two injections, a PAN |
+| 7 | [demo_07_the_audit_trail_the_events_in_the_retention_bucket.py](demo_07_the_audit_trail_the_events_in_the_retention_bucket.py) | The audit trail: the events in the retention bucket |
+| 8 | [demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py](demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py) | The audit tab: what the admin console reads, and what it misses |
 
 ## Before starting
 
@@ -25,11 +30,13 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py](cleanup/demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py) — At lesson end: The note came from you, and it should not stay in acme's corpus. make retire flags its chunks, which leave retrieval, and marks its ledger row WITHDRAWN; the object stays in the uploads bucket. Look at what stays. The findings record stays in dlp_findings until someone deletes it. The two audit events stay for five years, whatever anyone wants, which is what retention means. The withdrawal writes no audit event of its own: doc.delete is a registered action, and nothing in the kit emits it.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +44,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +60,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_pii_scan_and_findings.py
+### demo_03_the_pii_scan_one_list_and_a_note_that_trips_it.py
 
-Upload the synthetic PII note and inspect its findings in Firestore and the DLP UI.
+Do it
 
-**`step_01_example(session)` — The PII scan: one list, and a note that trips it / Do it**
+**`step_01_the_pii_scan_one_list_and_a_note_that_trip(session)` — The PII scan: one list, and a note that trips it / Do it**
 
 Do it
 
@@ -72,7 +79,11 @@ Copying file:///home/you/lesson83_vendor_note.md to gs://documind-ai-YOUR-ID-upl
 >> indexed: acme_...	1	1
 ```
 
-**`step_02_the_records(session)` — The findings: types and offsets, in Firestore and in the DLP tab / Do it: the records**
+### demo_04_the_findings_types_and_offsets_in_firestore_and_in_the_dlp_tab.py
+
+Do it: the records The console sits behind IAP and admits only the addresses the lane was deployed with as ADMIN_EMAILS. If it answers 403 - Admins only, your address is not among them; the cell above has already read the records the tab draws.
+
+**`step_01_the_records(session)` — The findings: types and offsets, in Firestore and in the DLP tab / Do it: the records**
 
 Do it: the records
 
@@ -86,7 +97,7 @@ acme/lesson83_vendor_note.md: 5 finding(s), INDIA_AADHAAR_INDIVIDUAL, INDIA_GST_
 one finding, whole: {'info_type': 'PERSON_NAME', 'likelihood': 'LIKELY', 'offset': 159, 'chunk_id': 'acme:SHA#0'}
 ```
 
-**`step_03_the_dlp_tab(session)` — The findings: types and offsets, in Firestore and in the DLP tab / Do it: the DLP tab**
+**`step_02_the_dlp_tab(session)` — The findings: types and offsets, in Firestore and in the DLP tab / Do it: the DLP tab**
 
 The console sits behind IAP and admits only the addresses the lane was deployed with as ADMIN_EMAILS. If it answers 403 - Admins only, your address is not among them; the cell above has already read the records the tab draws.
 
@@ -102,11 +113,11 @@ Expected shape, not a promised result:
 https://documind-admin-NUMBER.asia-south1.run.app   <- open in your browser, then the DLP tab
 ```
 
-### demo_02_guarded_candidate.py
+### demo_05_model_armor_the_template_the_guard_and_a_candidate_with_armor_on.py
 
-Inspect Model Armor and compare plain, injected and PAN-bearing requests on a candidate.
+Do it
 
-**`step_01_example(session)` — Model Armor: the template, the guard, and a candidate with ARMOR=on / Do it**
+**`step_01_model_armor_the_template_the_guard_and_a_c(session)` — Model Armor: the template, the guard, and a candidate with ARMOR=on / Do it**
 
 Do it
 
@@ -123,7 +134,11 @@ gcloud run services update documind-api --region asia-south1 --project documind-
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-**`step_02_four_questions_to_the_candidate_plain_two(session)` — Four questions to the candidate: plain, two injections, a PAN / Four questions to the candidate: plain, two injections, a PAN**
+### demo_06_four_questions_to_the_candidate_plain_two_injections_a_pan.py
+
+Each status beside the first characters of its body, then the candidate's tag removed. The cell asks acme four questions as you. The plain question must be answered. The English injection is a textbook attempt, and it must come back 400 prompt_blocked. The Hinglish one asks for the same thing the way people here actually type it, and it is the reason the template's floor is MEDIUM. The last question contains a synthetic PAN, and it tests the template's sensitive-data filter. Clean up: the candidate's tag
+
+**`step_01_four_questions_to_the_candidate_plain_two(session)` — Four questions to the candidate: plain, two injections, a PAN / Four questions to the candidate: plain, two injections, a PAN**
 
 Each status beside the first characters of its body, then the candidate's tag removed. The cell asks acme four questions as you. The plain question must be answered. The English injection is a textbook attempt, and it must come back 400 prompt_blocked. The Hinglish one asks for the same thing the way people here actually type it, and it is the reason the template's floor is MEDIUM. The last question contains a synthetic PAN, and it tests the template's sensitive-data filter.
 
@@ -138,7 +153,7 @@ a plain question             200  {"answer":"A confirmed employee at grade E3 or
   a synthetic PAN, asked       200  {"answer":"Invoice INV-2026-0412 carries that PAN [1].","c
 ```
 
-**`step_03_clean_up_the_candidate_s_tag(session)` — Four questions to the candidate: plain, two injections, a PAN / Clean up: the candidate's tag**
+**`step_02_clean_up_the_candidate_s_tag(session)` — Four questions to the candidate: plain, two injections, a PAN / Clean up: the candidate's tag**
 
 Clean up: the candidate's tag
 
@@ -154,11 +169,11 @@ Traffic:
   100% documind-api-000MM-xxx      (the live revision, as before; no candidate tag)
 ```
 
-### demo_03_audit_records.py
+### demo_07_the_audit_trail_the_events_in_the_retention_bucket.py
 
-Inspect immutable audit objects and the records used by the admin console.
+Do it
 
-**`step_01_example(session)` — The audit trail: the events in the retention bucket / Do it**
+**`step_01_the_audit_trail_the_events_in_the_retentio(session)` — The audit trail: the events in the retention bucket / Do it**
 
 Do it
 
@@ -180,7 +195,11 @@ retention 157680000 s (5 years), locked False
 delete refused: 403 Forbidden
 ```
 
-**`step_02_example(session)` — The audit tab: what the admin console reads, and what it misses / Do it**
+### demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py
+
+Do it
+
+**`step_01_the_audit_tab_what_the_admin_console_reads(session)` — The audit tab: what the admin console reads, and what it misses / Do it**
 
 Do it
 
@@ -192,9 +211,9 @@ Expected shape, not a promised result:
 {'tenant.create': 1} | doc.upload in it: 0
 ```
 
-### setup/finish.py
+### cleanup/demo_08_the_audit_tab_what_the_admin_console_reads_and_what_it_misses.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: The note came from you, and it should not stay in acme's corpus. make retire flags its chunks, which leave retrieval, and marks its ledger row WITHDRAWN; the object stays in the uploads bucket. Look at what stays. The findings record stays in dlp_findings until someone deletes it. The two audit events stay for five years, whatever anyone wants, which is what retention means. The withdrawal writes no audit event of its own: doc.delete is a registered action, and nothing in the kit emits it.
 
 **`step_01_clean_up_withdraw_the_note(session)` — The audit tab: what the admin console reads, and what it misses / Clean up: withdraw the note**
 
@@ -208,7 +227,11 @@ Expected shape, not a promised result:
 {"event": "reconcile_retired", "gcs_uri": "gs://documind-ai-YOUR-ID-uploads/acme/lesson83_vendor_note.md", ...}
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -216,6 +239,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html`. All 32 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0f79843e15e5d20e67a5ce3f41943aca173c2e5d`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

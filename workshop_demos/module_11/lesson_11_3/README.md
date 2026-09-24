@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_session_isolation.py](demo_01_session_isolation.py) | Exercise eight callers against the kit's own session-isolation implementation. |
-| 3 | [demo_02_restart_recovery.py](demo_02_restart_recovery.py) | Continue a conversation across a redeployment and compare another person's result. |
-| 4 | [demo_03_recovery_evidence.py](demo_03_recovery_evidence.py) | Read the rows that support both restart recovery and isolation. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_isolation_on_the_kit_s_own_app.py](demo_03_isolation_on_the_kit_s_own_app.py) | Isolation, on the kit's own app |
+| 4 | [demo_04_a_conversation_across_a_redeploy.py](demo_04_a_conversation_across_a_redeploy.py) | A conversation across a redeploy |
+| 5 | [demo_05_another_person_finds_nothing.py](demo_05_another_person_finds_nothing.py) | Another person finds nothing |
+| 6 | [demo_06_the_rows_behind_both.py](demo_06_the_rows_behind_both.py) | The rows behind both |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,7 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-**`step_02_the_venv(session)` — Isolation, on the kit's own app / Do it: the venv**
+### demo_03_isolation_on_the_kit_s_own_app.py
+
+Do it: the venv Do it: eight callers
+
+**`step_01_the_venv(session)` — Isolation, on the kit's own app / Do it: the venv**
 
 Do it: the venv
 
@@ -65,11 +73,7 @@ Expected shape, not a promised result:
 graph-venv ok: fastapi 0.141.1
 ```
 
-### demo_01_session_isolation.py
-
-Exercise eight callers against the kit's own session-isolation implementation.
-
-**`step_01_eight_callers(session)` — Isolation, on the kit's own app / Do it: eight callers**
+**`step_02_eight_callers(session)` — Isolation, on the kit's own app / Do it: eight callers**
 
 Do it: eight callers
 
@@ -95,11 +99,11 @@ alice gives the word, lesson113        200  Got it: saffron.
   after a restart, alice asks again      200  I have no word from you in this conversation.
 ```
 
-### demo_02_restart_recovery.py
+### demo_04_a_conversation_across_a_redeploy.py
 
-Continue a conversation across a redeployment and compare another person's result.
+Do it
 
-**`step_01_example(session)` — A conversation across a redeploy / Do it**
+**`step_01_a_conversation_across_a_redeploy(session)` — A conversation across a redeploy / Do it**
 
 Do it
 
@@ -116,7 +120,11 @@ serving documind-chat-00008-m2k, redeployed at 2026-09-23T11:20:41Z
   adk       lesson113-4242-adk        saffron no   "I don't have a word from you in th"
 ```
 
-**`step_02_example(session)` — Another person finds nothing / Do it**
+### demo_05_another_person_finds_nothing.py
+
+Do it
+
+**`step_01_another_person_finds_nothing(session)` — Another person finds nothing / Do it**
 
 Do it
 
@@ -128,11 +136,11 @@ Expected shape, not a promised result:
 open https://documind-ui-NUMBER.asia-south1.run.app and sign in as you@example.com
 ```
 
-### demo_03_recovery_evidence.py
+### demo_06_the_rows_behind_both.py
 
-Read the rows that support both restart recovery and isolation.
+Do it
 
-**`step_01_example(session)` — The rows behind both / Do it**
+**`step_01_the_rows_behind_both(session)` — The rows behind both / Do it**
 
 Do it
 
@@ -147,9 +155,9 @@ lesson113-4242-langchain: 6 checkpoints, 3 before the redeploy and 3 after
   threads of documind-ui-sa: 2; the latest is session lesson113-4242-langchain, 6 checkpoints
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -159,6 +167,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html`. All 19 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0f3fb29f23b886b2a6493c5a3474f442b8af3c17`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

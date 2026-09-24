@@ -1,4 +1,4 @@
-"""Lesson 2.3: demo 02 record restart inputs
+"""Lesson 2.3: Record restart inputs
 
 Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.
 
@@ -10,6 +10,8 @@ Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
 for expected observations, effects and the next file; GUIDE.md retains prose.
+Example: open this file at the matching HTML heading, Run once, then inspect
+the observations below before continuing to the next numbered section.
 A successful process is not proof that a live result matched the sample.
 
 """
@@ -31,6 +33,9 @@ def step_01_record_restart_inputs(session):
     Operations: Course-plan experiment — local Python/kit inspection.
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe the printed/saved evidence for this heading; a zero exit alone is not proof.
     """
     from pathlib import Path
     from workshop_helpers.artifacts import write_json
@@ -39,14 +44,22 @@ def step_01_record_restart_inputs(session):
     print("Saved non-secret inputs:", session.attempt / "restart_inputs.json")
 
 def demonstrate(session):
-    """Run this experiment in order, resuming only completed checkpoints safely."""
+    """Run this section in source order, saving each function's outcome.
+
+    Example: main() opens the configured session and calls demonstrate(session).
+    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    """
     run_steps(session, [
         ('source_demo_02_record_restart_inputs', step_01_record_restart_inputs),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 
 def main():
-    """Open the lesson session with the selected IDE interpreter and explicit settings."""
+    """Open the lesson session and run this section.
+
+    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
+    Project settings and completed prerequisites come from the shared setup.
+    """
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_gateway_routes.py](demo_01_gateway_routes.py) | Inspect gateway routes and their configured destinations. |
-| 3 | [demo_02_gateway_authorization.py](demo_02_gateway_authorization.py) | Exercise the authenticated route and deployment checks. |
-| 4 | [demo_03_routing_and_cost_headers.py](demo_03_routing_and_cost_headers.py) | Trace PAN rerouting and inspect the returned cost metadata. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_hook_s_decisions_traced.py](demo_03_the_hook_s_decisions_traced.py) | The hook's decisions, traced |
+| 4 | [demo_04_the_token_the_proxy_sends.py](demo_04_the_token_the_proxy_sends.py) | The token the proxy sends |
+| 5 | [demo_05_the_gateway_deployed_and_smoke_tested.py](demo_05_the_gateway_deployed_and_smoke_tested.py) | The gateway, deployed and smoke-tested |
+| 6 | [demo_06_a_pan_re_routed_and_the_cost_header.py](demo_06_a_pan_re_routed_and_the_cost_header.py) | A PAN re-routed, and the cost header |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_gateway_routes.py
+### demo_03_the_hook_s_decisions_traced.py
 
-Inspect gateway routes and their configured destinations.
+Do it
 
-**`step_01_example(session)` — The hook's decisions, traced / Do it**
+**`step_01_the_hook_s_decisions_traced(session)` — The hook's decisions, traced / Do it**
 
 Do it
 
@@ -69,7 +73,7 @@ Expected shape, not a promised result:
 en_core_web_lg installed: the image's model, 400 MB
 ```
 
-**`step_02_example(session)` — The hook's decisions, traced / Do it**
+**`step_02_the_hook_s_decisions_traced(session)` — The hook's decisions, traced / Do it**
 
 Do it
 
@@ -98,11 +102,11 @@ and what the last one sends to Gemini:
   Question: What is the notice period for a confirmed <US_DRIVER_LICENSE>?
 ```
 
-### demo_02_gateway_authorization.py
+### demo_04_the_token_the_proxy_sends.py
 
-Exercise the authenticated route and deployment checks.
+Do it
 
-**`step_01_example(session)` — The token the proxy sends / Do it**
+**`step_01_the_token_the_proxy_sends(session)` — The token the proxy sends / Do it**
 
 Do it
 
@@ -118,7 +122,11 @@ the vLLM engine           <token 3>   minted so far: 3
 the proxy drops these request headers, then adds its own Authorization: authorization, connection, content-length, host, transfer-encoding
 ```
 
-**`step_02_example(session)` — The gateway, deployed and smoke-tested / Do it**
+### demo_05_the_gateway_deployed_and_smoke_tested.py
+
+Do it
+
+**`step_01_the_gateway_deployed_and_smoke_tested(session)` — The gateway, deployed and smoke-tested / Do it**
 
 Do it
 
@@ -131,7 +139,7 @@ Expected shape, not a promised result:
 >> gateway: https://documind-gateway-NUMBER.asia-south1.run.app (the API and the UI's account may call it)
 ```
 
-**`step_03_example(session)` — The gateway, deployed and smoke-tested / Do it**
+**`step_02_the_gateway_deployed_and_smoke_tested(session)` — The gateway, deployed and smoke-tested / Do it**
 
 Do it
 
@@ -153,11 +161,11 @@ DocuMind gateway - live smoke test
   6 passed, 0 failed
 ```
 
-### demo_03_routing_and_cost_headers.py
+### demo_06_a_pan_re_routed_and_the_cost_header.py
 
-Trace PAN rerouting and inspect the returned cost metadata.
+Do it
 
-**`step_01_example(session)` — A PAN re-routed, and the cost header / Do it**
+**`step_01_a_pan_re_routed_and_the_cost_header(session)` — A PAN re-routed, and the cost header / Do it**
 
 Do it
 
@@ -172,9 +180,9 @@ documind-general is priced at 1.50 and 7.50 USD a million tokens, in and out (co
   a PAN and a date  HTTP 500  no answer: the route the hook chose has no backend yet, and no fallback
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -184,6 +192,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html`. All 24 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `99278f7195b558586eb8943607137376aa5cbb66`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

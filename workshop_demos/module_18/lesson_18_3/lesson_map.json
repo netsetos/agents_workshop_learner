@@ -1,11 +1,11 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "18.3",
   "title": "Inspect the vLLM service and the GKE alternative",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
-  "source_sha": "21dd5be3863147eb2597fe93610d080fce9979d1",
+  "source_sha": "b9a486aa693e132b0be189a1e993dc03d0d1bab2",
   "shared_setup_windows": [
     1
   ],
@@ -125,9 +125,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -155,19 +159,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_vllm_service.py"
+      "next": "demo_03_the_vllm_service_read.py"
     },
     {
-      "id": "demo_01_vllm_service",
+      "id": "demo_03_the_vllm_service_read",
       "lesson": "18.3",
-      "file": "demo_01_vllm_service.py",
+      "file": "demo_03_the_vllm_service_read.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 vllm service",
-      "purpose": "Read the implemented vLLM service and its serving constraints.",
+      "heading": "The vLLM service, read",
+      "purpose": "Do it",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         10
       ],
@@ -187,37 +195,37 @@
           "expected": "the image: FROM vllm/vllm-openai:v0.28.0, then python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  weights in the image: none - no step fetches them, and the HF_TOKEN build-arg cloudbuild.yaml passes has no ARG to land in\n  so the engine downloads google/gemma-3-4b-it when it starts, from Hugging Face\n  the environment make deploy-vllm gives it: GOOGLE_CLOUD_PROJECT - no Hugging Face token\nthe service: 1 nvidia-l4, 8 vCPU, 32Gi; 0 to 1 instance; 32 requests at a time; startup probe 120 s + 5 x 30 s = 270 s\nits door: every chat completion needs an X-API-Key header, hashed and looked up in Firestore (api_keys then tenants)\n  what the gateway's token proxy sends: its own ID token as Authorization, and no X-API-Key\n  code elsewhere in the kit that writes an api_keys document: none\n  roles Terraform grants documind-vllm-sa, the account it runs as: none\nits request log: BigQuery table 'project.dataset.inference_logs'\nthe gateway's route to it: documind-inference, http://127.0.0.1:8090/vllm/v1, falling back to documind-slm, documind-general",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_01_example",
+          "function": "step_01_the_vllm_service_read",
           "window": 10,
           "source_line": 466,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_gke_manifest_and_cluster.py"
+      "next": "demo_04_the_manifest_read.py"
     },
     {
-      "id": "demo_02_gke_manifest_and_cluster",
+      "id": "demo_04_the_manifest_read",
       "lesson": "18.3",
-      "file": "demo_02_gke_manifest_and_cluster.py",
+      "file": "demo_04_the_manifest_read.py",
       "category": "required",
       "requires": [
-        "demo_01_vllm_service"
+        "demo_03_the_vllm_service_read"
       ],
-      "heading": "demo 02 gke manifest and cluster",
-      "purpose": "Inspect the alternative manifest and the lane's actual cluster state.",
-      "anchor": "s4, s5",
+      "heading": "The manifest, read",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
-        14,
-        17,
-        19
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
-        577,
-        649,
-        685
+        577
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
@@ -229,11 +237,42 @@
           "expected": "Deployment documind-vllm: 1 replica, and no autoscaler\n  its node: nodeSelector cloud.google.com/gke-accelerator=nvidia-l4, so Autopilot provisions an L4 node for the pod\n  image: ${IMAGE}, which make gke-up fills in: asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/gemma-vllm:latest\n  limits: 1 GPU, 6 vCPU, 24Gi (requests default to the limits)\n  env: HF_HUB_OFFLINE=1\n  startup probe: GET /health every 10 s, 60 failures allowed: 600 s to load\n  args: --model=google/gemma-3-4b-it --dtype=bfloat16 --gpu-memory-utilization=0.90 --max-model-len=4096 --port=8080\nService documind-vllm: ClusterIP (no type named, so the default), port 80 to 8080: no address outside the cluster\nthe image it runs: ENTRYPOINT [], CMD python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  the manifest sets args and no command, and the ENTRYPOINT is empty: the container runs '--model=google/gemma-3-4b-it' as its program\n  main.py takes its model from the environment (MODEL_NAME), and reads none of those args\n  the image holds no weights (step 3), and HF_HUB_OFFLINE=1 forbids the download\nverdict: as written, this pod cannot start",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_01_example",
+          "function": "step_01_the_manifest_read",
           "window": 14,
           "source_line": 577,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_the_lane_s_cluster_inspected.py"
+    },
+    {
+      "id": "demo_05_the_lane_s_cluster_inspected",
+      "lesson": "18.3",
+      "file": "demo_05_the_lane_s_cluster_inspected.py",
+      "category": "required",
+      "requires": [
+        "demo_04_the_manifest_read"
+      ],
+      "heading": "The lane's cluster, inspected",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        17,
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
+      "source_lines": [
+        649,
+        685
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The lane's cluster, inspected",
           "subheading": "Do it",
@@ -242,7 +281,7 @@
           "expected": "documind-autopilot: STANDARD, a regional control plane in asia-south1, on documind-vpc, RUNNING\n  node pool documind-lab: 1 x e2-standard-2 in asia-south1-a, 30 GB pd-standard, GPU: none\n  what it bills while it exists: $0.10 an hour for the control plane (the free tier covers only zonal and Autopilot clusters) + $0.0805 for the node = $0.1805 an hour, Rs 15.34; Rs 11,199 for a 730-hour month, plus the disk\ndocumind-vllm on Cloud Run (us-central1): not deployed\nthe gemma-vllm image in asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind: not built",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_02_example",
+          "function": "step_01_the_lane_s_cluster_inspected",
           "window": 17,
           "source_line": 649,
           "manual_checkpoint": null
@@ -252,30 +291,34 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab)",
-          "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:695: gke-up] Error 1",
+          "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:711: gke-up] Error 1",
           "adaptations": [
             "The page runs make gke-up to watch its guard stop on the Standard CPU lab (exit 2 with STOP). Accept that stop as the observation, and exit 0 where the lab is Autopilot; any other exit is still an error."
           ],
           "id": "source_19",
-          "function": "step_03_example",
+          "function": "step_02_the_lane_s_cluster_inspected",
           "window": 19,
           "source_line": 685,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_duty_cycle_cost.py"
+      "next": "demo_06_the_duty_cycle_sum.py"
     },
     {
-      "id": "demo_03_duty_cycle_cost",
+      "id": "demo_06_the_duty_cycle_sum",
       "lesson": "18.3",
-      "file": "demo_03_duty_cycle_cost.py",
+      "file": "demo_06_the_duty_cycle_sum.py",
       "category": "required",
       "requires": [
-        "demo_02_gke_manifest_and_cluster"
+        "demo_05_the_lane_s_cluster_inspected"
       ],
-      "heading": "demo 03 duty cycle cost",
-      "purpose": "Compute the serving alternatives' duty-cycle cost from the supplied assumptions.",
+      "heading": "The duty-cycle sum",
+      "purpose": "Do it",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         22
       ],
@@ -295,7 +338,7 @@
           "expected": "your pattern: 8 bursts a day of 30 minutes, on 22 days a month\nCloud Run, on demand: each burst, then up to 10 idle minutes - an instance lives 320 minutes a day\n  the duty-cycle sum: 320 min x 22 days = 117.3 hours of 730 (16.1%) x $1.4209 = $166.72, Rs 14,171 a month\nGKE Autopilot, always on, for all 730 hours:\n  us-central1  $0.9558 an hour (node 0.8536 + L4 0.0670 + 8 vCPU 0.0240 + 32 GiB 0.0112): Rs 59,309; with the $0.10 cluster fee, Rs 65,514\n               cheaper than Cloud Run above 67.3% of the month (74.3% with the fee)\n  asia-south1  $1.0113 an hour (node 0.8886 + L4 0.0805 + 8 vCPU 0.0288 + 32 GiB 0.0134): Rs 62,753; with the $0.10 cluster fee, Rs 68,958\n               cheaper than Cloud Run above 71.2% of the month (78.2% with the fee)\nat 16.1%: Cloud Run is cheaper - Rs 14,171 against Rs 59,309 for the cheapest GKE line",
           "adaptations": [],
           "id": "source_22",
-          "function": "step_01_example",
+          "function": "step_01_the_duty_cycle_sum",
           "window": 22,
           "source_line": 722,
           "manual_checkpoint": null
@@ -304,14 +347,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "18.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -340,6 +387,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "18.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -347,14 +414,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 353
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 385
     },
     {
@@ -450,7 +517,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Read the vLLM/GKE definitions even if the optional GKE cluster has not been deployed; absence is not a serving comparison."
+  "prerequisites": "Read the vLLM/GKE definitions even if the optional GKE cluster has not been deployed; absence is not a serving comparison.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_dense_and_sparse_lists.py](demo_01_dense_and_sparse_lists.py) | Compare the two sparse rulers and obtain dense, sparse-only and hybrid index lists. |
-| 3 | [demo_02_rrf_and_ablation.py](demo_02_rrf_and_ablation.py) | Fuse the saved ranks by hand and compare controlled retrieval arms. |
-| 4 | [demo_03_hybrid_candidate.py](demo_03_hybrid_candidate.py) | Create a no-traffic hybrid candidate, compare the two questions and inspect policy limits. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows.py](demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows.py) | The lane runs dense, and two sparse rulers over its own rows |
+| 4 | [demo_04_three_ways_through_the_index_dense_sparse_only_fused.py](demo_04_three_ways_through_the_index_dense_sparse_only_fused.py) | Three ways through the index: dense, sparse only, fused |
+| 5 | [demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order.py](demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order.py) | RRF by hand: the kit's rule reproduces the server's order |
+| 6 | [demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop.py](demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop.py) | The ablation: one knob per arm, no model in the loop |
+| 7 | [demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed.py](demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed.py) | The knob: hybrid on a candidate that takes no traffic, compared, then removed |
+| 8 | [demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure.py](demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure.py) | What hybrid costs, where it cannot go, and what the harness does not measure |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint, the deployed index and the retrieval settings live in the API's environment; steps 3, 4 and 7 use them. An empty value means the setting's default, which the page names where it matters; a name the service does not set is unset rather than exported empty, because the kit's settings class reads an empty variable as a value, and step 8's cell imports the kit. The ablation's sparse leg needs rank_bm25, which the kit's images do not carry because no service runs it; the pip line puts it in the venv once.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -68,9 +74,9 @@ endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876
 mode: dense (default)  backend: vector
 ```
 
-### demo_01_dense_and_sparse_lists.py
+### demo_03_the_lane_runs_dense_and_two_sparse_rulers_over_its_own_rows.py
 
-Compare the two sparse rulers and obtain dense, sparse-only and hybrid index lists.
+The cell reads the text of every current acme row, no vectors, and scores each row twice for the invoice question; then run it again for the notice-period clause. Firestore reads of this size sit inside the free quota.
 
 **`step_01_both_rulers_over_your_rows_rs_0(session)` — The lane runs dense, and two sparse rulers over its own rows / Do it: both rulers over your rows, Rs 0**
 
@@ -94,7 +100,11 @@ ablation leg, BM25: anchor inv_2026_0412 at rank 1 of N
    p40-0      cgst_act_2017.pdf                      16.514
 ```
 
-**`step_02_dense_alpha_0_alpha_0_7(session)` — Three ways through the index: dense, sparse only, fused / Do it: dense, alpha 0, alpha 0.7**
+### demo_04_three_ways_through_the_index_dense_sparse_only_fused.py
+
+Do it: dense, alpha 0, alpha 0.7
+
+**`step_01_dense_alpha_0_alpha_0_7(session)` — Three ways through the index: dense, sparse only, fused / Do it: dense, alpha 0, alpha 0.7**
 
 Do it: dense, alpha 0, alpha 0.7
 
@@ -122,9 +132,9 @@ overlap of 20: dense/hybrid 18 | dense/sparse 2
 saved /tmp/legs52.json for step 5
 ```
 
-### demo_02_rrf_and_ablation.py
+### demo_05_rrf_by_hand_the_kit_s_rule_reproduces_the_server_s_order.py
 
-Fuse the saved ranks by hand and compare controlled retrieval arms.
+Do it: fuse the saved lists, compare with the index's fused list
 
 **`step_01_fuse_the_saved_lists_compare_with_the_inde(session)` — RRF by hand: the kit's rule reproduces the server's order / Do it: fuse the saved lists, compare with the index's fused list**
 
@@ -146,7 +156,11 @@ alpha 0.0 gives the sparse list back: True
 the bound: dense #1 0.01148, dense #20 0.00875, sparse #1 alone 0.00492
 ```
 
-**`step_02_a_wiring_check_then_acme_s_rows_with_a_led(session)` — The ablation: one knob per arm, no model in the loop / Do it: a wiring check, then acme's rows with a ledger**
+### demo_06_the_ablation_one_knob_per_arm_no_model_in_the_loop.py
+
+The first run takes five rows and about a minute; the second takes acme's 40 rows and a few minutes, and appends one JSON line per arm to a ledger you keep. make ablate passes your exported REGION as the embedding region, which is where the API embeds; the direct call is the same line without make.
+
+**`step_01_a_wiring_check_then_acme_s_rows_with_a_led(session)` — The ablation: one knob per arm, no model in the loop / Do it: a wiring check, then acme's rows with a ledger**
 
 The first run takes five rows and about a minute; the second takes acme's 40 rows and a few minutes, and appends one JSON line per arm to a ledger you keep. make ablate passes your exported REGION as the embedding region, which is where the API embeds; the direct call is the same line without make.
 
@@ -170,9 +184,9 @@ the hybrid row says whether a BM25 leg is worth wiring - twenty of the anchors a
 the rag_engine row (--arms all) is 4.3's corpus against the lane's own rows - a managed chunk that splits a clause from its code shows up as a miss.
 ```
 
-### demo_03_hybrid_candidate.py
+### demo_07_the_knob_hybrid_on_a_candidate_that_takes_no_traffic_compared_then_removed.py
 
-Create a no-traffic hybrid candidate, compare the two questions and inspect policy limits.
+Do it: hybrid on a candidate, the same two questions to both revisions, then undo
 
 **`step_01_hybrid_on_a_candidate_the_same_two_questio(session)` — The knob: hybrid on a candidate that takes no traffic, compared, then removed / Do it: hybrid on a candidate, the same two questions to both revisions, then undo**
 
@@ -217,7 +231,11 @@ live mode: dense
 100;documind-api-00042-xyz
 ```
 
-**`step_04_where_hybrid_cannot_go(session)` — What hybrid costs, where it cannot go, and what the harness does not measure / Where hybrid cannot go**
+### demo_08_what_hybrid_costs_where_it_cannot_go_and_what_the_harness_does_not_measure.py
+
+Two places, one at startup and one at runtime. A managed backend has no sparse leg to fuse and the Firestore rung's vector index takes one dense vector and nothing else, so check_retrieval_modes() refuses both pairs before the service serves; a tenant pinned to a managed store under hybrid mode is served from the deployment's backend with a retrieval_pin_ignored line instead. At runtime the chaos rung applies to hybrid as to dense: an unreachable index degrades to the Firestore rung, which is dense only, with a vector_search_fallback line and never a 500. The cell asks the validator the two questions offline.
+
+**`step_01_where_hybrid_cannot_go(session)` — What hybrid costs, where it cannot go, and what the harness does not measure / Where hybrid cannot go**
 
 Two places, one at startup and one at runtime. A managed backend has no sparse leg to fuse and the Firestore rung's vector index takes one dense vector and nothing else, so check_retrieval_modes() refuses both pairs before the service serves; a tenant pinned to a managed store under hybrid mode is served from the deployment's backend with a retrieval_pin_ignored line instead. At runtime the chaos rung applies to hybrid as to dense: an unreachable index degrades to the Firestore rung, which is dense only, with a vector_search_fallback line and never a 500. The cell asks the validator the two questions offline.
 
@@ -232,9 +250,9 @@ rag_engine hybrid -> refused: RETRIEVAL_MODE=hybrid needs RETRIEVAL_BACKEND=vect
 firestore  dense  -> allowed
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -244,6 +262,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `b281bd202e28501bb0b9d45ea85ed4b27f37555d`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

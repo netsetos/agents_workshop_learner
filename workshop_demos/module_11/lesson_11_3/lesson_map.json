@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "11.3",
   "title": "Verify restart recovery and session isolation",
   "source_kind": "main_html",
@@ -134,21 +134,23 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2, s3",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
-        3,
-        9
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        360,
-        414
+        360
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Before you run anything: set up the shell",
@@ -164,7 +166,38 @@
           "window": 3,
           "source_line": 360,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_03_isolation_on_the_kit_s_own_app.py"
+    },
+    {
+      "id": "demo_03_isolation_on_the_kit_s_own_app",
+      "lesson": "11.3",
+      "file": "demo_03_isolation_on_the_kit_s_own_app.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "Isolation, on the kit's own app",
+      "purpose": "Do it: the venv Do it: eight callers",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
+      "windows": [
+        9,
+        11
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
+      "source_lines": [
+        414,
+        423
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Isolation, on the kit's own app",
           "subheading": "Do it: the venv",
@@ -173,36 +206,11 @@
           "expected": "graph-venv ok: fastapi 0.141.1",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_02_the_venv",
+          "function": "step_01_the_venv",
           "window": 9,
           "source_line": 414,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_01_session_isolation.py"
-    },
-    {
-      "id": "demo_01_session_isolation",
-      "lesson": "11.3",
-      "file": "demo_01_session_isolation.py",
-      "category": "required",
-      "requires": [
-        "setup_prepare"
-      ],
-      "heading": "demo 01 session isolation",
-      "purpose": "Exercise eight callers against the kit's own session-isolation implementation.",
-      "anchor": "s3",
-      "windows": [
-        11
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
-      "source_lines": [
-        423
-      ],
-      "offline": true,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
+        },
         {
           "heading": "Isolation, on the kit's own app",
           "subheading": "Do it: eight callers",
@@ -211,33 +219,35 @@
           "expected": "alice gives the word, lesson113        200  Got it: saffron.\n  alice asks for it                      200  You asked me to remember saffron.\n  alice, a new session                   200  I have no word from you in this conversation.\n  bob, her tenant, same session name     200  I have no word from you in this conversation.\n  carol, another tenant, the same name   200  I have no word from you in this conversation.\n  alice, the body naming zeta            200  You asked me to remember saffron.\n  alice, a session id with a colon       422  String should match pattern '^[A-Za-z0-9_-]{1,64}$'\n  the outsider                           403  not a member of any tenant\n  a token that names nobody              401  the bearer token carries no verified email\n  the threads the checkpointer holds:\n    acme:alice@acme.example:lesson113\n    acme:alice@acme.example:lesson113-b\n    acme:bob@acme.example:lesson113\n    zeta:carol@zeta.example:lesson113\n  after a restart, alice asks again      200  I have no word from you in this conversation.",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_01_eight_callers",
+          "function": "step_02_eight_callers",
           "window": 11,
           "source_line": 423,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_restart_recovery.py"
+      "next": "demo_04_a_conversation_across_a_redeploy.py"
     },
     {
-      "id": "demo_02_restart_recovery",
+      "id": "demo_04_a_conversation_across_a_redeploy",
       "lesson": "11.3",
-      "file": "demo_02_restart_recovery.py",
+      "file": "demo_04_a_conversation_across_a_redeploy.py",
       "category": "required",
       "requires": [
-        "demo_01_session_isolation"
+        "demo_03_isolation_on_the_kit_s_own_app"
       ],
-      "heading": "demo 02 restart recovery",
-      "purpose": "Continue a conversation across a redeployment and compare another person's result.",
-      "anchor": "s4, s5",
+      "heading": "A conversation across a redeploy",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
-        14,
-        16
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        512,
-        564
+        512
       ],
       "offline": false,
       "live_verified": false,
@@ -251,11 +261,40 @@
           "expected": "serving documind-chat-00007-x4q\n  langchain lesson113-4242-langchain  \"Got it: saffron. I'll keep it for this conve\"\n  adk       lesson113-4242-adk        \"Got it: saffron. I'll keep it for this conve\"\nserving documind-chat-00008-m2k, redeployed at 2026-09-23T11:20:41Z\n  langchain lesson113-4242-langchain  saffron yes  'You asked me to remember \"saffron\"'\n  adk       lesson113-4242-adk        saffron no   \"I don't have a word from you in th\"",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_01_example",
+          "function": "step_01_a_conversation_across_a_redeploy",
           "window": 14,
           "source_line": 512,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_another_person_finds_nothing.py"
+    },
+    {
+      "id": "demo_05_another_person_finds_nothing",
+      "lesson": "11.3",
+      "file": "demo_05_another_person_finds_nothing.py",
+      "category": "required",
+      "requires": [
+        "demo_04_a_conversation_across_a_redeploy"
+      ],
+      "heading": "Another person finds nothing",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
+      "source_lines": [
+        564
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Another person finds nothing",
           "subheading": "Do it",
@@ -264,25 +303,29 @@
           "expected": "open https://documind-ui-NUMBER.asia-south1.run.app and sign in as you@example.com",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_02_example",
+          "function": "step_01_another_person_finds_nothing",
           "window": 16,
           "source_line": 564,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_recovery_evidence.py"
+      "next": "demo_06_the_rows_behind_both.py"
     },
     {
-      "id": "demo_03_recovery_evidence",
+      "id": "demo_06_the_rows_behind_both",
       "lesson": "11.3",
-      "file": "demo_03_recovery_evidence.py",
+      "file": "demo_06_the_rows_behind_both.py",
       "category": "required",
       "requires": [
-        "demo_02_restart_recovery"
+        "demo_05_another_person_finds_nothing"
       ],
-      "heading": "demo 03 recovery evidence",
-      "purpose": "Read the rows that support both restart recovery and isolation.",
+      "heading": "The rows behind both",
+      "purpose": "Do it",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         18
       ],
@@ -302,7 +345,7 @@
           "expected": "lesson113-4242-langchain: 6 checkpoints, 3 before the redeploy and 3 after\n  lesson113-4242-adk: no rows - the ADK brain keeps none\n  threads of you: 1; the latest is session 3f9c2a1d0b7e, 3 checkpoints\n  threads of documind-ui-sa: 2; the latest is session lesson113-4242-langchain, 6 checkpoints",
           "adaptations": [],
           "id": "source_18",
-          "function": "step_01_example",
+          "function": "step_01_the_rows_behind_both",
           "window": 18,
           "source_line": 587,
           "manual_checkpoint": null
@@ -311,14 +354,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "11.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -347,6 +394,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "11.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -354,14 +421,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 330
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 362
     },
     {
@@ -429,7 +496,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The durable conversation storage from 11.2; the example redeploys the chat service."
+  "prerequisites": "The durable conversation storage from 11.2; the example redeploys the chat service.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

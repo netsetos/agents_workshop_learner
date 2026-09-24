@@ -4,10 +4,12 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+This lesson has no authored main HTML. Its file numbers follow the explicitly listed course-plan experiments; they do not claim an HTML heading match. Run those plan steps in the order below.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [demo_01_inspect_the_keyless_build_identity.py](demo_01_inspect_the_keyless_build_identity.py) | Read the kit's workload-identity and build definitions. Verify repository/ref conditions in the real deployment configuration before submitting a build; no service-account key is generated. |
-| 2 | [demo_02_build_the_deployment_images.py](demo_02_build_the_deployment_images.py) | Use the actual kit build target and the current authenticated identity. Record the build output and image tags; a successful local credential check alone does not prove a deployed GitHub workload-identity run. |
+| Plan step 1 | [demo_01_inspect_the_keyless_build_identity.py](demo_01_inspect_the_keyless_build_identity.py) | Inspect the keyless build identity |
+| Plan step 2 | [demo_02_build_the_deployment_images.py](demo_02_build_the_deployment_images.py) | Build the deployment images |
 
 ## Before starting
 
@@ -23,7 +25,7 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Conditional recovery
 

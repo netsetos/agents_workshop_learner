@@ -1,4 +1,4 @@
-"""Reusable I/O for lesson 3.1; the experiments remain in the three demo files.
+"""Reusable I/O for lesson 3.1; the examples remain in numbered HTML-section files.
 
 Clients are created only inside an active DemoSession. HTTP evidence includes
 status and body, never bearer tokens. Exact-version polling replaces arbitrary
@@ -8,6 +8,7 @@ explicit preparation, roster command and fixture-upload checkpoints.
 from __future__ import annotations
 
 import json
+from functools import wraps
 import os
 import time
 from urllib.error import HTTPError
@@ -18,14 +19,43 @@ from .auth import gcloud
 from .discovery import read_serving
 
 
+def contract_step(function, *, saved_versions=False, local=False):
+    """Bind an authored contract example to the common resumable-step interface.
+
+    The function stays in its lesson file. Clients are created at execution time;
+    the version check reads the exact identities saved by the preceding upload.
+    Example: run_steps(session, [("source_23", contract_step(inspect_indexed_versions,
+    saved_versions=True))]) resumes inspection without repeating the upload.
+    """
+    @wraps(function)
+    def run(session):
+        """Supply this checkpoint's clients/state when run_steps invokes it.
+
+        Example: run(session) calls the wrapped lesson function after prerequisites.
+        """
+        if local:
+            return function()
+        cloud = LessonCloud(session)
+        if saved_versions:
+            return function(cloud, session.state['lesson31_versions'])
+        return function(cloud)
+    return run
+
+
 def require(condition, message):
-    """Keep evidence checks active even if Python is launched with optimization."""
+    """Keep evidence checks active even if Python is launched with optimization.
+    
+    Example: require(answer.get('cache_hit') == 'none', 'Cached answer: rerun setup/prepare.py after cleanup; no fresh retrieval was demonstrated.')
+    """
     if not condition:
         raise RuntimeError(message)
 
 
 def require_fresh_vector(answer):
-    """A backend pin alone cannot prove a fresh index read; inspect its stages."""
+    """A backend pin alone cannot prove a fresh index read; inspect its stages.
+    
+    Example: require_fresh_vector(result)
+    """
     stages = answer.get("stages") or {}
     require(answer.get("cache_hit") == "none", "Cached answer: rerun setup/prepare.py after cleanup; no fresh retrieval was demonstrated.")
     require(stages.get("retrieval_backend") == "vector" and stages.get("pool", 0) > 0
@@ -35,10 +65,12 @@ def require_fresh_vector(answer):
 
 def version_ready(expected, source, claim, chunks):
     """Require this object's generation, content key and complete current rows.
-
+    
     A document claim identifies CONTENT. Its generation can be an earlier upload
     of those same bytes; the source ledger identifies the current generation.
     Empty/missing claims and unrelated indexed documents must never pass.
+    
+    Example: version_ready(expected, r['source'], r['claim'], r['chunks'])
     """
     return bool(source and claim and chunks
                 and source.get("tenant_id") == expected["tenant"]
@@ -58,7 +90,10 @@ def version_ready(expected, source, claim, chunks):
 
 
 def poll_until(read, ready, seconds, interval, *, clock=time.monotonic, sleep=time.sleep):
-    """Poll bounded SDK reads; timeout reports the last observed state, not success."""
+    """Poll bounded SDK reads; timeout reports the last observed state, not success.
+    
+    Example: poll_until(read, lambda r: version_ready(expected, r['source'], r['claim'], r['chunks']), self.session.config.ingest_wait_seconds, self.session.config.poll_seconds)
+    """
     deadline = clock() + seconds
     while True:
         value = read()
@@ -73,10 +108,12 @@ def poll_until(read, ready, seconds, interval, *, clock=time.monotonic, sleep=ti
 
 def prepare_cache(session, disable=True):
     """Save the cache setting before changing it; cleanup can recover a failed update.
-
+    
     This creates a Cloud Run revision only when caching is enabled. It affects
     all tenants using this API. Require a single latest revision serving traffic
     so deployment cannot silently target an inactive revision or split traffic.
+    
+    Example: prepare_cache(session, disable=True) saves the previous setting before an update
     """
     config = session.config
     serving = read_serving(config, config.api_service)
@@ -102,7 +139,10 @@ def prepare_cache(session, disable=True):
 
 
 def restore_cache(session):
-    """Restore only the saved cache variable, preserving other service settings."""
+    """Restore only the saved cache variable, preserving other service settings.
+    
+    Example: restore_cache(session) restores the value saved during preparation
+    """
     saved = session.state.get("lesson31_cache") or {}
     if not saved.get("restore_required"):
         return
@@ -126,10 +166,16 @@ def restore_cache(session):
 
 
 class LessonCloud:
-    """Share authentication, clients and evidence between short teaching functions."""
+    """Share authentication, clients and evidence between short teaching functions.
+    
+    Example: cloud = LessonCloud(session); rows = cloud.chunks("acme", "hr_policy_2026.md")
+    """
 
     def __init__(self, session):
-        """Use the IDE's ADC and explicit project; never inherit a terminal's token."""
+        """Use the IDE's ADC and explicit project; never inherit a terminal's token.
+        
+        Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
+        """
         from google.cloud import firestore, storage
         require(session.config.tenant_id == "acme", "Lesson 3.1 uses the course's acme/zeta fixtures; set tenant_id to acme.")
         self.session = session
@@ -137,15 +183,24 @@ class LessonCloud:
         self.bucket = storage.Client(project=session.config.project, credentials=session.credentials).bucket(session.config.uploads_bucket)
 
     def save(self, name, value):
-        """Retain a complete response locally before selecting a short display view."""
+        """Retain a complete response locally before selecting a short display view.
+        
+        Example: session.save()
+        """
         write_json(self.session.attempt / f"{name}.json", value)
 
     def document(self, path):
-        """Read one document without a multi-minute implicit retry loop."""
+        """Read one document without a multi-minute implicit retry loop.
+        
+        Example: self.document('sources/' + source_id_for(expected['tenant'], expected['name']))
+        """
         return self.db.document(path).get(retry=None, timeout=15).to_dict() or {}
 
     def rows(self, collection, **equal):
-        """Read matching rows; dictionaries preserve IDs beside their payloads."""
+        """Read matching rows; dictionaries preserve IDs beside their payloads.
+        
+        Example: self.rows('chunks', tenant_id=tenant, source_uri=f'gs://{self.bucket.name}/{tenant}/{name}', current=True)
+        """
         from google.cloud.firestore_v1.base_query import FieldFilter
         query = self.db.collection(collection)
         for field, value in equal.items():
@@ -153,11 +208,17 @@ class LessonCloud:
         return {row.id: row.to_dict() for row in query.stream(retry=None, timeout=15)}
 
     def chunks(self, tenant, name):
-        """Retired rows cannot satisfy a current-version or locator demonstration."""
+        """Retired rows cannot satisfy a current-version or locator demonstration.
+        
+        Example: self.chunks(expected['tenant'], expected['name'].split('/', 1)[1])
+        """
         return self.rows("chunks", tenant_id=tenant, source_uri=f"gs://{self.bucket.name}/{tenant}/{name}", current=True)
 
     def request(self, name, path, body=None, identity="member", expected_status=200):
-        """Consume the entire HTTP body, record refusals and enforce the expected status."""
+        """Consume the entire HTTP body, record refusals and enforce the expected status.
+        
+        Example: self.request(name, '/v1/query', body)
+        """
         headers = {"Content-Type": "application/json"}
         require(identity in {"member", "outsider", "none"}, "Unknown request identity.")
         if identity != "none":
@@ -181,7 +242,10 @@ class LessonCloud:
         return {"json": payload, "body": text, "content_type": content_type}
 
     def query(self, name, question, *, filters=None, fresh=True):
-        """Ask ACME and optionally require evidence that Vector Search ran now."""
+        """Ask ACME and optionally require evidence that Vector Search ran now.
+        
+        Example: self.query(name, question, filters, fresh) in the owning lesson/helper context
+        """
         # The API caches tenant settings for 60s. Only wait out what remains of
         # this preparation's propagation window, then still inspect real stages.
         while True:
@@ -201,10 +265,12 @@ class LessonCloud:
 
     def fixture(self, tenant, filename, data, *, upload):
         """Use exact bytes and a generation guard; never overwrite a different file.
-
+        
         UI mode only verifies the existing object. Operator mode creates a missing
         fixture and reuses an identical existing object, avoiding duplicate-upload
         events whose content claim may already have been completed.
+        
+        Example: self.fixture(tenant, filename, data, upload) in the owning lesson/helper context
         """
         from google.api_core.exceptions import NotFound
         from services.ingest.contracts import DocumentContract, sha256_of
@@ -224,10 +290,17 @@ class LessonCloud:
                 "sha256": contract.sha256, "doc_key": contract.doc_key, "generation": str(blob.generation)}
 
     def wait_indexed(self, expected):
-        """Wait for this exact version, then save the ledger, claim and current chunks."""
+        """Wait for this exact version, then save the ledger, claim and current chunks.
+        
+        Example: self.wait_indexed(expected) in the owning lesson/helper context
+        """
         from services.ingest.idempotency import source_id_for
 
         def read():
+            """Read the exact source ledger, content claim and current chunks for the saved object generation.
+            
+            Example: read()
+            """
             source = self.document("sources/" + source_id_for(expected["tenant"], expected["name"]))
             claim = self.document("documents/" + expected["doc_key"])
             chunks = self.chunks(expected["tenant"], expected["name"].split("/", 1)[1])
@@ -244,7 +317,10 @@ class LessonCloud:
                           self.session.config.ingest_wait_seconds, self.session.config.poll_seconds)
 
     def worker_logs(self, expected):
-        """Show only this tenant/key/generation's events; absence is not success evidence."""
+        """Show only this tenant/key/generation's events; absence is not success evidence.
+        
+        Example: self.worker_logs(expected) in the owning lesson/helper context
+        """
         values = {"resource.type": "cloud_run_revision", "resource.labels.service_name": self.session.config.ingest_service,
                   "jsonPayload.tenant": expected["tenant"], "jsonPayload.doc_key": expected["doc_key"],
                   "jsonPayload.generation": expected["generation"]}

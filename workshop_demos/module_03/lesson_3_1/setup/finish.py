@@ -12,7 +12,10 @@ REPEAT = True  # Cleanup is safe to retry after an interrupted deployment.
 
 
 def demonstrate(session):
-    """Attempt each pending restore independently, retaining flags for any failure."""
+    """Attempt each pending restore independently, retaining flags for any failure.
+    
+    Example: demonstrate(session)
+    """
     errors = []
     operations = [lambda: restore_cache(session)]
     if session.state.get("backend_restore_required"):
@@ -30,7 +33,10 @@ def demonstrate(session):
 
 
 def main():
-    """Cleanup bypasses demo prerequisites and can run after a failed preparation."""
+    """Cleanup bypasses demo prerequisites and can run after a failed preparation.
+    
+    Example: main()
+    """
     with DemoSession(__file__, repeat=REPEAT) as session:
         demonstrate(session)
 

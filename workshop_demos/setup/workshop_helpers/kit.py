@@ -6,8 +6,15 @@ import sys
 
 
 class KitAdapter:
+    """Load the installed kit's reconciliation functions directly instead of maintaining a teaching copy.
+    
+    Example: kit = KitAdapter(config.kit_root); report = evaluate_widget(kit, rows)
+    """
     def __init__(self, root):
-        """Load reconcile.py and validate its pure decision functions; record its path and content hash."""
+        """Load reconcile.py and validate its pure decision functions; record its path and content hash.
+        
+        Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
+        """
         self.root = Path(root).resolve()
         self.ingest = self.root / "services" / "ingest"
         self.planner = self._load("reconcile")
@@ -21,7 +28,10 @@ class KitAdapter:
         }
 
     def _load(self, name):
-        """Import one kit module under a path-specific name without copying its implementation."""
+        """Import one kit module under a path-specific name without copying its implementation.
+        
+        Example: self._load('reconcile')
+        """
         path = self.ingest / f"{name}.py"
         if not path.is_file():
             raise FileNotFoundError(f"Required kit module is missing: {path}")
