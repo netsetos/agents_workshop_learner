@@ -4,10 +4,12 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+This lesson has no authored main HTML. Its file numbers follow the explicitly listed course-plan experiments; they do not claim an HTML heading match. Run those plan steps in the order below.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [demo_01_run_the_actual_offline_gate.py](demo_01_run_the_actual_offline_gate.py) | Run the kit's existing validation and offline evaluation. Read PASS/WARN/SKIP honestly: missing Docker or Terraform can mean skipped checks, not ten proven passes. |
-| 2 | [demo_02_break_an_assertion_in_memory.py](demo_02_break_an_assertion_in_memory.py) | Remove must_contain from a copy of one answerable golden row. The real falsifiability checker must reject it; restoring the original copy must pass. No committed dataset is edited. |
+| Plan step 1 | [demo_01_run_the_actual_offline_gate.py](demo_01_run_the_actual_offline_gate.py) | Run the actual offline gate |
+| Plan step 2 | [demo_02_break_an_assertion_in_memory.py](demo_02_break_an_assertion_in_memory.py) | Break an assertion in memory |
 
 ## Before starting
 
@@ -23,7 +25,7 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Functions, observations and effects
 

@@ -1,6 +1,6 @@
 # Run the workshop from your IDE
 
-All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each lesson has **two or three complete teaching demos** (173 in total), with preparation, cleanup and conditional extensions kept separate. There are 288 runnable files including those supporting actions.
+All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each authored HTML section has its own numbered example file. Preparation, numbered cleanup sections and conditional extensions remain explicit. A lesson may therefore have more than three demo files: its HTML headings determine the count.
 
 The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. A `GUIDE.md` beside each converted lesson retains the main HTML prose, including browser actions. Required manual actions also pause at the relevant function; read-only code and diagrams remain reference material.
 
@@ -25,11 +25,15 @@ workshop_demos/
       README.md                 # sequence, heading mapping, purpose and observations
       lesson_map.json           # exact source windows and prerequisite identifiers
       GUIDE.md                  # source prose and UI/wait instructions
-      demo_01_reconciliation_decisions.py
-      demo_02_create_and_repair_a_gap.py
-      demo_03_restore_the_exact_bytes.py
-      setup/prepare.py          # lesson settings/dependencies, when needed
-      setup/finish.py           # restore after success or failure
+      demo_02_how_reconciliation_decides.py
+      demo_03_credentials_backend_and_a_clean_baseline.py
+      demo_04_create_this_chapter_s_note_and_the_checks.py
+      demo_05_prove_the_document_works.py
+      demo_06_delete_the_cloud_file_and_show_the_stale_index.py
+      demo_07_plan_retirement_apply_it_then_prove_zero_drift.py
+      demo_08_restore_the_exact_bytes_and_prove_reuse.py
+      cleanup/demo_12_verify_the_story_and_restore_the_original_backend.py
+      setup/finish.py           # runs remaining cleanup sections after success/failure
       recovery/                 # conditional repairs, chosen explicitly
       optional/                 # independent extensions, chosen explicitly
   module_05/ ... module_18/
@@ -46,7 +50,7 @@ The authoring repository holds this tree under `deploy/workshop_demos/`. The lea
 4. If the workstation lacks the kit's Python dependencies, run `setup/install_dependencies.py` with the appropriate profile. Framework-specific isolated venvs remain at the lesson checkpoints that introduce them.
 5. If Python reports expired ADC, run `setup/authenticate.py` and complete the browser sign-in. `gcloud auth login` and Python application-default credentials are separate identities.
 6. For an **already deployed** project, run `setup/check_setup.py`. Modules 1 and 2 can run their own local/bootstrap examples before the cloud services exist; they do not require that deployed-lane preflight to pass.
-7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside the named `step_...` functions to inspect native Python variables. `demonstrate(session)` shows their complete call sequence. Lesson 3.1 retains its authored descriptive function names.
+7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside the named `step_...` functions to inspect native Python variables. `demonstrate(session)` shows their complete call sequence. Lesson 3.1 retains its authored descriptive function names and uses the same function checkpoints.
 
 All examples retain the course's `acme`, `zeta` and `globex` fixtures. Keep `tenant_id: "acme"` for the standard course sequence; changing that setting does not rewrite hard-coded fixture tenants in source examples. Empty endpoint fields are discovered from the serving service at the relevant lesson checkpoint, rather than guessed or hard-coded.
 
@@ -56,7 +60,7 @@ Each file imports `DemoSession`, resumes this lesson's active run, selects the k
 
 The helper carries the lesson's named variables and Bash functions across separate IDE launches. It checks required predecessors and records failed attempts. You do not need to copy terminal exports into every Run Configuration. Source code that writes specific files such as `/tmp/ans53_5.json` retains those paths so later checkpoints can read them.
 
-Do **not** use Run All. Some checkpoints change or remove the lesson's cloud fixtures, intentionally provoke failures, deploy resources, or restore settings. Follow the required table, choose optional/recovery examples only when appropriate, and run the finish files at the end. Some finish commands appear near the top of the HTML with the instruction “when you finish”; the README schedules them at the end.
+Do **not** use Run All. Some checkpoints change or remove the lesson's cloud fixtures, intentionally provoke failures, deploy resources, or restore settings. Follow the required table, choose optional/recovery examples only when appropriate, and run the finish files at the end. Numbered cleanup files retain their source heading numbers; `setup/finish.py` calls all remaining restorations in the documented order. Some finish commands appear near the top of the HTML with the instruction “when you finish”; the README schedules them at the end.
 
 ## Reruns and evidence
 
@@ -92,3 +96,11 @@ Stage the new kit paths, then regenerate `deploy/INDEX.md` with `python tools/ki
 Use `git pull --ff-only origin main` on your learner checkout. Git removes the old tracked fragments and brings in the grouped demos; do not delete your project directory. Keep local settings, the existing venv, and results. Finish any saved older lesson run before starting a fresh session with the new sequence. Each README names its preparation and finish files.
 
 The grouping is maintained in `tools/workshop_demo_groups.py` in the authoring repo and locked to reviewed HTML digests. An HTML edit requires reviewing its grouping and manual prerequisites; regeneration cannot silently turn a new Copy box into an extra demo. All 1,476 source windows remain accounted for.
+
+## HTML section matching
+
+The number is the visible section badge: HTML section **5** maps to `demo_05_<heading>.py`, not to the fifth runnable file or a Level label. The main HTML links directly to the matching public learner file. Numbering gaps are intentional when a section contains reading, a diagram or UI instructions without runnable Python/CLI examples. Unnumbered setup uses `setup/prepare.py`. Optional and recovery folders use the same heading numbers.
+
+All source windows are recorded in `lesson_map.json` as executable examples, shared setup or read-only reference. Every function/class includes a summary and usage example. The [coverage report](REVIEW.md) records the reviewed main baseline, preserved manual fixes and the limits of offline verification.
+
+After updating an active lesson from an older layout, finish its saved run before starting the new sequence. The session guard rejects old completion markers for new section files. Cleanup retains saved project settings and local evidence.

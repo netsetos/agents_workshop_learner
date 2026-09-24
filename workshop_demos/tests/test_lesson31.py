@@ -181,14 +181,14 @@ class PreparationTests(unittest.TestCase):
             with DemoSession(LESSON / "setup/prepare.py", live=False, config=config):
                 pass
             with self.assertRaisesRegex(RuntimeError, "prerequisite"):
-                with DemoSession(LESSON / "demo_02_document_versions.py", live=False, config=config):
+                with DemoSession(LESSON / "demo_05_version_the_bytes_decide_and_the_same_file_in_two_tenants_proves_it.py", live=False, config=config):
                     pass
             with DemoSession(LESSON / "setup/finish.py", live=False, config=config):
                 pass
 
     def test_actual_kit_local_validators(self):
         with patch.object(sys, "path", [str(KIT), *sys.path]):
-            load_demo("demo_03_citations_chunks_and_filters.py").prove_local_contract_rules()
+            load_demo("demo_08_why_it_is_built_this_way_the_failures_behind_each_rule.py").prove_local_contract_rules()
 
 
 if __name__ == "__main__":

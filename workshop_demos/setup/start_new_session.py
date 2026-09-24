@@ -11,7 +11,10 @@ LESSON = "4.4"
 
 
 def main():
-    """Archive the active pointer after checking known cleanup requirements."""
+    """Archive the active pointer after checking known cleanup requirements.
+    
+    Example: main()
+    """
     config = load_config()
     module = int(LESSON.split(".")[0])
     base = config.results_dir / f"module_{module:02}" / f"lesson_{LESSON.replace('.', '_')}"

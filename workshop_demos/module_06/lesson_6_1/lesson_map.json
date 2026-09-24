@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "6.1",
   "title": "Pack evidence within the context budget",
   "source_kind": "main_html",
@@ -171,9 +171,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -219,29 +223,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_packing_and_token_counts.py"
+      "next": "demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents.py"
     },
     {
-      "id": "demo_01_packing_and_token_counts",
+      "id": "demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents",
       "lesson": "6.1",
-      "file": "demo_01_packing_and_token_counts.py",
+      "file": "demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 packing and token counts",
-      "purpose": "Run the kit packer and compare its estimate with exact model token counts.",
-      "anchor": "s3, s4",
+      "heading": "The budget's lines and the packer, offline on the kit's own documents",
+      "purpose": "Do it: the lines, then two pools twice, then a counter",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        14,
-        17
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
-        482,
-        563
+        482
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
@@ -257,7 +263,36 @@
           "window": 14,
           "source_line": 482,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the.py"
+    },
+    {
+      "id": "demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the",
+      "lesson": "6.1",
+      "file": "demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents"
+      ],
+      "heading": "The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count",
+      "purpose": "Do it: three texts, two counters, one pool twice",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        17
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
+      "source_lines": [
+        563
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count",
           "subheading": "Do it: three texts, two counters, one pool twice",
@@ -266,37 +301,39 @@
           "expected": "NP-03, English     chars   234  estimate  58  counted  1xx  ratio x.xx  (near one)\na clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (well above one)\none Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)\ntwenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter\ntwenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_02_three_texts_two_counters_one_pool_twice",
+          "function": "step_01_three_texts_two_counters_one_pool_twice",
           "window": 17,
           "source_line": 563,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_answer_cost_and_dated_evidence.py"
+      "next": "demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price.py"
     },
     {
-      "id": "demo_02_answer_cost_and_dated_evidence",
+      "id": "demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price",
       "lesson": "6.1",
-      "file": "demo_02_answer_cost_and_dated_evidence.py",
+      "file": "demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price.py",
       "category": "required",
       "requires": [
-        "demo_01_packing_and_token_counts"
+        "demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the"
       ],
-      "heading": "demo 02 answer cost and dated evidence",
-      "purpose": "Inspect an answer's tokens/price and follow a dated document through a stream.",
-      "anchor": "s5, s6",
+      "heading": "One answer's tokens: the packed set's estimate, the model's count, and the price",
+      "purpose": "Do it: one question, its tokens, its price, and the estimate beside it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        21,
-        27
+        21
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
-        624,
-        703
+        624
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "One answer's tokens: the packed set's estimate, the model's count, and the price",
@@ -310,7 +347,36 @@
           "window": 21,
           "source_line": 624,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py"
+    },
+    {
+      "id": "demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati",
+      "lesson": "6.1",
+      "file": "demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py",
+      "category": "required",
+      "requires": [
+        "demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price"
+      ],
+      "heading": "A dated document on the lane: the header's date, the rule in the prompt, the citation event",
+      "purpose": "Do it: the dated revision in, the stream read, revision 1 back",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        27
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
+      "source_lines": [
+        703
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "A dated document on the lane: the header's date, the rule in the prompt, the citation event",
           "subheading": "Do it: the dated revision in, the stream read, revision 1 back",
@@ -319,33 +385,35 @@
           "expected": ">> event chunks embedded effective_from: ingest_reactivated\t3\t0\t2026-10-01\ncitation 1 smoke_note.md | effective_from 2026-10-01 | quote 'The smoke lantern is kept in bay 7 of the Pune wa'\ndone: tokens_in 1xxx | tokens_out 3xx | latency_ms 2xxx | the price is on the row, not in the event\nanswer: The smoke lantern is kept in bay 7 of the Pune warehouse [1], effective from 1 October 2026 ...\n>> event chunks embedded effective_from: ingest_reactivated\t3\t0\tNone",
           "adaptations": [],
           "id": "source_27",
-          "function": "step_02_the_dated_revision_in_the_stream_read_revi",
+          "function": "step_01_the_dated_revision_in_the_stream_read_revi",
           "window": 27,
           "source_line": 703,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_usage_and_small_budget.py"
+      "next": "demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows.py"
     },
     {
-      "id": "demo_03_usage_and_small_budget",
+      "id": "demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows",
       "lesson": "6.1",
-      "file": "demo_03_usage_and_small_budget.py",
+      "file": "demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows.py",
       "category": "required",
       "requires": [
-        "demo_02_answer_cost_and_dated_evidence"
+        "demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati"
       ],
-      "heading": "demo 03 usage and small budget",
-      "purpose": "Read token usage/retry evidence and test an undersized context budget on a candidate.",
-      "anchor": "s7, s8",
+      "heading": "The answer's reserve, the retry, and the tokens on the rows",
+      "purpose": "Do it: the day's tokens, and the retries there were not",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
-        32,
-        34
+        32
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
-        768,
-        797
+        768
       ],
       "offline": false,
       "live_verified": false,
@@ -363,7 +431,36 @@
           "window": 32,
           "source_line": 768,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e.py"
+    },
+    {
+      "id": "demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e",
+      "lesson": "6.1",
+      "file": "demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e.py",
+      "category": "required",
+      "requires": [
+        "demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows"
+      ],
+      "heading": "What the budget costs, the knob on a candidate, and the lines this lesson leaves empty",
+      "purpose": "max_context_tokens is a setting, so the way to see the drop on the live corpus without touching the live service is a candidate revision, as in lessons 5.2 to 5.4: a budget of 600 tokens leaves room for about three handbook sections after the fixed prompt, so the same question at top_k 5 packs three, drops two, logs the drop, and answers from what it packed. The variable is not set on the live service, so the undo removes it and the default returns.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        34
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
+      "source_lines": [
+        797
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "What the budget costs, the knob on a candidate, and the lines this lesson leaves empty",
           "subheading": "The knob: a budget too small, on a candidate that takes no traffic",
@@ -372,7 +469,7 @@
           "expected": "candidate: tokens_in 6xx | citations 2 | answerable True | pool 20\n2026-09-2xT1x:xx:xx.xxxxxxZ\t3\t2\ntemplate now:\n(empty means unset: the default, 8000)",
           "adaptations": [],
           "id": "source_34",
-          "function": "step_02_the_knob_a_budget_too_small_on_a_candidate",
+          "function": "step_01_the_knob_a_budget_too_small_on_a_candidate",
           "window": 34,
           "source_line": 797,
           "manual_checkpoint": null
@@ -381,14 +478,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "6.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -418,6 +519,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "6.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -425,21 +546,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 346
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 378
     },
     {
       "window": 7,
       "label": "expected (a lane deployed by make up may name the model explicitly; the rest are defaults)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 397
     },
     {
@@ -598,7 +719,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

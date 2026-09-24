@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "2.1",
   "title": "Understand the project, identities and resource map",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_read_the_resource_and_identity_definitions.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 read the resource and identity definitions",
+      "heading": "Read the resource and identity definitions",
       "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_read_the_resource_and_identity_definitions"
       ],
-      "heading": "demo 02 create a saved infrastructure plan",
+      "heading": "Create a saved infrastructure plan",
       "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/README.md",
       "source_lines": [
@@ -84,7 +92,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

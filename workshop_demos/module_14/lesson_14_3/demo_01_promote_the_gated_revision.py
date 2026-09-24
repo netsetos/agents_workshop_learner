@@ -1,4 +1,4 @@
-"""Lesson 14.3: demo 01 promote the gated revision
+"""Lesson 14.3: Promote the gated revision
 
 Require the saved gate from 14.2 to match this project, region and candidate, then use the kit's by-name promotion. The kit records the previous serving revision for rollback.
 
@@ -10,6 +10,8 @@ Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
 for expected observations, effects and the next file; GUIDE.md retains prose.
+Example: open this file at the matching HTML heading, Run once, then inspect
+the observations below before continuing to the next numbered section.
 A successful process is not proof that a live result matched the sample.
 
 """
@@ -31,6 +33,9 @@ def step_01_promote_the_gated_revision(session):
     Operations: Course-plan experiment — live deployment.
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe the printed/saved evidence for this heading; a zero exit alone is not proof.
     """
     import json, sys
     from pathlib import Path
@@ -41,14 +46,22 @@ def step_01_promote_the_gated_revision(session):
     session.command(["make", "promote", "PROJECT=" + session.config.project, "REGION=" + session.config.cloud_run_region, "PY=" + sys.executable])
 
 def demonstrate(session):
-    """Run this experiment in order, resuming only completed checkpoints safely."""
+    """Run this section in source order, saving each function's outcome.
+
+    Example: main() opens the configured session and calls demonstrate(session).
+    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    """
     run_steps(session, [
         ('source_demo_01_promote_the_gated_revision', step_01_promote_the_gated_revision),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 
 def main():
-    """Open the lesson session with the selected IDE interpreter and explicit settings."""
+    """Open the lesson session and run this section.
+
+    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
+    Project settings and completed prerequisites come from the shared setup.
+    """
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

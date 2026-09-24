@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "3.4",
   "title": "Write, inspect and verify indexed records",
   "source_kind": "main_html",
@@ -185,9 +185,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index, the endpoint, the BigQuery table and the audit bucket are named in the environment of the two services that use them. Read them once into the shell; every cell below uses these variables. Both reads are read-only.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -230,29 +234,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_index_and_inspect_records.py"
+      "next": "demo_03_write_the_order_the_worker_keeps_and_a_fresh_document_to_watch.py"
     },
     {
-      "id": "demo_01_index_and_inspect_records",
+      "id": "demo_03_write_the_order_the_worker_keeps_and_a_fresh_document_to_watch",
       "lesson": "3.4",
-      "file": "demo_01_index_and_inspect_records.py",
+      "file": "demo_03_write_the_order_the_worker_keeps_and_a_fresh_document_to_watch.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 index and inspect records",
-      "purpose": "Index the chapter note and inspect its exact claim, chunks, source and fingerprint.",
-      "anchor": "s3, s4",
+      "heading": "Write: the order the worker keeps, and a fresh document to watch",
+      "purpose": "The note is the kit's three-clause warehouse memo with one line added: your account and today's date. The line matters. A version is its bytes, and the kit's reindex smoke from Module 2 uploads the unchanged file under another name; if it ever ran on your lane, those bytes are already claimed, and the worker acks the same bytes again as a duplicate and writes nothing. One line of your own makes a new version key. The note is a Markdown file of about 500 characters with no PII: no Document AI, three embeddings, about a hundredth of a paisa. The block reads the index's datapoint count, writes and uploads the note, waits for the worker's line, then waits for the count to move. The index's statistics refresh on their own schedule, so the last wait can take a few minutes. The note is the kit's three-clause warehouse memo with one line added: your account and today's date. The line matters. A version is its bytes, and the kit's reindex smoke from Module 2 uploads the unchanged file under another name; if it ever ran on your lane, those bytes are already claimed, and the worker acks the same bytes again as a duplicate and writes nothing. One line of your own makes a new version key. The note is a Markdown file of about 500 characters with no PII: no Document AI, three embeddings, about a hundredth of a paisa. The block reads the index's datapoint count, writes and uploads the note, waits for the worker's line, then waits for the count to move. The index's statistics refresh on their own schedule, so the last wait can take a few minutes. Two reads tell you what the worker did with an upload. The first lists every ingest event of the last twenty minutes with its verdict: ingest_duplicate means the bytes were already claimed on this lane, ingest_failed carries the error, and no line at all means the event never reached the worker. The second reads the claim for the unchanged demo bytes; its gcs_uri names the object that holds them, which on a lane where the smoke has run is acme/smoke_note.md. The claim is per version, not per name: that is the record this whole step is about.",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         13,
-        15,
-        20
+        15
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         475,
-        494,
-        575
+        494
       ],
       "offline": false,
       "live_verified": false,
@@ -283,7 +289,36 @@
           "window": 15,
           "source_line": 494,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_inspect_firestore_the_claim_the_rows_the_ledger_row_the_fingerprint.py"
+    },
+    {
+      "id": "demo_04_inspect_firestore_the_claim_the_rows_the_ledger_row_the_fingerprint",
+      "lesson": "3.4",
+      "file": "demo_04_inspect_firestore_the_claim_the_rows_the_ledger_row_the_fingerprint.py",
+      "category": "required",
+      "requires": [
+        "demo_03_write_the_order_the_worker_keeps_and_a_fresh_document_to_watch"
+      ],
+      "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
+      "purpose": "Read all four, Rs 0",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        20
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
+      "source_lines": [
+        575
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
           "subheading": "Read all four, Rs 0",
@@ -292,25 +327,29 @@
           "expected": "doc_key from the note's bytes: acme_9c41d0e2b7f5a1...\ndocuments/: {'status': 'indexed', 'chunks': 3, 'reused': 0, 'embedded': 3, 'generation': '1758542671234567', 'tenant_id': 'acme'}\nchunks/: 3 rows | current: 3 | staged: 0 | with expire_at: 0\n  acme:9c41d0e2b7f5...#0  preamble  section=None hash=70501fc5957f vector=768 doc_type=unknown\n  acme:9c41d0e2b7f5...#1  SM-01     section='SM-01 - The smoke lantern' hash=14adcf0a776b vector=768 doc_type=unknown\n  acme:9c41d0e2b7f5...#2  SM-02     section='SM-02 - The ladder' hash=(yours) vector=768 doc_type=unknown\nsources/acme~smoke_note_v1.md: {'status': 'indexed', 'chunks': 3, 'reused': 0, 'embedded': 3, 'retired': 0, 'effective_from': None} | doc_key matches: True | sha256 matches: True\nledger/acme: {'fingerprint': '9b1d5e7a3c2f4680', 'versions': N, 'last_event': 'ingest_ok'}",
           "adaptations": [],
           "id": "source_20",
-          "function": "step_03_read_all_four_rs_0",
+          "function": "step_01_read_all_four_rs_0",
           "window": 20,
           "source_line": 575,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_search_the_written_datapoints.py"
+      "next": "demo_05_inspect_vector_search_the_datapoint_its_restricts_and_a_search_for_itself.py"
     },
     {
-      "id": "demo_02_search_the_written_datapoints",
+      "id": "demo_05_inspect_vector_search_the_datapoint_its_restricts_and_a_search_for_itself",
       "lesson": "3.4",
-      "file": "demo_02_search_the_written_datapoints.py",
+      "file": "demo_05_inspect_vector_search_the_datapoint_its_restricts_and_a_search_for_itself.py",
       "category": "required",
       "requires": [
-        "demo_01_index_and_inspect_records"
+        "demo_04_inspect_firestore_the_claim_the_rows_the_ledger_row_the_fingerprint"
       ],
-      "heading": "demo 02 search the written datapoints",
-      "purpose": "Inspect the deployed index and read/search the note's datapoints.",
+      "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
+      "purpose": "Three things exist: the index, the endpoint, and the deployed index that joins them and is the one that costs money per hour. The kit's make vector-status runs commands/vector-status.sh, which takes the two names from the shell (the variables you exported above) or, failing that, from Terraform's outputs; the two commands below are the same reads by hand. Read one datapoint back, then search for it",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         24,
         27
@@ -351,31 +390,29 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_mirrors_fallback_and_repair.py"
+      "next": "demo_06_inspect_the_mirror_and_the_audit_trail.py"
     },
     {
-      "id": "demo_03_mirrors_fallback_and_repair",
+      "id": "demo_06_inspect_the_mirror_and_the_audit_trail",
       "lesson": "3.4",
-      "file": "demo_03_mirrors_fallback_and_repair.py",
+      "file": "demo_06_inspect_the_mirror_and_the_audit_trail.py",
       "category": "required",
       "requires": [
-        "demo_02_search_the_written_datapoints"
+        "demo_05_inspect_vector_search_the_datapoint_its_restricts_and_a_search_for_itself"
       ],
-      "heading": "demo 03 mirrors fallback and repair",
-      "purpose": "Trace mirror/audit evidence, test the fallback rung and inspect the backfill plan.",
-      "anchor": "s6, s7, s8",
+      "heading": "Inspect the mirror and the audit trail",
+      "purpose": "Read the mirror rows, then the audit event",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
-        32,
-        37,
-        39,
-        43
+        32
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        807,
-        882,
-        914,
-        971
+        807
       ],
       "offline": false,
       "live_verified": false,
@@ -393,7 +430,38 @@
           "window": 32,
           "source_line": 807,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_07_verify_the_two_rungs_that_read_the_records.py"
+    },
+    {
+      "id": "demo_07_verify_the_two_rungs_that_read_the_records",
+      "lesson": "3.4",
+      "file": "demo_07_verify_the_two_rungs_that_read_the_records.py",
+      "category": "required",
+      "requires": [
+        "demo_06_inspect_the_mirror_and_the_audit_trail"
+      ],
+      "heading": "Verify: the two rungs that read the records",
+      "purpose": "The first cell runs the Firestore rung's exact query with the note's own vector: itself first, at a cosine distance of zero. The second asks the API a question only the note can answer and prints which rung served it and how many of the pooled chunks came from the index. The kit ships two read-only commands for exactly this lesson. verify-vector-index.py reads Terraform's outputs and asks the API whether the index Terraform declared is the one attached to the endpoint, streaming, 768-dimensional, deployed exactly once; it needs a checkout with Terraform state, and the two gcloud reads in step 5 are the same checks by hand. check-firestore-fallback.py takes the handbook, proves the ledger row names the bytes in your checkout, and runs the Firestore rung with combined filters in both current modes; it imports the API's own modules, so it needs the API's packages in your venv. Both write their evidence under operator-evidence/. Their tests run offline in a fraction of a second.",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        37,
+        39
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
+      "source_lines": [
+        882,
+        914
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Verify: the two rungs that read the records",
           "subheading": "Do it: the fallback rung, then the API",
@@ -402,7 +470,7 @@
           "expected": "acme:9c41d0e2b7f5...#1  SM-01     cosine distance 0.0000   <- itself\n  acme:9c41d0e2b7f5...#2  SM-02     cosine distance 0.2xxx\n  acme:9c41d0e2b7f5...#0  preamble  cosine distance 0.3xxx\nThe smoke lantern is kept in bay 4 of the Pune warehouse and is checked on the first Monday of every month ... [Source 1]\n[('1', 'smoke_note_v1.md'), ('2', 'smoke_note_v1.md')]\nbackend vector | pool 20 | from the index 20",
           "adaptations": [],
           "id": "source_37",
-          "function": "step_02_the_fallback_rung_then_the_api",
+          "function": "step_01_the_fallback_rung_then_the_api",
           "window": 37,
           "source_line": 882,
           "manual_checkpoint": null
@@ -415,11 +483,40 @@
           "expected": "Project: documind-ai-YOUR-ID (NUMBER)\nTerraform index: projects/documind-ai-YOUR-ID/locations/asia-south1/indexes/1234567890123456789\nTerraform endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876543210987654321\nAPI index: projects/NUMBER/locations/asia-south1/indexes/1234567890123456789\nAPI endpoint: projects/NUMBER/locations/asia-south1/indexEndpoints/9876543210987654321\nIndex dimensions: 768; update method: STREAM_UPDATE\nGlobal vector count: 1745\nDeployment: documind_chunks_v1\nDeployment sync time: 2026-09-22T10:41:07.000Z\nPASS: the expected index is attached to the expected endpoint.\nThis verifies attachment and configuration; ingestion and query checks are separate.\n{\"project\": \"documind-ai-YOUR-ID\", \"collection\": \"chunks\", \"source_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md\", \"source_status\": \"indexed\", \"source_doc_key\": \"acme_...\"}\nVerified HR source: 283 current chunks; stored doc_type='unknown'; manifest doc_type='policy'\nNOTE: stored metadata differs from the manifest. This probe tests the stored equality filters; it does not certify policy classification or repair metadata.\nPASS: combined doc_type='unknown'+kind='text', current=off, rows=5\nPASS: combined doc_type='unknown'+kind='text', current=on, rows=5\nPASS: both Firestore filter modes verified. Evidence: operator-evidence/firestore-combined-filters.json\nRan 8 tests in 0.005s\nOK\nRan 11 tests in 0.006s\nOK",
           "adaptations": [],
           "id": "source_39",
-          "function": "step_03_the_operator_s_checks_two_commands_and_the",
+          "function": "step_02_the_operator_s_checks_two_commands_and_the",
           "window": 39,
           "source_line": 914,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_repair_expire_and_what_the_records_cost.py"
+    },
+    {
+      "id": "demo_08_repair_expire_and_what_the_records_cost",
+      "lesson": "3.4",
+      "file": "demo_08_repair_expire_and_what_the_records_cost.py",
+      "category": "required",
+      "requires": [
+        "demo_07_verify_the_two_rungs_that_read_the_records"
+      ],
+      "heading": "Repair, expire, and what the records cost",
+      "purpose": "Firestore holds everything the index holds and more: the text, the vector, the stamps and the flags. So when the index and the rows disagree, the index is rebuilt from the rows, and nothing in the rows is ever derived from the index. backfill() reads every current row (of one tenant, or all), rebuilds each datapoint with the row's own vector, re-embeds only a row whose stamp fails the check from lesson 3.3, and checkpoints the repaired vector back on the row with optimistic concurrency so that a concurrent writer is never overwritten. Its plan is the count you saw in 3.3; APPLY=1 is the repair, and the two states it exists for are a worker deployed before the index existed and an apply that lost its index and succeeded on the second run.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        43
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
+      "source_lines": [
+        971
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Repair, expire, and what the records cost",
           "subheading": "The rows rebuild the tier",
@@ -428,7 +525,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_43",
-          "function": "step_04_the_rows_rebuild_the_tier",
+          "function": "step_01_the_rows_rebuild_the_tier",
           "window": 43,
           "source_line": 971,
           "manual_checkpoint": null
@@ -437,14 +534,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "3.4",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -473,6 +574,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "3.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -480,21 +601,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 337
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 369
     },
     {
       "window": 7,
       "label": "expected (your ids differ; a name may carry the project id or its number)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 389
     },
     {
@@ -709,7 +830,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Module 2's deployed Vector Search index, Firestore indexes and audit/mirror configuration."
+  "prerequisites": "Module 2's deployed Vector Search index, Firestore indexes and audit/mirror configuration.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

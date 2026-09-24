@@ -13,6 +13,10 @@ PUBLIC_KEYS = {
 
 @dataclass(frozen=True)
 class ServingConfig:
+    """Describe the inspected traffic-serving revision and its permitted literal environment values.
+    
+    Example: ServingConfig(service_name, revision, service.get('status', {}).get('url', ''), env)
+    """
     service: str
     revision: str
     service_url: str
@@ -20,7 +24,10 @@ class ServingConfig:
 
 
 def select_revision(service, override=""):
-    """Select the sole traffic-serving revision; reject split traffic or a stale explicit override."""
+    """Select the sole traffic-serving revision; reject split traffic or a stale explicit override.
+    
+    Example: select_revision(service, revision_override)
+    """
     active = {item.get("revisionName") for item in service.get("status", {}).get("traffic", [])
               if item.get("percent", 0) > 0}
     if len(active) != 1 or None in active:
@@ -32,7 +39,10 @@ def select_revision(service, override=""):
 
 
 def read_serving(config, service_name, revision_override=""):
-    """Read the chosen revision and retain only reviewed literal environment values."""
+    """Read the chosen revision and retain only reviewed literal environment values.
+    
+    Example: serving = read_serving(config, "documind-api")
+    """
     flags = (f"--project={config.project}", f"--region={config.cloud_run_region}", "--format=json")
     service = json.loads(gcloud("run", "services", "describe", service_name, *flags))
     revision = select_revision(service, revision_override)

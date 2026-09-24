@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "4.4",
   "title": "Restore documents and reconcile index differences",
   "source_kind": "main_html",
@@ -141,14 +141,18 @@
   ],
   "demos": [
     {
-      "id": "demo_01_reconciliation_decisions",
+      "id": "demo_02_how_reconciliation_decides",
       "lesson": "4.4",
-      "file": "demo_01_reconciliation_decisions.py",
+      "file": "demo_02_how_reconciliation_decides.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 reconciliation decisions",
-      "purpose": "Use the actual planner for the queued example and interactive widget's scenarios.",
+      "heading": "How reconciliation decides",
+      "purpose": "Explain the page's two-PDF illustration. Reconciliation leaves the matching queued generation to the batch lane; only the new Act contributes to drift. Reproduce the five default widget documents before exploring its known-bytes and queued variations. The real plan(), decide_bytes() and drift_of() functions make the decisions.",
       "anchor": "s2",
+      "anchors": [
+        "s2"
+      ],
+      "section_number": 2,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
@@ -186,19 +190,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "setup/prepare.py"
+      "next": "demo_03_credentials_backend_and_a_clean_baseline.py"
     },
     {
-      "id": "setup_prepare",
+      "id": "demo_03_credentials_backend_and_a_clean_baseline",
       "lesson": "4.4",
-      "file": "setup/prepare.py",
+      "file": "demo_03_credentials_backend_and_a_clean_baseline.py",
       "category": "required",
       "requires": [
-        "demo_01_reconciliation_decisions"
+        "demo_02_how_reconciliation_decides"
       ],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
+      "heading": "Credentials, backend and a clean baseline",
+      "purpose": "Do this before presenting. Stop at an error; do not paste the next stage until its checkpoint passes. Use the same operator shell and virtual environment throughout. Create a chapter directory before changing the backend, save its original pin, and run the offline planner check. These files are local demo state; keep them out of commits.",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         10
       ],
@@ -226,39 +234,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_create_and_repair_a_gap.py"
+      "next": "demo_04_create_this_chapter_s_note_and_the_checks.py"
     },
     {
-      "id": "demo_02_create_and_repair_a_gap",
+      "id": "demo_04_create_this_chapter_s_note_and_the_checks",
       "lesson": "4.4",
-      "file": "demo_02_create_and_repair_a_gap.py",
+      "file": "demo_04_create_this_chapter_s_note_and_the_checks.py",
       "category": "required",
       "requires": [
-        "setup_prepare"
+        "demo_03_credentials_backend_and_a_clean_baseline"
       ],
-      "heading": "demo 02 create and repair a gap",
-      "purpose": "Create the chapter fixture, prove it works, remove its object and reconcile retirement.",
-      "anchor": "s4, s5, s6, s7",
+      "heading": "Create this chapter's note and the checks",
+      "purpose": "A fresh name, a new fact and an unchanged local copy remove the dependencies on earlier lessons. This chapter does not use ~/lesson34_note.md or the smoke-lantern question. Another smoke note may still answer that question even after one copy is retired. Our primary checks are the exact source name, its object generation and its citation; a bare answerable True is insufficient. The helper block is preparation, not a slide to type live. It stops on failed uploads, polls the exact source and generation, checks citations, and refuses to apply an unexplained tenant-wide plan. The log filter includes both the version key and generation, so another acme upload cannot satisfy the wait. To resume after reopening a shell, first run the shared shell setup, then source this directory's session.env and helpers.sh; do not create a new note midway through a restore.",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        20
+        12
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         522,
-        544,
-        645,
-        647,
-        660,
-        667,
-        669,
-        698
+        544
       ],
       "offline": false,
       "live_verified": false,
@@ -289,7 +289,38 @@
           "window": 12,
           "source_line": 544,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_prove_the_document_works.py"
+    },
+    {
+      "id": "demo_05_prove_the_document_works",
+      "lesson": "4.4",
+      "file": "demo_05_prove_the_document_works.py",
+      "category": "required",
+      "requires": [
+        "demo_04_create_this_chapter_s_note_and_the_checks"
+      ],
+      "heading": "Prove the document works",
+      "purpose": "Show the source ledger in the UI and the same source's evidence from the API. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. Checkpoint: source indexed at this upload's generation, a cited answer naming locker Q7 in Jaipur, and no pending repair. If the source is indexed but the query has not caught up, repeat ch44_ask present and inspect its evidence; do not upload again merely to wait.",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        13,
+        14
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
+      "source_lines": [
+        645,
+        647
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Prove the document works",
           "subheading": "Prove the document works",
@@ -298,7 +329,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_03_prove_the_document_works",
+          "function": "step_01_prove_the_document_works",
           "window": 13,
           "source_line": 645,
           "manual_checkpoint": null
@@ -311,11 +342,40 @@
           "expected": "",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_04_prove_the_document_works",
+          "function": "step_02_prove_the_document_works",
           "window": 14,
           "source_line": 647,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_delete_the_cloud_file_and_show_the_stale_index.py"
+    },
+    {
+      "id": "demo_06_delete_the_cloud_file_and_show_the_stale_index",
+      "lesson": "4.4",
+      "file": "demo_06_delete_the_cloud_file_and_show_the_stale_index.py",
+      "category": "required",
+      "requires": [
+        "demo_05_prove_the_document_works"
+      ],
+      "heading": "Delete the cloud file and show the stale index",
+      "purpose": "The local original stays safe. Delete only this demonstration's live object.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        15
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
+      "source_lines": [
+        660
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Delete the cloud file and show the stale index",
           "subheading": "Delete the cloud file and show the stale index",
@@ -324,11 +384,44 @@
           "expected": "",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_05_delete_the_cloud_file_and_show_the_stale_i",
+          "function": "step_01_delete_the_cloud_file_and_show_the_stale_i",
           "window": 15,
           "source_line": 660,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_07_plan_retirement_apply_it_then_prove_zero_drift.py"
+    },
+    {
+      "id": "demo_07_plan_retirement_apply_it_then_prove_zero_drift",
+      "lesson": "4.4",
+      "file": "demo_07_plan_retirement_apply_it_then_prove_zero_drift.py",
+      "category": "required",
+      "requires": [
+        "demo_06_delete_the_cloud_file_and_show_the_stale_index"
+      ],
+      "heading": "Plan retirement, apply it, then prove zero drift",
+      "purpose": "Keep preview, mutation and verification as three visible operations. Keep preview, mutation and verification as three visible operations. The action must be retire for $SOURCE, with reason gone from the bucket, applied: false and drift 1. A plan is evidence, not a repair. Pause other uploads during the demonstration; the kit's apply does not execute a saved, source-scoped plan. The code that applies the plan",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        16,
+        17,
+        20
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
+      "source_lines": [
+        667,
+        669,
+        698
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Plan retirement, apply it, then prove zero drift",
           "subheading": "Plan retirement, apply it, then prove zero drift",
@@ -337,7 +430,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_06_plan_retirement_apply_it_then_prove_zero_d",
+          "function": "step_01_plan_retirement_apply_it_then_prove_zero_d",
           "window": 16,
           "source_line": 667,
           "manual_checkpoint": null
@@ -350,7 +443,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_07_plan_retirement_apply_it_then_prove_zero_d",
+          "function": "step_02_plan_retirement_apply_it_then_prove_zero_d",
           "window": 17,
           "source_line": 669,
           "manual_checkpoint": null
@@ -363,25 +456,29 @@
           "expected": "",
           "adaptations": [],
           "id": "source_20",
-          "function": "step_08_the_code_that_applies_the_plan",
+          "function": "step_03_the_code_that_applies_the_plan",
           "window": 20,
           "source_line": 698,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_restore_the_exact_bytes.py"
+      "next": "demo_08_restore_the_exact_bytes_and_prove_reuse.py"
     },
     {
-      "id": "demo_03_restore_the_exact_bytes",
+      "id": "demo_08_restore_the_exact_bytes_and_prove_reuse",
       "lesson": "4.4",
-      "file": "demo_03_restore_the_exact_bytes.py",
+      "file": "demo_08_restore_the_exact_bytes_and_prove_reuse.py",
       "category": "required",
       "requires": [
-        "demo_02_create_and_repair_a_gap"
+        "demo_07_plan_retirement_apply_it_then_prove_zero_drift"
       ],
-      "heading": "demo 03 restore the exact bytes",
-      "purpose": "Restore the saved bytes and verify reactivation, reuse and zero drift.",
+      "heading": "Restore the exact bytes and prove reuse",
+      "purpose": "A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.",
       "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
       "windows": [
         21,
         22
@@ -425,14 +522,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "recovery_inspect_incomplete_restore",
+      "id": "recovery_demo_08_restore_the_exact_bytes_and_prove_reuse",
       "lesson": "4.4",
-      "file": "recovery/inspect_incomplete_restore.py",
+      "file": "recovery/demo_08_restore_the_exact_bytes_and_prove_reuse.py",
       "category": "recovery",
       "requires": [],
-      "heading": "inspect incomplete restore",
-      "purpose": "Explicit recovery: inspect incomplete restore",
+      "heading": "Restore the exact bytes and prove reuse",
+      "purpose": "You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration. Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.",
       "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
       "windows": [
         25
       ],
@@ -461,16 +562,20 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "optional_incomplete_undo",
+      "id": "optional_demo_09_watch_an_incomplete_undo_refuse",
       "lesson": "4.4",
-      "file": "optional/incomplete_undo.py",
+      "file": "optional/demo_09_watch_an_incomplete_undo_refuse.py",
       "category": "optional",
       "requires": [
-        "demo_03_restore_the_exact_bytes"
+        "demo_08_restore_the_exact_bytes_and_prove_reuse"
       ],
-      "heading": "incomplete undo",
-      "purpose": "Explicit optional: incomplete undo",
+      "heading": "Watch an incomplete undo refuse",
+      "purpose": "Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. Checkpoint: a reactivate_incomplete event explains the shortfall, followed by fresh ingest_ok; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude reactivate_incomplete because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.",
       "anchor": "s9",
+      "anchors": [
+        "s9"
+      ],
+      "section_number": 9,
       "windows": [
         26,
         27,
@@ -544,16 +649,20 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "optional_nightly_job_and_backfill",
+      "id": "optional_demo_10_the_nightly_job_the_number_it_ends_on_and_the_lane_older_than_the_ledger",
       "lesson": "4.4",
-      "file": "optional/nightly_job_and_backfill.py",
+      "file": "optional/demo_10_the_nightly_job_the_number_it_ends_on_and_the_lane_older_than_the_ledger.py",
       "category": "optional",
       "requires": [
-        "demo_03_restore_the_exact_bytes"
+        "demo_08_restore_the_exact_bytes_and_prove_reuse"
       ],
-      "heading": "nightly job and backfill",
-      "purpose": "Explicit optional: nightly job and backfill",
+      "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
+      "purpose": "Read the deployed job and backfill plan",
       "anchor": "s10",
+      "anchors": [
+        "s10"
+      ],
+      "section_number": 10,
       "windows": [
         35
       ],
@@ -582,16 +691,20 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "optional_module_validation",
+      "id": "optional_demo_11_run_the_broader_module_validation_separately",
       "lesson": "4.4",
-      "file": "optional/module_validation.py",
+      "file": "optional/demo_11_run_the_broader_module_validation_separately.py",
       "category": "optional",
       "requires": [
-        "demo_03_restore_the_exact_bytes"
+        "demo_08_restore_the_exact_bytes_and_prove_reuse"
       ],
-      "heading": "module validation",
-      "purpose": "Explicit optional: module validation",
+      "heading": "Run the broader module validation separately",
+      "purpose": "The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair. make smoke-reindex uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.",
       "anchor": "s11",
+      "anchors": [
+        "s11"
+      ],
+      "section_number": 11,
       "windows": [
         39
       ],
@@ -620,20 +733,26 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "recovery_repair_module_baseline",
+      "id": "recovery_demo_11_run_the_broader_module_validation_separately",
       "lesson": "4.4",
-      "file": "recovery/repair_module_baseline.py",
+      "file": "recovery/demo_11_run_the_broader_module_validation_separately.py",
       "category": "recovery",
       "requires": [],
-      "heading": "repair module baseline",
-      "purpose": "Explicit recovery: repair module baseline",
+      "heading": "Run the broader module validation separately",
+      "purpose": "The smoke leaves its own fixture indexed. That does not demonstrate that $SOURCE was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, acme/smoke_note_v1.md, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.",
       "anchor": "s11",
+      "anchors": [
+        "s11"
+      ],
+      "section_number": 11,
       "windows": [
-        40
+        40,
+        42
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
-        980
+        980,
+        990
       ],
       "offline": false,
       "live_verified": false,
@@ -653,30 +772,7 @@
           "window": 40,
           "source_line": 980,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
-    },
-    {
-      "id": "recovery_run_isolated_reindex_smoke",
-      "lesson": "4.4",
-      "file": "recovery/run_isolated_reindex_smoke.py",
-      "category": "recovery",
-      "requires": [],
-      "heading": "run isolated reindex smoke",
-      "purpose": "Explicit recovery: run isolated reindex smoke",
-      "anchor": "s11",
-      "windows": [
-        42
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
-      "source_lines": [
-        990
-      ],
-      "offline": true,
-      "live_verified": false,
-      "implementation": "native_python",
-      "steps": [
+        },
         {
           "heading": "Run the broader module validation separately",
           "subheading": "Run the broader module validation separately",
@@ -687,7 +783,7 @@
             "Restore the temporarily withdrawn smoke note even when the separate smoke fails."
           ],
           "id": "source_42",
-          "function": "step_01_run_the_broader_module_validation_separate",
+          "function": "step_02_run_the_broader_module_validation_separate",
           "window": 42,
           "source_line": 990,
           "manual_checkpoint": null
@@ -696,14 +792,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "cleanup_demo_12_verify_the_story_and_restore_the_original_backend",
       "lesson": "4.4",
-      "file": "setup/finish.py",
+      "file": "cleanup/demo_12_verify_the_story_and_restore_the_original_backend.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
+      "heading": "Verify the story and restore the original backend",
+      "purpose": "At lesson end: Use the state transition and the exact evidence, then return the tenant to its saved configuration. Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.",
       "anchor": "s12",
+      "anchors": [
+        "s12"
+      ],
+      "section_number": 12,
       "windows": [
         44
       ],
@@ -732,6 +832,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "4.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -788,7 +908,7 @@
       "window": 9,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 467
     },
     {
@@ -891,7 +1011,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "A deployed lane. This lesson creates its own smoke-note fixture and does not depend on ~/lesson34_note.md."
+  "prerequisites": "A deployed lane. This lesson creates its own smoke-note fixture and does not depend on ~/lesson34_note.md.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

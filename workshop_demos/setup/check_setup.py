@@ -5,7 +5,10 @@ from workshop_helpers.discovery import read_serving
 
 
 def main():
-    """Read the deployed lane and save the observed service configuration; create no resources."""
+    """Read the deployed lane and save the observed service configuration; create no resources.
+    
+    Example: main()
+    """
     with DemoContext("00", live=True) as demo:
         print("Kit:", demo.kit.provenance["path"])
         snapshot = demo.db.document(f"tenant_settings/{demo.config.tenant_id}").get(retry=None, timeout=15)

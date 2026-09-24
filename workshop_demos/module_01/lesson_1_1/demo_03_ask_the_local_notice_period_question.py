@@ -1,4 +1,4 @@
-"""Lesson 1.1: demo 03 ask the local notice period question
+"""Lesson 1.1: Ask the local notice-period question
 
 Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.
 
@@ -10,6 +10,8 @@ Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
 for expected observations, effects and the next file; GUIDE.md retains prose.
+Example: open this file at the matching HTML heading, Run once, then inspect
+the observations below before continuing to the next numbered section.
 A successful process is not proof that a live result matched the sample.
 
 """
@@ -31,6 +33,9 @@ def step_01_ask_the_local_notice_period_question(session):
     Operations: Course-plan experiment — local Python/kit inspection.
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe: A local answer with citations. Starting the server is a prerequisite even though it runs in another console.
     """
     import json, urllib.request
     request = urllib.request.Request("http://127.0.0.1:8081/v1/chat", method="POST",
@@ -42,14 +47,22 @@ def step_01_ask_the_local_notice_period_question(session):
     assert answer.get("citations"), "The local answer has no citations; inspect its retrieval trace."
 
 def demonstrate(session):
-    """Run this experiment in order, resuming only completed checkpoints safely."""
+    """Run this section in source order, saving each function's outcome.
+
+    Example: main() opens the configured session and calls demonstrate(session).
+    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    """
     run_steps(session, [
         ('source_demo_03_ask_the_local_notice_period_question', step_01_ask_the_local_notice_period_question),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 
 def main():
-    """Open the lesson session with the selected IDE interpreter and explicit settings."""
+    """Open the lesson session and run this section.
+
+    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
+    Project settings and completed prerequisites come from the shared setup.
+    """
     with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 

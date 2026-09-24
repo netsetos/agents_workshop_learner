@@ -7,58 +7,58 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [2.1: Understand the project, identities and resource map](module_02/lesson_2_1/README.md) — 2 files; course_plan_and_kit
 - [2.2: Review and start the prepared deployment](module_02/lesson_2_2/README.md) — 4 files; course_plan_and_kit
 - [2.3: Check readiness, save progress and close the session](module_02/lesson_2_3/README.md) — 3 files; course_plan_and_kit
-- [3.1: Understand source, tenant, page and chunk contracts](module_03/lesson_3_1/README.md) — 5 files; main_html
-- [3.2: Parse documents and compare chunk boundaries](module_03/lesson_3_2/README.md) — 5 files; main_html
-- [3.3: Create and validate compatible embeddings](module_03/lesson_3_3/README.md) — 5 files; main_html
-- [3.4: Write, inspect and verify indexed records](module_03/lesson_3_4/README.md) — 5 files; main_html
-- [4.1: Follow upload events, retries, dead-letter handling and the batch lane](module_04/lesson_4_1/README.md) — 6 files; main_html
-- [4.2: Reindex a changed section and measure embedding reuse](module_04/lesson_4_2/README.md) — 5 files; main_html
-- [4.3: Publish versions, retire documents and reject stale events](module_04/lesson_4_3/README.md) — 6 files; main_html
-- [4.4: Restore documents and reconcile index differences](module_04/lesson_4_4/README.md) — 11 files; main_html
-- [5.1: Apply query embeddings and authorized filters](module_05/lesson_5_1/README.md) — 6 files; main_html
-- [5.2: Compare dense and hybrid retrieval](module_05/lesson_5_2/README.md) — 5 files; main_html
-- [5.3: Rerank and inspect retrieved candidates](module_05/lesson_5_3/README.md) — 5 files; main_html
-- [5.4: Test fallback without losing tenant or metadata filters](module_05/lesson_5_4/README.md) — 5 files; main_html
-- [6.1: Pack evidence within the context budget](module_06/lesson_6_1/README.md) — 5 files; main_html
-- [6.2: Generate structured answers, citations and refusals](module_06/lesson_6_2/README.md) — 5 files; main_html
-- [6.3: Stream answers and handle failures](module_06/lesson_6_3/README.md) — 5 files; main_html
-- [6.4: Complete the Streamlit upload-to-answer journey](module_06/lesson_6_4/README.md) — 5 files; main_html
-- [7.1: Build a useful evaluation dataset](module_07/lesson_7_1/README.md) — 6 files; main_html
-- [7.2: Separate offline checks, live scoring and LLM judgment](module_07/lesson_7_2/README.md) — 5 files; main_html
-- [7.3: Compare one controlled change against a baseline](module_07/lesson_7_3/README.md) — 5 files; main_html
-- [8.1: Trace authenticated identity into tenant membership](module_08/lesson_8_1/README.md) — 5 files; main_html
-- [8.2: Test valid access, denied access and cross-tenant requests](module_08/lesson_8_2/README.md) — 5 files; main_html
-- [8.3: Exercise DLP, guardrails and audit behavior](module_08/lesson_8_3/README.md) — 5 files; main_html
-- [9.1: Compare context caching and answer caching](module_09/lesson_9_1/README.md) — 5 files; main_html
-- [9.2: Test cache scope, configuration changes and freshness](module_09/lesson_9_2/README.md) — 5 files; main_html
-- [9.3: Measure latency, avoided calls and false cache hits](module_09/lesson_9_3/README.md) — 6 files; main_html
-- [10.1: Understand tool contracts and the direct agent loop](module_10/lesson_10_1/README.md) — 5 files; main_html
-- [10.2: Implement the main LangGraph workflow](module_10/lesson_10_2/README.md) — 5 files; main_html
-- [10.3: Diagnose tool arguments, access failures and timeouts](module_10/lesson_10_3/README.md) — 5 files; main_html
-- [10.4: Compare the LangChain and ADK adapters](module_10/lesson_10_4/README.md) — 5 files; main_html
-- [11.1: Distinguish agent state, conversation history and knowledge](module_11/lesson_11_1/README.md) — 5 files; main_html
-- [11.2: Configure and inspect durable conversation storage](module_11/lesson_11_2/README.md) — 5 files; main_html
-- [11.3: Verify restart recovery and session isolation](module_11/lesson_11_3/README.md) — 5 files; main_html
-- [12.1: Expose, discover and invoke MCP tools](module_12/lesson_12_1/README.md) — 5 files; main_html
-- [12.2: Deploy MCP and verify authorized access](module_12/lesson_12_2/README.md) — 6 files; main_html
-- [12.3: Trace the implemented A2A peer and its permissions](module_12/lesson_12_3/README.md) — 5 files; main_html
-- [13.1: Debug a wrong answer through the complete pipeline](module_13/lesson_13_1/README.md) — 5 files; main_html
-- [13.2: Reconcile usage events, reports and alerts](module_13/lesson_13_2/README.md) — 5 files; main_html
-- [13.3: Exercise model routing, budgets and shutdown controls](module_13/lesson_13_3/README.md) — 5 files; main_html
+- [3.1: Understand source, tenant, page and chunk contracts](module_03/lesson_3_1/README.md) — 8 files; main_html
+- [3.2: Parse documents and compare chunk boundaries](module_03/lesson_3_2/README.md) — 8 files; main_html
+- [3.3: Create and validate compatible embeddings](module_03/lesson_3_3/README.md) — 9 files; main_html
+- [3.4: Write, inspect and verify indexed records](module_03/lesson_3_4/README.md) — 9 files; main_html
+- [4.1: Follow upload events, retries, dead-letter handling and the batch lane](module_04/lesson_4_1/README.md) — 10 files; main_html
+- [4.2: Reindex a changed section and measure embedding reuse](module_04/lesson_4_2/README.md) — 8 files; main_html
+- [4.3: Publish versions, retire documents and reject stale events](module_04/lesson_4_3/README.md) — 9 files; main_html
+- [4.4: Restore documents and reconcile index differences](module_04/lesson_4_4/README.md) — 14 files; main_html
+- [5.1: Apply query embeddings and authorized filters](module_05/lesson_5_1/README.md) — 9 files; main_html
+- [5.2: Compare dense and hybrid retrieval](module_05/lesson_5_2/README.md) — 9 files; main_html
+- [5.3: Rerank and inspect retrieved candidates](module_05/lesson_5_3/README.md) — 9 files; main_html
+- [5.4: Test fallback without losing tenant or metadata filters](module_05/lesson_5_4/README.md) — 9 files; main_html
+- [6.1: Pack evidence within the context budget](module_06/lesson_6_1/README.md) — 9 files; main_html
+- [6.2: Generate structured answers, citations and refusals](module_06/lesson_6_2/README.md) — 9 files; main_html
+- [6.3: Stream answers and handle failures](module_06/lesson_6_3/README.md) — 8 files; main_html
+- [6.4: Complete the Streamlit upload-to-answer journey](module_06/lesson_6_4/README.md) — 8 files; main_html
+- [7.1: Build a useful evaluation dataset](module_07/lesson_7_1/README.md) — 10 files; main_html
+- [7.2: Separate offline checks, live scoring and LLM judgment](module_07/lesson_7_2/README.md) — 8 files; main_html
+- [7.3: Compare one controlled change against a baseline](module_07/lesson_7_3/README.md) — 8 files; main_html
+- [8.1: Trace authenticated identity into tenant membership](module_08/lesson_8_1/README.md) — 8 files; main_html
+- [8.2: Test valid access, denied access and cross-tenant requests](module_08/lesson_8_2/README.md) — 8 files; main_html
+- [8.3: Exercise DLP, guardrails and audit behavior](module_08/lesson_8_3/README.md) — 10 files; main_html
+- [9.1: Compare context caching and answer caching](module_09/lesson_9_1/README.md) — 9 files; main_html
+- [9.2: Test cache scope, configuration changes and freshness](module_09/lesson_9_2/README.md) — 9 files; main_html
+- [9.3: Measure latency, avoided calls and false cache hits](module_09/lesson_9_3/README.md) — 8 files; main_html
+- [10.1: Understand tool contracts and the direct agent loop](module_10/lesson_10_1/README.md) — 9 files; main_html
+- [10.2: Implement the main LangGraph workflow](module_10/lesson_10_2/README.md) — 6 files; main_html
+- [10.3: Diagnose tool arguments, access failures and timeouts](module_10/lesson_10_3/README.md) — 6 files; main_html
+- [10.4: Compare the LangChain and ADK adapters](module_10/lesson_10_4/README.md) — 7 files; main_html
+- [11.1: Distinguish agent state, conversation history and knowledge](module_11/lesson_11_1/README.md) — 7 files; main_html
+- [11.2: Configure and inspect durable conversation storage](module_11/lesson_11_2/README.md) — 7 files; main_html
+- [11.3: Verify restart recovery and session isolation](module_11/lesson_11_3/README.md) — 7 files; main_html
+- [12.1: Expose, discover and invoke MCP tools](module_12/lesson_12_1/README.md) — 8 files; main_html
+- [12.2: Deploy MCP and verify authorized access](module_12/lesson_12_2/README.md) — 8 files; main_html
+- [12.3: Trace the implemented A2A peer and its permissions](module_12/lesson_12_3/README.md) — 7 files; main_html
+- [13.1: Debug a wrong answer through the complete pipeline](module_13/lesson_13_1/README.md) — 7 files; main_html
+- [13.2: Reconcile usage events, reports and alerts](module_13/lesson_13_2/README.md) — 7 files; main_html
+- [13.3: Exercise model routing, budgets and shutdown controls](module_13/lesson_13_3/README.md) — 7 files; main_html
 - [14.1: Build and deploy using keyless identity](module_14/lesson_14_1/README.md) — 3 files; course_plan_and_kit
 - [14.2: Evaluate and gate the exact candidate revision](module_14/lesson_14_2/README.md) — 2 files; course_plan_and_kit
 - [14.3: Promote, roll back and repair a controlled failure](module_14/lesson_14_3/README.md) — 2 files; course_plan_and_kit
 - [14.4: Complete the independent capstone and operational handover](module_14/lesson_14_4/README.md) — 2 files; course_plan_and_kit
-- [15.1: Build graph evidence from source documents](module_15/lesson_15_1/README.md) — 5 files; main_html
-- [15.2: Compare Firestore and Spanner graph paths](module_15/lesson_15_2/README.md) — 6 files; main_html
-- [15.3: Configure and query managed retrieval mirrors](module_15/lesson_15_3/README.md) — 5 files; main_html
-- [15.4: Compare quality and test update/withdrawal freshness](module_15/lesson_15_4/README.md) — 5 files; main_html
-- [16.1: Query a video clip and validate media citations](module_16/lesson_16_1/README.md) — 5 files; main_html
-- [16.2: Exercise implemented Studio and voice features](module_16/lesson_16_2/README.md) — 5 files; main_html
-- [17.1: Decide whether tuning is justified and prepare data](module_17/lesson_17_1/README.md) — 5 files; main_html
-- [17.2: Validate sanitized datasets and run managed tuning](module_17/lesson_17_2/README.md) — 5 files; main_html
-- [17.3: Compare the tuned candidate with an uncontaminated baseline](module_17/lesson_17_3/README.md) — 5 files; main_html
-- [18.1: Trace and authorize gateway routes](module_18/lesson_18_1/README.md) — 5 files; main_html
-- [18.2: Serve a supplied or stock model using Ollama](module_18/lesson_18_2/README.md) — 5 files; main_html
-- [18.3: Inspect the vLLM service and the GKE alternative](module_18/lesson_18_3/README.md) — 5 files; main_html
-- [18.4: Compare actual backends and verify shutdown behavior](module_18/lesson_18_4/README.md) — 5 files; main_html
+- [15.1: Build graph evidence from source documents](module_15/lesson_15_1/README.md) — 7 files; main_html
+- [15.2: Compare Firestore and Spanner graph paths](module_15/lesson_15_2/README.md) — 8 files; main_html
+- [15.3: Configure and query managed retrieval mirrors](module_15/lesson_15_3/README.md) — 7 files; main_html
+- [15.4: Compare quality and test update/withdrawal freshness](module_15/lesson_15_4/README.md) — 7 files; main_html
+- [16.1: Query a video clip and validate media citations](module_16/lesson_16_1/README.md) — 7 files; main_html
+- [16.2: Exercise implemented Studio and voice features](module_16/lesson_16_2/README.md) — 7 files; main_html
+- [17.1: Decide whether tuning is justified and prepare data](module_17/lesson_17_1/README.md) — 7 files; main_html
+- [17.2: Validate sanitized datasets and run managed tuning](module_17/lesson_17_2/README.md) — 7 files; main_html
+- [17.3: Compare the tuned candidate with an uncontaminated baseline](module_17/lesson_17_3/README.md) — 8 files; main_html
+- [18.1: Trace and authorize gateway routes](module_18/lesson_18_1/README.md) — 7 files; main_html
+- [18.2: Serve a supplied or stock model using Ollama](module_18/lesson_18_2/README.md) — 8 files; main_html
+- [18.3: Inspect the vLLM service and the GKE alternative](module_18/lesson_18_3/README.md) — 7 files; main_html
+- [18.4: Compare actual backends and verify shutdown behavior](module_18/lesson_18_4/README.md) — 7 files; main_html

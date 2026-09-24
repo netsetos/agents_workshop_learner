@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_packing_and_token_counts.py](demo_01_packing_and_token_counts.py) | Run the kit packer and compare its estimate with exact model token counts. |
-| 3 | [demo_02_answer_cost_and_dated_evidence.py](demo_02_answer_cost_and_dated_evidence.py) | Inspect an answer's tokens/price and follow a dated document through a stream. |
-| 4 | [demo_03_usage_and_small_budget.py](demo_03_usage_and_small_budget.py) | Read token usage/retry evidence and test an undersized context budget on a candidate. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents.py](demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents.py) | The budget's lines and the packer, offline on the kit's own documents |
+| 4 | [demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the.py](demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the.py) | The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count |
+| 5 | [demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price.py](demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price.py) | One answer's tokens: the packed set's estimate, the model's count, and the price |
+| 6 | [demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py](demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py) | A dated document on the lane: the header's date, the rule in the prompt, the citation event |
+| 7 | [demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows.py](demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows.py) | The answer's reserve, the retry, and the tokens on the rows |
+| 8 | [demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e.py](demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e.py) | What the budget costs, the knob on a candidate, and the lines this lesson leaves empty |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -67,9 +73,9 @@ Expected shape, not a promised result:
 context: 8000 (default)  answer: 2048 (default)  model: gemini-3.6-flash (default)  prompt: v3 (default)  usd_inr: 85 (default)
 ```
 
-### demo_01_packing_and_token_counts.py
+### demo_03_the_budget_s_lines_and_the_packer_offline_on_the_kit_s_own_documents.py
 
-Run the kit packer and compare its estimate with exact model token counts.
+Do it: the lines, then two pools twice, then a counter
 
 **`step_01_the_lines_then_two_pools_twice_then_a_coun(session)` — The budget's lines and the packer, offline on the kit's own documents / Do it: the lines, then two pools twice, then a counter**
 
@@ -106,7 +112,11 @@ full Act pages, top_k 20: packed 17, dropped 3, context 7774 tokens | log: conte
 full Act pages, top_k 20, with a counter injected that reads 60 percent more: packed 11, dropped 9, trimmed from the tail after the estimate had packed them
 ```
 
-**`step_02_three_texts_two_counters_one_pool_twice(session)` — The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count / Do it: three texts, two counters, one pool twice**
+### demo_04_the_model_s_counter_beside_the_estimate_english_hindi_and_a_pool_trimmed_by_the.py
+
+Do it: three texts, two counters, one pool twice
+
+**`step_01_three_texts_two_counters_one_pool_twice(session)` — The model's counter beside the estimate: English, Hindi, and a pool trimmed by the exact count / Do it: three texts, two counters, one pool twice**
 
 Do it: three texts, two counters, one pool twice
 
@@ -122,9 +132,9 @@ twenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tok
 twenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter
 ```
 
-### demo_02_answer_cost_and_dated_evidence.py
+### demo_05_one_answer_s_tokens_the_packed_set_s_estimate_the_model_s_count_and_the_price.py
 
-Inspect an answer's tokens/price and follow a dated document through a stream.
+Do it: one question, its tokens, its price, and the estimate beside it
 
 **`step_01_one_question_its_tokens_its_price_and_the(session)` — One answer's tokens: the packed set's estimate, the model's count, and the price / Do it: one question, its tokens, its price, and the estimate beside it**
 
@@ -140,7 +150,11 @@ cost.price(): $0.00xxxx = Rs 0.xxxx at 85.0 | in 1xxx out 4xx cached 0
 the estimate for the same packed set: fixed 168 + context 8xx = 1xxx | the model counted 1xxx | ratio 0.9x
 ```
 
-**`step_02_the_dated_revision_in_the_stream_read_revi(session)` — A dated document on the lane: the header's date, the rule in the prompt, the citation event / Do it: the dated revision in, the stream read, revision 1 back**
+### demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py
+
+Do it: the dated revision in, the stream read, revision 1 back
+
+**`step_01_the_dated_revision_in_the_stream_read_revi(session)` — A dated document on the lane: the header's date, the rule in the prompt, the citation event / Do it: the dated revision in, the stream read, revision 1 back**
 
 Do it: the dated revision in, the stream read, revision 1 back
 
@@ -156,9 +170,9 @@ answer: The smoke lantern is kept in bay 7 of the Pune warehouse [1], effective 
 >> event chunks embedded effective_from: ingest_reactivated	3	0	None
 ```
 
-### demo_03_usage_and_small_budget.py
+### demo_07_the_answer_s_reserve_the_retry_and_the_tokens_on_the_rows.py
 
-Read token usage/retry evidence and test an undersized context budget on a candidate.
+Do it: the day's tokens, and the retries there were not
 
 **`step_01_the_day_s_tokens_and_the_retries_there_wer(session)` — The answer's reserve, the retry, and the tokens on the rows / Do it: the day's tokens, and the retries there were not**
 
@@ -176,7 +190,11 @@ acme                        NN     xxxxx     xxxx    0.0xxx      x.xx    4xxx   
 2026-09-2xT1x:xx:xx.xxxxxxZ	context_budget_drop		1x	x
 ```
 
-**`step_02_the_knob_a_budget_too_small_on_a_candidate(session)` — What the budget costs, the knob on a candidate, and the lines this lesson leaves empty / The knob: a budget too small, on a candidate that takes no traffic**
+### demo_08_what_the_budget_costs_the_knob_on_a_candidate_and_the_lines_this_lesson_leaves_e.py
+
+max_context_tokens is a setting, so the way to see the drop on the live corpus without touching the live service is a candidate revision, as in lessons 5.2 to 5.4: a budget of 600 tokens leaves room for about three handbook sections after the fixed prompt, so the same question at top_k 5 packs three, drops two, logs the drop, and answers from what it packed. The variable is not set on the live service, so the undo removes it and the default returns.
+
+**`step_01_the_knob_a_budget_too_small_on_a_candidate(session)` — What the budget costs, the knob on a candidate, and the lines this lesson leaves empty / The knob: a budget too small, on a candidate that takes no traffic**
 
 max_context_tokens is a setting, so the way to see the drop on the live corpus without touching the live service is a candidate revision, as in lessons 5.2 to 5.4: a budget of 600 tokens leaves room for about three handbook sections after the fixed prompt, so the same question at top_k 5 packs three, drops two, logs the drop, and answers from what it packed. The variable is not set on the live service, so the undo removes it and the default returns.
 
@@ -191,9 +209,9 @@ template now:
 (empty means unset: the default, 8000)
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -203,6 +221,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `fd0703c559853dc14669ad353f31423ca6ccef55`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

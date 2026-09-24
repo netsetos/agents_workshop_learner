@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "5.4",
   "title": "Test fallback without losing tenant or metadata filters",
   "source_kind": "main_html",
@@ -187,9 +187,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index names and the retrieval settings live in the API's environment; a name the service does not set is unset rather than exported empty, because the kit's settings class reads an empty variable as a value, and steps 5 and 6 import the kit. The pins live in Firestore, one document per tenant, and the lane helper prints them.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -235,19 +239,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_firestore_predicates.py"
+      "next": "demo_03_the_firestore_rung_by_hand_the_api_s_three_predicates_on_firestore_s_own_vector.py"
     },
     {
-      "id": "demo_01_firestore_predicates",
+      "id": "demo_03_the_firestore_rung_by_hand_the_api_s_three_predicates_on_firestore_s_own_vector",
       "lesson": "5.4",
-      "file": "demo_01_firestore_predicates.py",
+      "file": "demo_03_the_firestore_rung_by_hand_the_api_s_three_predicates_on_firestore_s_own_vector.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 firestore predicates",
-      "purpose": "Run the fallback rung directly with the same authorization/current/metadata predicates.",
+      "heading": "The Firestore rung by hand: the API's three predicates on Firestore's own vector index",
+      "purpose": "Run the cell as it is, then twice more with a filter in front of its first line: F='{\"doc_type\":\"policy\"}' python - <<'PY' and F='{\"kind\":\"text\"}' python - <<'PY', the rest unchanged. The worker stamped the lane's uploads doc_type: unknown, so the first filter empties the pool on this rung exactly as it did on the index in lesson 5.1, and the second keeps it whole.",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         11
       ],
@@ -273,33 +281,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_tenant_pin_and_chaos_candidate.py"
+      "next": "demo_04_moving_one_tenant_beneath_the_index_by_hand_and_back.py"
     },
     {
-      "id": "demo_02_tenant_pin_and_chaos_candidate",
+      "id": "demo_04_moving_one_tenant_beneath_the_index_by_hand_and_back",
       "lesson": "5.4",
-      "file": "demo_02_tenant_pin_and_chaos_candidate.py",
+      "file": "demo_04_moving_one_tenant_beneath_the_index_by_hand_and_back.py",
       "category": "required",
       "requires": [
-        "demo_01_firestore_predicates"
+        "demo_03_the_firestore_rung_by_hand_the_api_s_three_predicates_on_firestore_s_own_vector"
       ],
-      "heading": "demo 02 tenant pin and chaos candidate",
-      "purpose": "Choose the Firestore rung, restore the pin, then force an unavailable index on a candidate.",
-      "anchor": "s4, s5",
+      "heading": "Moving one tenant beneath the index by hand, and back",
+      "purpose": "Do it: pin acme beneath the index, and wait for the API to notice Do it: the same predicates on the chosen rung, and two tenants that do not cross Do it: the smoke's line for a chosen rung, then the pin back",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         16,
         18,
-        20,
-        25,
-        27
+        20
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         580,
         593,
-        604,
-        646,
-        664
+        604
       ],
       "offline": false,
       "live_verified": false,
@@ -345,7 +353,38 @@
           "window": 20,
           "source_line": 604,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_the_chaos_rung_an_index_that_will_not_answer_on_a_candidate_that_takes_no_traffi.py"
+    },
+    {
+      "id": "demo_05_the_chaos_rung_an_index_that_will_not_answer_on_a_candidate_that_takes_no_traffi",
+      "lesson": "5.4",
+      "file": "demo_05_the_chaos_rung_an_index_that_will_not_answer_on_a_candidate_that_takes_no_traffi.py",
+      "category": "required",
+      "requires": [
+        "demo_04_moving_one_tenant_beneath_the_index_by_hand_and_back"
+      ],
+      "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
+      "purpose": "Do it: a candidate that cannot reach the index",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        25,
+        27
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
+      "source_lines": [
+        646,
+        664
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
           "subheading": "Do it: a candidate that cannot reach the index",
@@ -354,7 +393,7 @@
           "expected": "candidate: backend vector | vector_chunks 0 | pool 20 | answerable True | citations 3\nthe smoke would say: [FAIL] vector tier  RETRIEVAL_BACKEND=vector and no chunk came from the index - the Firestore rung answered. make vector-status; make backfill-vectors APPLY=1\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme\t... documind_chunks_nonesuch ...",
           "adaptations": [],
           "id": "source_25",
-          "function": "step_04_a_candidate_that_cannot_reach_the_index",
+          "function": "step_01_a_candidate_that_cannot_reach_the_index",
           "window": 25,
           "source_line": 646,
           "manual_checkpoint": null
@@ -367,35 +406,35 @@
           "expected": "template now: documind_chunks_v1\nbackend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True | first 1 hr_policy_2026.md | A confirmed employee in grade E3 ...\n100;documind-api-00048-xyz",
           "adaptations": [],
           "id": "source_27",
-          "function": "step_05_a_candidate_that_cannot_reach_the_index",
+          "function": "step_02_a_candidate_that_cannot_reach_the_index",
           "window": 27,
           "source_line": 664,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_probe_backfill_and_policy.py"
+      "next": "demo_06_the_probe_the_kit_s_read_only_check_of_the_combined_filters.py"
     },
     {
-      "id": "demo_03_probe_backfill_and_policy",
+      "id": "demo_06_the_probe_the_kit_s_read_only_check_of_the_combined_filters",
       "lesson": "5.4",
-      "file": "demo_03_probe_backfill_and_policy.py",
+      "file": "demo_06_the_probe_the_kit_s_read_only_check_of_the_combined_filters.py",
       "category": "required",
       "requires": [
-        "demo_02_tenant_pin_and_chaos_candidate"
+        "demo_05_the_chaos_rung_an_index_that_will_not_answer_on_a_candidate_that_takes_no_traffi"
       ],
-      "heading": "demo 03 probe backfill and policy",
-      "purpose": "Read the combined-filter probe, tier/backfill evidence and residency policy decision.",
-      "anchor": "s6, s7, s8",
+      "heading": "The probe: the kit's read-only check of the combined filters",
+      "purpose": "Do it: the probe, then its evidence",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
-        31,
-        37,
-        42
+        31
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        711,
-        763,
-        834
+        711
       ],
       "offline": false,
       "live_verified": false,
@@ -413,7 +452,36 @@
           "window": 31,
           "source_line": 711,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_07_the_tier_from_the_rows_vector_status_backfill_vectors_and_the_rows_that_count_th.py"
+    },
+    {
+      "id": "demo_07_the_tier_from_the_rows_vector_status_backfill_vectors_and_the_rows_that_count_th",
+      "lesson": "5.4",
+      "file": "demo_07_the_tier_from_the_rows_vector_status_backfill_vectors_and_the_rows_that_count_th.py",
+      "category": "required",
+      "requires": [
+        "demo_06_the_probe_the_kit_s_read_only_check_of_the_combined_filters"
+      ],
+      "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
+      "purpose": "Do it: count the tier, plan its refill, read the rows by rung, Rs 0",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        37
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
+      "source_lines": [
+        763
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
           "subheading": "Do it: count the tier, plan its refill, read the rows by rung, Rs 0",
@@ -422,11 +490,40 @@
           "expected": "index: documind-chunks  datapoints: 4xxx  shards: 1  update: STREAM_UPDATE\nendpoint: documind-endpoint  deployed: documind_chunks_v1  synced: 2026-09-2xT1x:xx:xx.xxxxxxZ\n{\"event\": \"backfill_vectors_plan\", \"index\": \"projects/NUMBER/locations/asia-south1/indexes/1234567890123456789\", \"tenant\": \"acme\", \"current_chunks\": 1xxx, \"needs_document_embedding\": 0, \"invalid_chunks\": 0, \"embedding_task_type\": \"RETRIEVAL_DOCUMENT\", \"note\": \"Pause uploads/undo/batch writers; keep answer caches off during repair and validation.\"}\n\nby retrieval backend (which store served the pool; 13 September 2026)\nretrieval_backend      answers    tok_in  tok_out       USD       INR  p95 ms  unans\n------------------------------------------------------------------------------------\nfirestore                    5      xxxx      xxx    0.0xxx      x.xx    2xxx   0.20\nvector                       6      xxxx      xxx    0.0xxx      x.xx    2xxx   0.00",
           "adaptations": [],
           "id": "source_37",
-          "function": "step_02_count_the_tier_plan_its_refill_read_the_ro",
+          "function": "step_01_count_the_tier_plan_its_refill_read_the_ro",
           "window": 37,
           "source_line": 763,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_what_the_rung_costs_where_it_cannot_go_and_the_policy_that_sends_a_tenant_home.py"
+    },
+    {
+      "id": "demo_08_what_the_rung_costs_where_it_cannot_go_and_the_policy_that_sends_a_tenant_home",
+      "lesson": "5.4",
+      "file": "demo_08_what_the_rung_costs_where_it_cannot_go_and_the_policy_that_sends_a_tenant_home.py",
+      "category": "required",
+      "requires": [
+        "demo_07_the_tier_from_the_rows_vector_status_backfill_vectors_and_the_rows_that_count_th"
+      ],
+      "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
+      "purpose": "A tenant's data_region says where its text may be held: any lets the managed mirror copy its current versions abroad, in keeps it on the kit's rows in India, and a missing or unknown value is in, because an unreadable policy is the strict one. retrieval_backend_for() holds every request's backend against it: a managed pin for an in tenant is served from the kit's own rung instead, the deployment's if that is vector or firestore, otherwise Firestore, with policy_fallback 1 on the row, which the warehouse sums into a column. The cell runs the two pure functions behind that decision offline; nothing leaves the machine.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        42
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
+      "source_lines": [
+        834
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
           "subheading": "The policy that sends a tenant home",
@@ -435,7 +532,7 @@
           "expected": "{}                       -> policy in\n{'data_region': 'any'}   -> policy any\n{'data_region': 'in'}    -> policy in\n{'data_region': 'eu'}    -> policy in\nin   tenant, a store in asia-south1  -> may hold it\nin   tenant, a store in us-central1  -> may not\nin   tenant, a store in global       -> may not\nany  tenant, a store in us-central1  -> may hold it",
           "adaptations": [],
           "id": "source_42",
-          "function": "step_03_the_policy_that_sends_a_tenant_home",
+          "function": "step_01_the_policy_that_sends_a_tenant_home",
           "window": 42,
           "source_line": 834,
           "manual_checkpoint": null
@@ -444,14 +541,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "5.4",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -481,6 +582,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "5.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -488,21 +609,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 358
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 390
     },
     {
       "window": 7,
       "label": "expected (your ids differ; the lane pinned acme to vector in lesson 3.1 and never pinned zeta)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 412
     },
     {
@@ -696,7 +817,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

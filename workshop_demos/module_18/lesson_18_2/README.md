@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_model_definition_and_billing.py](demo_01_model_definition_and_billing.py) | Prepare the supplied/stock model definition and read startup/idle billing controls. |
-| 3 | [demo_02_deploy_and_time_ollama.py](demo_02_deploy_and_time_ollama.py) | Deploy/smoke the stock model and measure a real cold start. |
-| 4 | [demo_03_ollama_gateway_and_api.py](demo_03_ollama_gateway_and_api.py) | Route the model through the gateway/API, compare requests and restore the candidate. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_a_modelfile_from_the_tokenizer.py](demo_03_a_modelfile_from_the_tokenizer.py) | A Modelfile from the tokenizer |
+| 4 | [demo_04_the_waits_and_the_bill_from_the_kit.py](demo_04_the_waits_and_the_bill_from_the_kit.py) | The waits and the bill, from the kit |
+| 5 | [demo_05_the_stand_in_deployed_and_smoke_tested.py](demo_05_the_stand_in_deployed_and_smoke_tested.py) | The stand-in, deployed and smoke-tested |
+| 6 | [demo_06_the_cold_start_timed.py](demo_06_the_cold_start_timed.py) | The cold start, timed |
+| 7 | [demo_07_the_small_model_behind_the_gateway_and_the_api.py](demo_07_the_small_model_behind_the_gateway_and_the_api.py) | The small model behind the gateway and the API |
 
 ## Before starting
 
@@ -25,11 +29,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,17 +58,17 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-**`step_02_example(session)` — A Modelfile from the tokenizer / Do it**
+### demo_03_a_modelfile_from_the_tokenizer.py
+
+Do it
+
+**`step_01_a_modelfile_from_the_tokenizer(session)` — A Modelfile from the tokenizer / Do it**
 
 Do it
 
 Operation: bash — run in the operator shell (once: a venv with a transformers that can read the tokenizer).
 
-### demo_01_model_definition_and_billing.py
-
-Prepare the supplied/stock model definition and read startup/idle billing controls.
-
-**`step_01_example(session)` — A Modelfile from the tokenizer / Do it**
+**`step_02_a_modelfile_from_the_tokenizer(session)` — A Modelfile from the tokenizer / Do it**
 
 Do it
 
@@ -89,7 +94,11 @@ PARAMETER stop "<turn|>"
 PARAMETER num_ctx 4096
 ```
 
-**`step_02_example(session)` — The waits and the bill, from the kit / Do it**
+### demo_04_the_waits_and_the_bill_from_the_kit.py
+
+Do it
+
+**`step_01_the_waits_and_the_bill_from_the_kit(session)` — The waits and the bill, from the kit / Do it**
 
 Do it
 
@@ -110,11 +119,11 @@ the bill, by the instance: (0.0001867 + 8 x 0.000018 + 32 x 0.000002) USD a seco
   the kit's own figure: Rs 86,904/month, at $1.42 an hour
 ```
 
-### demo_02_deploy_and_time_ollama.py
+### demo_05_the_stand_in_deployed_and_smoke_tested.py
 
-Deploy/smoke the stock model and measure a real cold start.
+Do it
 
-**`step_01_example(session)` — The stand-in, deployed and smoke-tested / Do it**
+**`step_01_the_stand_in_deployed_and_smoke_tested(session)` — The stand-in, deployed and smoke-tested / Do it**
 
 Do it
 
@@ -135,7 +144,7 @@ gcloud run deploy documind-slm \
 >> slm: https://documind-slm-NUMBER.us-central1.run.app (min-instances 0; make slm-off after every session anyway)
 ```
 
-**`step_02_example(session)` — The stand-in, deployed and smoke-tested / Do it**
+**`step_02_the_stand_in_deployed_and_smoke_tested(session)` — The stand-in, deployed and smoke-tested / Do it**
 
 Do it
 
@@ -156,7 +165,11 @@ DocuMind SLM - live smoke test
   5 passed, 0 failed
 ```
 
-**`step_03_example(session)` — The cold start, timed / Do it**
+### demo_06_the_cold_start_timed.py
+
+Do it
+
+**`step_01_the_cold_start_timed(session)` — The cold start, timed / Do it**
 
 Do it
 
@@ -171,11 +184,11 @@ Expected shape, not a promised result:
 a cold start: 53.4 s to the first answer - 41.4 s for an instance, then 11.4 s to load the model into the GPU
 ```
 
-### demo_03_ollama_gateway_and_api.py
+### demo_07_the_small_model_behind_the_gateway_and_the_api.py
 
-Route the model through the gateway/API, compare requests and restore the candidate.
+Do it
 
-**`step_01_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_01_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -191,7 +204,7 @@ USD a million tokens, in and out (config.yaml): documind-general 1.50 and 7.50, 
                     Your notice period depends on your grade and confirmation status; the documents you shared do not say which applies to you.
 ```
 
-**`step_02_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_02_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -208,7 +221,7 @@ gcloud run services update documind-api --region asia-south1 --project documind-
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-**`step_03_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_03_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -224,7 +237,7 @@ model documind-slm, backend gateway: the route the API asked for, whoever answer
 cost 0.03977 USD for 1900 tokens in and 40 out: documind-slm's rate, so the small model answered
 ```
 
-**`step_04_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_04_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -266,7 +279,7 @@ Expected shape, not a promised result:
   All thresholds met.
 ```
 
-**`step_05_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_05_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -279,7 +292,7 @@ lk-06: pass, 1 citation(s); the route it asked for: documind-slm, through the ga
 8 of 10 rows passed; all thresholds met
 ```
 
-**`step_06_example(session)` — The small model behind the gateway and the API / Do it**
+**`step_06_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
@@ -294,9 +307,9 @@ gcloud run services update documind-slm --region us-central1 --project documind-
 documind-slm scaled to zero
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -306,6 +319,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html`. All 36 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d166600ec95e7f9de71575062e0a57c623378f5c`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

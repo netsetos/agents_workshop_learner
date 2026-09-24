@@ -1,4 +1,4 @@
-"""Lesson 14.2: demo 02 evaluate the exact candidate
+"""Lesson 14.2: Evaluate the exact candidate
 
 Resolve the candidate tag and require it to name the recorded revision before the live gate. Save a project/region/revision-bound gate record only after the evaluator exits successfully.
 
@@ -10,6 +10,8 @@ Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
 for expected observations, effects and the next file; GUIDE.md retains prose.
+Example: open this file at the matching HTML heading, Run once, then inspect
+the observations below before continuing to the next numbered section.
 A successful process is not proof that a live result matched the sample.
 
 """
@@ -31,6 +33,9 @@ def step_01_evaluate_the_exact_candidate(session):
     Operations: Course-plan experiment — live deployment.
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe: A successful live gate tied to the same recorded candidate revision.
     """
     import json, os, sys
     from pathlib import Path
@@ -47,14 +52,22 @@ def step_01_evaluate_the_exact_candidate(session):
     print("Gate passed for:", expected)
 
 def demonstrate(session):
-    """Run this experiment in order, resuming only completed checkpoints safely."""
+    """Run this section in source order, saving each function's outcome.
+
+    Example: main() opens the configured session and calls demonstrate(session).
+    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    """
     run_steps(session, [
         ('source_demo_02_evaluate_the_exact_candidate', step_01_evaluate_the_exact_candidate),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
+    ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 
 def main():
-    """Open the lesson session with the selected IDE interpreter and explicit settings."""
+    """Open the lesson session and run this section.
+
+    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
+    Project settings and completed prerequisites come from the shared setup.
+    """
     with DemoSession(__file__, live=True, repeat=REPEAT) as session:
         demonstrate(session)
 

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "10.1",
   "title": "Understand tool contracts and the direct agent loop",
   "source_kind": "main_html",
@@ -162,9 +162,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -192,29 +196,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_deploy_and_read_tool_contracts.py"
+      "next": "demo_03_the_chat_service_in_your_lane_s_region.py"
     },
     {
-      "id": "demo_01_deploy_and_read_tool_contracts",
+      "id": "demo_03_the_chat_service_in_your_lane_s_region",
       "lesson": "10.1",
-      "file": "demo_01_deploy_and_read_tool_contracts.py",
+      "file": "demo_03_the_chat_service_in_your_lane_s_region.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 deploy and read tool contracts",
-      "purpose": "Deploy/read the chat service and inspect the tool contracts the model sees.",
-      "anchor": "s3, s4",
+      "heading": "The chat service, in your lane's region",
+      "purpose": "Do it: deploy Do it: where it points, and its brains",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         6,
-        8,
-        12
+        8
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         394,
-        412,
-        465
+        412
       ],
       "offline": false,
       "live_verified": false,
@@ -245,7 +251,36 @@
           "window": 8,
           "source_line": 412,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_contract_what_the_model_reads_of_each_tool.py"
+    },
+    {
+      "id": "demo_04_the_contract_what_the_model_reads_of_each_tool",
+      "lesson": "10.1",
+      "file": "demo_04_the_contract_what_the_model_reads_of_each_tool.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_chat_service_in_your_lane_s_region"
+      ],
+      "heading": "The contract: what the model reads of each tool",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
+      "source_lines": [
+        465
+      ],
+      "offline": true,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The contract: what the model reads of each tool",
           "subheading": "Do it",
@@ -254,33 +289,35 @@
           "expected": "retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime\n      Retrieve grounded passages from DocuMind's corpus.\n  calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')\n      Estimate document processing cost in USD and INR.\n  get_usage_stats(metric: str, days: int = 7)    hidden: runtime\n      Get DocuMind RAG pipeline usage statistics.",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_03_example",
+          "function": "step_01_the_contract_what_the_model_reads_of_each",
           "window": 12,
           "source_line": 465,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_retrieval_and_direct_brain.py"
+      "next": "demo_05_the_one_retrieve_from_your_shell.py"
     },
     {
-      "id": "demo_02_retrieval_and_direct_brain",
+      "id": "demo_05_the_one_retrieve_from_your_shell",
       "lesson": "10.1",
-      "file": "demo_02_retrieval_and_direct_brain.py",
+      "file": "demo_05_the_one_retrieve_from_your_shell.py",
       "category": "required",
       "requires": [
-        "demo_01_deploy_and_read_tool_contracts"
+        "demo_04_the_contract_what_the_model_reads_of_each_tool"
       ],
-      "heading": "demo 02 retrieval and direct brain",
-      "purpose": "Call the shared retrieval tool and trace the direct brain's single retrieval.",
-      "anchor": "s5, s6",
+      "heading": "The one retrieve(), from your shell",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        15,
-        19
+        15
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        526,
-        580
+        526
       ],
       "offline": false,
       "live_verified": false,
@@ -294,11 +331,40 @@
           "expected": "5 citations | answerable True | confidence high | 2.7 s\n  first: {'chunk_id': 'acme:aaaaaaaa#0', 'page': 3, 'score': 0.94}\n  rag-api's own answer: Gratuity is payable on termination after not less than five years of continuous service [1",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_01_example",
+          "function": "step_01_the_one_retrieve_from_your_shell",
           "window": 15,
           "source_line": 526,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_the_direct_brain_one_retrieve_no_loop.py"
+    },
+    {
+      "id": "demo_06_the_direct_brain_one_retrieve_no_loop",
+      "lesson": "10.1",
+      "file": "demo_06_the_direct_brain_one_retrieve_no_loop.py",
+      "category": "required",
+      "requires": [
+        "demo_05_the_one_retrieve_from_your_shell"
+      ],
+      "heading": "The direct brain: one retrieve(), no loop",
+      "purpose": "Do it",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
+      "source_lines": [
+        580
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The direct brain: one retrieve(), no loop",
           "subheading": "Do it",
@@ -307,33 +373,35 @@
           "expected": "direct    tool_calls ['retrieve']  refusals []  citations 5  3180 ms\n      Gratuity is payable on termination after not less than five years of continuous service [1].",
           "adaptations": [],
           "id": "source_19",
-          "function": "step_02_example",
+          "function": "step_01_the_direct_brain_one_retrieve_no_loop",
           "window": 19,
           "source_line": 580,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_agent_loop_and_usage.py"
+      "next": "demo_07_the_loop_the_model_chooses_its_tools.py"
     },
     {
-      "id": "demo_03_agent_loop_and_usage",
+      "id": "demo_07_the_loop_the_model_chooses_its_tools",
       "lesson": "10.1",
-      "file": "demo_03_agent_loop_and_usage.py",
+      "file": "demo_07_the_loop_the_model_chooses_its_tools.py",
       "category": "required",
       "requires": [
-        "demo_02_retrieval_and_direct_brain"
+        "demo_06_the_direct_brain_one_retrieve_no_loop"
       ],
-      "heading": "demo 03 agent loop and usage",
-      "purpose": "Run the tool-selection loop and compare the cost records it produces.",
-      "anchor": "s7, s8",
+      "heading": "The loop: the model chooses its tools",
+      "purpose": "Do it",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
-        22,
-        24
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        628,
-        647
+        628
       ],
       "offline": false,
       "live_verified": false,
@@ -347,11 +415,40 @@
           "expected": "langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms\n      After five years of continuous service, under the Payment of Gratuity Act, 1972.\n  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 0  11350 ms\n      At the priority tier (USD 0.12 a page), 283 pages cost USD 33.96, about Rs 2,886.60.\n  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms\n      The documents give no per-page price for processing the handbook; the April invoice bills priori",
           "adaptations": [],
           "id": "source_22",
-          "function": "step_01_example",
+          "function": "step_01_the_loop_the_model_chooses_its_tools",
           "window": 22,
           "source_line": 628,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py"
+    },
+    {
+      "id": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records",
+      "lesson": "10.1",
+      "file": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py",
+      "category": "required",
+      "requires": [
+        "demo_07_the_loop_the_model_chooses_its_tools"
+      ],
+      "heading": "The rows: what each brain cost, and what no row records",
+      "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        24
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
+      "source_lines": [
+        647
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The rows: what each brain cost, and what no row records",
           "subheading": "The rows: what each brain cost, and what no row records",
@@ -360,7 +457,7 @@
           "expected": "rag-api, one row per retrieve():\n    brain ui         in   1790  out   96  Rs 0.2894   2600 ms\n    brain direct     in   1790  out   96  Rs 0.2894   2710 ms\n    brain langchain  in   1812  out  101  Rs 0.2954   2840 ms\n    brain langchain  in   1650  out   88  Rs 0.2665   2390 ms\n    brain direct     in   1705  out   92  Rs 0.2760   2620 ms\n  the chat service, one row per turn:\n    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)",
           "adaptations": [],
           "id": "source_24",
-          "function": "step_02_the_rows_what_each_brain_cost_and_what_no",
+          "function": "step_01_the_rows_what_each_brain_cost_and_what_no",
           "window": 24,
           "source_line": 647,
           "manual_checkpoint": null
@@ -369,14 +466,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "10.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -405,6 +506,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "10.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -412,14 +533,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 340
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 372
     },
     {
@@ -515,7 +636,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

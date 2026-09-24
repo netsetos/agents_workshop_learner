@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_lookup_row_and_gate.py](demo_01_lookup_row_and_gate.py) | Inspect the golden set, add a lookup row and test the real falsifiability gate. |
-| 3 | [demo_02_isolation_row_and_live_check.py](demo_02_isolation_row_and_live_check.py) | Try both isolation markers, fix the required-row set, then ask the new rows live. |
-| 4 | [demo_03_paraphrases_and_generated_candidates.py](demo_03_paraphrases_and_generated_candidates.py) | Add positive/negative paraphrase pairs and inspect candidate generation inputs. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py](demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py) | The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about |
+| 4 | [demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py](demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py) | A lookup row: written into build_golden.py, built, and judged |
+| 5 | [demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py](demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py) | An isolation row: the marker that cannot work, the list it must join, and the gate green again |
+| 6 | [demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py](demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py) | Ask the two rows once: the live half's own functions, and the outsider's 403 |
+| 7 | [demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py](demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py) | Paraphrase pairs and generated candidates: two kinds of row that are not golden |
 
 ## Before starting
 
@@ -25,15 +29,17 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Optional extensions
 
-- [optional/generate_evaluation_candidates.py](optional/generate_evaluation_candidates.py) — Explicit optional: generate evaluation candidates
+- [optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py](optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py) — The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version. Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 13.2 runs them (make features). Before that, the count is zero and the cell stops there.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py](cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py) — At lesson end: Your clone now differs from the kit in four files. Lesson 7.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's git pull --ff-only also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch" brings them back whenever you want them.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -41,7 +47,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -57,9 +63,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_lookup_row_and_gate.py
+### demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py
 
-Inspect the golden set, add a lookup row and test the real falsifiability gate.
+The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 7.3. The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 7.3. Ten rows cite the handbook, by --source. Now count by clause. The cell reads the handbook's sections and lists, for each clause that is not filler, the ACME rows that anchor on it.
 
 **`step_01_the_gate_the_rows_that_cite_the_handbook_a(session)` — The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about / Do it: the gate, the rows that cite the handbook, and the handbook's clauses**
 
@@ -116,7 +122,11 @@ hr_policy_2026.md: 282 sections, 272 of them GEN- filler
   WFH-01     Remote work              lk-09
 ```
 
-**`step_03_add_the_row_build_gate(session)` — A lookup row: written into build_golden.py, built, and judged / Do it: add the row, build, gate**
+### demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py
+
+The cell removes any earlier lk-32 line and inserts the row before the bracket that closes GOLDEN, so running it twice is harmless. The builder prints its first five lines and its last. make eval runs exactly the gate's line; calling it directly puts the exit code on a line of its own. The next cell judges six versions of the row in memory, with the gate's own two functions. It writes nothing.
+
+**`step_01_add_the_row_build_gate(session)` — A lookup row: written into build_golden.py, built, and judged / Do it: add the row, build, gate**
 
 The cell removes any earlier lk-32 line and inserts the row before the bracket that closes GOLDEN, so running it twice is harmless. The builder prints its first five lines and its last. make eval runs exactly the gate's line; calling it directly puts the exit code on a line of its own.
 
@@ -143,7 +153,7 @@ wrote 66 rows -> /home/you/deploy_module_rag/evals/golden.jsonl
 exit code 0
 ```
 
-**`step_04_what_the_gate_catches_and_the_one_mistake(session)` — A lookup row: written into build_golden.py, built, and judged / What the gate catches, and the one mistake it cannot see**
+**`step_02_what_the_gate_catches_and_the_one_mistake(session)` — A lookup row: written into build_golden.py, built, and judged / What the gate catches, and the one mistake it cannot see**
 
 The next cell judges six versions of the row in memory, with the gate's own two functions. It writes nothing.
 
@@ -164,9 +174,9 @@ nothing the answer must contain          REFUSED
 another clause's figure                  accepted
 ```
 
-### demo_02_isolation_row_and_live_check.py
+### demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py
 
-Try both isolation markers, fix the required-row set, then ask the new rows live.
+The first try: the obvious marker The second try: ACME's phrase The third try: listed, and the gate green
 
 **`step_01_the_first_try_the_obvious_marker(session)` — An isolation row: the marker that cannot work, the list it must join, and the gate green again / The first try: the obvious marker**
 
@@ -243,7 +253,11 @@ python evals/run_eval.py
 exit code 0
 ```
 
-**`step_04_example(session)` — Ask the two rows once: the live half's own functions, and the outsider's 403 / Do it**
+### demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py
+
+Do it
+
+**`step_01_ask_the_two_rows_once_the_live_half_s_own(session)` — Ask the two rows once: the live half's own functions, and the outsider's 403 / Do it**
 
 Do it
 
@@ -264,9 +278,9 @@ iso-11 as zeta: HTTP 200, answerable True, 1 citation(s), 2230 ms
 iso-11 asked by documind-outsider-sa: HTTP 403 (the isolation gate requires 403)
 ```
 
-### demo_03_paraphrases_and_generated_candidates.py
+### demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py
 
-Add positive/negative paraphrase pairs and inspect candidate generation inputs.
+The answer cache of Module 9 serves an earlier answer when a new question's embedding has a cosine similarity of at least 0.95 with an earlier one. That number was chosen, not measured. paraphrases.jsonl is what measures it. Each pair rewords a golden question. A pair marked same asks the same fact in other words, so a cache hit would be right. A pair marked different is a few words away with a different answer: E3 against E2, minimum against maximum, probation against confirmed. A cache hit there is a wrong answer served fast. cache_threshold.py embeds both sides and prints, for each candidate threshold, the hit rate on the same pairs and the false-hit rate on the different ones. The cache stays off until a threshold has no false hit on this set. The labels are yours to get right: the self-test checks that each pair names a real golden row and differs from its question, not that its label is true. Add two pairs against lk-32. One asks the same fact in other words. The other asks the clause's other fact, the kind of near miss a loose threshold would answer with 45 days. make make-evalset asks Gemini for one question and answer per chunk of the quality-gated feed. The feed is rag_data.index_feed, joined to the chunks the worker mirrors into BigQuery, so a chunk the quality scan held back never becomes a question. Each pair is scanned by the one PII list, shared/pii.py, and dropped on any finding, never rewritten. What comes out is a candidate: a question with no figure it must contain, and the chunk's id as its only anchor. A golden row is a contract a person writes, and a generated question inherits the blind spots of the model that wrote it. So the file is golden_generated.jsonl, and the gate never reads it. What would the gate say if a candidate were merged as it is? The cell builds one for SEC-09 the way make_evalset.py writes it. Its chunk id is the worker's own: the tenant, the hash of the handbook's bytes, and #8, SEC-09's position after the preamble and seven clauses. Then the cell judges the reviewed version.
 
 **`step_01_paraphrase_pairs(session)` — Paraphrase pairs and generated candidates: two kinds of row that are not golden / Paraphrase pairs**
 
@@ -296,9 +310,9 @@ gen-001  REFUSED
 lk-32    accepted
 ```
 
-### optional/generate_evaluation_candidates.py
+### optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py
 
-Explicit optional: generate evaluation candidates
+The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version. Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 13.2 runs them (make features). Before that, the count is zero and the cell stops there.
 
 **`step_01_generated_candidates(session)` — Paraphrase pairs and generated candidates: two kinds of row that are not golden / Generated candidates**
 
@@ -313,9 +327,9 @@ feed rows for acme: 0
 no feed rows yet: lesson 13.2 builds the feed (make features)
 ```
 
-### setup/finish.py
+### cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: Your clone now differs from the kit in four files. Lesson 7.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's git pull --ff-only also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch" brings them back whenever you want them.
 
 **`step_01_keep_your_rows_and_give_the_kit_its_files(session)` — What rows cost, how a golden set rots, and handing the kit back / Keep your rows, and give the kit its files back**
 
@@ -338,7 +352,11 @@ the four files match the kit again
 7
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -346,6 +364,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html`. All 45 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `085f18eff4b225ef3c249a8efd624fb5b739da9d`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

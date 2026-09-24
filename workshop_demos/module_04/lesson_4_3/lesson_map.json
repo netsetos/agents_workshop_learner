@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "4.3",
   "title": "Publish versions, retire documents and reject stale events",
   "source_kind": "main_html",
@@ -170,9 +170,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -200,31 +204,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_current_and_retired_versions.py"
+      "next": "demo_03_publish_the_swap_and_the_reader_s_guard.py"
     },
     {
-      "id": "demo_01_current_and_retired_versions",
+      "id": "demo_03_publish_the_swap_and_the_reader_s_guard",
       "lesson": "4.3",
-      "file": "demo_01_current_and_retired_versions.py",
+      "file": "demo_03_publish_the_swap_and_the_reader_s_guard.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 current and retired versions",
-      "purpose": "Inspect version publication and the purge plan without applying deletion.",
-      "anchor": "s3, s4",
+      "heading": "Publish: the swap, and the reader's guard",
+      "purpose": "Read the handbook's versions, Rs 0",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        14
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
-        454,
-        515
+        454
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Publish: the swap, and the reader's guard",
@@ -238,7 +244,36 @@
           "window": 9,
           "source_line": 454,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_superseded_the_retired_rows_bookkeeping_and_the_clock_that_removes_them.py"
+    },
+    {
+      "id": "demo_04_superseded_the_retired_rows_bookkeeping_and_the_clock_that_removes_them",
+      "lesson": "4.3",
+      "file": "demo_04_superseded_the_retired_rows_bookkeeping_and_the_clock_that_removes_them.py",
+      "category": "required",
+      "requires": [
+        "demo_03_publish_the_swap_and_the_reader_s_guard"
+      ],
+      "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
+      "purpose": "Do it: the purge plan, Rs 0",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        14
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
+      "source_lines": [
+        515
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Superseded: the retired rows' bookkeeping, and the clock that removes them",
           "subheading": "Do it: the purge plan, Rs 0",
@@ -247,25 +282,29 @@
           "expected": "{\"event\": \"reconcile_purge_plan\", \"expired\": 0, \"retired\": 566, \"applied\": false, \"note\": \"the TTL policy on chunks.expire_at (firestore_indexes.tf) deletes these on its own within a day; this is the manual twin for a lane that has not applied it\"}",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_02_the_purge_plan_rs_0",
+          "function": "step_01_the_purge_plan_rs_0",
           "window": 14,
           "source_line": 515,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_stale_event_verdicts.py"
+      "next": "demo_05_stale_the_generation_guard_and_three_replayed_events.py"
     },
     {
-      "id": "demo_02_stale_event_verdicts",
+      "id": "demo_05_stale_the_generation_guard_and_three_replayed_events",
       "lesson": "4.3",
-      "file": "demo_02_stale_event_verdicts.py",
+      "file": "demo_05_stale_the_generation_guard_and_three_replayed_events.py",
       "category": "required",
       "requires": [
-        "demo_01_current_and_retired_versions"
+        "demo_04_superseded_the_retired_rows_bookkeeping_and_the_clock_that_removes_them"
       ],
-      "heading": "demo 02 stale event verdicts",
-      "purpose": "Replay three simulated events and explain the generation guard.",
+      "heading": "Stale: the generation guard, and three replayed events",
+      "purpose": "The block reads the handbook's generation off the ledger, then publishes three records into the ingest topic exactly as Cloud Storage would, with the generation before the ledger's, the ledger's own, and one after it. The push subscription delivers them to the worker, and the worker's three lines say what it did with each. Nothing on the lane changes.",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         19
       ],
@@ -291,33 +330,35 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_withdraw_and_restore.py"
+      "next": "demo_06_withdrawn_retire_a_document_by_hand_then_restore_it.py"
     },
     {
-      "id": "demo_03_withdraw_and_restore",
+      "id": "demo_06_withdrawn_retire_a_document_by_hand_then_restore_it",
       "lesson": "4.3",
-      "file": "demo_03_withdraw_and_restore.py",
+      "file": "demo_06_withdrawn_retire_a_document_by_hand_then_restore_it.py",
       "category": "required",
       "requires": [
-        "demo_02_stale_event_verdicts"
+        "demo_05_stale_the_generation_guard_and_three_replayed_events"
       ],
-      "heading": "demo 03 withdraw and restore",
-      "purpose": "Prepare the note, withdraw it, test its tombstone, restore it and inspect the ledger.",
-      "anchor": "s6, s7",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         25,
         29,
         31,
-        33,
-        36
+        33
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         668,
         697,
         717,
-        723,
-        777
+        723
       ],
       "offline": false,
       "live_verified": false,
@@ -374,32 +415,23 @@
           "window": 33,
           "source_line": 723,
           "manual_checkpoint": null
-        },
-        {
-          "heading": "The three states side by side",
-          "subheading": "Read the ledger as the operator does, Rs 0",
-          "purpose": "Read the ledger as the operator does, Rs 0",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT",
-          "expected": "source                                       status            gen chunks reused embed retired effective  embedding              indexed_at\nacme/code_on_wages_2019.pdf                  indexed    ...2671234567     67      0    67       0 -          text-embedding-005@1   2026-09-20T09:14:02\nacme/hr_policy_2026.md                       indexed    ...4107123456    283    283     0     283 -          text-embedding-005@1   2026-09-22T13:41:55\nacme/smoke_note_v1.md                        indexed    ...5302345678      3      3     0       0 -          text-embedding-005@1   2026-09-22T15:21:40\n...\n{\"ledger\": \"acme\", \"fingerprint\": \"3a9f0c17e5d2b846\", \"versions\": 9, \"last_event\": \"ingest_reactivated\"}",
-          "adaptations": [],
-          "id": "source_36",
-          "function": "step_05_read_the_ledger_as_the_operator_does_rs_0",
-          "window": 36,
-          "source_line": 777,
-          "manual_checkpoint": null
         }
       ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
+      "next": "demo_07_the_three_states_side_by_side.py"
     },
     {
-      "id": "recovery_recover_missing_note",
+      "id": "recovery_demo_06_withdrawn_retire_a_document_by_hand_then_restore_it",
       "lesson": "4.3",
-      "file": "recovery/recover_missing_note.py",
+      "file": "recovery/demo_06_withdrawn_retire_a_document_by_hand_then_restore_it.py",
       "category": "recovery",
       "requires": [],
-      "heading": "recover missing note",
-      "purpose": "Explicit recovery: recover missing note",
+      "heading": "Withdrawn: retire a document by hand, then restore it",
+      "purpose": "The document is the note lesson 3.4 indexed, three chunks under acme/smoke_note_v1.md, with its bytes still at ~/lesson34_note.md; if you skipped that lesson, run its step 3 first. Four blocks: the withdrawal and what the API and Firestore say; a question that now has no source; the same bytes again, refused; the restore, and the same question answered. Everything here is a flag flip: no parse, no embedding. If the file is not on this machine, the box below gets it back before anything else runs. Lesson 3.4 wrote the note into the home directory of the machine it ran on. On another machine, Cloud Shell instead of the workstation or a fresh workstation, the file is gone while the ledger still holds its hash, and a note rewritten with today's date has different bytes: the worker would index it as a new version, and every reactivation on this page would read ingest_ok with three embedded instead. Get the original bytes back and check them against the ledger. The uploads bucket is versioned, so the object itself is the first place to look, and its last generation serves when the object has been deleted, as lesson 4.4 does on purpose. If the bucket has nothing, the second block rebuilds the note the way 3.4 wrote it, the kit's fixture plus one line naming your account and the day, and tries the last sixty days against the ledger's hash.",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         27
       ],
@@ -425,17 +457,63 @@
           "manual_checkpoint": null
         }
       ],
+      "next": "demo_07_the_three_states_side_by_side.py"
+    },
+    {
+      "id": "demo_07_the_three_states_side_by_side",
+      "lesson": "4.3",
+      "file": "demo_07_the_three_states_side_by_side.py",
+      "category": "required",
+      "requires": [
+        "demo_06_withdrawn_retire_a_document_by_hand_then_restore_it"
+      ],
+      "heading": "The three states side by side",
+      "purpose": "Read the ledger as the operator does, Rs 0",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        36
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
+      "source_lines": [
+        777
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The three states side by side",
+          "subheading": "Read the ledger as the operator does, Rs 0",
+          "purpose": "Read the ledger as the operator does, Rs 0",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT",
+          "expected": "source                                       status            gen chunks reused embed retired effective  embedding              indexed_at\nacme/code_on_wages_2019.pdf                  indexed    ...2671234567     67      0    67       0 -          text-embedding-005@1   2026-09-20T09:14:02\nacme/hr_policy_2026.md                       indexed    ...4107123456    283    283     0     283 -          text-embedding-005@1   2026-09-22T13:41:55\nacme/smoke_note_v1.md                        indexed    ...5302345678      3      3     0       0 -          text-embedding-005@1   2026-09-22T15:21:40\n...\n{\"ledger\": \"acme\", \"fingerprint\": \"3a9f0c17e5d2b846\", \"versions\": 9, \"last_event\": \"ingest_reactivated\"}",
+          "adaptations": [],
+          "id": "source_36",
+          "function": "step_01_read_the_ledger_as_the_operator_does_rs_0",
+          "window": 36,
+          "source_line": 777,
+          "manual_checkpoint": null
+        }
+      ],
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "4.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -464,6 +542,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "4.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -471,14 +569,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 342
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 374
     },
     {
@@ -651,7 +749,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The handbook history from 4.2 and the smoke note from 3.4. Use the conditional repair only if the note is absent."
+  "prerequisites": "The handbook history from 4.2 and the smoke note from 3.4. Use the conditional repair only if the note is absent.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

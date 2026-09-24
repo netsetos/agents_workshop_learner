@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_offline_gate_and_ci.py](demo_01_offline_gate_and_ci.py) | Run the offline gate and inspect the CI result for this kit commit. |
-| 3 | [demo_02_live_gate_and_report.py](demo_02_live_gate_and_report.py) | Run the live gate, retain its actual exit code and inspect the row-level report. |
-| 4 | [demo_03_judge_and_disagreements.py](demo_03_judge_and_disagreements.py) | Prepare the judge, run it on lane answers and compare disagreements/trajectory judgments. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py](demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py) | The offline half: on every push, and CI's verdict on the commit you run |
+| 4 | [demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py](demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py) | The live half: every row, two identities, nine rates, three exit codes |
+| 5 | [demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py](demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py) | The judge: the lane's own answers, read with the context they cite |
+| 6 | [demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py](demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py) | Where the gate and the judge disagree: read the row |
+| 7 | [demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py](demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py) | The judge's other two modes: trajectories now, pairwise in lesson 7.3 |
 
 ## Before starting
 
@@ -25,11 +29,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +58,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_offline_gate_and_ci.py
+### demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py
 
-Run the offline gate and inspect the CI result for this kit commit.
+Do it: the gate as CI runs it, and CI's result on your commit The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.
 
 **`step_01_the_gate_as_ci_runs_it_and_ci_s_result_on(session)` — The offline half: on every push, and CI's verdict on the commit you run / Do it: the gate as CI runs it, and CI's result on your commit**
 
@@ -91,9 +96,9 @@ your kit is at b89bbd8
   6999d24  push  success  2026-09-22
 ```
 
-### demo_02_live_gate_and_report.py
+### demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py
 
-Run the live gate, retain its actual exit code and inspect the row-level report.
+Do it: the live gate, with a report Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.
 
 **`step_01_the_live_gate_with_a_report(session)` — The live half: every row, two identities, nine rates, three exit codes / Do it: the live gate, with a report**
 
@@ -185,9 +190,9 @@ zeta                        10       ...      ...       ...       ...     ...   
 globex                       8       ...      ...       ...       ...     ...    ...
 ```
 
-### demo_03_judge_and_disagreements.py
+### demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py
 
-Prepare the judge, run it on lane answers and compare disagreements/trajectory judgments.
+Do it: the judge's venv and its self-test --reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.
 
 **`step_01_the_judge_s_venv_and_its_self_test(session)` — The judge: the lane's own answers, read with the context they cite / Do it: the judge's venv and its self-test**
 
@@ -233,7 +238,11 @@ Expected shape, not a promised result:
   the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.
 ```
 
-**`step_03_where_the_gate_and_the_judge_disagree_read(session)` — Where the gate and the judge disagree: read the row / Where the gate and the judge disagree: read the row**
+### demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py
+
+Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+
+**`step_01_where_the_gate_and_the_judge_disagree_read(session)` — Where the gate and the judge disagree: read the row / Where the gate and the judge disagree: read the row**
 
 Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
 
@@ -251,7 +260,11 @@ Expected shape, not a promised result:
          twenty per cent absent
 ```
 
-**`step_04_the_judge_s_other_two_modes_trajectories_n(session)` — The judge's other two modes: trajectories now, pairwise in lesson 7.3 / The judge's other two modes: trajectories now, pairwise in lesson 7.3**
+### demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py
+
+The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns.
+
+**`step_01_the_judge_s_other_two_modes_trajectories_n(session)` — The judge's other two modes: trajectories now, pairwise in lesson 7.3 / The judge's other two modes: trajectories now, pairwise in lesson 7.3**
 
 The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns.
 
@@ -263,9 +276,9 @@ Expected shape, not a promised result:
 no documind-chat service on this lane: trajectories need one
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -275,6 +288,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `035b7ce9098bd5e839d3c9896e605aacda3edf63`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

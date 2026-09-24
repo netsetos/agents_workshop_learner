@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "14.2",
   "title": "Evaluate and gate the exact candidate revision",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_create_the_recorded_candidate.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 create the recorded candidate",
+      "heading": "Create the recorded candidate",
       "purpose": "Create a no-traffic API revision with the kit's candidate target. The recorded revision name, not whatever is newest later, is the release identity.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_2/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_create_the_recorded_candidate"
       ],
-      "heading": "demo 02 evaluate the exact candidate",
+      "heading": "Evaluate the exact candidate",
       "purpose": "Resolve the candidate tag and require it to name the recorded revision before the live gate. Save a project/region/revision-bound gate record only after the evaluator exits successfully.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_2/README.md",
       "source_lines": [
@@ -84,7 +92,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

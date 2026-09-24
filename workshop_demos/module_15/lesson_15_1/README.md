@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_graph_contracts.py](demo_01_graph_contracts.py) | Read graph evidence and the code that derives it from source documents. |
-| 3 | [demo_02_build_and_inspect_graph.py](demo_02_build_and_inspect_graph.py) | Build the graph and inspect its nodes/edges against the source material. |
-| 4 | [demo_03_graph_retrieval.py](demo_03_graph_retrieval.py) | Run the lane's graph retrieval example and inspect the evidence. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_rules_run.py](demo_03_the_rules_run.py) | The rules, run |
+| 4 | [demo_04_build_the_handbook_s_graph.py](demo_04_build_the_handbook_s_graph.py) | Build the handbook's graph |
+| 5 | [demo_05_read_it_back_the_counts_and_one_edge_with_its_source.py](demo_05_read_it_back_the_counts_and_one_edge_with_its_source.py) | Read it back: the counts, and one edge with its source |
+| 6 | [demo_06_audit_an_extraction_and_build_again.py](demo_06_audit_an_extraction_and_build_again.py) | Audit an extraction, and build again |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_graph_contracts.py
+### demo_03_the_rules_run.py
 
-Read graph evidence and the code that derives it from source documents.
+Do it
 
-**`step_01_example(session)` — The rules, run / Do it**
+**`step_01_the_rules_run(session)` — The rules, run / Do it**
 
 Do it
 
@@ -93,11 +97,11 @@ build_graph() on two passages:
   2 relations dropped: 'board' is no entity (dangling), and Function Head -[IS]-> itself
 ```
 
-### demo_02_build_and_inspect_graph.py
+### demo_04_build_the_handbook_s_graph.py
 
-Build the graph and inspect its nodes/edges against the source material.
+Do it
 
-**`step_01_example(session)` — Build the handbook's graph / Do it**
+**`step_01_build_the_handbook_s_graph(session)` — Build the handbook's graph / Do it**
 
 Do it
 
@@ -121,7 +125,11 @@ tenant acme: 0 graph_nodes deleted
 {"event": "graph_built", "tenant": "acme", "backend": "firestore", "chunks": 11, "surface_forms": 28, "nodes": 25, "edges": 15}
 ```
 
-**`step_02_example(session)` — Read it back: the counts, and one edge with its source / Do it**
+### demo_05_read_it_back_the_counts_and_one_edge_with_its_source.py
+
+Do it
+
+**`step_01_read_it_back_the_counts_and_one_edge_with(session)` — Read it back: the counts, and one edge with its source / Do it**
 
 Do it
 
@@ -145,11 +153,11 @@ one edge, read back with its source chunk:
   both names in the passage as written: CFO yes, Purchase approval yes
 ```
 
-### demo_03_graph_retrieval.py
+### demo_06_audit_an_extraction_and_build_again.py
 
-Run the lane's graph retrieval example and inspect the evidence.
+Do it
 
-**`step_01_example(session)` — Audit an extraction, and build again / Do it**
+**`step_01_audit_an_extraction_and_build_again(session)` — Audit an extraction, and build again / Do it**
 
 Do it
 
@@ -177,9 +185,9 @@ cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. 
 {"event": "graph_built", "tenant": "acme", "backend": "firestore", "chunks": 11, "surface_forms": 28, "nodes": 25, "edges": 15}
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -189,6 +197,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html`. All 17 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d74daf0dbbc7f95660f0a56970362cc9c013c26a`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

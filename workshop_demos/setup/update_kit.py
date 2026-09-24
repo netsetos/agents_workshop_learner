@@ -5,14 +5,20 @@ from workshop_helpers.config import load_config
 
 
 def main():
-    """Fast-forward the current tracked learner branch without discarding edits."""
+    """Fast-forward the current tracked learner branch without discarding edits.
+    
+    Example: main()
+    """
     root = load_config().kit_root
     executable = shutil.which("git")
     if not executable:
         raise RuntimeError("git is not on PATH.")
 
     def git(*args):
-        """Run a checked Git read/update command inside the configured learner checkout."""
+        """Run a checked Git read/update command inside the configured learner checkout.
+        
+        Example: git('remote', 'get-url', 'origin')
+        """
         return subprocess.run([executable, "-C", str(root), *args], check=True,
                               text=True, capture_output=True, timeout=120).stdout.strip()
 

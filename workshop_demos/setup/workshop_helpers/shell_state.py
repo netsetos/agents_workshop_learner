@@ -11,7 +11,10 @@ from .session import secret_name
 
 
 def main():
-    """Write filtered environment data without exposing it on stdout."""
+    """Write filtered environment data without exposing it on stdout.
+    
+    Example: main()
+    """
     target = Path(sys.argv[1])
     values = {key: value for key, value in os.environ.items() if not secret_name(key)
               and re_allowed(key)}
@@ -20,7 +23,10 @@ def main():
 
 
 def re_allowed(name):
-    """Limit capture to the reviewed names passed in this lesson's map."""
+    """Limit capture to the reviewed names passed in this lesson's map.
+    
+    Example: re_allowed(key)
+    """
     return name in json.loads(os.environ.get("WORKSHOP_PERSIST_VARIABLES", "[]"))
 
 

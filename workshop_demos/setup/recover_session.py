@@ -13,7 +13,10 @@ REMOVE_STOPPED_PROCESS_LOCK = False
 
 
 def main():
-    """Release a verified dead process lock without changing any lesson artifacts."""
+    """Release a verified dead process lock without changing any lesson artifacts.
+    
+    Example: main()
+    """
     config = load_config()
     lock = config.results_dir / f"module_{int(LESSON.split('.')[0]):02}" / f"lesson_{LESSON.replace('.', '_')}" / "session.lock"
     if not lock.exists():

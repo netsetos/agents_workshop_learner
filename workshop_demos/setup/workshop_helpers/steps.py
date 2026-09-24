@@ -17,19 +17,29 @@ from .session import secret_name, utc_now
 
 
 class ManualCheckpoint(RuntimeError):
-    """A browser action or asynchronous wait has not been acknowledged yet."""
+    """A browser action or asynchronous wait has not been acknowledged yet.
+    
+    Example: ManualCheckpoint('Action pending; rerun this demo when ready.')
+    """
 
 
 def wait_after(session, identifier, seconds):
-    """Sleep only what remains of ``seconds`` since this demo's ``identifier`` step completed.
+    """Sleep only what remains of ``seconds`` since a lesson step completed.
 
 The page sleeps a fixed interval after an operation such as make off. The IDE also
 pauses there, so a learner who stopped and came back has already waited: count
 from the recorded completion instead of starting the interval again.
+
+Example: section 6 calls wait_after(session, "source_17", 600) after section 5
+has shut down the lane. The original timestamp is retained across IDE launches.
 """
-    record = session.state.get("function_checkpoints", {}).get(session.step["id"], {}).get(identifier, {})
+    checkpoints = session.state.get("function_checkpoints", {})
+    matches = [group[identifier] for group in checkpoints.values() if identifier in group]
+    if len(matches) > 1:
+        raise RuntimeError(f"Ambiguous step {identifier}; inspect this lesson's saved checkpoints.")
+    record = matches[0] if matches else {}
     if record.get("status") != "completed" or not record.get("finished_at"):
-        raise RuntimeError(f"{identifier} has not completed in this demo; the interval starts when it does.")
+        raise RuntimeError(f"{identifier} has not completed in this lesson; the interval starts when it does.")
     elapsed = time.time() - datetime.fromisoformat(record["finished_at"]).timestamp()
     if elapsed < seconds:
         print(f"Waiting {seconds - elapsed:.0f}s more: {seconds // 60} minutes after {identifier} completed.", flush=True)
@@ -39,7 +49,10 @@ from the recorded completion instead of starting the interval again.
 
 
 def manual_checkpoint(instruction):
-    """Pause before a dependent read; EOF/stop never counts as completed work."""
+    """Pause before a dependent read; EOF/stop never counts as completed work.
+    
+    Example: manual_checkpoint("Upload the exact visitor note, then refresh until indexed")
+    """
     print("\nMANUAL CHECKPOINT:", instruction, flush=True)
     try:
         answer = input("Type done after completing that action, or stop to resume later: ")
@@ -52,12 +65,14 @@ def manual_checkpoint(instruction):
 @contextmanager
 def native_context(session):
     """Give each source cell its original import/cwd boundary, with real breakpoints.
-
-Cells formerly ran in separate interpreters and can import kit modules with
-generic names such as config/retriever. Remove newly loaded kit modules after
-each cell so a previous cell's import path cannot select the next one's module.
-Third-party modules and the workshop helper itself remain loaded normally.
-"""
+    
+    Cells formerly ran in separate interpreters and can import kit modules with
+    generic names such as config/retriever. Remove newly loaded kit modules after
+    each cell so a previous cell's import path cannot select the next one's module.
+    Third-party modules and the workshop helper itself remain loaded normally.
+    
+    Example: native_context(session)
+    """
     before_path, before_cwd, before_modules = list(sys.path), Path.cwd(), dict(sys.modules)
     kit = session.config.kit_root.resolve()
     try:
@@ -76,14 +91,17 @@ Third-party modules and the workshop helper itself remain loaded normally.
                     sys.modules.pop(name, None)
 
 
-def run_steps(session, steps, *, retry_failed=False, cleanup=False):
+def run_steps(session, steps, *, retry_failed=False, cleanup=False, finalize=True):
     """Call ordered ``(identifier, function)`` pairs and save each actual outcome.
-
-On resume, completed functions are skipped. Set RETRY_FAILED_STEP=True in the
-demo only after inspecting the failed function's logs/resources. REPEAT=True
-deliberately replays the entire file. Cleanup attempts every restoration even
-if one fails, retaining failures for the next cleanup attempt.
-"""
+    
+    On resume, completed functions are skipped. Set RETRY_FAILED_STEP=True in the
+    demo only after inspecting the failed function's logs/resources. REPEAT=True
+    deliberately replays the entire file. Cleanup attempts every restoration even
+    if one fails, retaining failures for the next cleanup attempt. A single cleanup
+    section uses finalize=False; setup/finish.py closes the entire run afterward.
+    
+    Example: run_steps(session, [("read", inspect_rows), ("compare", compare_rows)])
+    """
     all_progress = session.state.setdefault("function_checkpoints", {})
     if session.live and session.script.name.startswith("demo_"):
         while session.state.get("pin_ready_after", 0) > time.time():
@@ -130,17 +148,19 @@ if one fails, retaining failures for the next cleanup attempt.
             session.save()
     if errors:
         raise RuntimeError("Cleanup incomplete:\n" + "\n".join(errors))
-    if cleanup:
+    if cleanup and finalize:
         session.state["lifecycle_complete"] = True
         session.save()
 
 
 def backup_files(session, relative_paths):
     """Save exact learner bytes once before a lesson edits its local fixtures.
-
-This preserves pre-existing edits; restoration must never mean git checkout.
-Only explicitly listed paths inside the kit can be saved or restored.
-"""
+    
+    This preserves pre-existing edits; restoration must never mean git checkout.
+    Only explicitly listed paths inside the kit can be saved or restored.
+    
+    Example: backup_files(session, ["evals/golden.jsonl"]) saves exact existing bytes
+    """
     saved = session.state.setdefault("file_backups", {})
     directory = session.directory / "original_files"
     directory.mkdir(exist_ok=True)
@@ -159,7 +179,10 @@ Only explicitly listed paths inside the kit can be saved or restored.
 
 
 def restore_files(session):
-    """Keep a copy of the lesson edits, then restore each exact original backup."""
+    """Keep a copy of the lesson edits, then restore each exact original backup.
+    
+    Example: restore_files(session) restores those saved bytes and retains the lesson edits
+    """
     for relative, saved in session.state.get("file_backups", {}).items():
         if saved.get("restored"):
             continue

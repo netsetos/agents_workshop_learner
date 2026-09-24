@@ -13,7 +13,10 @@ PROFILE = "operator"  # "operator" or "local-chat"; specialized frameworks keep 
 
 
 def main():
-    """Install the chosen committed requirements; fail on pip's actual exit status."""
+    """Install the chosen committed requirements; fail on pip's actual exit status.
+    
+    Example: main()
+    """
     root = Path(__file__).resolve().parents[2]
     profiles = {
         "operator": ["services/rag-api/requirements.txt", "services/ingest/requirements.txt"],

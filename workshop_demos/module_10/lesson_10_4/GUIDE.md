@@ -1,10 +1,10 @@
 # Lesson 10.4: source reading guide
 
-Read this beside the three demo files. The prose below follows the main HTML;
+Read this beside the section-numbered demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`, reviewed at blob `4d85e128644454856f18a930ac9e3dfcec8d55e1`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`, reviewed at blob `f3598f8936669b98d54a99f356e98faea20a469a`. Learners read that page on the course site; this guide keeps its prose.
 
 The chat service can answer with four brains, and all four reach the same `retrieve()`. What differs is the adapter between each framework and that one tool. It decides what the model is shown, what is filled in behind its back, what the model reads back and what happens when a call fails. It also decides where the conversation is kept and what gets counted. You put the LangChain adapter beside the ADK adapter offline, on the kit's own code. Then you ask one question through all four brains on your lane and read the four cost lines that rag-api's rows give. Last, you measure the half of each line those rows cannot see.
 
@@ -108,7 +108,7 @@ The LangGraph brain uses the same `tools.py` as the LangChain brain, so its sche
 
 #### Do it: side by side
 
-The LangChain model was shown three arguments in 465 characters. The ADK model was shown six, two of them required, in 2,572 characters, and every model call carries that declaration. Both requests reached rag-api for acme. `ToolRuntime` never let the LangChain model near the tenant, and the callback struck out the ADK model's globex. The assertion is different. The callback replaces it only when the request carried one, and this one did not, so the model's string went out as the assertion header. rag-api would verify it, refuse it with a 401, and the model would read that retrieval is unavailable. The ADK model also read rag-api's own answer, which the LangChain adapter drops.
+The LangChain model was shown three arguments in 481 characters. The ADK model was shown six, two of them required, in 2,572 characters, and every model call carries that declaration. Both requests reached rag-api for acme. `ToolRuntime` never let the LangChain model near the tenant, and the callback struck out the ADK model's globex. The assertion is different. The callback replaces it only when the request carried one, and this one did not, so the model's string went out as the assertion header. rag-api would verify it, refuse it with a 401, and the model would read that retrieval is unavailable. The ADK model also read rag-api's own answer, which the LangChain adapter drops.
 
 Then the three failures. The LangChain brain turned the first two into error results, which the model read, and `refusals` named both. The ADK brain raised on all three. On your lane a raise is a 500, with no answer and no row. The unknown tier shows the other side of the LangChain adapter: it priced `express` as standard, and said nothing.
 
@@ -152,7 +152,7 @@ The chat service keeps no count of its own model calls, so the cell makes one. I
 
 #### Do it
 
-Each agent brain made two model calls: one to ask for `retrieve`, one to answer from what came back. The second call carries everything the first did, plus the tool result, so it is the larger. The ADK brain's calls are larger than LangChain's for two reasons you saw in step 3. Its declaration is 2,572 characters against 465, and its tool result includes rag-api's answer. Your run can show a third reason: the ADK brain sets no thinking level, and the LangChain brains set it to low.
+Each agent brain made two model calls: one to ask for `retrieve`, one to answer from what came back. The second call carries everything the first did, plus the tool result, so it is the larger. The ADK brain's calls are larger than LangChain's for two reasons you saw in step 3. Its declaration is 2,572 characters against 481, and its tool result includes rag-api's answer. Your run can show a third reason: the ADK brain sets no thinking level, and the LangChain brains set it to low.
 
 The whole lines show what the rows hid. Each agent brain costs its retrieval plus its own loop, and the direct brain costs its retrieval alone. The loop is the price of the harness, and it is paid on every turn.
 

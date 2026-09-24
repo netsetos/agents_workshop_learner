@@ -19,6 +19,9 @@ Run these files with the same interpreter as the demos. They replace repeated sh
 | `session.pin_vector()` / `restore_backend()` | Saves and restores the actual prior tenant pin | Lessons that temporarily demonstrate the vector lane |
 | `session.start_local_service()` / `stop_local_service()` | Owns a local process without holding an IDE run open indefinitely | Module 1's local chat experiment |
 | `workshop_helpers.reconciliation` | Explains decisions using the kit's real planner | Lesson 4.4's offline queued/default/known-bytes examples |
+| `steps.wait_after(session, identifier, seconds)` | Uses the shutdown timestamp from this lesson, even in a previous section file | Monitoring observations after a required idle interval |
+| `cleanup.finish_lesson(session)` | Calls the mapped cleanup files and attempts every remaining restoration | The lesson's `setup/finish.py` entry point |
+| `lesson31.contract_step(function)` | Supplies clients/saved versions while retaining authored contract functions and step checkpoints | Lesson 3.1's numbered contract examples |
 
 `config/settings.example.json` documents the accepted configuration keys. Bootstrap creates the ignored `settings.local.json`; `WORKSHOP_DEMO_CONFIG` can select a different local file if needed. `kit_root: "auto"` resolves relative to the installed helper, independent of the IDE working directory. The selected interpreter's directory is placed first on PATH for child commands.
 

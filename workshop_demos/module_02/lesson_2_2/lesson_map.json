@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "2.2",
   "title": "Review and start the prepared deployment",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_check_the_saved_plan.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 check the saved plan",
+      "heading": "Check the saved plan",
       "purpose": "Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_check_the_saved_plan"
       ],
-      "heading": "demo 02 apply and deploy the prepared kit",
+      "heading": "Apply and deploy the prepared kit",
       "purpose": "Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
@@ -90,9 +98,13 @@
       "requires": [
         "demo_02_apply_and_deploy_the_prepared_kit"
       ],
-      "heading": "demo 03 inspect the deployed services",
+      "heading": "Inspect the deployed services",
       "purpose": "List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.",
       "anchor": "plan-3",
+      "anchors": [
+        "plan-3"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
@@ -123,9 +135,13 @@
       "file": "recovery/grant_the_build_account_what_a_build_needs.py",
       "category": "recovery",
       "requires": [],
-      "heading": "grant the build account what a build needs",
+      "heading": "Grant the build account what a build needs",
       "purpose": "Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.",
       "anchor": "plan-4",
+      "anchors": [
+        "plan-4"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
@@ -152,7 +168,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

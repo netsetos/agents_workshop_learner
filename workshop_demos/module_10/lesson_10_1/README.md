@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_deploy_and_read_tool_contracts.py](demo_01_deploy_and_read_tool_contracts.py) | Deploy/read the chat service and inspect the tool contracts the model sees. |
-| 3 | [demo_02_retrieval_and_direct_brain.py](demo_02_retrieval_and_direct_brain.py) | Call the shared retrieval tool and trace the direct brain's single retrieval. |
-| 4 | [demo_03_agent_loop_and_usage.py](demo_03_agent_loop_and_usage.py) | Run the tool-selection loop and compare the cost records it produces. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_chat_service_in_your_lane_s_region.py](demo_03_the_chat_service_in_your_lane_s_region.py) | The chat service, in your lane's region |
+| 4 | [demo_04_the_contract_what_the_model_reads_of_each_tool.py](demo_04_the_contract_what_the_model_reads_of_each_tool.py) | The contract: what the model reads of each tool |
+| 5 | [demo_05_the_one_retrieve_from_your_shell.py](demo_05_the_one_retrieve_from_your_shell.py) | The one retrieve(), from your shell |
+| 6 | [demo_06_the_direct_brain_one_retrieve_no_loop.py](demo_06_the_direct_brain_one_retrieve_no_loop.py) | The direct brain: one retrieve(), no loop |
+| 7 | [demo_07_the_loop_the_model_chooses_its_tools.py](demo_07_the_loop_the_model_chooses_its_tools.py) | The loop: the model chooses its tools |
+| 8 | [demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py](demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py) | The rows: what each brain cost, and what no row records |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +59,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_deploy_and_read_tool_contracts.py
+### demo_03_the_chat_service_in_your_lane_s_region.py
 
-Deploy/read the chat service and inspect the tool contracts the model sees.
+Do it: deploy Do it: where it points, and its brains
 
 **`step_01_deploy(session)` — The chat service, in your lane's region / Do it: deploy**
 
@@ -94,7 +100,11 @@ RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://d
 {"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain"}
 ```
 
-**`step_03_example(session)` — The contract: what the model reads of each tool / Do it**
+### demo_04_the_contract_what_the_model_reads_of_each_tool.py
+
+Do it
+
+**`step_01_the_contract_what_the_model_reads_of_each(session)` — The contract: what the model reads of each tool / Do it**
 
 Do it
 
@@ -111,11 +121,11 @@ retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime
       Get DocuMind RAG pipeline usage statistics.
 ```
 
-### demo_02_retrieval_and_direct_brain.py
+### demo_05_the_one_retrieve_from_your_shell.py
 
-Call the shared retrieval tool and trace the direct brain's single retrieval.
+Do it
 
-**`step_01_example(session)` — The one retrieve(), from your shell / Do it**
+**`step_01_the_one_retrieve_from_your_shell(session)` — The one retrieve(), from your shell / Do it**
 
 Do it
 
@@ -129,7 +139,11 @@ Expected shape, not a promised result:
   rag-api's own answer: Gratuity is payable on termination after not less than five years of continuous service [1
 ```
 
-**`step_02_example(session)` — The direct brain: one retrieve(), no loop / Do it**
+### demo_06_the_direct_brain_one_retrieve_no_loop.py
+
+Do it
+
+**`step_01_the_direct_brain_one_retrieve_no_loop(session)` — The direct brain: one retrieve(), no loop / Do it**
 
 Do it
 
@@ -142,11 +156,11 @@ direct    tool_calls ['retrieve']  refusals []  citations 5  3180 ms
       Gratuity is payable on termination after not less than five years of continuous service [1].
 ```
 
-### demo_03_agent_loop_and_usage.py
+### demo_07_the_loop_the_model_chooses_its_tools.py
 
-Run the tool-selection loop and compare the cost records it produces.
+Do it
 
-**`step_01_example(session)` — The loop: the model chooses its tools / Do it**
+**`step_01_the_loop_the_model_chooses_its_tools(session)` — The loop: the model chooses its tools / Do it**
 
 Do it
 
@@ -163,7 +177,11 @@ langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms
       The documents give no per-page price for processing the handbook; the April invoice bills priori
 ```
 
-**`step_02_the_rows_what_each_brain_cost_and_what_no(session)` — The rows: what each brain cost, and what no row records / The rows: what each brain cost, and what no row records**
+### demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py
+
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+
+**`step_01_the_rows_what_each_brain_cost_and_what_no(session)` — The rows: what each brain cost, and what no row records / The rows: what each brain cost, and what no row records**
 
 rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
 
@@ -185,9 +203,9 @@ rag-api, one row per retrieve():
     brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -197,6 +215,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html`. All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f1868f835bc67f911ec89f0027a86e55fa9969ab`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

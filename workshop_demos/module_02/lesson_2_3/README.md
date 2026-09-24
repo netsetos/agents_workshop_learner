@@ -4,10 +4,12 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+This lesson has no authored main HTML. Its file numbers follow the explicitly listed course-plan experiments; they do not claim an HTML heading match. Run those plan steps in the order below.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [demo_01_check_readiness_and_smoke.py](demo_01_check_readiness_and_smoke.py) | Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL. |
-| 2 | [demo_02_record_restart_inputs.py](demo_02_record_restart_inputs.py) | Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON. |
+| Plan step 1 | [demo_01_check_readiness_and_smoke.py](demo_01_check_readiness_and_smoke.py) | Check readiness and smoke |
+| Plan step 2 | [demo_02_record_restart_inputs.py](demo_02_record_restart_inputs.py) | Record restart inputs |
 
 ## Before starting
 
@@ -23,7 +25,7 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 

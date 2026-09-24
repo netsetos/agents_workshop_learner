@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_refusal_ladder_and_isolation.py](demo_01_refusal_ladder_and_isolation.py) | Compare admission/authentication/authorization refusals and cross-tenant golden rows. |
-| 3 | [demo_02_residency_and_backend_pin.py](demo_02_residency_and_backend_pin.py) | Read tenant policies and exercise a pin that residency rules override. |
-| 4 | [demo_03_authorization_regressions.py](demo_03_authorization_regressions.py) | Run the kit's actual tests for the same refusal and isolation contracts. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side.py](demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side.py) | The refusal ladder: the door, a 401 and a 403 side by side |
+| 4 | [demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member.py](demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member.py) | Cross-tenant: every isolation row, as the outsider and as a member |
+| 5 | [demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it.py](demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it.py) | Residency: each tenant's data_region, and the rule that applies it |
+| 6 | [demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it.py](demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it.py) | The policy against a pin: a tenant kept in India, pinned to a store outside it |
+| 7 | [demo_07_the_kit_s_own_tests_of_the_same_refusals.py](demo_07_the_kit_s_own_tests_of_the_same_refusals.py) | The kit's own tests of the same refusals |
 
 ## Before starting
 
@@ -25,11 +29,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +58,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_refusal_ladder_and_isolation.py
+### demo_03_the_refusal_ladder_the_door_a_401_and_a_403_side_by_side.py
 
-Compare admission/authentication/authorization refusals and cross-tenant golden rows.
+Do it
 
-**`step_01_example(session)` — The refusal ladder: the door, a 401 and a 403 side by side / Do it**
+**`step_01_the_refusal_ladder_the_door_a_401_and_a_40(session)` — The refusal ladder: the door, a 401 and a 403 side by side / Do it**
 
 Do it
 
@@ -72,7 +77,11 @@ no token                   403  (Cloud Run's own page: the request never reached
   documind-ui-sa's token     200  {"answer":"A confirmed employee at grade E3 or above serves a noti
 ```
 
-**`step_02_example(session)` — Cross-tenant: every isolation row, as the outsider and as a member / Do it**
+### demo_04_cross_tenant_every_isolation_row_as_the_outsider_and_as_a_member.py
+
+Do it
+
+**`step_01_cross_tenant_every_isolation_row_as_the_ou(session)` — Cross-tenant: every isolation row, as the outsider and as a member / Do it**
 
 Do it
 
@@ -95,9 +104,9 @@ the outsider, on 11 isolation rows: 403 on 100%
   mm-04  as zeta   HTTP 200  answerable False  no '5.2 per cent'
 ```
 
-### demo_02_residency_and_backend_pin.py
+### demo_05_residency_each_tenant_s_data_region_and_the_rule_that_applies_it.py
 
-Read tenant policies and exercise a pin that residency rules override.
+Do it: the three policies
 
 **`step_01_the_three_policies(session)` — Residency: each tenant's data_region, and the rule that applies it / Do it: the three policies**
 
@@ -113,7 +122,11 @@ zeta: data_region=any
 globex: data_region=in
 ```
 
-**`step_02_the_policy_against_a_pin_a_tenant_kept_in(session)` — The policy against a pin: a tenant kept in India, pinned to a store outside it / The policy against a pin: a tenant kept in India, pinned to a store outside it**
+### demo_06_the_policy_against_a_pin_a_tenant_kept_in_india_pinned_to_a_store_outside_it.py
+
+A pin set, a minute's wait, one question, its usage row, and the pin cleared. The cell pins globex to rag_engine, a managed store in us-central1, then waits a minute, because the API reads each tenant's settings once a minute. It asks one of globex's own questions and reads the question's usage row: which backend served, and policy_fallback. Then it clears the pin. RETRIEVAL_BACKEND is given on each make line on purpose, because a value exported in your shell would otherwise win.
+
+**`step_01_the_policy_against_a_pin_a_tenant_kept_in(session)` — The policy against a pin: a tenant kept in India, pinned to a store outside it / The policy against a pin: a tenant kept in India, pinned to a store outside it**
 
 A pin set, a minute's wait, one question, its usage row, and the pin cleared. The cell pins globex to rag_engine, a managed store in us-central1, then waits a minute, because the API reads each tenant's settings once a minute. It asks one of globex's own questions and reads the question's usage row: which backend served, and policy_fallback. Then it clears the pin. RETRIEVAL_BACKEND is given on each make line on purpose, because a value exported in your shell would otherwise win.
 
@@ -128,9 +141,9 @@ vector	1
 globex: retrieval_backend=default
 ```
 
-### demo_03_authorization_regressions.py
+### demo_07_the_kit_s_own_tests_of_the_same_refusals.py
 
-Run the kit's actual tests for the same refusal and isolation contracts.
+The smoke test's check 3b, and the chat service's check 4. The kit asserts these refusals itself, so a deploy that opened a door would fail its own smoke test. smoke/smoke.py sends its question again with no token and passes only on 401 or 403. smoke/smoke_chat.py asks the chat service as the outsider and passes only on a 403 from the roster, not a 401 from the verifier. The MCP server's smoke test does the same. The cell runs the API's smoke test and keeps two of its lines.
 
 **`step_01_the_kit_s_own_tests_of_the_same_refusals(session)` — The kit's own tests of the same refusals / The kit's own tests of the same refusals**
 
@@ -147,9 +160,9 @@ Expected shape, not a promised result:
   N pass · 0 fail
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -159,6 +172,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html`. All 24 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2bfa77b0d346884ddcee1c93f3b8bb4643d84862`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

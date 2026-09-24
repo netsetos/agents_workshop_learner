@@ -28,7 +28,10 @@ from .config import load_config
 
 
 def secret_name(name):
-    """Exclude credentials from persisted variables while retaining token budgets."""
+    """Exclude credentials from persisted variables while retaining token budgets.
+    
+    Example: secret_name(key)
+    """
     upper = name.upper()
     return (bool(re.search(r"PASSWORD|SECRET|CREDENTIAL|PRIVATE_KEY|API_KEY|DATABASE_URL|DSN", upper))
             or upper in {"TOK", "TOKEN", "AUTHORIZATION", "AUTH", "HEADERS"}
@@ -36,26 +39,34 @@ def secret_name(name):
 
 
 def utc_now():
-    """Return an unambiguous timestamp for ordering attempts and cloud observations."""
+    """Return an unambiguous timestamp for ordering attempts and cloud observations.
+    
+    Example: utc_now()
+    """
     return datetime.now(timezone.utc).isoformat()
 
 
 class DemoSession:
     """Open the active run of a lesson and record exactly which file was executed.
-
+    
     Args:
         script: The lesson demo's __file__; its adjacent lesson_map.json supplies
             the reviewed execution order and prerequisite identifiers.
         live: Refresh ADC and resolve project/API settings only when needed.
-
+    
     A process lock prevents simultaneous mutation of the same lesson session.
     Failed attempts remain failed and never satisfy a later prerequisite. Cleanup
     files are allowed after failure. A completed file is not replayed implicitly:
     set REPEAT=True in that demo only after reading its replay implications.
+    
+    Example: with DemoSession(__file__, live=False) as session: demonstrate(session)
     """
 
     def __init__(self, script, live=True, repeat=False, config=None):
-        """Locate this file in its lesson map and resolve the lesson-specific state directory."""
+        """Locate this file in its lesson map and resolve the lesson-specific state directory.
+        
+        Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
+        """
         self.script = Path(script).resolve()
         self.lesson_dir = self.script.parent
         # Lesson-specific preparation/cleanup can live in a setup/ subdirectory.
@@ -77,7 +88,10 @@ class DemoSession:
         self._original_path = None
 
     def __enter__(self):
-        """Validate run identity/order before opening any cloud clients or commands."""
+        """Validate run identity/order before opening any cloud clients or commands.
+        
+        Example: Use the owning class with a with statement; context entry/exit invokes this method.
+        """
         try:
             self._lock_fd = os.open(self.lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         except FileExistsError as exc:
@@ -148,7 +162,10 @@ class DemoSession:
             raise
 
     def __exit__(self, kind, error, traceback):
-        """Save the actual outcome and restore only the IDE process's local context."""
+        """Save the actual outcome and restore only the IDE process's local context.
+        
+        Example: self.__exit__(type(exc), exc, exc.__traceback__)
+        """
         try:
             if hasattr(self, "record"):
                 success = error is None or isinstance(error, SystemExit) and error.code in (None, 0)
@@ -178,16 +195,21 @@ class DemoSession:
         return False
 
     def save(self):
-        """Atomically checkpoint local state before/after operations, never API tokens."""
+        """Atomically checkpoint local state before/after operations, never API tokens.
+        
+        Example: self.save()
+        """
         write_json(self.directory / "session.json", self.state)
 
     def prepare_live(self):
         """Replace repeated shell exports with validated ADC and explicit project data.
-
+        
         This resolves addresses, not resource creation. A missing deployment is not
         repaired automatically; deployment lessons can still use the project/region
         while creating their services. Actual serving configuration is read only by
         the demos that require it.
+        
+        Example: self.prepare_live()
         """
         from .auth import checked_credentials, gcloud
         if not self.config.project:
@@ -200,7 +222,10 @@ class DemoSession:
         self.set_environment(**values)
 
     def set_environment(self, **values):
-        """Share explicit settings with later Python and command steps in this lesson."""
+        """Share explicit settings with later Python and command steps in this lesson.
+        
+        Example: self.set_environment(**values)
+        """
         for key, value in values.items():
             if value is None:
                 os.environ.pop(key, None)
@@ -212,7 +237,10 @@ class DemoSession:
         self.save()
 
     def identity_token(self, audience=None, outsider=False, include_email=True):
-        """Mint a fresh audience-bound token; returning it never persists it to disk."""
+        """Mint a fresh audience-bound token; returning it never persists it to disk.
+        
+        Example: token = identity_token(config, config.api_base_url) in an authenticated request
+        """
         from .auth import gcloud
         account = f"documind-outsider-sa@{self.config.project}.iam.gserviceaccount.com" if outsider else self.config.ui_service_account
         email_flag = ("--include-email",) if include_email else ()
@@ -221,10 +249,12 @@ class DemoSession:
 
     def service_environment(self, service, keys):
         """Read selected literal variables from the sole serving revision as JSON.
-
+        
         Missing values are unset, rather than set to empty strings that change SDK
         defaults. Secrets are neither fetched nor saved. Split traffic is rejected
         because one set of settings could not describe every request.
+        
+        Example: self.service_environment(service, keys) in the owning lesson/helper context
         """
         from .auth import gcloud
         from .discovery import select_revision
@@ -242,10 +272,12 @@ class DemoSession:
 
     def command(self, args, *, timeout=None, check=True, cwd=None):
         """Run an existing kit/CLI command, showing and retaining its real output.
-
+        
         Pass an argument list, not a shell-quoted string. Nonzero status raises by
         default so the next teaching checkpoint cannot silently continue. Long
         tuning/build commands intentionally have no implicit five-minute timeout.
+        
+        Example: self.command([sys.executable, 'commands/lane.py', '--project', self.config.project, 'tenant-backend', self.config.tenant_id, 'vector'])
         """
         number = len(list(self.attempt.glob("command_*.log"))) + 1
         path = self.attempt / f"command_{number:02}.log"
@@ -254,7 +286,10 @@ class DemoSession:
                                        env=dict(os.environ), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                        text=True, encoding="utf-8", errors="replace", start_new_session=os.name == "posix")
             def stream_output():
-                """Keep long builds visible while the parent can enforce a timeout."""
+                """Keep long builds visible while the parent can enforce a timeout.
+                
+                Example: stream_output() in the owning lesson/helper context
+                """
                 for line in process.stdout:
                     print(line, end="", flush=True)
                     output.write(line)
@@ -287,11 +322,13 @@ class DemoSession:
 
     def shell(self, code):
         """Run a lesson's CLI workflow with variables/functions carried to the next file.
-
+        
         Bash is required on the Linux Cloud Workstation for the kit's existing
         pipelines and shell helpers. A failure stops this attempt. State is saved
         on exit, including failure, so the explicit recovery/cleanup file can use
         identifiers that were created before the failing operation.
+        
+        Example: self.shell(code) in the owning lesson/helper context
         """
         if os.name == "nt" and not os.environ.get("WORKSHOP_TEST_BASH"):
             raise RuntimeError("Run command-based cloud demos on your Linux Cloud Workstation. Native offline Python examples also work here.")
@@ -326,7 +363,10 @@ class DemoSession:
                 self.set_environment(**{key: after.get(key) for key in variables})
 
     def pin_vector(self):
-        """Save the current tenant setting before selecting vector for the lesson."""
+        """Save the current tenant setting before selecting vector for the lesson.
+        
+        Example: self.pin_vector() in the owning lesson/helper context
+        """
         from google.cloud import firestore
         db = firestore.Client(project=self.config.project)
         ref = db.collection("tenant_settings").document(self.config.tenant_id)
@@ -342,10 +382,12 @@ class DemoSession:
 
     def start_local_service(self, args, health_url, *, expected_health=None):
         """Start an owned local process without holding the lesson lock indefinitely.
-
+        
         Logs are redirected before detaching, and the PID is saved before polling.
         A failed health check leaves evidence and an explicit cleanup path; it
         does not pretend the service started. Requires the Linux workstation.
+        
+        Example: self.start_local_service(args, health_url, expected_health) in the owning lesson/helper context
         """
         import urllib.request
         if os.name != "posix":
@@ -381,7 +423,10 @@ class DemoSession:
         raise TimeoutError(f"Local service did not become ready. Inspect {log_path}; cleanup remains available.")
 
     def stop_local_service(self):
-        """Stop only the process group whose command and cwd match this session."""
+        """Stop only the process group whose command and cwd match this session.
+        
+        Example: self.stop_local_service() in the owning lesson/helper context
+        """
         owned = self.state.get("local_service")
         if not owned:
             print("No local service was started by this session.")
@@ -397,7 +442,10 @@ class DemoSession:
         print("Stopped this session's local service; log retained:", owned["log"])
 
     def restore_backend(self):
-        """Restore the saved pin; refuse to overwrite an unrelated later pin change."""
+        """Restore the saved pin; refuse to overwrite an unrelated later pin change.
+        
+        Example: self.restore_backend() in the owning lesson/helper context
+        """
         from google.cloud import firestore
         previous = self.state.get("original_backend")
         if previous is None and not self.state.get("backend_restore_required"):

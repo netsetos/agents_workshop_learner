@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_embedding_contract_and_batches.py](demo_01_embedding_contract_and_batches.py) | Trace the declared embedding, embed a clause under both task types and inspect batching. |
-| 3 | [demo_02_validate_embedding_stamps.py](demo_02_validate_embedding_stamps.py) | Read and validate stored stamps, then run the operator's checks. |
-| 4 | [demo_03_reuse_changed_sections.py](demo_03_reuse_changed_sections.py) | Plan a reissue, measure live carry-over, undo it and inspect sparse features. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_one_declared_embedding_from_terraform_to_the_row.py](demo_03_one_declared_embedding_from_terraform_to_the_row.py) | One declared embedding, from Terraform to the row |
+| 4 | [demo_04_the_call_768_numbers_under_the_document_task_type.py](demo_04_the_call_768_numbers_under_the_document_task_type.py) | The call: 768 numbers under the document task type |
+| 5 | [demo_05_batches_250_texts_and_15_000_tokens_per_request.py](demo_05_batches_250_texts_and_15_000_tokens_per_request.py) | Batches: 250 texts and 15,000 tokens per request |
+| 6 | [demo_06_validate_the_stamp_and_the_function_that_reads_it.py](demo_06_validate_the_stamp_and_the_function_that_reads_it.py) | Validate: the stamp, and the function that reads it |
+| 7 | [demo_07_carry_over_re_issue_the_handbook_embed_only_what_changed.py](demo_07_carry_over_re_issue_the_handbook_embed_only_what_changed.py) | Carry-over: re-issue the handbook, embed only what changed |
+| 8 | [demo_08_the_sparse_twin_the_notebook_twin_and_what_embedding_bills.py](demo_08_the_sparse_twin_the_notebook_twin_and_what_embedding_bills.py) | The sparse twin, the notebook twin, and what embedding bills |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. Steps 6 and 7 import the worker's own indexer.py, which imports the Vector Search and Gemini SDKs at the top. The setup block installed only the Firestore client; add the other two once. Nothing in this lesson writes to Vector Search.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -59,9 +65,9 @@ Calls from the shell impersonate documind-ui-sa, the UI's own account, which mak
 
 Operation: bash — run in the operator shell, once.
 
-### demo_01_embedding_contract_and_batches.py
+### demo_03_one_declared_embedding_from_terraform_to_the_row.py
 
-Trace the declared embedding, embed a clause under both task types and inspect batching.
+All read-only. The first prints the worker's environment, the second asks the API what it is serving, the third reads the pair off the ledger rows the Versions table renders.
 
 **`step_01_three_reads_of_one_pair(session)` — One declared embedding, from Terraform to the row / Call it: three reads of one pair**
 
@@ -81,7 +87,11 @@ acme/hr_policy_2026.md                       chunks  283  reused    0  embedded 
 ...
 ```
 
-**`step_02_embed_one_clause_yourself_both_ways(session)` — The call: 768 numbers under the document task type / Do it: embed one clause yourself, both ways**
+### demo_04_the_call_768_numbers_under_the_document_task_type.py
+
+This cell costs money, a very small amount: two calls on a 234-character clause, about a tenth of a paisa. It reads NP-03's text and stored vector off the lane, embeds the same text under the document profile with the worker's exact settings, and compares by cosine. Then it embeds the same text under the query profile and compares again.
+
+**`step_01_embed_one_clause_yourself_both_ways(session)` — The call: 768 numbers under the document task type / Do it: embed one clause yourself, both ways**
 
 This cell costs money, a very small amount: two calls on a 234-character clause, about a tenth of a paisa. It reads NP-03's text and stored vector off the lane, embeds the same text under the document profile with the worker's exact settings, and compares by cosine. Then it embeds the same text under the query profile and compares again.
 
@@ -95,7 +105,11 @@ same text, RETRIEVAL_DOCUMENT: cosine to the lane's vector 1.0
 same text, RETRIEVAL_QUERY:    cosine to the lane's vector 0.9xxx
 ```
 
-**`step_03_plan_the_handbook_rs_0(session)` — Batches: 250 texts and 15,000 tokens per request / Do it: plan the handbook, Rs 0**
+### demo_05_batches_250_texts_and_15_000_tokens_per_request.py
+
+The loader's copy of the rule, on the chunks you cut in lesson 3.2. No call is made; a plan is printed.
+
+**`step_01_plan_the_handbook_rs_0(session)` — Batches: 250 texts and 15,000 tokens per request / Do it: plan the handbook, Rs 0**
 
 The loader's copy of the rule, on the chunks you cut in lesson 3.2. No call is made; a plan is printed.
 
@@ -109,9 +123,9 @@ wages mirror: 65 chunks, 102,444 chars -> 3 requests of [28, 28, 9] texts, est t
 the handbook in one request would carry about 52,783 estimated tokens: over 20,000, refused whole
 ```
 
-### demo_02_validate_embedding_stamps.py
+### demo_06_validate_the_stamp_and_the_function_that_reads_it.py
 
-Read and validate stored stamps, then run the operator's checks.
+Read the stamp off one row, Rs 0 This cell imports the worker's indexer.py as deployed and runs its test over every current acme row. The import builds the worker's embedding client (which is why the project must be in the environment) but nothing is embedded. The backfill target prints a plan when APPLY=1 is absent: it reads every current row and counts the ones that fail the same function. On a healthy lane the count is zero, and the target is how you would find out otherwise. It needs the index name from Terraform's outputs; if your checkout has no Terraform state, the second form takes the name from the API instead. The unit tests run the worker's file against doubled SDKs, offline, in a fraction of a second.
 
 **`step_01_read_the_stamp_off_one_row_rs_0(session)` — Validate: the stamp, and the function that reads it / Read the stamp off one row, Rs 0**
 
@@ -166,9 +180,9 @@ Ran 12 tests in 0.014s
 OK
 ```
 
-### demo_03_reuse_changed_sections.py
+### demo_07_carry_over_re_issue_the_handbook_embed_only_what_changed.py
 
-Plan a reissue, measure live carry-over, undo it and inspect sparse features.
+The worker's planner on the two versions of the handbook, with a stand-in for what held_vectors() would lend: one vector per version-1 hash. The upload must keep the object name, acme/hr_policy_2026.md, or it is a new source and nothing is held. The loop then waits for the worker's ingest_ok line and prints its counts. Cost: two clauses, 453 characters, about a hundredth of a paisa; a Markdown file pays no Document AI. Refresh Documents. The handbook's row in the Versions table now reads reused 281, embedded 2, retired 283, with an effective date of 1 October 2026 that the revision declares in its first lines. The first call below is the same row from the API; the second reads the rows themselves and checks the thing the counts claim: an unchanged clause's new row carries the same numbers as its retired predecessor, and a changed clause's does not. The third asks the question the revision changed the answer to. Upload version 1 again under the same name. Its doc_key is the one the lane retired a minute ago, so the worker does not parse, chunk or embed anything: it flips the retired rows back to current, retires revision 2, and logs ingest_reactivated with embedded 0. This is the undo from lesson 3.1, seen from the embedding side: nothing was ever deleted, so nothing has to be made again.
 
 **`step_01_plan_it_locally_rs_0(session)` — Carry-over: re-issue the handbook, embed only what changed / Plan it locally, Rs 0**
 
@@ -227,7 +241,11 @@ Expected shape, not a promised result:
 A confirmed employee at grade E3 or above serves a notice period of 60 days ... [Source 1]
 ```
 
-**`step_05_on_the_lane_s_text_rs_0(session)` — The sparse twin, the notebook twin, and what embedding bills / Run it on the lane's text, Rs 0**
+### demo_08_the_sparse_twin_the_notebook_twin_and_what_embedding_bills.py
+
+Run it on the lane's text, Rs 0
+
+**`step_01_on_the_lane_s_text_rs_0(session)` — The sparse twin, the notebook twin, and what embedding bills / Run it on the lane's text, Rs 0**
 
 Run it on the lane's text, Rs 0
 
@@ -242,9 +260,9 @@ the question: 13 dimensions, 9 shared with NP-03: ['a', 'at', 'confirmed', 'days
 same text twice, same dimensions: True
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -254,6 +272,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html`. All 48 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `517b23e8586183331850aae2cc29914890bc82df`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "2.3",
   "title": "Check readiness, save progress and close the session",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_check_readiness_and_smoke.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 check readiness and smoke",
+      "heading": "Check readiness and smoke",
       "purpose": "Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_check_readiness_and_smoke"
       ],
-      "heading": "demo 02 record restart inputs",
+      "heading": "Record restart inputs",
       "purpose": "Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
@@ -88,9 +96,13 @@
       "file": "setup/finish.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
+      "heading": "Lower service floors at session end",
       "purpose": "Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.",
       "anchor": "plan-3",
+      "anchors": [
+        "plan-3"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
@@ -117,7 +129,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

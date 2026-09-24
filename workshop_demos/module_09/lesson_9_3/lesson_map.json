@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "9.3",
   "title": "Measure latency, avoided calls and false cache hits",
   "source_kind": "main_html",
@@ -135,9 +135,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -165,19 +169,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_threshold_curve.py"
+      "next": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py"
     },
     {
-      "id": "demo_01_threshold_curve",
+      "id": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs",
       "lesson": "9.3",
-      "file": "demo_01_threshold_curve.py",
+      "file": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 threshold curve",
-      "purpose": "Compute candidate thresholds against labelled positive and negative pairs.",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "purpose": "Do it",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         9
       ],
@@ -197,25 +205,29 @@
           "expected": "42 pairs against 23 golden questions, text-embedding-005 @ us-central1\n\n  threshold   hit rate (same)   false-hit rate (different)\n       0.85      100% (24)          83% (15)\n       0.88      100% (24)          67% (12)\n       0.90       96% (23)          61% (11)\n       0.92       62% (15)          50% ( 9)\n       0.94       46% (11)          22% ( 4)\n       0.95       33% ( 8)          11% ( 2)\n       0.96       25% ( 6)           6% ( 1)\n       0.97       17% ( 4)           0% ( 0)\n       0.98        4% ( 1)           0% ( 0)\n\n  lowest threshold with no false hit: 0.97\n  nearest false pairs: pp-25 0.962, pp-31 0.955, pp-37 0.947, pp-35 0.941, pp-42 0.931, pp-41 0.929, pp-27 0.926, pp-30 0.926, pp-33 0.923, pp-40 0.914, pp-26 0.908, pp-36 0.885, pp-38 0.864, pp-39 0.858, pp-34 0.852, pp-29\n  report: /home/you/cache93_curve.json",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_curve_every_candidate_threshold_on_the",
           "window": 9,
           "source_line": 446,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_candidate_replay.py"
+      "next": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py"
     },
     {
-      "id": "demo_02_candidate_replay",
+      "id": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
       "lesson": "9.3",
-      "file": "demo_02_candidate_replay.py",
+      "file": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
       "category": "required",
       "requires": [
-        "demo_01_threshold_curve"
+        "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs"
       ],
-      "heading": "demo 02 candidate replay",
-      "purpose": "Create the cache candidate and replay the same labelled pairs live.",
+      "heading": "The replay: the same pairs, asked live at 0.95",
+      "purpose": "Do it: the candidate Do it: the replay",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         12,
         14
@@ -256,19 +268,63 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_avoided_calls_and_latency.py"
+      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
     },
     {
-      "id": "demo_03_avoided_calls_and_latency",
+      "id": "recovery_demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
       "lesson": "9.3",
-      "file": "demo_03_avoided_calls_and_latency.py",
+      "file": "recovery/demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "The replay: the same pairs, asked live at 0.95",
+      "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
+      "source_lines": [
+        571
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The replay: the same pairs, asked live at 0.95",
+          "subheading": "Do it: the replay",
+          "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
+          "label": "bash — run in the operator shell, only if the replay listed questions with no answer (the API's last three tracebacks)",
+          "expected": "",
+          "adaptations": [],
+          "id": "source_16",
+          "function": "step_01_the_replay",
+          "window": 16,
+          "source_line": 571,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
+    },
+    {
+      "id": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit",
+      "lesson": "9.3",
+      "file": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py",
       "category": "required",
       "requires": [
-        "demo_02_candidate_replay"
+        "demo_04_the_replay_the_same_pairs_asked_live_at_0_95"
       ],
-      "heading": "demo 03 avoided calls and latency",
-      "purpose": "Read candidate usage and the kit's cost/latency table before cleanup.",
+      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "purpose": "Do it: the candidate's rows Do it: the kit's table",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         18,
         20
@@ -312,58 +368,24 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "recovery_repair_replay_reader",
+      "id": "cleanup_demo_06_choosing_the_threshold_and_the_clean_up",
       "lesson": "9.3",
-      "file": "recovery/repair_replay_reader.py",
-      "category": "recovery",
-      "requires": [],
-      "heading": "repair replay reader",
-      "purpose": "Explicit recovery: repair replay reader",
-      "anchor": "s4",
-      "windows": [
-        16
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
-      "source_lines": [
-        571
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "The replay: the same pairs, asked live at 0.95",
-          "subheading": "Do it: the replay",
-          "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
-          "label": "bash — run in the operator shell, only if the replay listed questions with no answer (the API's last three tracebacks)",
-          "expected": "",
-          "adaptations": [],
-          "id": "source_16",
-          "function": "step_01_the_replay",
-          "window": 16,
-          "source_line": 571,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
-    },
-    {
-      "id": "setup_finish",
-      "lesson": "9.3",
-      "file": "setup/finish.py",
+      "file": "cleanup/demo_06_choosing_the_threshold_and_the_clean_up.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s6, s2",
+      "heading": "Choosing the threshold, and the clean-up",
+      "purpose": "At lesson end: What the numbers allow, where the threshold lives, and the candidate put away. The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's hit from lines, which the curve cannot see. The threshold is an environment variable, SEMANTIC_CACHE_THRESHOLD, read once when a revision starts. No make target passes it, so trying 0.97 on a candidate takes gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97, with your region and project, and then the replay again.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
-        22,
-        5
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        632,
-        386
+        632
       ],
       "offline": false,
       "live_verified": false,
@@ -381,7 +403,34 @@
           "window": 22,
           "source_line": 632,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_restore_settings",
+      "lesson": "9.3",
+      "file": "setup/restore_settings.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
+      "windows": [
+        5
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
+      "source_lines": [
+        386
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
@@ -392,13 +441,33 @@
             "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
           ],
           "id": "source_5",
-          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
+          "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
           "source_line": 386,
           "manual_checkpoint": null
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "9.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -406,14 +475,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 350
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 382
     },
     {
@@ -495,7 +564,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

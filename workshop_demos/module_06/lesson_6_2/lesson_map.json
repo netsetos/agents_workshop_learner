@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "6.2",
   "title": "Generate structured answers, citations and refusals",
   "source_kind": "main_html",
@@ -171,9 +171,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The model, its location, the tuned base, the router, the backend, the prompt version and the answer's reserve live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 3 and 6 import the kit. /version says what is actually serving.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -219,29 +223,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_answer_contract_and_citations.py"
+      "next": "demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k.py"
     },
     {
-      "id": "demo_01_answer_contract_and_citations",
+      "id": "demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k",
       "lesson": "6.2",
-      "file": "demo_01_answer_contract_and_citations.py",
+      "file": "demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 answer contract and citations",
-      "purpose": "Validate draft shapes and resolve a real answer's quotes against its rows.",
-      "anchor": "s3, s4",
+      "heading": "The contract offline: drafts that pass, drafts that fail, and the resolver on the kit's chunks",
+      "purpose": "Do it: six drafts, one resolution, two refusals",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        12,
-        16
+        12
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
-        471,
-        565
+        471
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
@@ -257,7 +263,36 @@
           "window": 12,
           "source_line": 471,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.py"
+    },
+    {
+      "id": "demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row",
+      "lesson": "6.2",
+      "file": "demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k"
+      ],
+      "heading": "One answer from the lane, field by field, with every quote checked against its row",
+      "purpose": "Do it: one question, two halves, three rows",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
+      "source_lines": [
+        565
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "One answer from the lane, field by field, with every quote checked against its row",
           "subheading": "Do it: one question, two halves, three rows",
@@ -266,33 +301,35 @@
           "expected": "the contract: {\"answer\": \"A confirmed employee in grade E3 must serve a notice period of ... [1]...\", \"citations\": \"3 citations\", \"confidence\": \"high\", \"answerable\": true}\nthe envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 1xxx, 'tokens_out': 4xx, 'cached_tokens': 0, 'cost_usd': 0.00xxxx, 'latency_ms': 2xxx, 'cache_hit': 'none'}\n[N] marks in the answer: ['1', '2', '3'] | citations returned: 3\n   [1] #  1 hr_policy_2026.md        page None score 0.9xxx kind text | row found True | quote in the row True | 1x words\n   [2] #  4 hr_policy_2026.md        page None score 0.8xxx kind text | row found True | quote in the row True | 1x words\n   [3] #  2 hr_policy_2026.md        page None score 0.6xxx kind text | row found True | quote in the row True | 1x words",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_02_one_question_two_halves_three_rows",
+          "function": "step_01_one_question_two_halves_three_rows",
           "window": 16,
           "source_line": 565,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_refusals_and_model_call.py"
+      "next": "demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ.py"
     },
     {
-      "id": "demo_02_refusals_and_model_call",
+      "id": "demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ",
       "lesson": "6.2",
-      "file": "demo_02_refusals_and_model_call.py",
+      "file": "demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ.py",
       "category": "required",
       "requires": [
-        "demo_01_answer_contract_and_citations"
+        "demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row"
       ],
-      "heading": "demo 02 refusals and model call",
-      "purpose": "Compare three refusal envelopes and reproduce the structured model request.",
-      "anchor": "s5, s6",
+      "heading": "Three refusals: the model's twice, the API's once, and how their envelopes differ",
+      "purpose": "Do it: three questions, three envelopes, three rows",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        21,
-        26
+        21
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
-        622,
-        712
+        622
       ],
       "offline": false,
       "live_verified": false,
@@ -310,7 +347,36 @@
           "window": 21,
           "source_line": 622,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price.py"
+    },
+    {
+      "id": "demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price",
+      "lesson": "6.2",
+      "file": "demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price.py",
+      "category": "required",
+      "requires": [
+        "demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ"
+      ],
+      "heading": "The model call by hand: the schema, the thinking, the usage, the price",
+      "purpose": "Do it: the same call, from the shell",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        26
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
+      "source_lines": [
+        712
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The model call by hand: the schema, the thinking, the usage, the price",
           "subheading": "Do it: the same call, from the shell",
@@ -319,33 +385,35 @@
           "expected": "finish: STOP | the draft: {\"answer\": \"A confirmed employee in grade E3 ... [1]\", \"citations\": [{\"source\": 1, \"quote\": \"...\"}], \"confidence\": \"high\", \"answerable\": true} ...\nresolved: [('acme:hr_policy_2026#NP-03', 1, 0.0)] | answerable True | confidence high\nusage: prompt 4xx | candidates 1xx | thoughts xxx | cached 0\npriced as the API would: $0.00xxxx = Rs 0.xxxx at 85.0",
           "adaptations": [],
           "id": "source_26",
-          "function": "step_02_the_same_call_from_the_shell",
+          "function": "step_01_the_same_call_from_the_shell",
           "window": 26,
           "source_line": 712,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_model_settings_and_failure.py"
+      "next": "demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router.py"
     },
     {
-      "id": "demo_03_model_settings_and_failure",
+      "id": "demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router",
       "lesson": "6.2",
-      "file": "demo_03_model_settings_and_failure.py",
+      "file": "demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router.py",
       "category": "required",
       "requires": [
-        "demo_02_refusals_and_model_call"
+        "demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price"
       ],
-      "heading": "demo 03 model settings and failure",
-      "purpose": "Inspect deployed model settings and the candidate failure that is not a refusal.",
-      "anchor": "s7, s8",
+      "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
+      "purpose": "Read the lane, Rs 0",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
-        32,
-        36
+        32
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
-        811,
-        869
+        811
       ],
       "offline": false,
       "live_verified": false,
@@ -363,7 +431,36 @@
           "window": 32,
           "source_line": 811,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal.py"
+    },
+    {
+      "id": "demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal",
+      "lesson": "6.2",
+      "file": "demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal.py",
+      "category": "required",
+      "requires": [
+        "demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router"
+      ],
+      "heading": "What an answer costs, and the failure that is not a refusal",
+      "purpose": "The code",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        36
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
+      "source_lines": [
+        869
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "What an answer costs, and the failure that is not a refusal",
           "subheading": "The code",
@@ -372,7 +469,7 @@
           "expected": "HTTP 502\n{\"detail\":\"generation produced no parseable answer (MAX_TOKENS)\"}\n2026-09-2xT1x:xx:xx.xxxxxxZ\tgeneration_unparsed\t\t\tMAX_TOKENS\n2026-09-2xT1x:xx:xx.xxxxxxZ\tgeneration_truncated\t16\t1x\ntemplate now:\n(empty means unset: the default, 2048)",
           "adaptations": [],
           "id": "source_36",
-          "function": "step_02_the_code",
+          "function": "step_01_the_code",
           "window": 36,
           "source_line": 869,
           "manual_checkpoint": null
@@ -381,14 +478,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "6.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -418,6 +519,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "6.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -425,21 +546,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 341
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 373
     },
     {
       "window": 7,
       "label": "expected (a lane deployed by make up may name the model explicitly; the rest are defaults)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 394
     },
     {
@@ -612,7 +733,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

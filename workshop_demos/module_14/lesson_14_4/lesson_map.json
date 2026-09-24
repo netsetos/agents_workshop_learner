@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "14.4",
   "title": "Complete the independent capstone and operational handover",
   "source_kind": "course_plan_and_kit",
@@ -20,9 +20,13 @@
       "file": "demo_01_run_the_operational_gate.py",
       "category": "required",
       "requires": [],
-      "heading": "demo 01 run the operational gate",
+      "heading": "Run the operational gate",
       "purpose": "Run the real smoke-all gate and preserve its output, including unavailable optional services and failures. Do not mark the capstone complete merely because earlier individual demos ran.",
       "anchor": "plan-1",
+      "anchors": [
+        "plan-1"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_4/README.md",
       "source_lines": [
@@ -55,9 +59,13 @@
       "requires": [
         "demo_01_run_the_operational_gate"
       ],
-      "heading": "demo 02 write an evidence handover",
+      "heading": "Write an evidence handover",
       "purpose": "Summarize actual lesson attempts and retain the exact candidate gate, failures and evidence locations. This is an evidence index for a human capstone review, not an automatic rubric score.",
       "anchor": "plan-2",
+      "anchors": [
+        "plan-2"
+      ],
+      "section_number": null,
       "windows": [],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_4/README.md",
       "source_lines": [
@@ -84,7 +92,7 @@
     }
   ],
   "live_verification": "Not performed; main HTML has not yet been authored.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
   "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide."
 }

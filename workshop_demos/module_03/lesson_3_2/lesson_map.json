@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "3.2",
   "title": "Parse documents and compare chunk boundaries",
   "source_kind": "main_html",
@@ -177,9 +177,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -207,29 +211,29 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_readers_and_page_counts.py"
+      "next": "demo_03_parse_document_ai_chosen_by_residency.py"
     },
     {
-      "id": "demo_01_readers_and_page_counts",
+      "id": "demo_03_parse_document_ai_chosen_by_residency",
       "lesson": "3.2",
-      "file": "demo_01_readers_and_page_counts.py",
+      "file": "demo_03_parse_document_ai_chosen_by_residency.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 readers and page counts",
-      "purpose": "Inspect parser selection, count the corpus and parse the small four-page PDF.",
-      "anchor": "s3, s4",
+      "heading": "Parse: Document AI, chosen by residency",
+      "purpose": "Two read-only calls. The first prints the worker's environment, where the residency and the processor id live. The second asks the Document AI API to list the processors in each of the two possible locations; exactly one location will list documind-parser.",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        12,
-        14
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        441,
-        480,
-        510
+        441
       ],
       "offline": false,
       "live_verified": false,
@@ -247,7 +251,38 @@
           "window": 9,
           "source_line": 441,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_count_pages_first_slices_and_the_250_page_line.py"
+    },
+    {
+      "id": "demo_04_count_pages_first_slices_and_the_250_page_line",
+      "lesson": "3.2",
+      "file": "demo_04_count_pages_first_slices_and_the_250_page_line.py",
+      "category": "required",
+      "requires": [
+        "demo_03_parse_document_ai_chosen_by_residency"
+      ],
+      "heading": "Count pages first: slices, and the 250-page line",
+      "purpose": "The same count, on the PDFs in your kit folder, with the same library. The cell prints pages and slices per PDF, then the totals and what one parse of the whole corpus would cost at each processor's list price - the rates as the course reads them on the pricing page, to re-verify before quoting. The amendment Act is four pages and globex does not hold it, so ingesting it there is a fresh source, one Document AI request, and a few paise. Then read the worker's line for it, which carries the page count as pages.",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        12,
+        14
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
+      "source_lines": [
+        480,
+        510
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Count pages first: slices, and the 250-page line",
           "subheading": "Do it: count the corpus, Rs 0",
@@ -256,7 +291,7 @@
           "expected": "acme/cgst_act_2017.pdf                           pages= 236 slices= 16 inline\nacme/code_on_social_security_2020.pdf            pages= 116 slices=  8 inline\nacme/code_on_wages_2019.pdf                      pages=  29 slices=  2 inline\nacme/maternity_benefit_amendment_act_2017.pdf    pages=   4 slices=  1 inline\nacme/posh_act_2013.pdf                           pages=  13 slices=  1 inline\n...\nzeta/osh_code_2020.pdf                           pages=  86 slices=  6 inline\n\n1065 pages in 79 Document AI requests\none full parse: OCR Rs 136   Layout Parser Rs 905",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_02_count_the_corpus_rs_0",
+          "function": "step_01_count_the_corpus_rs_0",
           "window": 12,
           "source_line": 480,
           "manual_checkpoint": null
@@ -269,25 +304,29 @@
           "expected": "globex_e7a1c0...    4    5    5",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_03_prove_it_on_the_lane_one_small_pdf_four_pa",
+          "function": "step_02_prove_it_on_the_lane_one_small_pdf_four_pa",
           "window": 14,
           "source_line": 510,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_handbook_sections.py"
+      "next": "demo_05_chunk_by_section_the_handbook_becomes_283_clauses.py"
     },
     {
-      "id": "demo_02_handbook_sections",
+      "id": "demo_05_chunk_by_section_the_handbook_becomes_283_clauses",
       "lesson": "3.2",
-      "file": "demo_02_handbook_sections.py",
+      "file": "demo_05_chunk_by_section_the_handbook_becomes_283_clauses.py",
       "category": "required",
       "requires": [
-        "demo_01_readers_and_page_counts"
+        "demo_04_count_pages_first_slices_and_the_250_page_line"
       ],
-      "heading": "demo 02 handbook sections",
-      "purpose": "Cut the handbook locally and compare its section chunks with indexed rows.",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "purpose": "Do it: cut the handbook, Rs 0 The worker cut the same file with the same rule when the corpus was loaded. Its rows for the handbook should be the same 283 locators in the same order.",
       "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         17,
         19
@@ -328,31 +367,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_pdf_windows_and_boundaries.py"
+      "next": "demo_06_chunk_by_window_an_act_becomes_page_windows.py"
     },
     {
-      "id": "demo_03_pdf_windows_and_boundaries",
+      "id": "demo_06_chunk_by_window_an_act_becomes_page_windows",
       "lesson": "3.2",
-      "file": "demo_03_pdf_windows_and_boundaries.py",
+      "file": "demo_06_chunk_by_window_an_act_becomes_page_windows.py",
       "category": "required",
       "requires": [
-        "demo_02_handbook_sections"
+        "demo_05_chunk_by_section_the_handbook_becomes_283_clauses"
       ],
-      "heading": "demo 03 pdf windows and boundaries",
-      "purpose": "Cut the Act into page windows, inspect citations and compare parser boundaries.",
-      "anchor": "s6, s7",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "purpose": "Your kit has a text mirror of every Act, made by pypdf when the corpus was fetched, with a form feed between pages. Cut the mirror of the Code on Wages and look at one seam. Read it on the lane, and ask a question that lands on a page",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         22,
         24,
-        25,
-        27
+        25
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         646,
         671,
-        685,
-        719
+        685
       ],
       "offline": false,
       "live_verified": false,
@@ -396,7 +437,36 @@
           "window": 25,
           "source_line": 685,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_07_compare_the_boundaries_two_parsers_one_document.py"
+    },
+    {
+      "id": "demo_07_compare_the_boundaries_two_parsers_one_document",
+      "lesson": "3.2",
+      "file": "demo_07_compare_the_boundaries_two_parsers_one_document.py",
+      "category": "required",
+      "requires": [
+        "demo_06_chunk_by_window_an_act_becomes_page_windows"
+      ],
+      "heading": "Compare the boundaries: two parsers, one document",
+      "purpose": "See it, page by page",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        27
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
+      "source_lines": [
+        719
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Compare the boundaries: two parsers, one document",
           "subheading": "See it, page by page",
@@ -405,7 +475,7 @@
           "expected": "lane 67 windows, mirror 65 windows\npages with a different number of windows: [(7, 3, 2), (23, 3, 2)]\np2-0 on the lane: 2000 chars, hash 4c19e0b7a2d8\np2-0 in the mirror: 2000 chars, hash 6a3f7e9c01b5\nlane text starts: 'THE CODE ON WAGES, 2019\\nCHAPTER I\\nPRELIMINARY\\n1. (1) This Code may be called ...'\nmirror text starts: 'THE CODE ON WAGES, 2019 CHAPTER I PRELIMINARY 1. (1) This Code may be called ...'",
           "adaptations": [],
           "id": "source_27",
-          "function": "step_04_see_it_page_by_page",
+          "function": "step_01_see_it_page_by_page",
           "window": 27,
           "source_line": 719,
           "manual_checkpoint": null
@@ -414,14 +484,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "3.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -450,6 +524,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "3.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -457,14 +551,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 334
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 366
     },
     {
@@ -574,7 +668,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Module 2 deployment and the seeded HR handbook/Code on Wages corpus."
+  "prerequisites": "Module 2 deployment and the seeded HR handbook/Code on Wages corpus.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

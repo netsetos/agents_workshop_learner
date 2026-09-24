@@ -12,8 +12,10 @@ import unittest
 from unittest.mock import patch
 
 from workshop_helpers.artifacts import write_json
+from workshop_helpers.cleanup import finish_lesson
 from workshop_helpers.config import load_config
 from workshop_helpers.gates import expect_failure, expect_guard, live_gate
+from workshop_helpers.lesson31 import contract_step
 from workshop_helpers.poison import matches
 from workshop_helpers.session import DemoSession
 from workshop_helpers.steps import ManualCheckpoint, backup_files, manual_checkpoint, restore_files, run_steps, wait_after
@@ -45,6 +47,61 @@ class GroupedTests(unittest.TestCase):
 
     def open(self, file="demo.py", **kw):
         return DemoSession(self.lesson / file, live=False, config=self.config, **kw)
+
+    def test_wait_after_uses_previous_section_timestamp(self):
+        with self.open() as s:
+            with patch('workshop_helpers.steps.utc_now', return_value='2026-01-01T00:00:00+00:00'):
+                run_steps(s, [('source_17', lambda run: None)])
+        with self.open('next.py') as s:
+            with patch('workshop_helpers.steps.time.time', return_value=1767226020), patch('workshop_helpers.steps.time.sleep') as sleep:
+                wait_after(s, 'source_17', 600)
+                sleep.assert_called_once_with(180)
+            s.state['function_checkpoints']['next'] = dict(s.state['function_checkpoints']['demo'])
+            with self.assertRaisesRegex(RuntimeError, 'Ambiguous'):
+                wait_after(s, 'source_17', 600)
+
+    def test_finish_dispatches_remaining_sections_even_after_failure(self):
+        self.mapping['demos'][-1]['orchestrator'] = True
+        for name in ('first', 'second'):
+            self.mapping['demos'].insert(-1, {'id': name, 'file': name+'.py', 'category': 'cleanup', 'requires': [], 'heading': name, 'purpose': 'restore'})
+            (self.lesson/(name+'.py')).write_text('def demonstrate(session):\n    session.state.setdefault("called", []).append("'+name+'")\n' + ('    if not session.state.get("repaired"): raise SystemExit(2)\n' if name=='first' else ''))
+        write_json(self.lesson/'lesson_map.json', self.mapping)
+        with self.assertRaisesRegex(RuntimeError, 'Cleanup incomplete'):
+            with self.open('setup/finish.py') as s:
+                finish_lesson(s)
+        with self.open('setup/finish.py') as s:
+            self.assertEqual(s.state['called'], ['first','second'])
+            self.assertEqual(s.step['id'], 'finish')
+            self.assertNotIn('lifecycle_complete', s.state)
+            s.state['repaired'] = True
+            finish_lesson(s)
+            self.assertEqual(s.state['called'], ['first','second','first'])
+            self.assertTrue(s.state['lifecycle_complete'])
+
+    def test_single_cleanup_section_does_not_close_whole_lesson(self):
+        with self.open() as s:
+            run_steps(s, [('restore', lambda run: None)], cleanup=True, finalize=False)
+            self.assertNotIn('lifecycle_complete', s.state)
+
+    def test_authored_contract_resume_uses_saved_versions_without_reupload(self):
+        calls = []
+        def upload(cloud):
+            calls.append('upload')
+            cloud.session.state['lesson31_versions'] = [{'generation': 'saved-generation'}]
+        def inspect(cloud, versions):
+            calls.append(versions[0]['generation'])
+            if not cloud.session.state.get('ready'):
+                raise RuntimeError('index still unavailable')
+        from types import SimpleNamespace
+        steps = [('upload', contract_step(upload)), ('inspect', contract_step(inspect, saved_versions=True))]
+        with patch('workshop_helpers.lesson31.LessonCloud', side_effect=lambda session: SimpleNamespace(session=session)):
+            with self.assertRaisesRegex(RuntimeError, 'index still unavailable'):
+                with self.open() as s:
+                    run_steps(s, steps)
+            with self.open() as s:
+                s.state['ready'] = True
+                run_steps(s, steps, retry_failed=True)
+        self.assertEqual(calls, ['upload','saved-generation','saved-generation'])
 
     def test_failure_requires_decision_then_skips_completed_upload(self):
         calls = []

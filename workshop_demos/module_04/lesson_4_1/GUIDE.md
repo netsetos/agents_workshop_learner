@@ -1,6 +1,6 @@
 # Lesson 4.1: source reading guide
 
-Read this beside the three demo files. The prose below follows the main HTML;
+Read this beside the section-numbered demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 

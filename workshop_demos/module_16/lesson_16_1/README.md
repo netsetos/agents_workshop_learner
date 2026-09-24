@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_media_contract_and_upload.py](demo_01_media_contract_and_upload.py) | Inspect media contracts and synthesize the workshop clip with the kit's media builder. |
-| 3 | [demo_02_index_and_inspect_segments.py](demo_02_index_and_inspect_segments.py) | Handle the old text fixture, index the media and inspect segment records. |
-| 4 | [demo_03_query_media_citations.py](demo_03_query_media_citations.py) | Ask about the clip and verify media citation/timestamp evidence. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_from_a_segment_to_a_pill_run.py](demo_03_from_a_segment_to_a_pill_run.py) | From a segment to a pill, run |
+| 4 | [demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard.py](demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard.py) | The clip built, the transcript withdrawn, the video heard |
+| 5 | [demo_05_the_clip_at_its_second.py](demo_05_the_clip_at_its_second.py) | The clip at its second |
+| 6 | [demo_06_make_smoke_media_green.py](demo_06_make_smoke_media_green.py) | make smoke-media, green |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_media_contract_and_upload.py
+### demo_03_from_a_segment_to_a_pill_run.py
 
-Inspect media contracts and synthesize the workshop clip with the kit's media builder.
+Do it
 
-**`step_01_example(session)` — From a segment to a pill, run / Do it**
+**`step_01_from_a_segment_to_a_pill_run(session)` — From a segment to a pill, run / Do it**
 
 Do it
 
@@ -76,7 +80,11 @@ Expected shape, not a promised result:
 5. mm-03, citing [Source 1]: kinds ['text'] -> cited no segment
 ```
 
-**`step_02_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
+### demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard.py
+
+make media MEDIA_ARGS=--video runs evals/build_media.py: Next, the transcript goes. upload.sh keeps a transcript home once its video exists, as it keeps a PDF's text mirror home, but it removes nothing already sent: make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back. make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back. Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call: Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call: Last, read the video's rows from acme's index, and hold them against the ground truth:
+
+**`step_01_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
 
 make media MEDIA_ARGS=--video runs evals/build_media.py:
 
@@ -98,11 +106,7 @@ python evals/build_media.py --video
   corpus/acme/townhall_2026_q1.mp4: 1.5 MB, 106 s, 5 utterances; ground truth beside it in townhall_2026_q1.segments.json
 ```
 
-### demo_02_index_and_inspect_segments.py
-
-Handle the old text fixture, index the media and inspect segment records.
-
-**`step_01_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
+**`step_02_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
 
 Next, the transcript goes. upload.sh keeps a transcript home once its video exists, as it keeps a PDF's text mirror home, but it removes nothing already sent: make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back.
 
@@ -114,7 +118,7 @@ Expected shape, not a promised result:
 {"event": "reconcile_withdrawn", "gcs_uri": "gs://documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.md", "fingerprint": "1a19e8a7d490616d", "retired_doc_keys": ["acme_b0d7702de2bf5a7d0770de433916af821b4a83f13ca321e074293ef99f4d75c1"], "retired_ids": ["acme:b0d7702de2bf5a7d0770de433916af821b4a83f13ca321e074293ef99f4d75c1#0"], "retired_chunks": 1, "note": "a tombstone: the object is kept and nothing automatic re-ingests it; make restore SOURCE= does"}
 ```
 
-**`step_02_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
+**`step_03_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
 
 make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back. Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call:
 
@@ -130,7 +134,7 @@ Expected shape, not a promised result:
 >> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=townhall_2026_q1.mp4 API=<candidate url>
 ```
 
-**`step_03_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
+**`step_04_definition(session)` — The clip built, the transcript withdrawn, the video heard / Definition**
 
 Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call: Last, read the video's rows from acme's index, and hold them against the ground truth:
 
@@ -154,11 +158,11 @@ checks: longest 36 s (the prompt asks for at most 60) -> PASS; start before end 
 the EMEA line: Arjun says '5.2 per cent' in the turn at 00:22-00:57; the segment that quotes it: t22-58
 ```
 
-### demo_03_query_media_citations.py
+### demo_05_the_clip_at_its_second.py
 
-Ask about the clip and verify media citation/timestamp evidence.
+Do it
 
-**`step_01_example(session)` — The clip at its second / Do it**
+**`step_01_the_clip_at_its_second(session)` — The clip at its second / Do it**
 
 Do it
 
@@ -176,7 +180,11 @@ the ground truth: Arjun says '5.2 per cent' in the turn 00:22-00:57
   https://storage.googleapis.com/documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.mp4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=documind-ui-sa%40documind-ai-YOUR-ID.iam.gserviceaccount.com%2F20260924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260924T083000Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=...#t=22
 ```
 
-**`step_02_example(session)` — make smoke-media, green / Do it**
+### demo_06_make_smoke_media_green.py
+
+Do it
+
+**`step_01_make_smoke_media_green(session)` — make smoke-media, green / Do it**
 
 Do it
 
@@ -199,9 +207,9 @@ DocuMind Module 9 - live smoke test
   6 passed, 0 failed
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -211,6 +219,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html`. All 26 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6580ee3d4f24d9fb786f5672f22d54789f8a197a`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

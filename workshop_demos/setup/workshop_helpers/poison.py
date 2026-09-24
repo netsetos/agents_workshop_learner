@@ -12,7 +12,10 @@ from .session import utc_now
 
 
 def create_drill(session):
-    """Create the same zero-byte PDF as make poison with a saved unique identity."""
+    """Create the same zero-byte PDF as make poison with a saved unique identity.
+    
+    Example: create_drill(session) saves this run's unique zero-byte PDF identity
+    """
     from google.api_core.exceptions import NotFound
     from google.cloud import storage
     bucket = storage.Client(project=session.config.project, credentials=session.credentials).bucket(session.config.uploads_bucket)
@@ -36,17 +39,22 @@ def create_drill(session):
 
 
 def matches(payload, saved):
-    """Require all object identity fields, not a similar filename or tenant alone."""
+    """Require all object identity fields, not a similar filename or tenant alone.
+    
+    Example: matches(payload, saved)
+    """
     return isinstance(payload, dict) and all(saved.get(key) is not None and str(payload.get(key)) == str(saved[key])
                                              for key in ("bucket", "name", "generation"))
 
 
 def inspect_dead_letter(session, *, acknowledge=False):
     """Read a bounded batch, acknowledging only this run's exact object generation.
-
-Unrelated messages are left unacknowledged and immediately made available again.
-No match means pending, never success; rerun this read later if the DLQ is busy.
-"""
+    
+    Unrelated messages are left unacknowledged and immediately made available again.
+    No match means pending, never success; rerun this read later if the DLQ is busy.
+    
+    Example: inspect_dead_letter(session, acknowledge=True)
+    """
     from google.auth.transport.requests import AuthorizedSession
     saved = session.state.get("poison_drill")
     if not saved:
@@ -90,7 +98,10 @@ No match means pending, never success; rerun this read later if the DLQ is busy.
 
 
 def finish_drill(session):
-    """Delete only the saved empty object generation; still try exact DLQ cleanup."""
+    """Delete only the saved empty object generation; still try exact DLQ cleanup.
+    
+    Example: finish_drill(session) removes only this run's owned fixture
+    """
     from google.api_core.exceptions import NotFound
     from google.cloud import storage
     saved = session.state.get("poison_drill")

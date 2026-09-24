@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "16.1",
   "title": "Query a video clip and validate media citations",
   "source_kind": "main_html",
@@ -120,9 +120,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -150,31 +154,33 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_media_contract_and_upload.py"
+      "next": "demo_03_from_a_segment_to_a_pill_run.py"
     },
     {
-      "id": "demo_01_media_contract_and_upload",
+      "id": "demo_03_from_a_segment_to_a_pill_run",
       "lesson": "16.1",
-      "file": "demo_01_media_contract_and_upload.py",
+      "file": "demo_03_from_a_segment_to_a_pill_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 media contract and upload",
-      "purpose": "Inspect media contracts and synthesize the workshop clip with the kit's media builder.",
-      "anchor": "s3, s4",
+      "heading": "From a segment to a pill, run",
+      "purpose": "Do it",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        8,
-        10
+        8
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
-        460,
-        532
+        460
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "From a segment to a pill, run",
@@ -184,45 +190,38 @@
           "expected": "1. resolve(): 2 draft citations in, 1 out ([Source 7] was not in the context):\n   {'chunk_id': 'acme:77e0...#1', 'source_uri': 'gs://documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.mp4', 'page': None, 'score': 0.88, 'kind': 'segment', 'media_url': 'gs://documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.mp4', 'start': 200.7, 'end': 238.0}\n2. the answer as the UI draws it: Revenue in EMEA fell 5.2 per cent, from 96 crore to 91 crore [Clip 3, 03:20].\n   under Sources: the video from second 200, captioned 03:20 – 03:58 of townhall_2026_q1.mp4\n3. the pills for the three sources: [1] [Fig 2] [Clip 3, 03:20] | a segment with no start: [Clip 3, ?]\n4. the usage row's modality: video | the same answer from the table and the figure: image\n5. mm-03, citing [Source 3]: kinds ['segment'] -> counts\n5. mm-03, citing [Source 1]: kinds ['text'] -> cited no segment",
           "adaptations": [],
           "id": "source_8",
-          "function": "step_01_example",
+          "function": "step_01_from_a_segment_to_a_pill_run",
           "window": 8,
           "source_line": 460,
           "manual_checkpoint": null
-        },
-        {
-          "heading": "The clip built, the transcript withdrawn, the video heard",
-          "subheading": "Definition",
-          "purpose": "make media MEDIA_ARGS=--video runs evals/build_media.py:",
-          "label": "bash — run in the operator shell, in the kit (the town hall synthesised: a minute or two)",
-          "expected": "python evals/build_media.py --video\n  keep annual_report_2026_fig3.png (43 KB) - exists; --force re-renders\n  keep inv_2026_0412.png (123 KB) - exists; --force re-renders\n  keep payment_of_bonus_act_1965_p30.png (151 KB) - exists; --force re-renders\n  voices: {'Meera': 'en-IN-Chirp3-HD-Aoede', 'Arjun': 'en-IN-Chirp3-HD-Charon'}\n  Meera    0.0-  21.5s  Good morning, everyone, and welcome to the FY2026 town hall....\n  Arjun   22.2-  57.7s  Thanks, Meera. Let me start with the table you all have on s...\n  Meera   58.4-  69.6s  On people, headcount closed at 4,180, up from 3,742, and att...\n  Arjun   70.3-  93.1s  On capital expenditure we invested 78 crore during the year....\n  Meera   93.8- 104.8s  Thank you, Arjun. Questions are open on the portal until Fri...\n  corpus/acme/townhall_2026_q1.mp4: 1.5 MB, 106 s, 5 utterances; ground truth beside it in townhall_2026_q1.segments.json",
-          "adaptations": [],
-          "id": "source_10",
-          "function": "step_02_definition",
-          "window": 10,
-          "source_line": 532,
-          "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_index_and_inspect_segments.py"
+      "next": "demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard.py"
     },
     {
-      "id": "demo_02_index_and_inspect_segments",
+      "id": "demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard",
       "lesson": "16.1",
-      "file": "demo_02_index_and_inspect_segments.py",
+      "file": "demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard.py",
       "category": "required",
       "requires": [
-        "demo_01_media_contract_and_upload"
+        "demo_03_from_a_segment_to_a_pill_run"
       ],
-      "heading": "demo 02 index and inspect segments",
-      "purpose": "Handle the old text fixture, index the media and inspect segment records.",
+      "heading": "The clip built, the transcript withdrawn, the video heard",
+      "purpose": "make media MEDIA_ARGS=--video runs evals/build_media.py: Next, the transcript goes. upload.sh keeps a transcript home once its video exists, as it keeps a PDF's text mirror home, but it removes nothing already sent: make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back. make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back. Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call: Then the video goes up as a new document. make reindex copies it into acme's uploads and waits for the worker's line. The worker's media branch describes it in one Gemini call: Last, read the video's rows from acme's index, and hold them against the ground truth:",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
+        10,
         13,
         16,
         18
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
+        532,
         561,
         589,
         599
@@ -234,12 +233,25 @@
         {
           "heading": "The clip built, the transcript withdrawn, the video heard",
           "subheading": "Definition",
+          "purpose": "make media MEDIA_ARGS=--video runs evals/build_media.py:",
+          "label": "bash — run in the operator shell, in the kit (the town hall synthesised: a minute or two)",
+          "expected": "python evals/build_media.py --video\n  keep annual_report_2026_fig3.png (43 KB) - exists; --force re-renders\n  keep inv_2026_0412.png (123 KB) - exists; --force re-renders\n  keep payment_of_bonus_act_1965_p30.png (151 KB) - exists; --force re-renders\n  voices: {'Meera': 'en-IN-Chirp3-HD-Aoede', 'Arjun': 'en-IN-Chirp3-HD-Charon'}\n  Meera    0.0-  21.5s  Good morning, everyone, and welcome to the FY2026 town hall....\n  Arjun   22.2-  57.7s  Thanks, Meera. Let me start with the table you all have on s...\n  Meera   58.4-  69.6s  On people, headcount closed at 4,180, up from 3,742, and att...\n  Arjun   70.3-  93.1s  On capital expenditure we invested 78 crore during the year....\n  Meera   93.8- 104.8s  Thank you, Arjun. Questions are open on the portal until Fri...\n  corpus/acme/townhall_2026_q1.mp4: 1.5 MB, 106 s, 5 utterances; ground truth beside it in townhall_2026_q1.segments.json",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_01_definition",
+          "window": 10,
+          "source_line": 532,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The clip built, the transcript withdrawn, the video heard",
+          "subheading": "Definition",
           "purpose": "Next, the transcript goes. upload.sh keeps a transcript home once its video exists, as it keeps a PDF's text mirror home, but it removes nothing already sent: make retire withdraws it as lesson 15.4 showed. The rows are retired, acme's two managed stores delete their copies, and the ledger row becomes a tombstone. The object stays in the bucket, and make restore would bring it back.",
           "label": "bash — run in the operator shell, in the kit (the transcript withdrawn from acme)",
           "expected": "{\"event\": \"reconcile_withdrawn\", \"gcs_uri\": \"gs://documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.md\", \"fingerprint\": \"1a19e8a7d490616d\", \"retired_doc_keys\": [\"acme_b0d7702de2bf5a7d0770de433916af821b4a83f13ca321e074293ef99f4d75c1\"], \"retired_ids\": [\"acme:b0d7702de2bf5a7d0770de433916af821b4a83f13ca321e074293ef99f4d75c1#0\"], \"retired_chunks\": 1, \"note\": \"a tombstone: the object is kept and nothing automatic re-ingests it; make restore SOURCE= does\"}",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_01_definition",
+          "function": "step_02_definition",
           "window": 13,
           "source_line": 561,
           "manual_checkpoint": null
@@ -252,7 +264,7 @@
           "expected": "...\n>> gs://documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.mp4 - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tacme_a85a89590f9a2b8b7ffc8588e11578297c5bc1fe5181482b0ef75d22d00881d3\t5\t0\t5\t0\t\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=townhall_2026_q1.mp4 API=<candidate url>",
           "adaptations": [],
           "id": "source_16",
-          "function": "step_02_definition",
+          "function": "step_03_definition",
           "window": 16,
           "source_line": 589,
           "manual_checkpoint": null
@@ -265,37 +277,39 @@
           "expected": "5 segments of townhall_2026_q1.mp4 in acme's index, against the ground truth's 5 turns:\n  segment t0-22     00:00-00:22   22 s  over Meera 00:00\n      Meera, the CEO, opens the FY2026 town hall over a first slide saying the video is synthetic, welcoming s...\n  segment t22-58    00:22-00:58   36 s  over Arjun 00:22\n      Arjun, the CFO, walks through the revenue table on slide two: India grew from 412 to 508 crore, up 23.3 ...\n  segment t58-70    00:58-01:10   12 s  over Meera 00:58\n      Meera says headcount closed at 4,180, up from 3,742, and attrition came down to 11.4 per cent from 14.9 ...\n  segment t70-93    01:10-01:33   23 s  over Arjun 01:10\n      Arjun says capital expenditure was 78 crore for the year: 31 crore went into the Hyderabad plant expansi...\n  segment t93-105   01:33-01:45   12 s  over Meera 01:33\n      Meera thanks Arjun and says questions are open on the portal until Friday, over a closing slide. The rec...\nchecks: longest 36 s (the prompt asks for at most 60) -> PASS; start before end in every row -> PASS; last end 01:45 against the speech's end 01:44\nthe EMEA line: Arjun says '5.2 per cent' in the turn at 00:22-00:57; the segment that quotes it: t22-58",
           "adaptations": [],
           "id": "source_18",
-          "function": "step_03_definition",
+          "function": "step_04_definition",
           "window": 18,
           "source_line": 599,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_query_media_citations.py"
+      "next": "demo_05_the_clip_at_its_second.py"
     },
     {
-      "id": "demo_03_query_media_citations",
+      "id": "demo_05_the_clip_at_its_second",
       "lesson": "16.1",
-      "file": "demo_03_query_media_citations.py",
+      "file": "demo_05_the_clip_at_its_second.py",
       "category": "required",
       "requires": [
-        "demo_02_index_and_inspect_segments"
+        "demo_04_the_clip_built_the_transcript_withdrawn_the_video_heard"
       ],
-      "heading": "demo 03 query media citations",
-      "purpose": "Ask about the clip and verify media citation/timestamp evidence.",
-      "anchor": "s5, s6",
+      "heading": "The clip at its second",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        23,
-        25
+        23
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
-        694,
-        781
+        694
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The clip at its second",
@@ -305,11 +319,40 @@
           "expected": "5 sources packed: [1] segment [2] figure [3] text [4] segment [5] text\nthe UI shows: The CFO said EMEA was the one region that shrank: revenue fell 5.2 per cent, from 96 crore to 91 crore, because two large renewals in Germany slipped into the first quarter of FY2027 [Clip 4, 00:22].\nrun_eval's rule for mm-03: cited kinds ['segment'], a segment asked for -> PASS\nthe ground truth: Arjun says '5.2 per cent' in the turn 00:22-00:57\n[Clip 4]: the player opens townhall_2026_q1.mp4 at 00:22, the clip runs to 00:58; it holds the turn -> PASS\n  open it at that second, for 15 minutes, as documind-ui-sa:\n  https://storage.googleapis.com/documind-ai-YOUR-ID-uploads/acme/townhall_2026_q1.mp4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=documind-ui-sa%40documind-ai-YOUR-ID.iam.gserviceaccount.com%2F20260924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260924T083000Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=...#t=22",
           "adaptations": [],
           "id": "source_23",
-          "function": "step_01_example",
+          "function": "step_01_the_clip_at_its_second",
           "window": 23,
           "source_line": 694,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_make_smoke_media_green.py"
+    },
+    {
+      "id": "demo_06_make_smoke_media_green",
+      "lesson": "16.1",
+      "file": "demo_06_make_smoke_media_green.py",
+      "category": "required",
+      "requires": [
+        "demo_05_the_clip_at_its_second"
+      ],
+      "heading": "make smoke-media, green",
+      "purpose": "Do it",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        25
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
+      "source_lines": [
+        781
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "make smoke-media, green",
           "subheading": "Do it",
@@ -318,7 +361,7 @@
           "expected": "DocuMind Module 9 - live smoke test\n  api: https://documind-api-NUMBER.asia-south1.run.app\n  mcp: https://documind-mcp-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] generate  blob=acme/gen/cd18d3eb6f6dd202ce999de17eb66160.png cached=False\n  [PASS] outsider refused  status=403\n  [PASS] figure citation  kinds=['figure'] media_url=gs://documind-ai-YOUR-ID-uploads/acme/annual_report_2026_fig  \"EMEA's revenue declined, from Rs 96 crore in FY2025 to Rs 91\"\n  [PASS] media documents  4 of 21 indexed documents are media: ['annual_report_2026_fig3.png', 'inv_2026_0412.png', 'payment_of_bonus_act_1965_p30.png', 'townhall_2026_q1.mp4']\n  [PASS] signed PUT  gs://documind-ai-YOUR-ID-uploads/acme/smoke_media_probe.png\n  [PASS] worker indexed the PUT  chunks=1 at 2026-09-24T08:14:00.300000+00:00\n  --------------------------------------------------------\n  6 passed, 0 failed",
           "adaptations": [],
           "id": "source_25",
-          "function": "step_02_example",
+          "function": "step_01_make_smoke_media_green",
           "window": 25,
           "source_line": 781,
           "manual_checkpoint": null
@@ -327,14 +370,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "16.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -363,6 +410,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "16.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -370,14 +437,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 371
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 403
     },
     {
@@ -480,7 +547,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Configured media ingestion services; this lesson builds its own synthetic video with make media before indexing it."
+  "prerequisites": "Configured media ingestion services; this lesson builds its own synthetic video with make media before indexing it.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

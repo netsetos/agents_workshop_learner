@@ -6,7 +6,10 @@ import subprocess
 
 
 def main():
-    """Run interactive ADC login for this workstation and preserve gcloud account selection."""
+    """Run interactive ADC login for this workstation and preserve gcloud account selection.
+    
+    Example: main()
+    """
     executable = shutil.which("gcloud")
     if not executable:
         raise RuntimeError("gcloud is not on the IDE's PATH.")

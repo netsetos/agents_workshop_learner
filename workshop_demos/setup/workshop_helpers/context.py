@@ -5,8 +5,15 @@ from .config import load_config
 
 
 class DemoContext:
+    """Provide a scoped preflight with lazy clients, actual kit functions and retained evidence.
+    
+    Example: with DemoContext("preflight", live=False) as context: print(context.kit)
+    """
     def __init__(self, demo, live=False, config=None, module=4, lesson="4.4"):
-        """Prepare a single preflight context; defer cloud clients until first use."""
+        """Prepare a single preflight context; defer cloud clients until first use.
+        
+        Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
+        """
         self.config = config or load_config()
         self.live = live
         self.credentials = None
@@ -14,7 +21,10 @@ class DemoContext:
         self.artifacts = ArtifactStore(self.config, demo, module=module, lesson=lesson)
 
     def __enter__(self):
-        """Print the chosen interpreter and refresh ADC only for a live preflight."""
+        """Print the chosen interpreter and refresh ADC only for a live preflight.
+        
+        Example: Use the owning class with a with statement; context entry/exit invokes this method.
+        """
         print("Python:", sys.executable)
         print("Mode:", "LIVE GCP" if self.live else "OFFLINE: simulated inputs, actual kit planner")
         print("Project:", self.config.project or "not needed offline", "| tenant:", self.config.tenant_id)
@@ -31,7 +41,10 @@ class DemoContext:
         return self
 
     def __exit__(self, kind, error, traceback):
-        """Record failure or completion and close opened clients while preserving exceptions."""
+        """Record failure or completion and close opened clients while preserving exceptions.
+        
+        Example: Use the owning class with a with statement; context entry/exit invokes this method.
+        """
         self.artifacts.finish(error)
         for client in (self._db, self._storage):
             close = getattr(client, "close", None)
@@ -42,7 +55,10 @@ class DemoContext:
 
     @property
     def kit(self):
-        """Load and record the actual local planner implementation on first use."""
+        """Load and record the actual local planner implementation on first use.
+        
+        Example: self.kit() in the owning lesson/helper context
+        """
         if self._kit is None:
             from .kit import KitAdapter
             self._kit = KitAdapter(self.config.kit_root)
@@ -51,7 +67,10 @@ class DemoContext:
 
     @property
     def db(self):
-        """Return a lazy Firestore client; reject cloud access in offline mode."""
+        """Return a lazy Firestore client; reject cloud access in offline mode.
+        
+        Example: self.db() in the owning lesson/helper context
+        """
         if not self.live:
             raise RuntimeError("An offline demo cannot open a cloud client.")
         if self._db is None:
@@ -61,7 +80,10 @@ class DemoContext:
 
     @property
     def storage(self):
-        """Return a lazy Storage client; reject cloud access in offline mode."""
+        """Return a lazy Storage client; reject cloud access in offline mode.
+        
+        Example: self.storage() in the owning lesson/helper context
+        """
         if not self.live:
             raise RuntimeError("An offline demo cannot open a cloud client.")
         if self._storage is None:
@@ -71,7 +93,10 @@ class DemoContext:
 
     @property
     def api(self):
-        """Return the serving API client and save its nonsecret configuration snapshot."""
+        """Return the serving API client and save its nonsecret configuration snapshot.
+        
+        Example: self.api() in the owning lesson/helper context
+        """
         if not self.live:
             raise RuntimeError("An offline demo cannot call the API.")
         if self._api is None:

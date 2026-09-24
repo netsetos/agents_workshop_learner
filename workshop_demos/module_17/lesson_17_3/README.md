@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_clean_baseline_and_candidate.py](demo_01_clean_baseline_and_candidate.py) | Read baseline requirements, create the tuned candidate and audit the comparison. |
-| 3 | [demo_02_paired_evaluation.py](demo_02_paired_evaluation.py) | Run the same questions on the baseline/candidate and inspect row-level results. |
-| 4 | [demo_03_verdict_and_cost_delta.py](demo_03_verdict_and_cost_delta.py) | Read the quality verdict and measured cost delta before removing the candidate. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_what_the_kit_does_with_a_tuned_candidate.py](demo_03_what_the_kit_does_with_a_tuned_candidate.py) | What the kit does with a tuned candidate |
+| 4 | [demo_04_the_candidate_audited.py](demo_04_the_candidate_audited.py) | The candidate, audited |
+| 5 | [demo_05_the_gate_on_both_revisions.py](demo_05_the_gate_on_both_revisions.py) | The gate on both revisions |
+| 6 | [demo_06_the_verdict_and_the_delta.py](demo_06_the_verdict_and_the_delta.py) | The verdict and the delta |
 
 ## Before starting
 
@@ -25,11 +28,13 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_06_the_verdict_and_the_delta.py](cleanup/demo_06_the_verdict_and_the_delta.py) — At lesson end: The decision is yours, and it reads the three results in order. The gate must pass. The judge says how often the tuned model gives the worse answer where the two differ. The delta says what that is worth at your volume. With a candidate that passes, there are three ways forward:
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +42,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +58,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_clean_baseline_and_candidate.py
+### demo_03_what_the_kit_does_with_a_tuned_candidate.py
 
-Read baseline requirements, create the tuned candidate and audit the comparison.
+Do it
 
-**`step_01_example(session)` — What the kit does with a tuned candidate / Do it**
+**`step_01_what_the_kit_does_with_a_tuned_candidate(session)` — What the kit does with a tuned candidate / Do it**
 
 Do it
 
@@ -78,7 +83,11 @@ gemini-3.6-flash             1      7400      210    0.0127      1.08    2100   
 projects/NUMBER/loca         1      7400      150    0.0021      0.18    1000   0.00
 ```
 
-**`step_02_the_candidate(session)` — The candidate, audited / Do it: the candidate**
+### demo_04_the_candidate_audited.py
+
+Do it: the candidate The cell makes the four checks from step 1:
+
+**`step_01_the_candidate(session)` — The candidate, audited / Do it: the candidate**
 
 Do it: the candidate
 
@@ -95,7 +104,7 @@ gcloud run services update documind-api --region asia-south1 --project documind-
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-**`step_03_the_audit(session)` — The candidate, audited / Do it: the audit**
+**`step_02_the_audit(session)` — The candidate, audited / Do it: the audit**
 
 The cell makes the four checks from step 1:
 
@@ -114,11 +123,11 @@ Expected shape, not a promised result:
 verdict: uncontaminated - one change, no answer cache, a training file the test set never entered, the same input price
 ```
 
-### demo_02_paired_evaluation.py
+### demo_05_the_gate_on_both_revisions.py
 
-Run the same questions on the baseline/candidate and inspect row-level results.
+Do it
 
-**`step_01_example(session)` — The gate on both revisions / Do it**
+**`step_01_the_gate_on_both_revisions(session)` — The gate on both revisions / Do it**
 
 Do it
 
@@ -166,7 +175,7 @@ report: /home/YOU/base173.json
   All thresholds met.
 ```
 
-**`step_02_example(session)` — The gate on both revisions / Do it**
+**`step_02_the_gate_on_both_revisions(session)` — The gate on both revisions / Do it**
 
 Do it
 
@@ -191,9 +200,9 @@ live  candidate  needs
   3 row(s) changed verdict; median round trip ... ms live, ... ms candidate
 ```
 
-### demo_03_verdict_and_cost_delta.py
+### demo_06_the_verdict_and_the_delta.py
 
-Read the quality verdict and measured cost delta before removing the candidate.
+Do it: the verdict The gates and the judge asked both revisions the same questions, so their usage rows are like for like. The cell prints make usage's model table, groups the rows by model, and prices the endpoint's rows at 1.5 times what they log.
 
 **`step_01_the_verdict(session)` — The verdict and the delta / Do it: the verdict**
 
@@ -250,9 +259,9 @@ the rupee delta: the tuned endpoint costs Rs 0.8079 less an answer, Rs 808 per 1
   (the usage rows alone say Rs 0.8959: they log the endpoint at its base's rate)
 ```
 
-### setup/finish.py
+### cleanup/demo_06_the_verdict_and_the_delta.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: The decision is yours, and it reads the three results in order. The gate must pass. The judge says how often the tuned model gives the worse answer where the two differ. The delta says what that is worth at your volume. With a candidate that passes, there are three ways forward:
 
 **`step_01_the_decision_and_the_candidate_s_tag(session)` — The verdict and the delta / The decision, and the candidate's tag**
 
@@ -267,7 +276,11 @@ Expected shape, not a promised result:
 the candidate URL now: HTTP 404
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -275,6 +288,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

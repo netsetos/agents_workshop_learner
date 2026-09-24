@@ -4,12 +4,17 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_answer_contract_and_citations.py](demo_01_answer_contract_and_citations.py) | Validate draft shapes and resolve a real answer's quotes against its rows. |
-| 3 | [demo_02_refusals_and_model_call.py](demo_02_refusals_and_model_call.py) | Compare three refusal envelopes and reproduce the structured model request. |
-| 4 | [demo_03_model_settings_and_failure.py](demo_03_model_settings_and_failure.py) | Inspect deployed model settings and the candidate failure that is not a refusal. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k.py](demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k.py) | The contract offline: drafts that pass, drafts that fail, and the resolver on the kit's chunks |
+| 4 | [demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.py](demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.py) | One answer from the lane, field by field, with every quote checked against its row |
+| 5 | [demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ.py](demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ.py) | Three refusals: the model's twice, the API's once, and how their envelopes differ |
+| 6 | [demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price.py](demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price.py) | The model call by hand: the schema, the thinking, the usage, the price |
+| 7 | [demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router.py](demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router.py) | The model as a setting: the global client, a tuned endpoint, a pin and a router |
+| 8 | [demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal.py](demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal.py) | What an answer costs, and the failure that is not a refusal |
 
 ## Before starting
 
@@ -25,11 +30,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The model, its location, the tuned base, the router, the backend, the prompt version and the answer's reserve live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 3 and 6 import the kit. /version says what is actually serving.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -69,9 +75,9 @@ routing: off (default)  backend: vertex (default)  prompt: v3 (default)  answer:
 version: gemini-3.6-flash | documind-rag@v3 | vertex
 ```
 
-### demo_01_answer_contract_and_citations.py
+### demo_03_the_contract_offline_drafts_that_pass_drafts_that_fail_and_the_resolver_on_the_k.py
 
-Validate draft shapes and resolve a real answer's quotes against its rows.
+Do it: six drafts, one resolution, two refusals
 
 **`step_01_six_drafts_one_resolution_two_refusals(session)` — The contract offline: drafts that pass, drafts that fail, and the resolver on the kit's chunks / Do it: six drafts, one resolution, two refusals**
 
@@ -93,7 +99,11 @@ the model's refusal, resolved: {'answer': 'The context does not contain the answ
 the empty pool's, written by the API without a model: The corpus holds nothing near this question: no passage of this tenant's current documents was r ...
 ```
 
-**`step_02_one_question_two_halves_three_rows(session)` — One answer from the lane, field by field, with every quote checked against its row / Do it: one question, two halves, three rows**
+### demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.py
+
+Do it: one question, two halves, three rows
+
+**`step_01_one_question_two_halves_three_rows(session)` — One answer from the lane, field by field, with every quote checked against its row / Do it: one question, two halves, three rows**
 
 Do it: one question, two halves, three rows
 
@@ -110,9 +120,9 @@ the envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 1x
    [3] #  2 hr_policy_2026.md        page None score 0.6xxx kind text | row found True | quote in the row True | 1x words
 ```
 
-### demo_02_refusals_and_model_call.py
+### demo_05_three_refusals_the_model_s_twice_the_api_s_once_and_how_their_envelopes_differ.py
 
-Compare three refusal envelopes and reproduce the structured model request.
+Do it: three questions, three envelopes, three rows
 
 **`step_01_three_questions_three_envelopes_three_rows(session)` — Three refusals: the model's twice, the API's once, and how their envelopes differ / Do it: three questions, three envelopes, three rows**
 
@@ -131,7 +141,11 @@ acme	False	vertex	1xxx	0.00xxxx
 globex	False	vertex	1xxx	0.00xxxx
 ```
 
-**`step_02_the_same_call_from_the_shell(session)` — The model call by hand: the schema, the thinking, the usage, the price / Do it: the same call, from the shell**
+### demo_06_the_model_call_by_hand_the_schema_the_thinking_the_usage_the_price.py
+
+Do it: the same call, from the shell
+
+**`step_01_the_same_call_from_the_shell(session)` — The model call by hand: the schema, the thinking, the usage, the price / Do it: the same call, from the shell**
 
 Do it: the same call, from the shell
 
@@ -146,9 +160,9 @@ usage: prompt 4xx | candidates 1xx | thoughts xxx | cached 0
 priced as the API would: $0.00xxxx = Rs 0.xxxx at 85.0
 ```
 
-### demo_03_model_settings_and_failure.py
+### demo_07_the_model_as_a_setting_the_global_client_a_tuned_endpoint_a_pin_and_a_router.py
 
-Inspect deployed model settings and the candidate failure that is not a refusal.
+Read the lane, Rs 0
 
 **`step_01_read_the_lane_rs_0(session)` — The model as a setting: the global client, a tuned endpoint, a pin and a router / Read the lane, Rs 0**
 
@@ -163,7 +177,11 @@ acme: retrieval_backend=vector
 acme's tenant_settings: {'generator_model': None, 'model_backend': None, 'retrieval_backend': 'vector', 'data_region': 'any'}
 ```
 
-**`step_02_the_code(session)` — What an answer costs, and the failure that is not a refusal / The code**
+### demo_08_what_an_answer_costs_and_the_failure_that_is_not_a_refusal.py
+
+The code
+
+**`step_01_the_code(session)` — What an answer costs, and the failure that is not a refusal / The code**
 
 The code
 
@@ -180,9 +198,9 @@ template now:
 (empty means unset: the default, 2048)
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -192,6 +210,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html`. All 37 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c8fdaf018887ed16c078e2078289794f62ff081b`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

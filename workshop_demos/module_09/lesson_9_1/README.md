@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_context_cache_and_cost.py](demo_01_context_cache_and_cost.py) | Ask uncached, create a context cache, repeat the ask and inspect the bill. |
-| 3 | [demo_02_answer_cache_miss_and_hits.py](demo_02_answer_cache_miss_and_hits.py) | Create an answer-cache candidate and compare misses, hits and a paraphrase. |
-| 4 | [demo_03_inspect_cached_state.py](demo_03_inspect_cached_state.py) | Read what each cache actually holds before cleanup. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer.py](demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer.py) | The context cache: a pack, a cache, and the next answer |
+| 4 | [demo_04_the_rows_what_the_context_cache_did_to_the_bill.py](demo_04_the_rows_what_the_context_cache_did_to_the_bill.py) | The rows: what the context cache did to the bill |
+| 5 | [demo_05_the_answer_cache_a_candidate_that_remembers_answers.py](demo_05_the_answer_cache_a_candidate_that_remembers_answers.py) | The answer cache: a candidate that remembers answers |
+| 6 | [demo_06_four_asks_a_miss_two_hits_and_a_paraphrase.py](demo_06_four_asks_a_miss_two_hits_and_a_paraphrase.py) | Four asks: a miss, two hits and a paraphrase |
+| 7 | [demo_07_what_each_cache_is_holding_and_the_clean_up.py](demo_07_what_each_cache_is_holding_and_the_clean_up.py) | What each cache is holding, and the clean-up |
 
 ## Before starting
 
@@ -25,11 +29,13 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_07_what_each_cache_is_holding_and_the_clean_up.py](cleanup/demo_07_what_each_cache_is_holding_and_the_clean_up.py) — At lesson end: The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it. The two records show where each cache keeps its weight. For the context cache, Firestore holds only a pointer and a few facts, and the pack's forty-odd thousand tokens sit on Google's side, billed by the hour until they expire or are deleted. For the answer cache, Firestore holds everything: the answer, its citations and the question's 768-number embedding. That costs Firestore storage and reads, for 24 hours. The clean-up removes the candidate's tag and recorded name, and deletes the context cache. The next acme question to the live API finds no record and runs uncached at once.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +43,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,9 +59,9 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_context_cache_and_cost.py
+### demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer.py
 
-Ask uncached, create a context cache, repeat the ask and inspect the bill.
+Do it: the question, uncached Do it: the cache Do it: the same question, with the cache
 
 **`step_01_the_question_uncached(session)` — The context cache: a pack, a cache, and the next answer / Do it: the question, uncached**
 
@@ -98,7 +104,11 @@ Expected shape, not a promised result:
 backend vertex cache_hit none     tokens_in  43071  cached_tokens  41259   2650 ms  | Employees may work remotely up to eight days
 ```
 
-**`step_04_example(session)` — The rows: what the context cache did to the bill / Do it**
+### demo_04_the_rows_what_the_context_cache_did_to_the_bill.py
+
+Do it
+
+**`step_01_the_rows_what_the_context_cache_did_to_the(session)` — The rows: what the context cache did to the bill / Do it**
 
 Do it
 
@@ -111,11 +121,11 @@ Expected shape, not a promised result:
   00041-kqz  vertex  in  43071  cached  41259  Rs 1.0197   2650 ms
 ```
 
-### demo_02_answer_cache_miss_and_hits.py
+### demo_05_the_answer_cache_a_candidate_that_remembers_answers.py
 
-Create an answer-cache candidate and compare misses, hits and a paraphrase.
+Do it
 
-**`step_01_example(session)` — The answer cache: a candidate that remembers answers / Do it**
+**`step_01_the_answer_cache_a_candidate_that_remember(session)` — The answer cache: a candidate that remembers answers / Do it**
 
 Do it
 
@@ -132,7 +142,11 @@ gcloud run services update documind-api --region asia-south1 --project documind-
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-**`step_02_four_asks_a_miss_two_hits_and_a_paraphrase(session)` — Four asks: a miss, two hits and a paraphrase / Four asks: a miss, two hits and a paraphrase**
+### demo_06_four_asks_a_miss_two_hits_and_a_paraphrase.py
+
+One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.
+
+**`step_01_four_asks_a_miss_two_hits_and_a_paraphrase(session)` — Four asks: a miss, two hits and a paraphrase / Four asks: a miss, two hits and a paraphrase**
 
 One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.
 
@@ -147,7 +161,7 @@ backend vertex cache_hit none     tokens_in  43071  cached_tokens  41259   2590 
   backend vertex cache_hit none     tokens_in  43053  cached_tokens  41259   2720 ms  | Employees may work remotely up to eight days
 ```
 
-**`step_03_four_asks_a_miss_two_hits_and_a_paraphrase(session)` — Four asks: a miss, two hits and a paraphrase / Four asks: a miss, two hits and a paraphrase**
+**`step_02_four_asks_a_miss_two_hits_and_a_paraphrase(session)` — Four asks: a miss, two hits and a paraphrase / Four asks: a miss, two hits and a paraphrase**
 
 One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.
 
@@ -164,9 +178,9 @@ Expected shape, not a promised result:
   00044-rtv  vertex  in  43053  cached  41259  Rs 1.0085   2720 ms
 ```
 
-### demo_03_inspect_cached_state.py
+### demo_07_what_each_cache_is_holding_and_the_clean_up.py
 
-Read what each cache actually holds before cleanup.
+The record behind the context cache, the entry behind the hit, and both caches put away. The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it.
 
 **`step_01_what_each_cache_is_holding_and_the_clean_u(session)` — What each cache is holding, and the clean-up / What each cache is holding, and the clean-up**
 
@@ -191,9 +205,9 @@ answer cache  (2 acme entries; 1 for this question's words)
     answer: Employees may work remotely up to eight days per month with   citations: 1
 ```
 
-### setup/finish.py
+### cleanup/demo_07_what_each_cache_is_holding_and_the_clean_up.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it. The two records show where each cache keeps its weight. For the context cache, Firestore holds only a pointer and a few facts, and the pack's forty-odd thousand tokens sit on Google's side, billed by the hour until they expire or are deleted. For the answer cache, Firestore holds everything: the answer, its citations and the question's 768-number embedding. That costs Firestore storage and reads, for 24 hours. The clean-up removes the candidate's tag and recorded name, and deletes the context cache. The next acme question to the live API finds no record and runs uncached at once.
 
 **`step_01_what_each_cache_is_holding_and_the_clean_u(session)` — What each cache is holding, and the clean-up / What each cache is holding, and the clean-up**
 
@@ -214,7 +228,11 @@ cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=
   deleted acme's cache
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -222,6 +240,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html`. All 32 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `ee993d0dd1999f045798aa2dc6a500e1d3d86122`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

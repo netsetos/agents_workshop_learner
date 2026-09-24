@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "18.4",
   "title": "Compare actual backends and verify shutdown behavior",
   "source_kind": "main_html",
@@ -120,9 +120,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -150,19 +154,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_comparison_math.py"
+      "next": "demo_03_the_table_s_maths_read.py"
     },
     {
-      "id": "demo_01_comparison_math",
+      "id": "demo_03_the_table_s_maths_read",
       "lesson": "18.4",
-      "file": "demo_01_comparison_math.py",
+      "file": "demo_03_the_table_s_maths_read.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 comparison math",
-      "purpose": "Read the comparison definitions and validate the table's calculations.",
+      "heading": "The table's maths, read",
+      "purpose": "Do it",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         9,
         11
@@ -184,7 +192,7 @@
           "expected": "backend            rows  groundedness  cite-precision   p95 ms  Rs/1k queries\n------------------------------------------------------------------------------\ndocumind-general      3         0.500           0.667     1200          42.00\ndocumind-slm          3         1.000           0.500     3100        1951.33\n\nselftest OK - groundedness excludes refusal rows, precision is per cited chunk, p95 is the 95th latency, Rs/1k is mean cost x 1000",
           "adaptations": [],
           "id": "source_9",
-          "function": "step_01_example",
+          "function": "step_01_the_table_s_maths_read",
           "window": 9,
           "source_line": 450,
           "manual_checkpoint": null
@@ -197,25 +205,29 @@
           "expected": "a row asks the gateway for a route by name: documind-general, documind-slm (make compare's default)\n  its context: the citations' quotes of the API's own answer - retrieve() posts to /v1/query\n  if that answer takes more than 20 s, the row's context is empty, and only the log says so\nfrom the gateway's reply a row keeps the answer and the token counts, and reads neither the model that answered nor x-litellm-response-cost\nits price is the script's own, by the route asked (USD a million tokens, in / out):\n  documind-general    table  1.50 /  7.50   config.yaml  1.50 /  7.50\n  documind-reasoning  table  1.50 /  7.50   config.yaml  2.00 / 12.00  <- no entry: documind-general's\n  documind-slm        table 20.50 / 20.50   config.yaml 20.50 / 20.50\n  documind-sensitive  table  1.50 /  7.50   config.yaml 20.50 / 20.50  <- no entry: documind-general's\n  documind-inference  table  1.50 /  7.50   config.yaml  6.80 /  6.80  <- no entry: documind-general's\n  documind-gke        table 20.50 / 20.50   config.yaml 20.50 / 20.50\np95 on 20 rows is sorted row 19 of 20: the slowest row never shows",
           "adaptations": [],
           "id": "source_11",
-          "function": "step_02_example",
+          "function": "step_02_the_table_s_maths_read",
           "window": 11,
           "source_line": 459,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_compare_real_backends.py"
+      "next": "demo_04_the_comparison_with_the_actual_backends.py"
     },
     {
-      "id": "demo_02_compare_real_backends",
+      "id": "demo_04_the_comparison_with_the_actual_backends",
       "lesson": "18.4",
-      "file": "demo_02_compare_real_backends.py",
+      "file": "demo_04_the_comparison_with_the_actual_backends.py",
       "category": "required",
       "requires": [
-        "demo_01_comparison_math"
+        "demo_03_the_table_s_maths_read"
       ],
-      "heading": "demo 02 compare real backends",
-      "purpose": "Run the comparison against actual configured backends and inspect results.",
+      "heading": "The comparison, with the actual backends",
+      "purpose": "Do it",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         14
       ],
@@ -235,33 +247,35 @@
           "expected": "backend            rows  groundedness  cite-precision   p95 ms  Rs/1k queries\n------------------------------------------------------------------------------\ndocumind-general     20         1.000           1.000     1500          38.69\ndocumind-slm         20         0.850           1.000     3100         262.77\ndocumind-inference   20         0.850           1.000     3400          38.50\n\nwhat answered each route - the gateway's reply, which the table does not keep:\n  documind-general    gemini-3.6-flash            20 rows\n  documind-slm        ollama_chat/documind-slm    20 rows\n  documind-inference  ollama_chat/documind-slm    20 rows\nthe rupees for these rows, the gateway's price against the table's:\n  documind-general    Rs   0.77   Rs   0.77\n  documind-slm        Rs   5.26   Rs   5.26\n  documind-inference  Rs   5.26   Rs   0.77\nthe slowest documind-slm row: 55.7 s; the p95 the table prints is row 19 of 20, 3.1 s",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_01_example",
+          "function": "step_01_the_comparison_with_the_actual_backends",
           "window": 14,
           "source_line": 530,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_shutdown_and_prove_zero_instances.py"
+      "next": "demo_05_everything_off.py"
     },
     {
-      "id": "demo_03_shutdown_and_prove_zero_instances",
+      "id": "demo_05_everything_off",
       "lesson": "18.4",
-      "file": "demo_03_shutdown_and_prove_zero_instances.py",
+      "file": "demo_05_everything_off.py",
       "category": "required",
       "requires": [
-        "demo_02_compare_real_backends"
+        "demo_04_the_comparison_with_the_actual_backends"
       ],
-      "heading": "demo 03 shutdown and prove zero instances",
-      "purpose": "Run shutdown controls, then inspect monitoring after the idle interval.",
-      "anchor": "s5, s6",
+      "heading": "Everything off",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        17,
-        20
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
-        612,
-        647
+        612
       ],
       "offline": false,
       "live_verified": false,
@@ -275,11 +289,40 @@
           "expected": "...\ndocumind-slm scaled to zero\n...\ndocumind-gateway scaled to zero\n...\nvLLM workload removed; the cluster and any Standard lab node remain (gke.tf) - make down removes them\ndocumind-slm: min-instances 0\ndocumind-vllm: min-instances absent\ndocumind-gateway: min-instances 0\ndocumind-ui: min-instances 0",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_01_example",
+          "function": "step_01_everything_off",
           "window": 17,
           "source_line": 612,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_zero_gpu_instances.py"
+    },
+    {
+      "id": "demo_06_zero_gpu_instances",
+      "lesson": "18.4",
+      "file": "demo_06_zero_gpu_instances.py",
+      "category": "required",
+      "requires": [
+        "demo_05_everything_off"
+      ],
+      "heading": "Zero GPU instances",
+      "purpose": "Do it",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        20
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
+      "source_lines": [
+        647
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Zero GPU instances",
           "subheading": "Do it",
@@ -291,7 +334,7 @@
             "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
           ],
           "id": "source_20",
-          "function": "step_02_example",
+          "function": "step_01_zero_gpu_instances",
           "window": 20,
           "source_line": 647,
           "manual_checkpoint": "The next read is Cloud Monitoring at least ten minutes after make off. Stop and rerun this demo later if you like; completed comparison/shutdown steps are retained. After done, it waits only for whatever is left of the ten minutes."
@@ -300,14 +343,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "18.4",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -336,6 +383,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "18.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -343,14 +410,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 355
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 387
     },
     {
@@ -432,7 +499,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "Actual configured comparison backends and monitoring read access; shutdown does not instantly imply zero instances."
+  "prerequisites": "Actual configured comparison backends and monitoring read access; shutdown does not instantly imply zero instances.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

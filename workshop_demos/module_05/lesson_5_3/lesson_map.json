@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "5.3",
   "title": "Rerank and inspect retrieved candidates",
   "source_kind": "main_html",
@@ -190,9 +190,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint and the deployed index are for step 4's pool; the reranker's settings say what the API is running with, and an empty value means the setting's default. Step 4's rank call and the in-process calls in steps 5 and 7 need the API's Ranking client in the venv at the API's own pin; the pip line is harmless if it is already there. A name the service does not set is unset here rather than exported empty, because the kit's settings class reads an empty variable as a value, not as an absence, and a cell that imports the kit would refuse it.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3,
         6
@@ -238,27 +242,29 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_answer_pool_and_reranker.py"
+      "next": "demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py"
     },
     {
-      "id": "demo_01_answer_pool_and_reranker",
+      "id": "demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages",
       "lesson": "5.3",
-      "file": "demo_01_answer_pool_and_reranker.py",
+      "file": "demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 answer pool and reranker",
-      "purpose": "Compare top_k answers, then reconstruct and rerank their candidate pool.",
-      "anchor": "s3, s4",
+      "heading": "One answer, read end to end: the citations, their scores, the stages",
+      "purpose": "The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        10,
-        13
+        10
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
-        462,
-        538
+        462
       ],
       "offline": false,
       "live_verified": false,
@@ -278,7 +284,36 @@
           "window": 10,
           "source_line": 462,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py"
+    },
+    {
+      "id": "demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order",
+      "lesson": "5.3",
+      "file": "demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py",
+      "category": "required",
+      "requires": [
+        "demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages"
+      ],
+      "heading": "The Ranking API by hand: the API's pool, the API's request, the API's order",
+      "purpose": "Do it: embed, pool, rank, compare",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
+      "source_lines": [
+        538
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "The Ranking API by hand: the API's pool, the API's request, the API's order",
           "subheading": "Do it: embed, pool, rank, compare",
@@ -287,39 +322,39 @@
           "expected": "pool: 20 current ids from the index in 9xx ms, every one found_by vector\nranker: 20 of 20 back in 2xx ms, 20 records sent, model semantic-ranker-fast-004\n   rank 1  score 0.9xxx  pool # 1  NP-03     hr_policy_2026.md\n   rank 2  score 0.xxxx  pool # x  ...       hr_policy_2026.md\n   ...\nthe API's cited ids, by score: ['#1', '#4', '#2'] | by hand, first 5: ['#1', '#4', '#2', '#7', '#3']\nevery citation is in the by-hand top 5: True | in the same relative order: True\nsaved /tmp/pool53.json for steps 5, 7 and 8",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_02_embed_pool_rank_compare",
+          "function": "step_01_embed_pool_rank_compare",
           "window": 13,
           "source_line": 538,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_fallback_and_stage_latency.py"
+      "next": "demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py"
     },
     {
-      "id": "demo_02_fallback_and_stage_latency",
+      "id": "demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat",
       "lesson": "5.3",
-      "file": "demo_02_fallback_and_stage_latency.py",
+      "file": "demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py",
       "category": "required",
       "requires": [
-        "demo_01_answer_pool_and_reranker"
+        "demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order"
       ],
-      "heading": "demo 02 fallback and stage latency",
-      "purpose": "Run the saved-pool fallback, force a candidate timeout and inspect usage rows.",
-      "anchor": "s5, s6",
+      "heading": "The fallback: the pool by retrieval score, flagged on the row, forced on a candidate",
+      "purpose": "Do it, offline: the kit's fallback on the pool you saved Do it, on a candidate: a deadline no call can meet",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
         17,
         19,
-        21,
-        27,
-        30
+        21
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         633,
         663,
-        678,
-        725,
-        750
+        678
       ],
       "offline": false,
       "live_verified": false,
@@ -363,7 +398,38 @@
           "window": 21,
           "source_line": 678,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py"
+    },
+    {
+      "id": "demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it",
+      "lesson": "5.3",
+      "file": "demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py",
+      "category": "required",
+      "requires": [
+        "demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat"
+      ],
+      "heading": "make usage: where the time went, p95 per stage, and the view behind it",
+      "purpose": "Do it: the selftest, then the lane's last day, then its rows into the reader",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        27,
+        30
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
+      "source_lines": [
+        725,
+        750
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "make usage: where the time went, p95 per stage, and the view behind it",
           "subheading": "Do it: the selftest, then the lane's last day, then its rows into the reader",
@@ -372,7 +438,7 @@
           "expected": "selftest: by tenant\ntenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans\n------------------------------------------------------------------------------------\nzeta                         1      1500      120    0.0332      2.82    5200   0.00\nacme                         2      3800      450    0.0091      0.77    1400   0.50\n\nselftest: where the time went (p95 per stage, by tenant)\ntenant                 answers  p95 ms  retrieve  rerank  generate   pool\n-------------------------------------------------------------------------\nzeta                         1    5200       200     120      4800   20.0\nacme                         2    1400       220     130       990   20.0\n\nselftest OK - grouped like tenant_daily: dearest tenant first, tokens summed, p95 the 95th latency, unanswerable a rate, p95 per stage and the pool beside it",
           "adaptations": [],
           "id": "source_27",
-          "function": "step_04_the_selftest_then_the_lane_s_last_day_then",
+          "function": "step_01_the_selftest_then_the_lane_s_last_day_then",
           "window": 27,
           "source_line": 725,
           "manual_checkpoint": null
@@ -385,39 +451,39 @@
           "expected": "NN rows; 1 with rerank_fallback 1; 0 with an empty pool\n{\"event\": \"query\", \"tenant\": \"acme\", \"user\": \"documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\", \"tokens_in\": xxxx.0, \"tokens_out\": xxx.0, \"cached_tokens\": 0.0, \"cost_usd\": 0.00xxxx, \"latency_ms\": 2xxx.0, \"answerable\": true, \"retrieve_ms\": 6xx.0, \"rerank_ms\": 3xx.0, \"generate_ms\": 1xxx.0, \"pool\": 20.0, \"rerank_fallback\": 0.0, ...",
           "adaptations": [],
           "id": "source_30",
-          "function": "step_05_the_selftest_then_the_lane_s_last_day_then",
+          "function": "step_02_the_selftest_then_the_lane_s_last_day_then",
           "window": 30,
           "source_line": 750,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_retrieval_origins_and_packing.py"
+      "next": "demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py"
     },
     {
-      "id": "demo_03_retrieval_origins_and_packing",
+      "id": "demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation",
       "lesson": "5.3",
-      "file": "demo_03_retrieval_origins_and_packing.py",
+      "file": "demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py",
       "category": "required",
       "requires": [
-        "demo_02_fallback_and_stage_latency"
+        "demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it"
       ],
-      "heading": "demo 03 retrieval origins and packing",
-      "purpose": "Join citations to retrieval origins, run smoke and inspect the packed evidence set.",
-      "anchor": "s7, s8",
+      "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
+      "purpose": "Do it: the join, then the kit's own retrieval in your process, then the smoke",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
         35,
         37,
-        39,
-        43,
-        45
+        39
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         806,
         823,
-        840,
-        896,
-        924
+        840
       ],
       "offline": false,
       "live_verified": false,
@@ -463,7 +529,38 @@
           "window": 39,
           "source_line": 840,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py"
+    },
+    {
+      "id": "demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from",
+      "lesson": "5.3",
+      "file": "demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py",
+      "category": "required",
+      "requires": [
+        "demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation"
+      ],
+      "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
+      "purpose": "The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        43,
+        45
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
+      "source_lines": [
+        896,
+        924
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
           "subheading": "Do it: the API's packer offline, then a pool of Act pages on the lane",
@@ -472,7 +569,7 @@
           "expected": "the budget: 7,832 tokens for the chunks, 168 for the fixed prompt, 2,048 reserved for the answer\nyour ranked pool, top_k 5    packed  5, dropped  0, context   7xx tokens\nyour ranked pool, top_k 20   packed 20, dropped  0, context  2xxx tokens\ntwenty full CGST Act pages   packed 15, dropped  5, context  7633 tokens\nthe first header the model reads: [Source 1] hr_policy_2026.md",
           "adaptations": [],
           "id": "source_43",
-          "function": "step_04_the_api_s_packer_offline_then_a_pool_of_ac",
+          "function": "step_01_the_api_s_packer_offline_then_a_pool_of_ac",
           "window": 43,
           "source_line": 896,
           "manual_checkpoint": null
@@ -485,7 +582,7 @@
           "expected": "pool 20 | citations 2 | generate_ms 3xxx | tokens_in 8xxx | sources ['cgst_act_2017.pdf']\n2026-09-2xT1x:xx:xx.xxxxxxZ\t1x\tx",
           "adaptations": [],
           "id": "source_45",
-          "function": "step_05_the_api_s_packer_offline_then_a_pool_of_ac",
+          "function": "step_02_the_api_s_packer_offline_then_a_pool_of_ac",
           "window": 45,
           "source_line": 924,
           "manual_checkpoint": null
@@ -494,14 +591,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "5.3",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -531,6 +632,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "5.3",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -538,21 +659,21 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 362
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 394
     },
     {
       "window": 7,
       "label": "expected (your ids differ; a lane deployed by make up sets the backend and leaves the rest at their defaults)",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 416
     },
     {
@@ -746,7 +867,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The loaded HR/PDF corpus and Ranking API access. Saved answer/pool files are produced in this lesson."
+  "prerequisites": "The loaded HR/PDF corpus and Ranking API access. Saved answer/pool files are produced in this lesson.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

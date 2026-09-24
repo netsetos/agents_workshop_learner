@@ -4,12 +4,16 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_trace_upload_delivery.py](demo_01_trace_upload_delivery.py) | Read upload notification, push identity and the previous upload's request/event records. |
-| 3 | [demo_02_poison_retries.py](demo_02_poison_retries.py) | Start the poison drill and observe retries without mistaking a delayed dead letter for success. |
-| 4 | [demo_03_batch_lane_and_dead_letters.py](demo_03_batch_lane_and_dead_letters.py) | Read the batch lane's queue and job, then inspect the drill's dead letter when it arrives. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py](demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py) | The plumbing: read the notification, the topic and the subscription off your lane |
+| 4 | [demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py](demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py) | The verdicts: the HTTP-code rule, and your last upload's request log |
+| 5 | [demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py](demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py) | Poison: a message that can never succeed, and the retries you can watch |
+| 6 | [demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py](demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py) | The batch lane: the 250-page decision, the queued claim, the job |
+| 7 | [demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py](demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py) | Dead letters: reading the queue, deciding, cleaning up |
 
 ## Before starting
 
@@ -25,15 +29,17 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Optional extensions
 
-- [optional/large_pdf_down_the_batch_lane.py](optional/large_pdf_down_the_batch_lane.py) — Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
+- [optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py](optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py) — Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py](cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py) — At lesson end: This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -41,7 +47,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. Whether the batch job is declared on your lane is a fact the worker carries in its environment as BATCH_JOB. Read it once; step 6 uses it.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -69,9 +75,9 @@ Expected shape, not a promised result:
 batch job declared: no (BATCH_JOB is empty)
 ```
 
-### demo_01_trace_upload_delivery.py
+### demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py
 
-Read upload notification, push identity and the previous upload's request/event records.
+Read it off the platform
 
 **`step_01_off_the_platform(session)` — The plumbing: read the notification, the topic and the subscription off your lane / Read it off the platform**
 
@@ -111,7 +117,11 @@ spec:
       timeoutSeconds: 600
 ```
 
-**`step_02_read_the_two_records_your_3_4_upload_left(session)` — The verdicts: the HTTP-code rule, and your last upload's request log / Read the two records your 3.4 upload left**
+### demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py
+
+Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.
+
+**`step_01_read_the_two_records_your_3_4_upload_left(session)` — The verdicts: the HTTP-code rule, and your last upload's request log / Read the two records your 3.4 upload left**
 
 Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.
 
@@ -128,9 +138,9 @@ TIMESTAMP                 EVENT             DOC_KEY                 CHUNKS  LANE
 2026-09-22T11:58:07.844Z  ingest_duplicate  acme_111510fcf0a6...
 ```
 
-### demo_02_poison_retries.py
+### demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py
 
-Start the poison drill and observe retries without mistaking a delayed dead letter for success.
+The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
 
 **`step_01_start_the_drill_then_watch_the_first_retri(session)` — Poison: a message that can never succeed, and the retries you can watch / Do it: start the drill, then watch the first retries**
 
@@ -160,9 +170,9 @@ Manual action: The poison retries are asynchronous. Wait a few minutes after the
 
 IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
-### demo_03_batch_lane_and_dead_letters.py
+### demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py
 
-Read the batch lane's queue and job, then inspect the drill's dead letter when it arrives.
+The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker.
 
 **`step_01_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
 
@@ -177,25 +187,7 @@ Expected shape, not a promised result:
 no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)
 ```
 
-**`step_02_when_it_has_landed(session)` — Dead letters: reading the queue, deciding, cleaning up / Read it, when it has landed**
-
-The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
-
-Operation: bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged).
-
-Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
-
-Expected shape, not a promised result:
-
-```text
-MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT
-12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1
-{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
-```
-
-### optional/large_pdf_down_the_batch_lane.py
+### optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py
 
 Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
 
@@ -214,9 +206,31 @@ bundle pages: 270
   acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678
 ```
 
-### setup/finish.py
+### demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
+
+**`step_01_when_it_has_landed(session)` — Dead letters: reading the queue, deciding, cleaning up / Read it, when it has landed**
+
+The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
+
+Operation: bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged).
+
+Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.
+
+IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
+Expected shape, not a promised result:
+
+```text
+MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT
+12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1
+{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
+```
+
+### cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py
+
+At lesson end: This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
 
 **`step_01_decide_then_clean_up(session)` — Dead letters: reading the queue, deciding, cleaning up / Decide, then clean up**
 
@@ -233,7 +247,11 @@ acme/poison-1758542871.pdf
 Removing gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
 DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
@@ -241,6 +259,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4e0b9d5eec2e3600a742e7ea82678d360613d541`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

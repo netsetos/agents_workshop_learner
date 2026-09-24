@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_peer_contract_and_deployment.py](demo_01_peer_contract_and_deployment.py) | Inspect the implemented A2A peer and deploy/read its advertised contract. |
-| 3 | [demo_02_peer_permissions.py](demo_02_peer_permissions.py) | Exercise the peer's actual access boundaries. |
-| 4 | [demo_03_peer_task_and_trace.py](demo_03_peer_task_and_trace.py) | Submit the task and inspect the lane's corresponding records. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_peer_s_permissions_as_the_kit_writes_them.py](demo_03_the_peer_s_permissions_as_the_kit_writes_them.py) | The peer's permissions, as the kit writes them |
+| 4 | [demo_04_the_card_refused_without_a_token_read_with_one.py](demo_04_the_card_refused_without_a_token_read_with_one.py) | The card: refused without a token, read with one |
+| 5 | [demo_05_the_gate_make_smoke_agent.py](demo_05_the_gate_make_smoke_agent.py) | The gate: make smoke-agent |
+| 6 | [demo_06_one_task_traced.py](demo_06_one_task_traced.py) | One task, traced |
 
 ## Before starting
 
@@ -25,11 +28,12 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -37,7 +41,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -53,11 +57,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_peer_contract_and_deployment.py
+### demo_03_the_peer_s_permissions_as_the_kit_writes_them.py
 
-Inspect the implemented A2A peer and deploy/read its advertised contract.
+Do it
 
-**`step_01_example(session)` — The peer's permissions, as the kit writes them / Do it**
+**`step_01_the_peer_s_permissions_as_the_kit_writes_t(session)` — The peer's permissions, as the kit writes them / Do it**
 
 Do it
 
@@ -76,7 +80,11 @@ documind-agent, as commands/lesson-8.4.sh deploys it:
   the image copies: services/agent/requirements.txt, services/agent/
 ```
 
-**`step_02_example(session)` — The card: refused without a token, read with one / Do it**
+### demo_04_the_card_refused_without_a_token_read_with_one.py
+
+Do it
+
+**`step_01_the_card_refused_without_a_token_read_with(session)` — The card: refused without a token, read with one / Do it**
 
 Do it
 
@@ -92,11 +100,11 @@ the card with a token: documind_peer, version 0.0.1
   skills: model
 ```
 
-### demo_02_peer_permissions.py
+### demo_05_the_gate_make_smoke_agent.py
 
-Exercise the peer's actual access boundaries.
+Do it
 
-**`step_01_example(session)` — The gate: make smoke-agent / Do it**
+**`step_01_the_gate_make_smoke_agent(session)` — The gate: make smoke-agent / Do it**
 
 Do it
 
@@ -119,9 +127,9 @@ DocuMind A2A peer - live smoke test
   5 passed, 0 failed
 ```
 
-### demo_03_peer_task_and_trace.py
+### demo_06_one_task_traced.py
 
-Submit the task and inspect the lane's corresponding records.
+Do it: the task Do it: what the lane saw
 
 **`step_01_the_task(session)` — One task, traced / Do it: the task**
 
@@ -155,9 +163,9 @@ documind-api - who it served:
   retrieve        tenant acme   user   documind-mcp-sa
 ```
 
-### setup/finish.py
+### setup/restore_settings.py
 
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -167,6 +175,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html`. All 19 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2d4eced3a474cc6fd41eaa365bb525484d950cc5`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

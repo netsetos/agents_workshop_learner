@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "18.1",
   "title": "Trace and authorize gateway routes",
   "source_kind": "main_html",
@@ -124,9 +124,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -154,19 +158,23 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_gateway_routes.py"
+      "next": "demo_03_the_hook_s_decisions_traced.py"
     },
     {
-      "id": "demo_01_gateway_routes",
+      "id": "demo_03_the_hook_s_decisions_traced",
       "lesson": "18.1",
-      "file": "demo_01_gateway_routes.py",
+      "file": "demo_03_the_hook_s_decisions_traced.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 gateway routes",
-      "purpose": "Inspect gateway routes and their configured destinations.",
+      "heading": "The hook's decisions, traced",
+      "purpose": "Do it",
       "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
         8,
         10
@@ -188,7 +196,7 @@
           "expected": "en_core_web_lg installed: the image's model, 400 MB",
           "adaptations": [],
           "id": "source_8",
-          "function": "step_01_example",
+          "function": "step_01_the_hook_s_decisions_traced",
           "window": 8,
           "source_line": 454,
           "manual_checkpoint": null
@@ -201,37 +209,37 @@
           "expected": "Presidio's recognizers: CreditCard, Crypto, Date, Email, Iban, Ip, MacAddress, MedicalLicense, Nhs, Phone, Spacy, Url, UsBank, UsItin, UsLicense, UsPassport, UsSsn\nthe classifier's own test cases, which nothing runs:\n  'What is GDPR?'                  expected PUBLIC       got PUBLIC\n  'Email me at user@acme.com'      expected CONFIDENTIAL got CONFIDENTIAL\n  'My Aadhaar is 2345-6789-0123'   expected RESTRICTED   got PUBLIC\n  'SSN 123-45-6789'                expected RESTRICTED   got PUBLIC\n  'PAN ABCDE1234F'                 expected RESTRICTED   got PUBLIC\nthe hook, on four requests for documind-general:\n  PUBLIC       -> documind-general   'What is the notice period for a confirmed E3?'\n  PUBLIC       -> documind-general   'My PAN is ABCDE1234F. What is the notice period for a confirmed E3?'\n  RESTRICTED   -> documind-sensitive 'My PAN is ABCDE1234F and I joined on 5 March 2026. What is my notice period?'\n  CONFIDENTIAL -> documind-general   'Context:'\nand what the last one sends to Gemini:\n  Context:\n  [Source 1] hr_policy_<URL>\n  NP-03. A confirmed <US_DRIVER_LICENSE> serves a notice period of <DATE_TIME>. Queries go to <EMAIL_ADDRESS>.\n  \n  Question: What is the notice period for a confirmed <US_DRIVER_LICENSE>?",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_02_example",
+          "function": "step_02_the_hook_s_decisions_traced",
           "window": 10,
           "source_line": 459,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_gateway_authorization.py"
+      "next": "demo_04_the_token_the_proxy_sends.py"
     },
     {
-      "id": "demo_02_gateway_authorization",
+      "id": "demo_04_the_token_the_proxy_sends",
       "lesson": "18.1",
-      "file": "demo_02_gateway_authorization.py",
+      "file": "demo_04_the_token_the_proxy_sends.py",
       "category": "required",
       "requires": [
-        "demo_01_gateway_routes"
+        "demo_03_the_hook_s_decisions_traced"
       ],
-      "heading": "demo 02 gateway authorization",
-      "purpose": "Exercise the authenticated route and deployment checks.",
-      "anchor": "s4, s5",
+      "heading": "The token the proxy sends",
+      "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
-        14,
-        17,
-        19
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
-        538,
-        588,
-        593
+        538
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
@@ -243,11 +251,42 @@
           "expected": "the SLM, first call       <token 1>   minted so far: 1\nthe SLM, a minute later   <token 1>   minted so far: 1\nthe SLM, 55 minutes in    <token 2>   minted so far: 2\nthe vLLM engine           <token 3>   minted so far: 3\nthe proxy drops these request headers, then adds its own Authorization: authorization, connection, content-length, host, transfer-encoding",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_01_example",
+          "function": "step_01_the_token_the_proxy_sends",
           "window": 14,
           "source_line": 538,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_05_the_gateway_deployed_and_smoke_tested.py"
+    },
+    {
+      "id": "demo_05_the_gateway_deployed_and_smoke_tested",
+      "lesson": "18.1",
+      "file": "demo_05_the_gateway_deployed_and_smoke_tested.py",
+      "category": "required",
+      "requires": [
+        "demo_04_the_token_the_proxy_sends"
+      ],
+      "heading": "The gateway, deployed and smoke-tested",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
+      "windows": [
+        17,
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
+      "source_lines": [
+        588,
+        593
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The gateway, deployed and smoke-tested",
           "subheading": "Do it",
@@ -256,7 +295,7 @@
           "expected": "...\n>> gateway: https://documind-gateway-NUMBER.asia-south1.run.app (the API and the UI's account may call it)",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_02_example",
+          "function": "step_01_the_gateway_deployed_and_smoke_tested",
           "window": 17,
           "source_line": 588,
           "manual_checkpoint": null
@@ -269,25 +308,29 @@
           "expected": "DocuMind gateway - live smoke test\n  target: https://documind-gateway-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] no token is refused at the door  HTTP 403\n  [PASS] liveliness as the member's account  HTTP 200 in ...s\n  [PASS] documind-general answers JSON  '{\"ok\": true}' in ...s, model gemini-3.6-flash\n  [PASS] the cost header rag-api prices from  x-litellm-response-cost=3.45e-05\n  [PASS] a PAN is routed by the guardrail  served by 'gemini-3.6-flash' in ...s (the sensitive route is the self-hosted model, no fallback)\n  [PASS] documind-slm answers, or its fallback does  model 'gemini-3.6-flash' in ...s, cost 1.8e-05\n  --------------------------------------------------------\n  6 passed, 0 failed",
           "adaptations": [],
           "id": "source_19",
-          "function": "step_03_example",
+          "function": "step_02_the_gateway_deployed_and_smoke_tested",
           "window": 19,
           "source_line": 593,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_routing_and_cost_headers.py"
+      "next": "demo_06_a_pan_re_routed_and_the_cost_header.py"
     },
     {
-      "id": "demo_03_routing_and_cost_headers",
+      "id": "demo_06_a_pan_re_routed_and_the_cost_header",
       "lesson": "18.1",
-      "file": "demo_03_routing_and_cost_headers.py",
+      "file": "demo_06_a_pan_re_routed_and_the_cost_header.py",
       "category": "required",
       "requires": [
-        "demo_02_gateway_authorization"
+        "demo_05_the_gateway_deployed_and_smoke_tested"
       ],
-      "heading": "demo 03 routing and cost headers",
-      "purpose": "Trace PAN rerouting and inspect the returned cost metadata.",
+      "heading": "A PAN re-routed, and the cost header",
+      "purpose": "Do it",
       "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
       "windows": [
         23
       ],
@@ -307,7 +350,7 @@
           "expected": "documind-general is priced at 1.50 and 7.50 USD a million tokens, in and out (config.yaml)\n  no personal data  HTTP 200  answered by gemini-3.6-flash; 11 tokens in, 20 out; x-litellm-response-cost 0.0001665\n  a bare PAN        HTTP 200  answered by gemini-3.6-flash; 16 tokens in, 20 out; x-litellm-response-cost 0.000174\n  a PAN and a date  HTTP 500  no answer: the route the hook chose has no backend yet, and no fallback",
           "adaptations": [],
           "id": "source_23",
-          "function": "step_01_example",
+          "function": "step_01_a_pan_re_routed_and_the_cost_header",
           "window": 23,
           "source_line": 636,
           "manual_checkpoint": null
@@ -316,14 +359,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "18.1",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -352,6 +399,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "18.1",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -359,14 +426,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 355
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 387
     },
     {
@@ -462,7 +529,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The intended gateway backend services and IAM configuration."
+  "prerequisites": "The intended gateway backend services and IAM configuration.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

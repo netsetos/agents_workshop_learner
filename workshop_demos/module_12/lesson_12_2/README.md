@@ -4,12 +4,15 @@
 
 Run one complete experiment at a time with the IDE Run/Debug button. Keep the files in the order below; do not use Run All.
 
-| Order | File | What it demonstrates |
+The number after `demo_` is the visible HTML section number, not the demo count or Level number. Gaps mean the intervening section is reading/UI-only. Unnumbered HTML setup stays in `setup/prepare.py`. At lesson end, `setup/finish.py` runs the numbered cleanup sections and restores saved settings; completed cleanup sections are skipped.
+
+| HTML section | File | What it demonstrates |
 |---|---|---|
-| 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
-| 2 | [demo_01_mcp_identity_and_deployment.py](demo_01_mcp_identity_and_deployment.py) | Read the MCP identity, build/deploy the server and inspect the deployed configuration. |
-| 3 | [demo_02_invoke_deployed_mcp.py](demo_02_invoke_deployed_mcp.py) | Discover and invoke tools on the deployed server. |
-| 4 | [demo_03_mcp_access_boundaries.py](demo_03_mcp_access_boundaries.py) | Test every admission/authorization gate and read both sides of the call. |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_door_as_the_kit_writes_it_down.py](demo_03_the_door_as_the_kit_writes_it_down.py) | The door, as the kit writes it down |
+| 4 | [demo_04_deploy_and_read_it_back.py](demo_04_deploy_and_read_it_back.py) | Deploy, and read it back |
+| 5 | [demo_05_the_gate_make_smoke_mcp.py](demo_05_the_gate_make_smoke_mcp.py) | The gate: make smoke-mcp |
+| 6 | [demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py](demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py) | One call at each door, and both sides of the answer |
 
 ## Before starting
 
@@ -25,15 +28,16 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
-After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
 ## Conditional recovery
 
-- [recovery/grant_the_build_account.py](recovery/grant_the_build_account.py) — Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
+- [recovery/demo_04_deploy_and_read_it_back.py](recovery/demo_04_deploy_and_read_it_back.py) — Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
 
 ## Finish and restore
 
-- [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
@@ -41,7 +45,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Prepare this lesson's saved settings and dependencies before its live experiments.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -57,11 +61,11 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_01_mcp_identity_and_deployment.py
+### demo_03_the_door_as_the_kit_writes_it_down.py
 
-Read the MCP identity, build/deploy the server and inspect the deployed configuration.
+Do it
 
-**`step_01_example(session)` — The door, as the kit writes it down / Do it**
+**`step_01_the_door_as_the_kit_writes_it_down(session)` — The door, as the kit writes it down / Do it**
 
 Do it
 
@@ -84,7 +88,11 @@ the tenants each caller may read through it (lane.py's roster_plan):
 the account rag-api sees for every MCP retrieval: documind-mcp-sa, on acme, zeta, globex
 ```
 
-**`step_02_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
+### demo_04_deploy_and_read_it_back.py
+
+Do it: build and deploy Do it: read it back
+
+**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
 
 Do it: build and deploy
 
@@ -107,7 +115,7 @@ Updated IAM policy for service [documind-mcp].   (three times: ui, agent, outsid
 >> you@example.com may mint tokens as documind-outsider-sa
 ```
 
-**`step_03_read_it_back(session)` — Deploy, and read it back / Do it: read it back**
+**`step_02_read_it_back(session)` — Deploy, and read it back / Do it: read it back**
 
 Do it: read it back
 
@@ -124,11 +132,21 @@ serving     documind-mcp-00004-k7w at https://documind-mcp-NUMBER.asia-south1.ru
   the script  documind-agent-sa, documind-outsider-sa, documind-ui-sa - the same
 ```
 
-### demo_02_invoke_deployed_mcp.py
+### recovery/demo_04_deploy_and_read_it_back.py
 
-Discover and invoke tools on the deployed server.
+Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
 
-**`step_01_example(session)` — The gate: make smoke-mcp / Do it**
+**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
+
+Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.
+
+Operation: bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get.
+
+### demo_05_the_gate_make_smoke_mcp.py
+
+Do it
+
+**`step_01_the_gate_make_smoke_mcp(session)` — The gate: make smoke-mcp / Do it**
 
 Do it
 
@@ -148,9 +166,9 @@ DocuMind MCP - live smoke test
   4 passed, 0 failed
 ```
 
-### demo_03_mcp_access_boundaries.py
+### demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py
 
-Test every admission/authorization gate and read both sides of the call.
+Do it: every door Do it: both sides
 
 **`step_01_every_door(session)` — One call at each door, and both sides of the answer / Do it: every door**
 
@@ -185,19 +203,9 @@ documind-api, a row per retrieval it served for the MCP server - who it served:
   retrieve  tenant zeta   user   documind-mcp-sa
 ```
 
-### recovery/grant_the_build_account.py
+### setup/restore_settings.py
 
-Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
-
-**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
-
-Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.
-
-Operation: bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get.
-
-### setup/finish.py
-
-Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -207,6 +215,12 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Source and coverage
 
 [Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `5e857fb7dd11d3ce82883c1fde49b0fa597e457a`.
+
+Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

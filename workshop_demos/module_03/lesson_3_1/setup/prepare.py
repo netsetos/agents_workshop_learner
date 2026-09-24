@@ -1,4 +1,4 @@
-"""Prepare lesson 3.1 before the three demos (HTML section 2).
+"""Prepare lesson 3.1 at the unnumbered HTML setup heading.
 
 Use the existing rag-shell-venv interpreter after workshop_demos/setup/bootstrap.py.
 Project/region come from setup/config/settings.local.json, not shell exports.
@@ -17,7 +17,10 @@ DISABLE_ANSWER_CACHE = True  # Explicit API-wide change; False refuses an enable
 
 
 def demonstrate(session):
-    """Save settings before mutation so a partial preparation remains recoverable."""
+    """Save settings before mutation so a partial preparation remains recoverable.
+    
+    Example: demonstrate(session)
+    """
     require(session.config.tenant_id == "acme", "Use tenant_id=acme for this lesson.")
     require(not session.state.get("lesson31_closed"), "This run was cleaned up. Use setup/start_new_session.py with LESSON='3.1'.")
     env = session.service_environment(session.config.api_service, ["VECTOR_INDEX_ENDPOINT", "VECTOR_DEPLOYED_INDEX_ID"])
@@ -28,11 +31,14 @@ def demonstrate(session):
     # Save a deadline rather than forcing every later question to sleep again.
     session.state["lesson31_pin_ready_after"] = time.time() + 65
     session.save()
-    print("Prepared. Run demo_01_tenant_and_source_contracts.py next.")
+    print("Prepared. Run demo_03_tenant_something_you_are_never_something_you_send.py next.")
 
 
 def main():
-    """Run only preparation; it is separate from the three teaching experiments."""
+    """Run only preparation; it is separate from the numbered HTML examples.
+    
+    Example: main()
+    """
     with DemoSession(__file__, repeat=REPEAT) as session:
         demonstrate(session)
 

@@ -1,11 +1,11 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "10.4",
   "title": "Compare the LangChain and ADK adapters",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
-  "source_sha": "4d85e128644454856f18a930ac9e3dfcec8d55e1",
+  "source_sha": "f3598f8936669b98d54a99f356e98faea20a469a",
   "shared_setup_windows": [
     1
   ],
@@ -136,21 +136,23 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2, s3",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
-        3,
-        10
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        364,
-        447
+        364
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Before you run anything: set up the shell",
@@ -166,7 +168,38 @@
           "window": 3,
           "source_line": 364,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_03_two_adapters_over_one_tool_side_by_side.py"
+    },
+    {
+      "id": "demo_03_two_adapters_over_one_tool_side_by_side",
+      "lesson": "10.4",
+      "file": "demo_03_two_adapters_over_one_tool_side_by_side.py",
+      "category": "required",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "Two adapters over one tool, side by side",
+      "purpose": "Do it: the venv Do it: side by side",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
+      "windows": [
+        10,
+        12
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
+      "source_lines": [
+        447,
+        456
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Two adapters over one tool, side by side",
           "subheading": "Do it: the venv",
@@ -175,63 +208,42 @@
           "expected": "graph-venv ok: google-adk 2.8.0 langchain 1.4.0",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_02_the_venv",
+          "function": "step_01_the_venv",
           "window": 10,
           "source_line": 447,
           "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_01_compare_adapters.py"
-    },
-    {
-      "id": "demo_01_compare_adapters",
-      "lesson": "10.4",
-      "file": "demo_01_compare_adapters.py",
-      "category": "required",
-      "requires": [
-        "setup_prepare"
-      ],
-      "heading": "demo 01 compare adapters",
-      "purpose": "Run the LangChain and ADK adapters over the same tool contract.",
-      "anchor": "s3",
-      "windows": [
-        12
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
-      "source_lines": [
-        456
-      ],
-      "offline": true,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
+        },
         {
           "heading": "Two adapters over one tool, side by side",
           "subheading": "Do it: side by side",
           "purpose": "Do it: side by side",
           "label": "bash — run in the operator shell, in the kit (the two adapters side by side; no model, no network beyond your machine)",
-          "expected": "1. what each model is shown for retrieve (* = required)\n   langchain query*, doc_type, top_k                                465 characters\n   adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters\n   langchain tools: retrieve, calculate_processing_cost, get_usage_stats\n   adk tools:       retrieve, calculate_processing_cost\n2. one retrieve(); the ADK model writes tenant_id \"globex\" and assertion \"anything\"\n   langchain rag-api got tenant acme, brain langchain, assertion header None\n             the model read: citations, answerable, confidence\n   adk       rag-api got tenant acme, brain adk, assertion header 'anything'\n             the model read: citations, answerable, confidence, answer\n3. three calls that go wrong\n   delete_document(doc=\"x\")\n     langchain [error] {\"error\": \"delete_document requires manual approval\"}\n               refusals ['delete_document']\n     adk       the turn raises ValueError: Tool 'delete_document' not found.\n   calculate_processing_cost(total_pages=\"many\")\n     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs\n               {'total_pages': 'many'} with error: total_pages: Input should be a valid\n               [...]\n               refusals ['calculate_processing_cost']\n     adk       the turn raises TypeError: '<=' not supported between instances of 'str' and\n               'int'\n   calculate_processing_cost(total_pages=10, processing_type=\"express\")\n     langchain [success] {\"num_documents\": 1, \"total_pages\": 10, \"processing_type\":\n               \"express\", \"rate_per_page\": 0.05, \"cost_usd\": 0.5, \"cost_inr\": 42.5}\n               refusals []\n     adk       the turn raises ValueError: unknown tier 'express'; expected one of ['bulk',\n               'priority', 'standard']\n4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn",
+          "expected": "1. what each model is shown for retrieve (* = required)\n   langchain query*, doc_type, top_k                                481 characters\n   adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters\n   langchain tools: retrieve, calculate_processing_cost, get_usage_stats\n   adk tools:       retrieve, calculate_processing_cost\n2. one retrieve(); the ADK model writes tenant_id \"globex\" and assertion \"anything\"\n   langchain rag-api got tenant acme, brain langchain, assertion header None\n             the model read: citations, answerable, confidence\n   adk       rag-api got tenant acme, brain adk, assertion header 'anything'\n             the model read: citations, answerable, confidence, answer\n3. three calls that go wrong\n   delete_document(doc=\"x\")\n     langchain [error] {\"error\": \"delete_document requires manual approval\"}\n               refusals ['delete_document']\n     adk       the turn raises ValueError: Tool 'delete_document' not found.\n   calculate_processing_cost(total_pages=\"many\")\n     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs\n               {'total_pages': 'many'} with error: total_pages: Input should be a valid\n               [...]\n               refusals ['calculate_processing_cost']\n     adk       the turn raises TypeError: '<=' not supported between instances of 'str' and\n               'int'\n   calculate_processing_cost(total_pages=10, processing_type=\"express\")\n     langchain [success] {\"num_documents\": 1, \"total_pages\": 10, \"processing_type\":\n               \"express\", \"rate_per_page\": 0.05, \"cost_usd\": 0.5, \"cost_inr\": 42.5}\n               refusals []\n     adk       the turn raises ValueError: unknown tier 'express'; expected one of ['bulk',\n               'priority', 'standard']\n4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_01_side_by_side",
+          "function": "step_02_side_by_side",
           "window": 12,
           "source_line": 456,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_four_brains_and_gate.py"
+      "next": "demo_04_four_brains_on_health_and_the_module_s_gate.py"
     },
     {
-      "id": "demo_02_four_brains_and_gate",
+      "id": "demo_04_four_brains_on_health_and_the_module_s_gate",
       "lesson": "10.4",
-      "file": "demo_02_four_brains_and_gate.py",
+      "file": "demo_04_four_brains_on_health_and_the_module_s_gate.py",
       "category": "required",
       "requires": [
-        "demo_01_compare_adapters"
+        "demo_03_two_adapters_over_one_tool_side_by_side"
       ],
-      "heading": "demo 02 four brains and gate",
-      "purpose": "Inspect the four deployed brains and run the module's actual gate.",
+      "heading": "Four brains on /health, and the module's gate",
+      "purpose": "Do it",
       "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
       "windows": [
         15
       ],
@@ -251,33 +263,35 @@
           "expected": "{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\"}\n  DocuMind chat - live smoke test\n  target: https://documind-chat-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] health  profile=gcp default=langchain\n  [PASS] brain direct  3120 ms  tools=['retrieve']  'Gratuity becomes payable after not less than five years of c'\n  [PASS] brain langchain  11840 ms  tools=['retrieve']  'Gratuity becomes payable once you have rendered at least fiv'\n  [PASS] brain langgraph  9730 ms  tools=['retrieve']  'Gratuity is payable after at least five years of continuous '\n  [PASS] brain adk  14260 ms  tools=['retrieve']  'After five years of continuous service, gratuity becomes pay'\n  [PASS] outsider refused  status=403 not a member of any tenant\n  --------------------------------------------------------\n  6 passed, 0 failed",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_01_example",
+          "function": "step_01_four_brains_on_health_and_the_module_s_gat",
           "window": 15,
           "source_line": 590,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_costs_and_missing_observability.py"
+      "next": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py"
     },
     {
-      "id": "demo_03_costs_and_missing_observability",
+      "id": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them",
       "lesson": "10.4",
-      "file": "demo_03_costs_and_missing_observability.py",
+      "file": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py",
       "category": "required",
       "requires": [
-        "demo_02_four_brains_and_gate"
+        "demo_04_four_brains_on_health_and_the_module_s_gate"
       ],
-      "heading": "demo 03 costs and missing observability",
-      "purpose": "Compare recorded cost lines and identify work those rows do not measure.",
-      "anchor": "s5, s6",
+      "heading": "Four cost lines, as rag-api's rows draw them",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        17,
-        19
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        619,
-        655
+        619
       ],
       "offline": false,
       "live_verified": false,
@@ -291,20 +305,49 @@
           "expected": "direct    1 retrieve()  in  2,561  out   68  Rs 0.3699\n  langchain 1 retrieve()  in  2,498  out   64  Rs 0.3593\n  langgraph 1 retrieve()  in  2,504  out   66  Rs 0.3613\n  adk       1 retrieve()  in  2,537  out   71  Rs 0.3687",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_01_example",
+          "function": "step_01_four_cost_lines_as_rag_api_s_rows_draw_the",
           "window": 17,
           "source_line": 619,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_the_half_the_rows_cannot_see.py"
+    },
+    {
+      "id": "demo_06_the_half_the_rows_cannot_see",
+      "lesson": "10.4",
+      "file": "demo_06_the_half_the_rows_cannot_see.py",
+      "category": "required",
+      "requires": [
+        "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them"
+      ],
+      "heading": "The half the rows cannot see",
+      "purpose": "Do it",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        19
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
+      "source_lines": [
+        655
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "The half the rows cannot see",
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the kit's three agent brains on your machine, their own model calls counted)",
-          "expected": "langchain 2 model calls  in  1,429  out    51 (thinking     0)  Rs 0.2147\n  langgraph 2 model calls  in  1,429  out    51 (thinking     0)  Rs 0.2147\n  adk       2 model calls  in  2,477  out    47 (thinking     0)  Rs 0.3458\nthe four cost lines, whole: the brain's own model calls + rag-api's, from step 5\n  direct    Rs 0.0000 + Rs 0.3699 = Rs 0.3699\n  langchain Rs 0.2147 + Rs 0.3593 = Rs 0.5740\n  langgraph Rs 0.2147 + Rs 0.3613 = Rs 0.5760\n  adk       Rs 0.3458 + Rs 0.3687 = Rs 0.7145",
+          "expected": "langchain 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175\n  langgraph 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175\n  adk       2 model calls  in  2,477  out    47 (thinking     0)  Rs 0.3458\nthe four cost lines, whole: the brain's own model calls + rag-api's, from step 5\n  direct    Rs 0.0000 + Rs 0.3699 = Rs 0.3699\n  langchain Rs 0.2175 + Rs 0.3593 = Rs 0.5768\n  langgraph Rs 0.2175 + Rs 0.3613 = Rs 0.5788\n  adk       Rs 0.3458 + Rs 0.3687 = Rs 0.7145",
           "adaptations": [],
           "id": "source_19",
-          "function": "step_02_example",
+          "function": "step_01_the_half_the_rows_cannot_see",
           "window": 19,
           "source_line": 655,
           "manual_checkpoint": null
@@ -313,14 +356,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "10.4",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -349,6 +396,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "10.4",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -356,14 +423,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 334
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 366
     },
     {
@@ -438,7 +505,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The deployed chat lane and access to the example models; adapters use a separate framework venv."
+  "prerequisites": "The deployed chat lane and access to the example models; adapters use a separate framework venv.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

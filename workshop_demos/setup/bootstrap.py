@@ -9,7 +9,10 @@ INSTALL_LIVE_DEPENDENCIES = True  # False installs only the helpers for offline 
 
 
 def main():
-    """Install editable helpers using this interpreter and preserve existing settings."""
+    """Install editable helpers using this interpreter and preserve existing settings.
+    
+    Example: main()
+    """
     setup = Path(__file__).resolve().parent
     local = setup / "config" / "settings.local.json"
     print("Installing for:", sys.executable, flush=True)

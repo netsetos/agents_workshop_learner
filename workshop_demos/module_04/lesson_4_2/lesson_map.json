@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "lesson": "4.2",
   "title": "Reindex a changed section and measure embedding reuse",
   "source_kind": "main_html",
@@ -161,9 +161,13 @@
       "file": "setup/prepare.py",
       "category": "required",
       "requires": [],
-      "heading": "prepare",
-      "purpose": "Prepare this lesson's saved settings and dependencies before its live experiments.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         3
       ],
@@ -191,29 +195,31 @@
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_01_gate_and_reuse_plan.py"
+      "next": "demo_03_the_gate_the_golden_set_scoped_to_one_document.py"
     },
     {
-      "id": "demo_01_gate_and_reuse_plan",
+      "id": "demo_03_the_gate_the_golden_set_scoped_to_one_document",
       "lesson": "4.2",
-      "file": "demo_01_gate_and_reuse_plan.py",
+      "file": "demo_03_the_gate_the_golden_set_scoped_to_one_document.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "demo 01 gate and reuse plan",
-      "purpose": "Run the handbook's offline gate and compare six edits through the worker's planner.",
-      "anchor": "s3, s4",
+      "heading": "The gate: the golden set, scoped to one document",
+      "purpose": "Do it: the offline gate, scoped to the handbook, Rs 0",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
       "windows": [
-        9,
-        13
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
-        453,
-        513
+        453
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
@@ -229,7 +235,36 @@
           "window": 9,
           "source_line": 453,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_04_measure_reuse_six_kinds_of_edit_rs_0.py"
+    },
+    {
+      "id": "demo_04_measure_reuse_six_kinds_of_edit_rs_0",
+      "lesson": "4.2",
+      "file": "demo_04_measure_reuse_six_kinds_of_edit_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_03_the_gate_the_golden_set_scoped_to_one_document"
+      ],
+      "heading": "Measure reuse: six kinds of edit, Rs 0",
+      "purpose": "Do it: the six edits through the worker's planner",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
+      "source_lines": [
+        513
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
         {
           "heading": "Measure reuse: six kinds of edit, Rs 0",
           "subheading": "Do it: the six edits through the worker's planner",
@@ -238,33 +273,35 @@
           "expected": "a figure in NP-03 (60 to 90)         chunks 283 -> 283  reused 282  embedded  1    234 chars  ['NP-03']\na figure in PB-02 (15 to 20)         chunks 283 -> 283  reused 282  embedded  1    212 chars  ['PB-02']\nNP-03 re-wrapped (whitespace only)   chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nNP-03's heading renamed              chunks 283 -> 283  reused 282  embedded  1    250 chars  ['NP-03']\na clause inserted before PB-02       chunks 283 -> 284  reused 283  embedded  1     84 chars  ['NP-04']\nNP-03 and PB-02 swapped              chunks 283 -> 283  reused 283  embedded  0      0 chars  []\nwages: a sentence added on page 2    chunks  65 ->  65  reused  63  embedded  2   3261 chars  ['p2-0', 'p2-1']",
           "adaptations": [],
           "id": "source_13",
-          "function": "step_02_the_six_edits_through_the_worker_s_planner",
+          "function": "step_01_the_six_edits_through_the_worker_s_planner",
           "window": 13,
           "source_line": 513,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_02_reissue_and_measure.py"
+      "next": "demo_05_do_it_revision_3_of_the_handbook_on_the_lane.py"
     },
     {
-      "id": "demo_02_reissue_and_measure",
+      "id": "demo_05_do_it_revision_3_of_the_handbook_on_the_lane",
       "lesson": "4.2",
-      "file": "demo_02_reissue_and_measure.py",
+      "file": "demo_05_do_it_revision_3_of_the_handbook_on_the_lane.py",
       "category": "required",
       "requires": [
-        "demo_01_gate_and_reuse_plan"
+        "demo_04_measure_reuse_six_kinds_of_edit_rs_0"
       ],
-      "heading": "demo 02 reissue and measure",
-      "purpose": "Upload revision 3 and inspect its ledger, claims and reused vectors.",
-      "anchor": "s5, s6",
+      "heading": "Do it: revision 3 of the handbook, on the lane",
+      "purpose": "Do it",
+      "anchor": "s5",
+      "anchors": [
+        "s5"
+      ],
+      "section_number": 5,
       "windows": [
-        15,
-        17
+        15
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
-        558,
-        590
+        558
       ],
       "offline": false,
       "live_verified": false,
@@ -278,11 +315,40 @@
           "expected": "/home/you/hr_policy_2026_rev3.md | version key acme_54337b4ba3f0...\n>> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tacme_54337b4ba3f0109a...\t283\t281\t2\t283\t2026-11-01\n>> retired (doc_keys, chunks, expire days): [u'acme_497809ffbaa603c4...']\t283\t30\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
           "adaptations": [],
           "id": "source_15",
-          "function": "step_01_example",
+          "function": "step_01_do_it_revision_3_of_the_handbook_on_the_la",
           "window": 15,
           "source_line": 558,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_06_inspect_the_ledger_row_the_claims_the_vectors.py"
+    },
+    {
+      "id": "demo_06_inspect_the_ledger_row_the_claims_the_vectors",
+      "lesson": "4.2",
+      "file": "demo_06_inspect_the_ledger_row_the_claims_the_vectors.py",
+      "category": "required",
+      "requires": [
+        "demo_05_do_it_revision_3_of_the_handbook_on_the_lane"
+      ],
+      "heading": "Inspect: the ledger row, the claims, the vectors",
+      "purpose": "Read the three",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        17
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
+      "source_lines": [
+        590
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Inspect: the ledger row, the claims, the vectors",
           "subheading": "Read the three",
@@ -291,25 +357,29 @@
           "expected": "acme/hr_policy_2026.md chunks 283 reused 281 embedded 2 retired 283 effective 2026-11-01 text-embedding-005@1\n3 claims (versions) for hr_policy_2026.md, oldest first\n  acme_497809ff...  superseded chunks 283  reused 0  embedded 283  superseded_by acme_54337b4b...  reactivated once\n  acme_55603088...  superseded chunks 283  reused 281  embedded 2  superseded_by acme_497809ff...\n  acme_54337b4b...  indexed    chunks 283  reused 281  embedded 2\nrows: 849 | current: 283 | retired: 566\n  LV-01  current hash ff463cede286  version 1's hash ff463cede286  same vector: True\n  NP-03  current hash 876232171dec  version 1's hash f4512754ae41  same vector: False",
           "adaptations": [],
           "id": "source_17",
-          "function": "step_02_read_the_three",
+          "function": "step_01_read_the_three",
           "window": 17,
           "source_line": 590,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_failing_gate_and_undo.py"
+      "next": "demo_07_the_gate_goes_red_and_the_two_ways_back_to_green.py"
     },
     {
-      "id": "demo_03_failing_gate_and_undo",
+      "id": "demo_07_the_gate_goes_red_and_the_two_ways_back_to_green",
       "lesson": "4.2",
-      "file": "demo_03_failing_gate_and_undo.py",
+      "file": "demo_07_the_gate_goes_red_and_the_two_ways_back_to_green.py",
       "category": "required",
       "requires": [
-        "demo_02_reissue_and_measure"
+        "demo_06_inspect_the_ledger_row_the_claims_the_vectors"
       ],
-      "heading": "demo 03 failing gate and undo",
-      "purpose": "Observe the expected live-gate failure, undo the revision and prove recovery.",
+      "heading": "The gate goes red, and the two ways back to green",
+      "purpose": "Ten questions to the API, each a generation call: a few rupees at most. The target mints two identity tokens, the UI's account as the member and the outsider's for the isolation rows, which is why it takes a moment to start. Version 1's bytes again, through the same release command. The offline gate passes, the upload lands, and the worker finds a version it has retired within the window: ingest_reactivated, nothing embedded, revision 3 retired in turn. The live gate then passes with the rows as they are.",
       "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
       "windows": [
         21,
         23
@@ -355,14 +425,18 @@
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "setup_finish",
+      "id": "setup_restore_settings",
       "lesson": "4.2",
-      "file": "setup/finish.py",
+      "file": "setup/restore_settings.py",
       "category": "cleanup",
       "requires": [],
-      "heading": "finish",
-      "purpose": "Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.",
-      "anchor": "s2",
+      "heading": "Before you run anything: set up the shell",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "anchor": "setup",
+      "anchors": [
+        "setup"
+      ],
+      "section_number": null,
       "windows": [
         5
       ],
@@ -391,6 +465,26 @@
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "4.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
@@ -398,14 +492,14 @@
       "window": 2,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 336
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
-      "anchor": "s2",
+      "anchor": "setup",
       "line": 368
     },
     {
@@ -515,7 +609,8 @@
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
-  "layout_version": 2,
+  "layout_version": 3,
   "curated": true,
-  "prerequisites": "The original handbook and unchanged golden set; the live gate deliberately fails for revision 3."
+  "prerequisites": "The original handbook and unchanged golden set; the live gate deliberately fails for revision 3.",
+  "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }
