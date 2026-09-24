@@ -6,6 +6,7 @@ interrupted function needs an explicit retry decision because it may have made
 partial changes. These checkpoints cannot make cloud operations transactional.
 """
 from contextlib import contextmanager
+from datetime import datetime
 import hashlib
 import os
 from pathlib import Path
@@ -17,6 +18,24 @@ from .session import secret_name, utc_now
 
 class ManualCheckpoint(RuntimeError):
     """A browser action or asynchronous wait has not been acknowledged yet."""
+
+
+def wait_after(session, identifier, seconds):
+    """Sleep only what remains of ``seconds`` since this demo's ``identifier`` step completed.
+
+The page sleeps a fixed interval after an operation such as make off. The IDE also
+pauses there, so a learner who stopped and came back has already waited: count
+from the recorded completion instead of starting the interval again.
+"""
+    record = session.state.get("function_checkpoints", {}).get(session.step["id"], {}).get(identifier, {})
+    if record.get("status") != "completed" or not record.get("finished_at"):
+        raise RuntimeError(f"{identifier} has not completed in this demo; the interval starts when it does.")
+    elapsed = time.time() - datetime.fromisoformat(record["finished_at"]).timestamp()
+    if elapsed < seconds:
+        print(f"Waiting {seconds - elapsed:.0f}s more: {seconds // 60} minutes after {identifier} completed.", flush=True)
+        time.sleep(seconds - elapsed)
+    else:
+        print(f"{elapsed / 60:.0f} minutes have passed since {identifier} completed; no further wait.")
 
 
 def manual_checkpoint(instruction):

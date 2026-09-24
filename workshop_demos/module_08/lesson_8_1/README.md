@@ -185,6 +185,8 @@ Operation: bash — run in the operator shell, in the kit (every caller the API 
 
 Manual action: Sign in through the deployed UI as the lesson's rostered person and submit the example question. Type done before inspecting the person's assertion path.
 
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 Expected shape, not a promised result:
 
 ```text
@@ -206,4 +208,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.1-identity-tenancy/Netsetos_GCP_Capstone_8.1_Identity_Tenancy_WIX.html). All 30 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4a2c528ee001991a66c0c2fdde1d412dbe008472`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.1_Identity_Tenancy_WIX.html`. All 30 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4a2c528ee001991a66c0c2fdde1d412dbe008472`.

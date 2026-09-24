@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html); reviewed blob `04da291943e43a6795223f296f39e4dafd0a5d8c`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.2_Reindex_WIX.html`, reviewed at blob `04da291943e43a6795223f296f39e4dafd0a5d8c`. Learners read that page on the course site; this guide keeps its prose.
 
 A document changes one clause and comes back under the same name. What should happen is exact: the golden questions that cite it are checked before anything is uploaded, the worker keeps the vector of every clause that did not change and embeds only the ones that did, the previous version is retired but kept, and the questions that now have a new answer turn the release gate red until their expected answers move with the document. This lesson does all of that on your lane with the handbook, measures what reuse saves for six different kinds of edit, and puts the document back for nothing.
 

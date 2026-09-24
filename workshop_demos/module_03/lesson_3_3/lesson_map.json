@@ -3,7 +3,8 @@
   "lesson": "3.3",
   "title": "Create and validate compatible embeddings",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
   "source_sha": "517b23e8586183331850aae2cc29914890bc82df",
   "shared_setup_windows": [
     1
@@ -206,7 +207,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
         412,
         428
@@ -262,7 +263,7 @@
         14,
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
         481,
         531,
@@ -330,7 +331,7 @@
         25,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
         715,
         746,
@@ -400,7 +401,7 @@
         39,
         44
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
         847,
         871,
@@ -492,7 +493,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.3-embeddings/Netsetos_GCP_Capstone_3.3_Embeddings_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
         418
       ],

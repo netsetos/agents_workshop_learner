@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html); reviewed blob `d166600ec95e7f9de71575062e0a57c623378f5c`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html`, reviewed at blob `d166600ec95e7f9de71575062e0a57c623378f5c`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 18.1's sensitive route has nowhere to go until a model runs behind it. The kit serves one with Ollama on a Cloud Run L4 GPU, always under one name, `documind-slm`. That model is either supplied (a GGUF and the Modelfile generated from its tokenizer) or a stock model from Ollama's library, which stands in until a supplied one exists. The model is built into the image, the service scales to zero, and the GPU bills for every minute an instance lives.
 

@@ -23,12 +23,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_example.
-COMMANDS_01 = """make eval-live PROJECT="$PROJECT" REPORT="$HOME/base173.json" | tail -3
-make eval-live PROJECT="$PROJECT" API="$CAND" REPORT="$HOME/cand173.json"
-
-"""
-
 def step_01_example(session):
     """Run Do it at this checkpoint.
 
@@ -39,8 +33,11 @@ def step_01_example(session):
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    import os
+    from pathlib import Path
+    from workshop_helpers.gates import live_gate
+    live_gate(session, report=Path.home() / "base173.json")
+    live_gate(session, report=Path.home() / "cand173.json", api=os.environ["CAND"])
 
 def step_02_example(session):
     """Run Do it at this checkpoint.
@@ -76,7 +73,7 @@ def demonstrate(session):
 
 def main():
     """Open the lesson session with the selected IDE interpreter and explicit settings."""
-    with DemoSession(__file__, live=True, repeat=REPEAT) as session:
+    with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 
 

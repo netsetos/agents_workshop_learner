@@ -3,7 +3,8 @@
   "lesson": "10.3",
   "title": "Diagnose tool arguments, access failures and timeouts",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
   "source_sha": "8c8650c57c7da57795b534e5c7b86462f1357233",
   "shared_setup_windows": [
     1
@@ -134,7 +135,7 @@
         3,
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
         359,
         431
@@ -188,7 +189,7 @@
       "windows": [
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
         438
       ],
@@ -226,7 +227,7 @@
       "windows": [
         15
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
         524
       ],
@@ -264,7 +265,7 @@
       "windows": [
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
         551
       ],
@@ -300,7 +301,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
       "source_lines": [
         365
       ],

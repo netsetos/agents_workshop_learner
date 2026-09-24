@@ -23,7 +23,8 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_kit_s_own_tests_of_the_same_refusals.
-COMMANDS_01 = """DOCUMIND_API_URL="$API" DOCUMIND_PROJECT="$PROJECT" DOCUMIND_TENANT=acme make smoke | grep -E "no token|pass ·"
+COMMANDS_01 = """set +o pipefail   # as the page runs it: make smoke's own status does not stop this filtered read
+DOCUMIND_API_URL="$API" DOCUMIND_PROJECT="$PROJECT" DOCUMIND_TENANT=acme make smoke | grep -E "no token|pass ·"
 
 """
 

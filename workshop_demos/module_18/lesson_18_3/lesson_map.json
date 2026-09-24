@@ -3,7 +3,8 @@
   "lesson": "18.3",
   "title": "Inspect the vLLM service and the GKE alternative",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
   "source_sha": "21dd5be3863147eb2597fe93610d080fce9979d1",
   "shared_setup_windows": [
     1
@@ -130,7 +131,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
         383
       ],
@@ -170,7 +171,7 @@
       "windows": [
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
         466
       ],
@@ -210,7 +211,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
         577,
         649,
@@ -218,7 +219,7 @@
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The manifest, read",
@@ -252,7 +253,9 @@
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab)",
           "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:695: gke-up] Error 1",
-          "adaptations": [],
+          "adaptations": [
+            "The page runs make gke-up to watch its guard stop on the Standard CPU lab (exit 2 with STOP). Accept that stop as the observation, and exit 0 where the lab is Autopilot; any other exit is still an error."
+          ],
           "id": "source_19",
           "function": "step_03_example",
           "window": 19,
@@ -276,7 +279,7 @@
       "windows": [
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
         722
       ],
@@ -312,7 +315,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_3/GUIDE.md",
       "source_lines": [
         389
       ],

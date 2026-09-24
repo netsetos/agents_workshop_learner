@@ -3,8 +3,9 @@
   "lesson": "17.1",
   "title": "Decide whether tuning is justified and prepare data",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
-  "source_sha": "9dd628268229d1f2f125a0bd5f6abb9d42ce92cb",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+  "source_sha": "055368732655b9c9c490603445fb3ef0f506e36b",
   "shared_setup_windows": [
     1
   ],
@@ -130,7 +131,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
         390
       ],
@@ -170,7 +171,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
         464
       ],
@@ -209,7 +210,7 @@
         12,
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
         542,
         578
@@ -262,10 +263,10 @@
         18,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
         694,
-        738
+        742
       ],
       "offline": false,
       "live_verified": false,
@@ -294,7 +295,7 @@
           "id": "source_21",
           "function": "step_02_example",
           "window": 21,
-          "source_line": 738,
+          "source_line": 742,
           "manual_checkpoint": null
         }
       ],
@@ -312,7 +313,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
         396
       ],
@@ -429,14 +430,14 @@
       "label": "evals/make_trainset.py - write(): the manifest, a sha256 per file, and the rule it states",
       "heading": "The frozen file, read back",
       "anchor": "s6",
-      "line": 721
+      "line": 725
     },
     {
       "window": 22,
       "label": "expected (the same stand-ins: your manifest's numbers are your v2's)",
       "heading": "The frozen file, read back",
       "anchor": "s6",
-      "line": 777
+      "line": 781
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

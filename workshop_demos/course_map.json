@@ -26,9 +26,9 @@
     {
       "lesson": "2.2",
       "title": "Review and start the prepared deployment",
-      "source_sha": "882ae288274402568f26204849f5415902dc9ae91e2986b3f61842eaa9f022b4",
+      "source_sha": "cdaa65e63e5b6452cf0453f9488b7357f22725dd73b346952ffe6fbc7da3c34a",
       "source_kind": "course_plan_and_kit",
-      "demos": 3
+      "demos": 4
     },
     {
       "lesson": "2.3",
@@ -70,7 +70,7 @@
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
       "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 6
     },
     {
       "lesson": "4.2",
@@ -271,9 +271,9 @@
     {
       "lesson": "12.2",
       "title": "Deploy MCP and verify authorized access",
-      "source_sha": "f1670b27aee13cd8c5083246399ffea5d2a1ac20",
+      "source_sha": "5e857fb7dd11d3ce82883c1fde49b0fa597e457a",
       "source_kind": "main_html",
-      "demos": 5
+      "demos": 6
     },
     {
       "lesson": "12.3",
@@ -306,9 +306,9 @@
     {
       "lesson": "14.1",
       "title": "Build and deploy using keyless identity",
-      "source_sha": "498aab6b58c49a1c3c3b5ca5bef83fb2278c2cedd0df90ada706473abd017546",
+      "source_sha": "58d251f00151cd1ca2e612acac5edcce36dfe0c10fd3c032da84f17e7f974c00",
       "source_kind": "course_plan_and_kit",
-      "demos": 2
+      "demos": 3
     },
     {
       "lesson": "14.2",
@@ -376,7 +376,7 @@
     {
       "lesson": "17.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "9dd628268229d1f2f125a0bd5f6abb9d42ce92cb",
+      "source_sha": "055368732655b9c9c490603445fb3ef0f506e36b",
       "source_kind": "main_html",
       "demos": 5
     },

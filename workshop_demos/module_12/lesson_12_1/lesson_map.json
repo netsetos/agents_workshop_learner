@@ -3,7 +3,8 @@
   "lesson": "12.1",
   "title": "Expose, discover and invoke MCP tools",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
   "source_sha": "b81be587a267019af54628b140280c63f1a4bd46",
   "shared_setup_windows": [
     1
@@ -147,7 +148,7 @@
         3,
         7
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
       "source_lines": [
         365,
         402
@@ -202,7 +203,7 @@
         9,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
       "source_lines": [
         409,
         478
@@ -256,7 +257,7 @@
       "windows": [
         15
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
       "source_lines": [
         500
       ],
@@ -296,7 +297,7 @@
       "windows": [
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
       "source_lines": [
         535
       ],
@@ -335,7 +336,7 @@
         19,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.1-mcp-tools/Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_1/GUIDE.md",
       "source_lines": [
         579,
         371

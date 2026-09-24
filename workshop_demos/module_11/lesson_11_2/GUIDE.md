@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html); reviewed blob `8ff81098aa551cfdfcea7b74a70b6d674c710765`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html`, reviewed at blob `8ff81098aa551cfdfcea7b74a70b6d674c710765`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.1 showed that your lane's conversations live in `PostgresSaver` on Cloud SQL. This lesson opens that storage. Terraform made an instance, a database, a user and a secret; the service mounts them; a one-off job made the tables. Each turn then writes a checkpoint row per step and, for the conversation itself, the whole list of messages again at every new version. You count what a turn writes on the kit's own code, and read the configuration your lane runs. You connect to the database the way the service does, through the Cloud SQL connector, and list the tables and one row per thread. On the way you find which brain's conversations are not there at all.
 

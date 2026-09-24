@@ -3,7 +3,8 @@
   "lesson": "18.1",
   "title": "Trace and authorize gateway routes",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
   "source_sha": "99278f7195b558586eb8943607137376aa5cbb66",
   "shared_setup_windows": [
     1
@@ -129,7 +130,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
         385
       ],
@@ -170,7 +171,7 @@
         8,
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
         454,
         459
@@ -224,7 +225,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
         538,
         588,
@@ -290,7 +291,7 @@
       "windows": [
         23
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
         636
       ],
@@ -326,7 +327,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.1-gateway-routes/Netsetos_GCP_Capstone_18.1_Gateway_Routes_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_1/GUIDE.md",
       "source_lines": [
         391
       ],

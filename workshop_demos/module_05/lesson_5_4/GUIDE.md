@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html); reviewed blob `9553c89dce4181161137e7caeba0cf202f30a3ac`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.4_Fallback_WIX.html`, reviewed at blob `9553c89dce4181161137e7caeba0cf202f30a3ac`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 5.3 followed the pool through the ranker. This lesson takes the pool's other source. Firestore holds every embedding the worker wrote, as a field on the row, and its own vector index can answer a question when the kit's index will not, or when a tenant is pinned beneath it. What must not change on the way down is the three predicates: the tenant from the roster, the ledger's current, and the caller's equality filters. On Firestore each combination of them needs a composite vector index the kit declares, 8 of them, and without one Firestore refuses rather than degrades. Every chunk the rung returns is stamped `found_by: firestore`, the answer counts `vector_chunks 0`, and the smoke fails a vector deployment that answers from beneath, because that failure is the one a working demo hides. You will read the rung by hand with the API's predicates, move one tenant onto it and back, break the index for a candidate revision and watch the chaos rung answer with a line in the log, run the kit's own read-only probe of the combined filters, see the tier rebuilt from the rows, and price the rung.
 

@@ -68,7 +68,8 @@ def step_02_the_join_then_the_kit_s_own_retrieval_in_y(session):
     print("first three:", [(c.get("locator", "?"), c["found_by"], round(c["score"], 4)) for c in pool[:3]])
 
 # Original CLI workflow for step_03_the_join_then_the_kit_s_own_retrieval_in_y.
-COMMANDS_03 = """DOCUMIND_PROJECT=$PROJECT DOCUMIND_API_URL=$API DOCUMIND_TENANT=acme \\
+COMMANDS_03 = """set +o pipefail   # as the page runs it: make smoke's own status does not stop this filtered read
+DOCUMIND_PROJECT=$PROJECT DOCUMIND_API_URL=$API DOCUMIND_TENANT=acme \\
 DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$PROJECT.iam.gserviceaccount.com make smoke 2>&1 | grep -E "query|vector tier|no token|PASS|FAIL"
 
 """

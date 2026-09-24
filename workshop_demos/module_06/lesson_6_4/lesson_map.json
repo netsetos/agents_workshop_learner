@@ -3,7 +3,8 @@
   "lesson": "6.4",
   "title": "Complete the Streamlit upload-to-answer journey",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
   "source_sha": "1434ee937aa77b8465276e8080c069b3d951e632",
   "shared_setup_windows": [
     1
@@ -179,7 +180,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         387,
         403
@@ -233,7 +234,7 @@
       "windows": [
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         471
       ],
@@ -247,7 +248,9 @@
           "purpose": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
           "label": "bash — run in the operator shell (four reads)",
           "expected": "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\n    run.googleapis.com/iap-enabled: 'true'\nroles/iap.httpsResourceAccessor\tuser:you@example.com\nwithout a sign-in: HTTP 302 -> https://accounts.google.com/o/oauth2/v2/auth?client_id=...",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: every line is a read. If the UI is not behind IAP, grep prints nothing and the IAP policy and the unsigned request after it show why, instead of the cell stopping at grep."
+          ],
           "id": "source_11",
           "function": "step_01_the_service_s_account_iap_s_flag_who_may_s",
           "window": 11,
@@ -273,7 +276,7 @@
         17,
         23
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         527,
         545,
@@ -303,7 +306,8 @@
           "label": "bash — run in the operator shell (the object, the worker's line, your hash, the ledger row)",
           "expected": "text/plain\t4xx\t17586xxxxxxxxxxx\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme_3f9c2b7e1a04...\t3\t0\t3\nyour file's hash begins: 3f9c2b7e1a04\nacme/pune_visitor_rules.md indexed chunks 3 reused 0 embedded 3\nversions NN | last event ingest_ok",
           "adaptations": [
-            "Verify the exact UI-uploaded bytes, source generation, claim and current chunks; an unrelated latest ingest_ok event cannot satisfy this checkpoint."
+            "Verify the exact UI-uploaded bytes, source generation, claim and current chunks; an unrelated latest ingest_ok event cannot satisfy this checkpoint.",
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
           ],
           "id": "source_17",
           "function": "step_02_write_the_note_upload_it_in_the_browser_fo",
@@ -317,7 +321,9 @@
           "purpose": "In the browser, open Chat and ask: What colour badge do visitors wear at the Pune warehouse? The sources arrive first and the answer streams after them. The answer ends with a pill. Hover over it to see the note's clause, and open Sources under the answer. Then ask the same question from the shell and read the two newest rows:",
           "label": "bash — run in the operator shell (one question, a rupee; one log read)",
           "expected": "from the shell: Every visitor to the Pune warehouse wears an amber badge, issued at gate | ['pune_visitor_rules.md']\n2026-09-2xT1x:xx:xx.xxxxxxZ\tquery\tdocumind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\tui\tacme\t20\n2026-09-2xT1x:xx:xx.xxxxxxZ\tstream\tyou@example.com\tui\tacme\t20",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_23",
           "function": "step_03_ask_in_the_browser_ask_from_the_shell_read",
           "window": 23,
@@ -342,7 +348,7 @@
         28,
         33
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         678,
         731
@@ -357,7 +363,9 @@
           "purpose": "In the browser, under the answer from step 5, open Sources and click Open source on the note. A new tab shows the note's text from the bucket, through a link that stops working in 15 minutes. Then capture the same answer as a transcript and paste it into the renderer in step 1:",
           "label": "bash — run in the operator shell (one stream, a rupee)",
           "expected": "citation events: 5 | tokens: NN | done: 1\nfirst citation: pune_visitor_rules.md | kind text | page None | quote 'VR-01 - Badges\\nEvery visitor to the Pune warehou'\n...",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_28",
           "function": "step_01_open_the_source_then_render_your_own_trans",
           "window": 28,
@@ -392,7 +400,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
         393
       ],

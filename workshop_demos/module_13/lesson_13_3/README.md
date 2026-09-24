@@ -185,7 +185,9 @@ A floor of zero lets the service scale to zero, but an idle instance can stay up
 
 Operation: bash — run in the operator shell, in the kit (after 15 minutes; reads only).
 
-Manual action: Allow the documented fifteen-minute idle interval after make off. Stop and rerun this demo later if needed; completed shutdown steps will not run again. Type done when ready to inspect monitoring.
+Manual action: The next read is Cloud Monitoring fifteen minutes after make off. Stop and rerun this demo later if you like; completed shutdown steps will not run again. After done, it waits only for whatever is left of the fifteen minutes.
+
+IDE adaptation: Replace the page's sleep 900 with a wait for whatever is left of those fifteen minutes since make off completed. The manual pause before it lets you stop and come back; the pause and the sleep no longer add up to thirty minutes. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -231,4 +233,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html). All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `98282e525bfaa2998c591ba8f3312851781f0218`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html`. All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `98282e525bfaa2998c591ba8f3312851781f0218`.

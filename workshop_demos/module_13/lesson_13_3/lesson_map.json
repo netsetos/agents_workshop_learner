@@ -3,7 +3,8 @@
   "lesson": "13.3",
   "title": "Exercise model routing, budgets and shutdown controls",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
   "source_sha": "98282e525bfaa2998c591ba8f3312851781f0218",
   "shared_setup_windows": [
     1
@@ -147,7 +148,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
         383
       ],
@@ -188,7 +189,7 @@
         9,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
         462,
         523
@@ -242,7 +243,7 @@
         15,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
         580,
         612,
@@ -310,7 +311,7 @@
         22,
         24
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
         658,
         684,
@@ -339,12 +340,15 @@
           "purpose": "A floor of zero lets the service scale to zero, but an idle instance can stay up for up to fifteen minutes after its last request. The cell waits, then reads the UI's instance count from Cloud Monitoring for the last half hour, a sample a minute.",
           "label": "bash — run in the operator shell, in the kit (after 15 minutes; reads only)",
           "expected": "documind-ui, container instances (active and idle), a sample a minute, last 30 minutes:\n  11:52 1  11:53 1  11:54 1  11:55 1  11:56 1  11:57 1  11:58 1  11:59 1  12:00 1  12:01 1\n  12:02 1  12:03 1  12:04 1  12:05 1  12:06 1  12:07 1  12:08 1  12:09 0  12:10 0  12:11 0\n  12:12 0  12:13 0  12:14 0  12:15 0  12:16 0  12:17 0  12:18 0  12:19 0  12:20 0  12:21 0\nzero instances since 12:09 IST",
-          "adaptations": [],
+          "adaptations": [
+            "Replace the page's sleep 900 with a wait for whatever is left of those fifteen minutes since make off completed. The manual pause before it lets you stop and come back; the pause and the sleep no longer add up to thirty minutes.",
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_22",
           "function": "step_02_the_instances_after_fifteen_minutes",
           "window": 22,
           "source_line": 684,
-          "manual_checkpoint": "Allow the documented fifteen-minute idle interval after make off. Stop and rerun this demo later if needed; completed shutdown steps will not run again. Type done when ready to inspect monitoring."
+          "manual_checkpoint": "The next read is Cloud Monitoring fifteen minutes after make off. Stop and rerun this demo later if you like; completed shutdown steps will not run again. After done, it waits only for whatever is left of the fifteen minutes."
         },
         {
           "heading": "Off at night, and the ceiling under it",
@@ -374,7 +378,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.3-cost-controls/Netsetos_GCP_Capstone_13.3_Cost_Controls_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_3/GUIDE.md",
       "source_lines": [
         389
       ],

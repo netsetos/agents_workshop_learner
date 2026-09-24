@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html); reviewed blob `4e0b9d5eec2e3600a742e7ea82678d360613d541`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`, reviewed at blob `4e0b9d5eec2e3600a742e7ea82678d360613d541`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 3 followed a document from bytes to records and took for granted that the worker was called. This lesson is about the call. An object landing in the bucket becomes a message; the message reaches the worker carrying a token nobody else can mint; the worker answers with an HTTP status; and the platform does one of three things with that status: acknowledges it, tries again after a growing pause, or, after twelve refusals, parks the message where you can read it. Then the one document the push path must not attempt, and the lane that takes it instead.
 

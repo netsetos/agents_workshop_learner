@@ -3,7 +3,8 @@
   "lesson": "10.2",
   "title": "Implement the main LangGraph workflow",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
   "source_sha": "73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b",
   "shared_setup_windows": [
     1
@@ -138,7 +139,7 @@
         3,
         7
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
       "source_lines": [
         369,
         405
@@ -192,7 +193,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
       "source_lines": [
         412
       ],
@@ -230,7 +231,7 @@
       "windows": [
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
       "source_lines": [
         473
       ],
@@ -268,7 +269,7 @@
       "windows": [
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
       "source_lines": [
         541
       ],
@@ -304,7 +305,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_2/GUIDE.md",
       "source_lines": [
         375
       ],

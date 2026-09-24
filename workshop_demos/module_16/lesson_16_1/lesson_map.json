@@ -3,7 +3,8 @@
   "lesson": "16.1",
   "title": "Query a video clip and validate media citations",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
   "source_sha": "6580ee3d4f24d9fb786f5672f22d54789f8a197a",
   "shared_setup_windows": [
     1
@@ -125,7 +126,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
         401
       ],
@@ -166,7 +167,7 @@
         8,
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
         460,
         532
@@ -220,7 +221,7 @@
         16,
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
         561,
         589,
@@ -287,7 +288,7 @@
         23,
         25
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
         694,
         781
@@ -337,7 +338,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_1/GUIDE.md",
       "source_lines": [
         407
       ],

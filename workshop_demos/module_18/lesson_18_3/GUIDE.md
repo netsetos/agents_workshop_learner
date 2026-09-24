@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html); reviewed blob `21dd5be3863147eb2597fe93610d080fce9979d1`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html`, reviewed at blob `21dd5be3863147eb2597fe93610d080fce9979d1`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 18.2 served the small model with Ollama. The kit holds two more ways to serve it, both optional, and no lesson deploys either. One is vLLM, an engine built to answer many requests at once, on the same Cloud Run L4. The other runs vLLM on GKE Autopilot: a pod that stays up all month, billed every hour, and the only self-serve L4 in Mumbai.
 

@@ -3,7 +3,8 @@
   "lesson": "5.1",
   "title": "Apply query embeddings and authorized filters",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
   "source_sha": "71dc43310c171099ca29431ddb48a29c6af8965e",
   "shared_setup_windows": [
     1
@@ -182,7 +183,7 @@
       "windows": [
         4
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         385
       ],
@@ -221,7 +222,7 @@
         8,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         527,
         667
@@ -274,7 +275,7 @@
         16,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         737,
         815
@@ -326,7 +327,7 @@
       "windows": [
         25
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         860
       ],
@@ -362,7 +363,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         450
       ],
@@ -398,7 +399,7 @@
       "windows": [
         29
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
         947
       ],

@@ -3,7 +3,8 @@
   "lesson": "6.1",
   "title": "Pack evidence within the context budget",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
   "source_sha": "fd0703c559853dc14669ad353f31423ca6ccef55",
   "shared_setup_windows": [
     1
@@ -177,7 +178,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
         376,
         392
@@ -235,7 +236,7 @@
         14,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
         482,
         563
@@ -288,7 +289,7 @@
         21,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
         624,
         703
@@ -341,7 +342,7 @@
         32,
         34
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
         768,
         797
@@ -391,7 +392,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.1-context-budget/Netsetos_GCP_Capstone_6.1_Context_Budget_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
         382
       ],

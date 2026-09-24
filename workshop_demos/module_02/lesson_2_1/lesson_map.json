@@ -24,7 +24,7 @@
       "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
       "anchor": "plan-1",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/README.md",
       "source_lines": [
         1
       ],
@@ -59,7 +59,7 @@
       "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
       "anchor": "plan-2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/README.md",
       "source_lines": [
         1
       ],

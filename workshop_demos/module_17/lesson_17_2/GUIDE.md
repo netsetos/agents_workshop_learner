@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html); reviewed blob `375a22387caec2be91dbd584d47b3fc5c7046157`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`, reviewed at blob `375a22387caec2be91dbd584d47b3fc5c7046157`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 17.1 froze a training file. Before Vertex AI trains on it, you check that it is the file the manifest describes, in the shape the trainer reads. You also check that it carries no personal data and no golden row, and that its tenant lets its text leave India. Only then do you start the job. It runs in `us-central1`, bills per training token, and returns a tuned model with an endpoint that answers from the location its path names.
 

@@ -27,6 +27,10 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
 
+## Conditional recovery
+
+- [recovery/grant_the_build_account.py](recovery/grant_the_build_account.py) — Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
+
 ## Finish and restore
 
 - [setup/finish.py](setup/finish.py) — Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
@@ -181,6 +185,16 @@ documind-api, a row per retrieval it served for the MCP server - who it served:
   retrieve  tenant zeta   user   documind-mcp-sa
 ```
 
+### recovery/grant_the_build_account.py
+
+Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
+
+**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
+
+Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.
+
+Operation: bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get.
+
 ### setup/finish.py
 
 Run at the end, including after a failed demo. Restore the settings saved by this lesson and retain evidence.
@@ -195,4 +209,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html). All 21 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f1670b27aee13cd8c5083246399ffea5d2a1ac20`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `5e857fb7dd11d3ce82883c1fde49b0fa597e457a`.

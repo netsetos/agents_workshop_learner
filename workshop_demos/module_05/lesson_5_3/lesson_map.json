@@ -3,7 +3,8 @@
   "lesson": "5.3",
   "title": "Rerank and inspect retrieved candidates",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
   "source_sha": "57bf349b566019103069ed16a192beac3c631f19",
   "shared_setup_windows": [
     1
@@ -196,7 +197,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         392,
         408
@@ -254,7 +255,7 @@
         10,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         462,
         538
@@ -312,7 +313,7 @@
         27,
         30
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         633,
         663,
@@ -410,7 +411,7 @@
         43,
         45
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         806,
         823,
@@ -454,7 +455,9 @@
           "purpose": "Do it: the join, then the kit's own retrieval in your process, then the smoke",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the smoke: one question, the same without a token, a version read; a rupee)",
           "expected": "[PASS] health  {\"status\":\"ok\"}\n  [PASS] ready  ...\n  [PASS] query  answerable=True citations=3  '...'\n  [PASS] vector tier  20 of 20 chunks came from the index\n  [PASS] no token refused  status=403\n  ...",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines."
+          ],
           "id": "source_39",
           "function": "step_03_the_join_then_the_kit_s_own_retrieval_in_y",
           "window": 39,
@@ -502,7 +505,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.3-rerank/Netsetos_GCP_Capstone_5.3_Rerank_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_3/GUIDE.md",
       "source_lines": [
         398
       ],

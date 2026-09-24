@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.1-video-clip/Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html); reviewed blob `6580ee3d4f24d9fb786f5672f22d54789f8a197a`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_16.1_Video_Clip_WIX.html`, reviewed at blob `6580ee3d4f24d9fb786f5672f22d54789f8a197a`. Learners read that page on the course site; this guide keeps its prose.
 
 A video has no text for the kit to parse. So the ingest worker has Gemini describe it: segments of at most a minute, each with a start, an end and a summary that quotes every number said. The summary is what the kit retrieves and the model reads. A citation of it carries the video's path and the seconds, and the UI opens the video at the second the segment starts.
 

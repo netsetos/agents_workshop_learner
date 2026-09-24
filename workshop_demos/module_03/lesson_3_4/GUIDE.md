@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html); reviewed blob `919ad0b568337556ab3556373116e42e432c4488`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html`, reviewed at blob `919ad0b568337556ab3556373116e42e432c4488`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 3.1 to 3.3 followed one document from bytes to vectors. This lesson is about what it leaves behind: the records in Firestore, in the Vector Search index, in BigQuery and in the audit bucket that say the document is indexed, and the order the worker writes them in so that a reader never sees half a document. You will index a three-chunk note, read every record it created from the store that holds it, check that they agree with each other, and learn which store is the truth when they do not.
 

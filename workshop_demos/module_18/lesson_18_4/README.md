@@ -158,7 +158,9 @@ Do it
 
 Operation: bash — run in the operator shell, at least 10 minutes after make off (reads Cloud Monitoring; changes nothing).
 
-Manual action: Allow at least ten minutes after make off before checking Cloud Monitoring for zero GPU instances. Stop and rerun this demo later if needed; completed comparison/shutdown steps are retained.
+Manual action: The next read is Cloud Monitoring at least ten minutes after make off. Stop and rerun this demo later if you like; completed comparison/shutdown steps are retained. After done, it waits only for whatever is left of the ten minutes.
+
+IDE adaptation: The page reads Cloud Monitoring at least ten minutes after make off. Wait for whatever is left of those ten minutes after the manual pause, so an early 'done' cannot read the instance count too soon. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -185,4 +187,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html). All 21 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `e7f21fbe70306e17ea9822bec16d034a4a8176cc`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html`. All 21 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `e7f21fbe70306e17ea9822bec16d034a4a8176cc`.

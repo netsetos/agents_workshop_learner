@@ -24,7 +24,7 @@
       "purpose": "Locate the selected Python and required CLI tools, then read the source corpus that the local lane will index. This makes missing setup visible before starting a server.",
       "anchor": "plan-1",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
         1
       ],
@@ -59,7 +59,7 @@
       "purpose": "Start the kit's local Ollama/Chroma service as an owned background process, save its PID and wait for its health endpoint. The next file can then run in another IDE process. The finish file stops this owned process.",
       "anchor": "plan-2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
         1
       ],
@@ -94,7 +94,7 @@
       "purpose": "Send the course's notice-period question through the local lane. Check the returned citations instead of treating an HTTP success as proof of grounded retrieval.",
       "anchor": "plan-3",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
         1
       ],
@@ -127,7 +127,7 @@
       "purpose": "Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.",
       "anchor": "plan-4",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_1/README.md",
       "source_lines": [
         1
       ],

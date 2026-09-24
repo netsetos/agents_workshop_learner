@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html); reviewed blob `6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.1_State_History_WIX.html`, reviewed at blob `6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23`. Learners read that page on the course site; this guide keeps its prose.
 
 An agent seems to remember three kinds of thing, and they live in three different places. Agent state is what one turn builds: the question, the model's call for a tool, what the tool returned, the answer. Conversation history is that state, checkpointed after every step and read back on the next turn of the same thread. Knowledge is the tenant's corpus, which the agent never remembers: it looks it up, every time. You take one turn apart on the kit's own code. You start the chat service's checkpointer the way no deployment should, and read the line it logs when you do. Then you watch one conversation cross four brains and two sessions on your lane.
 

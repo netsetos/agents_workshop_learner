@@ -3,7 +3,8 @@
   "lesson": "10.1",
   "title": "Understand tool contracts and the direct agent loop",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
   "source_sha": "f1868f835bc67f911ec89f0027a86e55fa9969ab",
   "shared_setup_windows": [
     1
@@ -167,7 +168,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         370
       ],
@@ -209,7 +210,7 @@
         8,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         394,
         412,
@@ -276,7 +277,7 @@
         15,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         526,
         580
@@ -329,7 +330,7 @@
         22,
         24
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         628,
         647
@@ -379,7 +380,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.1-agent-loop/Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         376
       ],

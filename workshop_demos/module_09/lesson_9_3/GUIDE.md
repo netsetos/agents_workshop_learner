@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html); reviewed blob `ab26cd1a53661cdbf477d3268f9e721275f57273`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html`, reviewed at blob `ab26cd1a53661cdbf477d3268f9e721275f57273`. Learners read that page on the course site; this guide keeps its prose.
 
 One number decides what the answer cache is worth: how similar a new question must be to an earlier one before it gets the earlier answer. Set it too low and the cache answers the wrong question fast; too high and it never answers at all. You measure that number offline on the kit's 42 labelled pairs. Then you ask the same pairs live on a candidate at the kit's 0.95, and check whether the offline curve predicted the live false hits. Finally you turn the hits into avoided calls in rupees, and set their latency beside a model answer's.
 

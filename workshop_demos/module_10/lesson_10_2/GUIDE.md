@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html); reviewed blob `73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html`, reviewed at blob `73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b`. Learners read that page on the course site; this guide keeps its prose.
 
 The LangChain brain hands its loop to a framework. The LangGraph brain draws it: an agent node that calls the model, a route that reads what the model asked for, a tools node, a refuse node, and a checkpointer that keeps each conversation. You list the kit's own graph and force the refuse node with a scripted model. The model on your lane is never offered a blocked tool, so it cannot reach that node any other way. Then you use the graph on your lane: a thread that remembers, a new thread that does not, and a request to delete that meets no tool at all.
 

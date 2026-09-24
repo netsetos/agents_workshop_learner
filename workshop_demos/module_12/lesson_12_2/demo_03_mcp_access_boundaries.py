@@ -3,8 +3,8 @@
 Test every admission/authorization gate and read both sides of the call.
 
 Run order inside this file:
-1. Do it: every door (source window 18)
-2. Do it: both sides (source window 20)
+1. Do it: every door (source window 19)
+2. Do it: both sides (source window 21)
 
 Prerequisites: demo_02_invoke_deployed_mcp.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -95,8 +95,8 @@ def step_02_both_sides(session):
 def demonstrate(session):
     """Run this experiment in order, resuming only completed checkpoints safely."""
     run_steps(session, [
-        ('source_18', step_01_every_door),
-        ('source_20', step_02_both_sides),
+        ('source_19', step_01_every_door),
+        ('source_21', step_02_both_sides),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
 
 

@@ -4,7 +4,8 @@
   "lesson": "3.1",
   "title": "Understand source, tenant, page and chunk contracts",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
   "source_sha": "9be3b915fa81df25778e35f6eaa825f0b365ec21",
   "shared_setup_windows": [
     1
@@ -197,7 +198,7 @@
       "implementation": "native_python",
       "offline": false,
       "live_verified": false,
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         394
       ],
@@ -224,7 +225,7 @@
       "implementation": "native_python",
       "offline": false,
       "live_verified": false,
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         459,
         463,
@@ -252,7 +253,7 @@
       "implementation": "native_python",
       "offline": false,
       "live_verified": false,
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         647,
         666
@@ -279,7 +280,7 @@
       "implementation": "native_python",
       "offline": false,
       "live_verified": false,
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         722,
         733,
@@ -303,7 +304,7 @@
       "implementation": "native_python",
       "offline": false,
       "live_verified": false,
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         400
       ],

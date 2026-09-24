@@ -3,7 +3,8 @@
   "lesson": "6.3",
   "title": "Stream answers and handle failures",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
   "source_sha": "c6e58b623f6b0a931efccb868a7e7dc1ba3f7f54",
   "shared_setup_windows": [
     1
@@ -171,7 +172,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
         370,
         386
@@ -229,7 +230,7 @@
         12,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
         456,
         525
@@ -282,7 +283,7 @@
         22,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
         590,
         629
@@ -334,7 +335,7 @@
       "windows": [
         35
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
         742
       ],
@@ -370,7 +371,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.3-streaming/Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
         376
       ],

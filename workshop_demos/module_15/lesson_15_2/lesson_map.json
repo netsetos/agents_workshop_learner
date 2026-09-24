@@ -3,7 +3,8 @@
   "lesson": "15.2",
   "title": "Compare Firestore and Spanner graph paths",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
   "source_sha": "7bdd37f0afd091fd34fa8e7a5d9f1fd4a8127ad2",
   "shared_setup_windows": [
     1
@@ -131,7 +132,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         390
       ],
@@ -172,7 +173,7 @@
         9,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         461,
         521
@@ -225,7 +226,7 @@
         15,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         616,
         665
@@ -279,7 +280,7 @@
         23,
         26
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         755,
         796,
@@ -343,7 +344,7 @@
       "windows": [
         25
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         823
       ],
@@ -379,7 +380,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.2-graph-paths/Netsetos_GCP_Capstone_15.2_Graph_Paths_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_2/GUIDE.md",
       "source_lines": [
         396
       ],

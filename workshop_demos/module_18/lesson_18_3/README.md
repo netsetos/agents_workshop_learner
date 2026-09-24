@@ -129,6 +129,8 @@ Do it
 
 Operation: bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab).
 
+IDE adaptation: The page runs make gke-up to watch its guard stop on the Standard CPU lab (exit 2 with STOP). Accept that stop as the observation, and exit 0 where the lab is Autopilot; any other exit is still an error.
+
 Expected shape, not a promised result:
 
 ```text
@@ -174,4 +176,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.3-vllm-gke/Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html). All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `21dd5be3863147eb2597fe93610d080fce9979d1`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_18.3_VLLM_GKE_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `21dd5be3863147eb2597fe93610d080fce9979d1`.

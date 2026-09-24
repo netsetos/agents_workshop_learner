@@ -24,7 +24,7 @@
       "purpose": "Run the kit's preflight and smoke before closing a deployment session. Preserve their actual exit status instead of inferring readiness from a service URL.",
       "anchor": "plan-1",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
         1
       ],
@@ -59,7 +59,7 @@
       "purpose": "Save non-secret project/region/kit identifiers and identify the kit's existing restart helper. Terraform state and credentials remain in their intended stores, not in a copied evidence JSON.",
       "anchor": "plan-2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
         1
       ],
@@ -92,7 +92,7 @@
       "purpose": "Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.",
       "anchor": "plan-3",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/README.md",
       "source_lines": [
         1
       ],

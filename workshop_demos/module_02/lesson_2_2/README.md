@@ -26,6 +26,10 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
 
+## Conditional recovery
+
+- [recovery/grant_the_build_account_what_a_build_needs.py](recovery/grant_the_build_account_what_a_build_needs.py) — Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.
+
 ## Functions, observations and effects
 
 The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
@@ -65,6 +69,22 @@ List the real Cloud Run services and their accounts, URLs and traffic so the res
 List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.
 
 Operation: Course-plan experiment — live deployment.
+
+### recovery/grant_the_build_account_what_a_build_needs.py
+
+Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.
+
+**`step_01_grant_the_build_account_what_a_build_needs(session)` — Grant the build account what a build needs / Grant the build account what a build needs**
+
+Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.
+
+Operation: Course-plan experiment — live deployment.
+
+Expected shape, not a promised result:
+
+```text
+Three bindings added for the account the 403 named; the next build reads its source.
+```
 
 ## Source and coverage
 

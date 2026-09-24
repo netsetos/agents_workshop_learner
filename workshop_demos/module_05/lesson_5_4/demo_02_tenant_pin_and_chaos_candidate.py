@@ -72,7 +72,8 @@ def step_02_the_same_predicates_on_the_chosen_rung_and(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_smoke_s_line_for_a_chosen_rung_then_th.
-COMMANDS_03 = """DOCUMIND_PROJECT=$PROJECT DOCUMIND_API_URL=$API DOCUMIND_TENANT=acme DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$PROJECT.iam.gserviceaccount.com make smoke 2>&1 | grep "vector tier"
+COMMANDS_03 = """set +o pipefail   # as the page runs it: make smoke's own status does not stop this filtered read
+DOCUMIND_PROJECT=$PROJECT DOCUMIND_API_URL=$API DOCUMIND_TENANT=acme DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$PROJECT.iam.gserviceaccount.com make smoke 2>&1 | grep "vector tier"
 python commands/lane.py tenant-backend acme vector
 for i in $(seq 1 9); do OUT="$(ask '{"query":"What is the notice period for a confirmed E3?","tenant_id":"acme","stream":false,"top_k":3}')"; case "$OUT" in *"backend vector"*) echo "$OUT"; break;; esac; sleep 10; done
 DOCUMIND_PROJECT=$PROJECT DOCUMIND_API_URL=$API DOCUMIND_TENANT=acme DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$PROJECT.iam.gserviceaccount.com make smoke 2>&1 | grep "vector tier"

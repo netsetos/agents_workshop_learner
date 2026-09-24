@@ -3,7 +3,8 @@
   "lesson": "13.1",
   "title": "Debug a wrong answer through the complete pipeline",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
   "source_sha": "c7abb19efcfadcbf3543f389b135fca680b1166c",
   "shared_setup_windows": [
     1
@@ -141,7 +142,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
         404
       ],
@@ -182,7 +183,7 @@
         9,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
         464,
         530
@@ -236,7 +237,7 @@
         15,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
         582,
         620,
@@ -302,7 +303,7 @@
       "windows": [
         20
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
         772
       ],
@@ -338,7 +339,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.1-debug-wrong-answer/Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
       "source_lines": [
         410
       ],

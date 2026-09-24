@@ -3,7 +3,7 @@
   "lesson": "2.2",
   "title": "Review and start the prepared deployment",
   "source_kind": "course_plan_and_kit",
-  "source_sha": "882ae288274402568f26204849f5415902dc9ae91e2986b3f61842eaa9f022b4",
+  "source_sha": "cdaa65e63e5b6452cf0453f9488b7357f22725dd73b346952ffe6fbc7da3c34a",
   "persist_variables": [
     "API",
     "API_URL",
@@ -24,7 +24,7 @@
       "purpose": "Validate the same saved plan from 2.1; never create a replacement plan implicitly at apply time.",
       "anchor": "plan-1",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
         1
       ],
@@ -59,7 +59,7 @@
       "purpose": "Apply the reviewed saved plan and run the kit's image-build, deployment, roster and readiness steps. This creates billed resources; the preceding plan is the concrete set of changes to inspect.",
       "anchor": "plan-2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
         1
       ],
@@ -94,7 +94,7 @@
       "purpose": "List the real Cloud Run services and their accounts, URLs and traffic so the resource diagram can be checked against the deployment.",
       "anchor": "plan-3",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
       "source_lines": [
         1
       ],
@@ -110,6 +110,39 @@
           "expected": "",
           "id": "source_demo_03_inspect_the_deployed_services",
           "function": "step_01_inspect_the_deployed_services",
+          "window": null,
+          "source_line": 1,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "recovery_grant_the_build_account_what_a_build_needs",
+      "lesson": "2.2",
+      "file": "recovery/grant_the_build_account_what_a_build_needs.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "grant the build account what a build needs",
+      "purpose": "Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.",
+      "anchor": "plan-4",
+      "windows": [],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/README.md",
+      "source_lines": [
+        1
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Grant the build account what a build needs",
+          "subheading": "Grant the build account what a build needs",
+          "purpose": "Only if the build stopped at storage.objects.get: 'could not resolve source' and a 403 naming the Compute Engine default account. The kit names no account for Cloud Build, so a build runs as the project's default build account, and in an organization created on or after 3 May 2024 that account is created without the Editor role. Run once, as a project owner: read access to its source in the PROJECT_cloudbuild bucket only, push access to the documind repository, and log writing. Not Editor or roles/cloudbuild.builds.builder: granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket included. IAM applies a grant in about two minutes, sometimes seven or more; then run the build again.",
+          "label": "Course-plan experiment — live deployment",
+          "expected": "Three bindings added for the account the 403 named; the next build reads its source.",
+          "id": "source_recover_04_grant_the_build_account_what_a_build_needs",
+          "function": "step_01_grant_the_build_account_what_a_build_needs",
           "window": null,
           "source_line": 1,
           "manual_checkpoint": null

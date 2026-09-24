@@ -3,7 +3,8 @@
   "lesson": "17.2",
   "title": "Validate sanitized datasets and run managed tuning",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
   "source_sha": "375a22387caec2be91dbd584d47b3fc5c7046157",
   "shared_setup_windows": [
     1
@@ -128,7 +129,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
         392
       ],
@@ -169,7 +170,7 @@
         9,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
         454,
         511
@@ -221,7 +222,7 @@
       "windows": [
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
         625
       ],
@@ -260,7 +261,7 @@
         19,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
         657,
         678
@@ -310,7 +311,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.2-managed-tuning/Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_2/GUIDE.md",
       "source_lines": [
         398
       ],

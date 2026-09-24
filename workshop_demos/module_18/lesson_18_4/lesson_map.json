@@ -3,7 +3,8 @@
   "lesson": "18.4",
   "title": "Compare actual backends and verify shutdown behavior",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
   "source_sha": "e7f21fbe70306e17ea9822bec16d034a4a8176cc",
   "shared_setup_windows": [
     1
@@ -125,7 +126,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
         385
       ],
@@ -166,7 +167,7 @@
         9,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
         450,
         459
@@ -218,7 +219,7 @@
       "windows": [
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
         530
       ],
@@ -257,7 +258,7 @@
         17,
         20
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
         612,
         647
@@ -285,12 +286,15 @@
           "purpose": "Do it",
           "label": "bash — run in the operator shell, at least 10 minutes after make off (reads Cloud Monitoring; changes nothing)",
           "expected": "instance_count per service, 09:40 to 10:25 UTC, one point a minute (Cloud Monitoring):\n  documind-slm      last instance at 10:13 UTC    a GPU service\n  documind-vllm     no instance in the window     a GPU service\n  documind-gateway  last instance at 10:09 UTC\n  documind-ui       no instance in the window\nGPU services with an instance in the last 3 minutes: none - zero GPU instances",
-          "adaptations": [],
+          "adaptations": [
+            "The page reads Cloud Monitoring at least ten minutes after make off. Wait for whatever is left of those ten minutes after the manual pause, so an early 'done' cannot read the instance count too soon.",
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_20",
           "function": "step_02_example",
           "window": 20,
           "source_line": 647,
-          "manual_checkpoint": "Allow at least ten minutes after make off before checking Cloud Monitoring for zero GPU instances. Stop and rerun this demo later if needed; completed comparison/shutdown steps are retained."
+          "manual_checkpoint": "The next read is Cloud Monitoring at least ten minutes after make off. Stop and rerun this demo later if you like; completed comparison/shutdown steps are retained. After done, it waits only for whatever is left of the ten minutes."
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
@@ -307,7 +311,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.4-compare-shutdown/Netsetos_GCP_Capstone_18.4_Compare_Shutdown_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_4/GUIDE.md",
       "source_lines": [
         391
       ],

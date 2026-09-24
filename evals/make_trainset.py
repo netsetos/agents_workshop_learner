@@ -52,6 +52,12 @@ GEN_MODEL = "gemini-3.6-flash"
 MIN_CHUNK_CHARS = 400
 REFUSAL_EVERY = 10
 OVERLAP_DROP = 0.5                  # Jaccard over content tokens; or containment, or four shared tokens
+# google-genai 2.22.0, the ingest image's pin, makes ONE attempt unless the client carries retry options: on the
+# lane (24 September 2026) the first 429 ended a 300-call run, and every pair made before it. Standard pay-as-you-go
+# shares capacity, and Google's answer to its 429 is exponential backoff with jitter: eight attempts, 2 s doubling
+# to a 60 s cap, about three minutes before a chunk is given up. Three given up in a row is capacity gone, not a blip.
+RETRY = {"attempts": 8, "initial_delay": 2.0, "max_delay": 60.0, "http_status_codes": [408, 429, 500, 502, 503, 504]}
+GIVE_UP_AFTER = 3
 
 # The generator's SYSTEM, verbatim (services/rag-api/generator.py). The tuned model is served behind
 # that prompt, so it is trained behind that prompt. tools/check_auth_wiring.py holds the two equal.
@@ -110,21 +116,42 @@ def _pair_schema():
 
 
 def ask_pairs(project: str, chunks: list[dict], refusal_every: int = REFUSAL_EVERY) -> list[dict]:
-    """One structured call per chunk on the global endpoint; every refusal_every-th chunk also yields a refusal."""
+    """One structured call per chunk on the global endpoint; every refusal_every-th chunk also yields a refusal.
+
+    Each call retries as RETRY says. A chunk that still fails is skipped and named; GIVE_UP_AFTER in a row stop the
+    run with nothing written. Any other error (a 400, a 403) is the request's fault and stops it at once."""
     from google import genai
-    from google.genai import types
-    client = genai.Client(enterprise=True, project=project, location="global")
+    from google.genai import errors, types
+    client = genai.Client(enterprise=True, project=project, location="global",
+                          http_options=types.HttpOptions(retry_options=types.HttpRetryOptions(**RETRY)))
     Pair = _pair_schema()
-    rows = []
-    for i, c in enumerate(chunks):
-        r = client.models.generate_content(
+
+    def ask(c):
+        return client.models.generate_content(
             model=GEN_MODEL,
             contents=("Read this passage from an Indian statute or a company document. Write one question a colleague "
                       "would ask that it answers, the answer from the passage only, the clause that answers (copied "
                       "exactly, at most twenty-five words), and one question on the same topic the passage does NOT "
                       "answer. Do not invent facts.\n\nPassage:\n" + c["text"][:2400]),
             config=types.GenerateContentConfig(response_mime_type="application/json", response_schema=Pair,
-                                               thinking_config=types.ThinkingConfig(thinking_level="LOW")))
+                                               thinking_config=types.ThinkingConfig(thinking_level="LOW"),
+                                               automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)))
+
+    rows, skipped, in_a_row = [], [], 0
+    for i, c in enumerate(chunks):
+        try:
+            r = ask(c)
+        except errors.APIError as e:
+            if e.code not in RETRY["http_status_codes"]:
+                raise
+            skipped.append(c["chunk_id"])
+            in_a_row += 1
+            print(f"  chunk {i + 1}/{len(chunks)} skipped after {RETRY['attempts']} attempts: {e.code} {e.status}", file=sys.stderr)
+            if in_a_row >= GIVE_UP_AFTER:
+                raise SystemExit(f"  {in_a_row} chunks in a row failed every attempt: stopped at chunk {i + 1} of {len(chunks)}, "
+                                 f"nothing written. Run it again later.")
+            continue
+        in_a_row = 0
         if not r.parsed:
             continue
         p = r.parsed
@@ -135,6 +162,8 @@ def ask_pairs(project: str, chunks: list[dict], refusal_every: int = REFUSAL_EVE
                          "question": p.unanswerable_question,
                          "answer": "The provided context does not answer this question.", "quote": "",
                          "answerable": False, "text": c["text"]})
+    if skipped:
+        print(f"  {len(skipped)} of {len(chunks)} chunks skipped after every attempt, so no row: {', '.join(skipped)}")
     return rows
 
 

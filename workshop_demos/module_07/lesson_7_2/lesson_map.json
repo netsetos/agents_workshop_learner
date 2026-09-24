@@ -3,7 +3,8 @@
   "lesson": "7.2",
   "title": "Separate offline checks, live scoring and LLM judgment",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
   "source_sha": "035b7ce9098bd5e839d3c9896e605aacda3edf63",
   "shared_setup_windows": [
     1
@@ -148,7 +149,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         385
       ],
@@ -189,7 +190,7 @@
         8,
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         433,
         446
@@ -243,7 +244,7 @@
         20,
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         546,
         584,
@@ -314,7 +315,7 @@
         35,
         38
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         698,
         707,
@@ -392,7 +393,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
         391
       ],

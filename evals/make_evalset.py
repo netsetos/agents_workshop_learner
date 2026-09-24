@@ -53,7 +53,9 @@ def ask_pairs(project: str, chunks: list[dict]) -> list[dict]:
         question: str = Field(description="One natural question the passage answers")
         expected_answer: str = Field(description="The answer, quoting the passage")
 
-    client = genai.Client(enterprise=True, project=project, location="global")  # generation is global-only
+    client = genai.Client(enterprise=True, project=project, location="global",  # generation is global-only
+                          http_options=types.HttpOptions(retry_options=types.HttpRetryOptions(      # a 429 waits: make_trainset's RETRY
+                              attempts=8, initial_delay=2.0, max_delay=60.0, http_status_codes=[408, 429, 500, 502, 503, 504])))
     pairs = []
     for c in chunks:
         r = client.models.generate_content(

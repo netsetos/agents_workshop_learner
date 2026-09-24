@@ -3,7 +3,8 @@
   "lesson": "4.2",
   "title": "Reindex a changed section and measure embedding reuse",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
   "source_sha": "04da291943e43a6795223f296f39e4dafd0a5d8c",
   "shared_setup_windows": [
     1
@@ -166,7 +167,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
         366
       ],
@@ -207,7 +208,7 @@
         9,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
         453,
         513
@@ -260,7 +261,7 @@
         15,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
         558,
         590
@@ -313,7 +314,7 @@
         21,
         23
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
         658,
         690
@@ -365,7 +366,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.2-reindex/Netsetos_GCP_Capstone_4.2_Reindex_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
       "source_lines": [
         372
       ],

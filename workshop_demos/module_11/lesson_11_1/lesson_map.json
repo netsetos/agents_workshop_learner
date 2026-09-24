@@ -3,7 +3,8 @@
   "lesson": "11.1",
   "title": "Distinguish agent state, conversation history and knowledge",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
   "source_sha": "6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23",
   "shared_setup_windows": [
     1
@@ -145,7 +146,7 @@
         3,
         8
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
         362,
         403
@@ -200,7 +201,7 @@
         10,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
         412,
         502
@@ -252,7 +253,7 @@
       "windows": [
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
         561
       ],
@@ -290,7 +291,7 @@
       "windows": [
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
         606
       ],
@@ -326,7 +327,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.1-state-history/Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
         368
       ],

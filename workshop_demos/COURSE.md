@@ -5,13 +5,13 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [1.1: Reproduce the local environment and read the master diagram](module_01/lesson_1_1/README.md) — 4 files; course_plan_and_kit
 - [1.2: Prove a first success and diagnose a first failure](module_01/lesson_1_2/README.md) — 2 files; course_plan_and_kit
 - [2.1: Understand the project, identities and resource map](module_02/lesson_2_1/README.md) — 2 files; course_plan_and_kit
-- [2.2: Review and start the prepared deployment](module_02/lesson_2_2/README.md) — 3 files; course_plan_and_kit
+- [2.2: Review and start the prepared deployment](module_02/lesson_2_2/README.md) — 4 files; course_plan_and_kit
 - [2.3: Check readiness, save progress and close the session](module_02/lesson_2_3/README.md) — 3 files; course_plan_and_kit
 - [3.1: Understand source, tenant, page and chunk contracts](module_03/lesson_3_1/README.md) — 5 files; main_html
 - [3.2: Parse documents and compare chunk boundaries](module_03/lesson_3_2/README.md) — 5 files; main_html
 - [3.3: Create and validate compatible embeddings](module_03/lesson_3_3/README.md) — 5 files; main_html
 - [3.4: Write, inspect and verify indexed records](module_03/lesson_3_4/README.md) — 5 files; main_html
-- [4.1: Follow upload events, retries, dead-letter handling and the batch lane](module_04/lesson_4_1/README.md) — 5 files; main_html
+- [4.1: Follow upload events, retries, dead-letter handling and the batch lane](module_04/lesson_4_1/README.md) — 6 files; main_html
 - [4.2: Reindex a changed section and measure embedding reuse](module_04/lesson_4_2/README.md) — 5 files; main_html
 - [4.3: Publish versions, retire documents and reject stale events](module_04/lesson_4_3/README.md) — 6 files; main_html
 - [4.4: Restore documents and reconcile index differences](module_04/lesson_4_4/README.md) — 11 files; main_html
@@ -40,12 +40,12 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [11.2: Configure and inspect durable conversation storage](module_11/lesson_11_2/README.md) — 5 files; main_html
 - [11.3: Verify restart recovery and session isolation](module_11/lesson_11_3/README.md) — 5 files; main_html
 - [12.1: Expose, discover and invoke MCP tools](module_12/lesson_12_1/README.md) — 5 files; main_html
-- [12.2: Deploy MCP and verify authorized access](module_12/lesson_12_2/README.md) — 5 files; main_html
+- [12.2: Deploy MCP and verify authorized access](module_12/lesson_12_2/README.md) — 6 files; main_html
 - [12.3: Trace the implemented A2A peer and its permissions](module_12/lesson_12_3/README.md) — 5 files; main_html
 - [13.1: Debug a wrong answer through the complete pipeline](module_13/lesson_13_1/README.md) — 5 files; main_html
 - [13.2: Reconcile usage events, reports and alerts](module_13/lesson_13_2/README.md) — 5 files; main_html
 - [13.3: Exercise model routing, budgets and shutdown controls](module_13/lesson_13_3/README.md) — 5 files; main_html
-- [14.1: Build and deploy using keyless identity](module_14/lesson_14_1/README.md) — 2 files; course_plan_and_kit
+- [14.1: Build and deploy using keyless identity](module_14/lesson_14_1/README.md) — 3 files; course_plan_and_kit
 - [14.2: Evaluate and gate the exact candidate revision](module_14/lesson_14_2/README.md) — 2 files; course_plan_and_kit
 - [14.3: Promote, roll back and repair a controlled failure](module_14/lesson_14_3/README.md) — 2 files; course_plan_and_kit
 - [14.4: Complete the independent capstone and operational handover](module_14/lesson_14_4/README.md) — 2 files; course_plan_and_kit

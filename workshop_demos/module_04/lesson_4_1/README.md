@@ -9,7 +9,7 @@ Run one complete experiment at a time with the IDE Run/Debug button. Keep the fi
 | 1 | [setup/prepare.py](setup/prepare.py) | Prepare this lesson's saved settings and dependencies before its live experiments. |
 | 2 | [demo_01_trace_upload_delivery.py](demo_01_trace_upload_delivery.py) | Read upload notification, push identity and the previous upload's request/event records. |
 | 3 | [demo_02_poison_retries.py](demo_02_poison_retries.py) | Start the poison drill and observe retries without mistaking a delayed dead letter for success. |
-| 4 | [demo_03_batch_lane_and_dead_letters.py](demo_03_batch_lane_and_dead_letters.py) | Inspect/build the batch example, then inspect the drill's dead letter when it arrives. |
+| 4 | [demo_03_batch_lane_and_dead_letters.py](demo_03_batch_lane_and_dead_letters.py) | Read the batch lane's queue and job, then inspect the drill's dead letter when it arrives. |
 
 ## Before starting
 
@@ -26,6 +26,10 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
 After upgrading from the old per-window layout, finish the saved run first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures.
+
+## Optional extensions
+
+- [optional/large_pdf_down_the_batch_lane.py](optional/large_pdf_down_the_batch_lane.py) — Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
 
 ## Finish and restore
 
@@ -154,9 +158,11 @@ Operation: bash — run in the operator shell, a few minutes later (read-only).
 
 Manual action: The poison retries are asynchronous. Wait a few minutes after the drill, then type done to read its retry records. This does not prove a dead letter has arrived.
 
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 ### demo_03_batch_lane_and_dead_letters.py
 
-Inspect/build the batch example, then inspect the drill's dead letter when it arrives.
+Read the batch lane's queue and job, then inspect the drill's dead letter when it arrives.
 
 **`step_01_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
 
@@ -171,7 +177,29 @@ Expected shape, not a promised result:
 no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)
 ```
 
-**`step_02_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
+**`step_02_when_it_has_landed(session)` — Dead letters: reading the queue, deciding, cleaning up / Read it, when it has landed**
+
+The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
+
+Operation: bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged).
+
+Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.
+
+IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
+Expected shape, not a promised result:
+
+```text
+MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT
+12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1
+{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
+```
+
+### optional/large_pdf_down_the_batch_lane.py
+
+Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
+
+**`step_01_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
 
 The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker. The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and make queued shows it. Decide before you upload.
 
@@ -184,24 +212,6 @@ bundle pages: 270
 >> queued: pages, consumer: 270	documind-ingest-batch started (run requested); the hourly schedule backstops it
 1 queued document(s)
   acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678
-```
-
-**`step_03_when_it_has_landed(session)` — Dead letters: reading the queue, deciding, cleaning up / Read it, when it has landed**
-
-The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
-
-Operation: bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged).
-
-Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later to resume without repeating the completed batch upload.
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.
-
-Expected shape, not a promised result:
-
-```text
-MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT
-12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1
-{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
 ```
 
 ### setup/finish.py
@@ -233,4 +243,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html). All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4e0b9d5eec2e3600a742e7ea82678d360613d541`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4e0b9d5eec2e3600a742e7ea82678d360613d541`.

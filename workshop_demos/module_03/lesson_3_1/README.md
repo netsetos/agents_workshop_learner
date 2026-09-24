@@ -2,7 +2,7 @@
 
 **Summary:** follow one document through tenant, source, version, page and chunk contracts. Each file is a complete experiment with short, named functions you can step through in PyCharm or VS Code. These replace the thirteen extracted command fragments.
 
-The sequence and fixtures follow the [main lesson HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.1-contracts/Netsetos_GCP_Capstone_3.1_Contracts_WIX.html), reviewed at blob `9be3b915fa81df25778e35f6eaa825f0b365ec21`. The source is private; this README and the Python docstrings supply the runnable instructions in the public learner kit. The [lesson map](lesson_map.json) accounts for all 36 code windows and additional prerequisites in prose.
+The sequence and fixtures follow the lesson's main page, `Netsetos_GCP_Capstone_3.1_Contracts_WIX.html`, reviewed at blob `9be3b915fa81df25778e35f6eaa825f0b365ec21`. Learners read that page on the course site; [GUIDE.md](GUIDE.md) keeps its prose, and this README and the Python docstrings supply the runnable instructions. The [lesson map](lesson_map.json) accounts for all 36 code windows and additional prerequisites in prose.
 
 ## Folder and run order
 

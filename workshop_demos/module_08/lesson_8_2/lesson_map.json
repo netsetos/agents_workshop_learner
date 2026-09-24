@@ -3,7 +3,8 @@
   "lesson": "8.2",
   "title": "Test valid access, denied access and cross-tenant requests",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
   "source_sha": "2bfa77b0d346884ddcee1c93f3b8bb4643d84862",
   "shared_setup_windows": [
     1
@@ -138,7 +139,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
         373
       ],
@@ -179,7 +180,7 @@
         8,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
         427,
         483
@@ -232,7 +233,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
         558,
         572
@@ -284,7 +285,7 @@
       "windows": [
         23
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
         609
       ],
@@ -298,7 +299,9 @@
           "purpose": "The smoke test's check 3b, and the chat service's check 4. The kit asserts these refusals itself, so a deploy that opened a door would fail its own smoke test. smoke/smoke.py sends its question again with no token and passes only on 401 or 403. smoke/smoke_chat.py asks the chat service as the outsider and passes only on a 403 from the roster, not a 401 from the verifier. The MCP server's smoke test does the same. The cell runs the API's smoke test and keeps two of its lines.",
           "label": "bash — run in the operator shell, in the kit (the kit's smoke test, two of its lines)",
           "expected": "[PASS] no token refused  status=403\n  N pass · 0 fail",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines."
+          ],
           "id": "source_23",
           "function": "step_01_the_kit_s_own_tests_of_the_same_refusals",
           "window": 23,
@@ -320,7 +323,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
         379
       ],

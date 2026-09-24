@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html); reviewed blob `66b57f935533d5d3d7f44538e669dbf20a968426`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html`, reviewed at blob `66b57f935533d5d3d7f44538e669dbf20a968426`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 15.3 put a copy of acme's and zeta's documents into two Google-managed stores and read answers back from them. A copy raises two questions. Is it as good: does the store find the clause the kit's own index finds? Is it current: when the ledger changes, does every store change with it?
 

@@ -46,8 +46,7 @@ def step_01_the_floor_then_the_switch(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_the_instances_after_fifteen_minutes.
-COMMANDS_02 = """sleep 900     # Cloud Run keeps an idle instance up to 15 minutes
-python - <<'PY'
+COMMANDS_02 = """python - <<'PY'
 import datetime as dt, json, os, subprocess, urllib.parse, urllib.request
 P = os.environ["PROJECT"]
 tok = subprocess.run(["gcloud", "auth", "print-access-token"], capture_output=True, text=True, check=True).stdout.strip()
@@ -84,8 +83,9 @@ def step_02_the_instances_after_fifteen_minutes(session):
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
     """
-    manual_checkpoint('Allow the documented fifteen-minute idle interval after make off. Stop and rerun this demo later if needed; completed shutdown steps will not run again. Type done when ready to inspect monitoring.')
-    # Preserve the kit CLI's arguments, conditions and observation order.
+    manual_checkpoint('The next read is Cloud Monitoring fifteen minutes after make off. Stop and rerun this demo later if you like; completed shutdown steps will not run again. After done, it waits only for whatever is left of the fifteen minutes.')
+    from workshop_helpers.steps import wait_after
+    wait_after(session, "source_20", 900)   # the page's sleep 900, less the time since make off completed
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_ceiling.

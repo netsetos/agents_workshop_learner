@@ -137,6 +137,8 @@ Do it: the smoke's line for a chosen rung, then the pin back
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (two smokes, a rupee each; one field written).
 
+IDE adaptation: Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines.
+
 Expected shape, not a promised result:
 
 ```text
@@ -249,4 +251,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html). All 43 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9553c89dce4181161137e7caeba0cf202f30a3ac`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.4_Fallback_WIX.html`. All 43 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9553c89dce4181161137e7caeba0cf202f30a3ac`.

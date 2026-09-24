@@ -3,7 +3,8 @@
   "lesson": "10.4",
   "title": "Compare the LangChain and ADK adapters",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
   "source_sha": "4d85e128644454856f18a930ac9e3dfcec8d55e1",
   "shared_setup_windows": [
     1
@@ -142,7 +143,7 @@
         3,
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
         364,
         447
@@ -196,7 +197,7 @@
       "windows": [
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
         456
       ],
@@ -234,7 +235,7 @@
       "windows": [
         15
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
         590
       ],
@@ -273,7 +274,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
         619,
         655
@@ -323,7 +324,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.4-adapters/Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
         370
       ],

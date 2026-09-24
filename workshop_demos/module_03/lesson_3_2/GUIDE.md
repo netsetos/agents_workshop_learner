@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html); reviewed blob `5b333c8a6d51ef5416793e5ae594068511fda01e`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html`, reviewed at blob `5b333c8a6d51ef5416793e5ae594068511fda01e`. Learners read that page on the course site; this guide keeps its prose.
 
 Before a document can be searched it has to be read, and before it can be cited it has to be cut into pieces small enough to compare with a question. This lesson opens the two steps that do that in DocuMind: the parser that turns a PDF into pages of text through Document AI, and the chunker that turns text into addressed pieces. You will count pages, cut a handbook into clauses, cut an Act into page windows, and compare the pieces two different parsers make of the same document on your own lane.
 

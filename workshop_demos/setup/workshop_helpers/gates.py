@@ -15,12 +15,32 @@ def expect_failure(session, args, *, status, messages):
     print("Expected gate failure observed:", status, "|", "; ".join(messages))
 
 
-def live_gate(session, *, report, source=None, expect_red=False):
+def expect_guard(session, args, *, stop):
+    """Run a command whose guard is meant to stop it on this lab; the stop and its message are the observation.
+
+Make exits 2 when a recipe fails. Exit 2 with the guard's own message is what the
+page shows; exit 0 means the guard let the command through, because this lab is
+not the kind it stops. Any other exit, or a 2 without the message, is an error.
+"""
+    before = set(session.attempt.glob("command_*.log"))
+    status = session.command(args, check=False)
+    output = "\n".join(p.read_text(encoding="utf-8") for p in set(session.attempt.glob("command_*.log")) - before)
+    if status == 2 and stop in output:
+        print("The guard stopped the command, as the page shows:", stop)
+    elif status == 0:
+        print("The guard let the command through: this lab is not the kind it stops.")
+    else:
+        raise RuntimeError(f"Exit {status} without the guard's message {stop!r}; inspect the command log.")
+    return status
+
+
+def live_gate(session, *, report, source=None, expect_red=False, api=None):
     """Keep a live gate's report and status so later functions can inspect red rows.
 
 Make wraps evaluator nonzero exits as 2. A fresh structured report distinguishes
 quality failure from a failed command/token/import. HTTP/malformed failures
 cannot satisfy the deliberate handbook-revision quality-failure experiment.
+``api`` sends the gate to another revision (a candidate's URL) instead of the API.
 """
     path = Path(report)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -29,6 +49,8 @@ cannot satisfy the deliberate handbook-revision quality-failure experiment.
     args = ["make", "eval-live", f"PROJECT={session.config.project}", f"REGION={session.config.cloud_run_region}", f"REPORT={path}"]
     if source:
         args.append(f"SOURCE={source}")
+    if api:
+        args.append(f"API={api}")
     status = session.command(args, check=False)
     if status not in {0, 2} or not path.exists():
         raise RuntimeError(f"Gate exited {status} without a valid fresh report; inspect the command log.")

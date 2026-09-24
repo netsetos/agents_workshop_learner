@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html); reviewed blob `1434ee937aa77b8465276e8080c069b3d951e632`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html`, reviewed at blob `1434ee937aa77b8465276e8080c069b3d951e632`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 6.1 to 6.3 built the answer. This lesson puts a screen in front of it and walks the whole journey once, as a person. You sign in through IAP, and the UI knows who you are from a signed assertion, never from a form. It finds your tenant on the roster. You upload a note on the Documents page, and the UI writes it into your tenant's folder as its own service account. The worker indexes it, and the Versions table shows the version the ledger now holds. You ask about the note in Chat: the answer streams from the API, the sources render as pills before the first word, and each source opens through a link that is signed for 15 minutes. The API believes the person, not the page: the usage row names you. You will check each hop from the shell as you make it in the browser.
 

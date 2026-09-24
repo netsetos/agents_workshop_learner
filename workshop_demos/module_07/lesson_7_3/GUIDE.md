@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html); reviewed blob `26b60d600a32c21f22d0a2778fe03515b0235248`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html`, reviewed at blob `26b60d600a32c21f22d0a2778fe03515b0235248`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 7.2 measured the revision that serves today. This lesson changes one thing and measures the difference. You make a candidate revision of the API with a cheaper model behind it and no traffic, and prove from both revisions' settings that the model is the only difference. You run the live gate on the rows that cite the handbook against both, ask the pairwise judge which answers are better, and read the price of the difference off the usage rows. Then you remove the candidate's tag, because an experiment is not a release.
 

@@ -3,7 +3,8 @@
   "lesson": "9.1",
   "title": "Compare context caching and answer caching",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
   "source_sha": "ee993d0dd1999f045798aa2dc6a500e1d3d86122",
   "shared_setup_windows": [
     1
@@ -147,7 +148,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
         392
       ],
@@ -190,7 +191,7 @@
         14,
         17
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
         498,
         518,
@@ -272,7 +273,7 @@
         25,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
         663,
         681,
@@ -338,7 +339,7 @@
       "windows": [
         29
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
         717
       ],
@@ -375,7 +376,7 @@
         31,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.1-cache-compare/Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
         752,
         398

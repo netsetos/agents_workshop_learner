@@ -3,7 +3,8 @@
   "lesson": "5.2",
   "title": "Compare dense and hybrid retrieval",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
   "source_sha": "b281bd202e28501bb0b9d45ea85ed4b27f37555d",
   "shared_setup_windows": [
     1
@@ -180,7 +181,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         379,
         395
@@ -238,7 +239,7 @@
         12,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         467,
         564
@@ -291,7 +292,7 @@
         20,
         26
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         649,
         736
@@ -346,7 +347,7 @@
         35,
         38
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         794,
         805,
@@ -424,7 +425,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.2-hybrid/Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
         385
       ],

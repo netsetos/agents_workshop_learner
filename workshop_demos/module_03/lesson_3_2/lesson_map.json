@@ -3,7 +3,8 @@
   "lesson": "3.2",
   "title": "Parse documents and compare chunk boundaries",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
   "source_sha": "5b333c8a6d51ef5416793e5ae594068511fda01e",
   "shared_setup_windows": [
     1
@@ -182,7 +183,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         364
       ],
@@ -224,7 +225,7 @@
         12,
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         441,
         480,
@@ -291,7 +292,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         553,
         581
@@ -346,7 +347,7 @@
         25,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         646,
         671,
@@ -424,7 +425,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
         370
       ],

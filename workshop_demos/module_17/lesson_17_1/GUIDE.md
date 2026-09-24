@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.1-tuning-decision/Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html); reviewed blob `9dd628268229d1f2f125a0bd5f6abb9d42ce92cb`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html`, reviewed at blob `055368732655b9c9c490603445fb3ef0f506e36b`. Learners read that page on the course site; this guide keeps its prose.
 
 Tuning teaches a model a habit, not facts. Before you pay for it, your lane's own numbers must show answers that are wrong in a way a habit fixes: a missing citation, a missing refusal, JSON that breaks. The fix must also be one that a prompt, a cache or better retrieval cannot make more cheaply. The kit has no tool that makes this call. This page gives you a rubric that reads numbers the kit already produces.
 
@@ -219,6 +219,10 @@ Pass `--version v2`. The default version is v1, and `write()` opens its files fo
 Before anything is written, `exclude_golden` runs: the rule the panel in step 1 ran.
 
 #### Do it
+
+Standard pay-as-you-go Gemini shares its capacity, and a 429 there is a rate limit from a spike in traffic. Google's answer is to wait and try again, doubling the wait each time. Google's retry page says the SDK does this by default. The ingest image's `google-genai` 2.22.0 does not: without retry options on the client it makes one attempt. So until 24 September 2026 the first 429 ended the run, and lost every pair made before it.
+
+`ask_pairs()` now gives each call 8 attempts on 408, 429 and 5xx, waiting 2 seconds and doubling up to a minute: about 3 minutes before it gives up on a chunk. A chunk that still fails is skipped and named, and the file has fewer rows. Three chunks in a row that fail stop the run with nothing written, because the capacity is gone for now: run the same cell again later. A 400 or a 403 is not retried. That is the request's fault, and waiting will not fix it.
 
 - 300 chunks, the same 300 as v1's. The sample is sorted by id and strided, so while the corpus is unchanged the chunks are too. What differs is the model's questions, and the golden set as it stands today.
 

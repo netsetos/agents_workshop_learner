@@ -106,11 +106,6 @@ def step_02_example(session):
     images = gc("artifacts", "docker", "images", "list", f"{R}-docker.pkg.dev/{P}/documind/gemma-vllm")
     print(f"the gemma-vllm image in {R}-docker.pkg.dev/{P}/documind: " + (f"{len(images)} version(s)" if images else "not built"))
 
-# Original CLI workflow for step_03_example.
-COMMANDS_03 = """make gke-up PROJECT="$PROJECT"            # read-only on a Standard lab: it checks the mode and stops
-
-"""
-
 def step_03_example(session):
     """Run Do it at this checkpoint.
 
@@ -121,8 +116,9 @@ def step_03_example(session):
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_03)
+    from workshop_helpers.gates import expect_guard
+    expect_guard(session, ["make", "gke-up", "PROJECT=" + session.config.project],
+                 stop="STOP: the Standard CPU lab cannot run the L4 GPU lesson")
 
 def demonstrate(session):
     """Run this experiment in order, resuming only completed checkpoints safely."""

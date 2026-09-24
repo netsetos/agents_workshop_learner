@@ -3,7 +3,8 @@
   "lesson": "12.3",
   "title": "Trace the implemented A2A peer and its permissions",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
   "source_sha": "2d4eced3a474cc6fd41eaa365bb525484d950cc5",
   "shared_setup_windows": [
     1
@@ -136,7 +137,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
         365
       ],
@@ -177,7 +178,7 @@
         10,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
         427,
         469
@@ -229,7 +230,7 @@
       "windows": [
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
         507
       ],
@@ -268,7 +269,7 @@
         16,
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
         533,
         564
@@ -318,7 +319,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.3-a2a-peer/Netsetos_GCP_Capstone_12.3_A2A_Peer_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
         371
       ],

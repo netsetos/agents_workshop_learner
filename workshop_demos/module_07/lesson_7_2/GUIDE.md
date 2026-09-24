@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.2-live-judge/Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html); reviewed blob `035b7ce9098bd5e839d3c9896e605aacda3edf63`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html`, reviewed at blob `035b7ce9098bd5e839d3c9896e605aacda3edf63`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 7.1 made the golden set sound. This lesson runs the three instruments that use it, and keeps them apart on purpose. The offline gate checks the set on every push, with no credentials. The live gate sends every row to the deployed API, as a roster member and again as an outsider, and blocks a release on 9 thresholds and 15 required rows. The judge has Gemini read the lane's answers with the context they cite, and it never blocks anything. You will read CI's verdict on the kit you run, run the live gate and take its report apart, and run the judge beside it.
 

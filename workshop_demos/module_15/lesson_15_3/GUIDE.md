@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html); reviewed blob `f3b8566f506ca71dad40790c01d60af2bf9f2df5`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html`, reviewed at blob `f3b8566f506ca71dad40790c01d60af2bf9f2df5`. Learners read that page on the course site; this guide keeps its prose.
 
 The kit's own index lives in Mumbai, asia-south1. Two Google-managed stores can hold a copy of a tenant's documents too: a Vertex AI RAG Engine corpus in us-central1 and a Vertex AI Search data store in `global`. The worker copies each version it makes current into them, but only for a tenant whose `data_region` says `any`. The API reads a store only for a tenant pinned to it, and holds that pin against the same policy.
 

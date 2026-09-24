@@ -98,6 +98,8 @@ Do it: the gate on the live revision, then on the candidate
 
 Operation: bash — run in the operator shell, in the kit (the 10 rows that cite the handbook, on each revision: a few minutes).
 
+IDE adaptation: Run both gates through live_gate: a red gate on the live revision or the candidate is an observation this lesson compares, and each keeps its fresh report. The page's `| tail -3` stopped the cell under pipefail on a red baseline; here the whole gate output shows. A missing report or an HTTP/auth failure still fails.
+
 Expected shape, not a promised result:
 
 ```text
@@ -233,4 +235,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.3-controlled-change/Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html). All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `26b60d600a32c21f22d0a2778fe03515b0235248`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `26b60d600a32c21f22d0a2778fe03515b0235248`.

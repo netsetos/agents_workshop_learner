@@ -3,7 +3,8 @@
   "lesson": "4.1",
   "title": "Follow upload events, retries, dead-letter handling and the batch lane",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
   "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
   "shared_setup_windows": [
     1
@@ -174,7 +175,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
       "source_lines": [
         366,
         382
@@ -229,7 +230,7 @@
         10,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
       "source_lines": [
         448,
         553
@@ -282,7 +283,7 @@
         19,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
       "source_lines": [
         598,
         607
@@ -312,7 +313,9 @@
           "purpose": "The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.",
           "label": "bash — run in the operator shell, a few minutes later (read-only)",
           "expected": "",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_21",
           "function": "step_02_start_the_drill_then_watch_the_first_retri",
           "window": 21,
@@ -331,17 +334,15 @@
         "demo_02_poison_retries"
       ],
       "heading": "demo 03 batch lane and dead letters",
-      "purpose": "Inspect/build the batch example, then inspect the drill's dead letter when it arrives.",
+      "purpose": "Read the batch lane's queue and job, then inspect the drill's dead letter when it arrives.",
       "anchor": "s6, s7",
       "windows": [
         27,
-        30,
         34
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
       "source_lines": [
         699,
-        730,
         778
       ],
       "offline": false,
@@ -362,6 +363,47 @@
           "manual_checkpoint": null
         },
         {
+          "heading": "Dead letters: reading the queue, deciding, cleaning up",
+          "subheading": "Read it, when it has landed",
+          "purpose": "The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.",
+          "label": "bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged)",
+          "expected": "MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT\n12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1\n{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}",
+          "adaptations": [
+            "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.",
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
+          "id": "source_34",
+          "function": "step_02_when_it_has_landed",
+          "window": 34,
+          "source_line": 778,
+          "manual_checkpoint": "Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again."
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "optional_large_pdf_down_the_batch_lane",
+      "lesson": "4.1",
+      "file": "optional/large_pdf_down_the_batch_lane.py",
+      "category": "optional",
+      "requires": [
+        "demo_03_batch_lane_and_dead_letters"
+      ],
+      "heading": "large pdf down the batch lane",
+      "purpose": "Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.",
+      "anchor": "s6",
+      "windows": [
+        30
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
+      "source_lines": [
+        730
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
           "heading": "The batch lane: the 250-page decision, the queued claim, the job",
           "subheading": "Read the lane, Rs 0",
           "purpose": "The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker. The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and make queued shows it. Decide before you upload.",
@@ -369,25 +411,10 @@
           "expected": "bundle pages: 270\n>> queued: pages, consumer: 270\tdocumind-ingest-batch started (run requested); the hourly schedule backstops it\n1 queued document(s)\n  acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678",
           "adaptations": [],
           "id": "source_30",
-          "function": "step_02_read_the_lane_rs_0",
+          "function": "step_01_read_the_lane_rs_0",
           "window": 30,
           "source_line": 730,
           "manual_checkpoint": null
-        },
-        {
-          "heading": "Dead letters: reading the queue, deciding, cleaning up",
-          "subheading": "Read it, when it has landed",
-          "purpose": "The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.",
-          "label": "bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged)",
-          "expected": "MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT\n12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1\n{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}",
-          "adaptations": [
-            "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object."
-          ],
-          "id": "source_34",
-          "function": "step_03_when_it_has_landed",
-          "window": 34,
-          "source_line": 778,
-          "manual_checkpoint": "Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later to resume without repeating the completed batch upload."
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
@@ -405,7 +432,7 @@
         36,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.1-upload-events/Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
       "source_lines": [
         789,
         372

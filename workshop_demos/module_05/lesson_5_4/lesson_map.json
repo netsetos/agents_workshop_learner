@@ -3,7 +3,8 @@
   "lesson": "5.4",
   "title": "Test fallback without losing tenant or metadata filters",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
   "source_sha": "9553c89dce4181161137e7caeba0cf202f30a3ac",
   "shared_setup_windows": [
     1
@@ -193,7 +194,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         388,
         404
@@ -250,7 +251,7 @@
       "windows": [
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         490
       ],
@@ -292,7 +293,7 @@
         25,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         580,
         593,
@@ -336,7 +337,9 @@
           "purpose": "Do it: the smoke's line for a chosen rung, then the pin back",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (two smokes, a rupee each; one field written)",
           "expected": "[ -- ] vector tier  this request ran on firestore — skipped\nacme: retrieval_backend=vector\nbackend vector | vector_chunks 20 | pool 20 | retrieve_ms 6xx | answerable True | first 1 hr_policy_2026.md | A confirmed employee in grade E3 ...\n  [PASS] vector tier  20 of 20 chunks came from the index",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines."
+          ],
           "id": "source_20",
           "function": "step_03_the_smoke_s_line_for_a_chosen_rung_then_th",
           "window": 20,
@@ -388,7 +391,7 @@
         37,
         42
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         711,
         763,
@@ -452,7 +455,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.4-fallback/Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
         394
       ],

@@ -3,7 +3,8 @@
   "lesson": "11.2",
   "title": "Configure and inspect durable conversation storage",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
   "source_sha": "8ff81098aa551cfdfcea7b74a70b6d674c710765",
   "shared_setup_windows": [
     1
@@ -139,7 +140,7 @@
         3,
         7
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
         361,
         399
@@ -193,7 +194,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
         408
       ],
@@ -232,7 +233,7 @@
         14,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
         529,
         581
@@ -284,7 +285,7 @@
       "windows": [
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
         635
       ],
@@ -320,7 +321,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.2-durable-storage/Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
         367
       ],

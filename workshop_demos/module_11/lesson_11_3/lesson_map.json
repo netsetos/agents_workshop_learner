@@ -3,7 +3,8 @@
   "lesson": "11.3",
   "title": "Verify restart recovery and session isolation",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
   "source_sha": "0f3fb29f23b886b2a6493c5a3474f442b8af3c17",
   "shared_setup_windows": [
     1
@@ -140,7 +141,7 @@
         3,
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
         360,
         414
@@ -194,7 +195,7 @@
       "windows": [
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
         423
       ],
@@ -233,7 +234,7 @@
         14,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
         512,
         564
@@ -285,7 +286,7 @@
       "windows": [
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
         587
       ],
@@ -321,7 +322,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/11-memory/11.3-restart-isolation/Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
         366
       ],

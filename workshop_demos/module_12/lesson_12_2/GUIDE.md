@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html); reviewed blob `f1670b27aee13cd8c5083246399ffea5d2a1ac20`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html`, reviewed at blob `5e857fb7dd11d3ce82883c1fde49b0fa597e457a`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 12.1 ran the kit's MCP server on your machine. This lesson puts it behind Cloud Run and checks who gets through. Three doors stand in front of a tenant's documents. Cloud Run lets in only the accounts bound as invokers. The server accepts only a token minted for its own address, with an email in it. The roster decides which tenant's documents that email may read. Behind the doors, the server fetches from rag-api as its own account, which every golden roster lists. You read the door as the kit writes it down, deploy it with the kit's own target, and run the module's gate. Then you call once at each door, and read the two logs that show who asked and who was served.
 
@@ -107,6 +107,12 @@ The kit's own build-and-deploy, then the service as Cloud Run holds it.
 `make build deploy-services` builds the MCP image from the kit with Cloud Build, then runs `lesson-7.2.sh`'s deploy block: the `gcloud run deploy` with its flags, and the loop that binds the three invokers. It ends by making sure you may mint tokens as `documind-ui-sa` and the outsider. The second cell reads the service back: the revision serving, the account it runs as, its ingress, its `SELF_URL`, and the invokers bound on it now, compared with the script's three.
 
 #### Do it: build and deploy
+
+Cloud Build runs a build as the project's default build account, and the kit names no other: `cloudbuild.yaml` has no `serviceAccount`, and `make build` passes no `--service-account`. On a project made since mid-2024 that account is the Compute Engine default account, `NUMBER-compute@developer.gserviceaccount.com`. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive `gcloud builds submit` has just uploaded to the `documind-ai-YOUR-ID_cloudbuild` bucket, and stops at `could not resolve source` with a 403 naming that account.
+
+This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the `documind` repository, and write its log lines (`cloudbuild.yaml` logs to Cloud Logging only). It does not grant Editor or `roles/cloudbuild.builds.builder`. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.
+
+Then run the build and deploy again. IAM applies a grant in about two minutes, sometimes seven or more, so a second 403 on the same object soon after is that wait, not a wrong grant. If the 403 names another account, set `BUILD_SA` to that one.
 
 #### Do it: read it back
 

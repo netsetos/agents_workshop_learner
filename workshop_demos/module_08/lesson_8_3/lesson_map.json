@@ -3,7 +3,8 @@
   "lesson": "8.3",
   "title": "Exercise DLP, guardrails and audit behavior",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
   "source_sha": "0f79843e15e5d20e67a5ce3f41943aca173c2e5d",
   "shared_setup_windows": [
     1
@@ -172,7 +173,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
       "source_lines": [
         377
       ],
@@ -214,7 +215,7 @@
         10,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
       "source_lines": [
         443,
         471,
@@ -256,7 +257,9 @@
           "purpose": "The console sits behind IAP and admits only the addresses the lane was deployed with as ADMIN_EMAILS. If it answers 403 - Admins only, your address is not among them; the cell above has already read the records the tab draws.",
           "label": "bash — run in the operator shell, in the kit (the admin console's address)",
           "expected": "https://documind-admin-NUMBER.asia-south1.run.app   <- open in your browser, then the DLP tab",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_12",
           "function": "step_03_the_dlp_tab",
           "window": 12,
@@ -282,7 +285,7 @@
         19,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
       "source_lines": [
         566,
         584,
@@ -349,7 +352,7 @@
         25,
         29
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
       "source_lines": [
         660,
         728
@@ -400,7 +403,7 @@
         31,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.3-dlp-guard-audit/Netsetos_GCP_Capstone_8.3_DLP_Guard_Audit_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_3/GUIDE.md",
       "source_lines": [
         745,
         383

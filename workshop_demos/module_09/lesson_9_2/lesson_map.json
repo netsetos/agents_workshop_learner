@@ -3,7 +3,8 @@
   "lesson": "9.2",
   "title": "Test cache scope, configuration changes and freshness",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
   "source_sha": "11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7",
   "shared_setup_windows": [
     1
@@ -169,7 +170,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
       "source_lines": [
         374
       ],
@@ -211,7 +212,7 @@
         10,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
       "source_lines": [
         426,
         445,
@@ -279,7 +280,7 @@
         19,
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
       "source_lines": [
         555,
         564,
@@ -347,7 +348,7 @@
         26,
         28
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
       "source_lines": [
         624,
         631,
@@ -412,7 +413,7 @@
         30,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.2-cache-freshness/Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_2/GUIDE.md",
       "source_lines": [
         666,
         380

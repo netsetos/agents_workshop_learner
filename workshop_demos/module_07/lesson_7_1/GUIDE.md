@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html); reviewed blob `085f18eff4b225ef3c249a8efd624fb5b739da9d`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html`, reviewed at blob `085f18eff4b225ef3c249a8efd624fb5b739da9d`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 7 measures the answer, and the measure is a set of questions with answer keys: the kit's golden set, 65 rows over 3 tenants. You find the one clause of ACME's handbook that no row asks about and write a row for it, which the offline gate accepts. Then you write the hardest shape, an isolation row for Zeta. The gate refuses it twice, each time with a sentence that says why, and accepts it on the third try. You ask both rows once against the API, label two paraphrases, and see why a question generated from a chunk is a candidate and not a row. Only step 6 and the last cell of step 7 call the cloud.
 

@@ -24,7 +24,7 @@
       "purpose": "Run the real smoke-all gate and preserve its output, including unavailable optional services and failures. Do not mark the capstone complete merely because earlier individual demos ran.",
       "anchor": "plan-1",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_4/README.md",
       "source_lines": [
         1
       ],
@@ -59,7 +59,7 @@
       "purpose": "Summarize actual lesson attempts and retain the exact candidate gate, failures and evidence locations. This is an evidence index for a human capstone review, not an automatic rubric score.",
       "anchor": "plan-2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_14/lesson_14_4/README.md",
       "source_lines": [
         1
       ],

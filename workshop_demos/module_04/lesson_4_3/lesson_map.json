@@ -3,7 +3,8 @@
   "lesson": "4.3",
   "title": "Publish versions, retire documents and reject stale events",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
   "source_sha": "f336737e3da708a11e2863a2d9742fafed531016",
   "shared_setup_windows": [
     1
@@ -175,7 +176,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         372
       ],
@@ -216,7 +217,7 @@
         9,
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         454,
         515
@@ -268,7 +269,7 @@
       "windows": [
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         574
       ],
@@ -310,7 +311,7 @@
         33,
         36
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         668,
         697,
@@ -402,7 +403,7 @@
       "windows": [
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         681
       ],
@@ -438,7 +439,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
         378
       ],

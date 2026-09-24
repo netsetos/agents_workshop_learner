@@ -3,7 +3,8 @@
   "lesson": "16.2",
   "title": "Exercise implemented Studio and voice features",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
   "source_sha": "f90dc609bf1dfc9befdb00d185c8e8f4286c122d",
   "shared_setup_windows": [
     1
@@ -130,7 +131,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
         387
       ],
@@ -170,7 +171,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
         467
       ],
@@ -209,7 +210,7 @@
         13,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
         592,
         675
@@ -262,7 +263,7 @@
         18,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
         732,
         790
@@ -312,7 +313,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
         393
       ],

@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.3-tool-failures/Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html); reviewed blob `8c8650c57c7da57795b534e5c7b86462f1357233`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html`, reviewed at blob `8c8650c57c7da57795b534e5c7b86462f1357233`. Learners read that page on the course site; this guide keeps its prose.
 
 A tool call can fail in more places than it can succeed. Some failures stop a request at the door, and some reach the model as an error. Some reach it as ordinary data that happens to say something went wrong. Some are noted in a log line that nobody reads. You force five failures through the kit's own LangChain brain: a blocked name, a wrong argument, a tool that does not exist, a retrieval that times out, and a call over its budget. Then you meet three identities at the chat service's door, and a filter argument the corpus cannot honour. For each one you find where it surfaced and who was told.
 

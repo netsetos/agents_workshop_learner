@@ -80,6 +80,8 @@ Do it: the service's account, IAP's flag, who may sign in, and a request without
 
 Operation: bash — run in the operator shell (four reads).
 
+IDE adaptation: Run with the page's shell semantics: every line is a read. If the UI is not behind IAP, grep prints nothing and the IAP policy and the unsigned request after it show why, instead of the cell stopping at grep.
+
 Expected shape, not a promised result:
 
 ```text
@@ -107,7 +109,7 @@ Operation: bash — run in the operator shell (the object, the worker's line, yo
 
 Manual action: In the ACME UI, Documents -> Upload: choose the exact ~/pune_visitor_rules.md created in the previous step, then Index documents. Refresh until indexed. If your browser runs elsewhere, download this exact file from the workstation first. Type done after the UI checkpoint.
 
-IDE adaptation: Verify the exact UI-uploaded bytes, source generation, claim and current chunks; an unrelated latest ingest_ok event cannot satisfy this checkpoint.
+IDE adaptation: Verify the exact UI-uploaded bytes, source generation, claim and current chunks; an unrelated latest ingest_ok event cannot satisfy this checkpoint. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -126,6 +128,8 @@ In the browser, open Chat and ask: What colour badge do visitors wear at the Pun
 Operation: bash — run in the operator shell (one question, a rupee; one log read).
 
 Manual action: In the deployed UI Chat, ask the visitor-badge question from this lesson and wait for the cited answer. Type done to compare the browser and operator API records.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -146,6 +150,8 @@ In the browser, under the answer from step 5, open Sources and click Open source
 Operation: bash — run in the operator shell (one stream, a rupee).
 
 Manual action: Open the answer's citation/source in the UI and inspect the signed link. Type done to render and inspect the transcript from Python.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -191,4 +197,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html). All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1434ee937aa77b8465276e8080c069b3d951e632`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1434ee937aa77b8465276e8080c069b3d951e632`.

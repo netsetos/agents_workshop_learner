@@ -3,7 +3,8 @@
   "lesson": "9.3",
   "title": "Measure latency, avoided calls and false cache hits",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
   "source_sha": "ab26cd1a53661cdbf477d3268f9e721275f57273",
   "shared_setup_windows": [
     1
@@ -140,7 +141,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         380
       ],
@@ -180,7 +181,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         446
       ],
@@ -219,7 +220,7 @@
         12,
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         494,
         506
@@ -272,7 +273,7 @@
         18,
         20
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         592,
         616
@@ -322,7 +323,7 @@
       "windows": [
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         571
       ],
@@ -359,7 +360,7 @@
         22,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/09-caching/9.3-cache-measure/Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
         632,
         386

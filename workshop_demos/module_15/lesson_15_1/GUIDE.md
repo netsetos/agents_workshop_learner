@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html); reviewed blob `d74daf0dbbc7f95660f0a56970362cc9c013c26a`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html`, reviewed at blob `d74daf0dbbc7f95660f0a56970362cc9c013c26a`. Learners read that page on the course site; this guide keeps its prose.
 
 Dense retrieval finds passages that sound like the question. A question about a relation, such as who approves a purchase above two lakh rupees, is better answered by following a named link from one thing to another. The kit builds those links from the tenant's own documents. It asks flash-lite for the entities and relations each passage states, and folds the different ways a name is written into one node. Every node and every edge keeps the chunk it came from, so a hop through the graph can be cited like a passage.
 

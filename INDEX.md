@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-781 files; 108 quoted by a lesson, 148 shown or named by one.
+787 files; 108 quoted by a lesson, 148 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -20,7 +20,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `Makefile` | code | 3.3 | 3.2, 4.2, 5.2, 5.3, 7.1, 7.2, 7.3, 8.3, 13.3, 15.3, 15.4, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `README.md` | doc | - | - |
 | `UNOWNED.md` | doc | - | 18.3 |
-| `cloudbuild.yaml` | config | - | 18.3 |
+| `cloudbuild.yaml` | config | - | 12.2, 18.3 |
 | `commands/check-firestore-fallback.py` | code | 5.4, 13.1 | 3.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
 | `commands/git-source.sh` | code | - | - |
@@ -130,6 +130,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/sft/documind_sft_v1.manifest.json` | data | - | - |
 | `evals/sft/documind_sft_v1.vertex.jsonl` | data | - | - |
 | `evals/tests/test_fetch_real.py` | code | - | - |
+| `evals/tests/test_make_trainset_retry.py` | code | - | - |
 | `evals/tune.py` | code | 17.1, 17.2 | - |
 | `evals/upload.sh` | code | 16.1 | - |
 | `evals/usage_rows.py` | code | 5.3, 5.4, 6.3, 9.3, 13.2, 17.3 | 10.4 |
@@ -306,12 +307,14 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_02/lesson_2_2/demo_02_apply_and_deploy_the_prepared_kit.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_2/demo_03_inspect_the_deployed_services.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_2/lesson_map.json` | config | - | - |
+| `workshop_demos/module_02/lesson_2_2/recovery/grant_the_build_account_what_a_build_needs.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_3/README.md` | doc | - | - |
 | `workshop_demos/module_02/lesson_2_3/demo_01_check_readiness_and_smoke.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_3/demo_02_record_restart_inputs.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_3/lesson_map.json` | config | - | - |
 | `workshop_demos/module_02/lesson_2_3/setup/finish.py` | code | - | - |
 | `workshop_demos/module_03/README.md` | doc | - | - |
+| `workshop_demos/module_03/lesson_3_1/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_03/lesson_3_1/README.md` | doc | - | - |
 | `workshop_demos/module_03/lesson_3_1/demo_01_tenant_and_source_contracts.py` | code | - | - |
 | `workshop_demos/module_03/lesson_3_1/demo_02_document_versions.py` | code | - | - |
@@ -350,6 +353,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_04/lesson_4_1/demo_02_poison_retries.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_1/demo_03_batch_lane_and_dead_letters.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_1/lesson_map.json` | config | - | - |
+| `workshop_demos/module_04/lesson_4_1/optional/large_pdf_down_the_batch_lane.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_1/setup/finish.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_1/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_2/GUIDE.md` | doc | - | - |
@@ -600,6 +604,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_12/lesson_12_2/demo_02_invoke_deployed_mcp.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_2/demo_03_mcp_access_boundaries.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_2/lesson_map.json` | config | - | - |
+| `workshop_demos/module_12/lesson_12_2/recovery/grant_the_build_account.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_2/setup/finish.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_2/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_3/GUIDE.md` | doc | - | - |
@@ -640,6 +645,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_14/lesson_14_1/demo_01_inspect_the_keyless_build_identity.py` | code | - | - |
 | `workshop_demos/module_14/lesson_14_1/demo_02_build_the_deployment_images.py` | code | - | - |
 | `workshop_demos/module_14/lesson_14_1/lesson_map.json` | config | - | - |
+| `workshop_demos/module_14/lesson_14_1/recovery/grant_the_build_account_what_a_build_needs.py` | code | - | - |
 | `workshop_demos/module_14/lesson_14_2/README.md` | doc | - | - |
 | `workshop_demos/module_14/lesson_14_2/demo_01_create_the_recorded_candidate.py` | code | - | - |
 | `workshop_demos/module_14/lesson_14_2/demo_02_evaluate_the_exact_candidate.py` | code | - | - |

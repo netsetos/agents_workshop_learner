@@ -23,7 +23,8 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_service_s_account_iap_s_flag_who_may_s.
-COMMANDS_01 = """gcloud run services describe documind-ui --region "$REGION" --project "$PROJECT" --format='value(spec.template.spec.serviceAccountName)'
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: every line is a read, and grep finding nothing is an answer
+gcloud run services describe documind-ui --region "$REGION" --project "$PROJECT" --format='value(spec.template.spec.serviceAccountName)'
 gcloud run services describe documind-ui --region "$REGION" --project "$PROJECT" --format=yaml | grep -i "iap-enabled"
 gcloud iap web get-iam-policy --resource-type=cloud-run --service=documind-ui --region "$REGION" --project "$PROJECT" \\
   --flatten=bindings --format='value(bindings.role,bindings.members)'

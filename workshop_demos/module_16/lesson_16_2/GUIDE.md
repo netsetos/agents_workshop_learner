@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/16-multimodal/16.2-studio-voice/Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html); reviewed blob `f90dc609bf1dfc9befdb00d185c8e8f4286c122d`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html`, reviewed at blob `f90dc609bf1dfc9befdb00d185c8e8f4286c122d`. Learners read that page on the course site; this guide keeps its prose.
 
 The UI has three media features. The Studio turns a prompt into an image through the API, which checks, spends and records it. The chat can read each answer aloud, and it can take a question from the microphone. All three are in the kit already: this lesson exercises them and reads what each one leaves behind.
 

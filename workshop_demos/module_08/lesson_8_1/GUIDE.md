@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.1-identity-tenancy/Netsetos_GCP_Capstone_8.1_Identity_Tenancy_WIX.html); reviewed blob `4a2c528ee001991a66c0c2fdde1d412dbe008472`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_8.1_Identity_Tenancy_WIX.html`, reviewed at blob `4a2c528ee001991a66c0c2fdde1d412dbe008472`. Learners read that page on the course site; this guide keeps its prose.
 
 Every answer the API gives is for someone, about one tenant's documents. This lesson follows a request through the three checks that decide both. Cloud Run's IAM decides who may knock at all. The kit's shared verifier decides who is asking, from a person's forwarded sign-in or the caller's own token, never from a header. The roster in Firestore decides which tenant that identity may read. You will read each check's settings on your lane, list the rosters, send a request with a forged header, and find the usage row that names the verified caller anyway.
 

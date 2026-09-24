@@ -3,7 +3,8 @@
   "lesson": "15.3",
   "title": "Configure and query managed retrieval mirrors",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
   "source_sha": "f3b8566f506ca71dad40790c01d60af2bf9f2df5",
   "shared_setup_windows": [
     1
@@ -133,7 +134,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
         400
       ],
@@ -174,7 +175,7 @@
         9,
         13
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
         480,
         592
@@ -227,7 +228,7 @@
         17,
         19
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
         649,
         695
@@ -281,7 +282,7 @@
         23,
         25
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
         747,
         765,
@@ -345,7 +346,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.3-managed-mirrors/Netsetos_GCP_Capstone_15.3_Managed_Mirrors_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_3/GUIDE.md",
       "source_lines": [
         406
       ],

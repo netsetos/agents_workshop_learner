@@ -3,7 +3,8 @@
   "lesson": "4.4",
   "title": "Restore documents and reconcile index differences",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
   "source_sha": "52d1fbe549bb76a2fe1064f01171f2107c260a11",
   "shared_setup_windows": [
     8
@@ -149,7 +150,7 @@
       "purpose": "Use the actual planner for the queued example and interactive widget's scenarios.",
       "anchor": "s2",
       "windows": [],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         335,
         431
@@ -201,7 +202,7 @@
       "windows": [
         10
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         500
       ],
@@ -248,7 +249,7 @@
         17,
         20
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         522,
         544,
@@ -385,7 +386,7 @@
         21,
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         712,
         725
@@ -435,7 +436,7 @@
       "windows": [
         25
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         763
       ],
@@ -476,7 +477,7 @@
         28,
         29
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         788,
         793,
@@ -556,7 +557,7 @@
       "windows": [
         35
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         939
       ],
@@ -594,7 +595,7 @@
       "windows": [
         39
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         976
       ],
@@ -630,7 +631,7 @@
       "windows": [
         40
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         980
       ],
@@ -668,7 +669,7 @@
       "windows": [
         42
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         990
       ],
@@ -706,7 +707,7 @@
       "windows": [
         44
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.4-restore-reconcile/Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
         1007
       ],

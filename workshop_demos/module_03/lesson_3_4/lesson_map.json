@@ -3,7 +3,8 @@
   "lesson": "3.4",
   "title": "Write, inspect and verify indexed records",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
   "source_sha": "919ad0b568337556ab3556373116e42e432c4488",
   "shared_setup_windows": [
     1
@@ -191,7 +192,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         367,
         383
@@ -247,7 +248,7 @@
         15,
         20
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         475,
         494,
@@ -314,7 +315,7 @@
         24,
         27
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         656,
         697
@@ -369,7 +370,7 @@
         39,
         43
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         807,
         882,
@@ -447,7 +448,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.4-indexed-records/Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
         373
       ],

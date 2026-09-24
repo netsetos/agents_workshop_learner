@@ -24,12 +24,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_the_gate_on_the_live_revision_then_on_the.
-COMMANDS_01 = """make eval-live PROJECT="$PROJECT" SOURCE=hr_policy_2026.md REPORT=evals/reports/base73.json | tail -3
-make eval-live PROJECT="$PROJECT" SOURCE=hr_policy_2026.md REPORT=evals/reports/cand73.json API="$CAND"
-
-"""
-
 def step_01_the_gate_on_the_live_revision_then_on_the(session):
     """Run Do it: the gate on the live revision, then on the candidate at this checkpoint.
 
@@ -40,8 +34,10 @@ def step_01_the_gate_on_the_live_revision_then_on_the(session):
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    import os
+    from workshop_helpers.gates import live_gate
+    live_gate(session, report="evals/reports/base73.json", source="hr_policy_2026.md")
+    live_gate(session, report="evals/reports/cand73.json", source="hr_policy_2026.md", api=os.environ["CAND"])
 
 def step_02_the_gate_on_the_live_revision_then_on_the(session):
     """Run Do it: the gate on the live revision, then on the candidate at this checkpoint.

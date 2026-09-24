@@ -3,7 +3,8 @@
   "lesson": "15.4",
   "title": "Compare quality and test update/withdrawal freshness",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
   "source_sha": "66b57f935533d5d3d7f44538e669dbf20a968426",
   "shared_setup_windows": [
     1
@@ -131,7 +132,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
       "source_lines": [
         387
       ],
@@ -172,7 +173,7 @@
         7,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
       "source_lines": [
         436,
         593
@@ -225,7 +226,7 @@
         13,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
       "source_lines": [
         670,
         766
@@ -278,7 +279,7 @@
         20,
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
       "source_lines": [
         813,
         837
@@ -328,7 +329,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.4-mirror-freshness/Netsetos_GCP_Capstone_15.4_Mirror_Freshness_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_4/GUIDE.md",
       "source_lines": [
         393
       ],

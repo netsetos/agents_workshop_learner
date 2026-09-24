@@ -138,6 +138,8 @@ The smoke test's check 3b, and the chat service's check 4. The kit asserts these
 
 Operation: bash — run in the operator shell, in the kit (the kit's smoke test, two of its lines).
 
+IDE adaptation: Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines.
+
 Expected shape, not a promised result:
 
 ```text
@@ -159,4 +161,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/08-security/8.2-access-tests/Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html). All 24 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2bfa77b0d346884ddcee1c93f3b8bb4643d84862`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.2_Access_Tests_WIX.html`. All 24 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2bfa77b0d346884ddcee1c93f3b8bb4643d84862`.

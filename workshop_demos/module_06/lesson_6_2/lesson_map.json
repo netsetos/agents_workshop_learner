@@ -3,7 +3,8 @@
   "lesson": "6.2",
   "title": "Generate structured answers, citations and refusals",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
   "source_sha": "c8fdaf018887ed16c078e2078289794f62ff081b",
   "shared_setup_windows": [
     1
@@ -177,7 +178,7 @@
         3,
         6
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
         371,
         387
@@ -235,7 +236,7 @@
         12,
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
         471,
         565
@@ -288,7 +289,7 @@
         21,
         26
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
         622,
         712
@@ -341,7 +342,7 @@
         32,
         36
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
         811,
         869
@@ -391,7 +392,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.2-structured-answers/Netsetos_GCP_Capstone_6.2_Structured_Answers_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_2/GUIDE.md",
       "source_lines": [
         377
       ],

@@ -51,7 +51,9 @@ def step_02_example(session):
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
     """
-    manual_checkpoint('Allow at least ten minutes after make off before checking Cloud Monitoring for zero GPU instances. Stop and rerun this demo later if needed; completed comparison/shutdown steps are retained.')
+    manual_checkpoint('The next read is Cloud Monitoring at least ten minutes after make off. Stop and rerun this demo later if you like; completed comparison/shutdown steps are retained. After done, it waits only for whatever is left of the ten minutes.')
+    from workshop_helpers.steps import wait_after
+    wait_after(session, "source_17", 600)   # the page: at least ten minutes after make off
     import json, os, subprocess, time, urllib.parse, urllib.request
     from datetime import datetime, timedelta, timezone
     P = os.environ["PROJECT"]

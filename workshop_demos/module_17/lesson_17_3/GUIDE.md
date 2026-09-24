@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.3-tuned-candidate/Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html); reviewed blob `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`, reviewed at blob `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 17.2 left a tuned endpoint. This lesson puts it behind the API on a candidate revision that takes no traffic, and compares that revision with the live one on the same questions, in the same hour. The method is lesson 7.3's. What is new is what can contaminate the comparison when the candidate is a tuned model, and how the price of its answers is counted.
 

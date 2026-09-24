@@ -3,7 +3,8 @@
   "lesson": "13.2",
   "title": "Reconcile usage events, reports and alerts",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
   "source_sha": "22c11174ed320d7ad4355dfac348e510cefca82b",
   "shared_setup_windows": [
     1
@@ -145,7 +146,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
         398
       ],
@@ -186,7 +187,7 @@
         9,
         11
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
         457,
         525
@@ -239,7 +240,7 @@
         13,
         15
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
         607,
         674
@@ -293,7 +294,7 @@
         20,
         22
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
         738,
         776,
@@ -357,7 +358,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/13-operations/13.2-usage-reconcile/Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
         404
       ],

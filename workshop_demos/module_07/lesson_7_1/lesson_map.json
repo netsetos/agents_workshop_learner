@@ -3,7 +3,8 @@
   "lesson": "7.1",
   "title": "Build a useful evaluation dataset",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
   "source_sha": "085f18eff4b225ef3c249a8efd624fb5b739da9d",
   "shared_setup_windows": [
     1
@@ -179,7 +180,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         392
       ],
@@ -222,7 +223,7 @@
         16,
         18
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         464,
         490,
@@ -307,7 +308,7 @@
         27,
         31
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         675,
         700,
@@ -392,7 +393,7 @@
         34,
         39
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         850,
         888
@@ -444,7 +445,7 @@
       "windows": [
         41
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         910
       ],
@@ -481,7 +482,7 @@
         44,
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/07-evaluation/7.1-eval-dataset/Netsetos_GCP_Capstone_7.1_Eval_Dataset_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_1/GUIDE.md",
       "source_lines": [
         954,
         398

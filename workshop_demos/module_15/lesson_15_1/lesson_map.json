@@ -3,7 +3,8 @@
   "lesson": "15.1",
   "title": "Build graph evidence from source documents",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
   "source_sha": "d74daf0dbbc7f95660f0a56970362cc9c013c26a",
   "shared_setup_windows": [
     1
@@ -129,7 +130,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
         377
       ],
@@ -169,7 +170,7 @@
       "windows": [
         9
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
         464
       ],
@@ -208,7 +209,7 @@
         12,
         14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
         551,
         581
@@ -260,7 +261,7 @@
       "windows": [
         16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
         635
       ],
@@ -296,7 +297,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/15-graph/15.1-graph-evidence/Netsetos_GCP_Capstone_15.1_Graph_Evidence_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_15/lesson_15_1/GUIDE.md",
       "source_lines": [
         383
       ],

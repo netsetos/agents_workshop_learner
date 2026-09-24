@@ -3,15 +3,17 @@
   "lesson": "12.2",
   "title": "Deploy MCP and verify authorized access",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
-  "source_sha": "f1670b27aee13cd8c5083246399ffea5d2a1ac20",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+  "source_sha": "5e857fb7dd11d3ce82883c1fde49b0fa597e457a",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 21,
+  "source_window_count": 22,
   "persist_variables": [
     "API",
     "API_URL",
+    "BUILD_SA",
     "MCP",
     "ME",
     "NUMBER",
@@ -143,7 +145,7 @@
       "windows": [
         3
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
         363
       ],
@@ -183,13 +185,13 @@
       "windows": [
         9,
         11,
-        13
+        14
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
         413,
         459,
-        476
+        489
       ],
       "offline": false,
       "live_verified": false,
@@ -228,10 +230,10 @@
           "label": "bash — run in the operator shell, in the kit (the service as deployed, against the script)",
           "expected": "serving     documind-mcp-00004-k7w at https://documind-mcp-NUMBER.asia-south1.run.app\n  runs as     documind-mcp-sa\n  ingress     all\n  SELF_URL    https://documind-mcp-NUMBER.asia-south1.run.app\n  invokers    documind-agent-sa, documind-outsider-sa, documind-ui-sa\n  the script  documind-agent-sa, documind-outsider-sa, documind-ui-sa - the same",
           "adaptations": [],
-          "id": "source_13",
+          "id": "source_14",
           "function": "step_03_read_it_back",
-          "window": 13,
-          "source_line": 476,
+          "window": 14,
+          "source_line": 489,
           "manual_checkpoint": null
         }
       ],
@@ -249,11 +251,11 @@
       "purpose": "Discover and invoke tools on the deployed server.",
       "anchor": "s5",
       "windows": [
-        15
+        16
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
-        512
+        525
       ],
       "offline": false,
       "live_verified": false,
@@ -266,10 +268,10 @@
           "label": "bash — run in the operator shell, in the kit (the module's gate)",
           "expected": "DocuMind MCP - live smoke test\n  target: https://documind-mcp-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] health  {\"status\":\"ok\",\"profile\":\"gcp\",\"self_url\":\"https://documind-mcp-NUMBER.asia-south1.run.app\"}\n  [PASS] tools/list  ['calculate_processing_cost', 'corpus_stats', 'list_documents', 'retrieve']\n  [PASS] retrieve  answerable=True citations=5  'Five years of continuous service [1].'\n  [PASS] outsider refused  documind-outsider-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com is not on tenant 'acme''s roster\n  --------------------------------------------------------\n  4 passed, 0 failed",
           "adaptations": [],
-          "id": "source_15",
+          "id": "source_16",
           "function": "step_01_example",
-          "window": 15,
-          "source_line": 512,
+          "window": 16,
+          "source_line": 525,
           "manual_checkpoint": null
         }
       ],
@@ -287,13 +289,13 @@
       "purpose": "Test every admission/authorization gate and read both sides of the call.",
       "anchor": "s6",
       "windows": [
-        18,
-        20
+        19,
+        21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
-        551,
-        587
+        564,
+        600
       ],
       "offline": false,
       "live_verified": false,
@@ -306,10 +308,10 @@
           "label": "bash — run in the operator shell, in the kit (one call at each door)",
           "expected": "no token                              HTTP 403 - Cloud Run, before the server ran\n  ui-sa, a token for rag-api's address  HTTP 401 - Cloud Run, before the server ran\n  ui-sa, no email in the token          tool error - not authenticated: the bearer token carries no verified email\n  the outsider, naming acme             tool error - documind-outsider-sa is not on tenant 'acme''s roster\n  ui-sa, naming zeta                    answered - answerable True, 5 citations",
           "adaptations": [],
-          "id": "source_18",
+          "id": "source_19",
           "function": "step_01_every_door",
-          "window": 18,
-          "source_line": 551,
+          "window": 19,
+          "source_line": 564,
           "manual_checkpoint": null
         },
         {
@@ -319,10 +321,46 @@
           "label": "bash — run in the operator shell, in the kit (both sides of the answered calls)",
           "expected": "documind-mcp, a line per answered call - who asked:\n  retrieve  tenant acme   caller documind-ui-sa\n  retrieve  tenant zeta   caller documind-ui-sa\ndocumind-api, a row per retrieval it served for the MCP server - who it served:\n  retrieve  tenant acme   user   documind-mcp-sa\n  retrieve  tenant zeta   user   documind-mcp-sa",
           "adaptations": [],
-          "id": "source_20",
+          "id": "source_21",
           "function": "step_02_both_sides",
-          "window": 20,
-          "source_line": 587,
+          "window": 21,
+          "source_line": 600,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "recovery_grant_the_build_account",
+      "lesson": "12.2",
+      "file": "recovery/grant_the_build_account.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "grant the build account",
+      "purpose": "Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.",
+      "anchor": "s4",
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
+      "source_lines": [
+        478
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Deploy, and read it back",
+          "subheading": "Do it: build and deploy",
+          "purpose": "Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.",
+          "label": "bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get",
+          "expected": "",
+          "adaptations": [],
+          "id": "source_13",
+          "function": "step_01_build_and_deploy",
+          "window": 13,
+          "source_line": 478,
           "manual_checkpoint": null
         }
       ],
@@ -340,7 +378,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/12-protocols/12.2-mcp-deploy/Netsetos_GCP_Capstone_12.2_MCP_Deploy_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_2/GUIDE.md",
       "source_lines": [
         369
       ],
@@ -418,39 +456,39 @@
       "line": 461
     },
     {
-      "window": 14,
+      "window": 15,
       "label": "expected (from a fake gcloud; your revision name differs)",
       "heading": "Deploy, and read it back",
       "anchor": "s4",
-      "line": 494
-    },
-    {
-      "window": 16,
-      "label": "expected (the kit's smoke_mcp.py against the kit's server.py on localhost; Cloud Run's check, the signatures, rag-api and Firestore stood in)",
-      "heading": "The gate: make smoke-mcp",
-      "anchor": "s5",
-      "line": 515
+      "line": 507
     },
     {
       "window": 17,
+      "label": "expected (the kit's smoke_mcp.py against the kit's server.py on localhost; Cloud Run's check, the signatures, rag-api and Firestore stood in)",
+      "heading": "The gate: make smoke-mcp",
+      "anchor": "s5",
+      "line": 528
+    },
+    {
+      "window": 18,
       "label": "services/mcp/server.py - the caller's tenant is checked here; rag-api is then called as the server's own account",
       "heading": "One call at each door, and both sides of the answer",
       "anchor": "s6",
-      "line": 544
+      "line": 557
     },
     {
-      "window": 19,
+      "window": 20,
       "label": "expected (the same stand-ins; the two HTTP statuses are the Cloud Run stand-in's, and your lane's come from Cloud Run itself)",
       "heading": "One call at each door, and both sides of the answer",
       "anchor": "s6",
-      "line": 579
+      "line": 592
     },
     {
-      "window": 21,
+      "window": 22,
       "label": "expected (from a fake gcloud, filled with what the stand-in stack recorded)",
       "heading": "One call at each door, and both sides of the answer",
       "anchor": "s6",
-      "line": 604
+      "line": 617
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -3,7 +3,8 @@
   "lesson": "18.2",
   "title": "Serve a supplied or stock model using Ollama",
   "source_kind": "main_html",
-  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+  "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
+  "source_page": "Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
   "source_sha": "d166600ec95e7f9de71575062e0a57c623378f5c",
   "shared_setup_windows": [
     1
@@ -141,7 +142,7 @@
         3,
         7
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
       "source_lines": [
         387,
         436
@@ -196,7 +197,7 @@
         8,
         12
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
       "source_lines": [
         438,
         487
@@ -250,7 +251,7 @@
         19,
         21
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
       "source_lines": [
         584,
         597,
@@ -321,7 +322,7 @@
         33,
         35
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
       "source_lines": [
         708,
         757,
@@ -427,7 +428,7 @@
       "windows": [
         5
       ],
-      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/18-serving/18.2-ollama-slm/Netsetos_GCP_Capstone_18.2_Ollama_SLM_WIX.html",
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_18/lesson_18_2/GUIDE.md",
       "source_lines": [
         393
       ],

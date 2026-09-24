@@ -3,7 +3,7 @@
 Discover and invoke tools on the deployed server.
 
 Run order inside this file:
-1. Do it (source window 15)
+1. Do it (source window 16)
 
 Prerequisites: demo_01_mcp_identity_and_deployment.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -44,7 +44,7 @@ def step_01_example(session):
 def demonstrate(session):
     """Run this experiment in order, resuming only completed checkpoints safely."""
     run_steps(session, [
-        ('source_15', step_01_example),
+        ('source_16', step_01_example),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
 
 

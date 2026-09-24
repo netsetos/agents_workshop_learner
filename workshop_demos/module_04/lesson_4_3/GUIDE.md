@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/04-lifecycle/4.3-versions/Netsetos_GCP_Capstone_4.3_Versions_WIX.html); reviewed blob `f336737e3da708a11e2863a2d9742fafed531016`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.3_Versions_WIX.html`, reviewed at blob `f336737e3da708a11e2863a2d9742fafed531016`. Learners read that page on the course site; this guide keeps its prose.
 
 A document on the lane has exactly one current version, and this lesson is about how that stays true. A new version is published by one swap, never by a stream of writes. A version stops being current in one of three ways, each with its own name and its own way back: superseded by a newer one, retired because its object left the bucket, or withdrawn by a person. And an event that arrives late, carrying an older generation of the object, is refused before a byte is downloaded, because acting on it would publish the past. You will read all of it off your lane, replay three events yourself, and withdraw and restore a document by hand.
 

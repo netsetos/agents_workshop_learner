@@ -4,7 +4,7 @@ Read this beside the three demo files. The prose below follows the main HTML;
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/05-retrieval/5.1-query-filters/Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html); reviewed blob `71dc43310c171099ca29431ddb48a29c6af8965e`.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html`, reviewed at blob `71dc43310c171099ca29431ddb48a29c6af8965e`. Learners read that page on the course site; this guide keeps its prose.
 
 Modules 3 and 4 put the records in place. This module reads them. A question arrives as text and leaves the API as a vector; the caller's identity, not the request, decides whose documents it may search; two named filters may narrow the search and anything else is refused before any work is done; and the index is asked with restricts that make one index serve three tenants without a leak. You will embed a question yourself and compare a direct index search with the API's citations, ask the same question of two tenants with one identity and get two answers, send the wrong filters and read the 400s, and read the stages block that says which store answered.
 

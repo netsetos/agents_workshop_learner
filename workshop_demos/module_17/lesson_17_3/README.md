@@ -124,6 +124,8 @@ Do it
 
 Operation: bash — run in the operator shell, in the kit (every golden row, on each revision: about twenty minutes).
 
+IDE adaptation: Run both gates through live_gate: a red gate on the live revision or the tuned candidate is an observation this lesson compares, and each keeps its fresh report. The page's `| tail -3` stopped the cell under pipefail on a red baseline; here the whole gate output shows. A missing report or an HTTP/auth failure still fails.
+
 Expected shape, not a promised result:
 
 ```text
@@ -275,4 +277,4 @@ IDE adaptation: Run at lesson end despite its early HTML position, as the source
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the [main HTML](https://github.com/netsetos/agents_workshop/blob/main/lessons/17-tuning/17.3-tuned-candidate/Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html). All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`.

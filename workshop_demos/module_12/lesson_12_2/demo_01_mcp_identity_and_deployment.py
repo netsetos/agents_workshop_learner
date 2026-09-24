@@ -5,7 +5,7 @@ Read the MCP identity, build/deploy the server and inspect the deployed configur
 Run order inside this file:
 1. Do it (source window 9)
 2. Do it: build and deploy (source window 11)
-3. Do it: read it back (source window 13)
+3. Do it: read it back (source window 14)
 
 Prerequisites: setup_prepare.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -103,7 +103,7 @@ def demonstrate(session):
     run_steps(session, [
         ('source_9', step_01_example),
         ('source_11', step_02_build_and_deploy),
-        ('source_13', step_03_read_it_back),
+        ('source_14', step_03_read_it_back),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False)
 
 
