@@ -48,6 +48,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import sys
 import time
 from contextlib import ExitStack, asynccontextmanager
 from typing import Literal, Optional
@@ -60,6 +61,10 @@ from shared import iap
 from shared.profile import PROFILE
 from shared.tenancy import tenant_for
 
+# The row chat() logs on every turn is INFO, and so are the guard's timing lines. gunicorn configures only its own
+# loggers and nothing here configured any, so Python dropped every INFO record: the row never reached Cloud Logging,
+# only the warnings did, through Python's last-resort handler (found 23 September 2026, lesson 10.4). rag-api's line:
+logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)  # bare JSON -> Cloud Run jsonPayload
 logger = logging.getLogger("documind.chat.agent")
 
 CHECKPOINT_DSN = os.environ.get("CHECKPOINT_DSN", "")

@@ -17,6 +17,15 @@ stack the Agents Workshop builds, lesson by lesson.
 > the code's comments (4.5's hybrid, 12.6's cache) are that edition's; [INDEX.md](INDEX.md) maps every file to
 > the workshop's own lessons.
 
+## Run lesson demos in your IDE
+
+The [lesson 4.4 pilot](workshop_demos/README.md) has three separate Python demos:
+reconciliation rules offline, a read-only tenant inspection, and a live delete-retire-restore
+round trip for one generated test document. Select your existing `rag-shell-venv` interpreter,
+run `workshop_demos/setup/bootstrap.py` once, then Run or Debug each lesson file directly.
+Setup, configuration, authentication and reusable helpers are in `workshop_demos/setup/`.
+The live demo records its original bytes and provides an interrupted-run recovery utility.
+
 ## Workstation infrastructure recovery and reruns
 
 Run the committed deployment files directly. See [INFRASTRUCTURE.md](INFRASTRUCTURE.md)

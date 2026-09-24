@@ -17,13 +17,14 @@ resource "google_service_usage_consumer_quota_override" "gemini_rpm" {
 }
 
 # The alerts that say something is wrong with the SYSTEM, not with a request.
-# Each one names a failure this course has already met.
+# Each one names a failure this course has already met. A list of intents, not resources: alerts.tf declares
+# unanswerable_rate and dlq_depth (24 September 2026); the other three are declared by nothing yet.
 locals {
   documind_alerts = {
     # 12.3: a tenant whose questions the corpus cannot answer
     unanswerable_rate = "documind/unanswerable_rate > 0.20 for 30m"
-    # 12.5: a poison message reached the dead-letter topic
-    dlq_depth = "pubsub subscription documind-ingest-dlq num_undelivered > 0"
+    # 12.5: a poison message reached the dead-letter topic (alerts.tf, google_monitoring_alert_policy.dlq_depth)
+    dlq_depth = "pubsub subscription ingest-dlq-sub num_undelivered > 0"
     # 12.6: the guard is blocking a lot, which is either an attack or a bug
     guardrail_blocks = "documind/guardrail_block_rate > 0.05 for 15m"
     # 12.6: the semantic cache stopped paying for itself
