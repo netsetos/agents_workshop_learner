@@ -5,7 +5,7 @@
 # ---- DEPLOY ----
 # 1. The image, from the deploy/ context - the same config as rag-api, another Dockerfile.
 gcloud builds submit --config=cloudbuild.yaml \
-  --substitutions=_IMAGE=us-central1-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA,_DOCKERFILE=services/chat/Dockerfile .
+  --substitutions=_IMAGE=${REGION:-us-central1}-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA,_DOCKERFILE=services/chat/Dockerfile .
 
 # 2. The service. The Makefile fills two variables (deploy-services), and the expansions below are ${VAR-default}
 #    rather than ${VAR:-default} so a value set to the empty string stays empty:
@@ -22,14 +22,14 @@ gcloud builds submit --config=cloudbuild.yaml \
 #    RAG_TIMEOUT_S=90 is 7.2's finding - a cold API takes longer than the tool layer's default.
 #    DOCUMIND_BRAIN is the default brain; GOOGLE_GENAI_USE_VERTEXAI is for the ADK brain.
 gcloud run deploy documind-chat \
-  --image=us-central1-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA \
-  --region=us-central1 --platform=managed \
+  --image=${REGION:-us-central1}-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA \
+  --region=${REGION:-us-central1} --platform=managed \
   --no-allow-unauthenticated \
   --memory=1Gi --cpu=1 --concurrency=20 --timeout=300 \
   --min-instances=0 --max-instances=10 \
   --service-account=documind-chat-sa@$PROJECT.iam.gserviceaccount.com \
-  ${CHAT_SQL_FLAGS---add-cloudsql-instances=$PROJECT:us-central1:documind-checkpoint --set-secrets=CHECKPOINT_DSN=documind-checkpoint-dsn:latest} \
-  --set-env-vars="^|^GOOGLE_CLOUD_PROJECT=$PROJECT|DOCUMIND_PROFILE=gcp|RAG_API_URL=https://documind-api-$PROJECT_NUMBER.us-central1.run.app|SELF_URL=https://documind-chat-$PROJECT_NUMBER.us-central1.run.app|RAG_TIMEOUT_S=90|DOCUMIND_BRAIN=langchain|GOOGLE_GENAI_USE_VERTEXAI=1|GOOGLE_CLOUD_LOCATION=global|IAP_AUDIENCE=/projects/$PROJECT_NUMBER/locations/us-central1/services/documind-chat,/projects/$PROJECT_NUMBER/locations/us-central1/services/documind-ui${CHAT_EXTRA_ENV-}"
+  ${CHAT_SQL_FLAGS---add-cloudsql-instances=$PROJECT:${REGION:-us-central1}:documind-checkpoint --set-secrets=CHECKPOINT_DSN=documind-checkpoint-dsn:latest} \
+  --set-env-vars="^|^GOOGLE_CLOUD_PROJECT=$PROJECT|DOCUMIND_PROFILE=gcp|RAG_API_URL=https://documind-api-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|SELF_URL=https://documind-chat-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|RAG_TIMEOUT_S=90|DOCUMIND_BRAIN=langchain|GOOGLE_GENAI_USE_VERTEXAI=1|GOOGLE_CLOUD_LOCATION=global|IAP_AUDIENCE=/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-chat,/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-ui${CHAT_EXTRA_ENV-}"
 
 # 2b. Who may call it (12 September 2026): the UI's account - the brain radio on the chat page posts here as
 #     ui-sa with the person's assertion (12.4) - and the eval gate's outsider, which make smoke-chat sends to
@@ -38,21 +38,21 @@ gcloud run deploy documind-chat \
 #     A2A peer included. sa.tf's caller graph is the list; the gate check_authz.py compares this loop with it.
 for who in documind-ui-sa documind-outsider-sa; do
   gcloud run services add-iam-policy-binding documind-chat \
-    --region=us-central1 --project=$PROJECT \
+    --region=${REGION:-us-central1} --project=$PROJECT \
     --member="serviceAccount:$who@$PROJECT.iam.gserviceaccount.com" --role=roles/run.invoker --quiet
 done
 
 # 3. The one-time checkpoint migration (8.5: setup() takes exclusive locks - a job, never startup).
 gcloud run jobs create documind-checkpoint-setup \
-  --image=us-central1-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA \
-  --region=us-central1 --service-account=documind-chat-sa@$PROJECT.iam.gserviceaccount.com \
-  --set-cloudsql-instances=$PROJECT:us-central1:documind-checkpoint \
+  --image=${REGION:-us-central1}-docker.pkg.dev/$PROJECT/documind/chat:$GIT_SHA \
+  --region=${REGION:-us-central1} --service-account=documind-chat-sa@$PROJECT.iam.gserviceaccount.com \
+  --set-cloudsql-instances=$PROJECT:${REGION:-us-central1}:documind-checkpoint \
   --set-secrets=CHECKPOINT_DSN=documind-checkpoint-dsn:latest \
   --command=python --args=migrate.py || echo "job exists - continuing"
-gcloud run jobs execute documind-checkpoint-setup --region=us-central1 --wait
+gcloud run jobs execute documind-checkpoint-setup --region=${REGION:-us-central1} --wait
 
 # 4. IAP in front of the human surface, AFTER the service exists (step 4 of the runbook above). The UI's brain radio
 #    and make smoke-chat still reach it: IAP_AUDIENCE above lists both surfaces, and the bearer leg (SELF_URL) is
 #    verified by shared/iap.identity when there is no assertion.
-gcloud beta run services update documind-chat --region=us-central1 --iap
+gcloud beta run services update documind-chat --region=${REGION:-us-central1} --iap
 

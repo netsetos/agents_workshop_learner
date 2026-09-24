@@ -1,0 +1,7 @@
+setup/config/settings.local.json
+results/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/

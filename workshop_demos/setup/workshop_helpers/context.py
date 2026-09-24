@@ -1,0 +1,75 @@
+"""One context per demo, with lazy clients and persistent evidence on failure."""
+import sys
+from .artifacts import ArtifactStore
+from .config import load_config
+
+
+class DemoContext:
+    def __init__(self, demo, live=False, config=None, module=4, lesson="4.4"):
+        self.config = config or load_config()
+        self.live = live
+        self.credentials = None
+        self._db = self._storage = self._api = self._kit = None
+        self.artifacts = ArtifactStore(self.config, demo, module=module, lesson=lesson)
+
+    def __enter__(self):
+        print("Python:", sys.executable)
+        print("Mode:", "LIVE GCP" if self.live else "OFFLINE: simulated inputs, actual kit planner")
+        print("Project:", self.config.project or "not needed offline", "| tenant:", self.config.tenant_id)
+        print("Results:", self.artifacts.directory, flush=True)
+        if self.live:
+            from .auth import checked_credentials
+            try:
+                if not self.config.project:
+                    raise ValueError("Set project in setup/config/settings.local.json, or run bootstrap.py.")
+                self.credentials = checked_credentials()
+            except Exception as exc:
+                self.artifacts.finish(exc)
+                raise
+        return self
+
+    def __exit__(self, kind, error, traceback):
+        self.artifacts.finish(error)
+        for client in (self._db, self._storage):
+            close = getattr(client, "close", None)
+            if close:
+                close()
+        print("Evidence saved:", self.artifacts.directory)
+        return False
+
+    @property
+    def kit(self):
+        if self._kit is None:
+            from .kit import KitAdapter
+            self._kit = KitAdapter(self.config.kit_root)
+            self.artifacts.save("kit_version", self._kit.provenance)
+        return self._kit
+
+    @property
+    def db(self):
+        if not self.live:
+            raise RuntimeError("An offline demo cannot open a cloud client.")
+        if self._db is None:
+            from google.cloud import firestore
+            self._db = firestore.Client(project=self.config.project, credentials=self.credentials)
+        return self._db
+
+    @property
+    def storage(self):
+        if not self.live:
+            raise RuntimeError("An offline demo cannot open a cloud client.")
+        if self._storage is None:
+            from google.cloud import storage
+            self._storage = storage.Client(project=self.config.project, credentials=self.credentials)
+        return self._storage
+
+    @property
+    def api(self):
+        if not self.live:
+            raise RuntimeError("An offline demo cannot call the API.")
+        if self._api is None:
+            from .api import ApiClient
+            self._api = ApiClient(self.config)
+            from dataclasses import asdict
+            self.artifacts.save("api_configuration", asdict(self._api.serving))
+        return self._api
