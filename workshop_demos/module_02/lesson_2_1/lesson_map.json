@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lesson": "2.1",
+  "title": "Understand the project, identities and resource map",
+  "source_kind": "course_plan_and_kit",
+  "source_sha": "4453148d372ae1a4f0682c20577e6b7e9faedc5eeaee3e4092a5faec07e9d948",
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "PROJECT",
+    "REGION",
+    "TENANT",
+    "ME",
+    "NUMBER"
+  ],
+  "demos": [
+    {
+      "lesson": "2.1",
+      "file": "demo_01_read_the_resource_and_identity_definitions.py",
+      "id": "demo_01_read_the_resource_and_identity_definitions",
+      "anchor": "plan-1",
+      "heading": "Read the resource and identity definitions",
+      "subheading": "Read the resource and identity definitions",
+      "purpose": "Read the actual Terraform resources and service-account names instead of assuming the deployed project has every optional service. The saved plan is the next checkpoint.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "2.1",
+      "file": "demo_02_create_a_saved_infrastructure_plan.py",
+      "id": "demo_02_create_a_saved_infrastructure_plan",
+      "anchor": "plan-2",
+      "heading": "Create a saved infrastructure plan",
+      "subheading": "Create a saved infrastructure plan",
+      "purpose": "Call the existing infrastructure planner, which saves verified inputs and refuses unexpected deletion/replacement. Initialize the intended Terraform backend and project prerequisites described in INFRASTRUCTURE.md first.",
+      "label": "Course-plan experiment \u2014 live deployment",
+      "category": "required",
+      "requires": [
+        "demo_01_read_the_resource_and_identity_definitions"
+      ],
+      "expected": "A saved checked plan and its resource changes; inspect them before the apply lesson.",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": false,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    }
+  ],
+  "live_verification": "Not performed; main HTML has not yet been authored."
+}

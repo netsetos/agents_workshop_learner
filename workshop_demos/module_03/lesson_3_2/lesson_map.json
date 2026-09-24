@@ -1,0 +1,549 @@
+{
+  "schema_version": 1,
+  "lesson": "3.2",
+  "title": "Parse documents and compare chunk boundaries",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+  "source_sha": "5b333c8a6d51ef5416793e5ae594068511fda01e",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 29,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "LOC",
+    "ME",
+    "NUMBER",
+    "PROJECT",
+    "REGION",
+    "TENANT"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Parse, then chunk: pages, sections, and the boundaries that decide retrieval"
+    },
+    {
+      "level": 3,
+      "heading": "What parsing and chunking are"
+    },
+    {
+      "level": 4,
+      "heading": "Try the cut yourself"
+    },
+    {
+      "level": 3,
+      "heading": "The words: page, slice, section, window, locator"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "Parse: Document AI, chosen by residency"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "See it in the UI"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Call it: which reader does your lane have?"
+    },
+    {
+      "level": 3,
+      "heading": "Count pages first: slices, and the 250-page line"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: count the corpus, Rs 0"
+    },
+    {
+      "level": 4,
+      "heading": "Prove it on the lane: one small PDF, four pages"
+    },
+    {
+      "level": 3,
+      "heading": "Chunk by section: the handbook becomes 283 clauses"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: cut the handbook, Rs 0"
+    },
+    {
+      "level": 4,
+      "heading": "Read it on the lane"
+    },
+    {
+      "level": 3,
+      "heading": "Chunk by window: an Act becomes page windows"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: cut the Code on Wages, Rs 0"
+    },
+    {
+      "level": 4,
+      "heading": "Read it on the lane, and ask a question that lands on a page"
+    },
+    {
+      "level": 3,
+      "heading": "Compare the boundaries: two parsers, one document"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The numbers, on a real lane"
+    },
+    {
+      "level": 4,
+      "heading": "See it, page by page"
+    },
+    {
+      "level": 4,
+      "heading": "Why it matters"
+    },
+    {
+      "level": 3,
+      "heading": "One chunker in two places, and what parsing bills"
+    },
+    {
+      "level": 4,
+      "heading": "Two copies, one rule"
+    },
+    {
+      "level": 4,
+      "heading": "What parsing bills, and what it does not"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 364,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "3.2",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_call_it_which_reader_does_your_lane_have.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 370,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "3.2",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_call_it_which_reader_does_your_lane_have.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 9,
+      "label": "bash — run in the operator shell",
+      "heading": "Parse: Document AI, chosen by residency",
+      "subheading": "Call it: which reader does your lane have?",
+      "anchor": "s3",
+      "purpose": "Two read-only calls. The first prints the worker's environment, where the residency and the processor id live. The second asks the Document AI API to list the processors in each of the two possible locations; exactly one location will list documind-parser.",
+      "expected": "{'name': 'RESIDENCY', 'value': 'us'}\n{'name': 'DOCAI_PROCESSOR_ID', 'value': 'a1b2c3d4e5f6a7b8'}\n== us ==\ndocumind-parser LAYOUT_PARSER_PROCESSOR ENABLED\n== asia-south1 ==\n(none)",
+      "line": 441,
+      "id": "demo_03_01_call_it_which_reader_does_your_lane_have",
+      "lesson": "3.2",
+      "file": "demo_03_01_call_it_which_reader_does_your_lane_have.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_01_do_it_count_the_corpus_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 12,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Count pages first: slices, and the 250-page line",
+      "subheading": "Do it: count the corpus, Rs 0",
+      "anchor": "s4",
+      "purpose": "The same count, on the PDFs in your kit folder, with the same library. The cell prints pages and slices per PDF, then the totals and what one parse of the whole corpus would cost at each processor's list price - the rates as the course reads them on the pricing page, to re-verify before quoting.",
+      "expected": "acme/cgst_act_2017.pdf                           pages= 236 slices= 16 inline\nacme/code_on_social_security_2020.pdf            pages= 116 slices=  8 inline\nacme/code_on_wages_2019.pdf                      pages=  29 slices=  2 inline\nacme/maternity_benefit_amendment_act_2017.pdf    pages=   4 slices=  1 inline\nacme/posh_act_2013.pdf                           pages=  13 slices=  1 inline\n...\nzeta/osh_code_2020.pdf                           pages=  86 slices=  6 inline\n\n1065 pages in 79 Document AI requests\none full parse: OCR Rs 136   Layout Parser Rs 905",
+      "line": 480,
+      "id": "demo_04_01_do_it_count_the_corpus_rs_0",
+      "lesson": "3.2",
+      "file": "demo_04_01_do_it_count_the_corpus_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_call_it_which_reader_does_your_lane_have"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_04_02_prove_it_on_the_lane_one_small_pdf_four_pages.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 14,
+      "label": "bash — run in the operator shell, in $DEMO_ROOT (costs about four pages of Document AI)",
+      "heading": "Count pages first: slices, and the 250-page line",
+      "subheading": "Prove it on the lane: one small PDF, four pages",
+      "anchor": "s4",
+      "purpose": "The amendment Act is four pages and globex does not hold it, so ingesting it there is a fresh source, one Document AI request, and a few paise. Then read the worker's line for it, which carries the page count as pages.",
+      "expected": "globex_e7a1c0...    4    5    5",
+      "line": 510,
+      "id": "demo_04_02_prove_it_on_the_lane_one_small_pdf_four_pages",
+      "lesson": "3.2",
+      "file": "demo_04_02_prove_it_on_the_lane_one_small_pdf_four_pages.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_do_it_count_the_corpus_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_01_do_it_cut_the_handbook_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 17,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "subheading": "Do it: cut the handbook, Rs 0",
+      "anchor": "s5",
+      "purpose": "Do it: cut the handbook, Rs 0",
+      "expected": "283 chunks from 282 headings\n  preamble   section=None                               chars=   97  hash=903e2b39ee92\n  NP-03      section=NP-03 — Notice period              chars=  234  hash=f4512754ae41\n  PB-02      section=PB-02 — Probation                  chars=  212  hash=bb65ccc2494c\n  LV-01      section=LV-01 — Earned leave               chars=  189  hash=ff463cede286\n  LV-07      section=LV-07 — Leave on exit              chars=  167  hash=7b5538b88f78\nsections windowed within themselves: []",
+      "line": 553,
+      "id": "demo_05_01_do_it_cut_the_handbook_rs_0",
+      "lesson": "3.2",
+      "file": "demo_05_01_do_it_cut_the_handbook_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_04_02_prove_it_on_the_lane_one_small_pdf_four_pages"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_05_02_read_it_on_the_lane.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 19,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "subheading": "Read it on the lane",
+      "anchor": "s5",
+      "purpose": "The worker cut the same file with the same rule when the corpus was loaded. Its rows for the handbook should be the same 283 locators in the same order.",
+      "expected": "lane: 283 local: 283 same locators in the same order: True\nsame hashes: True",
+      "line": 581,
+      "id": "demo_05_02_read_it_on_the_lane",
+      "lesson": "3.2",
+      "file": "demo_05_02_read_it_on_the_lane.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_do_it_cut_the_handbook_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_01_do_it_cut_the_code_on_wages_rs_0.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 22,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "subheading": "Do it: cut the Code on Wages, Rs 0",
+      "anchor": "s6",
+      "purpose": "Your kit has a text mirror of every Act, made by pypdf when the corpus was fetched, with a form feed between pages. Cut the mirror of the Code on Wages and look at one seam.",
+      "expected": "pages in the mirror: 29\n65 windows; the first six locators: ['p1-0', 'p2-0', 'p2-1', 'p3-0', 'p3-1', 'p4-0']\np2-0 is 2000 chars; p2-1 is 1201 chars\nend of p2-0 -> 'th or without the knowledge of the\\nprincipal employer and includ'\nstart of p2-1 -> 'in or\\nin connection with the work of an establishment when he'\nthe overlap: the last 200 characters of p2-0 reappear at the start of p2-1 -> True",
+      "line": 646,
+      "id": "demo_06_01_do_it_cut_the_code_on_wages_rs_0",
+      "lesson": "3.2",
+      "file": "demo_06_01_do_it_cut_the_code_on_wages_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_05_02_read_it_on_the_lane"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_06_02_read_it_on_the_lane_and_ask_a_question_that_land.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 24,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "subheading": "Read it on the lane, and ask a question that lands on a page",
+      "anchor": "s6",
+      "purpose": "Read it on the lane, and ask a question that lands on a page",
+      "expected": "",
+      "line": 671,
+      "id": "demo_06_02_read_it_on_the_lane_and_ask_a_question_that_land",
+      "lesson": "3.2",
+      "file": "demo_06_02_read_it_on_the_lane_and_ask_a_question_that_land.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_do_it_cut_the_code_on_wages_rs_0"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_03_read_it_on_the_lane_and_ask_a_question_that_land.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 25,
+      "label": "bash — run in the operator shell (acme pinned to vector, see the setup)",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "subheading": "Read it on the lane, and ask a question that lands on a page",
+      "anchor": "s6",
+      "purpose": "Read it on the lane, and ask a question that lands on a page",
+      "expected": "67 windows on the lane; first six: ['p1-0', 'p2-0', 'p2-1', 'p3-0', 'p3-1', 'p4-0']\npages seen: [1, 2, 3, 4, 5] ... 29\nUnder the Code on Wages, wages must be paid within seven days after the end of the wage period ... [Source 1]\n19 code_on_wages_2019.pdf page 9 | (iv) monthly basis, before the expiry of the seventh day of the succ\n20 code_on_wages_2019.pdf page 9 | ...",
+      "line": 685,
+      "id": "demo_06_03_read_it_on_the_lane_and_ask_a_question_that_land",
+      "lesson": "3.2",
+      "file": "demo_06_03_read_it_on_the_lane_and_ask_a_question_that_land.py",
+      "category": "required",
+      "requires": [
+        "demo_06_02_read_it_on_the_lane_and_ask_a_question_that_land"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_see_it_page_by_page.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 27,
+      "label": "bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash)",
+      "heading": "Compare the boundaries: two parsers, one document",
+      "subheading": "See it, page by page",
+      "anchor": "s7",
+      "purpose": "See it, page by page",
+      "expected": "lane 67 windows, mirror 65 windows\npages with a different number of windows: [(7, 3, 2), (23, 3, 2)]\np2-0 on the lane: 2000 chars, hash 4c19e0b7a2d8\np2-0 in the mirror: 2000 chars, hash 6a3f7e9c01b5\nlane text starts: 'THE CODE ON WAGES, 2019\\nCHAPTER I\\nPRELIMINARY\\n1. (1) This Code may be called ...'\nmirror text starts: 'THE CODE ON WAGES, 2019 CHAPTER I PRELIMINARY 1. (1) This Code may be called ...'",
+      "line": 719,
+      "id": "demo_07_01_see_it_page_by_page",
+      "lesson": "3.2",
+      "file": "demo_07_01_see_it_page_by_page.py",
+      "category": "required",
+      "requires": [
+        "demo_06_03_read_it_on_the_lane_and_ask_a_question_that_land"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/03-ingestion/3.2-parse-and-chunk/Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "native_python"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 334
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 366
+    },
+    {
+      "window": 6,
+      "label": "services/ingest/parser.py - the processor map and the online limit",
+      "heading": "Parse: Document AI, chosen by residency",
+      "anchor": "s3",
+      "line": 389
+    },
+    {
+      "window": 7,
+      "label": "services/ingest/parser.py - parse()",
+      "heading": "Parse: Document AI, chosen by residency",
+      "anchor": "s3",
+      "line": 408
+    },
+    {
+      "window": 8,
+      "label": "services/ingest/main.py - _parse()",
+      "heading": "Parse: Document AI, chosen by residency",
+      "anchor": "s3",
+      "line": 429
+    },
+    {
+      "window": 10,
+      "label": "expected, on a default make up",
+      "heading": "Parse: Document AI, chosen by residency",
+      "anchor": "s3",
+      "line": 451
+    },
+    {
+      "window": 11,
+      "label": "services/ingest/main.py - _pdf_pages()",
+      "heading": "Count pages first: slices, and the 250-page line",
+      "anchor": "s4",
+      "line": 470
+    },
+    {
+      "window": 13,
+      "label": "expected (trimmed)",
+      "heading": "Count pages first: slices, and the 250-page line",
+      "anchor": "s4",
+      "line": 496
+    },
+    {
+      "window": 15,
+      "label": "expected",
+      "heading": "Count pages first: slices, and the 250-page line",
+      "anchor": "s4",
+      "line": 515
+    },
+    {
+      "window": 16,
+      "label": "services/ingest/main.py - _chunk(), the section rule",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "anchor": "s5",
+      "line": 529
+    },
+    {
+      "window": 18,
+      "label": "expected",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "anchor": "s5",
+      "line": 568
+    },
+    {
+      "window": 20,
+      "label": "expected",
+      "heading": "Chunk by section: the handbook becomes 283 clauses",
+      "anchor": "s5",
+      "line": 603
+    },
+    {
+      "window": 21,
+      "label": "services/ingest/main.py - _windows(), and the window rule in _chunk()",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "anchor": "s6",
+      "line": 616
+    },
+    {
+      "window": 23,
+      "label": "expected",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "anchor": "s6",
+      "line": 661
+    },
+    {
+      "window": 26,
+      "label": "expected (your wording differs; the pages are the point)",
+      "heading": "Chunk by window: an Act becomes page windows",
+      "anchor": "s6",
+      "line": 689
+    },
+    {
+      "window": 28,
+      "label": "expected (your pages and characters differ; the shape is the point)",
+      "heading": "Compare the boundaries: two parsers, one document",
+      "anchor": "s7",
+      "line": 748
+    },
+    {
+      "window": 29,
+      "label": "shared/documind_corpus.py - the constants, and windows()",
+      "heading": "One chunker in two places, and what parsing bills",
+      "anchor": "s8",
+      "line": 767
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

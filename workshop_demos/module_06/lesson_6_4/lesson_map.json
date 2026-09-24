@@ -1,0 +1,555 @@
+{
+  "schema_version": 1,
+  "lesson": "6.4",
+  "title": "Complete the Streamlit upload-to-answer journey",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+  "source_sha": "1434ee937aa77b8465276e8080c069b3d951e632",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 35,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "HOME",
+    "ME",
+    "N",
+    "NUMBER",
+    "PROJECT",
+    "REGION",
+    "S",
+    "SA",
+    "TENANT",
+    "UI"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Complete the Streamlit upload-to-answer journey: one person, four identities, a page that holds no model, and a cited answer you can open"
+    },
+    {
+      "level": 3,
+      "heading": "What the page does, what it never does, and who each hop runs as"
+    },
+    {
+      "level": 4,
+      "heading": "The journey: seven hops, the identity on each, and what proves it"
+    },
+    {
+      "level": 4,
+      "heading": "The citation renderer: the UI's pills and sources, from a transcript you paste"
+    },
+    {
+      "level": 3,
+      "heading": "The words: IAP, assertion, roster, watched prefix, Versions, stream, pill, signed URL, surface, the row's user"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "The front door: IAP, the UI's settings, and who may sign in"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the service's account, IAP's flag, who may sign in, and a request without one"
+    },
+    {
+      "level": 3,
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: write the note, upload it in the browser, follow it"
+    },
+    {
+      "level": 3,
+      "heading": "The answer: asked in Chat, streamed, and the row that names you"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: ask in the browser, ask from the shell, read both rows"
+    },
+    {
+      "level": 3,
+      "heading": "Citations: the pills, the sources, and the link signed through IAM"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: open the source, then render your own transcript"
+    },
+    {
+      "level": 3,
+      "heading": "The UI's account: what it may do, and the checks the page makes first"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: read the account's grants, Rs 0"
+    },
+    {
+      "level": 3,
+      "heading": "What the journey costs, the sidebar's own price table, and what nothing records"
+    },
+    {
+      "level": 4,
+      "heading": "What it costs"
+    },
+    {
+      "level": 4,
+      "heading": "The sidebar's own price table"
+    },
+    {
+      "level": 4,
+      "heading": "The answer, drawn as HTML"
+    },
+    {
+      "level": 4,
+      "heading": "What nothing records"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 387,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "6.4",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 393,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "6.4",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 6,
+      "label": "bash — run in the operator shell, once per shell",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The UI's own environment says how it signs people in, where it uploads and which API it calls. The block prints the five names that matter and exports the UI's address for the steps below. An empty CHAT_URL means the chat service is not deployed on this lane, and then Chat has no brain picker. The page streams from the API directly, which is the journey this lesson follows.",
+      "expected": "AUTH_MODE      iap\nRAG_API_URL    https://documind-api-NUMBER.asia-south1.run.app\nUPLOAD_BUCKET  documind-ai-YOUR-ID-uploads\nIAP_AUDIENCE   /projects/NUMBER/locations/asia-south1/services/documind-ui\nCHAT_URL       https://documind-chat-NUMBER.asia-south1.run.app\nUI=https://documind-ui-NUMBER.asia-south1.run.app",
+      "line": 403,
+      "id": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "6.4",
+      "file": "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_do_it_the_service_s_account_iap_s_flag_who_may_s.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 11,
+      "label": "bash — run in the operator shell (four reads)",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "subheading": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
+      "anchor": "s3",
+      "purpose": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
+      "expected": "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\n    run.googleapis.com/iap-enabled: 'true'\nroles/iap.httpsResourceAccessor\tuser:you@example.com\nwithout a sign-in: HTTP 302 -> https://accounts.google.com/o/oauth2/v2/auth?client_id=...",
+      "line": 471,
+      "id": "demo_03_01_do_it_the_service_s_account_iap_s_flag_who_may_s",
+      "lesson": "6.4",
+      "file": "demo_03_01_do_it_the_service_s_account_iap_s_flag_who_may_s.py",
+      "category": "required",
+      "requires": [
+        "demo_02_02_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_01_do_it_write_the_note_upload_it_in_the_browser_fo.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 16,
+      "label": "bash — run in the operator shell (writes one small file in your home directory)",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "subheading": "Do it: write the note, upload it in the browser, follow it",
+      "anchor": "s4",
+      "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault.",
+      "expected": "",
+      "line": 527,
+      "id": "demo_04_01_do_it_write_the_note_upload_it_in_the_browser_fo",
+      "lesson": "6.4",
+      "file": "demo_04_01_do_it_write_the_note_upload_it_in_the_browser_fo.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_do_it_the_service_s_account_iap_s_flag_who_may_s"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_04_02_do_it_write_the_note_upload_it_in_the_browser_fo.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 17,
+      "label": "bash — run in the operator shell (the object, the worker's line, your hash, the ledger row)",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "subheading": "Do it: write the note, upload it in the browser, follow it",
+      "anchor": "s4",
+      "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. In the browser, open Documents, choose the file, and click Index documents. The page reports the object it wrote and its generation, then says the upload is complete and indexing is still in progress. Wait half a minute and click Refresh indexing status until the note appears in Versions. Then follow it from the shell:",
+      "expected": "text/plain\t4xx\t17586xxxxxxxxxxx\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme_3f9c2b7e1a04...\t3\t0\t3\nyour file's hash begins: 3f9c2b7e1a04\nacme/pune_visitor_rules.md indexed chunks 3 reused 0 embedded 3\nversions NN | last event ingest_ok",
+      "line": 545,
+      "id": "demo_04_02_do_it_write_the_note_upload_it_in_the_browser_fo",
+      "lesson": "6.4",
+      "file": "demo_04_02_do_it_write_the_note_upload_it_in_the_browser_fo.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_do_it_write_the_note_upload_it_in_the_browser_fo"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_05_01_do_it_ask_in_the_browser_ask_from_the_shell_read.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 23,
+      "label": "bash — run in the operator shell (one question, a rupee; one log read)",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "subheading": "Do it: ask in the browser, ask from the shell, read both rows",
+      "anchor": "s5",
+      "purpose": "In the browser, open Chat and ask: What colour badge do visitors wear at the Pune warehouse? The sources arrive first and the answer streams after them. The answer ends with a pill. Hover over it to see the note's clause, and open Sources under the answer. Then ask the same question from the shell and read the two newest rows:",
+      "expected": "from the shell: Every visitor to the Pune warehouse wears an amber badge, issued at gate | ['pune_visitor_rules.md']\n2026-09-2xT1x:xx:xx.xxxxxxZ\tquery\tdocumind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\tui\tacme\t20\n2026-09-2xT1x:xx:xx.xxxxxxZ\tstream\tyou@example.com\tui\tacme\t20",
+      "line": 609,
+      "id": "demo_05_01_do_it_ask_in_the_browser_ask_from_the_shell_read",
+      "lesson": "6.4",
+      "file": "demo_05_01_do_it_ask_in_the_browser_ask_from_the_shell_read.py",
+      "category": "required",
+      "requires": [
+        "demo_04_02_do_it_write_the_note_upload_it_in_the_browser_fo"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_06_01_do_it_open_the_source_then_render_your_own_trans.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 28,
+      "label": "bash — run in the operator shell (one stream, a rupee)",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "subheading": "Do it: open the source, then render your own transcript",
+      "anchor": "s6",
+      "purpose": "In the browser, under the answer from step 5, open Sources and click Open source on the note. A new tab shows the note's text from the bucket, through a link that stops working in 15 minutes. Then capture the same answer as a transcript and paste it into the renderer in step 1:",
+      "expected": "citation events: 5 | tokens: NN | done: 1\nfirst citation: pune_visitor_rules.md | kind text | page None | quote 'VR-01 - Badges\\nEvery visitor to the Pune warehou'\n...",
+      "line": 678,
+      "id": "demo_06_01_do_it_open_the_source_then_render_your_own_trans",
+      "lesson": "6.4",
+      "file": "demo_06_01_do_it_open_the_source_then_render_your_own_trans.py",
+      "category": "required",
+      "requires": [
+        "demo_05_01_do_it_ask_in_the_browser_ask_from_the_shell_read"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_07_01_do_it_read_the_account_s_grants_rs_0.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 33,
+      "label": "bash — run in the operator shell (reads only)",
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "subheading": "Do it: read the account's grants, Rs 0",
+      "anchor": "s7",
+      "purpose": "Do it: read the account's grants, Rs 0",
+      "expected": "project roles:\nroles/aiplatform.user\nroles/datastore.user\nroles/documentai.apiUser\nroles/secretmanager.secretAccessor\nroles/speech.editor\nuploads bucket: ['roles/storage.objectAdmin']\nmay invoke documind-api: ['roles/run.invoker']\nmay invoke documind-chat: ['roles/run.invoker']\nmay invoke documind-ingest: none\non itself: ['roles/iam.serviceAccountTokenCreator']",
+      "line": 731,
+      "id": "demo_07_01_do_it_read_the_account_s_grants_rs_0",
+      "lesson": "6.4",
+      "file": "demo_07_01_do_it_read_the_account_s_grants_rs_0.py",
+      "category": "required",
+      "requires": [
+        "demo_06_01_do_it_open_the_source_then_render_your_own_trans"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/06-generation/6.4-ui-journey/Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 357
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 389
+    },
+    {
+      "window": 7,
+      "label": "expected (your ids differ; CHAT_URL is empty on a lane without the chat service)",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 407
+    },
+    {
+      "window": 8,
+      "label": "commands/lesson-12.4.sh - IAP on the service itself, its agent the only invoker, and who may sign in",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "anchor": "s3",
+      "line": 421
+    },
+    {
+      "window": 9,
+      "label": "services/frontend/auth.py - current_user(): the assertion, verified for this service's audience",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "anchor": "s3",
+      "line": 437
+    },
+    {
+      "window": 10,
+      "label": "services/frontend/auth.py - tenant_for(): the roster, one query, never cached",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "anchor": "s3",
+      "line": 460
+    },
+    {
+      "window": 12,
+      "label": "expected (your accounts; the redirect is to Google's sign-in, and the container never saw the request)",
+      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "anchor": "s3",
+      "line": 477
+    },
+    {
+      "window": 13,
+      "label": "services/frontend/documents.py - upload_document(): the checks, then one object under the tenant's folder",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "anchor": "s4",
+      "line": 494
+    },
+    {
+      "window": 14,
+      "label": "services/frontend/documents.py - documents_page(): the upload is not the indexing, and the page says so",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "anchor": "s4",
+      "line": 513
+    },
+    {
+      "window": 15,
+      "label": "services/frontend/documents.py - versions_section(): the ledger, read through the API with the page's two credentials",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "anchor": "s4",
+      "line": 522
+    },
+    {
+      "window": 18,
+      "label": "expected (your size, generation and hash; the key's hash is your file's)",
+      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "anchor": "s4",
+      "line": 552
+    },
+    {
+      "window": 19,
+      "label": "services/frontend/chat.py - _headers(): the UI's own token, and the person's assertion forwarded",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "anchor": "s5",
+      "line": 568
+    },
+    {
+      "window": 20,
+      "label": "services/frontend/chat.py - stream_answer(): the question, labelled ui, and the events as they come",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "anchor": "s5",
+      "line": 576
+    },
+    {
+      "window": 21,
+      "label": "shared/iap.py - identity(): the assertion first, the bearer token second, never a header",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "anchor": "s5",
+      "line": 593
+    },
+    {
+      "window": 22,
+      "label": "services/rag-api/main.py - usage_row(): who asked, and a brain that defaults to ui",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "anchor": "s5",
+      "line": 602
+    },
+    {
+      "window": 24,
+      "label": "expected (newest row first; your email and wording)",
+      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "anchor": "s5",
+      "line": 615
+    },
+    {
+      "window": 25,
+      "label": "services/frontend/citations.py - the pattern and the labels: [3], [Fig 3, p.12], [Clip 3, 03:20]",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "anchor": "s6",
+      "line": 629
+    },
+    {
+      "window": 26,
+      "label": "services/frontend/citations.py - render_with_citations(): the pills, drawn as HTML",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "anchor": "s6",
+      "line": 643
+    },
+    {
+      "window": 27,
+      "label": "services/frontend/citations.py - signing on Cloud Run: the account's email and token, and IAM signs",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "anchor": "s6",
+      "line": 658
+    },
+    {
+      "window": 29,
+      "label": "expected (your ids and counts; the whole transcript follows, ready to copy)",
+      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "anchor": "s6",
+      "line": 685
+    },
+    {
+      "window": 30,
+      "label": "terraform/sa.tf - the UI's project roles, and the two it pointedly lacks",
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "anchor": "s7",
+      "line": 699
+    },
+    {
+      "window": 31,
+      "label": "terraform/storage.tf - object admin on the uploads bucket",
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "anchor": "s7",
+      "line": 718
+    },
+    {
+      "window": 32,
+      "label": "commands/lesson-12.4.sh - the account may sign as itself",
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "anchor": "s7",
+      "line": 723
+    },
+    {
+      "window": 34,
+      "label": "expected (your lane may carry a role more; the absent ones are the point: no BigQuery, no call to the worker)",
+      "heading": "The UI's account: what it may do, and the checks the page makes first",
+      "anchor": "s7",
+      "line": 738
+    },
+    {
+      "window": 35,
+      "label": "services/frontend/chat.py - the page's own rates, and the arithmetic the sidebar shows",
+      "heading": "What the journey costs, the sidebar's own price table, and what nothing records",
+      "anchor": "s8",
+      "line": 770
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}

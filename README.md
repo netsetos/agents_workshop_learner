@@ -19,6 +19,11 @@ stack the Agents Workshop builds, lesson by lesson.
 
 ## Workstation infrastructure recovery and reruns
 
+**Run lessons in PyCharm or VS Code:** [workshop_demos/README.md](workshop_demos/README.md)
+contains setup instructions and the index for all 18 modules and 60 lessons.
+Each lesson has separate Python Run/Debug files, source-heading mappings and
+expected observations; reusable setup lives under `workshop_demos/setup/`.
+
 Run the committed deployment files directly. See [INFRASTRUCTURE.md](INFRASTRUCTURE.md)
 for the Git-only update and checked `prepare → plan → check → apply` sequence.
 It includes native billing-account discovery, the Acme/Zeta digital-parser fix,

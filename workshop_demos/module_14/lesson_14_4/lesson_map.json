@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lesson": "14.4",
+  "title": "Complete the independent capstone and operational handover",
+  "source_kind": "course_plan_and_kit",
+  "source_sha": "8ec9a206c5d0330a3a3a66e1756d5afbf5c38738e2b99e986a815ce0a5068be0",
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "PROJECT",
+    "REGION",
+    "TENANT",
+    "ME",
+    "NUMBER"
+  ],
+  "demos": [
+    {
+      "lesson": "14.4",
+      "file": "demo_01_run_the_operational_gate.py",
+      "id": "demo_01_run_the_operational_gate",
+      "anchor": "plan-1",
+      "heading": "Run the operational gate",
+      "subheading": "Run the operational gate",
+      "purpose": "Run the real smoke-all gate and preserve its output, including unavailable optional services and failures. Do not mark the capstone complete merely because earlier individual demos ran.",
+      "label": "Course-plan experiment \u2014 live deployment",
+      "category": "required",
+      "requires": [],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": false,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    },
+    {
+      "lesson": "14.4",
+      "file": "demo_02_write_an_evidence_handover.py",
+      "id": "demo_02_write_an_evidence_handover",
+      "anchor": "plan-2",
+      "heading": "Write an evidence handover",
+      "subheading": "Write an evidence handover",
+      "purpose": "Summarize actual lesson attempts and retain the exact candidate gate, failures and evidence locations. This is an evidence index for a human capstone review, not an automatic rubric score.",
+      "label": "Course-plan experiment \u2014 local Python/kit inspection",
+      "category": "required",
+      "requires": [
+        "demo_01_run_the_operational_gate"
+      ],
+      "expected": "",
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/plan/course-plan-v5-story-2026-09-22.md",
+      "line": 1,
+      "offline": true,
+      "live_verified": false,
+      "next": "Read the next checkpoint in README.md",
+      "implementation": "native_python"
+    }
+  ],
+  "live_verification": "Not performed; main HTML has not yet been authored."
+}

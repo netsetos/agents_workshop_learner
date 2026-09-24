@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "lesson": "10.2",
+  "title": "Implement the main LangGraph workflow",
+  "source_kind": "main_html",
+  "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+  "source_sha": "73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b",
+  "shared_setup_windows": [
+    1
+  ],
+  "source_window_count": 19,
+  "persist_variables": [
+    "API",
+    "API_URL",
+    "CHAT",
+    "ME",
+    "NUMBER",
+    "PROJECT",
+    "Q",
+    "REGION",
+    "S",
+    "TENANT",
+    "TOKEN"
+  ],
+  "headings": [
+    {
+      "level": 1,
+      "heading": "Implement the main LangGraph workflow: three nodes, one route, a checkpointer, and a refuse node forced to fire"
+    },
+    {
+      "level": 3,
+      "heading": "A loop you can draw, and a guard that is a node"
+    },
+    {
+      "level": 4,
+      "heading": "Step through the graph"
+    },
+    {
+      "level": 3,
+      "heading": "The words: StateGraph, node, route, ToolNode, refuse, error result, checkpointer, thread"
+    },
+    {
+      "level": 3,
+      "heading": "Before you run anything: set up the shell"
+    },
+    {
+      "level": 4,
+      "heading": "Three kinds of code window on this page"
+    },
+    {
+      "level": 4,
+      "heading": "make, or the command it runs"
+    },
+    {
+      "level": 4,
+      "heading": "Which store answers acme? Pin it to the kit's own index for this lesson"
+    },
+    {
+      "level": 3,
+      "heading": "The graph, in a venv of its own"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the venv"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the graph"
+    },
+    {
+      "level": 3,
+      "heading": "The refuse node, forced to fire"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The graph on your lane: one thread, a new thread, and a request to delete"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "The code"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "What the checkpointer keeps"
+    },
+    {
+      "level": 3,
+      "heading": "Why the graph is built this way, what it costs, and what the kit does not do yet"
+    },
+    {
+      "level": 4,
+      "heading": "What it costs"
+    },
+    {
+      "level": 3,
+      "heading": "Verify it yourself: the checklist"
+    }
+  ],
+  "demos": [
+    {
+      "window": 3,
+      "label": "bash — run in the operator shell now, before the lesson's first step",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "expected": "acme: retrieval_backend=vector",
+      "line": 369,
+      "id": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "10.2",
+      "file": "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "required",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [
+        "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_do_it_the_venv.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 5,
+      "label": "bash — run in the operator shell when you finish the lesson, not now",
+      "heading": "Before you run anything: set up the shell",
+      "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
+      "anchor": "s2",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "expected": "",
+      "line": 375,
+      "id": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own",
+      "lesson": "10.2",
+      "file": "finish_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own.py",
+      "category": "cleanup",
+      "requires": [],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [
+        "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
+      ],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_01_do_it_the_venv.py",
+      "implementation": "native_python"
+    },
+    {
+      "window": 7,
+      "label": "bash — run in the operator shell, in the kit (a small venv with the chat image's LangChain pins; a minute or two)",
+      "heading": "The graph, in a venv of its own",
+      "subheading": "Do it: the venv",
+      "anchor": "s3",
+      "purpose": "Do it: the venv",
+      "expected": "graph-venv ok: langchain 1.4.0",
+      "line": 405,
+      "id": "demo_03_01_do_it_the_venv",
+      "lesson": "10.2",
+      "file": "demo_03_01_do_it_the_venv.py",
+      "category": "required",
+      "requires": [
+        "demo_02_01_which_store_answers_acme_pin_it_to_the_kit_s_own"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "demo_03_02_do_it_the_graph.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 9,
+      "label": "bash — run in the operator shell, in the kit (the kit's graph, built and listed; no network, no model)",
+      "heading": "The graph, in a venv of its own",
+      "subheading": "Do it: the graph",
+      "anchor": "s3",
+      "purpose": "Do it: the graph",
+      "expected": "nodes: __start__, agent, tools, refuse, __end__\n  __start__ -> agent    \n      agent -> __end__    (route decides)\n      agent -> refuse     (route decides)\n      agent -> tools      (route decides)\n     refuse -> agent    \n      tools -> agent",
+      "line": 412,
+      "id": "demo_03_02_do_it_the_graph",
+      "lesson": "10.2",
+      "file": "demo_03_02_do_it_the_graph.py",
+      "category": "required",
+      "requires": [
+        "demo_03_01_do_it_the_venv"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_04_01_do_it.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 13,
+      "label": "bash — run in the operator shell, in the kit (three scripted turns through the kit's own graph; no network, no model)",
+      "heading": "The refuse node, forced to fire",
+      "subheading": "Do it",
+      "anchor": "s4",
+      "purpose": "Do it",
+      "expected": "plain    agent -> tools -> agent          tool_calls ['retrieve']  refusals []\n           answer: After five years of continuous service [1].\n  blocked  agent -> refuse -> agent         tool_calls ['delete_document']  refusals ['delete_document']\n           error result for delete_document: {\"error\": \"delete_document requires manual approval\"}\n           answer: I could not delete the invoice: deleting a document requires manual approval, so\n  mixed    agent -> refuse -> agent         tool_calls ['retrieve', 'delete_document']  refusals ['retrieve', 'delete_document']\n           error result for retrieve: {\"error\": \"retrieve requires manual approval\"}\n           error result for delete_document: {\"error\": \"delete_document requires manual approval\"}\n           answer: Nothing was done: that request needs manual approval.",
+      "line": 473,
+      "id": "demo_04_01_do_it",
+      "lesson": "10.2",
+      "file": "demo_04_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_03_02_do_it_the_graph"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": true,
+      "next": "demo_05_01_do_it.py",
+      "implementation": "kit_cli_workflow"
+    },
+    {
+      "window": 17,
+      "label": "bash — run in the operator shell, in the kit (four turns to the LangGraph brain on your lane)",
+      "heading": "The graph on your lane: one thread, a new thread, and a request to delete",
+      "subheading": "Do it",
+      "anchor": "s5",
+      "purpose": "Do it",
+      "expected": "[lesson102] tool_calls ['retrieve']  refusals []  7310 ms\n      Gratuity becomes payable after not less than five years of continuous service, under the Payment of Gratuity A\n  [lesson102] tool_calls ['retrieve']  refusals []  6890 ms\n      Under the Code on Social Security, 2020, a fixed-term employee is paid gratuity on a pro rata basis, without t\n  [lesson102-new] tool_calls []  refusals []  2140 ms\n      Could you tell me what you would like to know about? For example, gratuity or leave for fixed-term employees u\n  [lesson102] tool_calls []  refusals []  1980 ms\n      I can't delete documents - I can only search and read them. Removing the April invoice needs someone with acce",
+      "line": 541,
+      "id": "demo_05_01_do_it",
+      "lesson": "10.2",
+      "file": "demo_05_01_do_it.py",
+      "category": "required",
+      "requires": [
+        "demo_04_01_do_it"
+      ],
+      "source": "https://github.com/netsetos/agents_workshop/blob/main/lessons/10-agents/10.2-langgraph/Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html",
+      "adaptations": [],
+      "live_verified": false,
+      "offline": false,
+      "next": "See README: optional extensions, then all finish_*.py files",
+      "implementation": "kit_cli_workflow"
+    }
+  ],
+  "read_only_windows": [
+    {
+      "window": 2,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 339
+    },
+    {
+      "window": 4,
+      "label": "expected",
+      "heading": "Before you run anything: set up the shell",
+      "anchor": "s2",
+      "line": 371
+    },
+    {
+      "window": 6,
+      "label": "services/chat/brains.py - LangGraphBrain: three nodes, one conditional edge, and the checkpointer at compile",
+      "heading": "The graph, in a venv of its own",
+      "anchor": "s3",
+      "line": 393
+    },
+    {
+      "window": 8,
+      "label": "expected",
+      "heading": "The graph, in a venv of its own",
+      "anchor": "s3",
+      "line": 408
+    },
+    {
+      "window": 10,
+      "label": "expected (this cell run on the kit's own brains.py)",
+      "heading": "The graph, in a venv of its own",
+      "anchor": "s3",
+      "line": 429
+    },
+    {
+      "window": 11,
+      "label": "services/chat/brains.py - agent, route and refuse: a turn that asks for a blocked tool is refused whole",
+      "heading": "The refuse node, forced to fire",
+      "anchor": "s4",
+      "line": 448
+    },
+    {
+      "window": 12,
+      "label": "services/chat/tools.py - the names no model turn may reach, and the budgets",
+      "heading": "The refuse node, forced to fire",
+      "anchor": "s4",
+      "line": 468
+    },
+    {
+      "window": 14,
+      "label": "expected (this cell run on the kit's own brains.py: the path, the lists and the error texts are the graph's)",
+      "heading": "The refuse node, forced to fire",
+      "anchor": "s4",
+      "line": 505
+    },
+    {
+      "window": 15,
+      "label": "services/chat/brains.py - answer(): one invoke on the thread, and the same three keys",
+      "heading": "The graph on your lane: one thread, a new thread, and a request to delete",
+      "anchor": "s5",
+      "line": 525
+    },
+    {
+      "window": 16,
+      "label": "services/chat/agent.py - thread_config(): the thread id is the tenancy boundary",
+      "heading": "The graph on your lane: one thread, a new thread, and a request to delete",
+      "anchor": "s5",
+      "line": 529
+    },
+    {
+      "window": 18,
+      "label": "expected (against a local stub of the chat service; the model decides the words and whether a turn needs a tool)",
+      "heading": "The graph on your lane: one thread, a new thread, and a request to delete",
+      "anchor": "s5",
+      "line": 564
+    },
+    {
+      "window": 19,
+      "label": "services/chat/agent.py - build_checkpointer(): Postgres on Cloud SQL, opened once for the process",
+      "heading": "What the checkpointer keeps",
+      "anchor": "s6",
+      "line": 581
+    }
+  ],
+  "live_verification": "Not run by the generator; validate on the intended workstation/lane."
+}
