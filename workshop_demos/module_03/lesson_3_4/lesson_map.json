@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html",
-  "source_sha": "919ad0b568337556ab3556373116e42e432c4488",
+  "source_sha": "0fed6e5f2f632604d917f822725869a9e2186f2e",
   "shared_setup_windows": [
     1
   ],
@@ -198,8 +198,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        367,
-        383
+        369,
+        385
       ],
       "offline": false,
       "live_verified": false,
@@ -217,7 +217,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 367,
+          "source_line": 369,
           "manual_checkpoint": null
         },
         {
@@ -230,7 +230,7 @@
           "id": "source_6",
           "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
           "window": 6,
-          "source_line": 383,
+          "source_line": 385,
           "manual_checkpoint": null
         }
       ],
@@ -257,8 +257,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        475,
-        494
+        477,
+        496
       ],
       "offline": false,
       "live_verified": false,
@@ -274,7 +274,7 @@
           "id": "source_13",
           "function": "step_01_index_a_note_and_count_the_datapoints_befo",
           "window": 13,
-          "source_line": 475,
+          "source_line": 477,
           "manual_checkpoint": null
         },
         {
@@ -287,7 +287,7 @@
           "id": "source_15",
           "function": "step_02_index_a_note_and_count_the_datapoints_befo",
           "window": 15,
-          "source_line": 494,
+          "source_line": 496,
           "manual_checkpoint": null
         }
       ],
@@ -313,7 +313,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        575
+        577
       ],
       "offline": false,
       "live_verified": false,
@@ -329,7 +329,7 @@
           "id": "source_20",
           "function": "step_01_read_all_four_rs_0",
           "window": 20,
-          "source_line": 575,
+          "source_line": 577,
           "manual_checkpoint": null
         }
       ],
@@ -356,8 +356,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        656,
-        697
+        658,
+        699
       ],
       "offline": false,
       "live_verified": false,
@@ -373,7 +373,7 @@
           "id": "source_24",
           "function": "step_01_the_index_and_its_deployment_as_gcloud_see",
           "window": 24,
-          "source_line": 656,
+          "source_line": 658,
           "manual_checkpoint": null
         },
         {
@@ -386,7 +386,7 @@
           "id": "source_27",
           "function": "step_02_read_one_datapoint_back_then_search_for_it",
           "window": 27,
-          "source_line": 697,
+          "source_line": 699,
           "manual_checkpoint": null
         }
       ],
@@ -412,7 +412,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        807
+        809
       ],
       "offline": false,
       "live_verified": false,
@@ -428,7 +428,7 @@
           "id": "source_32",
           "function": "step_01_read_the_mirror_rows_then_the_audit_event",
           "window": 32,
-          "source_line": 807,
+          "source_line": 809,
           "manual_checkpoint": null
         }
       ],
@@ -455,8 +455,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        882,
-        914
+        884,
+        916
       ],
       "offline": false,
       "live_verified": false,
@@ -472,7 +472,7 @@
           "id": "source_37",
           "function": "step_01_the_fallback_rung_then_the_api",
           "window": 37,
-          "source_line": 882,
+          "source_line": 884,
           "manual_checkpoint": null
         },
         {
@@ -485,7 +485,7 @@
           "id": "source_39",
           "function": "step_02_the_operator_s_checks_two_commands_and_the",
           "window": 39,
-          "source_line": 914,
+          "source_line": 916,
           "manual_checkpoint": null
         }
       ],
@@ -511,7 +511,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        971
+        973
       ],
       "offline": false,
       "live_verified": false,
@@ -527,7 +527,7 @@
           "id": "source_43",
           "function": "step_01_the_rows_rebuild_the_tier",
           "window": 43,
-          "source_line": 971,
+          "source_line": 973,
           "manual_checkpoint": null
         }
       ],
@@ -551,7 +551,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
       "source_lines": [
-        373
+        375
       ],
       "offline": false,
       "live_verified": false,
@@ -569,7 +569,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 373,
+          "source_line": 375,
           "manual_checkpoint": null
         }
       ],
@@ -602,231 +602,231 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 337
+      "line": 339
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 369
+      "line": 371
     },
     {
       "window": 7,
       "label": "expected (your ids differ; a name may carry the project id or its number)",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 389
+      "line": 391
     },
     {
       "window": 8,
       "label": "services/ingest/idempotency.py - claim(): the first record, written in a transaction",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 404
+      "line": 406
     },
     {
       "window": 9,
       "label": "services/ingest/idempotency.py - finish(): the claim becomes a record",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 427
+      "line": 429
     },
     {
       "window": 10,
       "label": "services/ingest/main.py - the order: staged rows, the swap, the tier",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 438
+      "line": 440
     },
     {
       "window": 11,
       "label": "services/ingest/main.py - then the mirror, the claim, the ledger row and the fingerprint",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 450
+      "line": 452
     },
     {
       "window": 12,
       "label": "services/ingest/main.py - the audit event, the last record before the log line",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 461
+      "line": 463
     },
     {
       "window": 14,
       "label": "expected (N is your lane's count before; the key is yours, because the note is)",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 488
+      "line": 490
     },
     {
       "window": 16,
       "label": "expected on a lane where the reindex smoke has run",
       "heading": "Write: the order the worker keeps, and a fresh document to watch",
       "anchor": "s3",
-      "line": 507
+      "line": 509
     },
     {
       "window": 17,
       "label": "services/ingest/indexer.py - mirror_to_firestore(): the stage marks, and the commit",
       "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
       "anchor": "s4",
-      "line": 520
+      "line": 522
     },
     {
       "window": 18,
       "label": "services/ingest/idempotency.py - record_source(): the ledger row",
       "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
       "anchor": "s4",
-      "line": 537
+      "line": 539
     },
     {
       "window": 19,
       "label": "services/ingest/idempotency.py - corpus_fingerprint() and refresh_fingerprint()",
       "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
       "anchor": "s4",
-      "line": 553
+      "line": 555
     },
     {
       "window": 21,
       "label": "expected (the key and the last hash are yours: the note carries your name; generation, fingerprint and versions differ too)",
       "heading": "Inspect Firestore: the claim, the rows, the ledger row, the fingerprint",
       "anchor": "s4",
-      "line": 600
+      "line": 602
     },
     {
       "window": 22,
       "label": "services/ingest/indexer.py - to_datapoints() and upsert()",
       "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
       "anchor": "s5",
-      "line": 619
+      "line": 621
     },
     {
       "window": 23,
       "label": "services/ingest/indexer.py - remove_datapoints(): a retired id leaves the tier",
       "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
       "anchor": "s5",
-      "line": 645
+      "line": 647
     },
     {
       "window": 25,
       "label": "expected (your counts and times differ)",
       "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
       "anchor": "s5",
-      "line": 661
+      "line": 663
     },
     {
       "window": 26,
       "label": "commands/vector-status.sh - what make vector-status runs: the index and the deployment, as gcloud sees them",
       "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
       "anchor": "s5",
-      "line": 677
+      "line": 679
     },
     {
       "window": 28,
       "label": "expected (the two lower distances are yours; if the sparse line reads 0, the read left the sparse half out and the restricts are the point)",
       "heading": "Inspect Vector Search: the datapoint, its restricts, and a search for itself",
       "anchor": "s5",
-      "line": 722
+      "line": 724
     },
     {
       "window": 29,
       "label": "services/ingest/indexer.py - mirror_to_bigquery()",
       "heading": "Inspect the mirror and the audit trail",
       "anchor": "s6",
-      "line": 739
+      "line": 741
     },
     {
       "window": 30,
       "label": "terraform/dataplex.tf - the chunk_source table",
       "heading": "Inspect the mirror and the audit trail",
       "anchor": "s6",
-      "line": 767
+      "line": 769
     },
     {
       "window": 31,
       "label": "shared/audit_log.py - emit(): one JSON object per event, in a retention-locked bucket",
       "heading": "Inspect the mirror and the audit trail",
       "anchor": "s6",
-      "line": 793
+      "line": 795
     },
     {
       "window": 33,
       "label": "expected (your counts, ids and times differ)",
       "heading": "Inspect the mirror and the audit trail",
       "anchor": "s6",
-      "line": 817
+      "line": 819
     },
     {
       "window": 34,
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the same predicates as the worker's restricts",
       "heading": "Verify: the two rungs that read the records",
       "anchor": "s7",
-      "line": 849
+      "line": 851
     },
     {
       "window": 35,
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the ANN call, and the rung's name on every chunk",
       "heading": "Verify: the two rungs that read the records",
       "anchor": "s7",
-      "line": 856
+      "line": 858
     },
     {
       "window": 36,
       "label": "services/rag-api/retriever.py - _firestore_fallback(): the same predicates, Firestore's own vector index",
       "heading": "Verify: the two rungs that read the records",
       "anchor": "s7",
-      "line": 866
+      "line": 868
     },
     {
       "window": 38,
       "label": "expected (your wording and the pool size differ)",
       "heading": "Verify: the two rungs that read the records",
       "anchor": "s7",
-      "line": 905
+      "line": 907
     },
     {
       "window": 40,
       "label": "expected (the first command stops at \"terraform output\" in a checkout without state; the rest is yours)",
       "heading": "Verify: the two rungs that read the records",
       "anchor": "s7",
-      "line": 921
+      "line": 923
     },
     {
       "window": 41,
       "label": "services/ingest/indexer.py - backfill(): the tier rebuilt from the rows",
       "heading": "Repair, expire, and what the records cost",
       "anchor": "s8",
-      "line": 951
+      "line": 953
     },
     {
       "window": 42,
       "label": "services/ingest/indexer.py - _repair_snapshots(): the rule for a repair",
       "heading": "Repair, expire, and what the records cost",
       "anchor": "s8",
-      "line": 963
+      "line": 965
     },
     {
       "window": 44,
       "label": "services/ingest/main.py - the two clocks on a row",
       "heading": "Repair, expire, and what the records cost",
       "anchor": "s8",
-      "line": 976
+      "line": 978
     },
     {
       "window": 45,
       "label": "terraform/firestore_indexes.tf - the TTL policy: the only thing that ever deletes a chunk row",
       "heading": "Repair, expire, and what the records cost",
       "anchor": "s8",
-      "line": 979
+      "line": 981
     },
     {
       "window": 46,
       "label": "terraform/firestore_indexes.tf - the vector index the fallback rung needs",
       "heading": "Repair, expire, and what the records cost",
       "anchor": "s8",
-      "line": 989
+      "line": 991
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

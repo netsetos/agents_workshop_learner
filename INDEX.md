@@ -186,7 +186,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/ingest/graph.py` | code | 15.1 | - |
 | `services/ingest/idempotency.py` | code | 3.1, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 9.2 | - |
 | `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2, 5.2, 6.1 | 5.1 |
-| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 8.3, 15.4, 16.1 | - |
+| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 8.3, 15.4, 16.1 | 3.1 |
 | `services/ingest/managed.py` | code | 15.3, 15.4 | - |
 | `services/ingest/parser.py` | code | 3.2 | - |
 | `services/ingest/reconcile.py` | code | 4.3, 4.4, 5.4, 15.4 | 3.3 |
@@ -258,7 +258,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/cloudsql.tf` | code | 11.2 | 11.1 |
 | `terraform/dataplex.tf` | code | 3.4 | - |
 | `terraform/docai.tf` | code | - | 3.2 |
-| `terraform/eventarc.tf` | code | 4.1 | - |
+| `terraform/eventarc.tf` | code | 4.1 | 3.1 |
 | `terraform/firestore.tf` | code | - | - |
 | `terraform/firestore_indexes.tf` | code | 3.4, 4.3, 5.4 | - |
 | `terraform/gateway.tf` | code | - | - |

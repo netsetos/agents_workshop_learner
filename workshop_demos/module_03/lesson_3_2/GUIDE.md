@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html`, reviewed at blob `5b333c8a6d51ef5416793e5ae594068511fda01e`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html`, reviewed at blob `7a8866e2e4e1e112551ab9b1a56b0f8b7aef1160`. Learners read that page on the course site; this guide keeps its prose.
 
 Before a document can be searched it has to be read, and before it can be cited it has to be cut into pieces small enough to compare with a question. This lesson opens the two steps that do that in DocuMind: the parser that turns a PDF into pages of text through Document AI, and the chunker that turns text into addressed pieces. You will count pages, cut a handbook into clauses, cut an Act into page windows, and compare the pieces two different parsers make of the same document on your own lane.
 
@@ -39,6 +39,12 @@ Parsing is reading. A PDF is a drawing of a page: shapes and positions, sometime
 Chunking is cutting. A question is a sentence or two; a document is thousands of sentences. Retrieval works by comparing the question with pieces of similar size, so the text is cut into chunks of a few hundred words, and every chunk gets an address, its locator, so that a citation can point back to it. The cut matters more than it looks: a clause split across two chunks is a clause the question may never find whole, and a chunk that contains three unrelated clauses is a chunk that answers three questions badly.
 
 A newspaper and a scrapbook. Parsing is the newspaper arriving as pages of print instead of a photograph of the page. Chunking is cutting the articles out for a scrapbook. Cut along the article boundaries and every clipping makes sense on its own; cut every page into equal squares and most clippings start mid-sentence and end mid-sentence. DocuMind cuts along the boundaries when the document has them (headings) and falls back to squares of a fixed size, with an overlap, when it does not (an Act's running text). The locator is the label on the clipping: "Notice period, clause NP-03" or "page 7, second square".
+
+#### Which reader each file gets
+
+Before anything is cut, the worker decides how to read the file, and the file's type decides. Two checks come first and cost nothing: an object outside a tenant folder is refused, and bytes the lane has seen before are not parsed or embedded again. Text is read as it is. A PDF has its pages counted first, for free: over 250 it waits for the batch lane, otherwise it goes to Document AI fifteen pages at a time, and a scan takes the same road because Document AI reads the page images. A picture or a recording cannot be cut like text, so Gemini describes it, and that description is the chunk. Every chunk is scanned for personal data before anything is indexed.
+
+The examples are the kit's own files with their real page counts; the 270-page bundle is the two Acts lesson 4.1 joins, and the video is lesson 16.1's. Step 3 opens the parser; steps 5 and 6 are the two cutting rules.
 
 #### Try the cut yourself
 

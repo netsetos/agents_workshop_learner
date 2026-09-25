@@ -55,8 +55,11 @@ def step_01_run_first_check_the_serving_revision_and_s(session):
             check=True, capture_output=True, text=True).stdout)
     
     service = read_run("services", "documind-api")
-    if os.environ["API"].rstrip("/") != service["status"]["url"].rstrip("/"):
-        raise SystemExit("STOP: API must be this service's URL for this demo.")
+    # One service, two URLs: status.url (often the hashed a.run.app one) and the
+    # deterministic documind-api-NUMBER.REGION.run.app that API is built from.
+    urls = {service["status"]["url"].rstrip("/"), f"https://documind-api-{os.environ['NUMBER']}.{region}.run.app"}
+    if os.environ["API"].rstrip("/") not in urls:
+        raise SystemExit(f"STOP: API={os.environ['API']} is not one of this service's URLs: {sorted(urls)}")
     traffic = [t for t in service["status"].get("traffic", []) if t.get("percent", 0) > 0]
     if len(traffic) != 1 or traffic[0].get("percent") != 100:
         raise SystemExit("STOP: inspect split traffic; this demo expects one serving revision.")

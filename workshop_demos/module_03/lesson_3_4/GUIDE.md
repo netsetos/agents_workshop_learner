@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html`, reviewed at blob `919ad0b568337556ab3556373116e42e432c4488`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html`, reviewed at blob `0fed6e5f2f632604d917f822725869a9e2186f2e`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 3.1 to 3.3 followed one document from bytes to vectors. This lesson is about what it leaves behind: the records in Firestore, in the Vector Search index, in BigQuery and in the audit bucket that say the document is indexed, and the order the worker writes them in so that a reader never sees half a document. You will index a three-chunk note, read every record it created from the store that holds it, check that they agree with each other, and learn which store is the truth when they do not.
 
@@ -47,6 +47,8 @@ A property changes hands. One sale, several registers: the sale deed at the sub-
 The player steps through the worker's order for two real ingests on your lane: the three-chunk note you will index in step 3, and the handbook re-issue from lesson 3.3. Each card is one store; the highlighted card is the one the step writes, and the amber line says what a reader asking a question at that moment would find.
 
 The order is the one in `services/ingest/main.py`, which you will read in step 3. Two things to watch for: the rows exist for two steps before a reader can see them (staged), and in the re-issue the reader moves from version 1 to version 2 in one step and never sees both. The numbers are the real counts from your lane.
+
+The player starts once the worker has the message. What comes before it - the bucket's notification, the Pub/Sub topic, the push subscription and its dead-letter topic - and every service the worker calls are drawn end to end in lesson 3.1, under "The services behind the stages".
 
 ### The words: claim, row, datapoint, restrict, mirror, ledger, fingerprint
 

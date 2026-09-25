@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.2_Parse_Chunk_WIX.html",
-  "source_sha": "5b333c8a6d51ef5416793e5ae594068511fda01e",
+  "source_sha": "7a8866e2e4e1e112551ab9b1a56b0f8b7aef1160",
   "shared_setup_windows": [
     1
   ],
@@ -28,6 +28,10 @@
     {
       "level": 3,
       "heading": "What parsing and chunking are"
+    },
+    {
+      "level": 4,
+      "heading": "Which reader each file gets"
     },
     {
       "level": 4,
@@ -189,7 +193,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        364
+        381
       ],
       "offline": false,
       "live_verified": false,
@@ -207,7 +211,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 364,
+          "source_line": 381,
           "manual_checkpoint": null
         }
       ],
@@ -233,7 +237,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        441
+        458
       ],
       "offline": false,
       "live_verified": false,
@@ -249,7 +253,7 @@
           "id": "source_9",
           "function": "step_01_which_reader_does_your_lane_have",
           "window": 9,
-          "source_line": 441,
+          "source_line": 458,
           "manual_checkpoint": null
         }
       ],
@@ -276,8 +280,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        480,
-        510
+        497,
+        527
       ],
       "offline": false,
       "live_verified": false,
@@ -293,7 +297,7 @@
           "id": "source_12",
           "function": "step_01_count_the_corpus_rs_0",
           "window": 12,
-          "source_line": 480,
+          "source_line": 497,
           "manual_checkpoint": null
         },
         {
@@ -306,7 +310,7 @@
           "id": "source_14",
           "function": "step_02_prove_it_on_the_lane_one_small_pdf_four_pa",
           "window": 14,
-          "source_line": 510,
+          "source_line": 527,
           "manual_checkpoint": null
         }
       ],
@@ -333,8 +337,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        553,
-        581
+        570,
+        598
       ],
       "offline": false,
       "live_verified": false,
@@ -350,7 +354,7 @@
           "id": "source_17",
           "function": "step_01_cut_the_handbook_rs_0",
           "window": 17,
-          "source_line": 553,
+          "source_line": 570,
           "manual_checkpoint": null
         },
         {
@@ -363,7 +367,7 @@
           "id": "source_19",
           "function": "step_02_on_the_lane",
           "window": 19,
-          "source_line": 581,
+          "source_line": 598,
           "manual_checkpoint": null
         }
       ],
@@ -391,9 +395,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        646,
-        671,
-        685
+        663,
+        688,
+        702
       ],
       "offline": false,
       "live_verified": false,
@@ -409,7 +413,7 @@
           "id": "source_22",
           "function": "step_01_cut_the_code_on_wages_rs_0",
           "window": 22,
-          "source_line": 646,
+          "source_line": 663,
           "manual_checkpoint": null
         },
         {
@@ -422,7 +426,7 @@
           "id": "source_24",
           "function": "step_02_on_the_lane_and_ask_a_question_that_lands",
           "window": 24,
-          "source_line": 671,
+          "source_line": 688,
           "manual_checkpoint": null
         },
         {
@@ -435,7 +439,7 @@
           "id": "source_25",
           "function": "step_03_on_the_lane_and_ask_a_question_that_lands",
           "window": 25,
-          "source_line": 685,
+          "source_line": 702,
           "manual_checkpoint": null
         }
       ],
@@ -461,7 +465,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        719
+        736
       ],
       "offline": false,
       "live_verified": false,
@@ -477,7 +481,7 @@
           "id": "source_27",
           "function": "step_01_see_it_page_by_page",
           "window": 27,
-          "source_line": 719,
+          "source_line": 736,
           "manual_checkpoint": null
         }
       ],
@@ -501,7 +505,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
       "source_lines": [
-        370
+        387
       ],
       "offline": false,
       "live_verified": false,
@@ -519,7 +523,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 370,
+          "source_line": 387,
           "manual_checkpoint": null
         }
       ],
@@ -552,119 +556,119 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 334
+      "line": 351
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 366
+      "line": 383
     },
     {
       "window": 6,
       "label": "services/ingest/parser.py - the processor map and the online limit",
       "heading": "Parse: Document AI, chosen by residency",
       "anchor": "s3",
-      "line": 389
+      "line": 406
     },
     {
       "window": 7,
       "label": "services/ingest/parser.py - parse()",
       "heading": "Parse: Document AI, chosen by residency",
       "anchor": "s3",
-      "line": 408
+      "line": 425
     },
     {
       "window": 8,
       "label": "services/ingest/main.py - _parse()",
       "heading": "Parse: Document AI, chosen by residency",
       "anchor": "s3",
-      "line": 429
+      "line": 446
     },
     {
       "window": 10,
       "label": "expected, on a default make up",
       "heading": "Parse: Document AI, chosen by residency",
       "anchor": "s3",
-      "line": 451
+      "line": 468
     },
     {
       "window": 11,
       "label": "services/ingest/main.py - _pdf_pages()",
       "heading": "Count pages first: slices, and the 250-page line",
       "anchor": "s4",
-      "line": 470
+      "line": 487
     },
     {
       "window": 13,
       "label": "expected (trimmed)",
       "heading": "Count pages first: slices, and the 250-page line",
       "anchor": "s4",
-      "line": 496
+      "line": 513
     },
     {
       "window": 15,
       "label": "expected",
       "heading": "Count pages first: slices, and the 250-page line",
       "anchor": "s4",
-      "line": 515
+      "line": 532
     },
     {
       "window": 16,
       "label": "services/ingest/main.py - _chunk(), the section rule",
       "heading": "Chunk by section: the handbook becomes 283 clauses",
       "anchor": "s5",
-      "line": 529
+      "line": 546
     },
     {
       "window": 18,
       "label": "expected",
       "heading": "Chunk by section: the handbook becomes 283 clauses",
       "anchor": "s5",
-      "line": 568
+      "line": 585
     },
     {
       "window": 20,
       "label": "expected",
       "heading": "Chunk by section: the handbook becomes 283 clauses",
       "anchor": "s5",
-      "line": 603
+      "line": 620
     },
     {
       "window": 21,
       "label": "services/ingest/main.py - _windows(), and the window rule in _chunk()",
       "heading": "Chunk by window: an Act becomes page windows",
       "anchor": "s6",
-      "line": 616
+      "line": 633
     },
     {
       "window": 23,
       "label": "expected",
       "heading": "Chunk by window: an Act becomes page windows",
       "anchor": "s6",
-      "line": 661
+      "line": 678
     },
     {
       "window": 26,
       "label": "expected (your wording differs; the pages are the point)",
       "heading": "Chunk by window: an Act becomes page windows",
       "anchor": "s6",
-      "line": 689
+      "line": 706
     },
     {
       "window": 28,
       "label": "expected (your pages and characters differ; the shape is the point)",
       "heading": "Compare the boundaries: two parsers, one document",
       "anchor": "s7",
-      "line": 748
+      "line": 765
     },
     {
       "window": 29,
       "label": "shared/documind_corpus.py - the constants, and windows()",
       "heading": "One chunker in two places, and what parsing bills",
       "anchor": "s8",
-      "line": 767
+      "line": 784
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

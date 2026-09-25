@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.1_Contracts_WIX.html`, reviewed at blob `9be3b915fa81df25778e35f6eaa825f0b365ec21`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.1_Contracts_WIX.html`, reviewed at blob `e5c94e364ea499e92d2d8b7de138173c0407d9c5`. Learners read that page on the course site; this guide keeps its prose.
 
 Your DocuMind is deployed. The sidebar says Tenant: acme, the Documents page lists your documents with a chunk count each, and an answer in Chat cites a page. Each of those is a contract: an agreed shape of data that the ingest worker writes and every other part of the system trusts. This lesson starts with what ingestion is, names the four contracts, and then proves each one on your own lane - in the UI, in the function that enforces it, in a REST call you make, and in the Firestore row you read.
 
@@ -45,6 +45,12 @@ A courier hub's inward register. A parcel arrives at the hub (the upload). The c
 Step through the six stages below. Each stage lights up on the diagram and shows which of the four names is minted there, and the value it takes for the ACME handbook on your lane.
 
 Stages 3 and 6 are this lesson; stage 4 is lesson 3.2, stage 5 is 3.3, and the writing in stage 6 is 3.4. Nothing here is drawn from memory: every value is one you will read back from your own lane below.
+
+#### The services behind the stages
+
+Those six stages run on Google Cloud services, and the diagram names each one. The bucket announces every upload to a Pub/Sub topic. A push subscription hands the message to the ingest worker on Cloud Run, retries it when the worker fails, and after twelve failures parks it on a dead-letter topic for a person to read. Inside the worker the stages run in order: the claim in Firestore, the reading (Document AI or Gemini), the cut, the Cloud DLP scan, the embeddings from Vertex AI, and the write. Firestore stays the source of truth. The Vector Search index, the BigQuery table and, where a tenant allows it, the RAG Engine and Vertex AI Search copies are all built from its rows.
+
+Names are the kit's own: the topic, subscription and dead-letter topic from terraform/eventarc.tf, the index from vector.tf, the worker's steps from services/ingest/main.py. Lesson 3.4 follows the write itself, record by record.
 
 The code that does each stage is a few hundred lines and it changes. The names do not. Retrieval (Module 5), caching (Module 9), the agents (Module 10) and the evaluation gate (Module 7) all read these rows and trust these names. Learn the names first, and every later module is a reader of something you already understand.
 

@@ -40,14 +40,14 @@
     {
       "lesson": "3.1",
       "title": "Understand source, tenant, page and chunk contracts",
-      "source_sha": "9be3b915fa81df25778e35f6eaa825f0b365ec21",
+      "source_sha": "e5c94e364ea499e92d2d8b7de138173c0407d9c5",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.2",
       "title": "Parse documents and compare chunk boundaries",
-      "source_sha": "5b333c8a6d51ef5416793e5ae594068511fda01e",
+      "source_sha": "7a8866e2e4e1e112551ab9b1a56b0f8b7aef1160",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -61,7 +61,7 @@
     {
       "lesson": "3.4",
       "title": "Write, inspect and verify indexed records",
-      "source_sha": "919ad0b568337556ab3556373116e42e432c4488",
+      "source_sha": "0fed6e5f2f632604d917f822725869a9e2186f2e",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -96,7 +96,7 @@
     {
       "lesson": "5.1",
       "title": "Apply query embeddings and authorized filters",
-      "source_sha": "71dc43310c171099ca29431ddb48a29c6af8965e",
+      "source_sha": "9b8d6d3ec02de2b4eddf4de5937d886bc4dfdbb5",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -159,7 +159,7 @@
     {
       "lesson": "7.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "035b7ce9098bd5e839d3c9896e605aacda3edf63",
+      "source_sha": "959e0e1f1d75f19ba7e9de02e79ee90ed9312944",
       "source_kind": "main_html",
       "demos": 8
     },

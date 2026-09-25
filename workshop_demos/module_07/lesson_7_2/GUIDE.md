@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html`, reviewed at blob `035b7ce9098bd5e839d3c9896e605aacda3edf63`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html`, reviewed at blob `959e0e1f1d75f19ba7e9de02e79ee90ed9312944`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 7.1 made the golden set sound. This lesson runs the three instruments that use it, and keeps them apart on purpose. The offline gate checks the set on every push, with no credentials. The live gate sends every row to the deployed API, as a roster member and again as an outsider, and blocks a release on 9 thresholds and 15 required rows. The judge has Gemini read the lane's answers with the context they cite, and it never blocks anything. You will read CI's verdict on the kit you run, run the live gate and take its report apart, and run the judge beside it.
 
@@ -148,7 +148,7 @@ The stub's two misses read differently. jn-06 answered with one of its two figur
 
 The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate.
 
-With `CHAT_URL`, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in `judge.py`: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. `--no-vertex` skips the Evaluation service, and `--reuse` skips asking the API again, so this costs only the chat turns.
+With `CHAT_URL`, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in `judge.py`: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. `--no-vertex` skips the Evaluation service, and `--reuse` skips asking the API again, so this costs only the chat turns. `CHAT_URL` is the service's `documind-chat-NUMBER.REGION.run.app` address, not the `status.url` gcloud prints, which is usually its hashed `a.run.app` address: the judge mints its token for `CHAT_URL`, and the chat service accepts only a token minted for its own `SELF_URL`.
 
 Pairwise is the third mode. With `API_B`, the same questions also go to a candidate revision, and the judge says which of the two answers is better, row by row, with the live revision as the baseline. It needs a candidate with one setting changed, which is where lesson 7.3 begins.
 
