@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-931 files; 108 quoted by a lesson, 148 shown or named by one.
+932 files; 108 quoted by a lesson, 148 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -941,3 +941,4 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/tests/test_lesson31.py` | code | - | - |
 | `workshop_demos/tests/test_sessions.py` | code | - | - |
 | `workshop_demos/tests/test_steps.py` | code | - | - |
+| `workshop_demos/tests/test_update_kit.py` | code | - | - |

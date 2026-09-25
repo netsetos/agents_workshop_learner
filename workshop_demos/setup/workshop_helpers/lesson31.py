@@ -106,13 +106,41 @@ def poll_until(read, ready, seconds, interval, *, clock=time.monotonic, sleep=ti
         sleep(min(interval, remaining))
 
 
+def _cache_flags(config):
+    """Name the project and region for the API's Cloud Run calls.
+
+    Example: gcloud("run", "services", "describe", config.api_service, *_cache_flags(config), "--format=json")
+    """
+    return (f"--project={config.project}", f"--region={config.cloud_run_region}")
+
+
+def _settings_apart_from_cache(config, revision):
+    """Return what a revision runs apart from SEMANTIC_CACHE, and its SEMANTIC_CACHE value.
+
+    Equal settings mean the same image digest, account and resources, and every other environment row, literal
+    values and secret references alike: two such revisions differ only in the answer-cache switch.
+
+    Example: settings, cache = _settings_apart_from_cache(config, "documind-api-00042-abc")
+    """
+    document = json.loads(gcloud("run", "revisions", "describe", revision, *_cache_flags(config), "--format=json"))
+    spec = document.get("spec", {})
+    container = (spec.get("containers") or [{}])[0]
+    rows = container.get("env", [])
+    settings = {"image": container.get("image"), "digest": document.get("status", {}).get("imageDigest"),
+                "account": spec.get("serviceAccountName"), "resources": container.get("resources"),
+                "env": sorted(json.dumps(row, sort_keys=True) for row in rows if row.get("name") != "SEMANTIC_CACHE")}
+    return settings, next((row.get("value") for row in rows if row.get("name") == "SEMANTIC_CACHE"), None)
+
+
 def prepare_cache(session, disable=True):
-    """Save the cache setting before changing it; cleanup can recover a failed update.
-    
-    This creates a Cloud Run revision only when caching is enabled. It affects
-    all tenants using this API. Require a single latest revision serving traffic
-    so deployment cannot silently target an inactive revision or split traffic.
-    
+    """Serve the API from a copy of its serving revision with SEMANTIC_CACHE=off; cleanup routes traffic back.
+
+    It affects all tenants using this API. The kit routes traffic to a named revision after every deploy
+    (F44), and so does this: the copy is created with --no-traffic, compared with the serving revision, and
+    only then given 100% of traffic by name. Cloud Run builds the copy from the service configuration, so the
+    configuration must run what the serving revision runs apart from the cache switch - never a candidate's
+    settings. A copy an earlier lesson left is reused. Both revision names are saved before traffic moves.
+
     Example: prepare_cache(session, disable=True) saves the previous setting before an update
     """
     config = session.config
@@ -121,26 +149,44 @@ def prepare_cache(session, disable=True):
     if value != "on":
         return
     require(disable, "SEMANTIC_CACHE=on. Set DISABLE_ANSWER_CACHE=True in prepare.py to temporarily disable it, or disable it yourself before this lesson.")
-    flags = (f"--project={config.project}", f"--region={config.cloud_run_region}")
-    service = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json"))
-    traffic = [row for row in service.get("spec", {}).get("traffic", []) if row.get("percent", 0) > 0]
-    require(len(traffic) == 1 and traffic[0].get("latestRevision") is True
-            and service.get("status", {}).get("latestReadyRevisionName") == serving.revision,
-            "Cache preparation needs 100% traffic to the latest ready revision. Inspect Cloud Run traffic before changing this service.")
+    flags = _cache_flags(config)
+    status = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json")).get("status", {})
+    latest = status.get("latestCreatedRevisionName", "")
+    wanted, _ = _settings_apart_from_cache(config, serving.revision)
+    template, template_cache = _settings_apart_from_cache(config, latest)
+    require(template == wanted,
+            f"The service configuration ({latest}) runs different settings from the serving revision ({serving.revision}), "
+            "probably a candidate from another lesson. A cache-off copy would carry them: inspect Cloud Run before this lesson.")
     saved = session.state.setdefault("lesson31_cache", {"previous": value, "restore_required": True})
     require(saved["previous"] == value, "Cache setting changed outside this session; inspect before overwriting it.")
-    saved["restore_required"] = True
+    saved.update(restore_required=True, revision_before=serving.revision)
     session.save()  # Intent is durable even if the deployment times out.
     print("Temporarily disabling the API answer cache for all tenants; cleanup restores it.")
-    gcloud("run", "services", "update", config.api_service, *flags,
-           "--update-env-vars=SEMANTIC_CACHE=off", "--quiet", timeout=600)
-    require(read_serving(config, config.api_service).environment.get("SEMANTIC_CACHE") == "off",
+    target = latest
+    if latest == serving.revision or template_cache != "off" or latest != status.get("latestReadyRevisionName"):
+        gcloud("run", "services", "update", config.api_service, *flags,
+               "--update-env-vars=SEMANTIC_CACHE=off", "--no-traffic", "--quiet", timeout=600)
+        status = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json")).get("status", {})
+        target = status.get("latestCreatedRevisionName", "")
+        copy, copy_cache = _settings_apart_from_cache(config, target)
+        require(target != serving.revision and target == status.get("latestReadyRevisionName")
+                and copy == wanted and copy_cache == "off",
+                f"The new revision {target} is not a ready cache-off copy of {serving.revision}, so traffic was not moved. Inspect Cloud Run, then run cleanup.")
+    saved["revision_after"] = target
+    session.save()
+    gcloud("run", "services", "update-traffic", config.api_service, *flags, f"--to-revisions={target}=100", "--quiet", timeout=600)
+    now = read_serving(config, config.api_service)
+    require(now.revision == target and now.environment.get("SEMANTIC_CACHE") == "off",
             "Cache update did not reach the serving revision. Run cleanup and inspect Cloud Run.")
 
 
 def restore_cache(session):
-    """Restore only the saved cache variable, preserving other service settings.
-    
+    """Route traffic back, by name, to the revision that served before preparation.
+
+    Nothing is rebuilt: the original revision serves again with every setting it had. If traffic moved to any
+    revision other than the cache-off copy in the meantime, restoring would undo someone else's change, so
+    this refuses and names the revision to restore.
+
     Example: restore_cache(session) restores the value saved during preparation
     """
     saved = session.state.get("lesson31_cache") or {}
@@ -148,18 +194,16 @@ def restore_cache(session):
         return
     config = session.config
     serving = read_serving(config, config.api_service)
-    current = serving.environment.get("SEMANTIC_CACHE")
-    require(current in {"off", saved["previous"]}, "Cache setting changed outside this lesson; inspect it before restoration.")
-    if current != saved["previous"]:
-        # Do not shift traffic on behalf of a lesson after an unrelated deployment.
-        flags = (f"--project={config.project}", f"--region={config.cloud_run_region}")
-        service = json.loads(gcloud("run", "services", "describe", config.api_service, *flags, "--format=json"))
-        traffic = [r for r in service.get("spec", {}).get("traffic", []) if r.get("percent", 0) > 0]
-        require(len(traffic) == 1 and traffic[0].get("latestRevision") is True,
-                "Traffic changed since preparation. Restore SEMANTIC_CACHE manually and rerun cleanup.")
-        gcloud("run", "services", "update", config.api_service, *flags,
-               f"--update-env-vars=SEMANTIC_CACHE={saved['previous']}", "--quiet", timeout=600)
-        require(read_serving(config, config.api_service).environment.get("SEMANTIC_CACHE") == saved["previous"],
+    if serving.environment.get("SEMANTIC_CACHE") != saved["previous"]:
+        before = saved.get("revision_before")
+        require(before and serving.revision == saved.get("revision_after"),
+                f"Traffic changed since preparation ({serving.revision} is serving). Route it to "
+                f"{before or 'the revision that served before'} (SEMANTIC_CACHE={saved['previous']}) yourself, then rerun cleanup.")
+        print(f"Restoring the API answer cache: 100% of traffic back to {before}.")
+        gcloud("run", "services", "update-traffic", config.api_service, *_cache_flags(config),
+               f"--to-revisions={before}=100", "--quiet", timeout=600)
+        now = read_serving(config, config.api_service)
+        require(now.revision == before and now.environment.get("SEMANTIC_CACHE") == saved["previous"],
                 "Cache restoration is not serving yet; inspect Cloud Run and rerun cleanup.")
     saved["restore_required"] = False
     session.save()

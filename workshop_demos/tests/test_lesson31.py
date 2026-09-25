@@ -132,38 +132,131 @@ class IOTests(unittest.TestCase):
             self.assertIn(f'jsonPayload.{field}="{value}"', query)
 
 
+class FakeCloudRun:
+    """Revisions, the service configuration and traffic, answering the gcloud calls the cache helpers make.
+
+    Traffic is pinned to a revision by name, as the kit leaves it after every deploy (F44).
+    """
+
+    def __init__(self):
+        self.revisions, self.calls = {}, []
+        self.copy_digest = self.fail_update = None
+        self.serving = self.latest = self.add("documind-api-r1", "on")
+
+    def add(self, name, cache, **extra_env):
+        env = [{"name": "RETRIEVAL_BACKEND", "value": "vector"}, {"name": "SEMANTIC_CACHE", "value": cache}]
+        env += [{"name": key, "value": value} for key, value in extra_env.items()]
+        self.revisions[name] = {"spec": {"serviceAccountName": "documind-api-sa@p.iam.gserviceaccount.com",
+                                         "containers": [{"image": "asia-south1-docker.pkg.dev/p/documind/api:abc",
+                                                         "resources": {"limits": {"cpu": "2", "memory": "1Gi"}}, "env": env}]},
+                                "status": {"imageDigest": "asia-south1-docker.pkg.dev/p/documind/api@sha256:aaa"}}
+        return name
+
+    def gcloud(self, *args, timeout=90):
+        verb = " ".join(args[:3])
+        self.calls.append(verb)
+        if verb == "run services describe":
+            return json.dumps({"status": {"latestCreatedRevisionName": self.latest, "latestReadyRevisionName": self.latest}})
+        if verb == "run revisions describe":
+            return json.dumps(self.revisions[args[3]])
+        if verb == "run services update":
+            if self.fail_update:
+                raise self.fail_update
+            assert "--no-traffic" in args and "--update-env-vars=SEMANTIC_CACHE=off" in args, args
+            copy = deepcopy(self.revisions[self.latest])          # Cloud Run builds from the configuration
+            copy["spec"]["containers"][0]["env"][1]["value"] = "off"
+            if self.copy_digest:
+                copy["status"]["imageDigest"] = self.copy_digest
+            self.latest = f"documind-api-r{len(self.revisions) + 1}"
+            self.revisions[self.latest] = copy
+            return ""
+        if verb == "run services update-traffic":
+            target, percent = next(a for a in args if a.startswith("--to-revisions=")).split("=", 1)[1].split("=")
+            assert percent == "100", args
+            self.serving = target
+            return ""
+        raise AssertionError(args)
+
+    def read_serving(self, config, service):
+        env = {row["name"]: row["value"] for row in self.revisions[self.serving]["spec"]["containers"][0]["env"]}
+        return SimpleNamespace(revision=self.serving, environment=env)
+
+    def patched(self):
+        return patch.multiple("workshop_helpers.lesson31", gcloud=self.gcloud, read_serving=self.read_serving)
+
+
 class PreparationTests(unittest.TestCase):
     def setUp(self):
         self.session = SimpleNamespace(config=load_config(), state={}, save=Mock())
-        self.on = SimpleNamespace(environment={"SEMANTIC_CACHE": "on"}, revision="documind-api-r1")
-        self.off = SimpleNamespace(environment={"SEMANTIC_CACHE": "off"}, revision="documind-api-r2")
-        self.service = json.dumps({"spec": {"traffic": [{"percent": 100, "latestRevision": True}]},
-                                   "status": {"latestReadyRevisionName": "documind-api-r1"}})
+        self.cloud = FakeCloudRun()
 
     def test_no_cache_update_when_already_off_or_opted_out(self):
-        with patch("workshop_helpers.lesson31.read_serving", return_value=self.off), patch("workshop_helpers.lesson31.gcloud") as command:
+        self.cloud.revisions["documind-api-r1"]["spec"]["containers"][0]["env"][1]["value"] = "off"
+        with self.cloud.patched():
             prepare_cache(self.session)
-            command.assert_not_called()
-        with patch("workshop_helpers.lesson31.read_serving", return_value=self.on):
-            with self.assertRaisesRegex(RuntimeError, "DISABLE_ANSWER_CACHE"):
-                prepare_cache(self.session, disable=False)
+        self.assertEqual(self.cloud.calls, [])
+        self.cloud.revisions["documind-api-r1"]["spec"]["containers"][0]["env"][1]["value"] = "on"
+        with self.cloud.patched(), self.assertRaisesRegex(RuntimeError, "DISABLE_ANSWER_CACHE"):
+            prepare_cache(self.session, disable=False)
 
-    def test_failed_deployment_retains_original_then_cleanup_recovers(self):
-        with patch("workshop_helpers.lesson31.read_serving", return_value=self.on), patch("workshop_helpers.lesson31.gcloud", side_effect=[self.service, TimeoutError("deployment pending")]):
-            with self.assertRaises(TimeoutError):
-                prepare_cache(self.session)
-        self.assertEqual(self.session.state["lesson31_cache"], {"previous": "on", "restore_required": True})
-        with patch("workshop_helpers.lesson31.read_serving", side_effect=[self.off, self.on]), patch("workshop_helpers.lesson31.gcloud", side_effect=[self.service, ""]):
+    def test_traffic_pinned_by_name_moves_to_a_cache_off_copy_and_back(self):
+        with self.cloud.patched():
+            prepare_cache(self.session)
+            self.assertEqual(self.cloud.serving, "documind-api-r2")
+            self.assertEqual(self.cloud.read_serving(None, None).environment["SEMANTIC_CACHE"], "off")
+            self.assertEqual(self.session.state["lesson31_cache"], {"previous": "on", "restore_required": True,
+                                                                    "revision_before": "documind-api-r1",
+                                                                    "revision_after": "documind-api-r2"})
             restore_cache(self.session)
+        self.assertEqual(self.cloud.serving, "documind-api-r1")
+        self.assertFalse(self.session.state["lesson31_cache"]["restore_required"])
+        self.assertEqual(self.cloud.calls.count("run services update"), 1)       # restoring rebuilds nothing
+
+    def test_an_earlier_lessons_copy_is_reused(self):
+        self.cloud.latest = self.cloud.add("documind-api-r2", "off")
+        with self.cloud.patched():
+            prepare_cache(self.session)
+        self.assertNotIn("run services update", self.cloud.calls)
+        self.assertEqual(self.cloud.serving, "documind-api-r2")
+
+    def test_a_candidates_configuration_refuses_before_any_change(self):
+        self.cloud.latest = self.cloud.add("documind-api-r3", "on", RETRIEVAL_MODE="hybrid")
+        with self.cloud.patched(), self.assertRaisesRegex(RuntimeError, "candidate"):
+            prepare_cache(self.session)
+        self.assertEqual(self.cloud.serving, "documind-api-r1")
+        self.assertFalse({"run services update", "run services update-traffic"} & set(self.cloud.calls))
+        self.assertFalse(self.session.state)
+
+    def test_a_copy_on_another_image_never_gets_traffic(self):
+        self.cloud.copy_digest = "asia-south1-docker.pkg.dev/p/documind/api@sha256:bbb"   # the tag moved since
+        with self.cloud.patched():
+            with self.assertRaisesRegex(RuntimeError, "traffic was not moved"):
+                prepare_cache(self.session)
+            self.assertNotIn("run services update-traffic", self.cloud.calls)
+            restore_cache(self.session)                     # nothing moved, so nothing to route back
+        self.assertEqual(self.cloud.serving, "documind-api-r1")
         self.assertFalse(self.session.state["lesson31_cache"]["restore_required"])
 
-    def test_pinned_traffic_refuses_mutation(self):
-        service = json.dumps({"spec": {"traffic": [{"percent": 100, "revisionName": "old"}]}})
-        with patch("workshop_helpers.lesson31.read_serving", return_value=self.on), patch("workshop_helpers.lesson31.gcloud", return_value=service) as command:
-            with self.assertRaisesRegex(RuntimeError, "traffic"):
+    def test_failed_deployment_retains_original_then_cleanup_recovers(self):
+        self.cloud.fail_update = TimeoutError("deployment pending")
+        with self.cloud.patched():
+            with self.assertRaises(TimeoutError):
                 prepare_cache(self.session)
-        self.assertEqual(command.call_count, 1)
-        self.assertFalse(self.session.state)
+            self.assertEqual(self.session.state["lesson31_cache"],
+                             {"previous": "on", "restore_required": True, "revision_before": "documind-api-r1"})
+            restore_cache(self.session)
+        self.assertFalse(self.session.state["lesson31_cache"]["restore_required"])
+        self.assertNotIn("run services update-traffic", self.cloud.calls)
+
+    def test_restore_refuses_when_someone_else_moved_traffic(self):
+        with self.cloud.patched():
+            prepare_cache(self.session)
+            self.cloud.serving = self.cloud.add("documind-api-r9", "off", RETRIEVAL_MODE="hybrid")
+            calls = len(self.cloud.calls)
+            with self.assertRaisesRegex(RuntimeError, "documind-api-r1"):
+                restore_cache(self.session)
+        self.assertNotIn("run services update-traffic", self.cloud.calls[calls:])
+        self.assertTrue(self.session.state["lesson31_cache"]["restore_required"])
 
     def test_finish_attempts_backend_even_when_cache_restore_fails(self):
         finish = load_demo("setup/finish.py")

@@ -34,8 +34,9 @@ def main():
     upstream = git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}")
     if not upstream.startswith("origin/"):
         raise RuntimeError("This updater expects the current branch to track origin.")
-    # Published demos are tracked kit files too; refuse their local edits as well.
-    dirty = git("status", "--porcelain", "--", ".")
+    # Published demos are tracked kit files too; refuse their local edits as well. Untracked files (the IDE's
+    # .idea/, a learner's notes) cannot be lost: git pull refuses before it would overwrite one.
+    dirty = git("status", "--porcelain", "--untracked-files=no", "--", ".")
     if dirty:
         raise RuntimeError("The kit has local changes. Commit or preserve them yourself before updating.\n" + dirty)
     print("Updating", branch, "from", upstream)
