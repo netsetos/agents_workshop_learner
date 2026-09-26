@@ -114,21 +114,21 @@ Expected shape, not a promised result:
 
 ```text
 dense  first five (anchor at rank 1 of 20):
-   p1-0       inv_2026_0412.md                     <- anchor
-   p36-0      cgst_act_2017.pdf
+   w0         inv_2026_0412.md                     <- anchor
+   p23-0      payment_of_bonus_act_1965.pdf
    ...
 
 sparse first five (anchor at rank None of 20):
    p28-1      industrial_relations_code_2020.pdf
-   p32-0      cgst_act_2017.pdf
+   p7-0       payment_of_gratuity_act_1972.pdf
    ...
 
-hybrid first five (anchor at rank 2 of 20):
-   p36-0      cgst_act_2017.pdf
-   p1-0       inv_2026_0412.md                     <- anchor
+hybrid first five (anchor at rank 1 of 20):
+   w0         inv_2026_0412.md                     <- anchor
+   p23-0      payment_of_bonus_act_1965.pdf
    ...
 
-overlap of 20: dense/hybrid 18 | dense/sparse 2
+overlap of 20: dense/hybrid 20 | dense/sparse 0
 saved /tmp/legs52.json for step 5
 ```
 
@@ -145,12 +145,14 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0: the lists ar
 Expected shape, not a promised result:
 
 ```text
+the legs differ: True | shared of 20: 0
 by hand, alpha 0.7:
-   p36-0 cgst_act_2017.pdf               0.01594   dense rank  2  sparse rank  4
-   p1-0 inv_2026_0412.md                 0.01148   dense rank  1  sparse rank  -
+   w0 inv_2026_0412.md                  0.01148   dense rank  1  sparse rank  -
+   p23-0 payment_of_bonus_act_1         0.01129   dense rank  2  sparse rank  -
    ...
-the index's fused first five: ['p36-0 cgst_act_2017.pdf', 'p1-0 inv_2026_0412.md', ...]
+the index's fused first five: ['w0 inv_2026_0412.md', 'p23-0 payment_of_bonus_act_1', ...]
 heads agree on 5 of 5 | first is the same: True
+all twenty in the index's order: True
 alpha 1.0 gives the dense list back: True
 alpha 0.0 gives the sparse list back: True
 the bound: dense #1 0.01148, dense #20 0.00875, sparse #1 alone 0.00492
@@ -268,6 +270,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `b281bd202e28501bb0b9d45ea85ed4b27f37555d`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `8a41203918c4a906a57fcdc73c120d65f08f183b`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

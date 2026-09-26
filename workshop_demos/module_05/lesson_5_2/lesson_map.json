@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_5.2_Hybrid_WIX.html",
-  "source_sha": "b281bd202e28501bb0b9d45ea85ed4b27f37555d",
+  "source_sha": "8a41203918c4a906a57fcdc73c120d65f08f183b",
   "shared_setup_windows": [
     1
   ],
@@ -290,7 +290,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        564
+        569
       ],
       "offline": false,
       "live_verified": false,
@@ -301,12 +301,12 @@
           "subheading": "Do it: dense, alpha 0, alpha 0.7",
           "purpose": "Do it: dense, alpha 0, alpha 0.7",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one paid embedding of a few dozen characters)",
-          "expected": "dense  first five (anchor at rank 1 of 20):\n   p1-0       inv_2026_0412.md                     <- anchor\n   p36-0      cgst_act_2017.pdf\n   ...\n\nsparse first five (anchor at rank None of 20):\n   p28-1      industrial_relations_code_2020.pdf\n   p32-0      cgst_act_2017.pdf\n   ...\n\nhybrid first five (anchor at rank 2 of 20):\n   p36-0      cgst_act_2017.pdf\n   p1-0       inv_2026_0412.md                     <- anchor\n   ...\n\noverlap of 20: dense/hybrid 18 | dense/sparse 2\nsaved /tmp/legs52.json for step 5",
+          "expected": "dense  first five (anchor at rank 1 of 20):\n   w0         inv_2026_0412.md                     <- anchor\n   p23-0      payment_of_bonus_act_1965.pdf\n   ...\n\nsparse first five (anchor at rank None of 20):\n   p28-1      industrial_relations_code_2020.pdf\n   p7-0       payment_of_gratuity_act_1972.pdf\n   ...\n\nhybrid first five (anchor at rank 1 of 20):\n   w0         inv_2026_0412.md                     <- anchor\n   p23-0      payment_of_bonus_act_1965.pdf\n   ...\n\noverlap of 20: dense/hybrid 20 | dense/sparse 0\nsaved /tmp/legs52.json for step 5",
           "adaptations": [],
           "id": "source_16",
           "function": "step_01_dense_alpha_0_alpha_0_7",
           "window": 16,
-          "source_line": 564,
+          "source_line": 569,
           "manual_checkpoint": null
         }
       ],
@@ -332,7 +332,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        649
+        654
       ],
       "offline": true,
       "live_verified": false,
@@ -343,12 +343,12 @@
           "subheading": "Do it: fuse the saved lists, compare with the index's fused list",
           "purpose": "Do it: fuse the saved lists, compare with the index's fused list",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: the lists are on disk)",
-          "expected": "by hand, alpha 0.7:\n   p36-0 cgst_act_2017.pdf               0.01594   dense rank  2  sparse rank  4\n   p1-0 inv_2026_0412.md                 0.01148   dense rank  1  sparse rank  -\n   ...\nthe index's fused first five: ['p36-0 cgst_act_2017.pdf', 'p1-0 inv_2026_0412.md', ...]\nheads agree on 5 of 5 | first is the same: True\nalpha 1.0 gives the dense list back: True\nalpha 0.0 gives the sparse list back: True\nthe bound: dense #1 0.01148, dense #20 0.00875, sparse #1 alone 0.00492",
+          "expected": "the legs differ: True | shared of 20: 0\nby hand, alpha 0.7:\n   w0 inv_2026_0412.md                  0.01148   dense rank  1  sparse rank  -\n   p23-0 payment_of_bonus_act_1         0.01129   dense rank  2  sparse rank  -\n   ...\nthe index's fused first five: ['w0 inv_2026_0412.md', 'p23-0 payment_of_bonus_act_1', ...]\nheads agree on 5 of 5 | first is the same: True\nall twenty in the index's order: True\nalpha 1.0 gives the dense list back: True\nalpha 0.0 gives the sparse list back: True\nthe bound: dense #1 0.01148, dense #20 0.00875, sparse #1 alone 0.00492",
           "adaptations": [],
           "id": "source_20",
           "function": "step_01_fuse_the_saved_lists_compare_with_the_inde",
           "window": 20,
-          "source_line": 649,
+          "source_line": 654,
           "manual_checkpoint": null
         }
       ],
@@ -374,7 +374,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        736
+        745
       ],
       "offline": false,
       "live_verified": false,
@@ -390,7 +390,7 @@
           "id": "source_26",
           "function": "step_01_a_wiring_check_then_acme_s_rows_with_a_led",
           "window": 26,
-          "source_line": 736,
+          "source_line": 745,
           "manual_checkpoint": null
         }
       ],
@@ -418,9 +418,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        794,
-        805,
-        819
+        803,
+        814,
+        828
       ],
       "offline": false,
       "live_verified": false,
@@ -436,7 +436,7 @@
           "id": "source_31",
           "function": "step_01_hybrid_on_a_candidate_the_same_two_questio",
           "window": 31,
-          "source_line": 794,
+          "source_line": 803,
           "manual_checkpoint": null
         },
         {
@@ -449,7 +449,7 @@
           "id": "source_33",
           "function": "step_02_hybrid_on_a_candidate_the_same_two_questio",
           "window": 33,
-          "source_line": 805,
+          "source_line": 814,
           "manual_checkpoint": null
         },
         {
@@ -462,7 +462,7 @@
           "id": "source_35",
           "function": "step_03_hybrid_on_a_candidate_the_same_two_questio",
           "window": 35,
-          "source_line": 819,
+          "source_line": 828,
           "manual_checkpoint": null
         }
       ],
@@ -488,7 +488,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_2/GUIDE.md",
       "source_lines": [
-        857
+        866
       ],
       "offline": false,
       "live_verified": false,
@@ -504,7 +504,7 @@
           "id": "source_38",
           "function": "step_01_where_hybrid_cannot_go",
           "window": 38,
-          "source_line": 857,
+          "source_line": 866,
           "manual_checkpoint": null
         }
       ],
@@ -643,133 +643,133 @@
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the two branches, alpha 0.7 under hybrid mode",
       "heading": "Three ways through the index: dense, sparse only, fused",
       "anchor": "s4",
-      "line": 540
+      "line": 545
     },
     {
       "window": 17,
       "label": "expected (your ids and orders differ; the two anchor ranks and the two overlaps are the point)",
       "heading": "Three ways through the index: dense, sparse only, fused",
       "anchor": "s4",
-      "line": 601
+      "line": 606
     },
     {
       "window": 18,
       "label": "services/rag-api/hybrid.py - rrf_fuse(): the rule",
       "heading": "RRF by hand: the kit's rule reproduces the server's order",
       "anchor": "s5",
-      "line": 629
+      "line": 634
     },
     {
       "window": 19,
       "label": "evals/ablate.py - rrf(): the same rule, in the harness",
       "heading": "RRF by hand: the kit's rule reproduces the server's order",
       "anchor": "s5",
-      "line": 638
+      "line": 643
     },
     {
       "window": 21,
-      "label": "expected (your ids differ; the three True lines and the bound are the point)",
+      "label": "expected (your ids differ; the legs differing, the True lines and the bound are the point)",
       "heading": "RRF by hand: the kit's rule reproduces the server's order",
       "anchor": "s5",
-      "line": 667
+      "line": 674
     },
     {
       "window": 22,
       "label": "Makefile - the ablate target",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 688
+      "line": 697
     },
     {
       "window": 23,
       "label": "evals/ablate.py - arms(): one knob each",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 696
+      "line": 705
     },
     {
       "window": 24,
       "label": "evals/ablate.py - Lane.hybrid(): BM25 ids fused with the Firestore rung's dense ids",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 707
+      "line": 716
     },
     {
       "window": 25,
       "label": "evals/ablate.py - hay(), recall_at(), mrr(), p95(): how an arm is scored",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 714
+      "line": 723
     },
     {
       "window": 27,
       "label": "expected (your numbers are yours; the column order, the miss lines and the reading order are fixed)",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 742
+      "line": 751
     },
     {
       "window": 28,
       "label": "evals/ablate.py - the reading order the harness prints",
       "heading": "The ablation: one knob per arm, no model in the loop",
       "anchor": "s6",
-      "line": 757
+      "line": 766
     },
     {
       "window": 29,
       "label": "services/rag-api/config.py - check_retrieval_modes(): the two refusals",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
-      "line": 773
+      "line": 782
     },
     {
       "window": 30,
       "label": "services/rag-api/main.py - choose_for(): a managed pin is ignored under hybrid, with a line",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
-      "line": 783
+      "line": 792
     },
     {
       "window": 32,
       "label": "expected",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
-      "line": 802
+      "line": 811
     },
     {
       "window": 34,
       "label": "expected (your ids and milliseconds differ; the citations agreeing or not is the measurement)",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
-      "line": 812
+      "line": 821
     },
     {
       "window": 36,
       "label": "expected",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
-      "line": 825
+      "line": 834
     },
     {
       "window": 37,
       "label": "services/rag-api/retriever.py - the chaos rung: hybrid degrades to the dense Firestore rung, logged",
       "heading": "What hybrid costs, where it cannot go, and what the harness does not measure",
       "anchor": "s8",
-      "line": 847
+      "line": 856
     },
     {
       "window": 39,
       "label": "expected",
       "heading": "What hybrid costs, where it cannot go, and what the harness does not measure",
       "anchor": "s8",
-      "line": 872
+      "line": 881
     },
     {
       "window": 40,
       "label": "services/rag-api/main.py and terraform/sql/tenant_daily.sql - the mode on every usage row, and the view that groups by it",
       "heading": "What hybrid costs, where it cannot go, and what the harness does not measure",
       "anchor": "s8",
-      "line": 879
+      "line": 888
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

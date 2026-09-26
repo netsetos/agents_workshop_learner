@@ -35,12 +35,14 @@ def step_01_fuse_the_saved_lists_compare_with_the_inde(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: by hand, alpha 0.7:
-       p36-0 cgst_act_2017.pdf               0.01594   dense rank  2  sparse rank  4
-       p1-0 inv_2026_0412.md                 0.01148   dense rank  1  sparse rank  -
+    Observe: the legs differ: True | shared of 20: 0
+    by hand, alpha 0.7:
+       w0 inv_2026_0412.md                  0.01148   dense rank  1  sparse rank  -
+       p23-0 payment_of_bonus_act_1         0.01129   dense rank  2  sparse rank  -
        ...
-    the index's fused first five: ['p36-0 cgst_act_2017.pdf', 'p1-0 inv_2026_0412.md', ...]
+    the index's fused first five: ['w0 inv_2026_0412.md', 'p23-0 payment_of_bonus_act_1', ...]
     heads agree on 5 of 5 | first is the same: True
+    all twenty in the index's order: True
     alpha 1.0 gives the dense list back: True
     alpha 0.0 gives the sparse list back: True
     the bound: dense #1 0.01148, dense #20 0.00875, sparse #1 alone 0.00492
@@ -50,6 +52,7 @@ def step_01_fuse_the_saved_lists_compare_with_the_inde(session):
     from hybrid import rrf_fuse
     d = json.load(open("/tmp/legs52.json"))
     name = lambda cid: f"{d['label'][cid][0]} {d['label'][cid][1][:22]}"
+    print("the legs differ:", d["dense"] != d["sparse"], "| shared of 20:", len(set(d["dense"]) & set(d["sparse"])))
     fused = rrf_fuse(d["dense"], d["sparse"], alpha=0.7)             # the kit's rule on the two lists you fetched
     print("by hand, alpha 0.7:")
     for cid, score in fused[:5]:
@@ -57,6 +60,7 @@ def step_01_fuse_the_saved_lists_compare_with_the_inde(session):
     hand = [cid for cid, _ in fused][:5]
     print("the index's fused first five:", [name(c) for c in d["hybrid"][:5]])
     print("heads agree on", len(set(hand) & set(d["hybrid"][:5])), "of 5 | first is the same:", hand[0] == d["hybrid"][0])
+    print("all twenty in the index's order:", [c for c, _ in fused][:20] == d["hybrid"])
     print("alpha 1.0 gives the dense list back:", [c for c, _ in rrf_fuse(d["dense"], d["sparse"], alpha=1.0)][:20] == d["dense"])
     print("alpha 0.0 gives the sparse list back:", [c for c, _ in rrf_fuse(d["dense"], d["sparse"], alpha=0.0)][:20] == d["sparse"])
     print(f"the bound: dense #1 {0.7 / 61:.5f}, dense #20 {0.7 / 80:.5f}, sparse #1 alone {0.3 / 61:.5f}")

@@ -29,11 +29,16 @@ def hybrid_find_neighbors(index_endpoint, deployed_index_id: str, dense_vec: lis
 
     `restricts`: the Namespace list the dense path sends - the tenant, the ledger's `current`,
     and the caller's filters. The tenant restrict is always inserted exactly once.
+
+    alpha 0 is asked as a sparse-only query (26 September 2026): 0.0 is the wire format's empty value, so
+    rrf_ranking_alpha=0.0 reaches the index as no alpha at all and the answer came back in the dense order.
     """
     from google.cloud.aiplatform.matching_engine.matching_engine_index_endpoint import HybridQuery, Namespace
     vals, dims = sparse_encode(query_text)
     q = HybridQuery(dense_embedding=dense_vec, sparse_embedding_values=vals,
                     sparse_embedding_dimensions=dims, rrf_ranking_alpha=alpha)
+    if alpha <= 0:
+        q = HybridQuery(sparse_embedding_values=vals, sparse_embedding_dimensions=dims)
     filters = [Namespace(name="tenant_id", allow_tokens=[tenant_id])]
     filters += [r for r in (restricts or []) if getattr(r, "name", None) != "tenant_id"]
     resp = index_endpoint.find_neighbors(

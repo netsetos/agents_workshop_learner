@@ -36,21 +36,21 @@ def step_01_dense_alpha_0_alpha_0_7(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: dense  first five (anchor at rank 1 of 20):
-       p1-0       inv_2026_0412.md                     <- anchor
-       p36-0      cgst_act_2017.pdf
+       w0         inv_2026_0412.md                     <- anchor
+       p23-0      payment_of_bonus_act_1965.pdf
        ...
 
     sparse first five (anchor at rank None of 20):
        p28-1      industrial_relations_code_2020.pdf
-       p32-0      cgst_act_2017.pdf
+       p7-0       payment_of_gratuity_act_1972.pdf
        ...
 
-    hybrid first five (anchor at rank 2 of 20):
-       p36-0      cgst_act_2017.pdf
-       p1-0       inv_2026_0412.md                     <- anchor
+    hybrid first five (anchor at rank 1 of 20):
+       w0         inv_2026_0412.md                     <- anchor
+       p23-0      payment_of_bonus_act_1965.pdf
        ...
 
-    overlap of 20: dense/hybrid 18 | dense/sparse 2
+    overlap of 20: dense/hybrid 20 | dense/sparse 0
     saved /tmp/legs52.json for step 5
     """
     import os, sys, json, warnings
