@@ -5,16 +5,17 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html",
-  "source_sha": "c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3",
+  "source_sha": "d5a42e1f21a372eeb47911426f376120ba20c027",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 27,
+  "source_window_count": 33,
   "persist_variables": [
     "API",
     "API_URL",
     "CAND",
     "ENDPOINT",
+    "ENDPOINT_V3",
     "HOME",
     "ME",
     "NUMBER",
@@ -122,6 +123,22 @@
     },
     {
       "level": 3,
+      "heading": "Optional: the v3 candidate, and the gate on it"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "Optional: one question, two models"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
       "heading": "Why it works this way, what it costs, and what the kit does not do yet"
     },
     {
@@ -152,7 +169,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        381
+        383
       ],
       "offline": false,
       "live_verified": false,
@@ -170,7 +187,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 381,
+          "source_line": 383,
           "manual_checkpoint": null
         }
       ],
@@ -196,7 +213,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        434
+        436
       ],
       "offline": true,
       "live_verified": false,
@@ -212,7 +229,7 @@
           "id": "source_9",
           "function": "step_01_what_the_kit_does_with_a_tuned_candidate",
           "window": 9,
-          "source_line": 434,
+          "source_line": 436,
           "manual_checkpoint": null
         }
       ],
@@ -239,8 +256,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        502,
-        522
+        504,
+        524
       ],
       "offline": false,
       "live_verified": false,
@@ -256,7 +273,7 @@
           "id": "source_12",
           "function": "step_01_the_candidate",
           "window": 12,
-          "source_line": 502,
+          "source_line": 504,
           "manual_checkpoint": null
         },
         {
@@ -269,7 +286,7 @@
           "id": "source_14",
           "function": "step_02_the_audit",
           "window": 14,
-          "source_line": 522,
+          "source_line": 524,
           "manual_checkpoint": null
         }
       ],
@@ -296,8 +313,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        598,
-        638
+        600,
+        640
       ],
       "offline": true,
       "live_verified": false,
@@ -315,7 +332,7 @@
           "id": "source_16",
           "function": "step_01_the_gate_on_both_revisions",
           "window": 16,
-          "source_line": 598,
+          "source_line": 600,
           "manual_checkpoint": null
         },
         {
@@ -328,7 +345,7 @@
           "id": "source_18",
           "function": "step_02_the_gate_on_both_revisions",
           "window": 18,
-          "source_line": 638,
+          "source_line": 640,
           "manual_checkpoint": null
         }
       ],
@@ -355,8 +372,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        695,
-        726
+        697,
+        728
       ],
       "offline": false,
       "live_verified": false,
@@ -372,7 +389,7 @@
           "id": "source_21",
           "function": "step_01_the_verdict",
           "window": 21,
-          "source_line": 695,
+          "source_line": 697,
           "manual_checkpoint": null
         },
         {
@@ -385,7 +402,106 @@
           "id": "source_23",
           "function": "step_02_the_delta",
           "window": 23,
-          "source_line": 726,
+          "source_line": 728,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "optional_demo_07_optional_the_v3_candidate_and_the_gate_on_it",
+      "lesson": "17.3",
+      "file": "optional/demo_07_optional_the_v3_candidate_and_the_gate_on_it.py",
+      "category": "optional",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "Optional: the v3 candidate, and the gate on it",
+      "purpose": "Do it Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        28,
+        30
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
+      "source_lines": [
+        789,
+        801
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Optional: the v3 candidate, and the gate on it",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — optional: run in the operator shell, in the kit (v3's endpoint behind the candidate address; still no traffic)",
+          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=projects/NUMBER/locations/us/endpoints/3784707595493887459|RAG_MODEL_BASE=gemini-3.1-flash-lite|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=off|RETRIEVAL_CURRENT_ONLY=off|RETRIEVAL_GRAPH=off|GRAPH_BACKEND=firestore|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-zzz (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
+          "adaptations": [],
+          "id": "source_28",
+          "function": "step_01_optional_the_v3_candidate_and_the_gate_on",
+          "window": 28,
+          "source_line": 789,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Optional: the v3 candidate, and the gate on it",
+          "subheading": "Do it",
+          "purpose": "Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:",
+          "label": "bash — optional: run in the operator shell, in the kit (every golden row on the v3 candidate: about ten minutes)",
+          "expected": ">> https://candidate---documind-api-NUMBER.asia-south1.run.app\n  65 rows (47 answerable, 18 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 65 rows)\n  [PASS] answerable_rate        97.9%  (threshold 80%; 47 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 46 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 46 rows)\n  [PASS] must_contain_rate      95.7%  (threshold 85%; 46 rows)\n  [PASS] correct_rate           93.6%  (threshold 68%; 47 rows)\n  [PASS] refusal_rate          100.0%  (threshold 90%; 18 rows)\n  [PASS] media_kind_rate       100.0%  (threshold 80%; 3 rows)\n  [PASS] isolation_403_rate    100.0%  (threshold 100%; 11 rows)\n  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)\n\n  shape        rows   ok   pass\n  lookup         34   34     33\n  join           11   11      9\n  refusal         8    8      8\n  isolation      11   11     11\n  version         1    1      1\n  latency ms  p50   ...  p95   ...   (round trip, 65 rows)\n  retrieve_ms p50   ...  p95   ...\n  rerank_ms   p50   ...  p95   ...\n  generate_ms p50   ...  p95   ...\n  pool        avg   ...   semantic cache hits ...\n\n  rows that cost a point (3):\n    jn-03  join      acme    answered without ['45', '60'] | '**answer:** 45 days.\\n**why:** at most 45 days of earned leave are encashed on ex'\n    jn-09  join      acme    answered without ['8.33', 'twenty per cent'] | '**answer:** 8.33%.\\n**why:** the minimum bonus is 8.33% of the salary or wage [1]'\n    lk-27  lookup    acme    REFUSED conf=low cites=0 | What is the maximum rate of central tax the CGST Act allows?\n\n  report: /home/YOU/cand173v3.json\n  All thresholds met.",
+          "adaptations": [],
+          "id": "source_30",
+          "function": "step_02_optional_the_v3_candidate_and_the_gate_on",
+          "window": 30,
+          "source_line": 801,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "optional_demo_08_optional_one_question_two_models",
+      "lesson": "17.3",
+      "file": "optional/demo_08_optional_one_question_two_models.py",
+      "category": "optional",
+      "requires": [
+        "optional_demo_07_optional_the_v3_candidate_and_the_gate_on_it"
+      ],
+      "heading": "Optional: one question, two models",
+      "purpose": "Do it",
+      "anchor": "s8",
+      "anchors": [
+        "s8"
+      ],
+      "section_number": 8,
+      "windows": [
+        32
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
+      "source_lines": [
+        856
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "steps": [
+        {
+          "heading": "Optional: one question, two models",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — optional: run in the operator shell, in the kit (three questions on each revision; ask again as often as you like)",
+          "expected": "Q: Can unused leave shorten my notice period?\n  live, as the UI answers (gemini-3.6-flash): 2 citation(s), 2 [N] mark(s), 2100 ms, about Rs 1.06\n    No. Unused earned leave may not be set off against the notice period [1], and leave cannot be used to shorten notice [2].\n  tuned candidate (endpoint 3784707595493887459): 1 citation(s), 1 [N] mark(s), 1000 ms, about Rs 0.25\n    **Answer:** No.\n    **Why:** Unused earned leave may not be set off against the notice period [1].\n    **Clause:** NP-03, hr_policy_2026.md\n\nQ: Kya main apni bachi hui leave se notice period chhota kar sakta hoon?\n  live, as the UI answers (gemini-3.6-flash): 2 citation(s), 2 [N] mark(s), 2100 ms, about Rs 1.06\n    No. Unused earned leave may not be set off against the notice period [1], and leave cannot be used to shorten notice [2].\n  tuned candidate (endpoint 3784707595493887459): 1 citation(s), 1 [N] mark(s), 1000 ms, about Rs 0.25\n    **Answer:** Nahi.\n    **Why:** Bachi hui earned leave ko notice period ke against set off nahi kiya ja sakta [1].\n    **Clause:** NP-03, hr_policy_2026.md\n\nQ: How much is ACME's referral bonus?\n  live, as the UI answers (gemini-3.6-flash): 0 citation(s), 0 [N] mark(s), 2100 ms, about Rs 1.06\n    The documents do not say. The handbook has a section headed Referral bonus, but it states no amount.\n  tuned candidate (endpoint 3784707595493887459): 0 citation(s), 0 [N] mark(s), 1000 ms, about Rs 0.24\n    **Answer:** Not in the documents.\n    **Why:** None of the sources states this, so there is nothing to cite.\n\nthe UI's URL sends 100% of its traffic to documind-api-000NN-xxx; the candidate answers only at its own URL",
+          "adaptations": [],
+          "id": "source_32",
+          "function": "step_01_optional_one_question_two_models",
+          "window": 32,
+          "source_line": 856,
           "manual_checkpoint": null
         }
       ],
@@ -409,7 +525,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        772
+        774
       ],
       "offline": false,
       "live_verified": false,
@@ -425,7 +541,7 @@
           "id": "source_26",
           "function": "step_01_the_decision_and_the_candidate_s_tag",
           "window": 26,
-          "source_line": 772,
+          "source_line": 774,
           "manual_checkpoint": null
         }
       ],
@@ -449,7 +565,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_3/GUIDE.md",
       "source_lines": [
-        387
+        389
       ],
       "offline": false,
       "live_verified": false,
@@ -467,7 +583,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 387,
+          "source_line": 389,
           "manual_checkpoint": null
         }
       ],
@@ -500,117 +616,138 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 351
+      "line": 353
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 383
+      "line": 385
     },
     {
       "window": 6,
       "label": "services/rag-api/semantic_cache.py - _alive(): the answer cache's test, which never reads the model",
       "heading": "What the kit does with a tuned candidate",
       "anchor": "s3",
-      "line": 416
+      "line": 418
     },
     {
       "window": 7,
       "label": "services/rag-api/cost.py - how the usage row prices a tuned endpoint",
       "heading": "What the kit does with a tuned candidate",
       "anchor": "s3",
-      "line": 425
+      "line": 427
     },
     {
       "window": 8,
       "label": "evals/usage_rows.py - show(): the model column, cut at twenty characters",
       "heading": "What the kit does with a tuned candidate",
       "anchor": "s3",
-      "line": 429
+      "line": 431
     },
     {
       "window": 10,
       "label": "expected (the kit's own functions)",
       "heading": "What the kit does with a tuned candidate",
       "anchor": "s3",
-      "line": 464
+      "line": 466
     },
     {
       "window": 11,
       "label": "Makefile - make candidate: the tuned endpoint as a setting, on a revision with no traffic",
       "heading": "The candidate, audited",
       "anchor": "s4",
-      "line": 488
+      "line": 490
     },
     {
       "window": 13,
       "label": "expected (the echo is the kit's recipe with this page's values; gcloud's own progress lines are left out, and your revision's name differs)",
       "heading": "The candidate, audited",
       "anchor": "s4",
-      "line": 506
+      "line": 508
     },
     {
       "window": 15,
       "label": "expected (this cell over the stand-in lane: two revisions' settings, the v2 lesson 17.1's stand-in built, no context cache)",
       "heading": "The candidate, audited",
       "anchor": "s4",
-      "line": 573
+      "line": 575
     },
     {
       "window": 17,
       "label": "expected (run_eval.py's own code over two stand-in revisions: the candidate misses a figure on two joins and states jn-06's; your rows and times are your lane's)",
       "heading": "The gate on both revisions",
       "anchor": "s5",
-      "line": 601
+      "line": 603
     },
     {
       "window": 19,
       "label": "expected (this cell over the two reports above)",
       "heading": "The gate on both revisions",
       "anchor": "s5",
-      "line": 654
+      "line": 656
     },
     {
       "window": 20,
       "label": "evals/judge.py - main(): the candidate is judged, the live revision is the baseline",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 682
+      "line": 684
     },
     {
       "window": 22,
       "label": "expected (judge.py's own code over a stand-in Evaluation service that chooses by each row's must_contain phrases; the template hash is SDK 2.1.0's, as in lesson 7.2; your judge is Gemini, and your rates are your lane's)",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 697
+      "line": 699
     },
     {
       "window": 24,
       "label": "expected (make usage and this cell over the usage rows those runs leave, priced by the kit's own cost.price(); your rupees are your lane's)",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 742
+      "line": 744
     },
     {
       "window": 25,
       "label": "services/rag-api/main.py - choose_for(): a tenant's pinned model, before the service's",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 767
+      "line": 769
     },
     {
       "window": 27,
       "label": "expected (the removal's own output is left out)",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 776
+      "line": 778
+    },
+    {
+      "window": 29,
+      "label": "expected (the echo is the kit's recipe with lesson 17.2's step 7 endpoint; gcloud's progress lines are left out, and your revision's name differs)",
+      "heading": "Optional: the v3 candidate, and the gate on it",
+      "anchor": "s7",
+      "line": 793
+    },
+    {
+      "window": 31,
+      "label": "expected (run_eval.py's own code over the stand-in v3 candidate: the house style, and the v2 candidate's misses; your rows are your lane's)",
+      "heading": "Optional: the v3 candidate, and the gate on it",
+      "anchor": "s7",
+      "line": 803
+    },
+    {
+      "window": 33,
+      "label": "expected (this cell over the stand-in revisions: the live answers as gemini-3.6-flash writes them, the candidate's as v3's rows teach; your answers are the models' own)",
+      "heading": "Optional: one question, two models",
+      "anchor": "s8",
+      "line": 892
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "The tuned endpoint from 17.2, its ~/poll172.log and the uncontaminated evaluation baseline.",
+  "prerequisites": "The tuned endpoint from 17.2, its ~/poll172.log and the uncontaminated evaluation baseline. The optional steps 7 and 8 need the v3 endpoint in ~/poll172v3.log (17.2's step 7).",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

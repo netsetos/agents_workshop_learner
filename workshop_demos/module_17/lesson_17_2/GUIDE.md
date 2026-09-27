@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`, reviewed at blob `375a22387caec2be91dbd584d47b3fc5c7046157`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`, reviewed at blob `0b28749d9a4a9b867844626a8ae85b70b7ba5048`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 17.1 froze a training file. Before Vertex AI trains on it, you check that it is the file the manifest describes, in the shape the trainer reads. You also check that it carries no personal data and no golden row, and that its tenant lets its text leave India. Only then do you start the job. It runs in `us-central1`, bills per training token, and returns a tuned model with an endpoint that answers from the location its path names.
 
@@ -23,6 +23,8 @@ In this lesson you run the kit's two self-tests and validate v2 from the dataset
 - The job, submitted
 
 - The endpoint, and where it answers
+
+- Optional: v3, validated and tuned with its validation file
 
 - Why it works this way, what it costs, and what the kit does not do yet
 
@@ -160,7 +162,7 @@ The cell reads v2 from the datasets bucket, the copy `make tune` names, and runs
 
 - The chunks carry what `make trainset` never scanned. On the stand-in, DLP's email pattern flags the CGST Act's front matter, which prints a public helpdesk address. Each finding names a row and an info type, never the value. Read the chunks it names: a helpdesk address printed in an Act is public, but a person's phone number would call for a new version without that row. The rule is drop, never rewrite.
 
-- acme's `data_region` is `any`, so its rows may be held in `us-central1`. An `in` tenant's rows may not, and nothing in the kit asks (step 7).
+- acme's `data_region` is `any`, so its rows may be held in `us-central1`. An `in` tenant's rows may not, and nothing in the kit asks (step 8).
 
 - The bill: about 610,353 training tokens, about Rs 156. The estimate divides characters by four; Google counts real tokens. The longest row, about 863 tokens, is far inside Google's limit.
 
@@ -204,6 +206,34 @@ The second cell asks the endpoint one question the way the generator would. It s
 
 - The price line prints two numbers: Google's, at 1.5 times flash-lite, and what `cost.py` would log.
 
+### Optional: v3, validated and tuned with its validation file
+
+If you built lesson 17.1's v3: the five checks on the served shape, make tune with --validation, and the poll to a second endpoint.
+
+Lesson 17.1's step 7 wrote v3: the prompt the generator really sends, the house style, a Hinglish twin for every second chunk, and a validation file. This step tunes a second model on it, next to the first. The first job and its endpoint do not change, and lesson 17.3's step 7 serves this one.
+
+#### What is different about v3
+
+- The shape. A v3 row has no system instruction. Its one user turn is the prompt the generator sends, with `SYSTEM` inside it, so the model trains on exactly what it will be served. A system instruction is optional in Vertex AI's tuning format.
+
+- The checks read more. The golden check reads the rows index, which names the chunk behind every row and every chunk beside it in the prompt. DLP reads every prompt, and so every chunk.
+
+- The validation file. `--validation` hands the job `documind_sft_v3.validation.vertex.jsonl`: 40 rows from one chunk in ten, which the job scores as it trains and never trains on. A validation loss that climbs while the training loss falls means the model is memorising its rows, not learning the habit. Google recommends a validation set, and `tune.py` has always taken one. v3 is the first file that comes with one.
+
+- The size. With three sources in every prompt, v3 is about 2.7 times v2's tokens: about 551,632 an epoch, or about Rs 422 for three epochs. Expect the job to take longer than step 6's.
+
+#### Do it
+
+Then submit the job with a name that says v3 and the validation file, and return at once:
+
+Then wait for it. The poll only reads, so after a disconnect it is safe to run again:
+
+- v3 passed the checks the plain file needs, and more. Every row is the served prompt. No row and no chunk in a prompt is golden evidence, and DLP found nothing in any chunk, because `make trainset` had already dropped what it found.
+
+- The job took the validation file. `make` echoes it in `TUNE_ARGS`, and the job scores it as it trains. The Vertex AI console's page for the job charts its loss beside the training loss.
+
+- A second endpoint, in `us` like the first. `~/poll172v3.log` holds it, and `ENDPOINT_V3` holds it in this shell. It is billed only when it answers.
+
 ### Why it works this way, what it costs, and what the kit does not do yet
 
 The design choices, from the kit's own comments, then the bill and the gaps.
@@ -226,7 +256,7 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 - Nothing checks residency. `make trainset` takes any `TENANT`, and `tune.py` submits to `us-central1`; neither reads `tenant_settings`. Google tunes these bases only in the US or the EU, so an `in` tenant's text would leave India. globex's policy is `in`, and `make trainset TENANT=globex` would write 118 of its chunks, its copies of the DPDP and IT Acts, into a file `make tune` would send.
 
-- No validation split. Google strongly recommends a validation dataset. `tune.py` accepts `--validation`, but `make_trainset.py` writes none and `make tune` passes none, so the job reports its training metrics only.
+- No validation split by default. Google strongly recommends a validation dataset. `tune.py` accepts `--validation`, but the plain `make trainset` writes none and `make tune` passes none, so a v2 job reports its training metrics only. v3 writes one, and step 7 passes it by hand.
 
 - The display name says v1, whatever you tune. `--display-name` defaults to `documind-sft-v1`, and `make tune` passes none.
 
@@ -238,9 +268,9 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Nine checks, each one block above, each with the value that proves it on your lane. The ninth is for step 7, if you ran it.
 
-Your project has one finished tuning job in `us-central1`, billed once. It has a tuned model and its endpoint in the `us` multi-region, billed only when the endpoint answers. `~/tune172.log` holds the job, `~/poll172.log` holds the endpoint, and `ENDPOINT` holds it in this shell. v2 and the datasets bucket are as lesson 17.1 left them. Lesson 17.3 serves the endpoint on a candidate revision with no traffic, with `make candidate PROJECT="$PROJECT" GENERATOR_MODEL="$ENDPOINT" RAG_MODEL_BASE=gemini-3.1-flash-lite`, and compares it with the served model.
+Your project has one finished tuning job in `us-central1`, billed once. It has a tuned model and its endpoint in the `us` multi-region, billed only when the endpoint answers. `~/tune172.log` holds the job, `~/poll172.log` holds the endpoint, and `ENDPOINT` holds it in this shell. v2 and the datasets bucket are as lesson 17.1 left them. Lesson 17.3 serves the endpoint on a candidate revision with no traffic, with `make candidate PROJECT="$PROJECT" GENERATOR_MODEL="$ENDPOINT" RAG_MODEL_BASE=gemini-3.1-flash-lite`, and compares it with the served model. If you ran step 7, there is a second job and a second endpoint, with `~/tune172v3.log` and `~/poll172v3.log`, and lesson 17.3's step 7 serves that one.
 
 Netsetos GenAI on GCP · Module 17 Tuning · Lesson 17.2 Validate sanitized datasets and run managed tuning · v5.0
 

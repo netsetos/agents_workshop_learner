@@ -65,11 +65,9 @@ def step_01_the_checks_that_run_before_the_spend(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds
+    selftest: the helpdesk rows mark the source they cite, carry the served prompt with SYSTEM once, drop a quote not in its chunk, keep Hinglish twins and refusals, and a PAN in a distractor drops its row
     selftest: an untunable base and a rank the SDK cannot spell are refused before submission; adapter 4 is ADAPTER_SIZE_FOUR and the SDK accepts it
     gemini-3.6-flash, adapter 4: refused before submission: managed SFT accepts ['gemini-3.1-flash-lite', 'gemini-3.5-flash'] as of 2026-09-04
-    gemini-3.1-flash-lite, adapter 3: refused before submission: the LoRA rank must be one of [1, 2, 4, 8, 16, 32]
-    gemini-3.1-flash-lite, adapter 32: accepted, ADAPTER_SIZE_THIRTY_TWO
-    make tune's defaults:
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)

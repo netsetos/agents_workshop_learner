@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`, reviewed at blob `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`, reviewed at blob `d5a42e1f21a372eeb47911426f376120ba20c027`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 17.2 left a tuned endpoint. This lesson puts it behind the API on a candidate revision that takes no traffic, and compares that revision with the live one on the same questions, in the same hour. The method is lesson 7.3's. What is new is what can contaminate the comparison when the candidate is a tuned model, and how the price of its answers is counted.
 
@@ -23,6 +23,10 @@ In this lesson you prove that the candidate differs from the live revision only 
 - The gate on both revisions
 
 - The verdict and the delta
+
+- Optional: the v3 candidate, and the gate on it
+
+- Optional: one question, two models
 
 - Why it works this way, what it costs, and what the kit does not do yet
 
@@ -210,11 +214,53 @@ The decision is yours, and it reads the three results in order. The gate must pa
 
 - Promote it: `make promote` moves all traffic to the recorded candidate by name, and `make rollback` returns it. The tuned model then answers every tenant, and it was trained on acme's corpus.
 
-- Pin it to acme: the API reads `tenant_settings/acme.generator_model` before the service's model. No target writes that field (step 7):
+- Pin it to acme: the API reads `tenant_settings/acme.generator_model` before the service's model. No target writes that field (step 9):
 
 - Keep the live model, and remove the candidate's address. The lane's path is this one:
 
 The revision stays in the service's list, with no traffic and no URL. The tuned endpoint stays too, billed only when it answers.
+
+### Optional: the v3 candidate, and the gate on it
+
+If you tuned v3 in lesson 17.2's step 7: its endpoint behind the candidate address, then every golden row on it.
+
+Steps 4 to 6 compared the v2 model with the live one. Its answers were about the same, some worse on the joins, for a quarter of the price. v3 was built to be worth showing. Its rows are the served prompt, its answers mark their source, and it answers in the house style and in the language it is asked in. This step puts its endpoint behind the candidate address, as step 4 did for v2, and step 8 asks it questions next to the live model.
+
+`make candidate` writes the tag again, so the candidate URL now answers with v3's endpoint. The live revision keeps all the traffic, and so does the UI, which only calls the service's own URL. Step 4's audit holds here too: lesson 17.1's step 7 and lesson 17.2's step 7 checked that the file v3 learned from holds no golden row, and no golden evidence in any prompt.
+
+#### Do it
+
+Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:
+
+- The candidate URL serves v3. `GENERATOR_MODEL` names lesson 17.2's second endpoint, priced at flash-lite. The live revision serves as it did.
+
+- v3 passes every threshold. On the stand-in it keeps the v2 candidate's three misses: two joins with one figure each, and lk-27's refusal. Each of v3's rows still answers from one source, so the stand-in does not credit it with the second figure a join needs. On your lane, the gate decides. Read the rows that cost a point, as step 5 did.
+
+### Optional: one question, two models
+
+The same questions to the live revision, as the UI asks them, and to the v3 candidate: both answers, their marks, their price, and the traffic line.
+
+Every step before this one measured. This one shows. The cell sends each question to both addresses with the gate's own client, `run_eval.ask`, which makes the same call the UI's requests arrive as. It prints both answers, then the service's traffic line, which proves the UI never saw the candidate. Its three questions test three things:
+
+- An answer. Can unused leave shorten my notice period? is golden row jn-02, so no training file ever held it. Both models should say no, from NP-03. v3 says it in the house style, with the clause named.
+
+- The same question in Hinglish. v3 learned to answer in the language it is asked in. Whether the live model answers a Hinglish question in Hinglish is for your lane to show; on the stand-in it answers in English.
+
+- A refusal. The handbook has a section headed Referral bonus that states no amount, so both should refuse. v3 refuses in the house style.
+
+To ask your own questions, write them in `~/demo_questions.txt`, one to a line, and the cell asks those instead. Ask the same question in the UI while it runs: the UI's answer is the live one.
+
+#### Do it
+
+- The same facts, a different habit. Both revisions retrieve the same way, so both answered from the same clause. What changed is how the answer is written: the verdict first, the mark, the clause, and the question's own language.
+
+- The price differs too. On the stand-in, an answer costs Rs 0.25 on the tuned candidate, at Google's 1.5 times flash-lite, against Rs 1.06 on the live model. The candidate also answered in half the time.
+
+- The UI never moved. The traffic line shows the service's own URL sending all its traffic to the live revision. The candidate answers only at its tagged URL.
+
+- This is one question, not the verdict. The verdict is step 7's gate, and step 6's judge if you run it on v3 (`make judge PROJECT="$PROJECT" PY="$HOME/judge-venv/bin/python" API_B="$CAND"`). Most answers will match in substance. The differences sit where the habit shows.
+
+- When you are done, remove the candidate's address with step 6's last block, or run the lesson's finish file.
 
 ### Why it works this way, what it costs, and what the kit does not do yet
 
@@ -250,9 +296,9 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Ten checks, each one block above, each with the value that proves it on your lane. The last two are for steps 7 and 8, if you ran them.
 
-`documind-api` has one more revision, with the tuned endpoint as its model, no traffic and no tag, and `.candidate-revision` is gone. Your home folder has `base173.json` and `cand173.json`, and Experiments has the pairwise run. Cloud Logging holds the usage rows of about 260 answers. The live revision still serves `gemini-3.6-flash`, and the tuned endpoint stays, billed only when it answers. Module 18 turns to where the model runs: lesson 18.1 traces and authorizes the gateway's routes.
+`documind-api` has one more revision, with the tuned endpoint as its model, no traffic and no tag, and `.candidate-revision` is gone. Your home folder has `base173.json` and `cand173.json`, and Experiments has the pairwise run. Cloud Logging holds the usage rows of about 260 answers. The live revision still serves `gemini-3.6-flash`, and the tuned endpoint stays, billed only when it answers. If you ran steps 7 and 8, the candidate address pointed at v3's endpoint until you removed it again, and `~/cand173v3.json` holds v3's gate. Module 18 turns to where the model runs: lesson 18.1 traces and authorizes the gateway's routes.
 
 Netsetos GenAI on GCP · Module 17 Tuning · Lesson 17.3 Compare the tuned candidate with an uncontaminated baseline · v5.0
 

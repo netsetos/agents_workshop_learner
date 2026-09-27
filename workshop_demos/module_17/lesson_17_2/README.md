@@ -18,7 +18,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The reviewed sanitized datasets from 17.1. Submission creates a billed tuning job; resume polling the saved job instead of resubmitting.
+The reviewed sanitized datasets from 17.1. Submission creates a billed tuning job; resume polling the saved job instead of resubmitting. The optional v3 job (step 7) needs 17.1's v3 and is a second billed job.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -29,6 +29,10 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
+
+## Optional extensions
+
+- [optional/demo_07_optional_v3_validated_and_tuned_with_its_validation_file.py](optional/demo_07_optional_v3_validated_and_tuned_with_its_validation_file.py) — Do it Then submit the job with a name that says v3 and the validation file, and return at once: Then submit the job with a name that says v3 and the validation file, and return at once: Then wait for it. The poll only reads, so after a disconnect it is safe to run again:
 
 ## Finish and restore
 
@@ -71,6 +75,7 @@ Expected shape, not a promised result:
 
 ```text
 selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds
+selftest: the helpdesk rows mark the source they cite, carry the served prompt with SYSTEM once, drop a quote not in its chunk, keep Hinglish twins and refusals, and a PAN in a distractor drops its row
 selftest: an untunable base and a rank the SDK cannot spell are refused before submission; adapter 4 is ADAPTER_SIZE_FOUR and the SDK accepts it
 gemini-3.6-flash, adapter 4: refused before submission: managed SFT accepts ['gemini-3.1-flash-lite', 'gemini-3.5-flash'] as of 2026-09-04
 gemini-3.1-flash-lite, adapter 3: refused before submission: the LoRA rank must be one of [1, 2, 4, 8, 16, 32]
@@ -174,6 +179,74 @@ the endpoint's path says us; the generator would call it at us
   the price: Rs 0.0322 as Google bills a tuned Gemini 3 endpoint (1.5 x flash-lite); cost.py would log Rs 0.0215
 ```
 
+### optional/demo_07_optional_v3_validated_and_tuned_with_its_validation_file.py
+
+Do it Then submit the job with a name that says v3 and the validation file, and return at once: Then submit the job with a name that says v3 and the validation file, and return at once: Then wait for it. The poll only reads, so after a disconnect it is safe to run again:
+
+**`step_01_optional_v3_validated_and_tuned_with_its_v(session)` — Optional: v3, validated and tuned with its validation file / Do it**
+
+Do it
+
+Operation: bash — optional: run in the operator shell, in the kit (reads the bucket and Firestore; DLP over every prompt).
+
+Expected shape, not a promised result:
+
+```text
+the files make tune VERSION=v3 reads: documind_sft_v3.vertex.jsonl, and with --validation documind_sft_v3.validation.vertex.jsonl
+  vertex     sha256 as the manifest says
+  chat       sha256 as the manifest says
+  validation sha256 as the manifest says
+  rows       sha256 as the manifest says
+1. the shape: 435 of 435 rows are one user turn that is the served prompt and one model turn, text only; the chat file says the same in 395 of 395; targets that parse as ModelDraft: 435
+2. the test set: the golden set would drop 0 of 435 rows; 0 of the 598 chunks in the prompts are a golden row's evidence
+3. personal data: DLP over every prompt and every answer, so over every chunk: 0 with a finding
+4. residency: the rows are acme's, whose data_region is any; may they be held in us-central1? True
+5. the size: about 551,632 tokens an epoch, the longest row about 1,805 of the 131,072 Google allows; the validation file about 57,521, scored and never trained on
+   3 epochs: about 1,654,896 training tokens, about Rs 422 at USD 3.00 a million
+verdict: ready to tune: the manifest's bytes, the served shape, no golden row or evidence in any prompt, no finding in any chunk, and acme may leave India
+```
+
+**`step_02_optional_v3_validated_and_tuned_with_its_v(session)` — Optional: v3, validated and tuned with its validation file / Do it**
+
+Then submit the job with a name that says v3 and the validation file, and return at once:
+
+Operation: bash — optional: run in the operator shell, in the kit (submits the v3 job and returns: a second billed act).
+
+Expected shape, not a promised result:
+
+```text
+python evals/tune.py --project documind-ai-YOUR-ID --dataset gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_${VERSION:-v1}.vertex.jsonl \
+  --base gemini-3.1-flash-lite --epochs 3 --adapter 4 --display-name documind-sft-v3 --validation gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.validation.vertex.jsonl --no-wait
+  submitted projects/NUMBER/locations/us-central1/tuningJobs/4763636347812545555 on gemini-3.1-flash-lite: 3 epochs, adapter 4, dataset gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.vertex.jsonl
+  poll later: python evals/tune.py --project documind-ai-YOUR-ID --poll projects/NUMBER/locations/us-central1/tuningJobs/4763636347812545555
+JOB_V3=projects/NUMBER/locations/us-central1/tuningJobs/4763636347812545555
+```
+
+**`step_03_optional_v3_validated_and_tuned_with_its_v(session)` — Optional: v3, validated and tuned with its validation file / Do it**
+
+Then submit the job with a name that says v3 and the validation file, and return at once: Then wait for it. The poll only reads, so after a disconnect it is safe to run again:
+
+Operation: bash — optional: run in the operator shell, in the kit (waits for the v3 job, a line a minute).
+
+Expected shape, not a promised result:
+
+```text
+10:03:00 JobState.JOB_STATE_PENDING
+  10:04:00 JobState.JOB_STATE_PENDING
+  10:05:00 JobState.JOB_STATE_RUNNING
+  ...      (a line a minute while the job runs: 33 more here)
+  10:39:00 JobState.JOB_STATE_RUNNING
+  JOB_STATE_SUCCEEDED
+  tuned model : projects/NUMBER/locations/us/models/8366872049017976783@1
+  endpoint    : projects/NUMBER/locations/us/endpoints/3784707595493887459
+
+  serve it as a candidate revision, no traffic, and judge it:
+    make candidate PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=projects/NUMBER/locations/us/endpoints/3784707595493887459 RAG_MODEL_BASE=gemini-3.1-flash-lite
+    make eval-live PROJECT=documind-ai-YOUR-ID API=<the candidate url>
+    make judge PROJECT=documind-ai-YOUR-ID API_B=<the candidate url>
+ENDPOINT_V3=projects/NUMBER/locations/us/endpoints/3784707595493887459
+```
+
 ### setup/restore_settings.py
 
 At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
@@ -192,6 +265,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `375a22387caec2be91dbd584d47b3fc5c7046157`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.2_Managed_Tuning_WIX.html`. All 28 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0b28749d9a4a9b867844626a8ae85b70b7ba5048`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

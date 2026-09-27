@@ -55,9 +55,9 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [15.4: Compare quality and test update/withdrawal freshness](module_15/lesson_15_4/README.md) — 7 files; main_html
 - [16.1: Query a video clip and validate media citations](module_16/lesson_16_1/README.md) — 7 files; main_html
 - [16.2: Exercise implemented Studio and voice features](module_16/lesson_16_2/README.md) — 7 files; main_html
-- [17.1: Decide whether tuning is justified and prepare data](module_17/lesson_17_1/README.md) — 7 files; main_html
-- [17.2: Validate sanitized datasets and run managed tuning](module_17/lesson_17_2/README.md) — 7 files; main_html
-- [17.3: Compare the tuned candidate with an uncontaminated baseline](module_17/lesson_17_3/README.md) — 8 files; main_html
+- [17.1: Decide whether tuning is justified and prepare data](module_17/lesson_17_1/README.md) — 8 files; main_html
+- [17.2: Validate sanitized datasets and run managed tuning](module_17/lesson_17_2/README.md) — 8 files; main_html
+- [17.3: Compare the tuned candidate with an uncontaminated baseline](module_17/lesson_17_3/README.md) — 10 files; main_html
 - [18.1: Trace and authorize gateway routes](module_18/lesson_18_1/README.md) — 7 files; main_html
 - [18.2: Serve a supplied or stock model using Ollama](module_18/lesson_18_2/README.md) — 8 files; main_html
 - [18.3: Inspect the vLLM service and the GKE alternative](module_18/lesson_18_3/README.md) — 7 files; main_html

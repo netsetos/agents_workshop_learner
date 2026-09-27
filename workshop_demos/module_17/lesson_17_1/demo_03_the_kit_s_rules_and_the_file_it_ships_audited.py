@@ -81,11 +81,10 @@ def step_01_the_kit_s_rules_and_the_file_it_ships_audi(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds
+    selftest: the helpdesk rows mark the source they cite, carry the served prompt with SYSTEM once, drop a quote not in its chunk, keep Hinglish twins and refusals, and a PAN in a distractor drops its row
     the manifest: v1, built 2026-09-10, 317 rows (30 refusals) from 12 documents; dropped 13 for the golden set, 0 for PII
     the two formats agree row by row: True; targets that parse as ModelDraft: 317 of 317; SYSTEM is the generator's: True
-    quotes: 287; in their chunk as written: 22, once line breaks are spaces: 282; over twenty-five words: 17
-    answers that mark their source with [N], as SYSTEM's rule 2 asks: 0 of 287
-    rows from the handbook: 58, every one from a generated GEN- section:
+    quotes: 287; in their chunk as written: 22, on
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)

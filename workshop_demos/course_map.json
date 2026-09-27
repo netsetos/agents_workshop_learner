@@ -376,23 +376,23 @@
     {
       "lesson": "17.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "055368732655b9c9c490603445fb3ef0f506e36b",
+      "source_sha": "fbe52329d96c5d61dd62ab43d14c871014854864",
       "source_kind": "main_html",
-      "demos": 7
+      "demos": 8
     },
     {
       "lesson": "17.2",
       "title": "Validate sanitized datasets and run managed tuning",
-      "source_sha": "375a22387caec2be91dbd584d47b3fc5c7046157",
+      "source_sha": "0b28749d9a4a9b867844626a8ae85b70b7ba5048",
       "source_kind": "main_html",
-      "demos": 7
+      "demos": 8
     },
     {
       "lesson": "17.3",
       "title": "Compare the tuned candidate with an uncontaminated baseline",
-      "source_sha": "c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3",
+      "source_sha": "d5a42e1f21a372eeb47911426f376120ba20c027",
       "source_kind": "main_html",
-      "demos": 8
+      "demos": 10
     },
     {
       "lesson": "18.1",

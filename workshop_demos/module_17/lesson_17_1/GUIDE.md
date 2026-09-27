@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html`, reviewed at blob `055368732655b9c9c490603445fb3ef0f506e36b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html`, reviewed at blob `fbe52329d96c5d61dd62ab43d14c871014854864`. Learners read that page on the course site; this guide keeps its prose.
 
 Tuning teaches a model a habit, not facts. Before you pay for it, your lane's own numbers must show answers that are wrong in a way a habit fixes: a missing citation, a missing refusal, JSON that breaks. The fix must also be one that a prompt, a cache or better retrieval cannot make more cheaply. The kit has no tool that makes this call. This page gives you a rubric that reads numbers the kit already produces.
 
@@ -23,6 +23,8 @@ In this lesson you audit the training file the kit ships. Then you run the live 
 - Your training file, as v2
 
 - The frozen file, read back
+
+- Optional: a better file, v3, in the house style and in Hinglish
 
 - Why it works this way, what it costs, and what the kit does not do yet
 
@@ -250,6 +252,40 @@ The cell reads the manifest from the datasets bucket, not from your disk, and ho
 
 - Read the sample questions, then more. `head -n 5 evals/sft/documind_sft_v2.chat.jsonl` shows whole rows. That is the review `make trainset` asks for.
 
+### Optional: a better file, v3, in the house style and in Hinglish
+
+make trainset --style helpdesk: a stronger teacher, the prompt the generator really sends, answers that mark their source, and a Hinglish twin for every second chunk.
+
+Steps 3 and 6 found four faults in the file the kit writes by default. It trains on a prompt the generator never sends. Its answers never mark their source. Nobody checks its quotes. And the handbook's rows are filler. A model tuned on it learns those faults as surely as the habit. Step 4's verdict is still why you might tune: a tuned flash-lite costs about a quarter as much, if it passes the same gate. Version 3 is the file worth that experiment. It fixes the four faults, and it teaches one habit the served model does not have, so that lesson 17.3 can show the difference on a single question.
+
+#### The house style
+
+Every answer in v3 has the same three lines: the verdict first, then the reason with the `[N]` mark of the source it rests on, then the clause and the file its header names. For example:
+
+The format is the habit; the facts in it still come from retrieval. The verdict, the reason and the clause are all in the source the mark names. The same facts in a plain paragraph would be just as correct. The labels make an answer quicker to read, and the clause makes it quicker to check.
+
+#### Hinglish
+
+Many of the people who ask DocuMind questions type in Hinglish: Hindi grammar in Roman script, with English terms. For every second chunk the teacher writes the question, the verdict and the reason again in Hinglish, keeping every number, section and name as the passage writes it, and v3 carries both rows. A model tuned on the pairs learns to answer in the language it is asked in, with the same labels and the same `[N]` mark. Refusals come in both languages too.
+
+#### What else changes
+
+The distractors come from the same corpus: one from the answering chunk's own document where it has another, as a retriever would return it, and the rest from other documents. None is a golden row's evidence and none is filler, so the test set stays out of the prompts as well as the answers. The answering chunk's place among the three is fixed by its id, so the file teaches `[1]`, `[2]` and `[3]`, not always `[1]`. And one more rule joins `exclude_golden`: when its question rule drops an English row, the row's Hinglish twin goes too. A golden question rephrased in Hinglish is still a rephrasing, and a word-overlap rule cannot see it.
+
+#### Do it
+
+Then read the frozen file back from the bucket and check it with the kit's own functions. The last lines print one chunk's two rows, the English and its Hinglish twin:
+
+- 395 training rows and 40 validation rows. 131 of the training rows are in Hinglish and 27 are refusals. v2 is as step 5 left it.
+
+- The checks dropped what they should. 10 pairs had a quote that was not in their chunk, 5 Hinglish twins came back in English, 23 rows touched the golden set, and the scan of every chunk dropped 1 row: the CGST Act's front page prints a public helpdesk address, which lesson 17.2 found the plain scan never reads. The stand-in fails the first two checks on purpose, so that you can see them fire.
+
+- Every prompt is the one the generator sends. Each has three sources under their headers, and every answer marks the source its citation names.
+
+- The two sample rows are one chunk, asked twice. They have the same sources, the same mark and the same clause; only the language changes. The stand-in's wording is mechanical. On your lane, the teacher writes them.
+
+- Nothing is tuned yet. Lesson 17.2's step 7 validates v3 and tunes on it, with its validation file.
+
 ### Why it works this way, what it costs, and what the kit does not do yet
 
 The design choices, from the kit's own comments, then the bill and the gaps.
@@ -274,15 +310,15 @@ Each point is checked in the kit's code or its committed v1, and the build asser
 
 - The rule "frozen" is a comment. The version defaults to v1, and `write()` overwrites without checking. `make trainset`'s recipe passes no version, and `make tune` reads v1 unless told otherwise. A second run without `TRAINSET_ARGS` replaces the file the kit ships, and the manifest that proved it.
 
-- The training prompt is not the served prompt. Training shows one source, with no header line, and carries `SYSTEM` twice. The generator packs several sources under header lines, and sends `SYSTEM` once. The code names `tools/check_auth_wiring.py` as what holds the two `SYSTEM`s equal, and it does not exist. They are equal today, and nothing keeps them so.
+- The plain style's training prompt is not the served prompt. Training shows one source, with no header line, and carries `SYSTEM` twice. The generator packs several sources under header lines, and sends `SYSTEM` once. The code names `tools/check_auth_wiring.py` as what holds the two `SYSTEM`s equal, and it does not exist. They are equal today, and nothing keeps them so. Step 7's `--style helpdesk` builds the served prompt with the generator's own packer.
 
-- The targets never mark a source. `SYSTEM`'s rule 2 asks for `[N]` in the answer, and the UI turns each one into a pill. `target()` never writes one, so the file teaches the model to leave the marks out. The gate, which counts the citations list, would not notice.
+- The plain style's targets never mark a source. `SYSTEM`'s rule 2 asks for `[N]` in the answer, and the UI turns each one into a pill. `target()` never writes one, so the file teaches the model to leave the marks out. The gate, which counts the citations list, would not notice. v3's answers carry the mark.
 
-- Nothing checks a quote. Not against its chunk: 5 of v1's 287 are not in it. Not against `SYSTEM`'s twenty-five words either: 17 are over, the longest 33. `target()` only cuts a quote at 200 characters, ModelDraft's limit.
+- The plain style checks no quote. Not against its chunk: 5 of v1's 287 are not in it. Not against `SYSTEM`'s twenty-five words either: 17 are over, the longest 33. `target()` only cuts a quote at 200 characters, ModelDraft's limit. v3 drops a pair whose quote fails either test.
 
-- The PII scan reads the question and the answer, not the chunk. The chunk is in the user turn, and it enters the weights too. acme's invoice carries a PAN and a GSTIN. The default sample of 300 passes it by, but a sample of 1,000 would train on it, unless the model happened to repeat one in its answer.
+- The plain style's PII scan reads the question and the answer, not the chunk. The chunk is in the user turn, and it enters the weights too. acme's invoice carries a PAN and a GSTIN. The default sample of 300 passes it by, but a sample of 1,000 would train on it, unless the model happened to repeat one in its answer. v3's scan reads every chunk a prompt carries.
 
-- The handbook trains on filler. Its ten clauses and its preamble are under 400 characters, so they are never sampled. 58 of v1's 317 rows come from one generated paragraph, repeated under 18 topic names.
+- The plain style trains on the handbook's filler. Its ten clauses and its preamble are under 400 characters, so they are never sampled. 58 of v1's 317 rows come from one generated paragraph, repeated under 18 topic names. v3 never samples them.
 
 - The kit prices a tuned endpoint at its base rate. `cost.py` bills an endpoint path at the price of `RAG_MODEL_BASE`. Google's pricing page, checked on 24 September 2026, says a tuned Gemini 3 endpoint's predictions cost 1.5 times the base's. The usage rows, and so `make usage` and `tenant_daily`, would count a tuned model's answers at two thirds of their price. The rubric in step 4 applies the 1.5 itself.
 
@@ -290,9 +326,9 @@ Each point is checked in the kit's code or its committed v1, and the build asser
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Nine checks, each one block above, each with the value that proves it on your lane. The ninth is for step 7, if you ran it.
 
-`~/gate171.json` holds the gate's report, and step 4's output is your verdict. `evals/sft/` in your kit folder holds v2's three files, and the datasets bucket holds the same three under `sft/`, versioned and never expiring. The kit's own v1 is as it shipped. Lesson 17.2 validates this file and tunes flash-lite on it. Pass it `VERSION=v2`, or `make tune` reads v1.
+`~/gate171.json` holds the gate's report, and step 4's output is your verdict. `evals/sft/` in your kit folder holds v2's three files, and the datasets bucket holds the same three under `sft/`, versioned and never expiring. The kit's own v1 is as it shipped. Lesson 17.2 validates this file and tunes flash-lite on it. Pass it `VERSION=v2`, or `make tune` reads v1. If you ran step 7, the same folder and the bucket also hold v3's four files and its manifest, and lesson 17.2's step 7 tunes on them.
 
 Netsetos GenAI on GCP · Module 17 Tuning · Lesson 17.1 Decide whether tuning is justified and prepare data · v5.0
 

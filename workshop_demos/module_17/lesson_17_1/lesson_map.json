@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_17.1_Tuning_Decision_WIX.html",
-  "source_sha": "055368732655b9c9c490603445fb3ef0f506e36b",
+  "source_sha": "fbe52329d96c5d61dd62ab43d14c871014854864",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 22,
+  "source_window_count": 27,
   "persist_variables": [
     "API",
     "API_URL",
@@ -107,6 +107,26 @@
     },
     {
       "level": 3,
+      "heading": "Optional: a better file, v3, in the house style and in Hinglish"
+    },
+    {
+      "level": 4,
+      "heading": "The house style"
+    },
+    {
+      "level": 4,
+      "heading": "Hinglish"
+    },
+    {
+      "level": 4,
+      "heading": "What else changes"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
       "heading": "Why it works this way, what it costs, and what the kit does not do yet"
     },
     {
@@ -137,7 +157,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        390
+        391
       ],
       "offline": false,
       "live_verified": false,
@@ -155,7 +175,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 390,
+          "source_line": 391,
           "manual_checkpoint": null
         }
       ],
@@ -181,7 +201,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        464
+        465
       ],
       "offline": true,
       "live_verified": false,
@@ -192,12 +212,12 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the rules on fixtures, then the kit's own v1; no network)",
-          "expected": "selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds\nthe manifest: v1, built 2026-09-10, 317 rows (30 refusals) from 12 documents; dropped 13 for the golden set, 0 for PII\nthe two formats agree row by row: True; targets that parse as ModelDraft: 317 of 317; SYSTEM is the generator's: True\nquotes: 287; in their chunk as written: 22, once line breaks are spaces: 282; over twenty-five words: 17\nanswers that mark their source with [N], as SYSTEM's rule 2 asks: 0 of 287\nrows from the handbook: 58, every one from a generated GEN- section: its clauses are all under 400 characters\ntoday's golden set (65 rows) would drop 0 of v1's rows\nthe prompt v1 trains on shows a chunk as: '[Source 1] CHAPTER XIV INSPECTION, SEARCH, SEIZURE AND ARREST \\n '...\nthe prompt the generator serves shows it as: '[Source 1] cgst_act_2017.pdf\\nCHAPTER XIV INSPECTION, SEARCH, SEI'...",
+          "expected": "selftest: the evidence rule dropped jn-06's chunk and kept EMEA elsewhere and lk-09's 8, the question rule dropped lk-06's twin, the PAN row dropped, two formats agree, ModelDraft parses, the batch round trip holds\nselftest: the helpdesk rows mark the source they cite, carry the served prompt with SYSTEM once, drop a quote not in its chunk, keep Hinglish twins and refusals, and a PAN in a distractor drops its row\nthe manifest: v1, built 2026-09-10, 317 rows (30 refusals) from 12 documents; dropped 13 for the golden set, 0 for PII\nthe two formats agree row by row: True; targets that parse as ModelDraft: 317 of 317; SYSTEM is the generator's: True\nquotes: 287; in their chunk as written: 22, once line breaks are spaces: 282; over twenty-five words: 17\nanswers that mark their source with [N], as SYSTEM's rule 2 asks: 0 of 287\nrows from the handbook: 58, every one from a generated GEN- section: its clauses are all under 400 characters\ntoday's golden set (65 rows) would drop 0 of v1's rows\nthe prompt v1 trains on shows a chunk as: '[Source 1] CHAPTER XIV INSPECTION, SEARCH, SEIZURE AND ARREST \\n '...\nthe prompt the generator serves shows it as: '[Source 1] cgst_act_2017.pdf\\nCHAPTER XIV INSPECTION, SEARCH, SEI'...",
           "adaptations": [],
           "id": "source_9",
           "function": "step_01_the_kit_s_rules_and_the_file_it_ships_audi",
           "window": 9,
-          "source_line": 464,
+          "source_line": 465,
           "manual_checkpoint": null
         }
       ],
@@ -224,8 +244,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        542,
-        578
+        544,
+        580
       ],
       "offline": false,
       "live_verified": false,
@@ -241,7 +261,7 @@
           "id": "source_12",
           "function": "step_01_the_evidence_and_the_verdict",
           "window": 12,
-          "source_line": 542,
+          "source_line": 544,
           "manual_checkpoint": null
         },
         {
@@ -254,7 +274,7 @@
           "id": "source_14",
           "function": "step_02_the_evidence_and_the_verdict",
           "window": 14,
-          "source_line": 578,
+          "source_line": 580,
           "manual_checkpoint": null
         }
       ],
@@ -280,7 +300,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        694
+        696
       ],
       "offline": false,
       "live_verified": false,
@@ -296,7 +316,7 @@
           "id": "source_18",
           "function": "step_01_your_training_file_as_v2",
           "window": 18,
-          "source_line": 694,
+          "source_line": 696,
           "manual_checkpoint": null
         }
       ],
@@ -322,7 +342,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        742
+        744
       ],
       "offline": false,
       "live_verified": false,
@@ -338,7 +358,64 @@
           "id": "source_21",
           "function": "step_01_the_frozen_file_read_back",
           "window": 21,
-          "source_line": 742,
+          "source_line": 744,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "optional_demo_07_optional_a_better_file_v3_in_the_house_style_and_in_hinglish",
+      "lesson": "17.1",
+      "file": "optional/demo_07_optional_a_better_file_v3_in_the_house_style_and_in_hinglish.py",
+      "category": "optional",
+      "requires": [
+        "setup_prepare"
+      ],
+      "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+      "purpose": "Do it Then read the frozen file back from the bucket and check it with the kit's own functions. The last lines print one chunk's two rows, the English and its Hinglish twin:",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        24,
+        26
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
+      "source_lines": [
+        833,
+        850
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — optional: run in the operator shell, in the kit (about twenty-five minutes: one teacher call a chunk)",
+          "expected": "python evals/make_trainset.py --project documind-ai-YOUR-ID --tenant acme --rows ${ROWS:-300} \\\n  --upload gs://documind-ai-YOUR-ID-datasets/sft/ --version v3 --style helpdesk\n  300 chunks sampled from acme's corpus mirrors, the handbook's 272 generated GEN- sections left out; gemini-3.1-pro-preview writes each pair and its Hinglish twin\n  395 training rows (131 in Hinglish, 27 refusals) and 40 validation rows from 11 documents, each prompt the served one with 2 other sources\n  dropped 10 pairs whose quote was not in its chunk or ran over twenty-five words, 0 with no verdict or reason, 5 Hinglish twins that were not Hinglish, 23 rows for golden overlap ['jn-10', 'lk-10', 'lk-14', 'lk-17', 'lk-19', 'lk-23', 'lk-28', 'mm-02'] and 1 by the PII scan of every chunk\n  wrote /home/YOU/deploy_module_rag/evals/sft/documind_sft_v3.{vertex,chat,validation.vertex,rows}.jsonl + .manifest.json (sha fc16d910b684)\n  uploaded gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.chat.jsonl\n  uploaded gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.manifest.json\n  uploaded gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.rows.jsonl\n  uploaded gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.validation.vertex.jsonl\n  uploaded gs://documind-ai-YOUR-ID-datasets/sft/documind_sft_v3.vertex.jsonl\n  review the rows before you commit them: a generated question inherits the generator's blind spots (4.7)",
+          "adaptations": [],
+          "id": "source_24",
+          "function": "step_01_optional_a_better_file_v3_in_the_house_sty",
+          "window": 24,
+          "source_line": 833,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+          "subheading": "Do it",
+          "purpose": "Then read the frozen file back from the bucket and check it with the kit's own functions. The last lines print one chunk's two rows, the English and its Hinglish twin:",
+          "label": "bash — optional: run in the operator shell, in the kit (reads only)",
+          "expected": "the frozen manifest: v3, helpdesk style, teacher gemini-3.1-pro-preview: 395 training rows (131 in Hinglish, 27 refusals) and 40 validation rows\n  vertex     documind_sft_v3.vertex.jsonl: 395 rows, sha256 as the manifest says\n  chat       documind_sft_v3.chat.jsonl: 395 rows, sha256 as the manifest says\n  validation documind_sft_v3.validation.vertex.jsonl: 40 rows, sha256 as the manifest says\n  rows       documind_sft_v3.rows.jsonl: 435 rows, sha256 as the manifest says\nthe prompts: 395 of 395 are the served shape - SYSTEM once, 3 sources under their header lines, the question\nthe answers: 368 of 368 mark the source their citation names; 368 of 368 quotes are in their chunk, at most twenty-five words\nthe test set: the golden set would drop 0 of 435 rows; rows from the handbook's GEN- sections: 0\nthe split: 25 chunks held out for validation, every twin beside its pair: True\n\n  en: acme:payment_of_gratuity_act_1972#p2-2, answered from [Source 3]\n  [Source 1] payment_of_gratuity_act_1972.pdf, p.7\n  [Source 2] osh_code_2020.pdf, p.41\n  [Source 3] payment_of_gratuity_act_1972.pdf, p.2\n  Question: What does the Payment of Gratuity Act, 1972 say about the employer?\n  **Answer:** The employer.\n  **Why:** (q) “retirement” means termination of the service of an employee otherwise than on superannuation [3].\n  **Clause:** payment_of_gratuity_act_1972.pdf, p.2\n\n  hinglish: acme:payment_of_gratuity_act_1972#p2-2, answered from [Source 3]\n  [Source 1] payment_of_gratuity_act_1972.pdf, p.7\n  [Source 2] osh_code_2020.pdf, p.41\n  [Source 3] payment_of_gratuity_act_1972.pdf, p.2\n  Question: The Payment of Gratuity Act, 1972 mein the employer ke baare mein kya likha hai?\n  **Answer:** The employer.\n  **Why:** The Payment of Gratuity Act, 1972 ke is hisse mein likha hai: (q) “retirement” means termination of the service of an employee otherwise than on superannuation [3].\n  **Clause:** payment_of_gratuity_act_1972.pdf, p.2",
+          "adaptations": [],
+          "id": "source_26",
+          "function": "step_02_optional_a_better_file_v3_in_the_house_sty",
+          "window": 26,
+          "source_line": 850,
           "manual_checkpoint": null
         }
       ],
@@ -362,7 +439,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_17/lesson_17_1/GUIDE.md",
       "source_lines": [
-        396
+        397
       ],
       "offline": false,
       "live_verified": false,
@@ -380,7 +457,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 396,
+          "source_line": 397,
           "manual_checkpoint": null
         }
       ],
@@ -413,103 +490,124 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 360
+      "line": 361
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 392
+      "line": 393
     },
     {
       "window": 6,
       "label": "evals/make_trainset.py - the four rules that make the file defensible",
       "heading": "The kit's rules, and the file it ships, audited",
       "anchor": "s3",
-      "line": 435
+      "line": 436
     },
     {
       "window": 7,
       "label": "evals/make_trainset.py - the user turn and the target: the served SYSTEM, one source, ModelDraft's JSON",
       "heading": "The kit's rules, and the file it ships, audited",
       "anchor": "s3",
-      "line": 446
+      "line": 447
     },
     {
       "window": 8,
       "label": "services/rag-api/context_budget.py - what the generator serves: a header line, then the chunk, for every packed source",
       "heading": "The kit's rules, and the file it ships, audited",
       "anchor": "s3",
-      "line": 460
+      "line": 461
     },
     {
       "window": 10,
       "label": "expected (this cell run on the kit's own make_trainset.py and its committed v1)",
       "heading": "The kit's rules, and the file it ships, audited",
       "anchor": "s3",
-      "line": 506
+      "line": 507
     },
     {
       "window": 11,
       "label": "evals/tune.py - what managed tuning accepts: not the model the lane serves",
       "heading": "The evidence, and the verdict",
       "anchor": "s4",
-      "line": 538
+      "line": 540
     },
     {
       "window": 13,
       "label": "expected (run_eval.py's own code over lesson 7.2's stub API, which misses two rows on purpose; your rows and times are your lane's)",
       "heading": "The evidence, and the verdict",
       "anchor": "s4",
-      "line": 544
+      "line": 546
     },
     {
       "window": 15,
       "label": "expected (this cell over that report and a week of stand-in usage rows; your traffic, tokens and verdict are your lane's)",
       "heading": "The evidence, and the verdict",
       "anchor": "s4",
-      "line": 631
+      "line": 633
     },
     {
       "window": 16,
       "label": "Makefile - make trainset: build, scan, freeze, upload",
       "heading": "Your training file, as v2",
       "anchor": "s5",
-      "line": 660
+      "line": 662
     },
     {
       "window": 17,
       "label": "evals/make_trainset.py - exclude_golden(): the evidence rule, then the question rule, for each golden row in order",
       "heading": "Your training file, as v2",
       "anchor": "s5",
-      "line": 666
+      "line": 668
     },
     {
       "window": 19,
       "label": "expected (the kit's make_trainset.py with Gemini, DLP and Cloud Storage stood in: your questions, drops and counts are yours)",
       "heading": "Your training file, as v2",
       "anchor": "s5",
-      "line": 697
+      "line": 699
     },
     {
       "window": 20,
       "label": "evals/make_trainset.py - write(): the manifest, a sha256 per file, and the rule it states",
       "heading": "The frozen file, read back",
       "anchor": "s6",
-      "line": 725
+      "line": 727
     },
     {
       "window": 22,
       "label": "expected (the same stand-ins: your manifest's numbers are your v2's)",
       "heading": "The frozen file, read back",
       "anchor": "s6",
-      "line": 781
+      "line": 783
+    },
+    {
+      "window": 23,
+      "label": "a v3 answer, for example",
+      "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+      "anchor": "s7",
+      "line": 810
+    },
+    {
+      "window": 25,
+      "label": "expected (the kit's make_trainset.py --style helpdesk with the teacher, DLP and Cloud Storage stood in: your rows, drops and counts are yours)",
+      "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+      "anchor": "s7",
+      "line": 836
+    },
+    {
+      "window": 27,
+      "label": "expected (the same stand-ins; the stand-in teacher's wording is mechanical, and your teacher writes its own)",
+      "heading": "Optional: a better file, v3, in the house style and in Hinglish",
+      "anchor": "s7",
+      "line": 894
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "Baseline evaluation evidence and the kit's sanitized training examples; no tuning job is submitted here.",
+  "prerequisites": "Baseline evaluation evidence and the kit's sanitized training examples; no tuning job is submitted here. The optional v3 file (step 7) calls gemini-3.1-pro-preview once a chunk.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

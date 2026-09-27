@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-932 files; 108 quoted by a lesson, 148 shown or named by one.
+937 files; 108 quoted by a lesson, 148 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -130,6 +130,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/sft/documind_sft_v1.manifest.json` | data | - | - |
 | `evals/sft/documind_sft_v1.vertex.jsonl` | data | - | - |
 | `evals/tests/test_fetch_real.py` | code | - | - |
+| `evals/tests/test_make_trainset_helpdesk.py` | code | - | - |
 | `evals/tests/test_make_trainset_retry.py` | code | - | - |
 | `evals/tune.py` | code | 17.1, 17.2 | - |
 | `evals/upload.sh` | code | 16.1 | - |
@@ -844,6 +845,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_17/lesson_17_1/demo_05_your_training_file_as_v2.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_1/demo_06_the_frozen_file_read_back.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_1/lesson_map.json` | config | - | - |
+| `workshop_demos/module_17/lesson_17_1/optional/demo_07_optional_a_better_file_v3_in_the_house_style_and_in_hinglish.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_1/setup/finish.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_1/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_1/setup/restore_settings.py` | code | - | - |
@@ -854,6 +856,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_17/lesson_17_2/demo_05_the_job_submitted.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_2/demo_06_the_endpoint_and_where_it_answers.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_2/lesson_map.json` | config | - | - |
+| `workshop_demos/module_17/lesson_17_2/optional/demo_07_optional_v3_validated_and_tuned_with_its_validation_file.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_2/setup/finish.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_2/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_2/setup/restore_settings.py` | code | - | - |
@@ -865,6 +868,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_17/lesson_17_3/demo_05_the_gate_on_both_revisions.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_3/demo_06_the_verdict_and_the_delta.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_3/lesson_map.json` | config | - | - |
+| `workshop_demos/module_17/lesson_17_3/optional/demo_07_optional_the_v3_candidate_and_the_gate_on_it.py` | code | - | - |
+| `workshop_demos/module_17/lesson_17_3/optional/demo_08_optional_one_question_two_models.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_3/setup/finish.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_3/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_17/lesson_17_3/setup/restore_settings.py` | code | - | - |

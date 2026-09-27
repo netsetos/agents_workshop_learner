@@ -18,7 +18,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The tuned endpoint from 17.2, its ~/poll172.log and the uncontaminated evaluation baseline.
+The tuned endpoint from 17.2, its ~/poll172.log and the uncontaminated evaluation baseline. The optional steps 7 and 8 need the v3 endpoint in ~/poll172v3.log (17.2's step 7).
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -29,6 +29,11 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
+
+## Optional extensions
+
+- [optional/demo_07_optional_the_v3_candidate_and_the_gate_on_it.py](optional/demo_07_optional_the_v3_candidate_and_the_gate_on_it.py) — Do it Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:
+- [optional/demo_08_optional_one_question_two_models.py](optional/demo_08_optional_one_question_two_models.py) — Do it
 
 ## Finish and restore
 
@@ -259,6 +264,110 @@ the rupee delta: the tuned endpoint costs Rs 0.8079 less an answer, Rs 808 per 1
   (the usage rows alone say Rs 0.8959: they log the endpoint at its base's rate)
 ```
 
+### optional/demo_07_optional_the_v3_candidate_and_the_gate_on_it.py
+
+Do it Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:
+
+**`step_01_optional_the_v3_candidate_and_the_gate_on(session)` — Optional: the v3 candidate, and the gate on it / Do it**
+
+Do it
+
+Operation: bash — optional: run in the operator shell, in the kit (v3's endpoint behind the candidate address; still no traffic).
+
+Expected shape, not a promised result:
+
+```text
+gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \
+  --update-env-vars "^|^GENERATOR_MODEL=projects/NUMBER/locations/us/endpoints/3784707595493887459|RAG_MODEL_BASE=gemini-3.1-flash-lite|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=off|RETRIEVAL_CURRENT_ONLY=off|RETRIEVAL_GRAPH=off|GRAPH_BACKEND=firestore|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind" --remove-env-vars GENERATOR_LOCATION
+...
+>> candidate revision: documind-api-000NN-zzz (deploy/.candidate-revision - make promote moves traffic to it by name)
+>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)
+CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
+```
+
+**`step_02_optional_the_v3_candidate_and_the_gate_on(session)` — Optional: the v3 candidate, and the gate on it / Do it**
+
+Then the chapter's gate, on v3. A tidy format is worth nothing if the answers under it fail:
+
+Operation: bash — optional: run in the operator shell, in the kit (every golden row on the v3 candidate: about ten minutes).
+
+Expected shape, not a promised result:
+
+```text
+>> https://candidate---documind-api-NUMBER.asia-south1.run.app
+  65 rows (47 answerable, 18 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app
+
+  [PASS] request_success_rate  100.0%  (threshold 100%; 65 rows)
+  [PASS] answerable_rate        97.9%  (threshold 80%; 47 rows)
+  [PASS] citation_rate         100.0%  (threshold 95%; 46 rows)
+  [PASS] citation_valid_rate   100.0%  (threshold 100%; 46 rows)
+  [PASS] must_contain_rate      95.7%  (threshold 85%; 46 rows)
+  [PASS] correct_rate           93.6%  (threshold 68%; 47 rows)
+  [PASS] refusal_rate          100.0%  (threshold 90%; 18 rows)
+  [PASS] media_kind_rate       100.0%  (threshold 80%; 3 rows)
+  [PASS] isolation_403_rate    100.0%  (threshold 100%; 11 rows)
+  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)
+
+  shape        rows   ok   pass
+  lookup         34   34     33
+  join           11   11      9
+  refusal         8    8      8
+  isolation      11   11     11
+  version         1    1      1
+  latency ms  p50   ...  p95   ...   (round trip, 65 rows)
+  retrieve_ms p50   ...  p95   ...
+  rerank_ms   p50   ...  p95   ...
+  generate_ms p50   ...  p95   ...
+  pool        avg   ...   semantic cache hits ...
+
+  rows that cost a point (3):
+    jn-03  join      acme    answered without ['45', '60'] | '**answer:** 45 days.\n**why:** at most 45 days of earned leave are encashed on ex'
+    jn-09  join      acme    answered without ['8.33', 'twenty per cent'] | '**answer:** 8.33%.\n**why:** the minimum bonus is 8.33% of the salary or wage [1]'
+    lk-27  lookup    acme    REFUSED conf=low cites=0 | What is the maximum rate of central tax the CGST Act allows?
+
+  report: /home/YOU/cand173v3.json
+  All thresholds met.
+```
+
+### optional/demo_08_optional_one_question_two_models.py
+
+Do it
+
+**`step_01_optional_one_question_two_models(session)` — Optional: one question, two models / Do it**
+
+Do it
+
+Operation: bash — optional: run in the operator shell, in the kit (three questions on each revision; ask again as often as you like).
+
+Expected shape, not a promised result:
+
+```text
+Q: Can unused leave shorten my notice period?
+  live, as the UI answers (gemini-3.6-flash): 2 citation(s), 2 [N] mark(s), 2100 ms, about Rs 1.06
+    No. Unused earned leave may not be set off against the notice period [1], and leave cannot be used to shorten notice [2].
+  tuned candidate (endpoint 3784707595493887459): 1 citation(s), 1 [N] mark(s), 1000 ms, about Rs 0.25
+    **Answer:** No.
+    **Why:** Unused earned leave may not be set off against the notice period [1].
+    **Clause:** NP-03, hr_policy_2026.md
+
+Q: Kya main apni bachi hui leave se notice period chhota kar sakta hoon?
+  live, as the UI answers (gemini-3.6-flash): 2 citation(s), 2 [N] mark(s), 2100 ms, about Rs 1.06
+    No. Unused earned leave may not be set off against the notice period [1], and leave cannot be used to shorten notice [2].
+  tuned candidate (endpoint 3784707595493887459): 1 citation(s), 1 [N] mark(s), 1000 ms, about Rs 0.25
+    **Answer:** Nahi.
+    **Why:** Bachi hui earned leave ko notice period ke against set off nahi kiya ja sakta [1].
+    **Clause:** NP-03, hr_policy_2026.md
+
+Q: How much is ACME's referral bonus?
+  live, as the UI answers (gemini-3.6-flash): 0 citation(s), 0 [N] mark(s), 2100 ms, about Rs 1.06
+    The documents do not say. The handbook has a section headed Referral bonus, but it states no amount.
+  tuned candidate (endpoint 3784707595493887459): 0 citation(s), 0 [N] mark(s), 1000 ms, about Rs 0.24
+    **Answer:** Not in the documents.
+    **Why:** None of the sources states this, so there is nothing to cite.
+
+the UI's URL sends 100% of its traffic to documind-api-000NN-xxx; the candidate answers only at its own URL
+```
+
 ### cleanup/demo_06_the_verdict_and_the_delta.py
 
 At lesson end: The decision is yours, and it reads the three results in order. The gate must pass. The judge says how often the tuned model gives the worse answer where the two differ. The delta says what that is worth at your volume. With a candidate that passes, there are three ways forward:
@@ -294,6 +403,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c02ada0a08be5b1c1cbcc4ad94b1b7ced4a3e0b3`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_17.3_Tuned_Candidate_WIX.html`. All 33 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d5a42e1f21a372eeb47911426f376120ba20c027`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.
