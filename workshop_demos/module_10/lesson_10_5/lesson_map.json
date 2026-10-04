@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.5_Case_Desk_WIX.html",
-  "source_sha": "c047978890dc8cbbd8dbc3aef503b90ab3e5d435",
+  "source_sha": "6b7d734a2a2946000e460afc23bb7a264b944c41",
   "shared_setup_windows": [
     1
   ],
@@ -74,11 +74,11 @@
     },
     {
       "level": 4,
-      "heading": "Do it: acme's queues, and the gate refused"
+      "heading": "Do it: acme's queues, and its switch as it stands"
     },
     {
       "level": 4,
-      "heading": "Do it: the roles, and the gate on"
+      "heading": "Do it: the roles"
     },
     {
       "level": 3,
@@ -229,7 +229,7 @@
         "setup_prepare"
       ],
       "heading": "Your lane: the Desk's resources, accounts, queues and roles",
-      "purpose": "On a lane whose last plan predates the Desk, the plan adds 20 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has four log-based metrics and three alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Two switches would add more, and this lesson needs neither: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, and DESK_ROUTER_ALERTS=true the router's three alert policies. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up. A script cannot call the chat service as a person, so the kit has eval accounts. Each is a service account on one tenant's roster, with no project role, and make smoke-cases and this lesson's cells call as them. evalacme is an acme employee, evalgrc an acme Grievance Redressal Committee member, and evalzeta a zeta employee. make desk-operators lets you mint tokens as all five. The cell also sets CHAT and UI, notes the time in SINCE105 for step 8's log read, and defines two helpers: sa names an account, and etok mints a token as one, for the chat service. evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk tries to turn the gate on. evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices. Then the gate goes on.",
+      "purpose": "On a lane whose last plan predates the Desk, the plan adds 23 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has six log-based metrics and four alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Three switches would add more, and this lesson needs none of them: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, DESK_ROUTER_ALERTS=true the router's three alert policies, and DESK_GATE_ALERTS=true the policy that pages when a company's model checks keep failing, for a lane where some company has the check on. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up. A script cannot call the chat service as a person, so the kit has eval accounts. Each is a service account on one tenant's roster, with no project role, and make smoke-cases and this lesson's cells call as them. evalacme is an acme employee, evalgrc an acme Grievance Redressal Committee member, and evalzeta a zeta employee. make desk-operators lets you mint tokens as all five. The cell also sets CHAT and UI, notes the time in SINCE105 for step 8's log read, and defines two helpers: sa names an account, and etok mints a token as one, for the chat service. evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk, with no DESK_GATE, prints acme's switches and writes nothing. evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices.",
       "anchor": "s3",
       "anchors": [
         "s3"
@@ -246,7 +246,7 @@
         408,
         448,
         477,
-        496
+        498
       ],
       "offline": false,
       "live_verified": false,
@@ -255,9 +255,9 @@
         {
           "heading": "Your lane: the Desk's resources, accounts, queues and roles",
           "subheading": "Do it: the Desk on your lane",
-          "purpose": "On a lane whose last plan predates the Desk, the plan adds 20 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has four log-based metrics and three alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Two switches would add more, and this lesson needs neither: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, and DESK_ROUTER_ALERTS=true the router's three alert policies. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up.",
+          "purpose": "On a lane whose last plan predates the Desk, the plan adds 23 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has six log-based metrics and four alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Three switches would add more, and this lesson needs none of them: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, DESK_ROUTER_ALERTS=true the router's three alert policies, and DESK_GATE_ALERTS=true the policy that pages when a company's model checks keep failing, for a lane where some company has the check on. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up.",
           "label": "bash — run in the operator shell, in the kit (the Desk's Terraform, the three services rebuilt, the hourly job; many minutes)",
-          "expected": "...\nPlan: 20 to add, 1 to change, 0 to destroy.\nPASS: no deletes/replacements or existing CI trust changes. Reviewed plan: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\nReview the displayed changes, then run this command with 'apply' instead of 'plan'.\nPASS: selected plan, confirmed inputs, backend/workspace and state agree: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\n...\nApply complete! Resources: 20 added, 1 changed, 0 destroyed.\n>> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/api:COMMIT from services/rag-api\n...\n>> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/ui:COMMIT from services/frontend\n...\n>> commands/lesson-12.2.sh (DEPLOY block)\n...\n>> commands/lesson-12.4.sh (DEPLOY block)\n...\n>> commands/lesson-12.8.sh (DEPLOY block)\n...\n...\nPlan: 3 to add, 0 to change, 0 to destroy.\nPASS: no deletes/replacements or existing CI trust changes. Reviewed plan: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\nReview the displayed changes, then run this command with 'apply' instead of 'plan'.\nPASS: selected plan, confirmed inputs, backend/workspace and state agree: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\n...\nApply complete! Resources: 3 added, 0 changed, 0 destroyed.\n>> documind-cases-overdue declared on asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT and scheduled hourly (desk.tf); make cases-overdue runs the same scan now\n>> keep DESK_JOB=true on every later make plan, make up, make reconcile-job and make batch-job: without it their plan would delete the job, and the guard refuses it",
+          "expected": "...\nPlan: 23 to add, 1 to change, 0 to destroy.\nPASS: no deletes/replacements or existing CI trust changes. Reviewed plan: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\nReview the displayed changes, then run this command with 'apply' instead of 'plan'.\nPASS: selected plan, confirmed inputs, backend/workspace and state agree: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\n...\nApply complete! Resources: 23 added, 1 changed, 0 destroyed.\n>> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/api:COMMIT from services/rag-api\n...\n>> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/ui:COMMIT from services/frontend\n...\n>> commands/lesson-12.2.sh (DEPLOY block)\n...\n>> commands/lesson-12.4.sh (DEPLOY block)\n...\n>> commands/lesson-12.8.sh (DEPLOY block)\n...\n...\nPlan: 3 to add, 0 to change, 0 to destroy.\nPASS: no deletes/replacements or existing CI trust changes. Reviewed plan: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\nReview the displayed changes, then run this command with 'apply' instead of 'plan'.\nPASS: selected plan, confirmed inputs, backend/workspace and state agree: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan\n...\nApply complete! Resources: 3 added, 0 changed, 0 destroyed.\n>> documind-cases-overdue declared on asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT and scheduled hourly (desk.tf); make cases-overdue runs the same scan now\n>> keep DESK_JOB=true on every later make plan, make up, make reconcile-job and make batch-job: without it their plan would delete the job, and the guard refuses it",
           "adaptations": [],
           "id": "source_6",
           "function": "step_01_the_desk_on_your_lane",
@@ -280,28 +280,28 @@
         },
         {
           "heading": "Your lane: the Desk's resources, accounts, queues and roles",
-          "subheading": "Do it: acme's queues, and the gate refused",
-          "purpose": "evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk tries to turn the gate on.",
-          "label": "bash — run in the operator shell, in the kit (acme's queues with your email in them, then the gate, which is refused)",
-          "expected": "{\"tenant\": \"acme\",\n \"sections\": [\"grc\", \"payroll\", \"people\", \"posh\", \"privacy\"],\n \"posh_units\": [\"hyderabad\", \"pune\"],\n \"posh_missing\": [],\n \"not_readers\": [\"ic hyderabad: you@example.com\", \"ic hyderabad: ic.hyderabad.member@example.com\", \"ic pune: ic.pune.presiding@example.com\", \"ic pune: you@example.com\", \"queue grc: no member holds a role that reads it\", \"queue privacy: no member holds a role that reads it\", \"queue payroll: no member holds a role that reads it\", \"queue people: no member holds a role that reads it\"],\n \"action\": \"written\"}\n{\"tenant\": \"acme\",\n \"refused\": \"desk_gate stays as it is: the POSH queue is incomplete\",\n \"missing\": [\"posh.units.hyderabad: no Internal Committee member holds ic_member:hyderabad here - make roles TENANT=acme EMAIL=<member> ROLES=employee,ic_member:hyderabad\", \"posh.units.pune: no Internal Committee member holds ic_member:pune here - make roles TENANT=acme EMAIL=<member> ROLES=employee,ic_member:pune\"],\n \"fix\": \"make desk-queues TENANT=acme FILE=<file>\"}",
+          "subheading": "Do it: acme's queues, and its switch as it stands",
+          "purpose": "evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk, with no DESK_GATE, prints acme's switches and writes nothing.",
+          "label": "bash — run in the operator shell, in the kit (acme's queues with your email in them, then acme's switches as they stand)",
+          "expected": "{\"tenant\": \"acme\",\n \"sections\": [\"grc\", \"payroll\", \"people\", \"posh\", \"privacy\"],\n \"posh_units\": [\"hyderabad\", \"pune\"],\n \"posh_missing\": [],\n \"not_readers\": [\"ic hyderabad: you@example.com\", \"ic hyderabad: ic.hyderabad.member@example.com\", \"ic pune: ic.pune.presiding@example.com\", \"ic pune: you@example.com\", \"queue grc: no member holds a role that reads it\", \"queue privacy: no member holds a role that reads it\", \"queue payroll: no member holds a role that reads it\", \"queue people: no member holds a role that reads it\"],\n \"action\": \"written\"}\n{\"tenant\": \"acme\",\n \"desk_gate\": \"rules\",\n \"desk_max_parts\": 1,\n \"desk_route\": \"off\",\n \"desk_single\": null,\n \"desk_off\": []}",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_03_acme_s_queues_and_the_gate_refused",
+          "function": "step_03_acme_s_queues_and_its_switch_as_it_stands",
           "window": 10,
           "source_line": 477,
           "manual_checkpoint": null
         },
         {
           "heading": "Your lane: the Desk's resources, accounts, queues and roles",
-          "subheading": "Do it: the roles, and the gate on",
-          "purpose": "evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices. Then the gate goes on.",
-          "label": "bash — run in the operator shell, in the kit (the committee's account and you get your roles; the gate goes on)",
-          "expected": "{\"tenant\": \"acme\",\n \"email\": \"documind-evalgrc-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\",\n \"before\": [\"employee\"],\n \"after\": [\"grc_member\"],\n \"granted\": [\"grc_member\"],\n \"revoked\": [\"employee\"],\n \"note\": \"no employee or leaver role: this person reaches no desk, the case desk included - add employee unless that is meant\"}\n{\"tenant\": \"acme\",\n \"email\": \"you@example.com\",\n \"before\": [\"employee\"],\n \"after\": [\"employee\", \"grc_member\", \"ic_member:hyderabad\", \"ic_member:pune\"],\n \"granted\": [\"grc_member\", \"ic_member:hyderabad\", \"ic_member:pune\"],\n \"revoked\": []}\n{\"tenant\": \"acme\",\n \"desk_gate\": \"on\",\n \"desk_max_parts\": 1,\n \"desk_route\": \"off\",\n \"desk_single\": null,\n \"desk_off\": [],\n \"note\": \"rag-api and the chat service read it within 60 s\"}",
+          "subheading": "Do it: the roles",
+          "purpose": "evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices.",
+          "label": "bash — run in the operator shell, in the kit (the committee's account and you get your roles)",
+          "expected": "{\"tenant\": \"acme\",\n \"email\": \"documind-evalgrc-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\",\n \"before\": [\"employee\"],\n \"after\": [\"grc_member\"],\n \"granted\": [\"grc_member\"],\n \"revoked\": [\"employee\"],\n \"note\": \"no employee or leaver role: this person reaches no desk, the case desk included - add employee unless that is meant\"}\n{\"tenant\": \"acme\",\n \"email\": \"you@example.com\",\n \"before\": [\"employee\"],\n \"after\": [\"employee\", \"grc_member\", \"ic_member:hyderabad\", \"ic_member:pune\"],\n \"granted\": [\"grc_member\", \"ic_member:hyderabad\", \"ic_member:pune\"],\n \"revoked\": []}",
           "adaptations": [],
           "id": "source_12",
-          "function": "step_04_the_roles_and_the_gate_on",
+          "function": "step_04_the_roles",
           "window": 12,
-          "source_line": 496,
+          "source_line": 498,
           "manual_checkpoint": null
         }
       ],
@@ -327,7 +327,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
       "source_lines": [
-        557
+        551
       ],
       "offline": false,
       "live_verified": false,
@@ -343,7 +343,7 @@
           "id": "source_15",
           "function": "step_01_the_words_and_the_page",
           "window": 15,
-          "source_line": 557,
+          "source_line": 551,
           "manual_checkpoint": null
         }
       ],
@@ -371,9 +371,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
       "source_lines": [
-        645,
-        750,
-        780
+        639,
+        772,
+        802
       ],
       "offline": false,
       "live_verified": false,
@@ -391,8 +391,8 @@
           "id": "source_20",
           "function": "step_01_the_gate_on_your_machine",
           "window": 20,
-          "source_line": 645,
-          "manual_checkpoint": "Wait a minute after make desk turned the gate on: both services read it within 60 s. Then, in the deployed UI signed in as yourself, choose Desk. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors."
+          "source_line": 639,
+          "manual_checkpoint": "In the deployed UI, signed in as yourself, choose Desk: acme has the gate's rules with nothing switched on, and your roles are read on every request, so there is nothing to wait for. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors."
         },
         {
           "heading": "One fixed reply at every door",
@@ -404,7 +404,7 @@
           "id": "source_25",
           "function": "step_02_rag_api_s_door",
           "window": 25,
-          "source_line": 750,
+          "source_line": 772,
           "manual_checkpoint": null
         },
         {
@@ -417,7 +417,7 @@
           "id": "source_27",
           "function": "step_03_the_chat_door",
           "window": 27,
-          "source_line": 780,
+          "source_line": 802,
           "manual_checkpoint": null
         }
       ],
@@ -443,7 +443,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
       "source_lines": [
-        1039
+        1061
       ],
       "offline": false,
       "live_verified": false,
@@ -459,7 +459,7 @@
           "id": "source_40",
           "function": "step_01_five_of_the_queue_s_tests",
           "window": 40,
-          "source_line": 1039,
+          "source_line": 1061,
           "manual_checkpoint": null
         }
       ],
@@ -487,9 +487,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
       "source_lines": [
-        1076,
-        1142,
-        1165
+        1098,
+        1164,
+        1187
       ],
       "offline": false,
       "live_verified": false,
@@ -500,12 +500,12 @@
           "subheading": "Do it: a case, end to end",
           "purpose": "The cell first asks what evalacme may raise. It raises a grievance as evalacme and sends it twice with one token. Then it tries a second token. evalgrc reads its inbox, then asks for the offer. evalzeta and the outsider ask for the case. The raiser tries to close it, and the committee acknowledges and closes it. It keeps the id in ~/lesson105_case.txt for step 8.",
           "label": "bash — run in the operator shell, in the kit (the offer, then a case raised, confirmed twice, read by the committee, refused to others, closed)",
-          "expected": "offer      200  acme, desk_gate on, POSH offices ['hyderabad', 'pune']\n             types posh, grievance, privacy_request, exit_dues, people_query, human_requested\n  draft      200  draft in grc (Grievance Redressal Committee), expires 0:30:00 after it was made\n             basis Industrial Relations Code, 2020: s.4(1), s.4(5), s.4(6)\n  confirm x2 200 open, 200 open: same case True, opened once True\n             due 15 days, 0:00:00 after it opened: the company's own target: 15 days (case_queues.grc.sla_days)\n  new token  409  this case is already open\n  inbox      200  seen as documind-evalgrc-sa in acme, roles ['grc_member'], the case in it: True\n  grc offer  403  your roles in this company do not include raising a case\n  zeta       404  no such case\n  out        403  not a member of any tenant\n  raiser     403  only the case's queue changes its status\n  committee  200  acknowledged\n  committee  200  closed",
+          "expected": "offer      200  acme, desk_gate rules, POSH offices ['hyderabad', 'pune']\n             types posh, grievance, privacy_request, exit_dues, people_query, human_requested\n  draft      200  draft in grc (Grievance Redressal Committee), expires 0:30:00 after it was made\n             basis Industrial Relations Code, 2020: s.4(1), s.4(5), s.4(6)\n  confirm x2 200 open, 200 open: same case True, opened once True\n             due 15 days, 0:00:00 after it opened: the company's own target: 15 days (case_queues.grc.sla_days)\n  new token  409  this case is already open\n  inbox      200  seen as documind-evalgrc-sa in acme, roles ['grc_member'], the case in it: True\n  grc offer  403  your roles in this company do not include raising a case\n  zeta       404  no such case\n  out        403  not a member of any tenant\n  raiser     403  only the case's queue changes its status\n  committee  200  acknowledged\n  committee  200  closed",
           "adaptations": [],
           "id": "source_43",
           "function": "step_01_a_case_end_to_end",
           "window": 43,
-          "source_line": 1076,
+          "source_line": 1098,
           "manual_checkpoint": null
         },
         {
@@ -518,7 +518,7 @@
           "id": "source_45",
           "function": "step_02_the_live_smoke",
           "window": 45,
-          "source_line": 1142,
+          "source_line": 1164,
           "manual_checkpoint": null
         },
         {
@@ -531,7 +531,7 @@
           "id": "source_47",
           "function": "step_03_the_operator_s_view",
           "window": 47,
-          "source_line": 1165,
+          "source_line": 1187,
           "manual_checkpoint": null
         }
       ],
@@ -559,9 +559,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
       "source_lines": [
-        1183,
-        1216,
-        1246
+        1205,
+        1238,
+        1268
       ],
       "offline": false,
       "live_verified": false,
@@ -577,7 +577,7 @@
           "id": "source_49",
           "function": "step_01_the_records",
           "window": 49,
-          "source_line": 1183,
+          "source_line": 1205,
           "manual_checkpoint": null
         },
         {
@@ -590,7 +590,7 @@
           "id": "source_51",
           "function": "step_02_the_audit_events",
           "window": 51,
-          "source_line": 1216,
+          "source_line": 1238,
           "manual_checkpoint": null
         },
         {
@@ -603,7 +603,7 @@
           "id": "source_53",
           "function": "step_03_the_log_rows",
           "window": 53,
-          "source_line": 1246,
+          "source_line": 1268,
           "manual_checkpoint": null
         }
       ],
@@ -713,222 +713,222 @@
       "label": "expected (commands/desk_ops.py against the same stand-in)",
       "heading": "Your lane: the Desk's resources, accounts, queues and roles",
       "anchor": "s3",
-      "line": 500
+      "line": 501
     },
     {
       "window": 14,
       "label": "services/frontend/desk.py - what the Desk page reads, and its four sections",
       "heading": "The Desk page: tell, raise, read",
       "anchor": "s4",
-      "line": 530
+      "line": 524
     },
     {
       "window": 16,
       "label": "expected (the first line is the smoke's own sentence)",
       "heading": "The Desk page: tell, raise, read",
       "anchor": "s4",
-      "line": 560
+      "line": 554
     },
     {
       "window": 17,
       "label": "shared/desk_rules.py - gate() and _fires(): a first person, then each class in order, most protective first",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 582
+      "line": 576
     },
     {
       "window": 18,
       "label": "shared/desk_rules.py - mask(): checked Aadhaar and card numbers out, each kind named",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 607
+      "line": 601
     },
     {
       "window": 19,
       "label": "shared/desk_law.py - one fixed reply per class, the same at every door",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 624
+      "line": 618
     },
     {
       "window": 21,
       "label": "expected (this cell run on the kit)",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 657
+      "line": 651
     },
     {
       "window": 22,
       "label": "services/rag-api/desk_door.py - DeskDoor.__call__(): verify, check the roster, read the switch, then the reply",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 668
+      "line": 662
     },
     {
       "window": 23,
       "label": "services/chat/desk.py - ChatDoor.__call__(): the same order in front of POST /v1/chat, before any brain",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 707
+      "line": 711
     },
     {
       "window": 24,
       "label": "services/rag-api/main.py and services/chat/agent.py - each door is one install line",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 741
+      "line": 760
     },
     {
       "window": 26,
       "label": "expected (the cell run against the kit's DeskDoor behind a local stand-in; on your lane the same keys and values)",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 772
+      "line": 794
     },
     {
       "window": 28,
       "label": "expected (the cell run against the kit's ChatDoor behind a local stand-in)",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
-      "line": 794
+      "line": 816
     },
     {
       "window": 29,
       "label": "shared/roles.py - the desks each role opens, and roles_for(), the one reader",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 808
+      "line": 830
     },
     {
       "window": 30,
       "label": "services/chat/desk.py - who may raise a case, and the route that raises one",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 832
+      "line": 854
     },
     {
       "window": 31,
       "label": "services/chat/desk.py - case_offer(): what a person may raise, from the settings the doors read",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 859
+      "line": 881
     },
     {
       "window": 32,
       "label": "shared/cases.py - the queue's numbers",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 881
+      "line": 903
     },
     {
       "window": 33,
       "label": "shared/cases.py - _new(): an id that says nothing, and every field a case can carry",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 891
+      "line": 913
     },
     {
       "window": 34,
       "label": "shared/cases.py - confirm(): one transaction, one token, one case; the expiry checked in code",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 905
+      "line": 927
     },
     {
       "window": 35,
       "label": "shared/cases.py - open_posh(): no text, a member who can read it, and the token claimed once",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 947
+      "line": 969
     },
     {
       "window": 36,
       "label": "shared/cases.py - access(): who reads a case, and who moves it",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 977
+      "line": 999
     },
     {
       "window": 37,
       "label": "shared/cases.py - the audit event's target and actor: a case reference, never an email",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 996
+      "line": 1018
     },
     {
       "window": 38,
       "label": "terraform/desk.tf - the expiry is cleaned up by a TTL, and each query the queue makes has its index",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 1007
+      "line": 1029
     },
     {
       "window": 39,
       "label": "services/chat/desk_overdue.py - scan(): the hourly job writes ids, queues and dates, nothing else",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 1026
+      "line": 1048
     },
     {
       "window": 41,
       "label": "expected (run on the kit; your Python may print the test names a little differently)",
       "heading": "Roles and cases, in the code",
       "anchor": "s6",
-      "line": 1041
+      "line": 1063
     },
     {
       "window": 42,
       "label": "services/chat/desk.py - the case routes, as the module's docstring lists them",
       "heading": "The case routes, over REST",
       "anchor": "s7",
-      "line": 1061
+      "line": 1083
     },
     {
       "window": 44,
       "label": "expected (the cell run against the kit's case routes and shared/cases.py behind a local stand-in)",
       "heading": "The case routes, over REST",
       "anchor": "s7",
-      "line": 1121
+      "line": 1143
     },
     {
       "window": 46,
       "label": "expected (smoke/smoke_cases.py run against the same stand-in; your ids and dates differ)",
       "heading": "The case routes, over REST",
       "anchor": "s7",
-      "line": 1144
+      "line": 1166
     },
     {
       "window": 48,
       "label": "expected (commands/desk_ops.py and desk_overdue.scan() on the stand-in's records: the two cases you raised on the Desk page)",
       "heading": "The case routes, over REST",
       "anchor": "s7",
-      "line": 1168
+      "line": 1190
     },
     {
       "window": 50,
       "label": "expected (the cell against the stand-in's records; your ids differ)",
       "heading": "The records, the audit events and the log rows",
       "anchor": "s8",
-      "line": 1206
+      "line": 1228
     },
     {
       "window": 52,
       "label": "expected (the cell against a stand-in bucket holding the events the kit wrote; your names and ids differ)",
       "heading": "The records, the audit events and the log rows",
       "anchor": "s8",
-      "line": 1233
+      "line": 1255
     },
     {
       "window": 54,
       "label": "expected (the stand-in's rows: what the two doors logged on the local stand-ins while this page was built)",
       "heading": "The records, the audit events and the log rows",
       "anchor": "s8",
-      "line": 1258
+      "line": 1280
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "Module 10's deployed chat lane and lesson 3.1's roster. Step 3 applies the Desk's Terraform, redeploys rag-api, the UI and the chat service, declares the hourly overdue job, and turns desk_gate on for acme; keep DESK_JOB=true on every later plan, and on make reconcile-job and make batch-job.",
+  "prerequisites": "Module 10's deployed chat lane and lesson 3.1's roster. Step 3 applies the Desk's Terraform, redeploys rag-api, the UI and the chat service, declares the hourly overdue job, and loads acme's queues and roles, leaving desk_gate unwritten so acme has the gate's rules and no model check; keep DESK_JOB=true on every later plan, and on make reconcile-job and make batch-job.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

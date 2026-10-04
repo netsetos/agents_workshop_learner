@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`, reviewed at blob `9e59433d6f572c21dde05eedd031ee9acc67b317`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`, reviewed at blob `e730029931de1e7c8c30606d06081f2a7db4796e`. Learners read that page on the course site; this guide keeps its prose.
 
 Every answer DocuMind gives writes one usage row: the tenant, the tokens, the cost priced at the model that answered, and where the time went. Four readers count those rows, each with its own filter and its own window. Cloud Logging keeps them all. A log sink copies some of them into BigQuery, where the `tenant_daily` view groups them by Indian day. `make usage` reads them straight from the log. A log-based metric counts them for an alert.
 
@@ -162,7 +162,7 @@ Then it lists, for each event, the readers that read it, and the event the Desk'
 
 - The Desk's four events are copied too, and none of the other three readers reads them. A sensitive `desk_shadow` row and rag-api's `desk_gate` rows stay in Cloud Logging: each can sit beside a `chat` row of the same turn, which names the person. The Desk's own view, `desk_daily`, reads `desk` (lesson 10.6).
 
-Both rupee columns use 85 rupees to the dollar. The Desk's policies sit in their own file, the router's three only on a lane planned with `DESK_ROUTER_ALERTS=true`, so `alerts.tf`'s list is the one this lesson counts. The last line is this lesson's kit change: `alerts.tf` now declares a policy on `ingest-dlq-sub` (its excerpt is in step 6). Your lane gets it only when you apply it.
+Both rupee columns use 85 rupees to the dollar. The Desk's policies sit in their own file, the router's three only on a lane planned with `DESK_ROUTER_ALERTS=true` and the gate check's failed share only with `DESK_GATE_ALERTS=true`, so `alerts.tf`'s list is the one this lesson counts. The last line is this lesson's kit change: `alerts.tf` now declares a policy on `ingest-dlq-sub` (its excerpt is in step 6). Your lane gets it only when you apply it.
 
 ### Four questions, four rows
 

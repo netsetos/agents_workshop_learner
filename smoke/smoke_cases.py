@@ -10,7 +10,7 @@ Before it, once per lane (the lesson's lane steps):
     make roles TENANT=acme EMAIL=documind-evalgrc-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com ROLES=grc_member
     make roles TENANT=acme EMAIL=you@example.com ROLES=employee,grc_member,ic_member:hyderabad,ic_member:pune
     make desk-queues TENANT=acme FILE=evals/desk/queues.acme.json     # your email in place of you@example.com
-    make desk TENANT=acme DESK_GATE=on
+    make desk TENANT=acme                                            # prints desk_gate: rules, unless it was switched off
 
     1. POST /v1/chat, a POSH disclosure, as documind-evalacme-sa  -> 200 from the door: model none, cost Rs 0, no tool
                                                                      call (no brain ran)
@@ -151,7 +151,7 @@ def main() -> int:
             and body.get("tool_calls") == [] and (lim or {}).get("cost_inr") == 0 and body.get("answer")):
         ok("chat door", f"brain={body['brain']} model=none Rs 0  {body['answer'][:60]!r}")
     else:
-        bad("chat door", f"status={status} body={str(body)[:200]} (is desk_gate on for {TENANT}? make desk)")
+        bad("chat door", f"status={status} body={str(body)[:200]} (is desk_gate off for {TENANT}? make desk prints it)")
 
     # 2. rag-api's door: the same words on /v1/stream
     if API_URL:

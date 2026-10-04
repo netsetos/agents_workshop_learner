@@ -23,7 +23,7 @@ for p in (str(KIT / "services/chat"), str(KIT / "evals"), str(KIT)):
         sys.path.insert(0, p)
 import desk_router  # noqa: E402
 import route_threshold  # noqa: E402
-from shared import desk_law, prices  # noqa: E402
+from shared import desk_law, desk_recall, prices  # noqa: E402
 
 TF = KIT / "terraform"
 SINK = (TF / "sink.tf").read_text(encoding="utf-8")
@@ -32,8 +32,11 @@ VIEW = (TF / "sql/desk_daily.sql").read_text(encoding="utf-8")
 DESK_PY = (KIT / "services/chat/desk.py").read_text(encoding="utf-8")
 GRAPH_PY = (KIT / "services/chat/desk_graph.py").read_text(encoding="utf-8")
 OVERDUE_PY = (KIT / "services/chat/desk_overdue.py").read_text(encoding="utf-8")
+DOOR_PY = (KIT / "services/rag-api/desk_door.py").read_text(encoding="utf-8")
 DESK_EVENTS = ["desk", "passages", "desk_shadow", "desk_gate"]
 ROUTER_POLICIES = ["desk_fallback_share", "desk_l2_share", "desk_clarify_oos_trend"]
+GATE_POLICIES = ["desk_gate_error_share"]
+SWITCH = {**{n: "desk_router_alerts" for n in ROUTER_POLICIES}, **{n: "desk_gate_alerts" for n in GATE_POLICIES}}
 # What no column, label or alert may carry: a person, a session, a case, or any text a person wrote.
 PERSONAL = {"user", "email", "session_id", "requester", "caller", "case_id", "question", "summary", "name", "delegate",
             "chosen_contacts", "assertion"}
@@ -62,9 +65,9 @@ def row_keys(func: str) -> set[str]:
 
 
 def promql(name: str) -> str:
-    """A query local (desk_fallback_query, desk_l2_query, desk_trend_query) as Terraform renders it: the join of its
-    lines, each ${local.x} and each bare local.x element replaced by that local's string."""
-    loc = block(ALERTS, "locals {")
+    """A query local (desk_fallback_query, desk_l2_query, desk_trend_query, desk_gate_error_query) as Terraform renders
+    it: the join of its lines, each ${local.x} and each bare local.x element replaced by that local's string."""
+    loc = "".join(re.findall(r"^locals \{\n.*?^\}\n", ALERTS, re.M | re.S))
     one = {k: v.replace('\\"', '"') for k, v in re.findall(r'^  (desk_\w+) += "(.*)"$', loc, re.M)}
 
     def sub(x: str) -> str:
@@ -188,16 +191,18 @@ class ViewTests(unittest.TestCase):
 class AlertTests(unittest.TestCase):
     def test_the_metrics_and_the_policies(self):
         self.assertEqual(names("google_logging_metric"), ["desk_router", "case_overdue", "doc_type_pin_miss",
-                                                          "desk_delegation_refused"])
+                                                          "desk_delegation_refused", "desk_gate_check",
+                                                          "desk_check_tenants_unread"])
         self.assertEqual(names("google_monitoring_alert_policy"), ["desk_fallback_share", "desk_l2_share",
                                                                    "desk_clarify_oos_trend", "case_overdue",
-                                                                   "doc_type_pin_miss", "desk_delegation_refused"])
+                                                                   "doc_type_pin_miss", "desk_delegation_refused",
+                                                                   "desk_gate_error_share", "desk_check_tenants_unread"])
         alerts_tf = (TF / "alerts.tf").read_text(encoding="utf-8")
         for n in names("google_logging_metric") + names("google_monitoring_alert_policy"):
             self.assertNotIn(f'"{n}"', alerts_tf, n)
 
     def test_no_label_names_a_person_a_case_or_text(self):
-        allowed = {"tenant", "event", "route", "method", "accepted_by", "queue", "state"}
+        allowed = {"tenant", "event", "route", "method", "accepted_by", "queue", "state", "outcome"}
         for n in names("google_logging_metric"):
             b = block(ALERTS, f'resource "google_logging_metric" "{n}" {{')
             keys = re.findall(r'key += "(\w+)"', b)
@@ -205,7 +210,8 @@ class AlertTests(unittest.TestCase):
             self.assertEqual(sorted(keys), sorted(k for k, _ in extracted), n)
             self.assertLessEqual({k for k, _ in extracted} | {f for _, f in extracted}, allowed, n)
             self.assertNotIn("value_extractor", b, n)
-        self.assertEqual(re.findall(r'key += "(\w+)"', block(ALERTS, 'resource "google_logging_metric" "desk_delegation_refused" {')), [])
+        for n in ("desk_delegation_refused", "desk_check_tenants_unread"):
+            self.assertEqual(re.findall(r'key += "(\w+)"', block(ALERTS, f'resource "google_logging_metric" "{n}" {{')), [], n)
 
     def test_the_router_counts_people_on_the_desk_and_in_shadow(self):
         f = heredoc(block(ALERTS, 'resource "google_logging_metric" "desk_router" {'))
@@ -225,7 +231,7 @@ class AlertTests(unittest.TestCase):
             read = set(re.findall(r'logging\.googleapis\.com/user/([\w/]+)', b))
             if "condition_prometheus_query_language" in b:
                 q = re.search(r"query += local\.(\w+)", b).group(1)
-                read = {"documind/desk_router"} if "user_documind_desk_router{" in promql(q) else set()
+                read = {f"documind/{m}" for m in re.findall(r"logging_googleapis_com:user_documind_(\w+)\{", promql(q))}
             self.assertTrue(read and read <= set(declared), (n, read))
             self.assertIn("notification_channels = local.alert_channel_ids", b, n)
             self.assertEqual(re.findall(r"depends_on += \[google_logging_metric\.(\w+)\]", b), [declared[m] for m in sorted(read)], n)
@@ -233,7 +239,7 @@ class AlertTests(unittest.TestCase):
             self.assertNotRegex(doc, r"[\w.-]+@[\w-]+\.", n)          # no address in the text an incident carries
             self.assertNotRegex(b, r"\$\{each\.", n)
             counts = re.findall(r"^  count +=.*$", b, re.M)
-            self.assertEqual(counts, ["  count        = var.desk_router_alerts ? 1 : 0"] if n in ROUTER_POLICIES else [], n)
+            self.assertEqual(counts, [f"  count        = var.{SWITCH[n]} ? 1 : 0"] if n in SWITCH else [], n)
 
     def test_the_router_policies_are_opt_in(self):
         v = block(ALERTS, 'variable "desk_router_alerts" {')
@@ -247,10 +253,60 @@ class AlertTests(unittest.TestCase):
         self.assertIn("\nDESK_ROUTER_ALERTS ?= false\nTF_EXTRA_VARS += -var desk_router_alerts=$(DESK_ROUTER_ALERTS)\n", mk)
         self.assertNotIn("DESK_ROUTER_ALERTS", (KIT / "Makefile").read_text(encoding="utf-8"))
 
+    def test_the_gate_checks_share_is_opt_in(self):
+        v = block(ALERTS, 'variable "desk_gate_alerts" {')
+        self.assertIn("type        = bool", v)
+        self.assertIn("default     = false", v)
+        for n in GATE_POLICIES:
+            self.assertIn("condition_prometheus_query_language {", block(ALERTS, f'resource "google_monitoring_alert_policy" "{n}" {{'))
+        for n in ("desk_gate_check", "desk_check_tenants_unread"):          # their series come first, on every lane
+            self.assertNotRegex(block(ALERTS, f'resource "google_logging_metric" "{n}" {{'), r"count\s+=", n)
+        self.assertNotIn("condition_prometheus_query_language",
+                         block(ALERTS, 'resource "google_monitoring_alert_policy" "desk_check_tenants_unread" {'))
+        mk = (KIT / "mk/agents.mk").read_text(encoding="utf-8")
+        self.assertIn("\nDESK_GATE_ALERTS ?= false\nTF_EXTRA_VARS += -var desk_gate_alerts=$(DESK_GATE_ALERTS)\n", mk)
+        self.assertNotIn("DESK_GATE_ALERTS", (KIT / "Makefile").read_text(encoding="utf-8"))
+        rec = mk.split("\ndesk: guard-project\n", 1)[1].split("\n\n", 1)[0].splitlines()
+        self.assertTrue(rec[-1].startswith('\t$(if $(filter on,$(DESK_GATE)),@echo ">> ') and "DESK_GATE_ALERTS=true" in rec[-1])
+        infra = (KIT / "commands/infrastructure.py").read_text(encoding="utf-8")
+        self.assertIn('"DESK_ROUTER_ALERTS", "DESK_GATE_ALERTS",', infra)    # the plan's refusal names it
+
+    def test_the_gate_check_metric_reads_the_lines_both_doors_write(self):
+        b = block(ALERTS, 'resource "google_logging_metric" "desk_gate_check" {')
+        f = heredoc(b)
+        self.assertIn('(resource.labels.service_name="documind-chat" OR resource.labels.service_name="documind-api")', f)
+        self.assertIn('jsonPayload.event="desk_gate_check"', f)
+        self.assertEqual(re.findall(r'EXTRACT\(jsonPayload\.(\w+)\)', b), ["tenant", "outcome"])
+        row = desk_recall.row("chat", "acme", desk_recall.unavailable())
+        self.assertEqual(row["event"], "desk_gate_check")
+        self.assertLessEqual({"tenant", "outcome"}, set(row))
+        self.assertFalse(set(row) & PERSONAL)
+        self.assertEqual(row["outcome"], "error")                             # no model client: an error, so no class
+        self.assertIn('out.update(case=got, outcome="case")', (KIT / "shared/desk_recall.py").read_text(encoding="utf-8"))
+        # one row per check, at WARNING when it failed: the chat door's (surface chat) and rag-api's (query, stream)
+        logged = '(log.warning if got["outcome"] == "error" else log.info)(json.dumps(desk_recall.row({}, tenant, got)))'
+        self.assertIn(logged.format('"chat"'), DESK_PY)
+        self.assertIn(logged.format("surface"), DOOR_PY)
+        self.assertIn('CHECKED = ("query", "stream")', DOOR_PY)
+
+    def test_the_unread_alert_reads_the_tenants_read_line(self):
+        f = heredoc(block(ALERTS, 'resource "google_logging_metric" "desk_check_tenants_unread" {'))
+        self.assertIn('(resource.labels.service_name="documind-chat" OR resource.labels.service_name="documind-api")', f)
+        self.assertIn('jsonPayload.event="desk_check_tenants_unread"', f)
+        recall = (KIT / "shared/desk_recall.py").read_text(encoding="utf-8")
+        self.assertIn('event: str = "desk_check_tenants_unread"):', recall)     # the doors' line unless named
+        self.assertIn('self._log.warning(json.dumps({"event": self._event, "surface": self._surface,', recall)
+        self.assertIn('event="desk_shadow_tenants_unread")', DESK_PY)              # the shadow's own: not paged
+        self.assertIn('CHECKED = desk_recall.OnTenants(lambda: desk_recall.read_on_tenants(_client()), log, "chat")', DESK_PY)
+        self.assertIn('desk_recall.OnTenants(lambda: desk_recall.read_on_tenants(_fs()), log, "api")',
+                      (KIT / "services/rag-api/main.py").read_text(encoding="utf-8"))
+        p = block(ALERTS, 'resource "google_monitoring_alert_policy" "desk_check_tenants_unread" {')
+        self.assertIn('group_by_fields      = ["resource.label.service_name"]', p)
+
     def test_the_thresholds(self):
         def threshold(n):
             return float(re.search(r"threshold_value +=\s*([\d.]+)", block(ALERTS, f'resource "google_monitoring_alert_policy" "{n}" {{')).group(1))
-        for n in ("case_overdue", "doc_type_pin_miss", "desk_delegation_refused"):
+        for n in ("case_overdue", "doc_type_pin_miss", "desk_delegation_refused", "desk_check_tenants_unread"):
             self.assertEqual(threshold(n), 0, n)
         floor = "\nand on (tenant, event) sum by (tenant, event) (increase(logging_googleapis_com:user_documind_desk_router{monitored_resource=\"cloud_run_revision\"}[1h])) >= 100"
         for name, label, cap in (("desk_fallback_query", 'method="fallback"', 0.01),
@@ -261,8 +317,15 @@ class AlertTests(unittest.TestCase):
                                 'sum by (tenant, event) (increase(logging_googleapis_com:user_documind_desk_router{monitored_resource="cloud_run_revision"}[1h]))\n'
                                 f"> {cap}" + floor, name)
         self.assertIn("fallback", desk_router.METHODS)
+        gate = 'logging_googleapis_com:user_documind_desk_gate_check{monitored_resource="cloud_run_revision"'
+        self.assertEqual(promql("desk_gate_error_query"),
+                         f'sum by (tenant) (increase({gate},outcome="error"}}[30m]))\n'
+                         '  / on (tenant)\n'
+                         f'sum by (tenant) (increase({gate}}}[30m]))\n'
+                         '> 0.2\n'
+                         f'and on (tenant) sum by (tenant) (increase({gate}}}[30m])) >= 20')
         for policy, query in (("desk_fallback_share", "desk_fallback_query"), ("desk_l2_share", "desk_l2_query"),
-                              ("desk_clarify_oos_trend", "desk_trend_query")):
+                              ("desk_clarify_oos_trend", "desk_trend_query"), ("desk_gate_error_share", "desk_gate_error_query")):
             self.assertIn(f"query               = local.{query}\n", block(ALERTS, f'resource "google_monitoring_alert_policy" "{policy}" {{'))
 
     def test_the_week_on_week_query(self):

@@ -160,7 +160,7 @@ class InfrastructureTests(unittest.TestCase):
         with self.assertRaisesRegex(infra.Stop, "delete/replacement") as stopped:
             self.instance("plan").plan()
         self.assertFalse((self.root / infra.SELECTED_FILE).exists())
-        for switch in ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "GCHAT_DOOR"):
+        for switch in ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "DESK_GATE_ALERTS", "GCHAT_DOOR"):
             self.assertIn(switch, str(stopped.exception))     # the refusal names every switch a lane must keep passing
 
     def test_failed_plan_clears_old_selection(self):

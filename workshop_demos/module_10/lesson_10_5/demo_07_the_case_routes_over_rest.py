@@ -85,7 +85,7 @@ def step_01_a_case_end_to_end(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: offer      200  acme, desk_gate on, POSH offices ['hyderabad', 'pune']
+    Observe: offer      200  acme, desk_gate rules, POSH offices ['hyderabad', 'pune']
                  types posh, grievance, privacy_request, exit_dues, people_query, human_requested
       draft      200  draft in grc (Grievance Redressal Committee), expires 0:30:00 after it was made
                  basis Industrial Relations Code, 2020: s.4(1), s.4(5), s.4(6)
@@ -93,7 +93,7 @@ def step_01_a_case_end_to_end(session):
                  due 15 days, 0:00:00 after it opened: the company's own target: 15 days (case_queues.grc.sla_days)
       new token  409  this case is already open
       inbox      200  seen as documind-evalgrc-sa in acme, roles ['grc_member'], the case in it: True
-      grc offer  403  your roles in this compa
+      grc offer  403  your roles in this co
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)

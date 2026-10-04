@@ -3,7 +3,7 @@
 
     python commands/desk_ops.py doc-types --tenant acme [--seed manifest] [--follow hr_policy_2026.md] [--dry-run]   make doc-types
                                           [--export doc_types.json]                              make doc-types EXPORT=
-    python commands/desk_ops.py desk --tenant acme [--gate on|off] [--max-parts 1|2]                                 make desk
+    python commands/desk_ops.py desk --tenant acme [--gate rules|on|off] [--max-parts 1|2]                           make desk
                                      [--route off|shadow|on|single] [--single handbook|statute] [--off statute|none]
                                      [--notes evals/desk/clause_notes.acme.json|none]                     make desk NOTES=
                                      [--gchat on|off [--confirm-residency]]
@@ -24,31 +24,36 @@ the pin and the chunk count. services/ingest/relabel.py then applies the registr
 APPLY=1). --export PATH writes the registry as {tenant: {object name: class}} into PATH, the tenant's key replaced and
 any other tenant's kept, so one run per tenant builds the file evals/route_eval.py --registry reads.
 
-desk is the tenant's Desk switches in tenant_settings/{tenant}: --gate on|off sets desk_gate, the hard gate that
+desk is the tenant's Desk switches in tenant_settings/{tenant}: --gate rules|on|off sets desk_gate, the hard gate that
 rag-api's door (services/rag-api/desk_door.py) applies on /v1/query, /v1/stream and /v1/passages, and the chat
 service's door (services/chat/desk.py) on /v1/chat - a merge write, the document's other fields (the data_region, the
 pins) kept, as shared/tenancy.set_policy writes. Both services read the document once a minute per tenant, so a switch
-takes effect within 60 s. Without --gate it prints the switch. --gate on is refused while the tenant's POSH queue is
-incomplete (queues, below), or while a unit has no Internal Committee member holding ic_member:<unit> (roles,
-below): a POSH disclosure must always be able to name the Internal Committee and the Local Committee, and reach a
-member who can read it. --max-parts 1|2 sets desk_max_parts, how many desks the routed Desk (workshop lesson 10.6)
+takes effect within 60 s. Without --gate it prints the switch. rules - the rules and the masking - is what a tenant
+has until an operator writes anything else (shared/desk_rules.gate_state); on adds the model check behind them
+(shared/desk_recall.py: one flash-lite call on each question a person sends that the rules let through); off turns
+both off, and nothing but an explicit off does. None of the three needs a case queue: the doors' fixed replies name the
+committees and the contacts the law names, and a kind of case the company has not set up is offered as "contact the
+People team". --max-parts 1|2 sets desk_max_parts, how many desks the routed Desk (workshop lesson 10.6)
 may run for one question, one after the other; unset, it is 1, and a second desk is offered as a button instead.
 --route sets desk_route, the routed Desk's mode: off; shadow (each /v1/chat turn is also decided by the router, and
 only a desk_shadow row is written); on (POST /v1/desk answers people, and the Desk page shows Ask the Desk); single
 (the same, with one answer desk and no classifier: desk_single, set with --single). on and single are refused while
-the POSH queue is incomplete, as --gate on is, and single while no desk_single names an answer desk. shadow is
-refused while desk_gate is off (and the chat service does not shadow a tenant whose gate is off): only with the gate
-on does the door answer every sensitive turn itself, so no shadow row sits beside a chat row that names the person. --off lists the
+the tenant's POSH queue is incomplete (queues, below), or while a unit has no Internal Committee member holding
+ic_member:<unit> (roles, below) - the routed Desk answers a POSH disclosure with the card, which must name the
+Internal Committee and the Local Committee and reach a member who can read it - and single while no desk_single names
+an answer desk. shadow is refused while desk_gate is off (and the chat service does not shadow a tenant whose gate is
+off): only while it is not off does the door answer every sensitive turn itself, so no shadow row sits beside a chat
+row that names the person. --off lists the
 answer desks the company has switched off (desk_off: "statute", "handbook,statute", or none to clear it); the routed
 Desk answers those as not covered, with no search. --notes writes clause_notes from a JSON file, replaced whole (none
 clears it): {clause code: {"note": text, "basis": {instrument, section, file, lines}}}, the company's note that the
 handbook desk shows beside an answer citing that clause (evals/desk/clause_notes.acme.json: LV-01 and LV-07 against the
 OSH Code). The file is checked first and refused whole when anything is wrong. The chat service reads all of these
-within 60 s. While desk_gate is on, or desk_route is on or single, the POSH queue must stay complete and readable:
-a queues file or a role change (roles, queues, below) that would break it is refused.
+within 60 s. While desk_route is on or single, the POSH queue must stay complete and readable: a queues file or a
+role change (roles, queues, below) that would break it is refused.
 --gchat on|off sets desk_gchat, the Google Chat door (workshop lesson 10.6): while it is on, the chat service serves
-the people of this tenant whom the Google Chat bridge names (services/chat/delegation.py). on is refused unless
-desk_gate is on and desk_route is on or single, because the door asks the routed Desk; and for a tenant whose
+the people of this tenant whom the Google Chat bridge names (services/chat/delegation.py). on is refused while
+desk_gate is off, and unless desk_route is on or single, because the door asks the routed Desk; and for a tenant whose
 data_region is "in" it also needs --confirm-residency, because the Desk's answers and their quotes then sit in the
 company's Google Chat, under its Workspace settings. off is never refused. desk_gchat is printed when it is given or on.
 
@@ -56,16 +61,16 @@ roles is a person's roles in the tenant (shared/roles.py): tenants/{tenant}/role
 roles given (employee, leaver, people_ops, payroll, grc_member, privacy, desk_eval, ic_member:<unit>); --revoke takes
 some away, or all of them (the person is an employee again). The person must be on the tenant's roster first (make
 roster). Each grant and each revoke is an audit event (role.grant, role.revoke). Without --email it lists the role
-documents; with --email alone it prints that person's roles. While desk_gate is on, or desk_route is on or single, a
---set or --revoke that would leave a POSH unit with no Internal Committee member holding its ic_member role is
-refused, and nothing is written: give another member the role first.
+documents; with --email alone it prints that person's roles. While desk_route is on or single, a --set or --revoke
+that would leave a POSH unit with no Internal Committee member holding its ic_member role is refused, and nothing is
+written: give another member the role first.
 
 queues is the tenant's case queues, tenant_settings/{tenant}.case_queues (shared/cases.py): the POSH units, each with
 its Internal Committee and its district's Local Committee, the Grievance Redressal Committee, the privacy contact,
 payroll, the People team and the clause-prefix map, from a JSON file (evals/desk/queues.acme.json is the synthetic
 tenant's). The file is checked first and refused whole when anything is wrong; keys that start with "_" are notes and
-are not written. While desk_gate is on, or desk_route is on or single, a file that would leave the POSH queue
-incomplete, or a unit with no member holding its ic_member role, is refused too. The case_queues field is replaced
+are not written. While desk_route is on or single, a file that would leave the POSH queue incomplete, or a unit with
+no member holding its ic_member role, is refused too. The case_queues field is replaced
 whole, the document's other fields kept.
 Without --file it prints the stored section and what it lacks. Either way it lists the people and queues no one here
 could read a case for (not_readers): give them their roles with make roles.
@@ -236,7 +241,7 @@ def cmd_doc_types(a) -> int:
     return 0
 
 
-DESK_SWITCHES = {"desk_gate": ("off", "on")}
+DESK_SWITCHES = {"desk_gate": ("off", "rules", "on")}    # shared/desk_rules.GATE_STATES
 GCHAT_VALUES = ("off", "on")            # desk_gchat, the Google Chat door: printed only when given or on
 
 
@@ -256,10 +261,11 @@ def set_switch(db, tenant: str, field: str, value: str, by: str, at=None) -> dic
 
 
 def switches(db, tenant: str) -> dict:
-    """The tenant's Desk switches as the services read them: on only when the field says on; missing is off."""
+    """The tenant's Desk switches as the services read them: desk_gate is rules unless it says off or on."""
+    from shared import desk_rules
     snap = db.collection("tenant_settings").document(tenant).get()
     doc = (snap.to_dict() or {}) if snap.exists else {}
-    return {f: "on" if doc.get(f) is True or str(doc.get(f)).strip().lower() == "on" else "off" for f in DESK_SWITCHES}
+    return {"desk_gate": desk_rules.gate_state(doc)}
 
 
 def stored_queues(db, tenant: str) -> dict:
@@ -270,7 +276,7 @@ def stored_queues(db, tenant: str) -> dict:
 
 
 def posh_refusal(db, tenant: str, cfg: dict) -> list[str]:
-    """What a POSH queue lacks for the gate: its sections, then each unit no Internal Committee member can read."""
+    """What a POSH queue lacks for the routed Desk: its sections, then each unit no Internal Committee member can read."""
     from shared import cases
     errs = cases.posh_errors(cfg)
     if errs:
@@ -279,8 +285,9 @@ def posh_refusal(db, tenant: str, cfg: dict) -> list[str]:
             f"EMAIL=<member> ROLES=employee,ic_member:{u}" for u in cases.reader_gaps(db, tenant, cfg)["posh_units"]]
 
 
-def gate_refusal(db, tenant: str) -> list[str]:
-    """Why desk_gate may not be turned on for this tenant: what its POSH queue lacks. Empty: it may."""
+def route_refusal(db, tenant: str) -> list[str]:
+    """Why desk_route may not be turned on or single for this tenant: what its POSH queue lacks. Empty: it may.
+    desk_gate needs no queue: its replies are fixed."""
     return posh_refusal(db, tenant, stored_queues(db, tenant))
 
 
@@ -390,10 +397,8 @@ def routing(db, tenant: str) -> dict:
 
 
 def posh_needed(db, tenant: str) -> str | None:
-    """Why the tenant's POSH queue must stay complete and readable now, or None: desk_gate on, or desk_route on or
-    single - each answers a POSH disclosure with the card and its members."""
-    if switches(db, tenant)["desk_gate"] == "on":
-        return "desk_gate is on"
+    """Why the tenant's POSH queue must stay complete and readable now, or None: desk_route on or single, which
+    answers a POSH disclosure with the card and its members. The gate's own reply is fixed, and needs no queue."""
     mode = routing(db, tenant)["desk_route"]
     return f"desk_route is {mode}" if mode in ("on", "single") else None
 
@@ -474,8 +479,8 @@ def gchat_refusal(db, tenant: str, confirm_residency: bool, gate: str | None = N
                   route: str | None = None) -> str | None:
     """Why desk_gchat=on is refused, or None. gate and route: the values this same command is about to write."""
     from shared import tenancy
-    if (gate or switches(db, tenant)["desk_gate"]) != "on":
-        return f"desk_gchat stays off: the hard gate is off - make desk TENANT={tenant} DESK_GATE=on first"
+    if (gate or switches(db, tenant)["desk_gate"]) == "off":
+        return f"desk_gchat stays off: the hard gate is off - make desk TENANT={tenant} DESK_GATE=rules (or on) first"
     if (route or routing(db, tenant)["desk_route"]) not in ("on", "single"):
         return (f"desk_gchat stays off: the routed Desk is not on - make desk TENANT={tenant} DESK_ROUTE=on "
                 f"(or single) first")
@@ -503,17 +508,16 @@ def cmd_desk(a) -> int:
     _prepare(a.project)
     from google.cloud import firestore
     db = firestore.Client(project=a.project)
-    if a.gate == "on" or a.route in ("on", "single"):
-        missing = gate_refusal(db, a.tenant)
+    if a.route in ("on", "single"):
+        missing = route_refusal(db, a.tenant)
         if missing:
-            what = "desk_gate" if a.gate == "on" else "desk_route"
-            print(json.dumps({"tenant": a.tenant, "refused": f"{what} stays as it is: the POSH queue is incomplete",
+            print(json.dumps({"tenant": a.tenant, "refused": "desk_route stays as it is: the POSH queue is incomplete",
                               "missing": missing, "fix": f"make desk-queues TENANT={a.tenant} FILE=<file>"}))
             return 2
-    if a.route == "shadow" and (a.gate or switches(db, a.tenant)["desk_gate"]) != "on":
+    if a.route == "shadow" and (a.gate or switches(db, a.tenant)["desk_gate"]) == "off":
         print(json.dumps({"tenant": a.tenant, "refused": "desk_route stays as it is: shadow runs only while desk_gate "
-                                                         "is on, so the door answers every sensitive turn itself",
-                          "fix": f"make desk TENANT={a.tenant} DESK_GATE=on DESK_ROUTE=shadow"}))
+                                                         "is not off, so the door answers every sensitive turn itself",
+                          "fix": f"make desk TENANT={a.tenant} DESK_GATE=rules DESK_ROUTE=shadow"}))
         return 2
     try:                                # every value checked before anything is written
         if a.route == "single" and (a.single or routing(db, a.tenant)["desk_single"]) not in SINGLE_DESKS:
@@ -535,7 +539,7 @@ def cmd_desk(a) -> int:
         except ValueError as e:
             print(e)
             return 2
-    if a.max_parts:                     # after the gate, so a refused --gate on changes nothing
+    if a.max_parts:                     # after the gate, so a refused --gate changes nothing
         set_max_parts(db, a.tenant, a.max_parts, a.by or _operator())
     if a.route:
         set_route(db, a.tenant, a.route, a.by or _operator(), single=a.single)
@@ -608,7 +612,7 @@ def cmd_roles(a) -> int:
         line["note"] = ("no employee or leaver role: this person reaches no desk, the case desk included - "
                         "add employee unless that is meant")
     if out["revoked"] and posh_needed(db, a.tenant):
-        gaps = gate_refusal(db, a.tenant)
+        gaps = route_refusal(db, a.tenant)
         if gaps:
             line["warning"] = gaps
     print(json.dumps(line))
@@ -774,10 +778,11 @@ def build_parser() -> argparse.ArgumentParser:
     d.add_argument("--json", action="store_true", help="the view as JSON lines")
     d.add_argument("--export", help="a JSON file: the registry as {tenant: {object: class}}, for route_eval.py --registry")
     d.set_defaults(fn=cmd_doc_types)
-    k = sub.add_parser("desk", help="the tenant's Desk switches in tenant_settings: --gate on|off (make desk)")
+    k = sub.add_parser("desk", help="the tenant's Desk switches in tenant_settings: --gate rules|on|off (make desk)")
     k.add_argument("--tenant", default=os.environ.get("TENANT") or "acme")
     k.add_argument("--gate", type=lambda s: s.strip().lower(), choices=DESK_SWITCHES["desk_gate"],
-                   help="desk_gate: the hard gate on rag-api's question routes and the chat service's /v1/chat (on or off, any case)")
+                   help="desk_gate: the hard gate on rag-api's question routes and the chat service's /v1/chat - rules "
+                        "(the default), on (the rules and the model check) or off, any case")
     k.add_argument("--max-parts", type=int, choices=MAX_PARTS,
                    help="desk_max_parts: how many desks the routed Desk may run for one question (1 or 2)")
     k.add_argument("--route", type=lambda s: s.strip().lower(), choices=ROUTE_MODES,
@@ -787,7 +792,7 @@ def build_parser() -> argparse.ArgumentParser:
     k.add_argument("--off", help="desk_off: the answer desks switched off, comma separated, or none")
     k.add_argument("--notes", help="clause_notes: a JSON file of the company's notes on handbook clauses, or none")
     k.add_argument("--gchat", type=lambda s: s.strip().lower(), choices=GCHAT_VALUES,
-                   help="desk_gchat: the Google Chat door (on needs desk_gate on and desk_route on or single)")
+                   help="desk_gchat: the Google Chat door (on needs desk_gate not off and desk_route on or single)")
     k.add_argument("--confirm-residency", action="store_true",
                    help="with --gchat on, for a tenant whose data_region is in: the answers will sit in its Google Chat")
     k.add_argument("--by", help="who is setting it (default: DOCUMIND_OPERATOR, else the gcloud account)")

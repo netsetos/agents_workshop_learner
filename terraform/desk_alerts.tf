@@ -1,26 +1,38 @@
 # The DocuMind Desk, watched (workshop lessons 10.5 and 10.6): log-based metrics on the lines the Desk already writes,
 # and the alert policies that read them. Kept out of alerts.tf, whose policy list lessons quote and count (13.2 asserts
-# it), as quota.tf keeps a resource of its own; every policy here notifies local.alert_channel_ids (alerts.tf).
+# it, and prints this file's list beside it), as quota.tf keeps a resource of its own; every policy here notifies
+# local.alert_channel_ids (alerts.tf).
 #
-# What a metric may carry: a tenant, a queue, a state, an event, a route, a method, an acceptance rule. Never a person,
-# a session, a case id or any text: no label below extracts one, so no incident can name who asked or who is waiting.
-# The overdue job already logs a posh, grievance or privacy_request case's queue as "sensitive" (shared/cases.py).
+# What a metric may carry: a tenant, a queue, a state, an event, a route, a method, an acceptance rule, a check's
+# outcome. Never a person, a session, a case id or any text: no label below extracts one, so no incident can name who
+# asked or who is waiting. The overdue job already logs a posh, grievance or privacy_request case's queue as
+# "sensitive" (shared/cases.py).
 #
 # The router's metric counts people's turns only. A person is never a service account, and the eval accounts (make
 # smoke-desk; make route-eval, whose arm C is the fallback by design) would otherwise page on a lane where nobody has
-# asked anything. A posh, grievance or privacy_request turn names nobody, so it is counted whoever sent it.
+# asked anything. A posh, grievance or privacy_request turn names nobody, so it is counted whoever sent it. The gate
+# check's row names nobody at all, so its metric counts every check, whoever asked.
 #
 # Every threshold is a starting value, not yet calibrated on any lane's traffic: the 1% fallback share, the 5-point
-# rise and the 100-turn floors are this file's own; the 15% L2 cap is evals/route_threshold.py's ("cap 15% to start").
+# rise and the 100-turn floors, and the gate check's 20% error share and 20-check floor, are this file's own; the 15%
+# L2 cap is evals/route_threshold.py's ("cap 15% to start").
 
-# The router's three policies are PromQL, and Cloud Monitoring may refuse a PromQL condition on a metric that has no
-# data yet, which on a fresh lane would fail make up. So they are off until the author turns them on, once the router
-# has run (make desk DESK_ROUTE=shadow or on, and some turns): DESK_ROUTER_ALERTS=true on make plan and make up
-# (mk/agents.mk), then on every later plan, or the next one would remove them and make plan's guard refuses it.
+# The router's three policies and the gate check's error share are PromQL, and Cloud Monitoring may refuse a PromQL
+# condition on a metric that has no data yet, which on a fresh lane would fail make up. So each switch is off until the
+# author turns it on, once its metric has data: DESK_ROUTER_ALERTS=true once the router has run (make desk
+# DESK_ROUTE=shadow or on, and some turns), DESK_GATE_ALERTS=true once the gate check has (make desk DESK_GATE=on for a
+# tenant, and some questions). Each goes on make plan and make up (mk/agents.mk), then on every later plan, or the next
+# one would remove its policies and make plan's guard refuses it.
 variable "desk_router_alerts" {
   type        = bool
   default     = false
   description = "create the Desk router's three alert policies (DESK_ROUTER_ALERTS=true), once the router has run on the lane"
+}
+
+variable "desk_gate_alerts" {
+  type        = bool
+  default     = false
+  description = "create the Desk gate check's error-share alert policy (DESK_GATE_ALERTS=true), once the check has run on the lane"
 }
 
 # ---------------------------------------------------------------------------------------------
@@ -366,4 +378,122 @@ resource "google_monitoring_alert_policy" "desk_delegation_refused" {
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_delegation_refused]
+}
+
+# ---------------------------------------------------------------------------------------------
+# The hard gate's model check (shared/desk_recall.py, workshop lesson 10.5), for a tenant whose desk_gate is on. Both
+# doors log one desk_gate_check line per check - the chat service's POST /v1/chat (surface chat), rag-api's /v1/query
+# and /v1/stream (query, stream) - with its outcome: case, none or error. An error (a timeout, an exception, an answer
+# outside the schema, a door with no model client) is no class: the turn goes on with the rules alone, the person is
+# told nothing, and the line, at WARNING, is the only trace. The line carries no question and no person.
+resource "google_logging_metric" "desk_gate_check" {
+  name    = "documind/desk_gate_check"
+  project = var.project_id
+  filter  = <<EOT
+    resource.type="cloud_run_revision"
+    (resource.labels.service_name="documind-chat" OR resource.labels.service_name="documind-api")
+    jsonPayload.event="desk_gate_check"
+  EOT
+  metric_descriptor {
+    metric_kind = "DELTA"
+    value_type  = "INT64"
+    unit        = "1"
+    labels {
+      key         = "tenant"
+      value_type  = "STRING"
+      description = "Tenant the question belonged to"
+    }
+    labels {
+      key         = "outcome"
+      value_type  = "STRING"
+      description = "case (the check found a gate class) | none | error (no class: the rules alone decided)"
+    }
+  }
+  label_extractors = {
+    tenant  = "EXTRACT(jsonPayload.tenant)"
+    outcome = "EXTRACT(jsonPayload.outcome)"
+  }
+}
+
+# The failed share, per tenant: failed checks over all checks in the last 30 minutes, paging only in 30 minutes of 20
+# checks or more, so a timeout or two among a handful of questions on a quiet lane is not a page. PromQL, as the
+# router's shares are, so that it can carry its floor; the metric is desk_gate_check above, as PromQL names it.
+locals {
+  desk_gate_check_promql = "logging_googleapis_com:user_documind_desk_gate_check{monitored_resource=\"cloud_run_revision\"}"
+  desk_gate_error_promql = "logging_googleapis_com:user_documind_desk_gate_check{monitored_resource=\"cloud_run_revision\",outcome=\"error\"}"
+  desk_gate_error_query = join("\n", [
+    "sum by (tenant) (increase(${local.desk_gate_error_promql}[30m]))",
+    "  / on (tenant)",
+    "sum by (tenant) (increase(${local.desk_gate_check_promql}[30m]))",
+    "> 0.2",
+    "and on (tenant) sum by (tenant) (increase(${local.desk_gate_check_promql}[30m])) >= 20",
+  ])
+}
+
+resource "google_monitoring_alert_policy" "desk_gate_error_share" {
+  count        = var.desk_gate_alerts ? 1 : 0
+  display_name = "Desk gate check: failed share above 20% for a tenant"
+  combiner     = "OR"
+  conditions {
+    display_name = "failed checks / checks > 0.2 over the last 30 minutes, in 30 minutes of 20 checks or more"
+    condition_prometheus_query_language {
+      query               = local.desk_gate_error_query
+      duration            = "0s"
+      evaluation_interval = "300s"
+    }
+  }
+  notification_channels = local.alert_channel_ids
+  alert_strategy { auto_close = "7200s" }
+  documentation {
+    content   = "The Desk's model check is failing for this tenant: more than a fifth of its checks in the last 30 minutes ended in error, and each of those questions was gated by the rules alone, with nothing said to the person. Read why: gcloud logging read 'jsonPayload.event=\"desk_gate_check\" AND jsonPayload.outcome=\"error\"' --limit 20 --format='value(jsonPayload.tenant,jsonPayload.surface,jsonPayload.error,jsonPayload.ms)'. error is the exception's class; parse is an answer outside the schema; unavailable is a door with no model client; ms near 3000 is the check's own timeout (CHECK_TIMEOUT_S in shared/desk_recall.py), which each such question waited out. While it cannot work, make desk TENANT=<tenant> DESK_GATE=rules stops the calls; the rules run either way. Lesson 10.5."
+    mime_type = "text/markdown"
+  }
+  depends_on = [google_logging_metric.desk_gate_check]
+}
+
+# The read behind the check: each door learns which tenants are on from one bounded query of tenant_settings, at most
+# once a minute (desk_recall.OnTenants). A failed read keeps the last set, and a process that has never read one checks
+# no tenant, so its questions get the rules alone and it logs no desk_gate_check line: the share above cannot see this.
+# The door logs desk_check_tenants_unread once per failure streak instead, so one line may stand for many turns, and
+# every line is worth a look. No label: the incident names the service and a count.
+resource "google_logging_metric" "desk_check_tenants_unread" {
+  name    = "documind/desk_check_tenants_unread"
+  project = var.project_id
+  filter  = <<EOT
+    resource.type="cloud_run_revision"
+    (resource.labels.service_name="documind-chat" OR resource.labels.service_name="documind-api")
+    jsonPayload.event="desk_check_tenants_unread"
+  EOT
+  metric_descriptor {
+    metric_kind = "DELTA"
+    value_type  = "INT64"
+    unit        = "1"
+  }
+}
+
+resource "google_monitoring_alert_policy" "desk_check_tenants_unread" {
+  display_name = "Desk gate check: a door could not read which tenants are on"
+  combiner     = "OR"
+  conditions {
+    display_name = "a desk_check_tenants_unread line in the last ten minutes"
+    condition_threshold {
+      filter          = "resource.type=\"cloud_run_revision\" AND metric.type=\"logging.googleapis.com/user/documind/desk_check_tenants_unread\""
+      comparison      = "COMPARISON_GT"
+      threshold_value = 0
+      duration        = "0s"
+      aggregations {
+        alignment_period     = "600s"
+        per_series_aligner   = "ALIGN_DELTA"
+        cross_series_reducer = "REDUCE_SUM"
+        group_by_fields      = ["resource.label.service_name"]
+      }
+    }
+  }
+  notification_channels = local.alert_channel_ids
+  alert_strategy { auto_close = "1800s" }
+  documentation {
+    content   = "A door of the Desk could not read which tenants have desk_gate on (one query of tenant_settings, one attempt of 2 s). Until a read works, that process keeps the last set it read, and one that never read a set runs the model check for nobody: a tenant that is on may be getting the rules alone. The line is logged once per failure streak, not per turn. Read it: gcloud logging read 'jsonPayload.event=\"desk_check_tenants_unread\"' --limit 20 (surface, error). Then see whether desk_gate_check lines are back for the tenants that are on: gcloud logging read 'jsonPayload.event=\"desk_gate_check\"' --limit 5. A read that keeps failing is Firestore or the service account's access to it. Lesson 10.5."
+    mime_type = "text/markdown"
+  }
+  depends_on = [google_logging_metric.desk_check_tenants_unread]
 }

@@ -21,7 +21,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-Lesson 10.5's Desk: acme's case queues, desk_gate on for acme, your roles, and token rights for the eval accounts. Step 3 pulls the kit, rebuilds and redeploys rag-api, the UI and the chat service, then applies its Terraform with DESK_JOB=true (optionally with GCHAT_DOOR=true too, then the door's bridge with make deploy-gchat), rosters evalglobex and evalleaver, applies the doc_type registry to acme, zeta and globex, builds acme's and zeta's example index, and switches acme's router on and globex to the statute desk alone; step 8 turns zeta's gate on and its router to shadow, then on.
+Lesson 10.5's Desk: acme's case queues, the gate's rules for acme (desk_gate unwritten), your roles, and token rights for the eval accounts. Step 3 pulls the kit, rebuilds and redeploys rag-api, the UI and the chat service, then applies its Terraform with DESK_JOB=true (optionally with GCHAT_DOOR=true too, then the door's bridge with make deploy-gchat), rosters evalglobex and evalleaver, applies the doc_type registry to acme, zeta and globex, builds acme's and zeta's example index, and switches acme's router on and globex to the statute desk alone; step 8 gives zeta its queues and turns its router to shadow, then on; zeta keeps the gate's rules.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -69,7 +69,7 @@ acme: retrieval_backend=vector
 
 ### demo_03_your_lane_the_classes_the_example_index_and_the_switches.py
 
-The routed Desk's code was already in the images lesson 10.5 deployed, switched off by desk_route. This cell makes sure your lane runs the code this page quotes: it pulls the kit, builds and redeploys rag-api, the UI and the chat service, then plans and applies the kit's Terraform. Terraform comes last because of DESK_JOB=true, which you keep as 10.5 said: it points the hourly overdue job at the chat image of the commit you pulled, chat:COMMIT, and commands/lesson-12.8.sh in the deploy is what builds that image. Without the flag the plan would remove the job, and make plan's guard would refuse it. The Google Chat door stays off: without GCHAT_DOOR=true the plan declares nothing of terraform/gchat.tf, nor the bridge's account in terraform/desk.tf, and the chat deploy says that documind-gchat-sa does not exist yet. The whole cell takes many minutes. The router is measured as the people it serves, so the kit has an eval account for each kind of caller. evalleaver is an acme leaver: its roles open the case desk and nothing else. evalglobex is a globex employee. Both go on their rosters. Then three accounts get desk_eval, the role that lets them call POST /v1/route. evalglobex also gets ic_member:head_office, because globex's queues, loaded below, name it as the Internal Committee, and a single desk, like the gate, is refused while an office's POSH cases have no reader. The cell also sets CHAT and UI, notes the time in SINCE106 for step 8, and defines 10.5's two helpers again: sa names an account, and etok mints a token as one, for the chat service. make doc-types SEED=manifest writes acme's registry from evals/manifest.json. Each text object gets its class, pinned to the doc_key the manifest records for its bytes, and the kit cross-checks that against what your lane ingested. A figure takes its parent's class, pinned to the version on your lane, because make media drew it there. The town hall video is not_ingested unless you made it. Then the view: each object's current label, its class, its pin, its chunks and what the relabel would do. Last comes the relabel's plan. The registry is written now; the stored rows are not, until APPLY=1. An object an earlier lesson uploaded that the manifest does not name, such as 3.4's and 6.1's smoke notes or 6.4's visitor rules, shows unregistered and keeps unknown; which ones you have depends on the lessons you ran. APPLY=1 runs the plan on every store that filters by class: the Firestore rows, the Vector Search restricts, the Vertex AI Search documents and BigQuery's chunk_source. Then it expires the company's answer cache, so no cached answer from before survives. zeta and globex are seeded and applied in one run each. A run exits 3 when BigQuery deferred a statement because rows were still in its streaming buffer; run the same line again later. The same view again, for acme, without SEED. make route-index takes the route set's dev rows on the routes a company's registry covers, embeds each question once with text-embedding-005 on us-central1, and writes them to tenants/{tenant}/desk_exemplars. The version is a hash of the rows and the model, so the same rows give the same version on every lane. globex gets no index: a single desk asks no classifier and takes no vote. acme goes from off to on. globex gets its queues, with its eval account as the Internal Committee, then single mode with the statute desk: every globex question goes to the law, with no classifier.
+The routed Desk's code was already in the images lesson 10.5 deployed, switched off by desk_route. This cell makes sure your lane runs the code this page quotes: it pulls the kit, builds and redeploys rag-api, the UI and the chat service, then plans and applies the kit's Terraform. Terraform comes last because of DESK_JOB=true, which you keep as 10.5 said: it points the hourly overdue job at the chat image of the commit you pulled, chat:COMMIT, and commands/lesson-12.8.sh in the deploy is what builds that image. Without the flag the plan would remove the job, and make plan's guard would refuse it. The Google Chat door stays off: without GCHAT_DOOR=true the plan declares nothing of terraform/gchat.tf, nor the bridge's account in terraform/desk.tf, and the chat deploy says that documind-gchat-sa does not exist yet. The whole cell takes many minutes. The router is measured as the people it serves, so the kit has an eval account for each kind of caller. evalleaver is an acme leaver: its roles open the case desk and nothing else. evalglobex is a globex employee. Both go on their rosters. Then three accounts get desk_eval, the role that lets them call POST /v1/route. evalglobex also gets ic_member:head_office, because globex's queues, loaded below, name it as the Internal Committee, and a single desk, like any routed Desk, is refused while an office's POSH cases have no reader. The cell also sets CHAT and UI, notes the time in SINCE106 for step 8, and defines 10.5's two helpers again: sa names an account, and etok mints a token as one, for the chat service. make doc-types SEED=manifest writes acme's registry from evals/manifest.json. Each text object gets its class, pinned to the doc_key the manifest records for its bytes, and the kit cross-checks that against what your lane ingested. A figure takes its parent's class, pinned to the version on your lane, because make media drew it there. The town hall video is not_ingested unless you made it. Then the view: each object's current label, its class, its pin, its chunks and what the relabel would do. Last comes the relabel's plan. The registry is written now; the stored rows are not, until APPLY=1. An object an earlier lesson uploaded that the manifest does not name, such as 3.4's and 6.1's smoke notes or 6.4's visitor rules, shows unregistered and keeps unknown; which ones you have depends on the lessons you ran. APPLY=1 runs the plan on every store that filters by class: the Firestore rows, the Vector Search restricts, the Vertex AI Search documents and BigQuery's chunk_source. Then it expires the company's answer cache, so no cached answer from before survives. zeta and globex are seeded and applied in one run each. A run exits 3 when BigQuery deferred a statement because rows were still in its streaming buffer; run the same line again later. The same view again, for acme, without SEED. make route-index takes the route set's dev rows on the routes a company's registry covers, embeds each question once with text-embedding-005 on us-central1, and writes them to tenants/{tenant}/desk_exemplars. The version is a hash of the rows and the model, so the same rows give the same version on every lane. globex gets no index: a single desk asks no classifier and takes no vote. acme goes from off to on. globex gets its queues, with its eval account as the Internal Committee, then single mode with the statute desk: every globex question goes to the law, with no classifier.
 
 **`step_01_the_kit_you_have_now_on_your_lane(session)` — Your lane: the classes, the example index and the switches / Do it: the kit you have now, on your lane**
 
@@ -101,7 +101,7 @@ Apply complete! Resources: N added, N changed, 0 destroyed.
 
 **`step_02_two_more_eval_accounts(session)` — Your lane: the classes, the example index and the switches / Do it: two more eval accounts**
 
-The router is measured as the people it serves, so the kit has an eval account for each kind of caller. evalleaver is an acme leaver: its roles open the case desk and nothing else. evalglobex is a globex employee. Both go on their rosters. Then three accounts get desk_eval, the role that lets them call POST /v1/route. evalglobex also gets ic_member:head_office, because globex's queues, loaded below, name it as the Internal Committee, and a single desk, like the gate, is refused while an office's POSH cases have no reader. The cell also sets CHAT and UI, notes the time in SINCE106 for step 8, and defines 10.5's two helpers again: sa names an account, and etok mints a token as one, for the chat service.
+The router is measured as the people it serves, so the kit has an eval account for each kind of caller. evalleaver is an acme leaver: its roles open the case desk and nothing else. evalglobex is a globex employee. Both go on their rosters. Then three accounts get desk_eval, the role that lets them call POST /v1/route. evalglobex also gets ic_member:head_office, because globex's queues, loaded below, name it as the Internal Committee, and a single desk, like any routed Desk, is refused while an office's POSH cases have no reader. The cell also sets CHAT and UI, notes the time in SINCE106 for step 8, and defines 10.5's two helpers again: sa names an account, and etok mints a token as one, for the chat service.
 
 Operation: bash — run in the operator shell, in the kit (two URLs, the time, two helpers, two more eval accounts and the roles of three).
 
@@ -338,7 +338,7 @@ Expected shape, not a promised result:
 
 ```text
 {"tenant": "acme",
- "desk_gate": "on",
+ "desk_gate": "rules",
  "desk_max_parts": 1,
  "desk_route": "on",
  "desk_single": null,
@@ -352,7 +352,7 @@ Expected shape, not a promised result:
  "not_readers": ["queue grc: no member holds a role that reads it", "queue privacy: no member holds a role that reads it", "queue payroll: no member holds a role that reads it", "queue people: no member holds a role that reads it"],
  "action": "written"}
 {"tenant": "globex",
- "desk_gate": "off",
+ "desk_gate": "rules",
  "desk_max_parts": 1,
  "desk_route": "single",
  "desk_single": "statute",
@@ -413,7 +413,7 @@ Optional, and only with the door on, a Business or Enterprise Google Workspace a
 
 **`step_01_optional_with_google_workspace_the_hr_desk(session)` — The Desk page, and the HR Desk app in Google Chat / Optional, with Google Workspace: the HR Desk app in Google Chat**
 
-Configure the app. In the console, on your lane's project, open the Google Chat API's Configuration page. The kit expects: Then run the cell as the operator. It deploys the bridge again, so that its last line now allows the add-on agent. It puts your Workspace address on acme's roster, where with no roles document it holds employee. Then it turns the door on for acme. make desk refuses DESK_GCHAT=on unless the company's gate is on and its routed Desk is on or single. For a company whose data_region is in, it also needs CONFIRM_RESIDENCY=1, because the Desk's answers and their quotes then sit in the company's Google Chat. acme has both switches on since step 3, and its data_region is any. The chat service reads the switch within 60 seconds.
+Configure the app. In the console, on your lane's project, open the Google Chat API's Configuration page. The kit expects: Then run the cell as the operator. It deploys the bridge again, so that its last line now allows the add-on agent. It puts your Workspace address on acme's roster, where with no roles document it holds employee. Then it turns the door on for acme. make desk refuses DESK_GCHAT=on while the company's gate is off, and unless its routed Desk is on or single. For a company whose data_region is in, it also needs CONFIRM_RESIDENCY=1, because the Desk's answers and their quotes then sit in the company's Google Chat. acme's gate has run its rules since lesson 10.5 and its router is on since step 3, and its data_region is any. The chat service reads the switch within 60 seconds.
 
 Operation: bash — run in the operator shell, in the kit, only with Google Workspace and once the app is configured (the bridge again, your address on acme's roster, the door on for acme, two questions to paste).
 
@@ -434,7 +434,7 @@ acme: data_region=any
 zeta: data_region=any
 globex: data_region=in
 {"tenant": "acme",
- "desk_gate": "on",
+ "desk_gate": "rules",
  "desk_max_parts": 1,
  "desk_route": "on",
  "desk_single": null,
@@ -720,13 +720,13 @@ DocuMind Desk - the Google Chat door's refusals, live
 
 ### demo_08_the_shadow_the_rows_and_the_log.py
 
-zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate on, so the door answers every disclosure before the router could see it, and the gate needs the POSH queue complete. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the switches. Three of zeta's route-set questions to /v1/chat as evalzeta, with the direct brain: a travel cap from zeta's handbook, the Code on Wages, and zeta's own contract. acme's chunk for NP-03, the handbook's registry entry, the exemplar for lk-06, and the three companies' switches, read with the Firestore client. Every desk and desk_shadow row the chat service logged since step 3. Since step 3's apply, the log sink copies the chat service's desk rows into BigQuery. make desk-views checks terraform/sql/desk_daily.sql with a dry run, then creates the view documind_observability.desk_daily: one row per India day, company, desk and kind of caller, with the turns, their outcomes, the escalations, how each turn was decided, the arbiter's share, the chip turns, the rupees and the latencies. No column names a person, a session or a question. The bq query then reads today's rows. Run it a few minutes after step 7, since the sink takes a little while to deliver rows and BigQuery types the table's columns from the rows it has seen. This is a preview; lesson 13.2 explains the sink and the views. The shadow rows are what a company reads before it switches. On the stand-in they agree with the route set's labels. Read yours first, and switch zeta on when they do.
+zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate not off, so the door answers every disclosure before the router could see it; zeta already has the gate's rules, because nothing has switched them off. zeta goes on to desk_route on later in this step, and the routed Desk waits for a complete POSH queue. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the shadow. Three of zeta's route-set questions to /v1/chat as evalzeta, with the direct brain: a travel cap from zeta's handbook, the Code on Wages, and zeta's own contract. acme's chunk for NP-03, the handbook's registry entry, the exemplar for lk-06, and the three companies' switches, read with the Firestore client. Every desk and desk_shadow row the chat service logged since step 3. Since step 3's apply, the log sink copies the chat service's desk rows into BigQuery. make desk-views checks terraform/sql/desk_daily.sql with a dry run, then creates the view documind_observability.desk_daily: one row per India day, company, desk and kind of caller, with the turns, their outcomes, the escalations, how each turn was decided, the arbiter's share, the chip turns, the rupees and the latencies. No column names a person, a session or a question. The bq query then reads today's rows. Run it a few minutes after step 7, since the sink takes a little while to deliver rows and BigQuery types the table's columns from the rows it has seen. This is a preview; lesson 13.2 explains the sink and the views. The shadow rows are what a company reads before it switches. On the stand-in they agree with the route set's labels. Read yours first, and switch zeta on when they do.
 
 **`step_01_the_shadow_the_rows_and_the_log(session)` — The shadow, the rows and the log / The shadow, the rows and the log**
 
-zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate on, so the door answers every disclosure before the router could see it, and the gate needs the POSH queue complete. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the switches.
+zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate not off, so the door answers every disclosure before the router could see it; zeta already has the gate's rules, because nothing has switched them off. zeta goes on to desk_route on later in this step, and the routed Desk waits for a complete POSH queue. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the shadow.
 
-Operation: bash — run in the operator shell, in the kit (zeta's queues with its eval account as the committee, the gate on and the router in shadow).
+Operation: bash — run in the operator shell, in the kit (zeta's queues with its eval account as the committee, then the router in shadow).
 
 Expected shape, not a promised result:
 
@@ -744,7 +744,7 @@ Expected shape, not a promised result:
  "granted": ["desk_eval", "ic_member:head_office"],
  "revoked": []}
 {"tenant": "zeta",
- "desk_gate": "on",
+ "desk_gate": "rules",
  "desk_max_parts": 1,
  "desk_route": "shadow",
  "desk_single": null,
@@ -781,9 +781,9 @@ chunks/acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#1
   tenants/acme/doc_types/acme~hr_policy_2026.md: policy, pin acme_497809ffbaa6..., set by you@example.com, source manifest
     the pin is the chunk's doc_key: True
   tenants/acme/desk_exemplars/lk-06: route handbook, group lk-06, 768 dimensions, text-embedding-005, index d15e143dd357
-  tenant_settings/acme: desk_gate on, desk_route on, desk_single None, data_region any
-  tenant_settings/zeta: desk_gate on, desk_route shadow, desk_single None, data_region any
-  tenant_settings/globex: desk_gate off, desk_route single, desk_single statute, data_region in
+  tenant_settings/acme: desk_gate rules, desk_route on, desk_single None, data_region any
+  tenant_settings/zeta: desk_gate rules, desk_route shadow, desk_single None, data_region any
+  tenant_settings/globex: desk_gate rules, desk_route single, desk_single statute, data_region in
 ```
 
 **`step_04_the_log(session)` — The shadow, the rows and the log / Do it: the log**
@@ -863,7 +863,7 @@ Expected shape, not a promised result:
 
 ```text
 {"tenant": "zeta",
- "desk_gate": "on",
+ "desk_gate": "rules",
  "desk_max_parts": 1,
  "desk_route": "on",
  "desk_single": null,
@@ -968,7 +968,7 @@ split test
   correct_rate                  not measured: the run carries no answer text (a /v1/route run)
   router cost                   Rs 0.0000 in all, Rs 0.00000 a turn
 FAIL  route accuracy 0/0 (no rows) is under 95%
-make: *** [mk/agents.mk:202: route-eval] Error 1
+make: *** [mk/agents.mk:205: route-eval] Error 1
 ```
 
 **`step_03_module_10_s_gate(session)` — Verify it yourself: the eval and the checklist / Do it: Module 10's gate**
@@ -1011,6 +1011,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.6_Desk_Router_WIX.html`. All 84 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `902bbfe348bfa460ec7a6008b52127b29e699ec6`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.6_Desk_Router_WIX.html`. All 84 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `cdb64225afab8cb2b503ad4ff187e2471dfa6c51`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

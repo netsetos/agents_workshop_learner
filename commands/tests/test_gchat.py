@@ -1383,10 +1383,12 @@ class DeskSwitchTests(unittest.TestCase):
 
     def test_the_door_switch(self):
         db = test_desk().FakeDB()
-        db.docs["tenant_settings/globex"] = {"data_region": "in"}
+        db.docs["tenant_settings/globex"] = {"data_region": "in", "desk_gate": "off"}
         code, out = self.run_ops(db, "--gchat", "on")
         self.assertEqual(code, 2)
         self.assertIn("the hard gate is off", out)
+        del db.docs["tenant_settings/globex"]["desk_gate"]                      # nothing set: the rules, enough here
+        self.assertIn("the routed Desk is not on", self.run_ops(db, "--gchat", "on")[1])
         db.docs["tenant_settings/globex"].update({"desk_gate": "on"})
         self.assertIn("the routed Desk is not on", self.run_ops(db, "--gchat", "on")[1])
         db.docs["tenant_settings/globex"].update({"desk_route": "single", "desk_single": "statute"})

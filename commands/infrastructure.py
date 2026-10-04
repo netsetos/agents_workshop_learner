@@ -32,7 +32,7 @@ CRITICAL = ("project_id", "region", "billing_account_id", "github_repository",
 TRUST = ("github_repository", "github_repository_id", "deploy_ref")
 WIF_ADDRESS = "google_iam_workload_identity_pool_provider.github"
 # The Makefile's switches that declare resources only while true: one left off deletes them, and the plan is refused.
-SWITCHES = ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "GCHAT_DOOR")
+SWITCHES = ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "DESK_GATE_ALERTS", "GCHAT_DOOR")
 
 
 class Stop(RuntimeError):

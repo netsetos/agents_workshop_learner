@@ -13,9 +13,9 @@ here, one file per lane, pulled in by `include mk/*.mk`:
 
 The Makefile pins the default goal to `dryrun` (Tier A: offline, free), so a bare `make` never depends on which file
 here sorts first. Still, always name the target. One file adds variables of its own: `agents.mk` declares `DESK_JOB`,
-`CHAT_IMAGE`, `DESK_EVAL_SAS`, `DESK_ROUTER_ALERTS` and `GCHAT_DOOR`, and appends all but `DESK_EVAL_SAS` to the
-Makefile's Terraform variable list (`TF_EXTRA_VARS +=`, which works because that list is a recursive variable and the
-`include` comes after it).
+`CHAT_IMAGE`, `DESK_EVAL_SAS`, `DESK_ROUTER_ALERTS`, `DESK_GATE_ALERTS` and `GCHAT_DOOR`, and appends all but
+`DESK_EVAL_SAS` to the Makefile's Terraform variable list (`TF_EXTRA_VARS +=`, which works because that list is a
+recursive variable and the `include` comes after it).
 
 Three rules keep the files small:
 

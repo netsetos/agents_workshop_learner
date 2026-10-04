@@ -22,6 +22,12 @@ DESK_EVAL_SAS = documind-evalacme-sa documind-evalzeta-sa documind-evalglobex-sa
 DESK_ROUTER_ALERTS ?= false
 TF_EXTRA_VARS += -var desk_router_alerts=$(DESK_ROUTER_ALERTS)
 
+# The gate check's alert on its failed share (terraform/desk_alerts.tf) is PromQL too: turn it on once a tenant's
+# desk_gate is on and the check has run (make desk DESK_GATE=on, and some questions): make plan up
+# DESK_GATE_ALERTS=true, then on every later plan, as DESK_ROUTER_ALERTS. Appended the same way.
+DESK_GATE_ALERTS ?= false
+TF_EXTRA_VARS += -var desk_gate_alerts=$(DESK_GATE_ALERTS)
+
 # The Google Chat door (terraform/gchat.tf, lesson 10.6) is off unless asked for: GCHAT_DOOR=true on make plan and
 # make up declares what its bridge runs on, then GCHAT_DOOR=true on every later plan, as DESK_JOB. make deploy-gchat
 # and make smoke-gchat read terraform output gchat_door and refuse while the last apply had it off.
@@ -90,33 +96,37 @@ limits-drill: guard-project
 	@PROJECT=$(PROJECT) REGION=$(REGION) STOP=$(STOP) PY=$(PY) bash commands/limits-drill.sh
 
 # The Desk's switches for one tenant, in tenant_settings/{TENANT} (a merge write: data_region and the pins kept).
-# DESK_GATE=on puts the hard gate in front of rag-api's /v1/query, /v1/stream and /v1/passages and the chat service's
-# /v1/chat for that tenant: a POSH disclosure, a grievance, a privacy request, unpaid exit dues or "let me talk to a
-# person" (shared/desk_rules.py) gets the fixed reply of shared/desk_law.py with model none and cost 0, and Aadhaar
-# and card numbers are masked out of every other question. Both services read the document once a minute. It is
-# refused until every POSH unit has a member holding its ic_member role. Without DESK_GATE it prints the switch.
+# The hard gate stands in front of rag-api's /v1/query, /v1/stream and /v1/passages and the chat service's /v1/chat for
+# every tenant unless DESK_GATE=off: a POSH disclosure, a grievance, a privacy request, unpaid exit dues or "let me
+# talk to a person" (shared/desk_rules.py) gets the fixed reply of shared/desk_law.py with model none and cost 0, and
+# Aadhaar and card numbers are masked out of every other question - DESK_GATE=rules, what a tenant has until an
+# operator writes anything else. DESK_GATE=on adds the model check (shared/desk_recall.py) on the questions people send
+# that the rules let through: one flash-lite call each. Both services read the document once a minute. No value needs
+# a case queue. Without DESK_GATE it prints the switch.
 # DESK_MAX_PARTS=2 lets the routed Desk (lesson 10.6) run two desks for one question, one after the other; 1, the
 # default, offers the second as a button. DESK_ROUTE is the routed Desk's mode: off; shadow (each /v1/chat turn is also
 # decided by the router and logged as a desk_shadow row, nothing more); on (POST /v1/desk answers, and the Desk page
 # shows Ask the Desk); single (the same with one desk, DESK_SINGLE=handbook|statute, and no classifier). on and single
-# are refused while the POSH queue is incomplete, as DESK_GATE=on is, and shadow while DESK_GATE is off.
+# are refused while the POSH queue is incomplete or a unit has no member holding its ic_member role (route_refusal),
+# and shadow while DESK_GATE is off.
 # DESK_OFF=statute (or handbook,statute; none clears it) switches answer desks off: the routed Desk answers them as
 # not covered, with no search.
 # NOTES=evals/desk/clause_notes.acme.json writes the company's notes on handbook clauses (none clears them): the
 # handbook desk shows one beside an answer citing its clause.
-# DESK_GCHAT=on|off opens or closes the Google Chat door (lesson 10.6) for the tenant: on is refused unless
-# DESK_GATE is on and DESK_ROUTE on or single, and for a tenant whose data_region is in it also needs
+# DESK_GCHAT=on|off opens or closes the Google Chat door (lesson 10.6) for the tenant: on is refused while
+# DESK_GATE is off, and unless DESK_ROUTE is on or single, and for a tenant whose data_region is in it also needs
 # CONFIRM_RESIDENCY=1, because the answers and their quotes then sit in the company's Google Chat. The chat service
 # reads it within 60 s.
 desk: guard-project
 	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) commands/desk_ops.py --project $(PROJECT) desk --tenant $(TENANT) $(if $(DESK_GATE),--gate $(DESK_GATE),) $(if $(DESK_MAX_PARTS),--max-parts $(DESK_MAX_PARTS),) $(if $(DESK_ROUTE),--route $(DESK_ROUTE),) $(if $(DESK_SINGLE),--single $(DESK_SINGLE),) $(if $(DESK_OFF),--off $(DESK_OFF),) $(if $(NOTES),--notes "$(NOTES)",) $(if $(DESK_GCHAT),--gchat $(DESK_GCHAT),) $(if $(CONFIRM_RESIDENCY),--confirm-residency,)
 	$(if $(filter shadow on,$(DESK_ROUTE)),@echo ">> the router's three alert policies (terraform/desk_alerts.tf): make plan up DESK_ROUTER_ALERTS=true after the router has taken some turns; then keep DESK_ROUTER_ALERTS=true on every later plan")
+	$(if $(filter on,$(DESK_GATE)),@echo ">> the gate check's alert on its failed share (terraform/desk_alerts.tf): make plan up DESK_GATE_ALERTS=true after the check has run on some questions; then keep DESK_GATE_ALERTS=true on every later plan")
 
 # The case queue (workshop lesson 10.5): shared/roles.py, shared/cases.py, and the routes on the chat service.
 # A person's roles in TENANT: ROLES=employee,grc_member sets exactly those; REVOKE=grc_member (or all: an employee
 # again) takes some away; EMAIL alone prints that person's roles; neither lists the tenant's role documents. The person
 # must be on the roster first (make roster). Each grant and each revoke is an audit event (role.grant, role.revoke).
-# While DESK_GATE or DESK_ROUTE (on, single) is on, a change that would leave a POSH unit unread is refused.
+# While DESK_ROUTE is on or single, a change that would leave a POSH unit unread is refused.
 roles: guard-project
 	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) commands/desk_ops.py --project $(PROJECT) roles --tenant $(TENANT) $(if $(EMAIL),--email "$(EMAIL)",) $(if $(ROLES),--set "$(ROLES)",) $(if $(REVOKE),--revoke "$(REVOKE)",)
 
@@ -140,7 +150,7 @@ cases: guard-project
 cases-overdue: guard-project
 	@PYTHONPATH=. GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) services/chat/desk_overdue.py --project $(PROJECT)
 
-# The case queue, live (smoke/smoke_cases.py), after make desk-queues and make desk DESK_GATE=on for acme: a POSH
+# The case queue, live (smoke/smoke_cases.py), after make desk-queues for acme (the gate needs no switch): a POSH
 # disclosure through /v1/chat (as documind-evalacme-sa) and /v1/stream (as ui-sa) answered with model none and cost 0;
 # a grievance drafted, confirmed twice with one token (one case), seen in documind-evalgrc-sa's inbox, acknowledged
 # and closed there; documind-evalzeta-sa's 404 on it; a POSH case pressed twice with one token (one case, no text) for

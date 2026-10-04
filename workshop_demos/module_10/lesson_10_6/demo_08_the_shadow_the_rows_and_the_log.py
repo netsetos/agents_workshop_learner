@@ -1,6 +1,6 @@
 """Lesson 10.6: The shadow, the rows and the log
 
-zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate on, so the door answers every disclosure before the router could see it, and the gate needs the POSH queue complete. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the switches. Three of zeta's route-set questions to /v1/chat as evalzeta, with the direct brain: a travel cap from zeta's handbook, the Code on Wages, and zeta's own contract. acme's chunk for NP-03, the handbook's registry entry, the exemplar for lk-06, and the three companies' switches, read with the Firestore client. Every desk and desk_shadow row the chat service logged since step 3. Since step 3's apply, the log sink copies the chat service's desk rows into BigQuery. make desk-views checks terraform/sql/desk_daily.sql with a dry run, then creates the view documind_observability.desk_daily: one row per India day, company, desk and kind of caller, with the turns, their outcomes, the escalations, how each turn was decided, the arbiter's share, the chip turns, the rupees and the latencies. No column names a person, a session or a question. The bq query then reads today's rows. Run it a few minutes after step 7, since the sink takes a little while to deliver rows and BigQuery types the table's columns from the rows it has seen. This is a preview; lesson 13.2 explains the sink and the views. The shadow rows are what a company reads before it switches. On the stand-in they agree with the route set's labels. Read yours first, and switch zeta on when they do.
+zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate not off, so the door answers every disclosure before the router could see it; zeta already has the gate's rules, because nothing has switched them off. zeta goes on to desk_route on later in this step, and the routed Desk waits for a complete POSH queue. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the shadow. Three of zeta's route-set questions to /v1/chat as evalzeta, with the direct brain: a travel cap from zeta's handbook, the Code on Wages, and zeta's own contract. acme's chunk for NP-03, the handbook's registry entry, the exemplar for lk-06, and the three companies' switches, read with the Firestore client. Every desk and desk_shadow row the chat service logged since step 3. Since step 3's apply, the log sink copies the chat service's desk rows into BigQuery. make desk-views checks terraform/sql/desk_daily.sql with a dry run, then creates the view documind_observability.desk_daily: one row per India day, company, desk and kind of caller, with the turns, their outcomes, the escalations, how each turn was decided, the arbiter's share, the chip turns, the rupees and the latencies. No column names a person, a session or a question. The bq query then reads today's rows. Run it a few minutes after step 7, since the sink takes a little while to deliver rows and BigQuery types the table's columns from the rows it has seen. This is a preview; lesson 13.2 explains the sink and the views. The shadow rows are what a company reads before it switches. On the stand-in they agree with the route set's labels. Read yours first, and switch zeta on when they do.
 
 Run order inside this file:
 1. The shadow, the rows and the log (source window 64)
@@ -33,17 +33,17 @@ RETRY_FAILED_STEP = False
 COMMANDS_01 = """sed "s/you@example.com/$(sa evalzeta)/g" evals/desk/queues.zeta.json > "$HOME/queues.zeta.json"
 make desk-queues PROJECT="$PROJECT" TENANT=zeta FILE="$HOME/queues.zeta.json"
 make roles PROJECT="$PROJECT" TENANT=zeta EMAIL="$(sa evalzeta)" ROLES=employee,desk_eval,ic_member:head_office
-make desk PROJECT="$PROJECT" TENANT=zeta DESK_GATE=on DESK_ROUTE=shadow
+make desk PROJECT="$PROJECT" TENANT=zeta DESK_ROUTE=shadow   # the gate already runs as rules for zeta
 
 """
 
 def step_01_the_shadow_the_rows_and_the_log(session):
     """Run The shadow, the rows and the log at this checkpoint.
 
-    zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate on, so the door answers every disclosure before the router could see it, and the gate needs the POSH queue complete. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the switches.
+    zeta's router in shadow beside ordinary chat turns; a chunk, its registry entry and an exemplar in Firestore; every row the router logged; the Google Chat door's rows and claims; the Desk's day in BigQuery; then zeta on. Shadow first. A company that is not ready to route can let the router watch. With desk_route at shadow, every /v1/chat turn for that company is answered by its brain as before, and the router decides the same question beside it, with its own Meter, and logs a desk_shadow row. It answers nothing and keeps nothing. Shadow needs desk_gate not off, so the door answers every disclosure before the router could see it; zeta already has the gate's rules, because nothing has switched them off. zeta goes on to desk_route on later in this step, and the routed Desk waits for a complete POSH queue. So zeta gets its queues, with evalzeta as head office's committee, then the role, then the shadow.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in the kit (zeta's queues with its eval account as the committee, the gate on and the router in shadow).
+    Operations: bash — run in the operator shell, in the kit (zeta's queues with its eval account as the committee, then the router in shadow).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
@@ -119,9 +119,9 @@ def step_03_the_rows_in_firestore(session):
       tenants/acme/doc_types/acme~hr_policy_2026.md: policy, pin acme_497809ffbaa6..., set by you@example.com, source manifest
         the pin is the chunk's doc_key: True
       tenants/acme/desk_exemplars/lk-06: route handbook, group lk-06, 768 dimensions, text-embedding-005, index d15e143dd357
-      tenant_settings/acme: desk_gate on, desk_route on, desk_single None, data_region any
-      tenant_settings/zeta: desk_gate on, desk_route shadow, desk_single None, data_region any
-      tenant_settings/globex: desk_gate off, desk_route single, desk_single statute, data_reg
+      tenant_settings/acme: desk_gate rules, desk_route on, desk_single None, data_region any
+      tenant_settings/zeta: desk_gate rules, desk_route shadow, desk_single None, data_region any
+      tenant_settings/globex: desk_gate rules, desk_route single, desk_single statute, 
     """
     import os, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -140,7 +140,7 @@ def step_03_the_rows_in_firestore(session):
           f" {x['embedding_model']}, index {x['index_version']}")
     for t in ("acme", "zeta", "globex"):
         s = db.document(f"tenant_settings/{t}").get().to_dict()
-        print(f"  tenant_settings/{t}: desk_gate {s.get('desk_gate', 'off')}, desk_route {s.get('desk_route', 'off')},"
+        print(f"  tenant_settings/{t}: desk_gate {s.get('desk_gate', 'rules')}, desk_route {s.get('desk_route', 'off')},"
               f" desk_single {s.get('desk_single')}, data_region {s.get('data_region')}")
 
 def step_04_the_log(session):
@@ -224,7 +224,7 @@ def step_06_zeta_on(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: {"tenant": "zeta",
-     "desk_gate": "on",
+     "desk_gate": "rules",
      "desk_max_parts": 1,
      "desk_route": "on",
      "desk_single": null,

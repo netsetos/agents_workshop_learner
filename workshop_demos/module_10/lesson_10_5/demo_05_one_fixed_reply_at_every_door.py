@@ -44,7 +44,7 @@ def step_01_the_gate_on_your_machine(session):
       gate None   mask []        My Aadhaar 2234 5678 9012 is on the travel form.
       rules 2026-10-01.4
     """
-    manual_checkpoint('Wait a minute after make desk turned the gate on: both services read it within 60 s. Then, in the deployed UI signed in as yourself, choose Desk. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors.')
+    manual_checkpoint("In the deployed UI, signed in as yourself, choose Desk: acme has the gate's rules with nothing switched on, and your roles are read on every request, so there is nothing to wait for. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors.")
     import warnings
     warnings.filterwarnings("ignore", category=UserWarning)
     from shared import desk_rules

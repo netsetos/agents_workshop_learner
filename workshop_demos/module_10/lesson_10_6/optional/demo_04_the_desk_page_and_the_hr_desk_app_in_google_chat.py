@@ -43,7 +43,7 @@ PY
 def step_01_optional_with_google_workspace_the_hr_desk(session):
     """Run Optional, with Google Workspace: the HR Desk app in Google Chat at this checkpoint.
 
-    Configure the app. In the console, on your lane's project, open the Google Chat API's Configuration page. The kit expects: Then run the cell as the operator. It deploys the bridge again, so that its last line now allows the add-on agent. It puts your Workspace address on acme's roster, where with no roles document it holds employee. Then it turns the door on for acme. make desk refuses DESK_GCHAT=on unless the company's gate is on and its routed Desk is on or single. For a company whose data_region is in, it also needs CONFIRM_RESIDENCY=1, because the Desk's answers and their quotes then sit in the company's Google Chat. acme has both switches on since step 3, and its data_region is any. The chat service reads the switch within 60 seconds.
+    Configure the app. In the console, on your lane's project, open the Google Chat API's Configuration page. The kit expects: Then run the cell as the operator. It deploys the bridge again, so that its last line now allows the add-on agent. It puts your Workspace address on acme's roster, where with no roles document it holds employee. Then it turns the door on for acme. make desk refuses DESK_GCHAT=on while the company's gate is off, and unless its routed Desk is on or single. For a company whose data_region is in, it also needs CONFIRM_RESIDENCY=1, because the Desk's answers and their quotes then sit in the company's Google Chat. acme's gate has run its rules since lesson 10.5 and its router is on since step 3, and its data_region is any. The chat service reads the switch within 60 seconds.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit, only with Google Workspace and once the app is configured (the bridge again, your address on acme's roster, the door on for acme, two questions to paste).
@@ -61,7 +61,7 @@ def step_01_optional_with_google_workspace_the_hr_desk(session):
     zeta: data_region=any
     globex: data_region=in
     {"tenant": "acme",
-     "desk_gate": "on",
+     "desk_gate": "rules",
      "desk_max_parts": 1,
      "desk_route": "on",
      "desk_single": null,

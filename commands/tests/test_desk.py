@@ -174,7 +174,7 @@ class Coll:
         coll, f = self, filter
 
         class Query:
-            def stream(self):
+            def stream(self, retry=None, timeout=None):      # Query.stream's own keywords, so a misspelt one fails
                 return [s for s in coll.stream() if f.op_string == "==" and (s.to_dict() or {}).get(f.field_path) == f.value]
         return Query()
 
@@ -810,9 +810,9 @@ class RouteIndexCommandTests(unittest.TestCase):
             desk_ops.set_max_parts(db, "acme", 3, ME, at="T")
 
 
-    def test_a_refused_gate_sets_no_max_parts(self):
+    def test_a_refused_route_sets_no_max_parts(self):
         db = FakeDB()
-        db.docs["tenant_settings/acme"] = {"data_region": "in"}               # no queues yet: --gate on is refused
+        db.docs["tenant_settings/acme"] = {"data_region": "in"}               # no queues yet: --route on is refused
         fs = types.SimpleNamespace(Client=lambda project=None: db, SERVER_TIMESTAMP="SERVER_TIMESTAMP")
 
         def run(*args):
@@ -824,9 +824,9 @@ class RouteIndexCommandTests(unittest.TestCase):
                 code = desk_ops.main(["--project", "documind-ai-YOUR-ID", *args])
             return code, out.getvalue()
 
-        code, _ = run("desk", "--tenant", "acme", "--gate", "on", "--max-parts", "2")
+        code, _ = run("desk", "--tenant", "acme", "--gate", "on", "--route", "on", "--max-parts", "2")
         self.assertEqual(code, 2)
-        self.assertEqual(db.docs["tenant_settings/acme"], {"data_region": "in"})
+        self.assertEqual(db.docs["tenant_settings/acme"], {"data_region": "in"})       # not the gate either
         code, out = run("desk", "--tenant", "acme", "--max-parts", "2")
         self.assertEqual(code, 0, out)
         self.assertEqual((json.loads(out)["desk_max_parts"], db.docs["tenant_settings/acme"]["desk_max_parts_set_by"]),
@@ -915,16 +915,16 @@ class DeskModeCommandTests(unittest.TestCase):
 
     def test_shadow_waits_for_the_gate(self):
         db = FakeDB()
-        db.docs["tenant_settings/globex"] = {"data_region": "in"}
+        db.docs["tenant_settings/globex"] = {"data_region": "in", "desk_gate": "off"}
         code, out = self.run_ops(db, "--route", "shadow")
         self.assertEqual(code, 2)
-        self.assertIn("shadow runs only while desk_gate is on", json.loads(out)["refused"])
-        self.assertEqual(db.docs["tenant_settings/globex"], {"data_region": "in"})
-        db.docs["tenant_settings/globex"]["desk_gate"] = "on"
+        self.assertIn("shadow runs only while desk_gate is not off", json.loads(out)["refused"])
+        self.assertEqual(db.docs["tenant_settings/globex"], {"data_region": "in", "desk_gate": "off"})
+        del db.docs["tenant_settings/globex"]["desk_gate"]                      # nothing set: the rules
         code, out = self.run_ops(db, "--route", "shadow")
-        self.assertEqual((code, json.loads(out)["desk_route"]), (0, "shadow"), out)
+        self.assertEqual((code, json.loads(out)["desk_route"], json.loads(out)["desk_gate"]), (0, "shadow", "rules"), out)
         code, out = self.run_ops(db, "--gate", "off", "--route", "shadow")   # off with shadow in one call: refused
-        self.assertEqual((code, db.docs["tenant_settings/globex"]["desk_gate"]), (2, "on"))
+        self.assertEqual((code, "desk_gate" in db.docs["tenant_settings/globex"]), (2, False))
 
     def test_on_and_single_wait_for_the_posh_queue_and_nothing_half_written(self):
         db = FakeDB()
@@ -1811,6 +1811,13 @@ class GraphTests(unittest.TestCase):
         self.assertEqual(str(c2.thinking_config.thinking_level).split(".")[-1], "LOW")
         gtypes.EmbedContentConfig.model_validate({"task_type": "RETRIEVAL_QUERY", "output_dimensionality": 768,
                                                   "http_options": {"timeout": 4000, "retry_options": {"attempts": 1}}})
+        # the gate's model check (shared/desk_recall.py): a config the pinned library refused would make every check a
+        # silent "error", because check() swallows the exception
+        from shared import desk_recall
+        c3 = gtypes.GenerateContentConfig.model_validate(desk_recall.config())
+        self.assertEqual((c3.max_output_tokens, c3.thinking_config.thinking_budget, c3.http_options.timeout,
+                          c3.http_options.retry_options.attempts), (desk_recall.MAX_OUTPUT_TOKENS, 0, 3000, 1))
+        self.assertEqual(c3.response_json_schema["properties"]["case"]["enum"], list(desk_recall.CASES))
 
 
 # ================================================================== the Desk service, in the chat image's pins
@@ -1902,7 +1909,8 @@ class ServiceTests(unittest.TestCase):
                   patch.dict(self.desk._hooks, {"tenant_for": tenant_for}),
                   patch.object(self.desk, "settings", lambda t: copy.deepcopy(self.flags.get(t, {}))),
                   patch.object(self.desk, "_client", lambda: self.db), patch.object(self.desk, "_models", lambda: self.models),
-                  patch.object(self.desk, "log", self.log), patch.object(self.g.documind_tools, "retrieve", self.retrieve)):
+                  patch.object(self.desk, "log", self.log), patch.object(self.g.documind_tools, "retrieve", self.retrieve),
+                  patch.object(self.desk, "CHECKED", self.desk.desk_recall.OnTenants(frozenset, self.log, "test"))):
             stack.enter_context(p)
         self.addCleanup(stack.close)
         return self.TestClient(self.agent.app)
@@ -2136,9 +2144,10 @@ class ServiceTests(unittest.TestCase):
             asyncio.run(self.desk._quietly(self.desk._shadow(scope(who), question, tenant)))
 
         def mode(m):                                   # the setting, and the per-process list of shadow tenants expired
-            self.flags["acme"].update(desk_route=m, desk_gate="on")
-            self.db.docs["tenant_settings/acme"] = {"desk_route": m, "desk_gate": "on"}
-            self.desk._SHADOW_TENANTS["at"] = None
+            self.flags["acme"].pop("desk_gate", None)  # desk_gate unwritten: the rules, as lesson 10.6 leaves zeta
+            self.flags["acme"].update(desk_route=m)
+            self.db.docs["tenant_settings/acme"] = {"desk_route": m}
+            self.desk.SHADOWING._at = None
 
         def rows(event):
             return [r for r in self.log.rows if r["event"] == event]
@@ -2146,8 +2155,7 @@ class ServiceTests(unittest.TestCase):
         threads, looked = [], []
         l1_of = self.models.l1
         self.models.l1 = lambda text: (threads.append(threading.current_thread().name), l1_of(text))[1]
-        with self.client() as c, patch.object(self.desk, "_SHADOW_TENANTS", {"at": None, "tenants": frozenset(),
-                                                                          "warned": False}):
+        with self.client() as c, patch.object(self.desk, "SHADOWING", self.desk._shadowing()):     # on this log
             lookup = self.desk._hooks["tenant_for"]
             with patch.dict(self.desk._hooks, {"tenant_for": lambda e: (looked.append(e), lookup(e))[1]}):
                 mode("on")                                                     # no tenant in shadow: nothing at all
@@ -2160,11 +2168,11 @@ class ServiceTests(unittest.TestCase):
                 shadow(None, LEAVE)                                            # chat() refuses this caller itself
                 shadow(GLOBEX_ME, LEAVE, "globex")                             # not in shadow: no lookup, nothing
                 self.assertEqual(looked, [ME])                                # the door's tenant needs no lookup
-                self.flags["acme"]["desk_gate"] = "off"                       # shadow runs only behind the gate
+                self.flags["acme"]["desk_gate"] = "off"                       # shadow runs only while the gate is not off
                 calls = self.models.calls()
                 shadow(ME, LEAVE, "acme")
                 self.assertEqual(self.models.calls(), calls)
-                self.flags["acme"]["desk_gate"] = "on"
+                del self.flags["acme"]["desk_gate"]                            # back to the rules
                 self.assertFalse(self.kept(c, ME, "default"))
                 for _ in range(self.desk.SHADOW_DECIDES):                     # every decide slot taken: skipped
                     self.desk._SHADOW_SLOTS.acquire()
@@ -2183,10 +2191,10 @@ class ServiceTests(unittest.TestCase):
                     while len(rows("desk_shadow")) < 3 and time.monotonic() - waited < 5:
                         time.sleep(0.02)
                 self.models.l1_delay = 0
-                self.db.fail = True                                            # the shadow list unread: no shadow
+                self.db.fail = True                         # the shadow list unread: the last set stands, said once
                 for _ in range(2):
-                    self.desk._SHADOW_TENANTS["at"] = None
-                    shadow(ME, LEAVE, "acme")
+                    self.desk.SHADOWING._at = None
+                    self.assertEqual(self.desk.shadow_tenants(), frozenset({"acme"}))
                 self.db.fail = False
         a, late = rows("desk_shadow")                                       # the POSH disclosure wrote no row
         self.assertEqual((a["event"], a["surface"], a["user"], a["route"], a["mode"]),
@@ -2199,10 +2207,68 @@ class ServiceTests(unittest.TestCase):
                                     "reason": "withheld"})                 # no tenant, no person, no class, no count
         self.assertEqual([(r["reason"], r["tenant"]) for r in (busy, slow)], [("busy", "acme"), ("late", "acme")])
         self.assertEqual([r["tenant"] for r in rows("desk_shadow_late")], ["acme"])
-        self.assertEqual(self.log.warnings, [{"event": "desk_shadow_tenants_unread", "error": "RuntimeError"}])
+        self.assertEqual(self.log.warnings, [{"event": "desk_shadow_tenants_unread", "surface": "chat",
+                                              "error": "RuntimeError"}])
         self.assertTrue(threads and all(n.startswith("documind-desk-shadow-router") for n in threads))
         self.assertEqual((self.calls, self.db.cases()), ([], {}))
         self.assertNotIn(LEAVE, json.dumps(self.log.rows))
+
+    def test_the_shadow_tenants_are_one_short_read_by_one_turn_at_a_time(self):
+        """SHADOWING is desk_recall.OnTenants over one query of at most READ_TIMEOUT_S, never Firestore's default
+        retries (about 300 s): a turn that arrives while it runs takes the last set at once instead of starting a
+        second read, and a failed read keeps the set, on the shadow's own line rather than the gate's paged one."""
+        import asyncio
+        import inspect
+        from google.cloud.firestore_v1.query import Query as FirestoreQuery
+        self.assertLessEqual({"retry", "timeout"}, set(inspect.signature(FirestoreQuery.stream).parameters))
+        streams, inside, go, fail = [], threading.Event(), threading.Event(), []
+
+        class Held:                                # tenant_settings, its query held until the test lets it go
+            def __init__(self, name):
+                self.name = name
+
+            def where(self, filter=None):
+                return types.SimpleNamespace(stream=lambda **kw: self.stream(filter, kw))
+
+            def stream(self, f, kw):
+                streams.append((self.name, f.field_path, f.op_string, f.value, kw))
+                inside.set()
+                go.wait(5)
+                if fail:
+                    raise RuntimeError("firestore unwell")
+                return iter([Snap("acme", {"desk_route": "shadow"})])
+
+        last = frozenset({"globex"})
+        scope = {"type": "http", "method": "POST", "path": "/v1/chat", "query_string": b"", "headers": []}
+        got = []
+        for p in (patch.object(self.desk, "_client", lambda: types.SimpleNamespace(collection=Held)),
+                  patch.object(self.desk, "PROFILE", "gcp"), patch.object(self.desk, "log", self.log)):
+            p.start()
+            self.addCleanup(p.stop)
+        shadowing = self.desk._shadowing()                                     # as the module makes it, on this log
+        shadowing._tenants = last                                               # the last set, expired
+        with patch.object(self.desk, "SHADOWING", shadowing):
+            reader = threading.Thread(target=lambda: got.append(self.desk.shadow_tenants()))
+            reader.start()
+            self.assertTrue(inside.wait(5))
+            t0 = time.monotonic()
+            others = [self.desk.shadow_tenants() for _ in range(3)]
+            asyncio.run(self.desk._shadow_turn(scope, LEAVE, "acme"))        # a chat turn meanwhile: no wait
+            waited = time.monotonic() - t0
+            go.set()
+            reader.join(5)
+            self.assertEqual((others, waited < 1, got), ([last] * 3, True, [frozenset({"acme"})]))
+            self.assertEqual(self.desk.shadow_tenants(), frozenset({"acme"}))      # fresh: no second read
+            self.assertEqual(streams, [("tenant_settings", "desk_route", "==", "shadow",
+                                        {"retry": None, "timeout": self.desk.desk_recall.READ_TIMEOUT_S})])
+            fail.append(1)                                  # a failed read keeps the set, and the next one still reads
+            for _ in range(2):
+                shadowing._at = None
+                self.assertEqual(self.desk.shadow_tenants(), frozenset({"acme"}))
+        self.assertEqual((len(streams), shadowing._reading), (3, False))
+        self.assertEqual((self.desk.desk_recall.READ_TIMEOUT_S, shadowing._ttl), (2.0, self.desk.SHADOW_TENANTS_TTL_S))
+        self.assertEqual(self.log.warnings, [{"event": "desk_shadow_tenants_unread", "surface": "chat",
+                                              "error": "RuntimeError"}])
 
     def test_every_field_of_each_row_is_named_in_its_literal(self):
         tree = ast.parse((KIT / "services" / "chat" / "desk.py").read_text(encoding="utf-8"))

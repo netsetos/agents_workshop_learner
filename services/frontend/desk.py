@@ -7,12 +7,12 @@
                     email and the company the service saw, and the page draws no case data unless they are the
                     signed-in person's: a UI running without IAP calls as its own account.
     Tell the Desk   Only for an employee (a leaver has the case desk alone, shared/roles.py), and only while desk_gate
-                    is on, because with it off the door lets every turn through to a model. The words go to POST
+                    is not off, because with it off the door lets every turn through to a model. The words go to POST
                     /v1/chat, through the chat door in front of it (services/chat/desk.py). A gate hit gets the door's
-                    fixed reply, with no model call, shown as it came, and the case it offers (case_offer): the POSH
-                    card opens at once; another kind gets a button that starts it. Other words get the chat service's
-                    direct answer, shown as the Chat page shows it. What was typed goes to /v1/chat and nowhere else:
-                    it is never shown back, never kept (the form clears on Send) and never put in a case.
+                    fixed reply - no model call, or with desk_gate on, the one check that found it - and the case it
+                    offers (case_offer): the POSH card opens at once; another kind gets a button that starts it. Other
+                    words get the chat service's direct answer, shown as the Chat page shows it. What was typed goes to
+                    /v1/chat and nowhere else: never shown back, never kept (the form clears on Send), never in a case.
     Raise a case    Always shown, with the kinds the offer lists. POSH opens at once from its card and holds no text:
                     one token per office and choice of members, a "Recorded" panel for the office it was recorded for,
                     and "Record another" to start again. When the service cannot open it (409: none of the chosen
@@ -323,10 +323,11 @@ def _tell(text: str, types: list[str]) -> None:
     if status != 200 or not isinstance(body, dict):
         st.error(_problem(status))           # never the service's words: a 422 can repeat what was typed
         return
-    gate = body.get("brain") == "desk_gate" and body.get("model") == "none"
+    gate = body.get("brain") == "desk_gate"   # model "none" for a rule, the check's model when the check found it
     offer = body.get("case_offer") if gate and isinstance(body.get("case_offer"), dict) else {}
     cites = body.get("citations")
-    ss.desk_reply = {"gate": gate, "answer": str(body.get("answer") or ""),
+    ss.desk_reply = {"gate": gate, "checked": gate and body.get("model") != "none",
+                     "answer": str(body.get("answer") or ""),
                      "citations": [c for c in cites if isinstance(c, dict)] if isinstance(cites, list) and not gate
                      else [],
                      "offered": offer.get("case_type") if _word(offer.get("case_type")) in CASE_TYPES else None}
@@ -342,7 +343,9 @@ def reply_section(types: list[str]) -> None:
     with st.container(border=True):
         if r["gate"]:
             st.markdown(_md(r["answer"]))     # the chat door's fixed reply, as it came
-            st.caption("This is a fixed reply. No AI model was used. To reach a person, raise the case below. "
+            used = ("An AI model read your message only to decide that it should go to a person; it wrote nothing."
+                    if r.get("checked") else "No AI model was used.")
+            st.caption(f"This is a fixed reply. {used} To reach a person, raise the case below. "
                        "A case does not include what you typed here.")
             kind = r.get("offered")
             if kind in START and kind in types:
@@ -767,7 +770,7 @@ def desk_page(user):
     employee = offer is not None and EMPLOYEE in _roles(offer)
     if employee and offer.get("desk_route") in ROUTED_MODES:
         routed_half(tenant_id, offer)        # in place of Tell the Desk, and before Raise a case (workshop lesson 10.6)
-    elif employee and offer.get("desk_gate") == "on":
+    elif employee and offer.get("desk_gate") in ("rules", "on"):
         tell_section(types)
         reply_section(types)
     raise_section(offer, why)

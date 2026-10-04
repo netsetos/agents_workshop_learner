@@ -61,8 +61,11 @@ except Exception as _e:  # noqa: BLE001
 from media import router as media_router  # noqa: E402
 app.include_router(media_router)
 
+from shared import desk_recall  # noqa: E402
+_desk_checked = desk_recall.OnTenants(lambda: desk_recall.read_on_tenants(_fs()), log, "api")
 from desk_door import install as install_desk_door  # noqa: E402
-install_desk_door(app, settings=lambda t: tenant_settings(t), verify=verify_iap, member=enforce_membership)
+install_desk_door(app, settings=lambda t: tenant_settings(t), verify=verify_iap, member=enforce_membership,
+                  checked=_desk_checked, check=lambda q: desk_recall.check(_gen_client, q))
 app.add_middleware(CORSMiddleware,
     allow_origins=["https://documind.example.com"],
     allow_methods=["POST","GET"], allow_headers=["*"])

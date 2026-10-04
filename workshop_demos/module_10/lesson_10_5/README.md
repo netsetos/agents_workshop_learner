@@ -20,7 +20,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-Module 10's deployed chat lane and lesson 3.1's roster. Step 3 applies the Desk's Terraform, redeploys rag-api, the UI and the chat service, declares the hourly overdue job, and turns desk_gate on for acme; keep DESK_JOB=true on every later plan, and on make reconcile-job and make batch-job.
+Module 10's deployed chat lane and lesson 3.1's roster. Step 3 applies the Desk's Terraform, redeploys rag-api, the UI and the chat service, declares the hourly overdue job, and loads acme's queues and roles, leaving desk_gate unwritten so acme has the gate's rules and no model check; keep DESK_JOB=true on every later plan, and on make reconcile-job and make batch-job.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -61,11 +61,11 @@ acme: retrieval_backend=vector
 
 ### demo_03_your_lane_the_desk_s_resources_accounts_queues_and_roles.py
 
-On a lane whose last plan predates the Desk, the plan adds 20 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has four log-based metrics and three alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Two switches would add more, and this lesson needs neither: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, and DESK_ROUTER_ALERTS=true the router's three alert policies. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up. A script cannot call the chat service as a person, so the kit has eval accounts. Each is a service account on one tenant's roster, with no project role, and make smoke-cases and this lesson's cells call as them. evalacme is an acme employee, evalgrc an acme Grievance Redressal Committee member, and evalzeta a zeta employee. make desk-operators lets you mint tokens as all five. The cell also sets CHAT and UI, notes the time in SINCE105 for step 8's log read, and defines two helpers: sa names an account, and etok mints a token as one, for the chat service. evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk tries to turn the gate on. evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices. Then the gate goes on.
+On a lane whose last plan predates the Desk, the plan adds 23 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has six log-based metrics and four alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Three switches would add more, and this lesson needs none of them: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, DESK_ROUTER_ALERTS=true the router's three alert policies, and DESK_GATE_ALERTS=true the policy that pages when a company's model checks keep failing, for a lane where some company has the check on. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up. A script cannot call the chat service as a person, so the kit has eval accounts. Each is a service account on one tenant's roster, with no project role, and make smoke-cases and this lesson's cells call as them. evalacme is an acme employee, evalgrc an acme Grievance Redressal Committee member, and evalzeta a zeta employee. make desk-operators lets you mint tokens as all five. The cell also sets CHAT and UI, notes the time in SINCE105 for step 8's log read, and defines two helpers: sa names an account, and etok mints a token as one, for the chat service. evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk, with no DESK_GATE, prints acme's switches and writes nothing. evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices.
 
 **`step_01_the_desk_on_your_lane(session)` — Your lane: the Desk's resources, accounts, queues and roles / Do it: the Desk on your lane**
 
-On a lane whose last plan predates the Desk, the plan adds 20 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has four log-based metrics and three alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Two switches would add more, and this lesson needs neither: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, and DESK_ROUTER_ALERTS=true the router's three alert policies. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up.
+On a lane whose last plan predates the Desk, the plan adds 23 resources. terraform/desk.tf has 12 of them: two TTL fields (a draft's expire_at and a client token's), five indexes (one for each query the case queue makes) and five eval accounts. terraform/desk_alerts.tf has six log-based metrics and four alert policies, and terraform/storage.tf lets the chat service write the audit bucket. The one change is the log sink's filter, widened to copy the Desk's rows to BigQuery. Three switches would add more, and this lesson needs none of them: GCHAT_DOOR=true adds 11 for lesson 10.6's Google Chat door, DESK_ROUTER_ALERTS=true the router's three alert policies, and DESK_GATE_ALERTS=true the policy that pages when a company's model checks keep failing, for a lane where some company has the check on. Then come the images with the Desk's code, deployed by their own scripts. lesson-12.8.sh builds the chat image itself and lets the eval accounts invoke documind-chat. Last, make desk-job declares the hourly overdue scan on that chat image: a plan with DESK_JOB=true, which adds the job's three, then its apply. The whole cell takes many minutes. The flags are the ones you gave make up.
 
 Operation: bash — run in the operator shell, in the kit (the Desk's Terraform, the three services rebuilt, the hourly job; many minutes).
 
@@ -73,12 +73,12 @@ Expected shape, not a promised result:
 
 ```text
 ...
-Plan: 20 to add, 1 to change, 0 to destroy.
+Plan: 23 to add, 1 to change, 0 to destroy.
 PASS: no deletes/replacements or existing CI trust changes. Reviewed plan: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan
 Review the displayed changes, then run this command with 'apply' instead of 'plan'.
 PASS: selected plan, confirmed inputs, backend/workspace and state agree: .../terraform/rag-YYYYMMDDTHHMMSSZ-...tfplan
 ...
-Apply complete! Resources: 20 added, 1 changed, 0 destroyed.
+Apply complete! Resources: 23 added, 1 changed, 0 destroyed.
 >> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/api:COMMIT from services/rag-api
 ...
 >> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/ui:COMMIT from services/frontend
@@ -127,11 +127,11 @@ zeta: data_region=any
 globex: data_region=in
 ```
 
-**`step_03_acme_s_queues_and_the_gate_refused(session)` — Your lane: the Desk's resources, accounts, queues and roles / Do it: acme's queues, and the gate refused**
+**`step_03_acme_s_queues_and_its_switch_as_it_stands(session)` — Your lane: the Desk's resources, accounts, queues and roles / Do it: acme's queues, and its switch as it stands**
 
-evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk tries to turn the gate on.
+evals/desk/queues.acme.json names acme's queues: who receives each kind of case, and the company's target in days. For POSH it lists each office's Internal Committee and its district's Local Committee. The file puts you@example.com on both offices' committees, and the sed puts your own email there instead. Then make desk, with no DESK_GATE, prints acme's switches and writes nothing.
 
-Operation: bash — run in the operator shell, in the kit (acme's queues with your email in them, then the gate, which is refused).
+Operation: bash — run in the operator shell, in the kit (acme's queues with your email in them, then acme's switches as they stand).
 
 Expected shape, not a promised result:
 
@@ -143,16 +143,18 @@ Expected shape, not a promised result:
  "not_readers": ["ic hyderabad: you@example.com", "ic hyderabad: ic.hyderabad.member@example.com", "ic pune: ic.pune.presiding@example.com", "ic pune: you@example.com", "queue grc: no member holds a role that reads it", "queue privacy: no member holds a role that reads it", "queue payroll: no member holds a role that reads it", "queue people: no member holds a role that reads it"],
  "action": "written"}
 {"tenant": "acme",
- "refused": "desk_gate stays as it is: the POSH queue is incomplete",
- "missing": ["posh.units.hyderabad: no Internal Committee member holds ic_member:hyderabad here - make roles TENANT=acme EMAIL=<member> ROLES=employee,ic_member:hyderabad", "posh.units.pune: no Internal Committee member holds ic_member:pune here - make roles TENANT=acme EMAIL=<member> ROLES=employee,ic_member:pune"],
- "fix": "make desk-queues TENANT=acme FILE=<file>"}
+ "desk_gate": "rules",
+ "desk_max_parts": 1,
+ "desk_route": "off",
+ "desk_single": null,
+ "desk_off": []}
 ```
 
-**`step_04_the_roles_and_the_gate_on(session)` — Your lane: the Desk's resources, accounts, queues and roles / Do it: the roles, and the gate on**
+**`step_04_the_roles(session)` — Your lane: the Desk's resources, accounts, queues and roles / Do it: the roles**
 
-evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices. Then the gate goes on.
+evalgrc gets grc_member alone, so it can read and move grievances but cannot raise a case: the note says so. You get employee, so the Desk page shows you Tell the Desk and lets you raise cases. You also get the three roles that read: grievances, and the POSH cases of both offices.
 
-Operation: bash — run in the operator shell, in the kit (the committee's account and you get your roles; the gate goes on).
+Operation: bash — run in the operator shell, in the kit (the committee's account and you get your roles).
 
 Expected shape, not a promised result:
 
@@ -170,13 +172,6 @@ Expected shape, not a promised result:
  "after": ["employee", "grc_member", "ic_member:hyderabad", "ic_member:pune"],
  "granted": ["grc_member", "ic_member:hyderabad", "ic_member:pune"],
  "revoked": []}
-{"tenant": "acme",
- "desk_gate": "on",
- "desk_max_parts": 1,
- "desk_route": "off",
- "desk_single": null,
- "desk_off": [],
- "note": "rag-api and the chat service read it within 60 s"}
 ```
 
 ### demo_04_the_desk_page_tell_raise_read.py
@@ -206,7 +201,7 @@ No lane and no cost: the cell imports the kit's rules and runs them on the smoke
 
 Operation: bash — run in the operator shell, in the kit (gate() and mask() on your machine; no lane, no cost).
 
-Manual action: Wait a minute after make desk turned the gate on: both services read it within 60 s. Then, in the deployed UI signed in as yourself, choose Desk. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors.
+Manual action: In the deployed UI, signed in as yourself, choose Desk: acme has the gate's rules with nothing switched on, and your roles are read on every request, so there is nothing to wait for. Paste the sentence the previous section printed into Tell the Desk and Send: the fixed reply comes back and the POSH card opens under Raise a case. Choose Hyderabad and yourself, and Create a confidential record; then, under What is it about?, raise a grievance, check it and Send; in Your inbox, change the grievance to Acknowledged and Update. Type done to run the gate on your machine and through both doors.
 
 IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
@@ -290,7 +285,7 @@ Operation: bash — run in the operator shell, in the kit (the offer, then a cas
 Expected shape, not a promised result:
 
 ```text
-offer      200  acme, desk_gate on, POSH offices ['hyderabad', 'pune']
+offer      200  acme, desk_gate rules, POSH offices ['hyderabad', 'pune']
              types posh, grievance, privacy_request, exit_dues, people_query, human_requested
   draft      200  draft in grc (Grievance Redressal Committee), expires 0:30:00 after it was made
              basis Industrial Relations Code, 2020: s.4(1), s.4(5), s.4(6)
@@ -426,6 +421,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.5_Case_Desk_WIX.html`. All 54 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c047978890dc8cbbd8dbc3aef503b90ab3e5d435`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.5_Case_Desk_WIX.html`. All 54 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6b7d734a2a2946000e460afc23bb7a264b944c41`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -9,11 +9,13 @@ only; every grant and revoke is an event; a draft expires (410), a confirm with 
 is 409; another tenant and a stranger get 404; a POSH case holds no text and one token opens one; the inbox, the
 overdue states, the exit-dues flag and the queue files; the case table against the corpus's own lines and the
 manifest's URLs; an audit actor is a case reference, never an email; the wiring in Terraform, the deploy script and
-the Makefile; and commands/desk_ops.py's roles, queues, cases and its refusal to turn the gate on without a POSH queue.
+the Makefile; and commands/desk_ops.py's roles, queues, cases and its refusal to turn desk_route on or single without
+a complete POSH queue (the gate needs none).
 
 The second half runs services/chat/desk.py and needs the chat image's pins (pip install -r
-services/chat/requirements.txt): the chat door against a fake app (the bytes replayed when the gate is off, the local
-profile's LOCAL_TENANT with no setting read, an Aadhaar number masked when it is on, the 64 KiB cap), the real chat
+services/chat/requirements.txt): the chat door against a fake app (the bytes replayed when the gate is off, the rules
+for a tenant that set nothing and for the local profile's LOCAL_TENANT with no setting read, an Aadhaar number masked
+unless the gate is off, the model check for a tenant whose gate is on, the 64 KiB cap), the real chat
 service (a refused caller gets the same bytes whether or not the question hit the gate; a gated turn calls no model and
 writes no checkpoint), and the case routes end to end. Without the pins it is skipped and says so; with
 DOCUMIND_REQUIRE_LIBS=1 a missing pin is an error instead.
@@ -40,7 +42,7 @@ KIT = Path(__file__).resolve().parents[2]
 for p in (str(KIT / "services/chat"), str(KIT)):
     if p not in sys.path:
         sys.path.insert(0, p)
-from shared import cases, desk_law, desk_rules, identifiers, roles  # noqa: E402
+from shared import cases, desk_law, desk_recall, desk_rules, identifiers, roles  # noqa: E402
 
 FRAMEWORKS = all(importlib.util.find_spec(m) for m in ("langchain", "langgraph", "google.adk", "fastapi"))
 REQUIRE = os.environ.get("DOCUMIND_REQUIRE_LIBS") == "1"
@@ -49,6 +51,7 @@ ME, GRC, HR, PAY, PRIV, OTHER = ("you@example.com", "grc@example.com", "hr@examp
                                  "dpo@example.com", "colleague@example.com")
 POSH = "My manager keeps making sexual comments about my body. What can I do?"
 PLAIN = "How many days of earned leave can I carry forward?"
+MISS = "He grabbed my hand in the lift yesterday and I keep thinking about it"   # no pattern catches it: the check may
 
 
 def _load(name, path):
@@ -740,42 +743,41 @@ class DeskOpsTests(Lane):
             code = desk_ops.main(["--project", "documind-ai-YOUR-ID", *args])
         return code, out.getvalue()
 
-    def test_the_gate_waits_for_a_posh_queue(self):
+    def test_the_gate_needs_no_queue_and_the_routed_desk_waits_for_a_posh_queue(self):
         self.db.collection("tenant_settings").document("acme").set({"data_region": "in"})
-        code, out = self.run_ops("desk", "--tenant", "acme", "--gate", "on")
+        # the gate's replies are fixed: every value, with no case queue at all
+        for value in ("on", "off", "rules"):
+            code, out = self.run_ops("desk", "--tenant", "acme", "--gate", value)
+            self.assertEqual((code, self.db.docs["tenant_settings/acme"]["desk_gate"]), (0, value), out)
+            self.assertEqual(json.loads(out)["desk_gate"], value)
+        # the routed Desk answers a POSH disclosure with the card: on is refused until the POSH queue is complete
+        code, out = self.run_ops("desk", "--tenant", "acme", "--route", "on")
         self.assertEqual(code, 2)
         self.assertIn("posh: no POSH section", out)
-        self.assertNotIn("desk_gate", self.db.docs["tenant_settings/acme"])
+        self.assertNotIn("desk_route", self.db.docs["tenant_settings/acme"])
         code, out = self.run_ops("queues", "--tenant", "acme", "--file", str(KIT / "evals/desk/queues.acme.json"))
         self.assertEqual(code, 0, out)
         doc = self.db.docs["tenant_settings/acme"]
         self.assertEqual((doc["data_region"], doc["case_queues"], doc["case_queues_set_by"]), ("in", self.queues, HR))
         self.assertNotIn("_note", json.dumps(doc["case_queues"]))
         self.assertIn("ic pune: ic.pune.presiding@example.com", json.loads(out)["not_readers"])
-        code, out = self.run_ops("desk", "--tenant", "acme", "--gate", "on")   # pune: nobody here reads its cases
+        code, out = self.run_ops("desk", "--tenant", "acme", "--route", "on")   # pune: nobody here reads its cases
         self.assertEqual(code, 2)
         self.assertIn("posh.units.pune: no Internal Committee member holds ic_member:pune", out)
         roles.role_ref(self.db, "acme", ME).set({"roles": ["employee", "ic_member:hyderabad", "ic_member:pune"]})
-        code, out = self.run_ops("desk", "--tenant", "acme", "--gate", "on")
-        self.assertEqual((code, self.db.docs["tenant_settings/acme"]["desk_gate"]), (0, "on"))
-        # while the gate is on, a queue file that drops POSH is refused, and nothing is written
+        # while only the gate is on, a queue file that drops POSH is written: the gate's reply needs no queue
         no_posh = {k: v for k, v in self.queues.items() if k != "posh"}
         import tempfile
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
             json.dump(no_posh, f)
         self.addCleanup(os.unlink, f.name)
+        self.run_ops("desk", "--tenant", "acme", "--gate", "on")
         code, out = self.run_ops("queues", "--tenant", "acme", "--file", f.name)
-        self.assertEqual(code, 2)
-        self.assertIn("desk_gate is on", out)
-        self.assertIn("posh", self.db.docs["tenant_settings/acme"]["case_queues"])
-        # and a role change that would leave a unit with no member who reads its cases is refused, nothing written
-        code, out = self.run_ops("roles", "--tenant", "acme", "--email", ME, "--revoke", "ic_member:pune")
-        self.assertEqual(code, 2)
-        self.assertIn("desk_gate is on: this would leave POSH unit(s) ['pune']", json.loads(out)["refused"])
-        self.assertIn("ic_member:pune", self.roles(ME))
-        code, out = self.run_ops("desk", "--tenant", "acme", "--gate", "off")   # off is never refused
-        self.assertEqual(code, 0)
-        # the routed Desk on or single answers a POSH disclosure with the card too, so the same rule holds
+        self.assertEqual(code, 0, out)
+        self.assertNotIn("posh", self.db.docs["tenant_settings/acme"]["case_queues"])
+        code, out = self.run_ops("queues", "--tenant", "acme", "--file", str(KIT / "evals/desk/queues.acme.json"))
+        self.assertEqual(code, 0, out)
+        # the routed Desk on or single answers a POSH disclosure with the card, so the queue must stay complete
         for mode in ("on", "single"):
             self.db.collection("tenant_settings").document("acme").set({"desk_route": mode, "desk_single": "handbook"},
                                                                          merge=True)
@@ -841,6 +843,21 @@ def synthetic_aadhaar(first11="23456789012"):
     return first11 + identifiers.verhoeff_digit(first11)
 
 
+class _OnTenants:
+    """shared/desk_recall.OnTenants as the door reads it, over a set the test may change: fresh() is None until get()
+    has read once, as at a process's first turn, and every read is counted."""
+
+    def __init__(self, tenants):
+        self.tenants, self.reads = tenants, 0
+
+    def fresh(self):
+        return frozenset(self.tenants) if self.reads else None
+
+    def get(self):
+        self.reads += 1
+        return frozenset(self.tenants)
+
+
 class _App:
     """The downstream app: records what reached it and answers 200."""
 
@@ -879,12 +896,15 @@ class ChatDoorTests(unittest.TestCase):
         import desk
         from starlette.exceptions import HTTPException
         cls.desk, cls.HTTPException = desk, HTTPException
+        cls.real_check = staticmethod(desk._check)       # setUp patches it; one test runs the real one
 
     def setUp(self):
         self.app, self.door = _App(), self.desk.ChatDoor(_App())
         self.door.app = self.app
         self.reads, self.callers, self.shadows = [], [], []
         self.flags = {"acme": {"desk_gate": "on"}}
+        self.checked, self.checks, self.verdict = set(), [], None
+        self.door_checked = _OnTenants(self.checked)
 
         def caller(request):
             self.callers.append(1)
@@ -900,9 +920,20 @@ class ChatDoorTests(unittest.TestCase):
         async def shadow(scope, question, tenant):
             self.shadows.append((question, tenant))
 
+        def check(question):
+            self.checks.append(question)
+            out = {**desk_recall._result(), "tokens_in": 900, "tokens_out": 4, "ms": 400,
+                   "cost_usd": desk_recall.prices.usd(desk_recall.MODEL, 900, 4)}
+            if self.verdict == "error":
+                out.update(outcome="error", error="TimeoutError")
+            elif self.verdict:
+                out.update(case=self.verdict, outcome="case")
+            return out
+
         for p in (patch.dict(self.desk._hooks, {"caller": caller, "tenant_for": lambda e: "acme" if e == ME else None}),
                   patch.object(self.desk, "settings", settings), patch.object(self.desk, "PROFILE", "gcp"),
-                  patch.object(self.desk, "_shadow", shadow)):
+                  patch.object(self.desk, "_shadow", shadow), patch.object(self.desk, "CHECKED", self.door_checked),
+                  patch.object(self.desk, "_check", check), patch.dict(self.desk._GATE_SEEN, {}, clear=True)):
             p.start()
             self.addCleanup(p.stop)
 
@@ -910,23 +941,33 @@ class ChatDoorTests(unittest.TestCase):
         return json.dumps({"question": q, "session_id": "s1", **extra}).encode()
 
     def test_the_gate_off_replays_the_bytes(self):
-        self.flags["acme"] = {}
+        self.flags["acme"] = {"desk_gate": "off"}
         for raw in (self.body(POSH, brain="langchain"), b'{"question":  "' + PLAIN.encode() + b'"}'):
             status, _, out = _run(self.door, raw, [(b"x-test-email", ME.encode())])
             self.assertEqual((status, out, self.app.calls[-1][1]), (200, b'{"handler":true}', raw))
         self.assertEqual((len(self.callers), self.reads), (1, ["acme"]))       # the plain question was never verified
         self.assertEqual([t for _, t in self.shadows], ["acme", None])
 
-    def test_the_local_profile_reads_no_setting(self):
+    def test_the_local_profile_has_the_rules_and_reads_no_setting(self):
         def boom(*a):
-            raise AssertionError("the local profile read a setting or verified a caller")
+            raise AssertionError("the local profile read a setting, verified a caller or looked for a check")
+        self.checked.add("zeta")                                                 # never read on the local profile
+        a = synthetic_aadhaar()
+        masked_q = f"My Aadhaar is {a[:4]} {a[4:8]} {a[8:]}. How do I update my address in the records?"
         with patch.object(self.desk, "PROFILE", "local"), patch.object(self.desk, "settings", boom), \
-                patch.dict(self.desk._hooks, {"caller": boom}), patch.dict(os.environ, {"LOCAL_TENANT": "zeta"}):
-            raw = self.body(POSH)
-            status, _, out = _run(self.door, raw)
-        self.assertEqual((status, self.app.calls[-1][1], self.shadows), (200, raw, [(POSH, "zeta")]))
+                patch.dict(self.desk._hooks, {"caller": boom, "tenant_for": boom}), patch.object(self.desk, "_check", boom), \
+                patch.dict(os.environ, {"LOCAL_TENANT": "zeta"}):
+            status, _, out = _run(self.door, self.body(POSH))                     # a hit: the fixed reply, no model
+            self.assertEqual((status, json.loads(out)["answer"], json.loads(out)["model"], self.app.calls),
+                             (200, desk_law.template("posh"), "none", []))
+            raw = self.body(PLAIN)                                                # no hit: chat() as before
+            _run(self.door, raw)
+            self.assertEqual((self.app.calls[-1][1], self.shadows), (raw, [(PLAIN, "zeta")]))
+            _run(self.door, self.body(masked_q))                                  # a number: masked
+            self.assertNotIn(a[8:], self.app.calls[-1][1].decode())
+        self.assertEqual(self.door_checked.reads, 0)
 
-    def test_an_aadhaar_number_is_masked_when_the_gate_is_on(self):
+    def test_an_aadhaar_number_is_masked_unless_the_gate_is_off(self):
         a = synthetic_aadhaar()
         q = f"My Aadhaar is {a[:4]} {a[4:8]} {a[8:]}. How do I update my address in the records?"
         self.assertIsNone(desk_rules.gate(q))
@@ -938,18 +979,148 @@ class ChatDoorTests(unittest.TestCase):
         self.assertNotIn(a[8:], got.decode())
         self.assertIn((b"content-length", str(len(got)).encode()), scope["headers"])
         self.assertEqual(self.shadows[-1], (sent["question"], "acme"))           # the shadow sees what chat() sees
-        self.flags["acme"] = {}
+        self.flags["acme"] = {}                                                   # nothing set: the rules, masked too
+        _run(self.door, self.body(q), [(b"x-test-email", ME.encode())])
+        self.assertNotIn(a[8:], self.app.calls[-1][1].decode())
+        self.flags["acme"] = {"desk_gate": "off"}
         raw = self.body(q)
         _run(self.door, raw, [(b"x-test-email", ME.encode())])
         self.assertEqual(self.app.calls[-1][1], raw)                             # off: unchanged
 
-    def test_a_failed_settings_read_is_off(self):
+    def test_a_tenant_that_set_nothing_has_the_rules(self):
+        for doc in ({}, {"desk_gate": "rules"}, {"desk_gate": "maybe"}):
+            self.flags["acme"] = doc
+            status, _, out = _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])
+            self.assertEqual((status, json.loads(out)["answer"], self.app.calls), (200, desk_law.template("posh"), []), doc)
+
+    def test_a_failed_settings_read_keeps_the_rules_or_the_last_state(self):
         def unwell(tenant):
             raise RuntimeError("firestore is unwell")
         with patch.object(self.desk, "settings", unwell):
+            status, _, out = _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])
+        self.assertEqual((status, json.loads(out)["brain"], self.app.calls), (200, "desk_gate", []))   # never off
+        # a state read before stands while the switch cannot be read: an operator's off stays off
+        self.flags["acme"] = {"desk_gate": "off"}
+        a = synthetic_aadhaar()
+        q = f"My Aadhaar is {a[:4]} {a[4:8]} {a[8:]}. How do I update my address in the records?"
+        self.assertIsNone(desk_rules.gate(q))
+        _run(self.door, self.body(q), [(b"x-test-email", ME.encode())])          # an identifier: the switch is read
+        self.assertEqual(self.desk._GATE_SEEN["acme"], "off")
+        with patch.object(self.desk, "settings", unwell):
             raw = self.body(POSH)
-            status, _, out = _run(self.door, raw, [(b"x-test-email", ME.encode())])
-        self.assertEqual((status, out, self.app.calls[-1][1]), (200, b'{"handler":true}', raw))   # replayed, unchanged
+            _run(self.door, raw, [(b"x-test-email", ME.encode())])
+        self.assertEqual(self.app.calls[-1][1], raw)
+        # and it is the tenant's own: zeta's off never stands in for acme's unread switch
+        self.desk._GATE_SEEN.clear()
+        self.flags["zeta"] = {"desk_gate": "off"}
+        with patch.dict(self.desk._hooks, {"tenant_for": lambda e: {ME: "acme", OTHER: "zeta"}.get(e)}):
+            _run(self.door, self.body(q), [(b"x-test-email", OTHER.encode())])
+            self.assertEqual(self.desk._GATE_SEEN, {"zeta": "off"})
+            n = len(self.app.calls)
+            with patch.object(self.desk, "settings", unwell):
+                status, _, out = _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])
+        self.assertEqual((status, json.loads(out)["answer"], len(self.app.calls)), (200, desk_law.template("posh"), n))
+
+    # ---------------------------------------------------------------- the model check (shared/desk_recall.py)
+    def test_the_model_check_answers_what_the_rules_miss(self):
+        self.assertIsNone(desk_rules.gate(MISS))
+        self.checked.add("acme")
+        self.verdict = "posh"
+        records = self.records()
+        self.assertIsNone(self.door_checked.fresh())                            # a process's first turn
+        status, _, out = _run(self.door, self.body(MISS, brain="langchain"), [(b"x-test-email", ME.encode())])
+        body = json.loads(out)
+        self.assertEqual((status, self.app.calls, self.checks, self.door_checked.reads), (200, [], [MISS], 1))
+        self.assertEqual((body["answer"], body["brain"], body["model"], body["limits"]["model_calls"],
+                          body["case_offer"]), (desk_law.template("posh"), "desk_gate", desk_recall.MODEL, 1,
+                                                {"case_type": "posh"}))
+        self.assertGreater(body["limits"]["cost_inr"], 0)
+        self.assertEqual([r["event"] for r in records], ["desk_gate_check", "desk_gate"])
+        self.assertEqual((records[0]["outcome"], records[0]["tenant"]), ("case", "acme"))
+        self.assertEqual(records[1], {"event": "desk_gate", "surface": "chat", "tenant": "acme", "user": None,
+                                      "class": "sensitive", "rules_version": desk_rules.RULES_VERSION, "method": "model"})
+        self.assertNotIn(MISS, json.dumps(records))
+        self.assertEqual(self.shadows, [])                                        # answered at the door: no shadow
+
+    def test_a_model_hit_that_carries_a_number_is_answered_and_the_number_never_leaves(self):
+        a = synthetic_aadhaar()
+        q = f"{MISS}. My Aadhaar is {a[:4]} {a[4:8]} {a[8:]}"
+        self.assertIsNone(desk_rules.gate(q))
+        self.checked.add("acme")
+        self.verdict = "posh"
+        records = self.records()
+        status, _, out = _run(self.door, self.body(q), [(b"x-test-email", ME.encode())])
+        body = json.loads(out)
+        self.assertEqual((status, self.app.calls, body["answer"], body["model"]),
+                         (200, [], desk_law.template("posh"), desk_recall.MODEL))
+        self.assertEqual(self.checks, [f"{MISS}. My Aadhaar is [Aadhaar]"])
+        self.assertEqual(records[-1]["method"], "model")
+        self.assertNotIn(a[8:], json.dumps(records) + out.decode())
+
+    def test_the_real_check_passes_the_routed_desks_client(self):
+        class _Usage:
+            prompt_token_count, candidates_token_count, thoughts_token_count, cached_content_token_count = 900, 4, 0, 0
+
+        class _Gen:
+            def __init__(self):
+                self.models, self.calls = self, []
+
+            def generate_content(self, model, contents, config):
+                self.calls.append(model)
+                return types.SimpleNamespace(parsed={"case": "posh"}, text=None, usage_metadata=_Usage())
+        gen = _Gen()
+        with patch.object(self.desk, "_models", lambda: types.SimpleNamespace(gen=gen)):
+            got = self.real_check("masked words")
+        self.assertEqual((got["case"], got["outcome"], gen.calls), ("posh", "case", [desk_recall.MODEL]))
+        with patch.object(self.desk, "_models", lambda: None):                   # no client: no check, and why
+            self.assertEqual(self.real_check("masked words"), desk_recall.unavailable())
+
+    def test_the_model_check_reads_the_masked_question_and_a_miss_goes_on(self):
+        a = synthetic_aadhaar()
+        q = f"My Aadhaar is {a}. How do I update my address in the records?"
+        self.checked.add("acme")
+        for verdict in (None, "error"):
+            self.verdict = verdict
+            _run(self.door, self.body(q), [(b"x-test-email", ME.encode())])
+            self.assertEqual(self.checks[-1], "My Aadhaar is [Aadhaar]. How do I update my address in the records?")
+            self.assertNotIn(a, self.app.calls[-1][1].decode())                  # masked, then on to chat()
+        raw = self.body(PLAIN)
+        _run(self.door, raw, [(b"x-test-email", ME.encode())])
+        self.assertEqual(self.app.calls[-1][1], raw)                             # no identifier: the bytes as sent
+
+    def test_the_model_check_runs_only_for_a_tenant_whose_gate_is_on(self):
+        raw = self.body(MISS)
+        _run(self.door, raw, [(b"x-test-email", ME.encode())])                   # nobody's gate is on: no lookup
+        self.assertEqual((self.callers, self.reads, self.checks, self.app.calls[-1][1]), ([], [], [], raw))
+        self.checked.add("zeta")                                                 # someone else's is on
+        for doc in ({}, {"desk_gate": "rules"}, {"desk_gate": "off"}):
+            self.flags["acme"] = doc
+            _run(self.door, raw, [(b"x-test-email", ME.encode())])
+            self.assertEqual((self.checks, self.app.calls[-1][1]), ([], raw), doc)
+        self.assertEqual(len(self.callers), 3)                                   # looked up, then not checked
+        self.flags["acme"] = {"desk_gate": "on"}
+        _run(self.door, raw)                                                      # a caller chat() refuses: its own 401
+        self.assertEqual((self.checks, self.app.calls[-1][1]), ([], raw))
+        self.verdict = "posh"
+        _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])       # a rule hit: the rule answers
+        self.assertEqual(self.checks, [])
+        _run(self.door, raw, [(b"x-test-email", ME.encode())])
+        self.assertEqual(self.checks, [MISS])
+
+    def records(self) -> list:
+        records = []
+        handler = logging.Handler()
+        handler.emit = lambda r: records.append(json.loads(r.getMessage()))
+        lg = logging.getLogger("documind.chat.desk")
+        lg.addHandler(handler)
+        lg.setLevel(logging.INFO)
+        self.addCleanup(lg.removeHandler, handler)
+        self.addCleanup(setattr, lg, "propagate", lg.propagate)
+        lg.propagate = False
+        disabled = logging.root.manager.disable
+        logging.disable(logging.NOTSET)
+        self.addCleanup(logging.disable, disabled)
+        return records
 
     def test_a_lone_surrogate_reaches_the_handler(self):
         a = synthetic_aadhaar()
@@ -990,7 +1161,7 @@ class ChatDoorTests(unittest.TestCase):
                          (desk_law.template("posh"), "desk_gate", "none", [], [], [], "s1", 0, 0))
         self.assertEqual(body["case_offer"], {"case_type": "posh"})              # the case to offer, not the words
         self.assertEqual(records[-1], {"event": "desk_gate", "surface": "chat", "tenant": "acme", "user": None,
-                                       "class": "sensitive", "rules_version": desk_rules.RULES_VERSION})
+                                       "class": "sensitive", "rules_version": desk_rules.RULES_VERSION, "method": "rule"})
         status, _, out = _run(self.door, self.body(POSH), [(b"x-test-email", OTHER.encode())])   # on no roster
         self.assertEqual((status, out), (403, b'{"detail":"not a member of any tenant"}'))
         status, _, out = _run(self.door, self.body(POSH))
@@ -1060,7 +1231,8 @@ class ChatServiceTests(unittest.TestCase):
         for p in (patch.object(self.iap, "identity", identity), patch.object(self.agent, "PROFILE", "gcp"),
                   patch.object(self.desk, "PROFILE", "gcp"), patch.object(self.agent, "tenant_for", tenant_for),
                   patch.dict(self.desk._hooks, {"tenant_for": tenant_for}), patch.object(self.desk, "settings", settings),
-                  patch.object(self.desk, "_client", lambda: db)):
+                  patch.object(self.desk, "_client", lambda: db), patch.object(self.desk, "CHECKED", _OnTenants(set())),
+                  patch.object(self.desk, "SHADOWING", _OnTenants(set()))):
             stack.enter_context(p)
         self.addCleanup(stack.close)
         return self.TestClient(self.agent.app)
@@ -1090,6 +1262,16 @@ class ChatServiceTests(unittest.TestCase):
                             headers={"x-test-email": ME})
             self.assertEqual((r.status_code, r.json()["brain"], len(model.seen)), (200, "langchain", 1))
             self.assertGreater(len(list(saver.list(cfg))), 0)
+
+    def test_the_offer_says_the_gate_as_the_doors_read_it(self):
+        db, flags = FakeDB(), {"acme": {}}
+        db.collection("tenants").document("acme").collection("members").document(ME).set({"email": ME})
+        with self.lane({ME: "acme"}, flags, db=db, queues={"acme": queues_file("acme")}) as client:
+            for value, want in ((None, "rules"), ("rules", "rules"), ("off", "off"), ("on", "on"), (True, "on"),
+                                (False, "off"), ("On", "rules")):
+                flags["acme"] = {} if value is None else {"desk_gate": value}
+                got = client.get("/v1/cases/offer", headers={"x-test-email": ME})
+                self.assertEqual((got.status_code, got.json()["desk_gate"]), (200, want), value)
 
     def test_the_case_routes(self):
         db, events = FakeDB(), []
@@ -1147,7 +1329,7 @@ class ChatServiceTests(unittest.TestCase):
             # what a person may raise: the switches, the configured types, the POSH card; no case read, no text
             offer = call("GET", "/v1/cases/offer", ME).json()
             self.assertEqual((offer["email"], offer["tenant"], offer["desk_gate"], offer["desk_route"]),
-                             (ME, "acme", "off", "off"))
+                             (ME, "acme", "rules", "off"))                     # nothing set: the gate's rules
             self.assertEqual(offer["types"], list(desk_law.CASE_TYPES))
             self.assertEqual(sorted(offer["posh"]), ["hyderabad", "pune"])
             self.assertEqual(offer["posh"]["pune"]["local_committee"]["contact"], "lc.pune@example.com")

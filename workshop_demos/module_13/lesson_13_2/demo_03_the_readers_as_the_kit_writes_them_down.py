@@ -83,9 +83,11 @@ def step_01_the_readers_as_the_kit_writes_them_down(session):
     print("the Desk's own view, desk_daily (make desk-views), reads: " + ", ".join(re.findall(r'jsonPayload\.event = "(\w+)"', desk_view)))
     policies = re.findall(r'resource "google_monitoring_alert_policy" "(\w+)"', alerts)
     print(f"alert policies in terraform/alerts.tf: {len(policies)} - " + ", ".join(policies))
-    desk_policies = re.findall(r'resource "google_monitoring_alert_policy" "(\w+)" \{\n(  count += var\.\w+)?', desk_alerts)
-    print(f"alert policies in terraform/desk_alerts.tf: {len(desk_policies)} - " + ", ".join(n + "*" * bool(c) for n, c in desk_policies)
-          + " (* only on a lane planned with DESK_ROUTER_ALERTS=true)")
+    desk_policies = re.findall(r'resource "google_monitoring_alert_policy" "(\w+)" \{\n(?:  count += var\.(\w+) \? 1 : 0\n)?', desk_alerts)
+    switches = list(dict.fromkeys(s for _, s in desk_policies if s))
+    mark = {s: "*" * (i + 1) for i, s in enumerate(switches)}
+    print(f"alert policies in terraform/desk_alerts.tf: {len(desk_policies)} - " + ", ".join(n + mark.get(s, "") for n, s in desk_policies)
+          + " (" + ", ".join(f"{mark[s]} only on a lane planned with {s.upper()}=true" for s in switches) + ")")
     print("the one that reads the dead-letter queue: " + ", ".join(p for p in policies
           if "ingest_dlq_sub" in between(alerts, f'"google_monitoring_alert_policy" "{p}"', "\n}\n")))
 

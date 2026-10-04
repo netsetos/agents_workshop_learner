@@ -153,7 +153,7 @@ def principal(request, caller, tenant_for, settings) -> dict:
         _deny(NOT_A_MEMBER, path)
     try:
         on = _switch_on((settings(tenant) or {}).get(SWITCH))
-    except Exception:  # noqa: BLE001 - a failed read is off, as the doors treat every Desk switch
+    except Exception:  # noqa: BLE001 - a failed read is off: the door stays shut (desk_gate alone falls back to rules)
         on = False
     if not on:                                                          # 7
         _deny(DOOR_OFF, path)

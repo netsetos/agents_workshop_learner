@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1026 files; 128 quoted by a lesson, 202 shown or named by one.
+1027 files; 128 quoted by a lesson, 203 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -278,6 +278,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/cases.py` | code | 10.5 | - |
 | `shared/desk_calc.py` | code | - | 10.6 |
 | `shared/desk_law.py` | code | 10.5, 10.6 | - |
+| `shared/desk_recall.py` | code | - | 10.5 |
 | `shared/desk_rules.py` | code | 10.5 | - |
 | `shared/doc_types.py` | code | 10.6 | - |
 | `shared/documind_corpus.py` | code | 3.2, 3.3, 4.2 | 6.1, 17.1 |

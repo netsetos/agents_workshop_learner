@@ -13,23 +13,32 @@ is checkpointed.
        pydantic reads it only after this door has read the body.
     2. A body ChatRequest would refuse (not JSON, no string question, a question over 4,000 characters, a bad
        session_id or brain) is replayed unchanged: the handler's own 422 answers it.
-    3. On the local profile there is no IAP and no Firestore: the tenant is LOCAL_TENANT, every Desk switch is off,
-       and the body is replayed unchanged, as chat() itself never touches Firestore there.
-    4. No hit and no identifier: the original bytes go through untouched, and nothing is read or verified.
+    3. On the local profile there is no IAP and no Firestore: the tenant is LOCAL_TENANT, nobody is verified and no
+       switch is read, as chat() itself never touches Firestore there. LOCAL_TENANT has the rules, as every tenant has
+       until an operator writes off: a hit gets the fixed reply below, a number is masked, and nothing else changes.
+    4. No hit, no identifier and no tenant whose desk_gate is on (CHECKED, shared/desk_recall.OnTenants, read once a
+       minute): the original bytes go through untouched, and nothing is read or verified.
     5. Otherwise the caller is verified with the caller() install() was given, and the tenant looked up with its
        tenant_for(), before any setting is read - so this door reads no tenant's settings for a caller it does not
-       know.
+       know. Then tenant_settings/{tenant}.desk_gate, as gate_state() reads it: rules unless it says off or on, and a
+       failed read is the last state this process read for the tenant, else rules - only an operator's "off" replays
+       the body as sent.
          - A hit: their refusals (401, 403) are answered here, in FastAPI's own bytes, so a caller cannot tell a gate
-           hit from a pass by the reply. Then tenant_settings/{tenant}.desk_gate (a failed read is off): off replays
-           the body; on answers with the fixed reply of shared/desk_law.py in /v1/chat's response shape, with no tool
-           calls, no refusals, no citations, model "none" and cost 0, plus case_offer: the type of case the person
-           may raise for it (POST /v1/cases), so a page can offer that case without reading the reply's words.
+           hit from a pass by the reply. Then the fixed reply of shared/desk_law.py in /v1/chat's response shape, with
+           no tool calls, no refusals, no citations, model "none" and cost 0, plus case_offer: the type of case the
+           person may raise for it (POST /v1/cases), so a page can offer that case without reading the reply's words.
+         - No hit, and desk_gate on: the model check (shared/desk_recall.py) reads the masked question before any
+           brain does. A class is answered as a hit is, with the check's model and its one call in limits; none, or a
+           check that fails, goes on below. Each check logs a "desk_gate_check" row: its outcome, tokens and cost, no
+           question and no person, at WARNING when the check failed. The check and the CHECKED read run on
+           desk_recall.POOL. CHECKED is lane-wide: while any tenant is on, every turn the rules let through is looked
+           up, because the tenant is known only after the caller is.
          - Aadhaar or card numbers and no hit: a refused caller's body is replayed unchanged, so the handler gives its
-           own 401 or 403; for a member, when desk_gate is on, the numbers are masked before the body is replayed, so
-           neither the brain, the checkpoint nor the model sees them.
-    6. A hit that is answered logs {"event": "desk_gate", "surface": "chat", ...} with the class and the rules
-       version, never the question. For posh, grievance and privacy_request the row's user is null and its class
-       "sensitive".
+           own 401 or 403; for a member, unless desk_gate is off, the numbers are masked before the body is replayed,
+           so neither the brain, the checkpoint nor the model sees them.
+    6. A hit that is answered logs {"event": "desk_gate", "surface": "chat", ...} with the class, the rules version
+       and the method (rule or model), never the question. For posh, grievance and privacy_request the row's user is
+       null and its class "sensitive".
 Every turn the door hands to chat() also goes to _shadow(): while the tenant's desk_route is shadow, the routed Desk's
 router decides it there too and logs a row (workshop lesson 10.6), and the door's own lines did not change for it.
 
@@ -70,7 +79,7 @@ THE ROUTED DESK (workshop lesson 10.6: services/chat/desk_router.py decides a tu
     GET /v1/desk/check  who the request serves and their tenant, refused as POST /v1/desk refuses its caller, with no
                       text: the Google Chat bridge asks it before it queues a question, so a person on no roster, or a
                       company with the door or the routed Desk off, hears so at once.
-    shadow            while desk_route is shadow and desk_gate is on (the door then answers every sensitive turn
+    shadow            while desk_route is shadow and desk_gate is not off (the door then answers every sensitive turn
                       itself), _shadow() decides each /v1/chat turn too, inside the request and beside the brain (the
                       chat service's CPU is throttled between requests, so a background task could stall), with its own
                       Meter, and logs a "desk_shadow" row. It never answers, drafts or checkpoints. The request waits
@@ -113,7 +122,7 @@ import delegation
 import desk_router
 import desk_routes
 import limits
-from shared import cases, desk_law, desk_rules, roles
+from shared import cases, desk_law, desk_recall, desk_rules, roles
 from shared.profile import PROFILE
 
 log = logging.getLogger("documind.chat.desk")
@@ -140,7 +149,8 @@ _SETTINGS: dict[str, tuple[float, dict]] = {}
 
 def settings(tenant: str) -> dict:
     """tenant_settings/{tenant}, read at most once a minute per tenant per instance. A failed read raises: the door
-    treats it as off, a case route as 503."""
+    keeps the last desk_gate state it read for the tenant, else rules (gate_state()); a case route answers 503; the
+    shadow stops."""
     hit = _SETTINGS.get(tenant)
     if hit and time.monotonic() - hit[0] < SETTINGS_TTL_S:
         return hit[1]
@@ -151,9 +161,37 @@ def settings(tenant: str) -> dict:
 
 
 def switch_on(doc, field: str) -> bool:
-    """A Desk switch is on only when the tenant's settings say so; a missing field or a failed read is off."""
+    """An on/off Desk switch (desk_gchat) is on only when the tenant's settings say so; a missing field or a failed read
+    is off. desk_gate has three states: gate_state()."""
     v = (doc or {}).get(field)
     return v is True or (isinstance(v, str) and v.strip().lower() == "on")
+
+
+_GATE_SEEN: dict[str, str] = {}         # the last desk_gate state this process read, per tenant
+
+
+def gate_state(tenant: str) -> str:
+    """tenant_settings/{tenant}.desk_gate as the door applies it (shared/desk_rules.gate_state): off, rules or on. A
+    failed read is the last state this process read for the tenant, else rules: never off for want of a read."""
+    try:
+        state = desk_rules.gate_state(settings(tenant))
+    except Exception as e:  # noqa: BLE001 - the rules hold while the switch cannot be read
+        log.warning(json.dumps({"event": "desk_gate_unread", "surface": "chat", "tenant": tenant,
+                                "error": type(e).__name__}))
+        return _GATE_SEEN.get(tenant, "rules")
+    _GATE_SEEN[tenant] = state
+    return state
+
+
+# The tenants whose desk_gate is on: the door looks a caller up for the model check only while there is one.
+CHECKED = desk_recall.OnTenants(lambda: desk_recall.read_on_tenants(_client()), log, "chat")
+
+
+def _check(question: str) -> dict:
+    """The model check (shared/desk_recall.py) on the masked question, with the routed Desk's own Gemini client. No
+    client is no check (desk_recall.unavailable()); the door logs the result's row."""
+    models = _models()
+    return desk_recall.check(models.gen, question) if models is not None else desk_recall.unavailable()
 
 
 # ---------------------------------------------------------------- the chat door
@@ -224,11 +262,11 @@ class ChatDoor:
     def __init__(self, app):
         self.app = app
 
-    async def _gate_on(self, tenant: str) -> bool:
-        try:
-            return switch_on(await asyncio.to_thread(settings, tenant), "desk_gate")
-        except Exception:  # noqa: BLE001 - a failed read is off, as rag-api's door treats it
-            return False
+    async def _checking(self) -> bool:
+        """True while some tenant's desk_gate is on: only then is a turn with no hit looked up for the model check."""
+        got = CHECKED.fresh()
+        return bool(got if got is not None
+                    else await asyncio.get_running_loop().run_in_executor(desk_recall.POOL, CHECKED.get))
 
     async def _pass(self, scope, receive, send, body: bytes, question: str, tenant: str | None):
         """chat() gets the turn, with the body as sent or its masked copy; the shadow hook runs beside it, in a task
@@ -267,40 +305,53 @@ class ChatDoor:
         question = _turn(payload)
         if question is None:
             return await self.app(scope, _replay(body, receive), send)
-        if PROFILE == "local":                     # no IAP, no Firestore: LOCAL_TENANT, and every switch off
-            return await self._pass(scope, receive, send, body, question, os.environ.get("LOCAL_TENANT", "acme"))
         cls, (masked, kinds) = await asyncio.to_thread(_read, question)
-        if cls is None and not kinds:
-            return await self._pass(scope, receive, send, body, question, None)
-        try:
-            user = await asyncio.to_thread(_hooks["caller"], Request(scope))
-            tenant = await asyncio.to_thread(_hooks["tenant_for"], user["email"])
-        except RefusedHTTP as e:
-            if cls is None:                        # nothing to mask for a caller the handler refuses: it answers
-                return await self._pass(scope, receive, send, body, question, None)
-            return await _reply(send, e.status_code, {"detail": e.detail}, getattr(e, "headers", None))
-        if tenant is None:
-            if cls is None:
-                return await self._pass(scope, receive, send, body, question, None)
-            return await _reply(send, 403, {"detail": NOT_A_MEMBER})
-        on = await self._gate_on(tenant)
+        local = PROFILE == "local"                 # no IAP, no Firestore: LOCAL_TENANT, the rules and no switch to read
+        checked = not local and cls is None and await self._checking()
+        if cls is None and not kinds and not checked:
+            return await self._pass(scope, receive, send, body, question,
+                                    os.environ.get("LOCAL_TENANT", "acme") if local else None)
+        if local:
+            user, tenant, state = {"email": None}, os.environ.get("LOCAL_TENANT", "acme"), "rules"
+        else:
+            try:
+                user = await asyncio.to_thread(_hooks["caller"], Request(scope))
+                tenant = await asyncio.to_thread(_hooks["tenant_for"], user["email"])
+            except RefusedHTTP as e:
+                if cls is None:                    # nothing to mask or check for a caller the handler refuses
+                    return await self._pass(scope, receive, send, body, question, None)
+                return await _reply(send, e.status_code, {"detail": e.detail}, getattr(e, "headers", None))
+            if tenant is None:
+                if cls is None:
+                    return await self._pass(scope, receive, send, body, question, None)
+                return await _reply(send, 403, {"detail": NOT_A_MEMBER})
+            state = await asyncio.to_thread(gate_state, tenant)
+        if state == "off":                         # an operator's explicit off: the body as it was sent
+            return await self._pass(scope, receive, send, body, question, tenant)
+        method, meter = "rule", limits.Meter(model="none")
+        if cls is None and checked and state == "on":
+            got = await asyncio.get_running_loop().run_in_executor(desk_recall.POOL, _check, masked)
+            (log.warning if got["outcome"] == "error" else log.info)(json.dumps(desk_recall.row("chat", tenant, got)))
+            if got["case"] is not None:
+                cls, method, meter = got["case"], "model", limits.Meter(model=got["model"])
+                meter.allow_model_call()
+                meter.charge_model(got["tokens_in"], got["tokens_out"], got["cached_tokens"])
         if cls is None:
-            if on:
+            if kinds:
                 payload["question"] = masked
                 body = json.dumps(payload).encode()     # ASCII escapes: a lone surrogate reaches the handler's 422
                 return await self._pass(_with_length(scope, len(body)), receive, send, body, masked, tenant)
             return await self._pass(scope, receive, send, body, question, tenant)
-        if not on:
-            return await self._pass(scope, receive, send, body, question, tenant)
         sensitive = cls in desk_rules.SENSITIVE
         log.info(json.dumps({"event": "desk_gate", "surface": "chat", "tenant": tenant,
                              "user": None if sensitive else user["email"],
-                             "class": "sensitive" if sensitive else cls, "rules_version": desk_rules.RULES_VERSION}))
+                             "class": "sensitive" if sensitive else cls, "rules_version": desk_rules.RULES_VERSION,
+                             "method": method}))
         return await _reply(send, 200, {"answer": desk_law.template(cls), "tool_calls": [], "refusals": [],
-                                        "citations": [], "brain": "desk_gate", "model": "none",
+                                        "citations": [], "brain": "desk_gate", "model": meter.model,
                                         "session_id": payload.get("session_id", "default"),
                                         "latency_ms": int((time.monotonic() - t0) * 1000),
-                                        "limits": limits.Meter(model="none").summary(),
+                                        "limits": meter.summary(),
                                         "case_offer": {"case_type": cls}})
 
 
@@ -455,7 +506,7 @@ def case_offer(request: Request) -> dict:
              or (t != "posh" and cases.queue_for(t, queues) is not None)]
     posh = cases.posh_offer(queues)
     return {"email": who["email"], "tenant": who["tenant"], "roles": held,
-            "desk_gate": "on" if switch_on(doc, "desk_gate") else "off", "desk_route": desk_mode(doc)[0],
+            "desk_gate": desk_rules.gate_state(doc), "desk_route": desk_mode(doc)[0],
             "types": types, "posh": posh or None}
 
 
@@ -493,8 +544,6 @@ SHADOW_POOL = ThreadPoolExecutor(max_workers=SHADOW_THREADS, thread_name_prefix=
 SHADOW_ROUTER_POOL = ThreadPoolExecutor(max_workers=2 * SHADOW_DECIDES,       # L1 and the vote; never desk_router.POOL
                                         thread_name_prefix="documind-desk-shadow-router")
 _SHADOW_SLOTS = threading.BoundedSemaphore(SHADOW_DECIDES)
-_SHADOW_TENANTS: dict = {"at": None, "tenants": frozenset(), "warned": False}
-_SHADOW_LOCK = threading.Lock()
 _RATE: dict[str, list[float]] = {}
 _RATE_LOCK = threading.Lock()
 _COVERAGE: dict[str, tuple[float, dict]] = {}
@@ -809,35 +858,28 @@ def desk_check(request: Request) -> dict:
 
 # ---------------------------------------------------------------- shadow mode
 def _read_shadow_tenants(db) -> frozenset:
+    """The tenants whose desk_route is exactly "shadow" (as make desk writes it), by one query: one attempt, at most
+    desk_recall.READ_TIMEOUT_S (Firestore's default retries for about 300 s)."""
     from google.cloud.firestore_v1.base_query import FieldFilter
     q = db.collection("tenant_settings").where(filter=FieldFilter("desk_route", "==", "shadow"))
-    return frozenset(s.id for s in q.stream())
+    return frozenset(s.id for s in q.stream(retry=None, timeout=desk_recall.READ_TIMEOUT_S))
 
 
-def _fresh_shadow_tenants() -> frozenset | None:
-    with _SHADOW_LOCK:
-        at = _SHADOW_TENANTS["at"]
-        fresh = at is not None and time.monotonic() - at < SHADOW_TENANTS_TTL_S
-        return _SHADOW_TENANTS["tenants"] if fresh else None
+def _shadowing():
+    """The shadow's tenants as CHECKED reads the door's: desk_recall.OnTenants, at most once every SHADOW_TENANTS_TTL_S
+    per process, by one thread at a time, so a turn waits at most READ_TIMEOUT_S for it, once a minute. A failed read
+    keeps the last set (none before the first read works): the set only says which turns to look at, and each one's
+    own tenant_settings still decides. Its line is desk_shadow_tenants_unread, not the gate's paged one."""
+    return desk_recall.OnTenants(lambda: _read_shadow_tenants(_client()), log, "chat", ttl_s=SHADOW_TENANTS_TTL_S,
+                                 event="desk_shadow_tenants_unread")
+
+
+SHADOWING = _shadowing()
 
 
 def shadow_tenants() -> frozenset:
-    """The tenants whose desk_route is exactly "shadow" (as make desk writes it), by one query at most once every
-    SHADOW_TENANTS_TTL_S per process. A failed read is none, said once until a read works again: the shadow is a
-    measurement, so it stops rather than guess."""
-    got = _fresh_shadow_tenants()
-    if got is not None:
-        return got
-    try:
-        got, failed = _read_shadow_tenants(_client()), None
-    except Exception as e:  # noqa: BLE001 - no shadow this minute
-        got, failed = frozenset(), e
-    with _SHADOW_LOCK:
-        warn = failed is not None and not _SHADOW_TENANTS["warned"]
-        _SHADOW_TENANTS.update(at=time.monotonic(), tenants=got, warned=failed is not None)
-    if warn:
-        log.warning(json.dumps({"event": "desk_shadow_tenants_unread", "error": type(failed).__name__}))
-    return got
+    """The tenants in shadow (SHADOWING): the last set while it is fresh, else one bounded read."""
+    return SHADOWING.get()
 
 
 def _skipped(tenant: str | None, reason: str) -> None:
@@ -848,7 +890,7 @@ def _skipped(tenant: str | None, reason: str) -> None:
 def _shadow_work(scope, question: str, tenant: str | None, t0: float) -> dict | None:
     """The caller, the tenant and its mode, then decide() with its own Meter, and the "desk_shadow" row logged here,
     so a decide that outlives the request's wait still writes its row. None and no row when the tenant is not in
-    shadow mode, its desk_gate is off, or chat() refuses the caller itself. None with a "desk_shadow_skipped" line,
+    shadow mode, its desk_gate is off (or unread), or chat() refuses the caller itself. None with a "desk_shadow_skipped" line,
     and no model call, when SHADOW_DECIDES decides are running already ("busy") or SHADOW_TIMEOUT_S has passed before
     decide() starts ("late"). A turn the gate hands to a person as posh, grievance or privacy_request writes no row,
     only a "desk_shadow_skipped" line with no tenant ("withheld"): the turn's own chat row names the person, so even
@@ -866,11 +908,11 @@ def _shadow_work(scope, question: str, tenant: str | None, t0: float) -> dict | 
             return None
     try:
         doc = settings(tenant)
-    except Exception:  # noqa: BLE001 - a failed read is off, as the doors treat it
+    except Exception:  # noqa: BLE001 - no shadow without the mode: the shadow is a measurement, so it does not guess
         return None
     if desk_mode(doc)[0] != "shadow":
         return None
-    if not switch_on(doc, "desk_gate"):        # the door answers every sensitive turn itself only while it is on
+    if desk_rules.gate_state(doc) == "off":   # the door answers every sensitive turn itself unless it is off
         return None
     if user is None:
         try:
@@ -913,7 +955,7 @@ async def _shadow_turn(scope, question: str, tenant: str | None) -> None:
     then is cancelled, and one still running writes its own row when it ends ("desk_shadow_late" says so)."""
     if PROFILE == "local":
         return None
-    shadowing = _fresh_shadow_tenants()
+    shadowing = SHADOWING.fresh()
     if shadowing is None:
         shadowing = await asyncio.to_thread(shadow_tenants)
     if not shadowing or (tenant is not None and tenant not in shadowing):

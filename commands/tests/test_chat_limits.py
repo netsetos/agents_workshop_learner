@@ -39,7 +39,7 @@ for p in (str(KIT / "services/chat"), str(KIT)):
     if p not in sys.path:
         sys.path.insert(0, p)
 import limits                                  # noqa: E402 - stdlib and shared/prices.py only, at import
-from shared import prices                      # noqa: E402
+from shared import desk_recall, prices         # noqa: E402
 
 FRAMEWORKS = all(importlib.util.find_spec(m) for m in ("langchain", "langgraph", "google.adk", "fastapi"))
 REQUIRE = os.environ.get("DOCUMIND_REQUIRE_LIBS") == "1"
@@ -224,6 +224,12 @@ class KitAgrees(unittest.TestCase):
         self.assertLess(worst, ui_timeout)
         self.assertLess(worst, worker)
         self.assertLess(ui_timeout, run)
+        # the chat door's model check (shared/desk_recall.py) runs before chat() starts the turn's clock: the tenants
+        # read, once a minute, and an "on" tenant's check fit with the turn under the same two timeouts
+        door = desk_recall.READ_TIMEOUT_S + desk_recall.CHECK_TIMEOUT_S
+        self.assertEqual(worst + door, 108)
+        self.assertLess(worst + door, ui_timeout)
+        self.assertLess(worst + door, worker)
         self.assertEqual((ui_timeout, worker, run), (120, 120, 300))
         # retrieve's budget on the lane is RAG_TIMEOUT_S + 5, under the deadline, so one slow search cannot use it up
         lane_rag = float(re.search(r"RAG_TIMEOUT_S=(\d+)", deploy).group(1))
@@ -565,9 +571,12 @@ class BrainsStop(unittest.TestCase):
         with patch.dict(os.environ, {"CHECKPOINT_DSN": "memory"}):
             sys.modules.pop("agent", None)
             import agent
+        import desk
         agent.app.dependency_overrides[agent.caller] = lambda: {"email": "you@acme.example", "assertion": None}
         rows = []
-        with patch.object(agent, "tenant_for", return_value="acme"), \
+        no_check = desk.desk_recall.OnTenants(frozenset, desk.log, "test")     # no tenant's desk_gate is on here
+        with patch.object(agent, "tenant_for", return_value="acme"), patch.object(desk, "CHECKED", no_check), \
+                patch.object(desk, "SHADOWING", desk.desk_recall.OnTenants(frozenset, desk.log, "test")), \
                 patch.object(agent.logger, "info", side_effect=lambda line: rows.append(json.loads(line))), \
                 TestClient(agent.app) as client:
             client.app.state.brains["langchain"] = self.brains.build(

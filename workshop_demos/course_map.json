@@ -243,14 +243,14 @@
     {
       "lesson": "10.5",
       "title": "Hand a question to the person the law names",
-      "source_sha": "c047978890dc8cbbd8dbc3aef503b90ab3e5d435",
+      "source_sha": "6b7d734a2a2946000e460afc23bb7a264b944c41",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.6",
       "title": "Route each question to one specialist agent",
-      "source_sha": "902bbfe348bfa460ec7a6008b52127b29e699ec6",
+      "source_sha": "cdb64225afab8cb2b503ad4ff187e2471dfa6c51",
       "source_kind": "main_html",
       "demos": 14
     },
@@ -306,7 +306,7 @@
     {
       "lesson": "13.2",
       "title": "Reconcile usage events, reports and alerts",
-      "source_sha": "9e59433d6f572c21dde05eedd031ee9acc67b317",
+      "source_sha": "e730029931de1e7c8c30606d06081f2a7db4796e",
       "source_kind": "main_html",
       "demos": 7
     },

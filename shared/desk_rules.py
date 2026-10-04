@@ -15,8 +15,9 @@ it before any handler, so on a hit rag-api retrieves nothing, calls no model and
 agent brains send a turn to their own model before they call rag-api, so on those paths rag-api's door reads only
 the search words that model wrote: it stops the search when they hit, which they need not, and the brain's model
 writes the reply. So the chat service has a door of its own (services/chat/desk.py) in front of POST /v1/chat: it
-calls gate() on the person's own words before any brain runs, and with the tenant's desk_gate on, a turn that hits
-reaches no model at all.
+calls gate() on the person's own words before any brain runs, and unless the tenant's desk_gate is off, a turn that
+hits reaches no model at all. gate_state() reads that switch: rules unless an operator says off, or on - the rules
+and a model check behind them (shared/desk_recall.py) for what no pattern catches.
 
 A question about how the law or the process works is not a disclosure. "Under the POSH Act, where do I file a
 complaint?" and "How do I raise a grievance?" ask what the statute or the handbook says, and they are answered from
@@ -627,6 +628,30 @@ def near(question: str) -> bool:
     if _first_person(t) or _HUMAN_IMPERATIVE.search(t) or _exit_dues(t):
         return True
     return any(p.search(t) for patterns in TOPICS.values() for p in patterns)
+
+
+# ---------------------------------------------------------------- the switch
+# tenant_settings/{tenant}.desk_gate, as both doors read it (services/rag-api/desk_door.py, services/chat/desk.py):
+#     rules   the default - a missing field, or any value that is not exactly one of these - gate() and mask() run
+#             on every question a person sends through a door
+#     on      the rules, and the model check behind them (shared/desk_recall.py) on POST /v1/chat, and on rag-api's
+#             /v1/query and /v1/stream for a question with no brain label or the Chat page's "ui", for the questions
+#             the rules let through
+#     off     neither: the body goes through as it was sent. Only an operator's explicit "off" turns the rules off,
+#             never a missing field, a typo or a failed read
+# The values are read exactly as make desk writes them (lower case; True and False too), as desk_recall.read_on_tenants
+# queries them: "On" or " off " is a hand edit, read as rules, so every reader agrees and an edit errs to the rules.
+GATE_STATES = ("off", "rules", "on")
+
+
+def gate_state(doc) -> str:
+    """off, rules or on: the tenant's desk_gate as the doors apply it. rules unless the field is exactly off or on."""
+    v = (doc or {}).get("desk_gate")
+    if v is True:
+        return "on"
+    if v is False:
+        return "off"
+    return v if isinstance(v, str) and v in GATE_STATES else "rules"
 
 
 # ---------------------------------------------------------------- masking
