@@ -48,11 +48,10 @@ def step_01_deploy(session):
     Deploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]
     ...
     Service URL: https://documind-chat-NUMBER.asia-south1.run.app
-    Updated IAM policy for service [documind-chat].   (twice: documind-ui-sa, documind-outsider-sa)
-    ... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)
-    Execution [documind-checkpoint-setup-xxxxx] has successfully completed.
-    ...
-    >> you@example.com may mint tokens as documind-ui
+    Updated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,
+       documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,
+       documind-evalgrc-sa)
+    >> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
@@ -77,7 +76,7 @@ def step_02_where_it_points_and_its_brains(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain
-    {"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain"}
+    {"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain","limits":{"max_model_calls":12,"budget_inr":5.0,"deadline_s":100.0,"model_timeout_s":30.0,"model_attempts":2,"min_model_s":5.0,"tool_budgets_s":{"retrieve":95.0,"calculate_processing_cost":10}}}
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)

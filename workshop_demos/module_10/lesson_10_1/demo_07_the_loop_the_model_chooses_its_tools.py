@@ -42,10 +42,10 @@ def step_01_the_loop_the_model_chooses_its_tools(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms
-          After five years of continuous service, under the Payment of Gratuity Act, 1972.
-      langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 0  11350 ms
-          At the priority tier (USD 0.12 a page), 283 pages cost USD 33.96, about Rs 2,886.60.
+    Observe: langchain tool_calls ['retrieve']  refusals []  citations 5 n [1, 2, 3, 4, 5]  7240 ms
+          After five years of continuous service, under the Payment of Gratuity Act, 1972 [1].
+      langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 3 n [1, 2, 3]  11350 ms
+          The handbook has 283 pages [1]. At the priority tier (USD 0.12 a page) they cost USD 33.96, abou
       direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms
           The documents give no per-page price for processing the handbook; the April invoice bills priori
     """

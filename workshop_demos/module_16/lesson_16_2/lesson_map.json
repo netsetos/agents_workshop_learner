@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html",
-  "source_sha": "f90dc609bf1dfc9befdb00d185c8e8f4286c122d",
+  "source_sha": "169d2b48fc8b50cd220083becc6860aed967d1f7",
   "shared_setup_windows": [
     1
   ],
@@ -181,7 +181,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
-        467
+        470
       ],
       "offline": true,
       "live_verified": false,
@@ -192,12 +192,12 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the rules, run; no network)",
-          "expected": "1. a generation: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.039, 'cached': False}\n1. a DEMO_MODE hit: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.0, 'cached': True}\n2. event=chat    copied       by the sink, never read by tenant_daily\n2. event=media   never copied by the sink, read by tenant_daily\n2. event=query   copied       by the sink, read by tenant_daily\n2. event=stream  copied       by the sink, read by tenant_daily\n3. read aloud 1, en-IN-Chirp3-HD-Kore: synthesised, then cached (1 object in the bucket)\n3. read aloud 2, en-IN-Chirp3-HD-Kore: read back from the cache (1 object in the bucket)\n3. read aloud 3, hi-IN-Chirp3-HD-Kore: synthesised, then cached (2 objects in the bucket)\n   the first object: tts/171aae62fa1f4b3a....ogg, the SHA-256 of 'en-IN-Chirp3-HD-Kore|1.0|ogg|' and the text",
+          "expected": "1. a generation: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.039, 'cached': False}\n1. a DEMO_MODE hit: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.0, 'cached': True}\n2. event=chat        copied       by the sink, never read by tenant_daily\n2. event=desk        copied       by the sink, never read by tenant_daily\n2. event=desk_gate   copied       by the sink, never read by tenant_daily\n2. event=desk_shadow copied       by the sink, never read by tenant_daily\n2. event=media       never copied by the sink, read by tenant_daily\n2. event=passages    copied       by the sink, never read by tenant_daily\n2. event=query       copied       by the sink, read by tenant_daily\n2. event=stream      copied       by the sink, read by tenant_daily\n3. read aloud 1, en-IN-Chirp3-HD-Kore: synthesised, then cached (1 object in the bucket)\n3. read aloud 2, en-IN-Chirp3-HD-Kore: read back from the cache (1 object in the bucket)\n3. read aloud 3, hi-IN-Chirp3-HD-Kore: synthesised, then cached (2 objects in the bucket)\n   the first object: tts/171aae62fa1f4b3a....ogg, the SHA-256 of 'en-IN-Chirp3-HD-Kore|1.0|ogg|' and the text",
           "adaptations": [],
           "id": "source_9",
           "function": "step_01_the_studio_s_and_the_voice_s_rules_run",
           "window": 9,
-          "source_line": 467,
+          "source_line": 470,
           "manual_checkpoint": null
         }
       ],
@@ -223,7 +223,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
-        592
+        599
       ],
       "offline": false,
       "live_verified": false,
@@ -239,7 +239,7 @@
           "id": "source_13",
           "function": "step_01_a_generated_image_and_its_usage_row",
           "window": 13,
-          "source_line": 592,
+          "source_line": 599,
           "manual_checkpoint": null
         }
       ],
@@ -265,7 +265,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
-        675
+        682
       ],
       "offline": false,
       "live_verified": false,
@@ -281,7 +281,7 @@
           "id": "source_16",
           "function": "step_01_the_upload_door",
           "window": 16,
-          "source_line": 675,
+          "source_line": 682,
           "manual_checkpoint": null
         }
       ],
@@ -308,8 +308,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_16/lesson_16_2/GUIDE.md",
       "source_lines": [
-        732,
-        790
+        739,
+        797
       ],
       "offline": false,
       "live_verified": false,
@@ -325,7 +325,7 @@
           "id": "source_18",
           "function": "step_01_definition",
           "window": 18,
-          "source_line": 732,
+          "source_line": 739,
           "manual_checkpoint": null
         },
         {
@@ -338,7 +338,7 @@
           "id": "source_21",
           "function": "step_02_definition",
           "window": 21,
-          "source_line": 790,
+          "source_line": 797,
           "manual_checkpoint": null
         }
       ],
@@ -441,70 +441,70 @@
       "label": "services/frontend/voice.py - an answer read aloud: Chirp 3 HD, cached by the SHA-256 of voice, rate and text",
       "heading": "The Studio's and the voice's rules, run",
       "anchor": "s3",
-      "line": 447
+      "line": 450
     },
     {
       "window": 10,
       "label": "expected (this cell run on the kit's own media.py, sink.tf, tenant_daily.sql and voice.py)",
       "heading": "The Studio's and the voice's rules, run",
       "anchor": "s3",
-      "line": 521
+      "line": 524
     },
     {
       "window": 11,
       "label": "services/rag-api/media.py - /v1/media/generate, before anything is spent: the roster, the audit bucket, DEMO_MODE's cache",
       "heading": "A generated image, and its usage row",
       "anchor": "s4",
-      "line": 551
+      "line": 558
     },
     {
       "window": 12,
       "label": "services/rag-api/media.py - the spend: the image, stored; the audit event; the usage row",
       "heading": "A generated image, and its usage row",
       "anchor": "s4",
-      "line": 569
+      "line": 576
     },
     {
       "window": 14,
       "label": "expected (the kit's rag-api on a stand-in lane with DEMO_MODE=1, as make up deploys it; your blob is the same, your times and signature are yours)",
       "heading": "A generated image, and its usage row",
       "anchor": "s4",
-      "line": 630
+      "line": 637
     },
     {
       "window": 15,
       "label": "services/rag-api/media.py - the upload door: a signed PUT into the uploads bucket, under the tenant's prefix",
       "heading": "The upload door",
       "anchor": "s5",
-      "line": 655
+      "line": 662
     },
     {
       "window": 17,
       "label": "expected (the kit's rag-api and ingest worker on the stand-in lane; your doc_key is your video's)",
       "heading": "The upload door",
       "anchor": "s5",
-      "line": 712
+      "line": 719
     },
     {
       "window": 19,
       "label": "expected (the kit's rag-api and voice.py on the stand-in lane, Text-to-Speech stood in: your byte counts are Chirp 3 HD's)",
       "heading": "An answer read aloud, and a question nobody hears",
       "anchor": "s6",
-      "line": 761
+      "line": 768
     },
     {
       "window": 20,
       "label": "services/frontend/voice.py - the microphone's audio made a question: three models, then an empty string",
       "heading": "An answer read aloud, and a question nobody hears",
       "anchor": "s6",
-      "line": 769
+      "line": 776
     },
     {
       "window": 22,
       "label": "expected (voice.py on the stand-in lane: its recogniser answers only where Google's pages list a model for hi-IN and en-IN; yours is Google's)",
       "heading": "An answer read aloud, and a question nobody hears",
       "anchor": "s6",
-      "line": 804
+      "line": 811
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

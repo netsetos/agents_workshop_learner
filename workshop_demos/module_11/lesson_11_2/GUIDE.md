@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html`, reviewed at blob `8ff81098aa551cfdfcea7b74a70b6d674c710765`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html`, reviewed at blob `ca3be661b14fed97662fcbbdaa7f8f484cedaf5e`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.1 showed that your lane's conversations live in `PostgresSaver` on Cloud SQL. This lesson opens that storage. Terraform made an instance, a database, a user and a secret; the service mounts them; a one-off job made the tables. Each turn then writes a checkpoint row per step and, for the conversation itself, the whole list of messages again at every new version. You count what a turn writes on the kit's own code, and read the configuration your lane runs. You connect to the database the way the service does, through the Cloud SQL connector, and list the tables and one row per thread. On the way you find which brain's conversations are not there at all.
 
@@ -46,7 +46,7 @@ A sub-registrar's record room. The deeds are not kept at a clerk's desk. They go
 
 Choose how long a conversation runs, its tool calls, and how many conversations a day your tenants hold. The panel counts the checkpoint rows and versions of messages one conversation leaves. It compares the bytes those versions take with the latest version alone, and how they grow against the instance's 10 GB disk.
 
-A turn with k tool calls writes 3 + 2k checkpoints and 2 + 2k versions of messages, as step 3 counts them on the kit's `brains.py`. Each message adds what it added there: a question 215 bytes, a tool call 314, five passages 1,719, an answer 261. Only the messages are counted; the other channels and the writes add more rows.
+A turn with k tool calls writes 3 + 2k checkpoints and 2 + 2k versions of messages, as step 3 counts them on the kit's `brains.py`. Each message adds what it added there: a question 215 bytes, a tool call 314, five passages 1,759, an answer 261. Only the messages are counted; the other channels and the writes add more rows.
 
 It counts what `PostgresSaver` keeps of the messages, not what Cloud SQL bills. The instance costs roughly Rs 700 to 850 a month whether it holds one conversation or ten thousand, and its disk is 10 GB.
 
@@ -98,7 +98,7 @@ The cell runs two turns of the kit's LangChain brain on one thread, against `InM
 
 #### Do it: two turns
 
-The first turn wrote three checkpoints and two versions of messages: the question, then the answer. The second wrote five and four, because the tool call and its result are messages too. Every version holds the whole list. So the last one, 2,981 bytes, is the conversation, and 8,072 bytes, all six versions, is what the table keeps. The five passages `retrieve()` returned are by far the largest message, and every later version stores them again.
+The first turn wrote three checkpoints and two versions of messages: the question, then the answer. The second wrote five and four, because the tool call and its result are messages too. Every version holds the whole list. So the last one, 3,021 bytes, is the conversation, and 8,152 bytes, all six versions, is what the table keeps. The five passages `retrieve()` returned are by far the largest message, and every later version stores them again.
 
 The ADK brain logged its warning and chose memory. The chat image does the same with the same DSN, because it installs google-adk without SQLAlchemy.
 

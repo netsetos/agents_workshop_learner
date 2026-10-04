@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html`, reviewed at blob `0fed6e5f2f632604d917f822725869a9e2186f2e`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Indexed_Records_WIX.html`, reviewed at blob `210ec828d1fbc8bddc005b88f8f7628a8aa938aa`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 3.1 to 3.3 followed one document from bytes to vectors. This lesson is about what it leaves behind: the records in Firestore, in the Vector Search index, in BigQuery and in the audit bucket that say the document is indexed, and the order the worker writes them in so that a reader never sees half a document. You will index a three-chunk note, read every record it created from the store that holds it, check that they agree with each other, and learn which store is the truth when they do not.
 
@@ -162,7 +162,7 @@ The API reads the records two ways, with one set of predicates. Run both against
 
 #### Definition
 
-A question reaches the records through one of two rungs. The first is the index: the question's vector, the tenant restrict, the `current` restrict and any caller filters go to `find_neighbors`, the ids come back with scores, and the rows are fetched from Firestore by id to get their text. The second is Firestore's own vector index on the `chunks` collection, used when the first rung raises or when a tenant is pinned to it: the same tenant, the same `current`, the same filters, as equality pre-filters on the rows. Every chunk that comes back carries `found_by`, so an answer can say which rung served it. The two rungs need different indexes to exist, the Vector Search index and the Firestore composite indexes, and the second one does not degrade without its index; it refuses.
+A question reaches the records through one of two rungs. The first is the index: the question's vector, the tenant restrict, the `current` restrict and any caller filters go to `find_neighbors`, the ids come back with scores, and the rows are fetched from Firestore by id to get their text. The second is Firestore's own vector index on the `chunks` collection, used when the first rung raises or when a tenant is pinned to it: the same tenant, the same `current`, the same filters, as pre-filters on the rows (an equality each, or one `in` for a `doc_type` list). Every chunk that comes back carries `found_by`, so an answer can say which rung served it. The two rungs need different indexes to exist, the Vector Search index and the Firestore composite indexes, and the second one does not degrade without its index; it refuses.
 
 #### The code
 

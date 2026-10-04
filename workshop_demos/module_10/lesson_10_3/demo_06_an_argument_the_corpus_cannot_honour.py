@@ -3,9 +3,9 @@
 Do it
 
 Run order inside this file:
-1. Do it (source window 17)
+1. Do it (source window 28)
 
-Prerequisites: demo_04_access_failures_at_the_chat_service_s_door.
+Prerequisites: demo_05_access_failures_at_the_chat_service_s_door.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
@@ -72,7 +72,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_17', step_01_an_argument_the_corpus_cannot_honour),
+        ('source_28', step_01_an_argument_the_corpus_cannot_honour),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

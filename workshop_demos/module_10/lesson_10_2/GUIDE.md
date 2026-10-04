@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html`, reviewed at blob `73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.2_LangGraph_WIX.html`, reviewed at blob `d653ce9c48a969574766793e79b2212be4ff15ed`. Learners read that page on the course site; this guide keeps its prose.
 
 The LangChain brain hands its loop to a framework. The LangGraph brain draws it: an agent node that calls the model, a route that reads what the model asked for, a tools node, a refuse node, and a checkpointer that keeps each conversation. You list the kit's own graph and force the refuse node with a scripted model. The model on your lane is never offered a blocked tool, so it cannot reach that node any other way. Then you use the graph on your lane: a thread that remembers, a new thread that does not, and a request to delete that meets no tool at all.
 
@@ -36,7 +36,7 @@ A loop you can draw. The graph's state is the conversation, a list of messages. 
 
 The guard is a node, and it refuses the whole turn. `route` sends a turn to `refuse` if any requested name is in `BLOCKED`: `delete_document`, `send_email`, `modify_access`. Every call in that turn then gets an error result, including an allowed one asked for alongside. A model therefore cannot slip a deletion in beside a search and have the search run. Each error reads "requires manual approval", and the system prompt tells the model to say so plainly and never to claim the action was taken.
 
-You have to force it. The model is bound to the three real tools only, and Gemini's function calling returns calls to the functions it was given, nothing else. On your lane the model has no way to ask for `delete_document`. The refuse node is defence in depth: for the day a blocked tool is registered by mistake, or another framework lets a name through. So the proof uses a scripted model: the kit's own graph, with a model that replies exactly as scripted, including a request for a blocked tool.
+You have to force it. The model is bound to the two real tools only, and Gemini's function calling returns calls to the functions it was given, nothing else. On your lane the model has no way to ask for `delete_document`. The refuse node is defence in depth: for the day a blocked tool is registered by mistake, or another framework lets a name through. So the proof uses a scripted model: the kit's own graph, with a model that replies exactly as scripted, including a request for a blocked tool.
 
 The checkpointer keeps the conversation, not the instructions. The graph is compiled with a checkpointer, which saves the thread's messages after each step. The next turn on the same thread starts from them. The thread id is `tenant:user:session`, built by the server from the verified identity. The system prompt is added on every call and never saved, so a changed prompt reaches old conversations too. On your lane the saver is Postgres on Cloud SQL. Its tables are created once by a job, not by the service at startup.
 
@@ -106,7 +106,7 @@ Three scripted turns through the kit's own graph: a plain one, a blocked one, an
 
 #### Definition
 
-The scripted model returns its prepared replies in order: first a request for tools, then an answer. The cell streams each turn through the graph and prints the nodes it visited, the two lists from `_summary()`, every error result, and the final answer. `retrieve()` is stood in with a fixed result, so the plain turn needs no network. The blocked turn asks for `delete_document`. The mixed turn asks for `retrieve` and `delete_document` in the same reply.
+The scripted model returns its prepared replies in order: first a request for tools, then an answer. The cell streams each turn through the graph and prints the nodes it visited, the two lists from `_summary()`, every error result, and the final answer. `retrieve()` is stood in with a fixed result, so the plain turn needs no network. The blocked turn asks for `delete_document`. The mixed turn asks for `retrieve` and `delete_document` in the same reply. The `agent` node's first lines are the turn's limits, which lesson 10.4 reads; the scripted turns stay far inside them.
 
 #### The code
 
@@ -120,13 +120,13 @@ Four turns to the LangGraph brain, through the chat service.
 
 #### Definition
 
-With `brain` set to `langgraph`, `/v1/chat` builds the thread id from the roster's tenant, your caller's email and the session you send. It then invokes the graph once on that thread, with the tenant in the runtime context. The graph loads the thread's saved messages, runs the turn, saves the new ones, and `_summary()` returns the three keys. The cell asks the first question in session `lesson102`, then a follow-up that only makes sense after it: "how is it paid". It asks the follow-up again in a new session, `lesson102-new`. Finally it asks to delete a document, in the first session.
+With `brain` set to `langgraph`, `/v1/chat` builds the thread id from the roster's tenant, your caller's email and the session you send. It then invokes the graph once on that thread, with the tenant in the runtime context. The graph loads the thread's saved messages, runs the turn, saves the new ones, and `_summary()` returns the four keys for this turn alone: `_turn()` gave the question an id, and the turn is that message and what follows it. If that message is missing from the thread, `_summary()` raises a `ValueError` rather than count the whole thread again, so anything that trims a thread must keep each turn's question. The cell asks the first question in session `lesson102`, then a follow-up that only makes sense after it: "how is it paid". It asks the follow-up again in a new session, `lesson102-new`. Finally it asks to delete a document, in the first session.
 
 #### The code
 
 #### Do it
 
-The follow-up in the same session knew that "it" was gratuity. The graph started the turn from the saved thread, so the model read the first question and answer before the second question. The same words in a new session had no thread behind them, and the model could only ask what "it" meant. The request to delete called no tool: the model has no delete tool to call, so the refuse node was never involved, and `refusals` is empty. The model refused in words, as the system prompt asks. This is the other half of step 4. On your lane the refuse node is a net under a model that has not been offered the rope.
+The follow-up in the same session knew that "it" was gratuity. The graph started the turn from the saved thread, so the model read the first question and answer before the second question. The same words in a new session had no thread behind them, and the model could only ask what "it" meant. The request to delete called no tool: the model has no delete tool to call, so the refuse node was never involved, and `refusals` is empty. The model refused in words, as the system prompt asks. Each turn's `tool_calls` names its own calls only: the second turn ran on a thread that already held a retrieval, and lists one, and the last lists none. This is the other half of step 4. On your lane the refuse node is a net under a model that has not been offered the rope.
 
 ### What the checkpointer keeps
 
@@ -154,11 +154,11 @@ The design choices, from the kit's own comments, then the bill and the gaps.
 
 Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-- The refuse node cannot fire on the lane, and its test is missing. No blocked name is ever bound to the model. `brains.py` cites `tools/check_auth_wiring.py` as the offline proof of this graph's refuse path and checkpoint, and no such file exists. Step 4's cell is, for now, the only test.
+- The refuse node cannot fire on the lane. No blocked name is ever bound to the model. Its proof is offline: step 4's cell, and the kit's own `commands/tests/test_chat_brains.py`, which runs this graph with a scripted model in the chat image's pins on every push.
 
 - A refused mixed turn misinforms the model. Every call gets "requires manual approval", so an allowed `retrieve` asked for beside a blocked tool is reported to the model as needing approval.
 
-- No timeout in the graph. `TIMEOUTS` is read only by the LangChain brain's guard, and only to log a warning once a call has already returned. Here a slow tool holds the turn until its own client gives up: for `retrieve`, `RAG_TIMEOUT_S`, 90 seconds on the chat service. Lesson 10.3 takes this up.
+- The graph's limits are written by hand. No middleware runs in a hand-built graph, so the `agent` node checks the turn's `Meter` itself before each model call, and `ToolNode` times each tool call through `limits.timed_tool_call`. A node added later that calls the model gets no limit unless it does the same. Lessons 10.3 and 10.4 show the limits.
 
 - Nothing deletes a thread. No code in the kit removes checkpoints. Every conversation, with its questions, quotes and answers, stays in Cloud SQL until someone deletes it by hand.
 

@@ -81,8 +81,8 @@ def _id_token(audience: str) -> str:
 
 
 def retrieve(query: str, tenant_id: str, top_k: int = 5,
-             doc_type: str | None = None, assertion: str | None = None,
-             brain: str | None = None) -> dict[str, Any]:
+             doc_type: str | list[str] | None = None, assertion: str | None = None,
+             brain: str | None = None, passages: bool = False) -> dict[str, Any]:
     """Retrieve grounded passages for a question from DocuMind's corpus.
 
     THE single retrieval entry point. Every brain calls this one.
@@ -97,7 +97,8 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
             evals/ adds report, and image and video for the Doc AI paths. Pass
             one the tenant's corpus actually contains: an unknown value filters
             everything out and returns answerable=False, which reads exactly
-            like a corpus that cannot answer the question.
+            like a corpus that cannot answer the question. A list of 1 to 5 of them
+            means any of those classes; any other list is an error, on both lanes.
         assertion: The IAP assertion of the PERSON this call is for, when there is
             one - the chat service reads it off its own request and passes it
             through, and rag-api verifies it against the surfaces it accepts.
@@ -107,16 +108,26 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
         brain: Which harness is asking (langchain | langgraph | adk | direct | mcp), so
             rag-api's usage row records it and 8.7's cost comparison can be run from
             the warehouse rather than a notebook. Purely a label.
+        passages: True for the passages themselves instead of an answer (workshop lesson
+            10.6): rag-api's /v1/passages, the same retrieval with no model call, each
+            chunk's full text where a citation carries one short quote. For an agent that
+            writes its own answer.
 
     Returns:
         {"citations": [{chunk_id, source_uri, page, quote, score}], "answerable": bool,
          "confidence": "high"|"medium"|"low"} - plus "answer", rag-api's own grounded
-        answer, when the gcp lane produced one (the direct brain uses it; the agents ignore it)
+        answer, when the gcp lane produced one (the direct brain uses it; the agents ignore it), and
+        "usage", rag-api's model, tokens and cost_usd on the gcp lane (the chat's turn limits charge it)
         or {"error": ...} - returned as DATA so the model can explain the failure rather than
-        the turn dying on an exception.
+        the turn dying on an exception. With passages=True: {"passages": [{n, chunk_id,
+        source_uri, page, doc_type, kind, section, text}], "answerable": bool, "usage"},
+        plus "answer" when rag-api's door answered in its place, or {"error": ...}.
     """
+    doc_type, bad = _doc_type_filter(doc_type)
+    if bad:
+        return bad
     if PROFILE == "local":
-        return _retrieve_local(query, tenant_id, top_k, doc_type)
+        return _retrieve_local(query, tenant_id, top_k, doc_type, passages)
 
     payload: dict[str, Any] = {
         "query": query,
@@ -138,6 +149,8 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
     headers = {"Authorization": f"Bearer {_id_token(RAG_API_URL)}"}
     if assertion:
         headers[ASSERTION_HEADER] = assertion
+    if passages:
+        return _passages(payload, headers)
 
     started = time.monotonic()
     try:
@@ -160,6 +173,34 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
     }
     if answer.get("answer"):
         out["answer"] = answer["answer"]    # rag-api's grounded answer; the direct brain's whole job
+    # What rag-api says this answer cost (workshop lesson 10.3): the chat service charges it to the turn's limits.
+    # cost_usd is set when the gateway priced the answer or the cache served it; otherwise the tokens are priced.
+    out["usage"] = {k: answer.get(k) for k in ("model", "tokens_in", "tokens_out", "cached_tokens", "cost_usd")}
+    return out
+
+
+PASSAGE_KEYS = ("n", "chunk_id", "source_uri", "page", "doc_type", "kind", "section", "text")
+
+
+def _passages(payload: dict[str, Any], headers: dict[str, str]) -> dict[str, Any]:
+    """retrieve(passages=True) on the gcp lane: the same payload and credentials to /v1/passages, one attempt,
+    the same failure as data. rag-api's door may answer instead of the route (a question it hands to a person):
+    then passages is empty and "answer" carries the door's reply, which the caller shows as it is."""
+    started = time.monotonic()
+    try:
+        resp = requests.post(f"{RAG_API_URL}/v1/passages", json=payload, headers=headers, timeout=RAG_TIMEOUT_S)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        logger.warning("passages failed: %s", exc)
+        return {"error": "document retrieval is unavailable", "passages": [], "answerable": False}
+    finally:
+        logger.info("passages took %.2fs", time.monotonic() - started)
+    got = resp.json()
+    out: dict[str, Any] = {"passages": [{k: p.get(k) for k in PASSAGE_KEYS} for p in got.get("passages", [])],
+                           "answerable": bool(got.get("answerable", False))}
+    if got.get("answer"):
+        out["answer"] = got["answer"]
+    out["usage"] = {k: (got.get("usage") or {}).get(k) for k in ("model", "tokens_in", "tokens_out", "cached_tokens", "cost_usd")}
     return out
 
 
@@ -263,8 +304,22 @@ def _snippet(text: str, words: list[str], width: int = 500) -> str:
     return " ".join(p for _, p in sorted(keep)) if keep else text[:width]
 
 
+def _doc_type_filter(doc_type):
+    """(doc_type as rag-api's check_filters makes it, None), or (None, its 400 as data). A list or tuple is a set of
+    classes (workshop lesson 10.6): 1 to 5 non-empty strings - an empty list is that error too, never "no filter",
+    so a scope that computes to no classes cannot read every class - sorted, de-duplicated, one class as its string.
+    retrieve() checks it before either lane, so the gcp lane names the rule as the local lane does, not an outage."""
+    if not isinstance(doc_type, (list, tuple)):
+        return doc_type, None
+    if not 1 <= len(doc_type) <= 5 or not all(isinstance(t, str) and t for t in doc_type):
+        return None, {"error": "filter doc_type must be a non-empty string or a list of 1 to 5 of them",
+                      "citations": [], "answerable": False, "confidence": "low"}
+    vals = sorted(set(doc_type))
+    return (vals[0] if len(vals) == 1 else vals), None
+
+
 def _retrieve_local(query: str, tenant_id: str, top_k: int,
-                    doc_type: str | None) -> dict[str, Any]:
+                    doc_type: str | list[str] | None, passages: bool = False) -> dict[str, Any]:
     """The local lane of the one retrieve: Chroma on disk, the same tenant filter, the same
     contract out. The store is read with get() - the tenant (and doc_type) predicate, every
     matching chunk, no embedding involved - and ranked lexically (BM25, above), because the
@@ -282,7 +337,8 @@ def _retrieve_local(query: str, tenant_id: str, top_k: int,
                     "citations": [], "answerable": False, "confidence": "low"}
         where: dict[str, Any] = {"tenant_id": tenant_id}
         if doc_type:
-            where = {"$and": [{"tenant_id": tenant_id}, {"doc_type": doc_type}]}
+            match = {"$in": doc_type} if isinstance(doc_type, list) else doc_type
+            where = {"$and": [{"tenant_id": tenant_id}, {"doc_type": match}]}
         got = store.get(where=where, include=["documents", "metadatas"])
         rows = list(zip(got.get("documents") or [], got.get("metadatas") or []))
     except Exception as exc:                     # noqa: BLE001 - as data, like the gcp lane
@@ -302,6 +358,11 @@ def _retrieve_local(query: str, tenant_id: str, top_k: int,
     if share < EVIDENCE_FLOOR:
         ranked = []
     top = ranked[0][0] if ranked else 0.0
+    if passages:                                 # the passages shape of /v1/passages, each chunk's whole text
+        return {"passages": [{"n": i, "chunk_id": m.get("chunk_id", ""), "source_uri": m.get("source_uri", ""),
+                              "page": m.get("page"), "doc_type": m.get("doc_type"), "kind": m.get("kind", "text"),
+                              "section": m.get("section"), "text": text} for i, (s, hit, text, m) in enumerate(ranked, 1)],
+                "answerable": bool(ranked)}
     return {
         "citations": [{"chunk_id": m.get("chunk_id", ""),
                        "source_uri": m.get("source_uri", ""),

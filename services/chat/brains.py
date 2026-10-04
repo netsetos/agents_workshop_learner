@@ -20,22 +20,27 @@ DatabaseSessionService on the same Cloud SQL when CHECKPOINT_DSN is set, InMemor
 otherwise. And each brain imports its framework lazily, so a deployment that does not install
 google-adk simply reports that brain as unavailable (501), rather than failing to start.
 
-Verified offline 2026-09-05: the LangGraph brain's loop, refuse path, context delivery and
-checkpoint (tools/check_auth_wiring.py). The ADK brain follows 8.7 cell 12 (google-adk 2.8.0).
+Verified offline by commands/tests/test_chat_brains.py (workshop lessons 10.1-10.4): each turn's
+own tool calls, refusals and numbered citations from all three agent brains, one tool declaration,
+and one error contract. The ADK brain follows 8.7 cell 12 (google-adk 2.8.0). Each turn's limits -
+model calls, rupees, time - are limits.py's, checked at each brain's own seam, and verified by
+commands/tests/test_chat_limits.py (workshop lessons 10.3 and 10.4).
 """
 from __future__ import annotations
 
 import asyncio
-import contextvars
 import json
 import logging
 import os
+import uuid
 
-from langchain_core.messages import SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.tools import ToolException
 
+import limits
 from shared import documind_tools
 from shared.profile import LOCAL_MODEL, PROFILE, build_llm
-from tools import BLOCKED, TIMEOUTS, TOOLS
+from tools import BLOCKED, REQUEST, TOOLS, for_adk
 
 logger = logging.getLogger("documind.chat.brains")
 
@@ -48,11 +53,22 @@ SYSTEM = (
     "Use the tools for document questions. When estimating costs, search first so the page "
     "count is real rather than guessed. If a tool refuses, say so plainly and explain what "
     "approval is needed - never claim the action was taken."
+    " Search for every document question, a follow-up too, and cite each passage you use as [n],"
+    " with the n it carries in this turn's search results."
 )
 
 
-def _summary(messages) -> dict:
-    """The same three keys from every brain, so agent.py and the UI never branch on the brain."""
+def _summary(messages, turn: str | None = None, citations: list | None = None) -> dict:
+    """The same four keys from every brain, for THIS turn, so agent.py and the UI never branch on the brain."""
+    # A checkpointed thread hands back the whole conversation. Before workshop lesson 10.2's fix, every
+    # turn's tool_calls and refusals counted the earlier turns' too: three turns reported 1, 2 and 3
+    # calls. `turn` is the id _turn() gave this turn's question, so the turn is that message and what
+    # follows it. A thread without it is an error, never the whole thread: a trim must keep it.
+    if turn is not None:
+        ids = [getattr(m, "id", None) for m in messages]
+        if turn not in ids:
+            raise ValueError(f"turn {turn} is not in the thread; whatever trims a thread must keep its question")
+        messages = messages[ids.index(turn):]
     # Gemini 3 through langchain-google-genai can send a turn's content as blocks - [{"type": "text", "text": ...}], a
     # thought signature beside them - where older models sent a string. The answer is the text blocks' text, a string
     # either way: until 24 September 2026 the list itself went out, and lesson 11.1's cell failed on .split().
@@ -62,18 +78,26 @@ def _summary(messages) -> dict:
                                                              if isinstance(b, str) or b.get("type") == "text"),
         "tool_calls": [tc["name"] for m in messages for tc in (getattr(m, "tool_calls", None) or [])],
         "refusals": [m.name for m in messages if isinstance(m, ToolMessage) and m.status == "error"],
+        "citations": sorted(citations or [], key=lambda c: c["n"]),     # numbered by tools.search, from 1
     }
+
+
+def _turn(question: str, context: dict) -> tuple:
+    """This turn's question with an id to find it by afterwards, and the context with an empty ledger
+    and the turn's Meter (limits.py). The id is the 36-character form add_messages would have given it."""
+    turn = str(uuid.uuid4())
+    ctx = {**context, "cited": []}
+    limits.meter_of(ctx)                   # agent.chat()'s Meter, or a fresh one for a caller with none
+    return turn, {"messages": [HumanMessage(content=question, id=turn)]}, ctx
 
 
 # ----------------------------------------------------------------------------- 1. langchain
 def _guard_middleware():
     """6.4's guard, as create_agent middleware. Built here so langchain is imported lazily."""
-    import time
-
     from langchain.agents.middleware import AgentMiddleware
 
     class GuardMiddleware(AgentMiddleware):
-        """Refuse blocked operations, time every call, record all of them."""
+        """Refuse blocked operations; run every other call within its budget (limits.timed_tool_call)."""
 
         def wrap_tool_call(self, request, handler):
             name = request.tool_call["name"]
@@ -81,14 +105,9 @@ def _guard_middleware():
                 logger.warning("refused %s (blocked list)", name)
                 return ToolMessage(content=json.dumps({"error": f"{name} requires manual approval"}),
                                    name=name, tool_call_id=request.tool_call["id"], status="error")
-            started = time.monotonic()
-            try:
-                return handler(request)
-            finally:
-                elapsed = time.monotonic() - started
-                budget = TIMEOUTS.get(name, 30)
-                (logger.warning if elapsed > budget else logger.info)(
-                    "%s took %.2fs (budget %ss)", name, elapsed, budget)
+            # Cut at the smaller of TIMEOUTS[name] and the turn's time left, and timed in the log either way
+            # (workshop lesson 10.3). Until then the budget was read after the call returned, and only logged.
+            return limits.timed_tool_call(request, handler)
 
     return GuardMiddleware()
 
@@ -99,13 +118,26 @@ class LangChainBrain:
     def __init__(self, checkpointer, llm=None):
         from langchain.agents import create_agent
 
+        # The first entry is the outermost wrapper. The turn's limits sit at the model call
+        # (limits.TurnLimitsMiddleware: the call cap, the rupees, the deadline, each call's own timeout);
+        # the guard is the last entry with a wrap_tool_call, the innermost wrapper around the tool handler.
         self.agent = create_agent(model=llm or build_llm(), tools=TOOLS, system_prompt=SYSTEM,
-                                  middleware=[_guard_middleware()], checkpointer=checkpointer)
+                                  middleware=[limits.TurnLimitsMiddleware(), _guard_middleware()],
+                                  checkpointer=checkpointer)
 
     def answer(self, question: str, *, config: dict, context: dict) -> dict:
-        out = self.agent.invoke({"messages": [{"role": "user", "content": question}]},
-                                config=config, context=context)
-        return _summary(out["messages"])
+        from langgraph.errors import GraphRecursionError
+
+        turn, state, ctx = _turn(question, context)
+        try:
+            # The framework's own step limit stays, as a backstop well above the Meter's (limits.recursion_limit).
+            out = self.agent.invoke(state, config={**config, "recursion_limit": limits.recursion_limit()},
+                                    context=ctx)
+        except GraphRecursionError:         # the backstop tripped before the Meter: end the turn whole
+            limits.meter_of(ctx).stop("recursion_limit")
+            limits.repair_thread(self.agent, config, as_node="model")
+            out = self.agent.get_state(config).values
+        return _summary(out["messages"], turn, ctx["cited"])
 
 
 # ----------------------------------------------------------------------------- 2. langgraph
@@ -120,10 +152,23 @@ class LangGraphBrain:
 
         model = (llm or build_llm()).bind_tools(TOOLS)
 
-        def agent(state):
+        def agent(state, runtime):
+            # The turn's limits, by hand (workshop lesson 10.4): no middleware here, so the node checks the
+            # Meter before the call, gives the call its timeout, and turns a timed-out call into the stop.
+            meter = limits.meter_of(runtime.context)
+            if not meter.allow_model_call():
+                return {"messages": [limits.stop_message()]}
             # The system prompt is prepended per call, never stored - the checkpoint holds the
             # conversation, not the instructions, so a prompt change applies to old threads too.
-            return {"messages": [model.invoke([SystemMessage(content=SYSTEM)] + state["messages"])]}
+            try:
+                msg = model.invoke([SystemMessage(content=SYSTEM)] + state["messages"], **limits.call_settings(meter))
+            except Exception as exc:                       # noqa: BLE001 - only a timeout is caught
+                if not limits.is_timeout(exc):
+                    raise
+                meter.stop("turn_deadline")
+                return {"messages": [limits.stop_message()]}
+            meter.charge_model(*limits.usage_of(msg))
+            return {"messages": [msg]}
 
         def route(state):
             calls = getattr(state["messages"][-1], "tool_calls", None) or []
@@ -142,7 +187,7 @@ class LangGraphBrain:
 
         g = StateGraph(MessagesState, context_schema=dict)
         g.add_node("agent", agent)
-        g.add_node("tools", ToolNode(TOOLS))
+        g.add_node("tools", ToolNode(TOOLS, wrap_tool_call=limits.timed_tool_call))   # each call within its budget
         g.add_node("refuse", refuse)
         g.add_edge(START, "agent")
         g.add_conditional_edges("agent", route, {"tools": "tools", "refuse": "refuse", END: END})
@@ -151,18 +196,20 @@ class LangGraphBrain:
         self.graph = g.compile(checkpointer=checkpointer)
 
     def answer(self, question: str, *, config: dict, context: dict) -> dict:
-        out = self.graph.invoke({"messages": [{"role": "user", "content": question}]},
-                                config=config, context=context)
-        return _summary(out["messages"])
+        from langgraph.errors import GraphRecursionError
+
+        turn, state, ctx = _turn(question, context)
+        try:
+            out = self.graph.invoke(state, config={**config, "recursion_limit": limits.recursion_limit()},
+                                    context=ctx)
+        except GraphRecursionError:         # the backstop tripped before the Meter: end the turn whole
+            limits.meter_of(ctx).stop("recursion_limit")
+            limits.repair_thread(self.graph, config, as_node="agent")
+            out = self.graph.get_state(config).values
+        return _summary(out["messages"], turn, ctx["cited"])
 
 
 # ----------------------------------------------------------------------------- 3. adk
-# The request's tenant and assertion, for ADK's before_tool_callback. A ContextVar, not an
-# attribute: the sync endpoint runs in a thread pool, and asyncio.run() copies the context into
-# the task it creates, so two concurrent requests cannot see each other's tenant.
-_adk_ctx: contextvars.ContextVar[dict] = contextvars.ContextVar("documind_adk_ctx", default={})
-
-
 class AdkBrain:
     name = "adk"
 
@@ -175,13 +222,29 @@ class AdkBrain:
 
         def guard_tool(tool, args, tool_context):
             """8.7 cell 12: return a dict to REPLACE the call, None to let it through."""
+            # Unreachable until a tool that needs approval is declared: ADK looks a name up before this
+            # callback runs, no blocked name is declared, and an unknown name goes to tool_failed.
             if tool.name in BLOCKED:
                 return {"error": f"{tool.name} is not reachable from a model turn"}
-            ctx = _adk_ctx.get()
-            args["tenant_id"] = ctx.get("tenant_id", "")        # never the model's choice
-            if ctx.get("assertion"):
-                args["assertion"] = ctx["assertion"]
-            args["brain"] = "adk"
+            return None
+
+        def tool_failed(tool, args, tool_context, error):
+            """An error result, as LangChain gives one (workshop lesson 10.4): a name ADK does not hold, and an
+            argument a tool refused (the ToolException for_adk() raises, as the @tool does). Anything else returns
+            None, so it raises and fails the turn in every brain, the token mint included (workshop lesson 10.3)."""
+            unknown = tool.name not in {t.name for t in TOOLS} and isinstance(error, ValueError)
+            if not (unknown or isinstance(error, ToolException)):
+                return None
+            if tool.name in BLOCKED:      # not declared, so not found: say why, as the other brains' guards do
+                return {"error": f"{tool.name} requires manual approval", "status": "error"}
+            return {"error": str(error), "status": "error"}
+
+        def mark_error(tool, args, tool_context, tool_response):
+            """ADK's own argument check answers {"error": ...} and nothing else, so it is marked as the
+            error result it is. A failed search carries citations as well: data, not a refusal (workshop
+            lesson 10.3)."""
+            if isinstance(tool_response, dict) and set(tool_response) == {"error"}:
+                return {**tool_response, "status": "error"}
             return None
 
         if PROFILE == "local":
@@ -193,13 +256,19 @@ class AdkBrain:
             os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
             model = MODEL
 
+        # The one tool list (tools.for_adk): the model is shown query, doc_type and top_k, and the
+        # request reaches the tools through tools.REQUEST, never through an argument it writes. Each
+        # runs within its budget (limits.timed_adk), and the turn's limits are three model callbacks.
         root = LlmAgent(name="documind_adk", model=model, instruction=SYSTEM,
-                        tools=[FunctionTool(documind_tools.retrieve),
-                               FunctionTool(documind_tools.calculate_processing_cost)],
-                        before_tool_callback=guard_tool)
+                        tools=[FunctionTool(limits.timed_adk(f)) for f in for_adk()],
+                        before_tool_callback=guard_tool, on_tool_error_callback=tool_failed,
+                        after_tool_callback=mark_error,
+                        before_model_callback=limits.adk_before_model, after_model_callback=limits.adk_after_model,
+                        on_model_error_callback=limits.adk_model_error)
         self.svc = self._sessions()
         self.runner = Runner(app=App(name="documind", root_agent=root), session_service=self.svc)
-        self.run_config = RunConfig(max_llm_calls=int(os.environ.get("ADK_MAX_LLM_CALLS", "12")))
+        # ADK's own cap stays, as the backstop: the Meter refuses the call after the last one first.
+        self.run_config = RunConfig(max_llm_calls=limits.MAX_MODEL_CALLS)
 
     @staticmethod
     def _sessions():
@@ -215,32 +284,41 @@ class AdkBrain:
         return InMemorySessionService()
 
     def answer(self, question: str, *, config: dict, context: dict) -> dict:
+        from google.adk.agents.invocation_context import LlmCallsLimitExceededError
+
         session_id = config["configurable"]["thread_id"]     # tenant:user:session - the same boundary
         user_id = context.get("user_id") or "user"
-        token = _adk_ctx.set(context)
+        ctx = {**context, "cited": []}
+        meter = limits.meter_of(ctx)
+        token = REQUEST.set(ctx)       # asyncio.run() copies it into the task, and ADK into each tool call
+        out = {"answer": "", "tool_calls": [], "refusals": []}      # filled as the events arrive
         try:
-            return asyncio.run(self._run(question, user_id, session_id))
+            asyncio.run(self._run(question, user_id, session_id, out))
+        except LlmCallsLimitExceededError:      # the backstop; the Meter's cap is checked before ADK counts
+            meter.stop("model_calls")
+            out["answer"] = limits.STOP_ANSWER  # the calls made before it stay in tool_calls and refusals
         finally:
-            _adk_ctx.reset(token)
+            REQUEST.reset(token)
+        return {**out, "citations": sorted(ctx["cited"], key=lambda c: c["n"])}
 
-    async def _run(self, question: str, user_id: str, session_id: str) -> dict:
+    async def _run(self, question: str, user_id: str, session_id: str, out: dict) -> None:
         from google.genai import types as gt
 
         sess = await self.svc.get_session(app_name="documind", user_id=user_id, session_id=session_id)
         if sess is None:
             sess = await self.svc.create_session(app_name="documind", user_id=user_id, session_id=session_id)
-        answer, tool_calls, refusals = "", [], []
+        tool_calls, refusals = out["tool_calls"], out["refusals"]
         async for ev in self.runner.run_async(
                 user_id=user_id, session_id=sess.id,
                 new_message=gt.Content(role="user", parts=[gt.Part(text=question)]),
                 run_config=self.run_config):
             for call in (ev.get_function_calls() or []):
                 tool_calls.append(call.name)
-                if call.name in BLOCKED:
-                    refusals.append(call.name)
+            for res in (ev.get_function_responses() or []):
+                if isinstance(res.response, dict) and res.response.get("status") == "error":
+                    refusals.append(res.name)        # an error result, as a ToolMessage with status "error" is
             if ev.is_final_response() and ev.content and ev.content.parts:
-                answer = "".join(p.text or "" for p in ev.content.parts)
-        return {"answer": answer, "tool_calls": tool_calls, "refusals": refusals}
+                out["answer"] = "".join(p.text or "" for p in ev.content.parts)
 
 
 # ----------------------------------------------------------------------------- 4. direct
@@ -256,6 +334,8 @@ class DirectBrain:
     def answer(self, question: str, *, config: dict, context: dict) -> dict:
         r = documind_tools.retrieve(question, tenant_id=context.get("tenant_id", ""), top_k=5,
                                     assertion=context.get("assertion") or None, brain="direct")
+        meter = limits.meter_of(context)
+        meter.charge_rag(r.get("usage"))       # no model call of its own on the lane: rag-api's answer is the cost
         if "error" in r:
             return {"answer": r["error"], "tool_calls": ["retrieve"], "refusals": [], "citations": []}
         if r.get("answer"):
@@ -263,8 +343,10 @@ class DirectBrain:
                     "citations": r["citations"]}
         # The local lane has no generator behind retrieve(): one grounded call to the profile's model.
         ctx = "\n".join(f"[Source {i}] {c['quote']}" for i, c in enumerate(r["citations"], 1))
+        meter.allow_model_call()               # one call, always allowed: counted, so the row says 1
         msg = (self.llm or build_llm()).invoke(
             f"{SYSTEM}\nAnswer only from the context and cite [Source N].\n\nContext:\n{ctx}\n\nQuestion: {question}")
+        meter.charge_model(*limits.usage_of(msg))
         said = getattr(msg, "content", str(msg))
         if not isinstance(said, str):                      # content blocks, as in _summary: the text blocks' text
             said = "".join(b if isinstance(b, str) else b.get("text", "") for b in said if isinstance(b, str) or b.get("type") == "text")

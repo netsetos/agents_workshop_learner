@@ -4,7 +4,7 @@ Reviewed against author main `1a2a29c547cc` and learner main `76fe0c8b2b92` on 2
 
 ## Scope and numbering
 
-All **18 modules and 60 lessons** are included. The **51 authored HTML pages contain 1,477 code windows**. Every window is accounted for as a runnable example, shared setup, or read-only reference. The nine course-plan lessons are listed explicitly below; no HTML correspondence is claimed for them.
+All **18 modules and 62 lessons** are included. The **53 authored HTML pages contain 1,646 code windows**. Every window is accounted for as a runnable example, shared setup, or read-only reference. The nine course-plan lessons are listed explicitly below; no HTML correspondence is claimed for them.
 
 One file corresponds to one numbered HTML section. `demo_05_...` means section 5, including inside `optional/`, `recovery/` and `cleanup/`. A section can contain several ordered functions. Unnumbered setup retains descriptive setup filenames. `setup/finish.py` runs the remaining cleanup sections, then restores saved settings, including after a failed example.
 

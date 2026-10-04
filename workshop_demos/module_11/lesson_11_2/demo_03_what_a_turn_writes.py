@@ -116,9 +116,9 @@ def step_02_two_turns(session):
        version 2  2 messages     472 bytes
        version 3  3 messages     687 bytes
        version 4  4 messages   1,001 bytes
-       version 5  5 messages   2,720 bytes
-       version 6  6 messages   2,981 bytes
-       8,072 bytes kept, for a conversation whose latest version is 2,981 bytes
+       version 5  5 messages   2,760 bytes
+       version 6  6 messages   3,021 bytes
+       8,152 bytes kept, for a conversation whose latest version is 3,021 bytes
     the ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:
     WARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feat
     """

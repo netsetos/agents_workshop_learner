@@ -89,9 +89,9 @@ the messages channel, every version kept:
    version 2  2 messages     472 bytes
    version 3  3 messages     687 bytes
    version 4  4 messages   1,001 bytes
-   version 5  5 messages   2,720 bytes
-   version 6  6 messages   2,981 bytes
-   8,072 bytes kept, for a conversation whose latest version is 2,981 bytes
+   version 5  5 messages   2,760 bytes
+   version 6  6 messages   3,021 bytes
+   8,152 bytes kept, for a conversation whose latest version is 3,021 bytes
 the ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:
 WARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feature. Please install it by running: pip install google-adk[db]); using memory
    it keeps its sessions in InMemorySessionService
@@ -169,9 +169,9 @@ the latest thread, session lesson111-4242-b: its checkpoints in order
   step  2  input  messages unchanged
   step  3  loop   messages, version 3:    586 bytes
   step  4  loop   messages, version 4:    866 bytes
-  step  5  loop   messages, version 5:  2,285 bytes
-  step  6  loop   messages, version 6:  2,522 bytes
-every version kept: 6,846 bytes; the latest alone: 2,522 bytes
+  step  5  loop   messages, version 5:  2,325 bytes
+  step  6  loop   messages, version 6:  2,562 bytes
+every version kept: 6,926 bytes; the latest alone: 2,562 bytes
 ```
 
 ### setup/restore_settings.py
@@ -192,6 +192,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html`. All 19 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `8ff81098aa551cfdfcea7b74a70b6d674c710765`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html`. All 19 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `ca3be661b14fed97662fcbbdaa7f8f484cedaf5e`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

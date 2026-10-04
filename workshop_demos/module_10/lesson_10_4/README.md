@@ -11,8 +11,8 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
 | 3 | [demo_03_two_adapters_over_one_tool_side_by_side.py](demo_03_two_adapters_over_one_tool_side_by_side.py) | Two adapters over one tool, side by side |
 | 4 | [demo_04_four_brains_on_health_and_the_module_s_gate.py](demo_04_four_brains_on_health_and_the_module_s_gate.py) | Four brains on /health, and the module's gate |
-| 5 | [demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py](demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py) | Four cost lines, as rag-api's rows draw them |
-| 6 | [demo_06_the_half_the_rows_cannot_see.py](demo_06_the_half_the_rows_cannot_see.py) | The half the rows cannot see |
+| 5 | [demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py](demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py) | Four cost lines, from rag-api's rows and the chat rows |
+| 6 | [demo_06_the_loop_call_by_call.py](demo_06_the_loop_call_by_call.py) | The loop, call by call |
 
 ## Before starting
 
@@ -82,35 +82,58 @@ Operation: bash — run in the operator shell, in the kit (the two adapters side
 Expected shape, not a promised result:
 
 ```text
-1. what each model is shown for retrieve (* = required)
-   langchain query*, doc_type, top_k                                481 characters
-   adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters
-   langchain tools: retrieve, calculate_processing_cost, get_usage_stats
-   adk tools:       retrieve, calculate_processing_cost
+1. what each model is shown for retrieve (* = required); raw = FunctionTool over the shared retrieve(), unadapted
+   langchain query*, doc_type, top_k                                          481 characters
+   adk       query*, doc_type, top_k                                          635 characters
+   raw       query*, tenant_id*, top_k, doc_type, assertion, brain, passages  3,420 characters
+   langchain tools: retrieve, calculate_processing_cost
+   adk tools:       retrieve, calculate_processing_cost   (tools.for_adk())
 2. one retrieve(); the ADK model writes tenant_id "globex" and assertion "anything"
    langchain rag-api got tenant acme, brain langchain, assertion header None
-             the model read: citations, answerable, confidence
-   adk       rag-api got tenant acme, brain adk, assertion header 'anything'
-             the model read: citations, answerable, confidence, answer
-3. three calls that go wrong
+             the model read: citations, answerable, confidence; citations numbered [1]
+   adk       rag-api got tenant acme, brain adk, assertion header None
+             the model read: citations, answerable, confidence; citations numbered [1]
+3. four calls that go wrong
    delete_document(doc="x")
      langchain [error] {"error": "delete_document requires manual approval"}
                refusals ['delete_document']
-     adk       the turn raises ValueError: Tool 'delete_document' not found.
+     adk       [error] {"error": "delete_document requires manual approval", "status":
+               "error"}
+               refusals ['delete_document']
    calculate_processing_cost(total_pages="many")
      langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs
                {'total_pages': 'many'} with error: total_pages: Input should be a valid
                [...]
                refusals ['calculate_processing_cost']
-     adk       the turn raises TypeError: '<=' not supported between instances of 'str' and
-               'int'
+     adk       [error] {"error": "1 validation error for
+               calculate_processing_cost\ntotal_pages\n Input should be a valid integer,
+               unable to parse string as an [...]
+               refusals ['calculate_processing_cost']
    calculate_processing_cost(total_pages=10, processing_type="express")
-     langchain [success] {"num_documents": 1, "total_pages": 10, "processing_type":
-               "express", "rate_per_page": 0.05, "cost_usd": 0.5, "cost_inr": 42.5}
-               refusals []
-     adk       the turn raises ValueError: unknown tier 'express'; expected one of ['bulk',
-               'priority', 'standard']
+     langchain [error] unknown tier 'express'; expected one of ['bulk', 'priority',
+               'standard']
+               refusals ['calculate_processing_cost']
+     adk       [error] {"error": "unknown tier 'express'; expected one of ['bulk',
+               'priority', 'standard']", "status": "error"}
+               refusals ['calculate_processing_cost']
+   calculate_processing_cost()
+     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs {} with
+               error: total_pages: Field required Please fix the error and try again.
+               refusals ['calculate_processing_cost']
+     adk       [error] {"error": "Invoking `calculate_processing_cost()` failed as the
+               following mandatory input parameters are not present:\ntotal_pages\nYou
+               [...]
+               refusals ['calculate_processing_cost']
 4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn
+5. the turn's limits, wired three ways: a model that asks for a tool on every call, at a cap of 2
+   langchain  nodes model, tools; TurnLimitsMiddleware wraps the model call
+              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...
+   langgraph  nodes agent, tools, refuse; the agent node checks the Meter itself
+              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...
+   adk        adk_before_model, adk_after_model, adk_model_error; RunConfig max_llm_calls 12
+              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...
+   the kit's middleware:      nodes model, tools; a turn with one tool call writes 5 checkpoints
+   ModelCallLimitMiddleware:  nodes model, tools, ModelCallLimitMiddleware.before_model, ModelCallLimitMiddleware.after_model; a turn with one tool call writes 9 checkpoints
 ```
 
 ### demo_04_four_brains_on_health_and_the_module_s_gate.py
@@ -126,60 +149,59 @@ Operation: bash — run in the operator shell, in the kit (/health, then the mod
 Expected shape, not a promised result:
 
 ```text
-{"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain"}
+{"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain","limits":{"max_model_calls":12,"budget_inr":5.0,"deadline_s":100.0,"model_timeout_s":30.0,"model_attempts":2,"min_model_s":5.0,"tool_budgets_s":{"retrieve":95.0,"calculate_processing_cost":10}}}
   DocuMind chat - live smoke test
   target: https://documind-chat-NUMBER.asia-south1.run.app
   --------------------------------------------------------
-  [PASS] health  profile=gcp default=langchain
-  [PASS] brain direct  3120 ms  tools=['retrieve']  'Gratuity becomes payable after not less than five years of c'
-  [PASS] brain langchain  11840 ms  tools=['retrieve']  'Gratuity becomes payable once you have rendered at least fiv'
-  [PASS] brain langgraph  9730 ms  tools=['retrieve']  'Gratuity is payable after at least five years of continuous '
-  [PASS] brain adk  14260 ms  tools=['retrieve']  'After five years of continuous service, gratuity becomes pay'
+  [PASS] health  profile=gcp default=langchain limits=12 calls, Rs 5.0, 100.0 s
+  [PASS] brain direct  3120 ms  tools=['retrieve']  citations=5  calls=0 Rs 0.3699  'Gratuity becomes payable after not less than five years of c'
+  [PASS] brain langchain  11840 ms  tools=['retrieve']  citations=5  calls=2 Rs 0.8738  'Gratuity becomes payable once you have rendered at least fiv'
+  [PASS] brain langgraph  9730 ms  tools=['retrieve']  citations=5  calls=2 Rs 0.8777  'Gratuity is payable after at least five years of continuous '
+  [PASS] brain adk  14260 ms  tools=['retrieve']  citations=5  calls=2 Rs 1.0024  'After five years of continuous service, gratuity becomes pay'
   [PASS] outsider refused  status=403 not a member of any tenant
   --------------------------------------------------------
   6 passed, 0 failed
 ```
 
-### demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py
+### demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py
 
 Do it
 
-**`step_01_four_cost_lines_as_rag_api_s_rows_draw_the(session)` — Four cost lines, as rag-api's rows draw them / Do it**
+**`step_01_four_cost_lines_from_rag_api_s_rows_and_th(session)` — Four cost lines, from rag-api's rows and the chat rows / Do it**
 
 Do it
 
-Operation: bash — run in the operator shell, in the kit (rag-api's rows since step 4, one line per brain).
+Operation: bash — run in the operator shell, in the kit (rag-api's rows and the chat rows since step 4, one line per brain).
 
 Expected shape, not a promised result:
 
 ```text
-direct    1 retrieve()  in  2,561  out   68  Rs 0.3699
-  langchain 1 retrieve()  in  2,498  out   64  Rs 0.3593
-  langgraph 1 retrieve()  in  2,504  out   66  Rs 0.3613
-  adk       1 retrieve()  in  2,537  out   71  Rs 0.3687
+rag-api's rows        the chat rows             whole
+  direct    1 retrieve()  Rs 0.3699   0 model calls  Rs 0.0000   Rs 0.3699
+  langchain 1 retrieve()  Rs 0.3593   2 model calls  Rs 0.5144   Rs 0.8737
+  langgraph 1 retrieve()  Rs 0.3613   2 model calls  Rs 0.5164   Rs 0.8777
+  adk       1 retrieve()  Rs 0.3687   2 model calls  Rs 0.6337   Rs 1.0024
 ```
 
-### demo_06_the_half_the_rows_cannot_see.py
+### demo_06_the_loop_call_by_call.py
 
 Do it
 
-**`step_01_the_half_the_rows_cannot_see(session)` — The half the rows cannot see / Do it**
+**`step_01_the_loop_call_by_call(session)` — The loop, call by call / Do it**
 
 Do it
 
-Operation: bash — run in the operator shell, in the kit (the kit's three agent brains on your machine, their own model calls counted).
+Operation: bash — run in the operator shell, in the kit (the kit's three agent brains on your machine, each model call counted).
 
 Expected shape, not a promised result:
 
 ```text
-langchain 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175
-  langgraph 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175
-  adk       2 model calls  in  2,477  out    47 (thinking     0)  Rs 0.3458
-the four cost lines, whole: the brain's own model calls + rag-api's, from step 5
-  direct    Rs 0.0000 + Rs 0.3699 = Rs 0.3699
-  langchain Rs 0.2175 + Rs 0.3593 = Rs 0.5768
-  langgraph Rs 0.2175 + Rs 0.3613 = Rs 0.5788
-  adk       Rs 0.3458 + Rs 0.3687 = Rs 0.7145
+langchain call 1: in   401 out   31   call 2: in   931 out   20   (thinking 0)
+            the Meter, as the chat row keeps it: 2 model calls, in 1,332, out 51, Rs 0.2023
+  langgraph call 1: in   401 out   31   call 2: in   931 out   20   (thinking 0)
+            the Meter, as the chat row keeps it: 2 model calls, in 1,332, out 51, Rs 0.2023
+  adk       call 1: in   501 out   21   call 2: in 1,058 out   20   (thinking 0)
+            the Meter, as the chat row keeps it: 2 model calls, in 1,559, out 41, Rs 0.2249
 ```
 
 ### setup/restore_settings.py
@@ -200,6 +222,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`. All 20 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f3598f8936669b98d54a99f356e98faea20a469a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.4_Adapters_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f330c4e200777574a7445b21a9fac5307dec72dd`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

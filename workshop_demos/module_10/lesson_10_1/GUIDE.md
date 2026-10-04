@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html`, reviewed at blob `f1868f835bc67f911ec89f0027a86e55fa9969ab`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html`, reviewed at blob `d12d91f61f0874ef613af21ea7f0d87936734ecc`. Learners read that page on the course site; this guide keeps its prose.
 
 An agent is a model that is allowed to call functions. What it may call, with which arguments, and what comes back is a contract, and the kit writes that contract once. Every brain shares one `retrieve()`. The tenant reaches a tool through the runtime, never through an argument the model fills. A failure comes back as data. You deploy the chat service in your lane's region and read the contract the model sees. Then you call the one `retrieve()` from your shell, and ask the same questions of two brains: the direct brain, which has no loop at all, and the LangChain loop, which decides for itself.
 
@@ -24,7 +24,7 @@ An agent is a model that is allowed to call functions. What it may call, with wh
 
 - The loop: the model chooses its tools
 
-- The rows: what each brain cost, and what no row records
+- The rows: what each brain cost, and which row records it
 
 - Why the contract is shaped this way, what it costs, and what the kit does not do yet
 
@@ -44,13 +44,13 @@ One retrieval, adapted per brain. `shared/documind_tools.py` holds the only func
 
 The direct brain is the floor. The chat service has four brains behind one endpoint. Three are agent loops: LangChain, LangGraph and ADK. The model reads the question and the tool schemas, calls tools, reads the results and decides again. The fourth, `direct`, has no loop. It calls `retrieve()` once, in code, and returns rag-api's own grounded answer. It is the cheapest and fastest brain, and it cannot do anything but look things up. An agent justifies its extra model turns only by answering what the floor cannot, or answering it better.
 
-A government office counter. The clerk may use three registers, and the counter sheet lists what each one needs: a file number, a year. The sheet has no line for "whose file". The office fills that in from the token you were given at the gate, so no one at the counter can ask for someone else's file. At the simple window, an attendant takes your question, looks up the one register and reads out the entry. At the full counter, a clerk decides which registers to consult and in what order, and can do the arithmetic the attendant cannot. The simple window is where you judge whether the full counter is worth its wait.
+A government office counter. The clerk may use two registers, and the counter sheet lists what each one needs: a file number, a year. The sheet has no line for "whose file". The office fills that in from the token you were given at the gate, so no one at the counter can ask for someone else's file. At the simple window, an attendant takes your question, looks up the one register and reads out the entry. At the full counter, a clerk decides which registers to consult and in what order, and can do the arithmetic the attendant cannot. The simple window is where you judge whether the full counter is worth its wait.
 
 #### One turn, two brains
 
-Choose a brain and a question, and follow the turn: what the model reads, what the runtime adds, which tools run, and the three keys that come back.
+Choose a brain and a question, and follow the turn: what the model reads, what the runtime adds, which tools run, and the two lists that come back.
 
-The schemas are LangChain's own `tool_call_schema` for the kit's three tools, read at build time; the cell in step 4 prints the same from the source. The `tool_calls` and `refusals` come from the kit's `_summary()` run on these turns, and the direct brain's from `DirectBrain.answer()` run with a stand-in `retrieve()`. The loop's steps are the path a well-behaved model takes; on your lane, the model decides.
+The schemas are LangChain's own `tool_call_schema` for the kit's two tools, read at build time; the cell in step 4 prints the same from the source. The `tool_calls` and `refusals` come from the kit's `_summary()` run on these turns, and the direct brain's from `DirectBrain.answer()` run with a stand-in `retrieve()`. The loop's steps are the path a well-behaved model takes; on your lane, the model decides.
 
 It shows the contract and the plumbing, not a model's judgement. A model may call `retrieve` twice, or skip the page-count search, and step 7 shows what yours did. Blocked tools, timeouts and refusals are lesson 10.3's subject, and the hand-built LangGraph loop is 10.2's.
 
@@ -94,7 +94,7 @@ A redeploy with the kit's current script, then where it points and which brains 
 
 #### Definition
 
-`make up` deploys the chat service from `commands/lesson-12.8.sh`. Until 23 September 2026, that script named `us-central1` in all fourteen places a region appears. That meant the image registry, the service, the Cloud SQL instance, the migration job, and two URLs: `RAG_API_URL`, where the brains send every retrieval, and `SELF_URL`. The API's own script follows `REGION`, and Terraform creates the image registry in `REGION`. So on a lane in asia-south1, the chat build pushed to a registry the lane does not have, and the deploy stopped there: no chat service was created at all. Had one been, it would have called an API that does not exist. The kit's script now follows `REGION` in all fourteen places. The cell below runs just that script through `make deploy-services`. It builds the chat image, deploys it beside your API, grants the UI's account and the outsider the invoker role, runs the checkpointer's one-time migration and turns on IAP. `ADMIN_EMAILS` is your own address, so the target's last step, the operator grant, succeeds.
+`make up` deploys the chat service from `commands/lesson-12.8.sh`. Until 23 September 2026, that script named `us-central1` in all fourteen places a region appears. That meant the image registry, the service, the Cloud SQL instance, the migration job, and two URLs: `RAG_API_URL`, where the brains send every retrieval, and `SELF_URL`. The API's own script follows `REGION`, and Terraform creates the image registry in `REGION`. So on a lane in asia-south1, the chat build pushed to a registry the lane does not have, and the deploy stopped there: no chat service was created at all. Had one been, it would have called an API that does not exist. The kit's script now follows `REGION` in all fourteen places. The cell below runs just that script through `make deploy-services`. It builds the chat image, deploys it beside your API, grants the invoker role, runs the checkpointer's one-time migration and turns on IAP. The invoker role goes to seven accounts: the UI's account, the outsider, and five eval accounts the DocuMind Desk's live checks call the service as. Terraform creates them. The loop names an eighth, the account a Google Chat bridge calls the service as, which exists only on a lane planned with `GCHAT_DOOR=true`, as lesson 10.6 shows, and then it is bound too. The script prints a "not bound" line for each account that does not exist yet and binds the rest, so on a lane without the door the bridge's account gets that line. `ADMIN_EMAILS` is your own address, so the target's last step, the operator grant, succeeds.
 
 #### Do it: deploy
 
@@ -104,17 +104,17 @@ The chat service now runs in your region, and its `RAG_API_URL` is your API, the
 
 ### The contract: what the model reads of each tool
 
-The three tools as the model sees them, and the parameter it never sees.
+The two tools as the model sees them, and the parameter it never sees.
 
 #### Definition
 
-LangChain builds a tool's schema from its signature and its docstring. The adapter's `runtime: ToolRuntime` parameter is filled by the framework and left out of the schema. That is the one kind of hidden parameter that is also delivered. The first version of this file used `InjectedToolArg` instead, which hides an argument and never fills it: the tool ran with an empty tenant, and rag-api refused it. The chat request itself has only three fields, and none of them names a tenant. The cell reads `services/chat/tools.py` as text and prints each tool the way its schema presents it, so it needs no LangChain on your machine. The build checked the printout against LangChain's own `tool_call_schema` for all 3 tools.
+LangChain builds a tool's schema from its signature and its docstring. The adapter's `runtime: ToolRuntime` parameter is filled by the framework and left out of the schema. That is the one kind of hidden parameter that is also delivered. The first version of this file used `InjectedToolArg` instead, which hides an argument and never fills it: the tool ran with an empty tenant, and rag-api refused it. The chat request itself has only three fields, and none of them names a tenant. The cell reads `services/chat/tools.py` as text and prints each tool the way its schema presents it, so it needs no LangChain on your machine. Its last line calls the shared `calculate_processing_cost`, the function the chat's cost tool hands its arguments to, with the tier `'express'` and prints its refusal. That refusal is the text the chat tool returns to the model as an error result. The build checked the printout against LangChain's own `tool_call_schema` for all 2 tools.
 
 #### The code
 
 #### Do it
 
-Three tools, and not one argument names a tenant, a user or an assertion. `retrieve` and `get_usage_stats` each have a hidden `runtime`, which is where agent.py's context arrives. `calculate_processing_cost` needs none, because pricing pages concerns nobody's documents. The first line of each docstring is the description the model uses to choose a tool, so a vague docstring is a tool the model picks at the wrong time.
+Two tools, and not one argument names a tenant, a user or an assertion. `retrieve` has a hidden `runtime`, which is where agent.py's context arrives, and passes what it reads to `search()`, where every brain's retrieval ends. `calculate_processing_cost` needs none, because pricing pages concerns nobody's documents; it hands its arguments to the shared function, so an unknown tier is refused here as it is there. The first line of each docstring is the description the model uses to choose a tool, so a vague docstring is a tool the model picks at the wrong time.
 
 ### The one retrieve(), from your shell
 
@@ -136,7 +136,7 @@ A chat turn with no model in the chat service, and the tenant it was answered fo
 
 #### Definition
 
-`/v1/chat` first looks up the caller's tenant from the roster, then builds the thread id from the tenant, the user and the session, then hands the brain a context: the tenant, the user, the assertion and the brain's name. `DirectBrain.answer()` calls the one `retrieve()` with the question, the tenant from the context and `top_k` 5. It returns rag-api's answer with the citations, and `tool_calls` set to `['retrieve']`. That list is written by the code, not chosen by a model, because there is no model in this brain. The cell defines `chat10`, a small function that posts one turn as `documind-ui-sa` and prints the brain, the two lists, the citations, the time and the start of the answer. `documind-ui-sa` is on three rosters, and `tenant_for()` takes the first, acme.
+`/v1/chat` first looks up the caller's tenant from the roster, then builds the thread id from the tenant, the user and the session, then hands the brain a context: the tenant, the user, the assertion and the brain's name. `DirectBrain.answer()` calls the one `retrieve()` with the question, the tenant from the context and `top_k` 5. It returns rag-api's answer with the citations, and `tool_calls` set to `['retrieve']`. That list is written by the code, not chosen by a model, because there is no model in this brain. The cell defines `chat10`, a small function that posts one turn as `documind-ui-sa` and prints the brain, the two lists, the citations (with their numbers, when an agent brain numbered them), the time and the start of the answer. `documind-ui-sa` is on three rosters, and `tenant_for()` takes the first, acme.
 
 #### The code
 
@@ -150,21 +150,21 @@ The same question to the LangChain brain, then a question only a tool can answer
 
 #### Definition
 
-The LangChain brain is `create_agent` with the three tools, the system prompt and a guard. The model reads the question and the schemas and emits tool calls; the runtime runs them and returns each result as a message; the model decides again until it answers. `_summary()` then reads the conversation. `tool_calls` is every tool call the model made, in order. `refusals` is every tool result marked as an error. Every brain returns the same three keys, so the UI never asks which brain answered. The cost question needs a page count and a multiplication. The system prompt asks the model to search for a page count before it estimates a cost.
+The LangChain brain is `create_agent` with the two tools, the system prompt and a guard. The model reads the question and the schemas and emits tool calls; the runtime runs them and returns each result as a message; the model decides again until it answers. The checkpointer hands back the whole conversation, so `_turn()` gives each question an id, and `_summary()` reads only that question and what follows it. `tool_calls` is every tool call the model made in this turn, in order. `refusals` is every tool result marked as an error. `citations` is every passage this turn's searches returned, numbered from 1 by `search()`; the system prompt asks the model to cite them as `[n]`. Every brain returns the same four keys, so the UI never asks which brain answered. The cost question needs a page count and a multiplication. The system prompt asks the model to search for a page count before it estimates a cost.
 
 #### The code
 
 #### Do it
 
-On the policy question, the model chose `retrieve` itself and wrote its own answer from the citations; it took longer than the direct brain for the same fact. On the cost question it called two tools. The second, `calculate_processing_cost`, priced 33.96 US dollars for 283 pages at the priority rate, Rs 2,886.60. The direct brain could only look the question up, and could only answer from what the documents say. The two brains may even give different numbers, because they consult different sources: the tool's price list, and whatever rate a document mentions. Your lists are the truth for your lane. A model that skipped the search, or searched twice, is still inside the contract.
+On the policy question, the model chose `retrieve` itself and wrote its own answer from the citations; it took longer than the direct brain for the same fact. Its citations are numbered 1 to 5, and its answer cites `[1]`. The cost question went to the same session, so the thread held the first turn too, and the list still names only this turn's two tools, with its citations numbered from 1 again. The second tool, `calculate_processing_cost`, priced 33.96 US dollars for 283 pages at the priority rate, Rs 2,886.60. The direct brain could only look the question up, and could only answer from what the documents say. The two brains may even give different numbers, because they consult different sources: the tool's price list, and whatever rate a document mentions. Your lists are the truth for your lane. A model that skipped the search, or searched twice, is still inside the contract.
 
-### The rows: what each brain cost, and what no row records
+### The rows: what each brain cost, and which row records it
 
 rag-api's row for every retrieve(), and the chat service's row for every turn.
 
-Each `retrieve()` posts to rag-api's `/v1/query`, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled `ui` because it named no brain.
+Each `retrieve()` posts to rag-api's `/v1/query`, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled `ui` because it named no brain.
 
-Every `retrieve()` left one rag-api row, whichever brain made it, and each row is a full answer: retrieval, reranking and a model call. The direct brain's row is its whole cost. The LangChain brain's row is only part of its cost. It paid for rag-api's grounded answer, threw that answer away, and then paid its own model to write another. Its own model turns appear on no row: the chat service's keys, printed beside each turn, include no tokens and no cost. That is why the floor matters. It is the one brain whose cost the rows state completely.
+Every `retrieve()` left one rag-api row, whichever brain made it, and each row is a full answer: retrieval, reranking and a model call. The direct brain's row is its whole cost. The LangChain brain's rag-api row is only part of its cost. It paid for rag-api's grounded answer, threw that answer away, and then paid its own model to write another. Those model turns are on the chat service's row: the keys printed beside each turn include `model_calls`, `cost_usd` for its own calls, and `rag_cost_usd` for what its searches billed. That is why the floor matters. The direct brain makes no model call of its own, so its rag-api row states its whole cost.
 
 ### Why the contract is shaped this way, what it costs, and what the kit does not do yet
 
@@ -184,21 +184,17 @@ The design choices, from the kit's own comments, then the bill and the gaps.
 
 Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-- An agent's retrieval pays for an answer it throws away. rag-api has no retrieval-only route: `/v1/query` always generates. The chat adapter keeps the citations and drops rag-api's answer.
+- An agent's retrieval pays for an answer it throws away. rag-api has one retrieval-only route, `/v1/passages`: the same retrieval with each passage's full text and no model call, which `retrieve(passages=True)` asks for. The chat brains do not use it yet. Their adapter calls `/v1/query`, which always generates, keeps the citations and drops rag-api's answer. Lesson 10.6's desks are its first callers.
 
-- The agent's own model calls are priced nowhere. The chat service's row carries the brain, the lists and the time, but no tokens and no cost.
-
-- Two cost tools that disagree. The shared `calculate_processing_cost` refuses an unknown tier. The chat service's copy prices one, say `express`, at the standard rate without a word. Its module calls it "byte-for-byte the lesson's version", and the rates live in both files.
-
-- A stub in the toolbox. `get_usage_stats` is offered to the model and always returns `value: None`.
+- The month's totals leave the agent's own calls out. The chat service's row prices each turn, but the warehouse's `tenant_daily` view and `make usage` read rag-api's rows only.
 
 - A check the kit names but does not ship. `documind_tools.py` tells you to run `tools/check_one_retrieval.py`. It lives in the course's own repository, not in the kit you cloned.
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Nine checks, each one block above, each with the value that proves it on your lane.
 
-The chat service runs in your region, from the kit's current script, with IAP on and its checkpointer migrated. The UI's account and the outsider may invoke it, and you may mint tokens as both. The usage rows of five retrievals and four chat turns, and one conversation of two turns in the checkpointer, session `lesson101-langchain`. The direct brain keeps no conversation. No roster, policy or setting changed. Lesson 10.2 opens the LangGraph brain: the hand-built graph, its refuse node, and the checkpointer that keeps a conversation.
+The chat service runs in your region, from the kit's current script, with IAP on and its checkpointer migrated. The UI's account and the outsider may invoke it, and so may the Desk's six accounts once Terraform has created them. You may mint tokens as the UI's account and the outsider. The usage rows of five retrievals and four chat turns, and one conversation of two turns in the checkpointer, session `lesson101-langchain`. The direct brain keeps no conversation. No roster, policy or setting changed. Lesson 10.2 opens the LangGraph brain: the hand-built graph, its refuse node, and the checkpointer that keeps a conversation.
 
 Netsetos GenAI on GCP · Module 10 Agents · Lesson 10.1 Understand tool contracts and the direct agent loop · v5.0
 

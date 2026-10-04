@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.2_Durable_Storage_WIX.html",
-  "source_sha": "8ff81098aa551cfdfcea7b74a70b6d674c710765",
+  "source_sha": "ca3be661b14fed97662fcbbdaa7f8f484cedaf5e",
   "shared_setup_windows": [
     1
   ],
@@ -215,7 +215,7 @@
           "subheading": "Do it: two turns",
           "purpose": "Do it: two turns",
           "label": "bash — run in the operator shell, in the kit (two turns, their checkpoints and versions counted; no model, no network)",
-          "expected": "a turn with no tool   +3 checkpoints, +2 versions of messages\na turn with retrieve  +5 checkpoints, +4 versions of messages\nthe messages channel, every version kept:\n   version 1  1 message      211 bytes\n   version 2  2 messages     472 bytes\n   version 3  3 messages     687 bytes\n   version 4  4 messages   1,001 bytes\n   version 5  5 messages   2,720 bytes\n   version 6  6 messages   2,981 bytes\n   8,072 bytes kept, for a conversation whose latest version is 2,981 bytes\nthe ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:\nWARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feature. Please install it by running: pip install google-adk[db]); using memory\n   it keeps its sessions in InMemorySessionService",
+          "expected": "a turn with no tool   +3 checkpoints, +2 versions of messages\na turn with retrieve  +5 checkpoints, +4 versions of messages\nthe messages channel, every version kept:\n   version 1  1 message      211 bytes\n   version 2  2 messages     472 bytes\n   version 3  3 messages     687 bytes\n   version 4  4 messages   1,001 bytes\n   version 5  5 messages   2,760 bytes\n   version 6  6 messages   3,021 bytes\n   8,152 bytes kept, for a conversation whose latest version is 3,021 bytes\nthe ADK brain, given the lane's DSN, with google-adk and no SQLAlchemy - as the chat image has them:\nWARNING documind.chat.brains: ADK DatabaseSessionService unavailable (The 'sqlalchemy' package is required to use this feature. Please install it by running: pip install google-adk[db]); using memory\n   it keeps its sessions in InMemorySessionService",
           "adaptations": [],
           "id": "source_9",
           "function": "step_02_two_turns",
@@ -341,7 +341,7 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the latest thread, step by step)",
-          "expected": "the latest thread, session lesson111-4242-b: its checkpoints in order\n  step -1  input  messages unchanged\n  step  0  loop   messages, version 1:    175 bytes\n  step  1  loop   messages, version 2:    412 bytes\n  step  2  input  messages unchanged\n  step  3  loop   messages, version 3:    586 bytes\n  step  4  loop   messages, version 4:    866 bytes\n  step  5  loop   messages, version 5:  2,285 bytes\n  step  6  loop   messages, version 6:  2,522 bytes\nevery version kept: 6,846 bytes; the latest alone: 2,522 bytes",
+          "expected": "the latest thread, session lesson111-4242-b: its checkpoints in order\n  step -1  input  messages unchanged\n  step  0  loop   messages, version 1:    175 bytes\n  step  1  loop   messages, version 2:    412 bytes\n  step  2  input  messages unchanged\n  step  3  loop   messages, version 3:    586 bytes\n  step  4  loop   messages, version 4:    866 bytes\n  step  5  loop   messages, version 5:  2,325 bytes\n  step  6  loop   messages, version 6:  2,562 bytes\nevery version kept: 6,926 bytes; the latest alone: 2,562 bytes",
           "adaptations": [],
           "id": "source_18",
           "function": "step_01_one_thread_step_by_step",

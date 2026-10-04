@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html",
-  "source_sha": "f1868f835bc67f911ec89f0027a86e55fa9969ab",
+  "source_sha": "d12d91f61f0874ef613af21ea7f0d87936734ecc",
   "shared_setup_windows": [
     1
   ],
@@ -140,7 +140,7 @@
     },
     {
       "level": 3,
-      "heading": "The rows: what each brain cost, and what no row records"
+      "heading": "The rows: what each brain cost, and which row records it"
     },
     {
       "level": 3,
@@ -220,7 +220,7 @@
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
         394,
-        412
+        415
       ],
       "offline": false,
       "live_verified": false,
@@ -231,7 +231,7 @@
           "subheading": "Do it: deploy",
           "purpose": "Do it: deploy",
           "label": "bash — run in the operator shell, in the kit (the chat service built and deployed in your region; several minutes)",
-          "expected": ">> commands/lesson-12.8.sh (DEPLOY block)\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT\nDeploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-chat-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-chat].   (twice: documind-ui-sa, documind-outsider-sa)\n... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)\nExecution [documind-checkpoint-setup-xxxxx] has successfully completed.\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
+          "expected": ">> commands/lesson-12.8.sh (DEPLOY block)\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT\nDeploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-chat-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,\n   documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,\n   documind-evalgrc-sa)\n>> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound\n... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)\nExecution [documind-checkpoint-setup-xxxxx] has successfully completed.\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
           "adaptations": [],
           "id": "source_6",
           "function": "step_01_deploy",
@@ -244,12 +244,12 @@
           "subheading": "Do it: where it points, and its brains",
           "purpose": "Do it: where it points, and its brains",
           "label": "bash — run in the operator shell, in the kit (where the chat service points, and its brains)",
-          "expected": "RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain\n{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\"}",
+          "expected": "RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain\n{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\",\"limits\":{\"max_model_calls\":12,\"budget_inr\":5.0,\"deadline_s\":100.0,\"model_timeout_s\":30.0,\"model_attempts\":2,\"min_model_s\":5.0,\"tool_budgets_s\":{\"retrieve\":95.0,\"calculate_processing_cost\":10}}}",
           "adaptations": [],
           "id": "source_8",
           "function": "step_02_where_it_points_and_its_brains",
           "window": 8,
-          "source_line": 412,
+          "source_line": 415,
           "manual_checkpoint": null
         }
       ],
@@ -275,7 +275,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        465
+        483
       ],
       "offline": true,
       "live_verified": false,
@@ -286,12 +286,12 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (what the model reads of each tool; reads the source, installs nothing)",
-          "expected": "retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime\n      Retrieve grounded passages from DocuMind's corpus.\n  calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')\n      Estimate document processing cost in USD and INR.\n  get_usage_stats(metric: str, days: int = 7)    hidden: runtime\n      Get DocuMind RAG pipeline usage statistics.",
+          "expected": "retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime\n      Retrieve grounded passages from DocuMind's corpus.\n  calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')\n      Estimate document processing cost in USD and INR.\n  'express' refused: unknown tier 'express'; expected one of ['bulk', 'priority', 'standard']",
           "adaptations": [],
           "id": "source_12",
           "function": "step_01_the_contract_what_the_model_reads_of_each",
           "window": 12,
-          "source_line": 465,
+          "source_line": 483,
           "manual_checkpoint": null
         }
       ],
@@ -317,7 +317,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        526
+        548
       ],
       "offline": false,
       "live_verified": false,
@@ -333,7 +333,7 @@
           "id": "source_15",
           "function": "step_01_the_one_retrieve_from_your_shell",
           "window": 15,
-          "source_line": 526,
+          "source_line": 548,
           "manual_checkpoint": null
         }
       ],
@@ -359,7 +359,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        580
+        604
       ],
       "offline": false,
       "live_verified": false,
@@ -375,7 +375,7 @@
           "id": "source_19",
           "function": "step_01_the_direct_brain_one_retrieve_no_loop",
           "window": 19,
-          "source_line": 580,
+          "source_line": 604,
           "manual_checkpoint": null
         }
       ],
@@ -401,7 +401,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        628
+        673
       ],
       "offline": false,
       "live_verified": false,
@@ -412,27 +412,27 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the LangChain loop on the same question, then a cost question on both brains)",
-          "expected": "langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms\n      After five years of continuous service, under the Payment of Gratuity Act, 1972.\n  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 0  11350 ms\n      At the priority tier (USD 0.12 a page), 283 pages cost USD 33.96, about Rs 2,886.60.\n  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms\n      The documents give no per-page price for processing the handbook; the April invoice bills priori",
+          "expected": "langchain tool_calls ['retrieve']  refusals []  citations 5 n [1, 2, 3, 4, 5]  7240 ms\n      After five years of continuous service, under the Payment of Gratuity Act, 1972 [1].\n  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 3 n [1, 2, 3]  11350 ms\n      The handbook has 283 pages [1]. At the priority tier (USD 0.12 a page) they cost USD 33.96, abou\n  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms\n      The documents give no per-page price for processing the handbook; the April invoice bills priori",
           "adaptations": [],
           "id": "source_22",
           "function": "step_01_the_loop_the_model_chooses_its_tools",
           "window": 22,
-          "source_line": 628,
+          "source_line": 673,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py"
+      "next": "demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py"
     },
     {
-      "id": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records",
+      "id": "demo_08_the_rows_what_each_brain_cost_and_which_row_records_it",
       "lesson": "10.1",
-      "file": "demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py",
+      "file": "demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py",
       "category": "required",
       "requires": [
         "demo_07_the_loop_the_model_chooses_its_tools"
       ],
-      "heading": "The rows: what each brain cost, and what no row records",
-      "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
+      "heading": "The rows: what each brain cost, and which row records it",
+      "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
       "anchor": "s8",
       "anchors": [
         "s8"
@@ -443,23 +443,23 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
       "source_lines": [
-        647
+        692
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
         {
-          "heading": "The rows: what each brain cost, and what no row records",
-          "subheading": "The rows: what each brain cost, and what no row records",
-          "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
+          "heading": "The rows: what each brain cost, and which row records it",
+          "subheading": "The rows: what each brain cost, and which row records it",
+          "purpose": "rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.",
           "label": "bash — run in the operator shell, in the kit (the rows both services wrote since the retrieve cell; reads only)",
-          "expected": "rag-api, one row per retrieve():\n    brain ui         in   1790  out   96  Rs 0.2894   2600 ms\n    brain direct     in   1790  out   96  Rs 0.2894   2710 ms\n    brain langchain  in   1812  out  101  Rs 0.2954   2840 ms\n    brain langchain  in   1650  out   88  Rs 0.2665   2390 ms\n    brain direct     in   1705  out   92  Rs 0.2760   2620 ms\n  the chat service, one row per turn:\n    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)\n    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)",
+          "expected": "rag-api, one row per retrieve():\n    brain ui         in   1790  out   96  Rs 0.2894   2600 ms\n    brain direct     in   1790  out   96  Rs 0.2894   2710 ms\n    brain langchain  in   1812  out  101  Rs 0.2954   2840 ms\n    brain langchain  in   1650  out   88  Rs 0.2665   2390 ms\n    brain direct     in   1705  out   92  Rs 0.2760   2620 ms\n  the chat service, one row per turn:\n    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)\n    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)\n    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)\n    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)",
           "adaptations": [],
           "id": "source_24",
-          "function": "step_01_the_rows_what_each_brain_cost_and_what_no",
+          "function": "step_01_the_rows_what_each_brain_cost_and_which_ro",
           "window": 24,
-          "source_line": 647,
+          "source_line": 692,
           "manual_checkpoint": null
         }
       ],
@@ -555,84 +555,84 @@
       "label": "expected (the cell's parsing over a stand-in of the service; your URLs carry your project number)",
       "heading": "The chat service, in your lane's region",
       "anchor": "s3",
-      "line": 417
+      "line": 420
     },
     {
       "window": 10,
-      "label": "services/chat/tools.py - the chat adapter: the tenant from the runtime, never from the model",
+      "label": "services/chat/tools.py - the chat adapter: the tenant from the runtime, never from the model, and search(), where every brain's retrieve ends",
       "heading": "The contract: what the model reads of each tool",
       "anchor": "s4",
-      "line": 431
+      "line": 434
     },
     {
       "window": 11,
       "label": "services/chat/agent.py - the request has nowhere to name a tenant",
       "heading": "The contract: what the model reads of each tool",
       "anchor": "s4",
-      "line": 451
+      "line": 469
     },
     {
       "window": 13,
       "label": "expected (this cell run on the kit's own tools.py; the build checks it against LangChain's own schema)",
       "heading": "The contract: what the model reads of each tool",
       "anchor": "s4",
-      "line": 478
+      "line": 501
     },
     {
       "window": 14,
       "label": "shared/documind_tools.py - retrieve(): THE single retrieval entry point, and failures returned as data",
       "heading": "The one retrieve(), from your shell",
       "anchor": "s5",
-      "line": 496
+      "line": 518
     },
     {
       "window": 16,
       "label": "expected (the kit's retrieve() against a local stub of rag-api; your citations and time differ)",
       "heading": "The one retrieve(), from your shell",
       "anchor": "s5",
-      "line": 538
+      "line": 560
     },
     {
       "window": 17,
       "label": "services/chat/agent.py - the tenant looked up, then carried in the runtime context",
       "heading": "The direct brain: one retrieve(), no loop",
       "anchor": "s6",
-      "line": 552
+      "line": 574
     },
     {
       "window": 18,
       "label": "services/chat/brains.py - DirectBrain: no loop, one retrieve(), rag-api's own answer",
       "heading": "The direct brain: one retrieve(), no loop",
       "anchor": "s6",
-      "line": 560
+      "line": 582
     },
     {
       "window": 20,
       "label": "expected (against a local stub of the chat service; your words and times differ)",
       "heading": "The direct brain: one retrieve(), no loop",
       "anchor": "s6",
-      "line": 599
+      "line": 625
     },
     {
       "window": 21,
-      "label": "services/chat/brains.py - _summary(): the same three keys from every brain",
+      "label": "services/chat/brains.py - _summary() and _turn(): the same four keys from every brain, for this turn",
       "heading": "The loop: the model chooses its tools",
       "anchor": "s7",
-      "line": 613
+      "line": 639
     },
     {
       "window": 23,
       "label": "expected (against a local stub; the model decides which tools it calls, and your lists are the truth)",
       "heading": "The loop: the model chooses its tools",
       "anchor": "s7",
-      "line": 632
+      "line": 677
     },
     {
       "window": 25,
       "label": "expected (against a fake gcloud, priced by the kit's own price(); your numbers differ)",
-      "heading": "The rows: what each brain cost, and what no row records",
+      "heading": "The rows: what each brain cost, and which row records it",
       "anchor": "s8",
-      "line": 663
+      "line": 708
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

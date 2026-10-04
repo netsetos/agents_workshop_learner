@@ -37,12 +37,12 @@ def step_01_the_studio_s_and_the_voice_s_rules_run(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: 1. a generation: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.039, 'cached': False}
     1. a DEMO_MODE hit: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.0, 'cached': True}
-    2. event=chat    copied       by the sink, never read by tenant_daily
-    2. event=media   never copied by the sink, read by tenant_daily
-    2. event=query   copied       by the sink, read by tenant_daily
-    2. event=stream  copied       by the sink, read by tenant_daily
-    3. read aloud 1, en-IN-Chirp3-HD-Kore: synthesised, then cached (1 object in the bucket)
-    3. read aloud 2, en-IN-Chirp3-HD-Kore: read back from the cac
+    2. event=chat        copied       by the sink, never read by tenant_daily
+    2. event=desk        copied       by the sink, never read by tenant_daily
+    2. event=desk_gate   copied       by the sink, never read by tenant_daily
+    2. event=desk_shadow copied       by the sink, never read by tenant_daily
+    2. event=media       never copied by the sink, read by tenant_daily
+    2. event=passages    copied       by the sink, n
     """
     import ast, hashlib, os, re, sys, types
     # 1. the Studio's usage row, as media.py writes it (media.py builds its clients at import, so _usage() is lifted out)
@@ -61,7 +61,7 @@ def step_01_the_studio_s_and_the_voice_s_rules_run(session):
     copied = set(re.findall(r'jsonPayload\.event = "(\w+)"', sink))
     read = set(re.findall(r'"(\w+)"', view.split("WHERE jsonPayload.event IN (", 1)[1].split(")", 1)[0]))
     for event in sorted(copied | read):
-        print(f"2. event={event:7} {'copied' if event in copied else 'never copied':12} by the sink, {'read' if event in read else 'never read'} by tenant_daily")
+        print(f"2. event={event:11} {'copied' if event in copied else 'never copied':12} by the sink, {'read' if event in read else 'never read'} by tenant_daily")
     # 3. the UI's cached_tts, run with its clients stood in: a bucket in memory, a voice that counts its calls
     store, said = {}, []
     class Blob:

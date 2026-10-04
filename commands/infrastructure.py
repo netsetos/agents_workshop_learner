@@ -31,6 +31,8 @@ CRITICAL = ("project_id", "region", "billing_account_id", "github_repository",
             "github_repository_id", "deploy_ref")
 TRUST = ("github_repository", "github_repository_id", "deploy_ref")
 WIF_ADDRESS = "google_iam_workload_identity_pool_provider.github"
+# The Makefile's switches that declare resources only while true: one left off deletes them, and the plan is refused.
+SWITCHES = ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "GCHAT_DOOR")
 
 
 class Stop(RuntimeError):
@@ -116,7 +118,10 @@ def inspect_plan(plan, expected):
             if not after or any(before.get(key) != after.get(key) for key in ("member", "role", "service_account_id")):
                 blocked.append(address + " (existing CI binding change)")
     if blocked:
-        raise Stop("Plan blocked: " + "; ".join(blocked) + ". Review Terraform configuration; do not delete data or remove state to bypass this check.")
+        raise Stop("Plan blocked: " + "; ".join(blocked) + ". A switch the lane was applied with may be off: give make "
+                   "plan, make up, make desk-job, reconcile-job and batch-job the " + ", ".join(SWITCHES[:-1]) + " and "
+                   + SWITCHES[-1] + " of the last apply. Otherwise review Terraform configuration; do not delete data or "
+                   "remove state to bypass this check.")
 
 
 class Infrastructure:

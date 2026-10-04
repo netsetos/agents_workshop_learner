@@ -61,6 +61,8 @@ except Exception as _e:  # noqa: BLE001
 from media import router as media_router  # noqa: E402
 app.include_router(media_router)
 
+from desk_door import install as install_desk_door  # noqa: E402
+install_desk_door(app, settings=lambda t: tenant_settings(t), verify=verify_iap, member=enforce_membership)
 app.add_middleware(CORSMiddleware,
     allow_origins=["https://documind.example.com"],
     allow_methods=["POST","GET"], allow_headers=["*"])
@@ -194,15 +196,27 @@ def check_filters(filters: dict | None) -> None:
     """The request's filters, or a 400 (12 September 2026, R06). A key that is not a restrict namespace on the
     index and a field on the row filters nothing on one path and everything on another; tenant_id and `current`
     are the roster's and the ledger's, never the caller's - a body field is a header in disguise. A typo is a 400
-    that names the allowed keys, not an empty pool that reads like an honest "nothing found"."""
+    that names the allowed keys, not an empty pool that reads like an honest "nothing found".
+
+    doc_type may name a set (workshop lesson 10.6: the statute desk asks for statute and guidance in one retrieval):
+    a list of 1 to 5 classes, any of which a row may carry. It is made canonical in place - sorted, de-duplicated,
+    one class as its string - because scope_of sorts the keys, not a list's values: one set, one cache scope. kind
+    stays one string: its branches in retriever.py are scalar and differ by path, so a list would mean one thing on
+    one backend and another on the next."""
     if not filters:
         return
     bad = sorted(set(filters) - set(FILTER_KEYS))
     if bad:
         raise HTTPException(400, f"unknown filter key(s) {', '.join(bad)}; allowed: {', '.join(FILTER_KEYS)}")
     for k, v in filters.items():
-        if not isinstance(v, str) or not v:
-            raise HTTPException(400, f"filter {k} must be a non-empty string")
+        if isinstance(v, list) and k != "doc_type":
+            raise HTTPException(400, f"filter {k} takes one string, not a list: only doc_type takes a list")
+        vals = v if isinstance(v, list) else [v]
+        if not 1 <= len(vals) <= 5 or not all(isinstance(t, str) and t for t in vals):
+            raise HTTPException(400, f"filter {k} must be a non-empty string" + (" or a list of 1 to 5 of them" if k == "doc_type" else ""))
+        if isinstance(v, list):
+            vals = sorted(set(vals))
+            filters[k] = vals[0] if len(vals) == 1 else vals   # one form per set: what every path and the cache scope see
 
 
 EMPTY_POOL_ANSWER = ("The corpus holds nothing near this question: no passage of this tenant's current documents was "
@@ -508,3 +522,43 @@ def stream(req: QueryRequest, user=Depends(verify_iap)):
         _record(row["cost_usd"])
         yield f"event: done\ndata: {json.dumps(done)}\n\n"
     return StreamingResponse(sse(), media_type="text/event-stream")
+
+
+@app.post("/v1/passages")
+def passages(req: QueryRequest, user=Depends(verify_iap)):
+    """The retrieval half of /v1/query and nothing after it (workshop lesson 10.6): the same door, identity,
+    membership, filters, prompt screen, backend, current-version rule and rerank, then this turn's passages with
+    each chunk's full text - no model call, no answer cache, no retry. An agent that writes its own answer reads
+    these instead of paying for rag-api's and throwing it away; a Citation's quote is one clause (at most 25 words,
+    generator.py) and 500 characters (the schema), so the full text is a field of its own. The row is
+    {"event": "passages"} with no tokens and no cost; an empty pool is passages [] and answerable False."""
+    enforce_membership(user["email"], req.tenant_id)
+    check_filters(req.filters)                            # a 400 before any work, as on the other two routes
+    t0 = time.time()
+    _, _, rbackend = choose_for(req)
+    guard = screen_prompt(req.query, req.tenant_id)
+    stages: dict = {}
+    rbackend, stages["policy_fallback"] = retrieval_backend_for(req.tenant_id, rbackend)
+    stages["retrieval_backend"] = rbackend
+    with stage(stages, "retrieve"):
+        chunks = retrieve(req.query, req.tenant_id, req.top_k, req.filters, backend=rbackend)
+    stages["pool"] = len(chunks)
+    stages["graph_chunks"] = sum(1 for c in chunks if c.get("found_by") == "graph")
+    stages["managed_chunks"] = sum(1 for c in chunks if c.get("found_by") in MANAGED_BACKENDS)
+    stages["vector_chunks"] = sum(1 for c in chunks if c.get("found_by") == "vector")
+    stages["rerank_ms"] = stages["generate_ms"] = 0
+    if chunks:
+        with stage(stages, "rerank"):
+            chunks = rerank(req.query, chunks, req.top_k, tenant_id=req.tenant_id)
+        if rerank_fell_back(chunks):
+            stages["rerank_fallback"] = 1
+    out = [{"n": i, "chunk_id": c.get("id"), "source_uri": c.get("source_uri") or "", "page": c.get("page_start"),
+            "doc_type": c.get("doc_type"), "kind": c.get("kind", "text"), "section": c.get("section"), "text": c.get("text") or ""}
+           for i, c in enumerate(chunks, 1)]
+    latency = int((time.time() - t0) * 1000)
+    row = usage_row(req, user, 0, 0, 0, latency, bool(out), None, "passages", modality=modality_of(p["kind"] for p in out),
+                    model="none", backend="none", cost_usd=0.0, guard=guard, stages=stages, retrieval_backend=rbackend)
+    log.info(json.dumps(row))
+    usage = {"tokens_in": 0, "tokens_out": 0, "cached_tokens": 0, "cost_usd": 0.0, "model": "none", "backend": "none",
+             "latency_ms": latency, "stages": stages}
+    return {"passages": out, "answerable": bool(out), "usage": usage}

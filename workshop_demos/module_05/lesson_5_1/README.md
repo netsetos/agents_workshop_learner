@@ -117,7 +117,7 @@ Expected shape, not a promised result:
 
 ```text
 400 | unknown filter key(s) tenant_id; allowed: doc_type, kind
-400 | filter doc_type must be a non-empty string
+400 | filter doc_type must be a non-empty string or a list of 1 to 5 of them
 200 | answerable False pool 0 | The corpus holds nothing near this question: no passage of this
 200 | answerable True pool 20 | A confirmed employee at grade E3 or above serves a notice period
 ```
@@ -186,6 +186,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9b8d6d3ec02de2b4eddf4de5937d886bc4dfdbb5`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0dd90805d01d1a1b437bb8c335f36323ac152187`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

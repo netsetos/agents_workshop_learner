@@ -26,11 +26,11 @@
 #     make rag-engine-enable                     once per project: RAG Engine in serverless mode + vectorsearch (4.3's one-time prep)
 #     make down  PROJECT=...                        the services, then terraform destroy; names what only project deletion removes
 #
-# ONE SHAPE (15 September 2026; the lean | full switch is gone): seven Cloud Run services - the ingest worker, the
-# API, the admin console, the UI, the chat service on its Cloud SQL checkpointer, the MCP server and the A2A peer -
-# Firestore with its vector indexes, Vector Search and its endpoint, Spanner Graph, the GKE lab cluster,
-# the BigQuery mirror and Dataplex scan, the log sink, Cloud Deploy, the managed stores of 4.3 and 4.4, one Document
-# AI processor, the buckets, the accounts, secrets, budget and alerts. See README.md.
+# ONE SHAPE (15 September 2026; the lean | full switch is gone): seven Cloud Run services - the ingest worker, the API,
+# the admin console, the UI, the chat service on its Cloud SQL checkpointer, the MCP server and the A2A peer (an eighth,
+# the Google Chat bridge, on request) - Firestore with its vector indexes, Vector Search and its endpoint, Spanner
+# Graph, the GKE lab cluster, the BigQuery mirror and Dataplex scan, the log sink, Cloud Deploy, the managed stores of
+# 4.3 and 4.4, one Document AI processor, the buckets, the accounts, secrets, budget and alerts. See README.md.
 #
 # On Windows without `make`, run the python commands directly, e.g.
 #     python deploy/validate.py
@@ -145,7 +145,7 @@ TF_PROJECT_VARS = $(abspath $(TF_DIR)/runbook-project.auto.tfvars.json)
 # In the billing account's currency (an Indian account is INR).
 BUDGET_AMOUNT      ?= 5000
 PAGERDUTY_KEY      ?= unset-in-dryrun
-# Explicit legacy import, teardown, and feature-job targets use this init recipe.
+# Explicit legacy import and teardown targets use this init recipe; the job targets plan and apply as plan and up do.
 # The safe plan/up path requires an initialized backend and never switches its bucket.
 TFSTATE_BUCKET     ?= documind-tfstate
 TFSTATE_PREFIX     ?= documind/$(PROJECT)
@@ -194,14 +194,14 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
         release-candidate record-candidate promote rollback smoke-all usage ingest-one poison dlq down-services \
         reindex retire restore reconcile reconcile-job backfill-current sources purge smoke-reindex \
         batch queued batch-job graph managed-status rag-corpus rag-engine-enable tenant-policy tenant-backend \
-        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors
+        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat
 
 # ---------- the module files (22 September 2026): one .mk per lane; the Makefile keeps the variables and the core ----------
 # mk/ingestion.mk  the roster and the tenant pins, the vector tier's status and repair, the ingest drills (the v5 course's Module 3)
 # mk/lifecycle.mk  the ledger (reindex, retire, restore, reconcile, sources, purge) and the batch lane (Module 4)
-# A recipe longer than a few lines is a script under commands/ or a subcommand of commands/lane.py, so the same
-# operation runs without make; the .mk target is its one-line entry. tools/check_*.py read the Makefile and
-# mk/*.mk as one text. Add a module: one file here, its targets in .PHONY above.
+# mk/agents.mk     the agent layer (Module 10). A long recipe is a commands/ script or a subcommand of commands/lane.py
+# (Module 10's: commands/desk_ops.py). tools/check_*.py read the Makefile and mk/*.mk as one text. Bare make: dryrun.
+.DEFAULT_GOAL := dryrun
 include mk/*.mk
 
 # ---------- Tier A: offline ----------
@@ -590,12 +590,12 @@ down: guard-project down-services
 	echo ">>   gcloud projects delete $(PROJECT)"; exit $$rc
 
 # ---------- Teardown (12 September 2026): what terraform destroy does not own ----------
-# The seven services the deploy scripts create with gcloud run deploy (commands/lesson-*.sh; not Terraform resources,
+# The eight services the deploy scripts create with gcloud run deploy (commands/lesson-*.sh, gchat.sh; not Terraform resources,
 # so make down left them running and billing their floors), the candidate tag, and the tenants' context caches
 # (cache_admin.py delete - a cache bills its storage by the hour until it is deleted). Module 11's three, when they
 # were deployed (make deploy-gateway / deploy-slm / deploy-vllm), go the same way. Best effort: every resource is its
 # own || line, so an absent one never stops the next, and each echo says what happened.
-DOWN_SERVICES     = documind-ingest documind-api documind-admin documind-ui documind-chat documind-mcp documind-agent
+DOWN_SERVICES     = documind-ingest documind-api documind-admin documind-ui documind-chat documind-mcp documind-agent documind-gchat
 DOWN_SERVICES_M11 = documind-gateway
 DOWN_SERVICES_GPU = documind-slm documind-vllm
 down-services: guard-project

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`, reviewed at blob `4e0b9d5eec2e3600a742e7ea82678d360613d541`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`, reviewed at blob `266786f87d070114f56dd645ac5f3e9a4228224a`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 3 followed a document from bytes to records and took for granted that the worker was called. This lesson is about the call. An object landing in the bucket becomes a message; the message reaches the worker carrying a token nobody else can mint; the worker answers with an HTTP status; and the platform does one of three things with that status: acknowledges it, tries again after a growing pause, or, after twelve refusals, parks the message where you can read it. Then the one document the push path must not attempt, and the lane that takes it instead.
 
@@ -148,7 +148,7 @@ The queue is a Firestore query the kit prints for you. The job and its schedule 
 
 The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and `make queued` shows it. Decide before you upload.
 
-With the job declared, the queue empties within minutes and the worker's usual records appear for the bundle, this time with `lane: batch` on the `ingest_ok` line and a `batch_run` line from the job. Without it, the claim stays queued; `make batch-job` declares and schedules the job (keep `BATCH_JOB=true` on every later `make plan` or `make up`), and `make batch` starts a run and waits for it.
+With the job declared, the queue empties within minutes and the worker's usual records appear for the bundle, this time with `lane: batch` on the `ingest_ok` line and a `batch_run` line from the job. Without it, the claim stays queued; `make batch-job` declares and schedules the job with a plan through `make plan`'s guard, then its apply (keep `BATCH_JOB=true` on every later `make plan` or `make up`, or the guard refuses the plan that would delete the job), and `make batch` starts a run and waits for it.
 
 You read the batch lane as three records and one job: the queue (a Firestore query, empty unless you took the optional drill), the job (the ingest image with a different command, two hours instead of ten minutes, no platform retries because the claim carries the retry), and the schedule that drains whatever the worker could not start. The decision that feeds it is made before the first rupee is spent, which you saw if you uploaded the bundle: 270 pages counted for free, a claim written, a 200 returned, and the parse belongs to the job.
 

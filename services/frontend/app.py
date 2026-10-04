@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from auth import login_gate, is_admin
 from chat import chat_page
+from desk import desk_page
 from documents import documents_page
 from studio import studio_page
 from admin_dashboard import admin_page
@@ -15,6 +16,7 @@ user = login_gate()
 # Navigation - admin tab only visible to admins. Studio (9.4) is for every roster member:
 # the API refuses a tenant the caller is not on, so the tab needs no gate of its own.
 pages = ["Chat", "Documents", "Studio", "Admin"] if is_admin(user) else ["Chat", "Documents", "Studio"]
+pages.insert(1, "Desk")   # the Desk (workshop lesson 10.5): every roster member raises a case there
 with st.sidebar:
     st.markdown(f"### 👤 {user.get('email')}")
     if st.button("Sign out"):
@@ -24,6 +26,8 @@ with st.sidebar:
 
 if page == "Chat":
     chat_page(user)
+elif page == "Desk":
+    desk_page(user)
 elif page == "Documents":
     documents_page(user)
 elif page == "Studio":

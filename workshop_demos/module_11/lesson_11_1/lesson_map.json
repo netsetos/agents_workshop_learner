@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.1_State_History_WIX.html",
-  "source_sha": "6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23",
+  "source_sha": "ee97c6b3e1370765aa66f12eae221bfb91923009",
   "shared_setup_windows": [
     1
   ],
@@ -196,8 +196,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        403,
-        412
+        405,
+        414
       ],
       "offline": false,
       "live_verified": false,
@@ -213,7 +213,7 @@
           "id": "source_8",
           "function": "step_01_the_venv",
           "window": 8,
-          "source_line": 403,
+          "source_line": 405,
           "manual_checkpoint": null
         },
         {
@@ -226,7 +226,7 @@
           "id": "source_10",
           "function": "step_02_one_turn",
           "window": 10,
-          "source_line": 412,
+          "source_line": 414,
           "manual_checkpoint": null
         }
       ],
@@ -252,7 +252,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        502
+        504
       ],
       "offline": false,
       "live_verified": false,
@@ -268,7 +268,7 @@
           "id": "source_13",
           "function": "step_01_the_memory_checkpointer_and_the_line_it_lo",
           "window": 13,
-          "source_line": 502,
+          "source_line": 504,
           "manual_checkpoint": null
         }
       ],
@@ -294,7 +294,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        561
+        563
       ],
       "offline": false,
       "live_verified": false,
@@ -310,7 +310,7 @@
           "id": "source_16",
           "function": "step_01_one_conversation_four_brains_two_sessions",
           "window": 16,
-          "source_line": 561,
+          "source_line": 563,
           "manual_checkpoint": null
         }
       ],
@@ -336,7 +336,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        606
+        608
       ],
       "offline": false,
       "live_verified": false,
@@ -352,7 +352,7 @@
           "id": "source_18",
           "function": "step_01_which_checkpointer_your_lane_runs",
           "window": 18,
-          "source_line": 606,
+          "source_line": 608,
           "manual_checkpoint": null
         }
       ],
@@ -455,49 +455,49 @@
       "label": "expected",
       "heading": "One turn, taken apart",
       "anchor": "s3",
-      "line": 408
+      "line": 410
     },
     {
       "window": 11,
       "label": "expected (this cell run on the kit's own brains.py; the checkpoint count is the installed LangChain's)",
       "heading": "One turn, taken apart",
       "anchor": "s3",
-      "line": 460
+      "line": 462
     },
     {
       "window": 12,
       "label": "services/chat/agent.py - the three checkpointers, and the one that says so",
       "heading": "The memory checkpointer, and the line it logs",
       "anchor": "s4",
-      "line": 483
+      "line": 485
     },
     {
       "window": 14,
       "label": "expected (this cell run on the kit's own agent.py and brains.py; the WARNING lines are agent.py's own)",
       "heading": "The memory checkpointer, and the line it logs",
       "anchor": "s4",
-      "line": 536
+      "line": 538
     },
     {
       "window": 15,
       "label": "services/chat/brains.py - the ADK brain keeps its conversation under the same thread id, in its own store",
       "heading": "One conversation, four brains, two sessions",
       "anchor": "s5",
-      "line": 556
+      "line": 558
     },
     {
       "window": 17,
       "label": "expected (against a local stand-in that keeps history as the kit does; its answers are invented, and the model's words on your lane will differ)",
       "heading": "One conversation, four brains, two sessions",
       "anchor": "s5",
-      "line": 587
+      "line": 589
     },
     {
       "window": 19,
       "label": "expected (from a fake gcloud; your line shows your project and region)",
       "heading": "Which checkpointer your lane runs",
       "anchor": "s6",
-      "line": 621
+      "line": 623
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

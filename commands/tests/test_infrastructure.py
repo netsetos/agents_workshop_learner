@@ -157,9 +157,11 @@ class InfrastructureTests(unittest.TestCase):
 
     def test_plan_blocks_datastore_replacement(self):
         self.fake.plan["resource_changes"] = [{"address": 'google_discovery_engine_data_store.tenant["acme"]', "type": "google_discovery_engine_data_store", "change": {"actions": ["delete", "create"]}}]
-        with self.assertRaisesRegex(infra.Stop, "delete/replacement"):
+        with self.assertRaisesRegex(infra.Stop, "delete/replacement") as stopped:
             self.instance("plan").plan()
         self.assertFalse((self.root / infra.SELECTED_FILE).exists())
+        for switch in ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "GCHAT_DOOR"):
+            self.assertIn(switch, str(stopped.exception))     # the refusal names every switch a lane must keep passing
 
     def test_failed_plan_clears_old_selection(self):
         infra.write_json(self.root / infra.SELECTED_FILE, {"plan": "old.tfplan"})

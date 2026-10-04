@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html",
-  "source_sha": "52d1fbe549bb76a2fe1064f01171f2107c260a11",
+  "source_sha": "4bbd9c72fa443ebba227ab37a125bf213850fb3c",
   "shared_setup_windows": [
     8
   ],
@@ -668,7 +668,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
-        939
+        942
       ],
       "offline": false,
       "live_verified": false,
@@ -679,12 +679,12 @@
           "subheading": "Read the deployed job and backfill plan",
           "purpose": "Read the deployed job and backfill plan",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (all read-only; the backfill is printed, not applied)",
-          "expected": "no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform apply)\nno schedule either: make reconcile from a shell is the walk until then\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}\n\ndocumind-reconcile\n30 23 * * *\tAsia/Kolkata\tENABLED\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}",
+          "expected": "no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform plan and apply)\nno schedule either: make reconcile from a shell is the walk until then\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}\n\ndocumind-reconcile\n30 23 * * *\tAsia/Kolkata\tENABLED\n{\"event\": \"reconcile_backfill\", \"chunks\": 0, \"sources\": N, \"applied\": false}",
           "adaptations": [],
           "id": "source_35",
           "function": "step_01_read_the_deployed_job_and_backfill_plan",
           "window": 35,
-          "source_line": 939,
+          "source_line": 942,
           "manual_checkpoint": null
         }
       ],
@@ -710,7 +710,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
-        976
+        979
       ],
       "offline": false,
       "live_verified": false,
@@ -726,7 +726,7 @@
           "id": "source_39",
           "function": "step_01_run_the_broader_module_validation_separate",
           "window": 39,
-          "source_line": 976,
+          "source_line": 979,
           "manual_checkpoint": null
         }
       ],
@@ -751,8 +751,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
-        980,
-        990
+        983,
+        993
       ],
       "offline": false,
       "live_verified": false,
@@ -770,7 +770,7 @@
           "id": "source_40",
           "function": "step_01_run_the_broader_module_validation_separate",
           "window": 40,
-          "source_line": 980,
+          "source_line": 983,
           "manual_checkpoint": null
         },
         {
@@ -785,7 +785,7 @@
           "id": "source_42",
           "function": "step_02_run_the_broader_module_validation_separate",
           "window": 42,
-          "source_line": 990,
+          "source_line": 993,
           "manual_checkpoint": null
         }
       ],
@@ -809,7 +809,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_4/GUIDE.md",
       "source_lines": [
-        1007
+        1010
       ],
       "offline": true,
       "live_verified": false,
@@ -827,7 +827,7 @@
           "id": "source_44",
           "function": "step_01_verify_the_story_and_restore_the_original",
           "window": 44,
-          "source_line": 1007,
+          "source_line": 1010,
           "manual_checkpoint": null
         }
       ],
@@ -979,35 +979,35 @@
       "label": "expected on a lane deployed with the defaults (the second form on a lane where make reconcile-job has run)",
       "heading": "The nightly job, the number it ends on, and the lane older than the ledger",
       "anchor": "s10",
-      "line": 946
+      "line": 949
     },
     {
       "window": 37,
       "label": "smoke/smoke_reindex.py - the six checks",
       "heading": "Run the broader module validation separately",
       "anchor": "s11",
-      "line": 959
+      "line": 962
     },
     {
       "window": 38,
       "label": "mk/lifecycle.mk - smoke-reindex",
       "heading": "Run the broader module validation separately",
       "anchor": "s11",
-      "line": 969
+      "line": 972
     },
     {
       "window": 41,
       "label": "expected (a duplicate line with an empty tenant column is the worker doing its job; the old smoke could not see it)",
       "heading": "Run the broader module validation separately",
       "anchor": "s11",
-      "line": 984
+      "line": 987
     },
     {
       "window": 43,
       "label": "expected (the smoke's lines as above, between the two)",
       "heading": "Run the broader module validation separately",
       "anchor": "s11",
-      "line": 993
+      "line": 996
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

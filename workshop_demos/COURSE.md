@@ -34,8 +34,10 @@ The sequence comes from each main HTML; the nine missing-HTML lessons are clearl
 - [9.3: Measure latency, avoided calls and false cache hits](module_09/lesson_9_3/README.md) — 8 files; main_html
 - [10.1: Understand tool contracts and the direct agent loop](module_10/lesson_10_1/README.md) — 9 files; main_html
 - [10.2: Implement the main LangGraph workflow](module_10/lesson_10_2/README.md) — 6 files; main_html
-- [10.3: Diagnose tool arguments, access failures and timeouts](module_10/lesson_10_3/README.md) — 6 files; main_html
+- [10.3: Diagnose tool arguments, access failures and timeouts](module_10/lesson_10_3/README.md) — 7 files; main_html
 - [10.4: Compare the LangChain and ADK adapters](module_10/lesson_10_4/README.md) — 7 files; main_html
+- [10.5: Hand a question to the person the law names](module_10/lesson_10_5/README.md) — 9 files; main_html
+- [10.6: Route each question to one specialist agent](module_10/lesson_10_6/README.md) — 14 files; main_html
 - [11.1: Distinguish agent state, conversation history and knowledge](module_11/lesson_11_1/README.md) — 7 files; main_html
 - [11.2: Configure and inspect durable conversation storage](module_11/lesson_11_2/README.md) — 7 files; main_html
 - [11.3: Verify restart recovery and session isolation](module_11/lesson_11_3/README.md) — 7 files; main_html

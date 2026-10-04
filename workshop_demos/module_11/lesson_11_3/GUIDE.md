@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html`, reviewed at blob `0f3fb29f23b886b2a6493c5a3474f442b8af3c17`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Restart_Isolation_WIX.html`, reviewed at blob `c44aa8bbfd33aaa359878ff4b69914553f10b7c7`. Learners read that page on the course site; this guide keeps its prose.
 
 Two properties make the chat service safe to put in front of people. A conversation must outlive the instance that held it, because Cloud Run replaces instances whenever the service scales to zero or you deploy. And a conversation must be readable by its own person alone, in their own tenant and session, whoever else knows its name. The kit builds both: the checkpointer lives outside the instance, and the server makes the thread id from the verified identity. A property you have not tried to break is only a claim. So you try to break both. You put the kit's own app in front of eight different callers. You redeploy your chat service between two turns. Then you ask, in the UI, for a word you never gave.
 

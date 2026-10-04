@@ -61,7 +61,8 @@ def _firestore_fallback(vec: list[float], tenant_id: str, top_k: int, filters: d
     The SAME predicates as the index query (12 September 2026, R06): the tenant, the
     ledger's `current`, and the caller's filters as equality pre-filters on the row's own
     fields. Until then this path had no `filters` parameter, so a doc_type-filtered
-    question answered from here read the whole tenant.
+    question answered from here read the whole tenant. A doc_type list is one `in`
+    pre-filter (workshop lesson 10.6), served by the same composite indexes as `==`.
 
     Needs the composite index in 12.5's firestore_indexes.tf - one per predicate
     combination. Without it Firestore does not degrade, it refuses.
@@ -72,7 +73,7 @@ def _firestore_fallback(vec: list[float], tenant_id: str, top_k: int, filters: d
         # vector index in firestore_indexes.tf (tenant_id, current, embedding).
         query = query.where("current", "==", True)
     for k, v in (filters or {}).items():
-        query = query.where(k, "==", v)       # doc_type, kind: the keys schemas.FILTER_KEYS allows, main.py checked
+        query = query.where(k, "in", v) if isinstance(v, list) else query.where(k, "==", v)   # doc_type, kind: the keys schemas.FILTER_KEYS allows, main.py checked
     hits = (query
             .find_nearest("embedding", Vector(vec),
                           distance_measure=DistanceMeasure.COSINE,
@@ -154,6 +155,12 @@ def _page_span(ctx) -> str:
     first, last = getattr(span, "first_page", 0) or 0, getattr(span, "last_page", 0) or 0
     return f"p{first}" + (f"-{last}" if last and last != first else "") if first else ""
 
+def matches(row: dict, filters: dict | None) -> bool:
+    """The caller's filters on one row, in Python, for the paths that check a row after the store returned it: a
+    doc_type list (workshop lesson 10.6, main.py's check_filters made it canonical) is any of its classes, every
+    other value is one equality. The same meaning as the restricts, the Firestore where() and the store's ANY()."""
+    return all(row.get(k) in v if isinstance(v, list) else row.get(k) == v for k, v in (filters or {}).items())
+
 def _media_rows(vec: list[float], tenant_id: str, top_k: int, filters: dict | None = None) -> list[dict]:
     """The kit's own figure and segment rows (Module 9), for a pool a managed backend served: a store holds text only
     (the plan's D4), so media comes from Firestore's vector index under the tenant + kind index firestore_indexes.tf
@@ -170,7 +177,7 @@ def _media_rows(vec: list[float], tenant_id: str, top_k: int, filters: dict | No
     out = []
     for h in hits:
         d = h.to_dict()
-        if filters and filters.get("doc_type") and d.get("doc_type") != filters["doc_type"]:
+        if not matches(d, filters):                        # the doc_type, a class or a list; the kind is the query's already
             continue
         d["id"], d["score"] = h.id, 1.0 - d.pop("d", 1.0)
         d.pop("embedding", None)
@@ -228,7 +235,7 @@ def _managed_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | No
                  "indexed_at": row.get("indexed_at"), "reactivated_at": row.get("reactivated_at"),
                  "current": row.get("current"), "locator": _page_span(ctx),
                  "score": max(0.0, 1.0 - float(getattr(ctx, "score", 0.0) or 0.0)), "found_by": "rag_engine"}
-        if any(chunk.get(k) != v for k, v in (filters or {}).items()):
+        if not matches(chunk, filters):
             continue
         out.append(chunk)
     if kind != "text":
@@ -250,9 +257,11 @@ def _search_serving_config(tenant_id: str) -> str:
 
 def _search_filter(filters: dict | None) -> str:
     """The caller's filters as a Vertex AI Search filter expression on the schema's indexable fields (managed.tf):
-    doc_type: ANY("policy"). `kind` never reaches the store - it holds text only (D4): a media kind is answered from
-    the kit's index before the store is asked, and text is what every document there is."""
-    return " AND ".join(f'{k}: ANY("{str(v).replace(chr(34), chr(92) + chr(34))}")' for k, v in (filters or {}).items() if k != "kind")
+    doc_type: ANY("policy"), or doc_type: ANY("guidance", "statute") for a list (workshop lesson 10.6). `kind` never
+    reaches the store - it holds text only (D4): a media kind is answered from the kit's index before the store is
+    asked, and text is what every document there is."""
+    quoted = lambda v: ", ".join('"' + str(t).replace("\\", "\\\\").replace('"', '\\"') + '"' for t in (v if isinstance(v, list) else [v]))
+    return " AND ".join(f"{k}: ANY({quoted(v)})" for k, v in (filters or {}).items() if k != "kind")
 
 def _search_texts(doc) -> list[tuple[str, str]]:
     """What the store extracted for one result: its extractive segments (content, pageNumber) when it serves them, else
@@ -322,7 +331,7 @@ def _search_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | Non
                      "current": row.get("current"), "locator": f"p{page}" if page else "",
                      "score": max(0.0, 1.0 - rank / 100), "found_by": "vertex_search"}
             rank += 1
-            if any(chunk.get(k) != v for k, v in (filters or {}).items()):
+            if not matches(chunk, filters):
                 continue
             out.append(chunk)
     if kind != "text":
@@ -351,7 +360,7 @@ def _dense_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | None
         restricts.append(Namespace(name="current", allow_tokens=["true"]))   # indexer.py's third restrict
     if filters:
         for k, v in filters.items():
-            restricts.append(Namespace(name=k, allow_tokens=[str(v)]))
+            restricts.append(Namespace(name=k, allow_tokens=[str(t) for t in v] if isinstance(v, list) else [str(v)]))
     try:
         if settings.retrieval_mode == "hybrid":
             # 4.5's hybrid.py, wired. Dense recall misses exact tokens - an
@@ -426,7 +435,7 @@ def graph_candidates(query: str, tenant_id: str, filters: dict | None = None) ->
         d = snap.to_dict() or {}
         if d.get("tenant_id") != tenant_id:            # the walk is tenant-scoped; the id it hands over is checked once more
             continue
-        if any(d.get(k) != v for k, v in (filters or {}).items()):   # doc_type, kind: the same predicates as every path
+        if not matches(d, filters):                    # doc_type, kind: the same predicates as every path
             continue
         if settings.retrieval_current_only == "on" and d.get("current") is not True:
             continue

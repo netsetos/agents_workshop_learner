@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_5.4_Fallback_WIX.html",
-  "source_sha": "9553c89dce4181161137e7caeba0cf202f30a3ac",
+  "source_sha": "9d543e45f0ba007f3a7308fb465bf1c366f8f394",
   "shared_setup_windows": [
     1
   ],
@@ -261,7 +261,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        490
+        491
       ],
       "offline": false,
       "live_verified": false,
@@ -277,7 +277,7 @@
           "id": "source_11",
           "function": "step_01_the_rung_under_three_predicate_sets",
           "window": 11,
-          "source_line": 490,
+          "source_line": 491,
           "manual_checkpoint": null
         }
       ],
@@ -305,9 +305,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        580,
-        593,
-        604
+        582,
+        595,
+        606
       ],
       "offline": false,
       "live_verified": false,
@@ -323,7 +323,7 @@
           "id": "source_16",
           "function": "step_01_pin_acme_beneath_the_index_and_wait_for_th",
           "window": 16,
-          "source_line": 580,
+          "source_line": 582,
           "manual_checkpoint": null
         },
         {
@@ -336,7 +336,7 @@
           "id": "source_18",
           "function": "step_02_the_same_predicates_on_the_chosen_rung_and",
           "window": 18,
-          "source_line": 593,
+          "source_line": 595,
           "manual_checkpoint": null
         },
         {
@@ -351,7 +351,7 @@
           "id": "source_20",
           "function": "step_03_the_smoke_s_line_for_a_chosen_rung_then_th",
           "window": 20,
-          "source_line": 604,
+          "source_line": 606,
           "manual_checkpoint": null
         }
       ],
@@ -378,8 +378,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        646,
-        664
+        648,
+        666
       ],
       "offline": false,
       "live_verified": false,
@@ -395,7 +395,7 @@
           "id": "source_25",
           "function": "step_01_a_candidate_that_cannot_reach_the_index",
           "window": 25,
-          "source_line": 646,
+          "source_line": 648,
           "manual_checkpoint": null
         },
         {
@@ -408,7 +408,7 @@
           "id": "source_27",
           "function": "step_02_a_candidate_that_cannot_reach_the_index",
           "window": 27,
-          "source_line": 664,
+          "source_line": 666,
           "manual_checkpoint": null
         }
       ],
@@ -434,7 +434,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        711
+        713
       ],
       "offline": false,
       "live_verified": false,
@@ -450,7 +450,7 @@
           "id": "source_31",
           "function": "step_01_the_probe_then_its_evidence",
           "window": 31,
-          "source_line": 711,
+          "source_line": 713,
           "manual_checkpoint": null
         }
       ],
@@ -476,7 +476,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        763
+        765
       ],
       "offline": false,
       "live_verified": false,
@@ -492,7 +492,7 @@
           "id": "source_37",
           "function": "step_01_count_the_tier_plan_its_refill_read_the_ro",
           "window": 37,
-          "source_line": 763,
+          "source_line": 765,
           "manual_checkpoint": null
         }
       ],
@@ -518,7 +518,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_4/GUIDE.md",
       "source_lines": [
-        834
+        836
       ],
       "offline": true,
       "live_verified": false,
@@ -534,7 +534,7 @@
           "id": "source_42",
           "function": "step_01_the_policy_that_sends_a_tenant_home",
           "window": 42,
-          "source_line": 834,
+          "source_line": 836,
           "manual_checkpoint": null
         }
       ],
@@ -638,182 +638,182 @@
       "label": "services/rag-api/schemas.py - FILTER_KEYS: the two keys a caller may send, on every path alike",
       "heading": "The Firestore rung by hand: the API's three predicates on Firestore's own vector index",
       "anchor": "s3",
-      "line": 468
+      "line": 469
     },
     {
       "window": 10,
       "label": "terraform/firestore_indexes.tf - the filter combinations, each a composite vector index of its own",
       "heading": "The Firestore rung by hand: the API's three predicates on Firestore's own vector index",
       "anchor": "s3",
-      "line": 474
+      "line": 475
     },
     {
       "window": 12,
       "label": "expected, the three runs (your counts and scores; the row count under each predicate set is the point)",
       "heading": "The Firestore rung by hand: the API's three predicates on Firestore's own vector index",
       "anchor": "s3",
-      "line": 523
+      "line": 525
     },
     {
       "window": 13,
       "label": "services/rag-api/main.py - choose_for(): the deployment's backend against the tenant's pin",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 546
+      "line": 548
     },
     {
       "window": 14,
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the chosen road onto the rung",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 563
+      "line": 565
     },
     {
       "window": 15,
       "label": "mk/ingestion.mk - the tenant-backend target",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 569
+      "line": 571
     },
     {
       "window": 17,
       "label": "expected (a line or two of vector while the cached settings age out, then the chosen rung)",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 588
+      "line": 590
     },
     {
       "window": 19,
       "label": "expected (acme on the chosen rung, zeta on the index; the two amounts are the isolation)",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 598
+      "line": 600
     },
     {
       "window": 21,
       "label": "expected",
       "heading": "Moving one tenant beneath the index by hand, and back",
       "anchor": "s4",
-      "line": 609
+      "line": 611
     },
     {
       "window": 22,
       "label": "services/rag-api/retriever.py - the chaos rung: the index raised, Firestore answers, the log says so",
       "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
       "anchor": "s5",
-      "line": 624
+      "line": 626
     },
     {
       "window": 23,
       "label": "services/rag-api/main.py - the count the smoke reads",
       "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
       "anchor": "s5",
-      "line": 633
+      "line": 635
     },
     {
       "window": 24,
       "label": "smoke/smoke.py - check 3a: the pair, and the sentence it prints for each case",
       "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
       "anchor": "s5",
-      "line": 635
+      "line": 637
     },
     {
       "window": 26,
       "label": "expected (the error's wording is the endpoint's; the wrong name appears in it)",
       "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
       "anchor": "s5",
-      "line": 660
+      "line": 662
     },
     {
       "window": 28,
       "label": "expected",
       "heading": "The chaos rung: an index that will not answer, on a candidate that takes no traffic",
       "anchor": "s5",
-      "line": 671
+      "line": 673
     },
     {
       "window": 29,
       "label": "commands/check-firestore-fallback.py - verify_hits(): what every returned row must satisfy",
       "heading": "The probe: the kit's read-only check of the combined filters",
       "anchor": "s6",
-      "line": 685
+      "line": 687
     },
     {
       "window": 30,
       "label": "commands/check-firestore-fallback.py - both current modes through the kit's own function",
       "heading": "The probe: the kit's read-only check of the combined filters",
       "anchor": "s6",
-      "line": 698
+      "line": 700
     },
     {
       "window": 32,
       "label": "expected (your key; the NOTE is the lane's own truth about doc_type)",
       "heading": "The probe: the kit's read-only check of the combined filters",
       "anchor": "s6",
-      "line": 715
+      "line": 717
     },
     {
       "window": 33,
       "label": "mk/ingestion.mk - vector-status: the index's own count",
       "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
       "anchor": "s7",
-      "line": 733
+      "line": 735
     },
     {
       "window": 34,
       "label": "mk/ingestion.mk - backfill-vectors: the tier from the rows",
       "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
       "anchor": "s7",
-      "line": 741
+      "line": 743
     },
     {
       "window": 35,
       "label": "services/ingest/reconcile.py - the plan's line",
       "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
       "anchor": "s7",
-      "line": 751
+      "line": 753
     },
     {
       "window": 36,
       "label": "evals/usage_rows.py - the table by rung",
       "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
       "anchor": "s7",
-      "line": 759
+      "line": 761
     },
     {
       "window": 38,
       "label": "expected (your counts; the plan's zeros are the point, and the firestore row is step 4's)",
       "heading": "The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung",
       "anchor": "s7",
-      "line": 767
+      "line": 769
     },
     {
       "window": 39,
       "label": "shared/tenancy.py - policy_of() and permits(): the two pure rules",
       "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
       "anchor": "s8",
-      "line": 800
+      "line": 802
     },
     {
       "window": 40,
       "label": "services/rag-api/main.py - retrieval_backend_for(): a managed pin held against the policy",
       "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
       "anchor": "s8",
-      "line": 816
+      "line": 818
     },
     {
       "window": 41,
       "label": "terraform/sql/tenant_daily.sql - the managed share and the policy fallbacks, summed",
       "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
       "anchor": "s8",
-      "line": 828
+      "line": 830
     },
     {
       "window": 43,
       "label": "expected",
       "heading": "What the rung costs, where it cannot go, and the policy that sends a tenant home",
       "anchor": "s8",
-      "line": 844
+      "line": 846
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

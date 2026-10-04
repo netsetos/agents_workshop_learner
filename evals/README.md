@@ -187,6 +187,20 @@ thousand queries - and the self-hosted rupees are a rate that only holds at the 
 (11.4). `make judge API_B=<candidate>` is the other instrument: the same answers, Vertex AI Evaluation,
 pairwise against the live revision.
 
+## routes.jsonl - the DocuMind Desk's route set (Module 10)
+
+One row per question the Desk is asked, with the route it must take (handbook, statute, case, clarify,
+out_of_scope), the outcome, the doc types its citations may come from, and a symbolic caller (`acme_employee`)
+that a live run resolves to an eval service account from `PROJECT`, so no row carries an address.
+`build_routes.py` writes the 207 dev rows that come from questions which already existed: the 65 golden rows
+and 42 paraphrases, relabelled under the handbook/statute labelling rule, and 100 first-person rewrites of
+SFT user turns. The labels and the rewrites are model drafts (`author` says so) and a person reviews each one
+before the gate is tuned on them. Hand-written rows (`source` "new") are kept and validated. `route_eval.py
+--selftest` checks the set (schema, the split by group, no identical question across the split, the Wilson
+figures); `route_eval.py --predictions` scores a run with every rate's denominator and Wilson 95% interval;
+`route_probe.py` measures four model facts on a lane (`make route-probe`). `make desk-check` runs the offline
+half.
+
 ## Refreshing the real documents
 
 A publisher moves files. When `fetch_real.py` reports a 404, find the Act on the ministry's site

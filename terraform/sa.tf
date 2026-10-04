@@ -96,14 +96,15 @@ resource "google_service_account_iam_member" "api_self_impersonate" {
 # cost: every one of those identities could knock on every service, and documind-agent verifies
 # nobody itself - IAM is its door, and it speaks to the lane as documind-agent-sa, on acme's
 # roster - so the eval gate's outsider, admitted "everywhere", could read acme's documents through
-# the peer. The gate check_authz.py parses the five lines below and the five scripts, and fails
+# the peer. The gate check_authz.py parses the six lines below and the six scripts, and fails
 # when they disagree.
 #
 #   documind-api    <- documind-ui-sa, documind-chat-sa, documind-mcp-sa, documind-outsider-sa  (lesson-12.2.sh)
-#   documind-chat   <- documind-ui-sa, documind-outsider-sa                                     (lesson-12.8.sh)
+#   documind-chat   <- documind-ui-sa, documind-outsider-sa, documind-evalacme-sa, documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa, documind-evalgrc-sa, documind-gchat-sa  (lesson-12.8.sh)
 #   documind-mcp    <- documind-ui-sa, documind-agent-sa, documind-outsider-sa                  (lesson-7.2.sh)
 #   documind-agent  <- documind-ui-sa, documind-chat-sa                                         (lesson-8.4.sh)
 #   documind-ui     <- IAP's service agent, service-NUMBER@gcp-sa-iap                           (lesson-12.4.sh)
+#   documind-gchat  <- service-NUMBER@gcp-sa-gsuiteaddons, documind-gchatpush-sa, documind-outsider-sa  (gchat.sh)
 #
 # Each edge, from the code. The UI calls the API (frontend/chat.py, documents.py, studio.py:
 # RAG_API_URL) and the chat service's brains (chat.py: CHAT_URL). chat-sa and mcp-sa reach the API
@@ -116,7 +117,17 @@ resource "google_service_account_iam_member" "api_self_impersonate" {
 # verifies the token with shared/iap.identity and then refuses it by the roster, which is the
 # refusal the gate is testing for. It is never bound on the peer, which has no roster to refuse it
 # with. A person reaches the UI through IAP alone (lesson-12.4.sh binds IAP's service agent, and
-# nothing else invokes it).
+# nothing else invokes it). The outsider is also bound on documind-gchat, the Google Chat bridge
+# (workshop lesson 10.6, make smoke-gchat), whose code refuses every caller except Chat's add-on
+# agent and Pub/Sub's push account (terraform/gchat.tf).
+#
+# The DocuMind Desk (workshop lesson 10.5) adds six callers to the chat service and to nothing
+# else. The five documind-eval*-sa accounts are the people its live checks call as (make
+# smoke-cases): each is put on one tenant's roster (make roster), so the chat service verifies the
+# token and the roster answers, as it does for the outsider. documind-gchat-sa is the Google Chat
+# bridge's account, named now so this line changes once, and bound once it exists (GCHAT_DOOR=true,
+# terraform/gchat.tf); it is on no roster, so the chat service refuses it until the bridge exists,
+# and nobody may mint as it (terraform/desk.tf, tools/check_authz.py).
 # ---------------------------------------------------------------------------------------------
 locals {
   ui_roles = [

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html`, reviewed at blob `b81be587a267019af54628b140280c63f1a4bd46`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.1_MCP_Tools_WIX.html`, reviewed at blob `6445f72b7a3eb45ac366efa9f37170e90c9ef1bb`. Learners read that page on the course site; this guide keeps its prose.
 
 The UI is how a person reaches your lane. MCP is how an agent does: Claude Desktop, Cursor, another team's ADK app, any agent you did not build. The kit's MCP server exposes four of the lane's own operations as tools. A client discovers them with one JSON-RPC method, `tools/list`, and invokes one with another, `tools/call`. You import the server and read what it declares. You start it on your machine with your lane behind it, send `tools/list` over plain HTTP, and call `retrieve` from fastmcp's client, the same client the smoke test and ADK use. Three calls that fail show where the server checks what.
 
@@ -46,7 +46,7 @@ A restaurant's menu card. The card is `tools/list`: each dish's name, a line on 
 
 Choose a tool, its arguments and who is calling. The panel shows the JSON-RPC request a client sends, and what the kit's server answers.
 
-Every answer was returned by the kit's own `server.py`, run on localhost at build time with the token check, the roster, rag-api and Firestore stood in. The rag-api stand-in empties the pool for any doc_type filter, as your lane's does for text uploads.
+Every answer was returned by the kit's own `server.py`, run on localhost at build time with the token check, the roster, rag-api and Firestore stood in. The stand-ins hold each document under the class lesson 10.6's relabel gave it. So `statute` keeps the Act's passages, and `form`, a listed type that is no class, empties the pool.
 
 It shows the server's checks and messages, not your lane's documents. Your corpus, your rosters and your answers will differ.
 
@@ -166,7 +166,7 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 - A refused call leaves no audit line. The `mcp_call` line is written only after the checks pass. A call refused for its tenant, its token or its arguments leaves no row naming the caller and the tenant.
 
-- `retrieve` offers filters the corpus cannot honour. Its `doc_type` list names eight types, and text uploads are stamped `unknown`, so any of them empties the pool. Lesson 10.3 found the same in the chat tools.
+- `retrieve` offers filters the corpus cannot honour. Its `doc_type` list names eight types, and six of them are classes from lesson 10.6's registry, which your registered documents now carry. `form` and `research_paper` are not classes, so no row carries them, and either one empties the pool. `transcript` is a class, but the list leaves it out, so the server refuses it. A class filter also skips every text upload still stamped `unknown`: an object the manifest does not name, and a new version nobody has re-pinned. The chat service's `retrieve`, which lesson 10.3 tested, still offers `form` and `research_paper` too.
 
 ### Verify it yourself: the checklist
 

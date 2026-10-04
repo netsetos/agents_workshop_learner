@@ -184,7 +184,7 @@ Expected shape, not a promised result:
 
 ```text
 0 queued document(s)
-no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)
+no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)
 ```
 
 ### optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py
@@ -265,6 +265,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4e0b9d5eec2e3600a742e7ea82678d360613d541`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `266786f87d070114f56dd645ac5f3e9a4228224a`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

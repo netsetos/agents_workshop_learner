@@ -70,17 +70,29 @@ Operation: bash — run in the operator shell, in the kit (the readers as the ki
 Expected shape, not a promised result:
 
 ```text
-reader                         services                     events                window
-the sink, into BigQuery        documind-api, documind-chat  query, stream, chat   every row, as it is written
-tenant_daily, the view         what the sink copied         query, stream, media  one row per India day and 7 dimensions
-make usage                     documind-api                 query, stream, media  the last N hours (default 24), at most 2000 rows
-documind/queries, for alerts   documind-api                 query, stream         counted as written
+reader                         services                     window
+the sink, into BigQuery        documind-api, documind-chat  every row, as it is written
+                               events: query, stream, chat, desk, passages, desk_shadow, desk_gate
+                               desk_shadow only where NOT jsonPayload.case_type = "sensitive"
+                               desk_gate only where resource.labels.service_name = "documind-chat"
+tenant_daily, the view         what the sink copied         one row per India day and 7 dimensions
+                               events: query, stream, media
+make usage                     documind-api                 the last N hours (default 24), at most 2000 rows
+                               events: query, stream, media
+documind/queries, for alerts   documind-api                 counted as written
+                               events: query, stream
 rupees: tenant_daily's cost_inr is cost_usd x 85; make usage's USD_INR is 85
-  chat    read by: the sink, into BigQuery
-  media   read by: tenant_daily, the view, make usage
-  query   read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts
-  stream  read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts
+  chat        read by: the sink, into BigQuery
+  desk        read by: the sink, into BigQuery
+  desk_gate   read by: the sink, into BigQuery
+  desk_shadow read by: the sink, into BigQuery
+  media       read by: tenant_daily, the view, make usage
+  passages    read by: the sink, into BigQuery
+  query       read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts
+  stream      read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts
+the Desk's own view, desk_daily (make desk-views), reads: desk
 alert policies in terraform/alerts.tf: 7 - api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth
+alert policies in terraform/desk_alerts.tf: 6 - desk_fallback_share*, desk_l2_share*, desk_clarify_oos_trend*, case_overdue, doc_type_pin_miss, desk_delegation_refused (* only on a lane planned with DESK_ROUTER_ALERTS=true)
 the one that reads the dead-letter queue: dlq_depth
 ```
 
@@ -267,6 +279,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `22c11174ed320d7ad4355dfac348e510cefca82b`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9e59433d6f572c21dde05eedd031ee9acc67b317`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

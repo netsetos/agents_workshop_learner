@@ -23,7 +23,7 @@ class LaneTests(unittest.TestCase):
         names = {a.dest for a in ap._actions}
         sub = next(a for a in ap._actions if a.dest == "cmd")
         self.assertEqual(set(sub.choices), {"sources", "queued", "vector-status", "backfill-vectors", "roster",
-                                            "tenant-backend", "tenant-policy"})
+                                            "tenant-backend", "tenant-policy", "limits"})
         self.assertIn("project", names)
 
     def test_roster_plan_is_the_make_recipe(self):

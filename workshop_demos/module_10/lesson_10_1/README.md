@@ -14,7 +14,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | 5 | [demo_05_the_one_retrieve_from_your_shell.py](demo_05_the_one_retrieve_from_your_shell.py) | The one retrieve(), from your shell |
 | 6 | [demo_06_the_direct_brain_one_retrieve_no_loop.py](demo_06_the_direct_brain_one_retrieve_no_loop.py) | The direct brain: one retrieve(), no loop |
 | 7 | [demo_07_the_loop_the_model_chooses_its_tools.py](demo_07_the_loop_the_model_chooses_its_tools.py) | The loop: the model chooses its tools |
-| 8 | [demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py](demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py) | The rows: what each brain cost, and what no row records |
+| 8 | [demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py](demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py) | The rows: what each brain cost, and which row records it |
 
 ## Before starting
 
@@ -79,7 +79,10 @@ DONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT
 Deploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]
 ...
 Service URL: https://documind-chat-NUMBER.asia-south1.run.app
-Updated IAM policy for service [documind-chat].   (twice: documind-ui-sa, documind-outsider-sa)
+Updated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,
+   documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,
+   documind-evalgrc-sa)
+>> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound
 ... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)
 Execution [documind-checkpoint-setup-xxxxx] has successfully completed.
 ...
@@ -97,7 +100,7 @@ Expected shape, not a promised result:
 
 ```text
 RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain
-{"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain"}
+{"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain","limits":{"max_model_calls":12,"budget_inr":5.0,"deadline_s":100.0,"model_timeout_s":30.0,"model_attempts":2,"min_model_s":5.0,"tool_budgets_s":{"retrieve":95.0,"calculate_processing_cost":10}}}
 ```
 
 ### demo_04_the_contract_what_the_model_reads_of_each_tool.py
@@ -117,8 +120,7 @@ retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime
       Retrieve grounded passages from DocuMind's corpus.
   calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')
       Estimate document processing cost in USD and INR.
-  get_usage_stats(metric: str, days: int = 7)    hidden: runtime
-      Get DocuMind RAG pipeline usage statistics.
+  'express' refused: unknown tier 'express'; expected one of ['bulk', 'priority', 'standard']
 ```
 
 ### demo_05_the_one_retrieve_from_your_shell.py
@@ -169,21 +171,21 @@ Operation: bash — run in the operator shell, in the kit (the LangChain loop on
 Expected shape, not a promised result:
 
 ```text
-langchain tool_calls ['retrieve']  refusals []  citations 0  7240 ms
-      After five years of continuous service, under the Payment of Gratuity Act, 1972.
-  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 0  11350 ms
-      At the priority tier (USD 0.12 a page), 283 pages cost USD 33.96, about Rs 2,886.60.
+langchain tool_calls ['retrieve']  refusals []  citations 5 n [1, 2, 3, 4, 5]  7240 ms
+      After five years of continuous service, under the Payment of Gratuity Act, 1972 [1].
+  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 3 n [1, 2, 3]  11350 ms
+      The handbook has 283 pages [1]. At the priority tier (USD 0.12 a page) they cost USD 33.96, abou
   direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms
       The documents give no per-page price for processing the handbook; the April invoice bills priori
 ```
 
-### demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py
+### demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py
 
-rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
 
-**`step_01_the_rows_what_each_brain_cost_and_what_no(session)` — The rows: what each brain cost, and what no row records / The rows: what each brain cost, and what no row records**
+**`step_01_the_rows_what_each_brain_cost_and_which_ro(session)` — The rows: what each brain cost, and which row records it / The rows: what each brain cost, and which row records it**
 
-rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
 
 Operation: bash — run in the operator shell, in the kit (the rows both services wrote since the retrieve cell; reads only).
 
@@ -197,10 +199,10 @@ rag-api, one row per retrieve():
     brain langchain  in   1650  out   88  Rs 0.2665   2390 ms
     brain direct     in   1705  out   92  Rs 0.2760   2620 ms
   the chat service, one row per turn:
-    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
-    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
-    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
-    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
+    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
 ```
 
 ### setup/restore_settings.py
@@ -221,6 +223,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html`. All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f1868f835bc67f911ec89f0027a86e55fa9969ab`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.1_Agent_Loop_WIX.html`. All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d12d91f61f0874ef613af21ea7f0d87936734ecc`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

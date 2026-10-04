@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html",
-  "source_sha": "22c11174ed320d7ad4355dfac348e510cefca82b",
+  "source_sha": "9e59433d6f572c21dde05eedd031ee9acc67b317",
   "shared_setup_windows": [
     1
   ],
@@ -196,7 +196,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
-        457
+        460
       ],
       "offline": true,
       "live_verified": false,
@@ -207,12 +207,12 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the readers as the kit writes them down; no network)",
-          "expected": "reader                         services                     events                window\nthe sink, into BigQuery        documind-api, documind-chat  query, stream, chat   every row, as it is written\ntenant_daily, the view         what the sink copied         query, stream, media  one row per India day and 7 dimensions\nmake usage                     documind-api                 query, stream, media  the last N hours (default 24), at most 2000 rows\ndocumind/queries, for alerts   documind-api                 query, stream         counted as written\nrupees: tenant_daily's cost_inr is cost_usd x 85; make usage's USD_INR is 85\n  chat    read by: the sink, into BigQuery\n  media   read by: tenant_daily, the view, make usage\n  query   read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts\n  stream  read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts\nalert policies in terraform/alerts.tf: 7 - api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth\nthe one that reads the dead-letter queue: dlq_depth",
+          "expected": "reader                         services                     window\nthe sink, into BigQuery        documind-api, documind-chat  every row, as it is written\n                               events: query, stream, chat, desk, passages, desk_shadow, desk_gate\n                               desk_shadow only where NOT jsonPayload.case_type = \"sensitive\"\n                               desk_gate only where resource.labels.service_name = \"documind-chat\"\ntenant_daily, the view         what the sink copied         one row per India day and 7 dimensions\n                               events: query, stream, media\nmake usage                     documind-api                 the last N hours (default 24), at most 2000 rows\n                               events: query, stream, media\ndocumind/queries, for alerts   documind-api                 counted as written\n                               events: query, stream\nrupees: tenant_daily's cost_inr is cost_usd x 85; make usage's USD_INR is 85\n  chat        read by: the sink, into BigQuery\n  desk        read by: the sink, into BigQuery\n  desk_gate   read by: the sink, into BigQuery\n  desk_shadow read by: the sink, into BigQuery\n  media       read by: tenant_daily, the view, make usage\n  passages    read by: the sink, into BigQuery\n  query       read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts\n  stream      read by: the sink, into BigQuery, tenant_daily, the view, make usage, documind/queries, for alerts\nthe Desk's own view, desk_daily (make desk-views), reads: desk\nalert policies in terraform/alerts.tf: 7 - api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth\nalert policies in terraform/desk_alerts.tf: 6 - desk_fallback_share*, desk_l2_share*, desk_clarify_oos_trend*, case_overdue, doc_type_pin_miss, desk_delegation_refused (* only on a lane planned with DESK_ROUTER_ALERTS=true)\nthe one that reads the dead-letter queue: dlq_depth",
           "adaptations": [],
           "id": "source_9",
           "function": "step_01_the_readers_as_the_kit_writes_them_down",
           "window": 9,
-          "source_line": 457,
+          "source_line": 460,
           "manual_checkpoint": null
         }
       ],
@@ -238,7 +238,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
-        525
+        551
       ],
       "offline": false,
       "live_verified": false,
@@ -254,7 +254,7 @@
           "id": "source_11",
           "function": "step_01_four_questions_four_rows",
           "window": 11,
-          "source_line": 525,
+          "source_line": 551,
           "manual_checkpoint": null
         }
       ],
@@ -280,7 +280,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
-        607
+        633
       ],
       "offline": false,
       "live_verified": false,
@@ -296,7 +296,7 @@
           "id": "source_13",
           "function": "step_01_reconcile_the_view_with_make_usage",
           "window": 13,
-          "source_line": 607,
+          "source_line": 633,
           "manual_checkpoint": null
         }
       ],
@@ -325,10 +325,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_2/GUIDE.md",
       "source_lines": [
-        674,
-        738,
-        776,
-        823
+        700,
+        764,
+        802,
+        849
       ],
       "offline": false,
       "live_verified": false,
@@ -344,7 +344,7 @@
           "id": "source_15",
           "function": "step_01_what_pages_you_today",
           "window": 15,
-          "source_line": 674,
+          "source_line": 700,
           "manual_checkpoint": null
         },
         {
@@ -357,7 +357,7 @@
           "id": "source_18",
           "function": "step_02_plan_and_apply",
           "window": 18,
-          "source_line": 738,
+          "source_line": 764,
           "manual_checkpoint": null
         },
         {
@@ -370,7 +370,7 @@
           "id": "source_20",
           "function": "step_03_the_drill",
           "window": 20,
-          "source_line": 776,
+          "source_line": 802,
           "manual_checkpoint": null
         },
         {
@@ -383,7 +383,7 @@
           "id": "source_22",
           "function": "step_04_drain_the_drill_message",
           "window": 22,
-          "source_line": 823,
+          "source_line": 849,
           "manual_checkpoint": null
         }
       ],
@@ -479,70 +479,70 @@
       "label": "terraform/sql/tenant_daily.sql - the view: the events it reads from the sink's table, and its GROUP BY",
       "heading": "The readers, as the kit writes them down",
       "anchor": "s3",
-      "line": 445
+      "line": 448
     },
     {
       "window": 8,
       "label": "evals/usage_rows.py - make usage: one service, three events, the last N hours",
       "heading": "The readers, as the kit writes them down",
       "anchor": "s3",
-      "line": 449
+      "line": 452
     },
     {
       "window": 10,
       "label": "expected (this cell run on the kit's own sink.tf, tenant_daily.sql, usage_rows.py and alerts.tf)",
       "heading": "The readers, as the kit writes them down",
       "anchor": "s3",
-      "line": 490
+      "line": 503
     },
     {
       "window": 12,
       "label": "expected (the kit's rag-api on a stand-in lane, then the kit's usage_rows.py over its rows; your tokens and rupees differ)",
       "heading": "Four questions, four rows",
       "anchor": "s4",
-      "line": 542
+      "line": 568
     },
     {
       "window": 14,
       "label": "expected (the kit's group() over the same rows; Cloud Logging and BigQuery stood in, the view's arithmetic asserted against its SQL)",
       "heading": "Reconcile the view with make usage",
       "anchor": "s5",
-      "line": 648
+      "line": 674
     },
     {
       "window": 16,
       "label": "expected (a lane made up before this kit version, from a stand-in of the Monitoring API; RECONCILE_JOB=true adds two policies)",
       "heading": "The alert the dead-letter queue never had",
       "anchor": "s6",
-      "line": 697
+      "line": 723
     },
     {
       "window": 17,
       "label": "terraform/alerts.tf - the dead-letter policy this lesson adds",
       "heading": "The alert the dead-letter queue never had",
       "anchor": "s6",
-      "line": 711
+      "line": 737
     },
     {
       "window": 19,
       "label": "expected shape (terraform prints the whole resource; your paths, ids and CI repository are your lane's)",
       "heading": "The alert the dead-letter queue never had",
       "anchor": "s6",
-      "line": 741
+      "line": 767
     },
     {
       "window": 21,
       "label": "expected (Pub/Sub and Monitoring stood in; your times differ)",
       "heading": "The alert the dead-letter queue never had",
       "anchor": "s6",
-      "line": 805
+      "line": 831
     },
     {
       "window": 23,
       "label": "expected (Pub/Sub stood in)",
       "heading": "The alert the dead-letter queue never had",
       "anchor": "s6",
-      "line": 835
+      "line": 861
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

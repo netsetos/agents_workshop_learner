@@ -21,13 +21,13 @@ class QueryRequest(BaseModel):
     user_id: Optional[str] = None
     top_k: int = Field(default=5, ge=1, le=20)
     stream: bool = True
-    filters: Optional[dict] = None  # e.g. {"doc_type": "policy"}: keys from FILTER_KEYS, string values
+    filters: Optional[dict] = None  # e.g. {"doc_type": "policy"}: keys from FILTER_KEYS; doc_type a string, or a list of up to 5 strings; kind a string
     # Which harness is asking (8.7, gap G6): the chat service's brains and the UI label
     # themselves so usage_row - and therefore tenant_daily - can compare them. A label only;
     # nothing in retrieval or generation reads it. "mcp" is the agent surface (7.1-7.2): its
     # first live call was a 422, because a new surface has to be added to this list - the
     # list is closed on purpose, so an unknown label is a typo and not a new row in the warehouse.
-    brain: Optional[Literal["langchain", "langgraph", "adk", "direct", "ui", "mcp"]] = None
+    brain: Optional[Literal["langchain", "langgraph", "adk", "direct", "ui", "mcp", "desk"]] = None
 
 class RAGResponse(RAGAnswer):
     """The contract plus the transport envelope. RAGAnswer is what every module passes along;

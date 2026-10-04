@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html",
-  "source_sha": "9b8d6d3ec02de2b4eddf4de5937d886bc4dfdbb5",
+  "source_sha": "0dd90805d01d1a1b437bb8c335f36323ac152187",
   "shared_setup_windows": [
     1
   ],
@@ -355,7 +355,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
-        740
+        752
       ],
       "offline": false,
       "live_verified": false,
@@ -366,12 +366,12 @@
           "subheading": "Do it: four filters, four verdicts",
           "purpose": "Do it: four filters, four verdicts",
           "label": "bash — run in the operator shell (two 400s cost nothing; two questions, paise)",
-          "expected": "400 | unknown filter key(s) tenant_id; allowed: doc_type, kind\n400 | filter doc_type must be a non-empty string\n200 | answerable False pool 0 | The corpus holds nothing near this question: no passage of this\n200 | answerable True pool 20 | A confirmed employee at grade E3 or above serves a notice period",
+          "expected": "400 | unknown filter key(s) tenant_id; allowed: doc_type, kind\n400 | filter doc_type must be a non-empty string or a list of 1 to 5 of them\n200 | answerable False pool 0 | The corpus holds nothing near this question: no passage of this\n200 | answerable True pool 20 | A confirmed employee at grade E3 or above serves a notice period",
           "adaptations": [],
           "id": "source_16",
           "function": "step_01_four_filters_four_verdicts",
           "window": 16,
-          "source_line": 740,
+          "source_line": 752,
           "manual_checkpoint": null
         }
       ],
@@ -397,7 +397,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
-        818
+        830
       ],
       "offline": false,
       "live_verified": false,
@@ -413,7 +413,7 @@
           "id": "source_21",
           "function": "step_01_the_tenant_s_pin_and_policy_then_a_full_st",
           "window": 21,
-          "source_line": 818,
+          "source_line": 830,
           "manual_checkpoint": null
         }
       ],
@@ -439,7 +439,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
-        863
+        875
       ],
       "offline": false,
       "live_verified": false,
@@ -455,7 +455,7 @@
           "id": "source_25",
           "function": "step_01_the_question_the_revisions_answered_differ",
           "window": 25,
-          "source_line": 863,
+          "source_line": 875,
           "manual_checkpoint": null
         }
       ],
@@ -479,7 +479,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
       "source_lines": [
-        950
+        962
       ],
       "offline": false,
       "live_verified": false,
@@ -495,7 +495,7 @@
           "id": "source_29",
           "function": "step_01_finish_restore_the_saved_tenant_pin",
           "window": 29,
-          "source_line": 950,
+          "source_line": 962,
           "manual_checkpoint": null
         }
       ],
@@ -598,70 +598,70 @@
       "label": "expected",
       "heading": "Filters: two keys, a 400 for everything else",
       "anchor": "s5",
-      "line": 748
+      "line": 760
     },
     {
       "window": 18,
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the restricts, in order, then the ids hydrated and marked",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 764
+      "line": 776
     },
     {
       "window": 19,
       "label": "services/rag-api/hybrid.py - the same restricts under hybrid, the tenant exactly once",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 780
+      "line": 792
     },
     {
       "window": 20,
       "label": "services/rag-api/main.py - choose_for() and retrieval_backend_for(): the store, per request",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 786
+      "line": 798
     },
     {
       "window": 22,
       "label": "expected (your milliseconds differ; rerank_fallback appears only when the Ranking API stood down)",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 825
+      "line": 837
     },
     {
       "window": 23,
       "label": "services/rag-api/retriever.py - prefer_current(): a retired row is never a source",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 850
+      "line": 862
     },
     {
       "window": 24,
       "label": "services/rag-api/config.py - the setting, and the two sizes",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 857
+      "line": 869
     },
     {
       "window": 26,
       "label": "expected",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 880
+      "line": 892
     },
     {
       "window": 27,
       "label": "services/rag-api/main.py - _semantic_hit(): the vector, the fingerprint and the scope",
       "heading": "The cache shares the vector, the pool is not the answer, and what a question costs",
       "anchor": "s8",
-      "line": 893
+      "line": 905
     },
     {
       "window": 28,
       "label": "services/rag-api/schemas.py - top_k on the request",
       "heading": "The cache shares the vector, the pool is not the answer, and what a question costs",
       "anchor": "s8",
-      "line": 914
+      "line": 926
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

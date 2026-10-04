@@ -1,6 +1,6 @@
 # Run the workshop from your IDE
 
-All **18 modules and 60 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each authored HTML section has its own numbered example file. Preparation, numbered cleanup sections and conditional extensions remain explicit. A lesson may therefore have more than three demo files: its HTML headings determine the count.
+All **18 modules and 62 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each authored HTML section has its own numbered example file. Preparation, numbered cleanup sections and conditional extensions remain explicit. A lesson may therefore have more than three demo files: its HTML headings determine the count.
 
 The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. A `GUIDE.md` beside each converted lesson retains the main HTML prose, including browser actions. Required manual actions also pause at the relevant function; read-only code and diagrams remain reference material.
 

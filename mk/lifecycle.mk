@@ -37,13 +37,16 @@ reconcile: guard-project
 backfill-current: guard-project
 	$(PY) services/ingest/reconcile.py --project $(PROJECT) --backfill --apply
 
-# the nightly job, from the ingest image the lane already runs; then RECONCILE_JOB=true on the next make plan
-# schedules it (reconcile.tf) at 23:30 IST, after documind-off.
+# the nightly job, from the ingest image the lane already runs, scheduled (reconcile.tf) at 23:30 IST, after
+# documind-off. It is make plan with RECONCILE_JOB=true, then make up's apply: if a switch the lane was applied with is
+# missing, the plan would delete something and its guard refuses it first. Without make: commands/infrastructure.py
+# plan with --var reconcile_job=true and the lane's other --var flags, then apply.
 reconcile-job: RECONCILE_JOB = true
-reconcile-job: guard-project
-	cd $(TF_DIR) && $(TF_INIT) && terraform apply -input=false -auto-approve $(TF_VARS)
+reconcile-job: guard-project tf-backend
+	$(INFRA) plan $(INFRA_FLAGS) $(INFRA_VARS)
+	$(INFRA) apply $(INFRA_FLAGS)
 	@echo ">> documind-reconcile declared on $(RECONCILE_IMAGE) and scheduled 23:30 IST (reconcile.tf); gcloud run jobs execute documind-reconcile --region $(REGION) --project $(PROJECT) runs it now"
-	@echo ">> keep RECONCILE_JOB=true on every later make plan / make up, or the next apply removes the job and its schedule"
+	@echo ">> keep RECONCILE_JOB=true on every later make plan, make up, make desk-job and make batch-job: without it their plan would delete the job and its schedule, and the guard refuses it"
 
 # the versions view from the shell: every source's current version, generation, what the last reindex cost, the date
 # it declares, the corpus fingerprint - the rows GET /v1/sources serves and the UI's Documents page renders.
@@ -64,14 +67,16 @@ smoke-reindex: guard-project
 
 # A document over MAX_INLINE_PAGES is queued by the worker (ingest_batch/{doc_key}, the claim says queued) and indexed by
 # documind-ingest-batch: a Cloud Run job on the ingest image (batch.tf), which the worker starts as it queues (BATCH_JOB
-# in its environment, set by deploy-services once BATCH_JOB=true) and an hourly schedule backstops. batch-job is an apply
-# with the switch on, like reconcile-job; batch starts the job now and waits; queued lists the queue from the shell
-# (needs google-cloud-firestore, like make roster). Keep BATCH_JOB=true on every later make plan / make up.
+# in its environment, set by deploy-services once BATCH_JOB=true) and an hourly schedule backstops. batch-job is a plan
+# and an apply with the switch on, like reconcile-job; batch starts the job now and waits; queued lists the queue from
+# the shell (needs google-cloud-firestore, like make roster).
 batch-job: BATCH_JOB = true
-batch-job: guard-project
-	cd $(TF_DIR) && $(TF_INIT) && terraform apply -input=false -auto-approve $(TF_VARS)
+batch-job: guard-project tf-backend
+	$(INFRA) plan $(INFRA_FLAGS) $(INFRA_VARS)
+	$(INFRA) apply $(INFRA_FLAGS)
 	@echo ">> documind-ingest-batch declared on $(RECONCILE_IMAGE) and scheduled hourly (batch.tf); the worker starts it as it queues once"
 	@echo ">> make deploy-services BATCH_JOB=true tells the worker the job's name (BATCH_JOB in commands/lesson-12.5.sh)"
+	@echo ">> keep BATCH_JOB=true on every later make plan, make up, make desk-job and make reconcile-job: without it their plan would delete the job and its schedule, and the guard refuses it"
 
 batch: guard-project
 	gcloud run jobs execute documind-ingest-batch --region $(REGION) --project $(PROJECT) --wait

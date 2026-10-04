@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html",
-  "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
+  "source_sha": "266786f87d070114f56dd645ac5f3e9a4228224a",
   "shared_setup_windows": [
     1
   ],
@@ -395,7 +395,7 @@
           "subheading": "Read the lane, Rs 0",
           "purpose": "The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (read-only)",
-          "expected": "0 queued document(s)\nno batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)",
+          "expected": "0 queued document(s)\nno batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)",
           "adaptations": [],
           "id": "source_27",
           "function": "step_01_read_the_lane_rs_0",

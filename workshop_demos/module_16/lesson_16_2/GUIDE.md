@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html`, reviewed at blob `f90dc609bf1dfc9befdb00d185c8e8f4286c122d`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html`, reviewed at blob `169d2b48fc8b50cd220083becc6860aed967d1f7`. Learners read that page on the course site; this guide keeps its prose.
 
 The UI has three media features. The Studio turns a prompt into an image through the API, which checks, spends and records it. The chat can read each answer aloud, and it can take a question from the microphone. All three are in the kit already: this lesson exercises them and reads what each one leaves behind.
 
@@ -128,7 +128,7 @@ The cell does three things with the kit's own files:
 
 - The media row carries a price and no tokens: 0.039 for a generation, and 0 with `cached True` for a DEMO_MODE hit. The UI's cost display reads the same price from its own copy of it.
 
-- A media row never reaches `tenant_daily`. The sink copies `query`, `stream` and `chat` into BigQuery, and the view reads `query`, `stream` and `media`. The view asks for media rows the sink never copies, and the chat rows the sink copies go unread. Lesson 13.2 found it; this lesson's image is one such row.
+- A media row never reaches `tenant_daily`. The sink copies `query`, `stream`, `chat`, `desk`, `passages`, `desk_shadow` and `desk_gate` (those two on a condition) into BigQuery; `media` still never. The view reads `query`, `stream` and `media`. The view asks for media rows the sink never copies, and the chat rows the sink copies go unread. Lesson 13.2 found it; this lesson's image is one such row.
 
 - `cached_tts` synthesised once and read back once. The Hindi voice reading the same words is another key and another object, because the voice is part of what the key hashes.
 
@@ -234,7 +234,7 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 - The failure says nothing. `transcribe()` catches every error, logs none and returns an empty string, so the chat asks nothing and shows nothing.
 
-- Media rows never reach BigQuery. The sink copies `query`, `stream` and `chat`; `tenant_daily` reads `query`, `stream` and `media`. The Studio's spend is in Cloud Logging only, and `tenant_daily` has no image cost. Lesson 13.2 found it.
+- Media rows never reach BigQuery. The sink copies `query`, `stream`, `chat`, `desk`, `passages`, `desk_shadow` and `desk_gate` (those two on a condition); `media` still never. `tenant_daily` reads `query`, `stream` and `media`. The Studio's spend is in Cloud Logging only, and `tenant_daily` has no image cost. Lesson 13.2 found it.
 
 - Speech is metered and audited nowhere. `voice.py` writes no usage row, and `media.transcribe` is a registered audit action that nothing emits. Every synthesis and every recognition is billed to the project under the UI's account, and attributed to no tenant.
 

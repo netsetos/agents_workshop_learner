@@ -88,7 +88,9 @@ resource "google_project_iam_member" "gateway_sql_client" {
 
 output "gateway_sa" { value = google_service_account.gateway.email }
 output "vllm_sa" { value = google_service_account.vllm.email }
+# Prisma (LiteLLM runs `prisma migrate deploy` at startup) refuses an empty host ("P1013: empty host in database URL"):
+# localhost is a placeholder, ignored in favour of the Cloud SQL socket that host= names.
 output "gateway_database_url" {
-  value     = format("postgresql://litellm:%s@/litellm?host=/cloudsql/%s", random_password.gateway_db.result, google_sql_database_instance.gateway.connection_name)
+  value     = format("postgresql://litellm:%s@localhost/litellm?host=/cloudsql/%s", random_password.gateway_db.result, google_sql_database_instance.gateway.connection_name)
   sensitive = true
 }

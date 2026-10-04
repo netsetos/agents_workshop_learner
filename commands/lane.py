@@ -8,6 +8,7 @@
     python commands/lane.py roster --tenant acme --members a@x.com,b@y.com [--dry-run]   make roster
     python commands/lane.py tenant-backend acme [vector|firestore|rag_engine|vertex_search|default]   make tenant-backend
     python commands/lane.py tenant-policy acme [in|any]                     make tenant-policy
+    python commands/lane.py limits                                          make limits (a chat turn's limits, read live)
 
 The project is --project, else PROJECT, else GOOGLE_CLOUD_PROJECT; the region --region, else REGION, else us-central1
 (where the index lives: vector.tf's var.region). Each subcommand is the kit's own module - services/ingest/reconcile.py,
@@ -188,6 +189,50 @@ def cmd_tenant_policy(a) -> int:
     return 0
 
 
+def _health(service: str, project: str, region: str) -> tuple[str, dict | str]:
+    """(url, /health's body or why it could not be read), called as documind-ui-sa, as make smoke-chat calls."""
+    import json
+    import urllib.request
+    number = subprocess.run(["gcloud", "projects", "describe", project, "--format=value(projectNumber)"],
+                            capture_output=True, text=True).stdout.strip()
+    url = f"https://{service}-{number or 'NUMBER'}.{region}.run.app"
+    if not number.isdigit():
+        return url, "gcloud did not return a project number"
+    token = subprocess.run(["gcloud", "auth", "print-identity-token", "--include-email", f"--audiences={url}",
+                            f"--impersonate-service-account=documind-ui-sa@{project}.iam.gserviceaccount.com"],
+                           capture_output=True, text=True).stdout.strip()
+    req = urllib.request.Request(f"{url}/health", headers={"Authorization": f"Bearer {token}"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return url, json.loads(r.read().decode())
+    except Exception as e:  # noqa: BLE001 - reported, not raised: the other service may still answer
+        return url, f"{type(e).__name__}: {e}"
+
+
+def cmd_limits(a) -> int:
+    """The limits a chat turn runs under, as the deployed service publishes them (workshop lesson 10.3), and the
+    A2A peer's own call cap when its /health names one."""
+    url, body = _health("documind-chat", a.project, a.region)
+    print(f"documind-chat  {url}")
+    lim = body.get("limits") if isinstance(body, dict) else None
+    if not lim:
+        print(f"  no limits on /health: {body if isinstance(body, str) else 'an image from before workshop lesson 10.3'}")
+        return 1
+    print(f"  model calls a turn    {lim['max_model_calls']}")
+    print(f"  rupees a turn         Rs {lim['budget_inr']:g}")
+    print(f"  deadline              {lim['deadline_s']:g} s; each model call min({lim['model_timeout_s']:g} s, time left"
+          f" / {lim['model_attempts']}), none started with under {lim['min_model_s']:g} s left")
+    print("  tool budgets          " + ", ".join(f"{k} {v:g} s" for k, v in lim["tool_budgets_s"].items()))
+    url, body = _health("documind-agent", a.project, a.region)
+    print(f"documind-agent  {url}")
+    if not isinstance(body, dict):                  # not deployed, or /health unreadable: say so, claim nothing
+        print(f"  could not read /health: {body}")
+        return 0
+    cap = body.get("max_llm_calls")
+    print(f"  model calls a task    {cap if cap is not None else 'not on its /health (ADK defaults to 500)'}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0], formatter_class=argparse.RawDescriptionHelpFormatter,
                                  epilog="\n".join(__doc__.splitlines()[2:]))
@@ -209,6 +254,8 @@ def build_parser() -> argparse.ArgumentParser:
     tb.add_argument("tenant"); tb.add_argument("backend", nargs="?"); tb.set_defaults(fn=cmd_tenant_backend)
     tp = sub.add_parser("tenant-policy", help="where a tenant's text may be held: in | any; alone, print it (make tenant-policy)")
     tp.add_argument("tenant"); tp.add_argument("region_policy", nargs="?", choices=("in", "any")); tp.set_defaults(fn=cmd_tenant_policy)
+    li = sub.add_parser("limits", help="a chat turn's model-call, rupee and time limits, from the deployed /health (make limits)")
+    li.set_defaults(fn=cmd_limits)
     return ap
 
 

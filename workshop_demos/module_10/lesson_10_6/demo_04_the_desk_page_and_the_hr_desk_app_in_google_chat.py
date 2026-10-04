@@ -1,11 +1,11 @@
-"""Lesson 10.3: Access failures at the chat service's door
+"""Lesson 10.6: The Desk page, and the HR Desk app in Google Chat
 
-Do it
+Do it: the questions, and the page
 
 Run order inside this file:
-1. Do it (source window 15)
+1. Do it: the questions, and the page (source window 23)
 
-Prerequisites: demo_03_five_failures_through_the_kit_s_langchain_brain.
+Prerequisites: demo_03_your_lane_the_classes_the_example_index_and_the_switches.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
@@ -24,35 +24,33 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_access_failures_at_the_chat_service_s_door.
-COMMANDS_01 = """export CHAT="https://documind-chat-$NUMBER.$REGION.run.app"
-chatas() {   # one /v1/chat turn with the token in $1: the status, then the start of the body
-  code=$(curl -s -o /tmp/chat103.json -w "%{http_code}" -X POST "$CHAT/v1/chat" -H "Authorization: Bearer $1" \\
-    -H "Content-Type: application/json" -d '{"question": "After how many years of continuous service does gratuity become payable?", "session_id": "lesson103"}')
-  echo "  $code  $(head -c 100 /tmp/chat103.json)"
-}
-chatas "$(gcloud auth print-identity-token --include-email --audiences="$CHAT" \\
-    --impersonate-service-account="documind-outsider-sa@$PROJECT.iam.gserviceaccount.com" 2>/dev/null)"   # admitted by IAM, on no roster
-chatas "$(gcloud auth print-identity-token --audiences="$CHAT" \\
-    --impersonate-service-account="documind-ui-sa@$PROJECT.iam.gserviceaccount.com" 2>/dev/null)"          # no --include-email
-chatas "$(tok "$CHAT")"                                                                                  # a roster member
+# Original CLI workflow for step_01_the_questions_and_the_page.
+COMMANDS_01 = """python - <<'PY'
+import json, warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+rows = {r["id"]: r for r in (json.loads(x) for x in open("evals/routes.jsonl", encoding="utf-8") if x.strip())}
+for rid in ("lk-06", "lk-17", "lk-10"):
+    print(f"{rid}: {rows[rid]['question']}")
+PY
+echo "$UI   <- open it signed in as $ME, then choose Desk"
 
 """
 
-def step_01_access_failures_at_the_chat_service_s_door(session):
-    """Run Do it at this checkpoint.
+def step_01_the_questions_and_the_page(session):
+    """Run Do it: the questions, and the page at this checkpoint.
 
-    Do it
+    Do it: the questions, and the page
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in the kit (three identities at the chat service's door).
+    Operations: bash — run in the operator shell, in the kit (the three route-set questions to paste, and the page's address).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: 403  {"detail":"not a member of any tenant"}
-      401  {"detail":"the bearer token carries no verified email"}
-      200  {"answer":"Gratuity becomes payable after not less than five years of continuous service [1].","tool
+    Observe: lk-06: What is the notice period for a confirmed E3?
+    lk-17: At what rate is gratuity paid for each completed year of service?
+    lk-10: What is the total payable on invoice INV-2026-0412?
+    https://documind-ui-NUMBER.asia-south1.run.app   <- open it signed in as you@example.com, then choose Desk
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
@@ -64,7 +62,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_15', step_01_access_failures_at_the_chat_service_s_door),
+        ('source_23', step_01_the_questions_and_the_page),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

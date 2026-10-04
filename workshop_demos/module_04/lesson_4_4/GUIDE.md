@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html`, reviewed at blob `52d1fbe549bb76a2fe1064f01171f2107c260a11`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html`, reviewed at blob `4bbd9c72fa443ebba227ab37a125bf213850fb3c`. Learners read that page on the course site; this guide keeps its prose.
 
 Start with a document that answers a question. Delete its cloud file and show why the index can still answer. Preview the reconciliation plan, apply retirement, and prove that storage and the index agree again. Then upload the exact original bytes and watch the worker reuse the existing embeddings. A fresh fixture, exact source checks and a clean baseline make each change visible.
 
@@ -182,7 +182,7 @@ The walk is a Cloud Run job on the ingest image, `documind-reconcile`, declared 
 
 #### Read the deployed job and backfill plan
 
-On a lane deployed with the defaults the job is not declared, so the walk is something you run; the page you are on has been that operator. Declaring it is one Terraform apply with the switch on, and from then the same script runs every night as the worker's account and the pager reads its last line. Read the actual backfill counts rather than assuming zero: `chunks 0` means no chunk flag needs that repair; the sources count describes the indexed claims the operation would record.
+On a lane deployed with the defaults the job is not declared, so the walk is something you run; the page you are on has been that operator. Declaring it is one Terraform plan with the switch on, through `make plan`'s guard, and its apply; keep `RECONCILE_JOB=true` on every later plan, or the guard refuses the plan that would delete the job. From then the same script runs every night as the worker's account and the pager reads its last line. Read the actual backfill counts rather than assuming zero: `chunks 0` means no chunk flag needs that repair; the sources count describes the indexed claims the operation would record.
 
 ### Run the broader module validation separately
 

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_13/lesson_13_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html",
-  "source_sha": "c7abb19efcfadcbf3543f389b135fca680b1166c",
+  "source_sha": "0f996600a116814e0283b479aaac9e6b34305bb0",
   "shared_setup_windows": [
     1
   ],
@@ -203,7 +203,7 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (the trail as the kit writes it down; no network)",
-          "expected": "the envelope on every answer, beyond the contract (schemas.py, RAGResponse):\n  model, backend, cost_usd, tokens_in, tokens_out, cached_tokens, latency_ms, stages, cache_hit\nstages, as query() fills them (main.py):\n  generate_ms, graph_chunks, managed_chunks, policy_fallback, pool, rerank_fallback, rerank_ms, retrieval_backend, retrieve_ms, vector_chunks\nfound_by, the rung that put a chunk in the pool (retriever.py):\n  firestore, graph, rag_engine, vector, vertex_search\nGET /version, what is serving (main.py):\n  model_backend, generator_model, prompt, retrieval_mode, retrieval_backend, retrieval_graph, graph_backend, embedding, retrieval_current_only, semantic_cache, git_sha\nthe events a degraded answer leaves in documind-api's log:\n  routing_fallback         main.py:96\n  retrieval_pin_ignored    main.py:135\n  rag_engine_fallback      retriever.py:200\n  rag_engine_fallback      retriever.py:212\n  vertex_search_fallback   retriever.py:302\n  vector_search_fallback   retriever.py:382\n  rerank_fallback          retriever.py:503\n  tier_exhausted           generator.py:304\n  generation_truncated     generator.py:402\n  tier_exhausted           generator.py:493\n  cache_stale              cache_manager.py:119",
+          "expected": "the envelope on every answer, beyond the contract (schemas.py, RAGResponse):\n  model, backend, cost_usd, tokens_in, tokens_out, cached_tokens, latency_ms, stages, cache_hit\nstages, as query() fills them (main.py):\n  generate_ms, graph_chunks, managed_chunks, policy_fallback, pool, rerank_fallback, rerank_ms, retrieval_backend, retrieve_ms, vector_chunks\nfound_by, the rung that put a chunk in the pool (retriever.py):\n  firestore, graph, rag_engine, vector, vertex_search\nGET /version, what is serving (main.py):\n  model_backend, generator_model, prompt, retrieval_mode, retrieval_backend, retrieval_graph, graph_backend, embedding, retrieval_current_only, semantic_cache, git_sha\nthe events a degraded answer leaves in documind-api's log:\n  routing_fallback         main.py:98\n  retrieval_pin_ignored    main.py:137\n  rag_engine_fallback      retriever.py:207\n  rag_engine_fallback      retriever.py:219\n  vertex_search_fallback   retriever.py:311\n  vector_search_fallback   retriever.py:391\n  rerank_fallback          retriever.py:512\n  tier_exhausted           generator.py:304\n  generation_truncated     generator.py:402\n  tier_exhausted           generator.py:493\n  cache_stale              cache_manager.py:119",
           "adaptations": [],
           "id": "source_9",
           "function": "step_01_the_trail_as_the_kit_writes_it_down",

@@ -79,13 +79,13 @@ found_by, the rung that put a chunk in the pool (retriever.py):
 GET /version, what is serving (main.py):
   model_backend, generator_model, prompt, retrieval_mode, retrieval_backend, retrieval_graph, graph_backend, embedding, retrieval_current_only, semantic_cache, git_sha
 the events a degraded answer leaves in documind-api's log:
-  routing_fallback         main.py:96
-  retrieval_pin_ignored    main.py:135
-  rag_engine_fallback      retriever.py:200
-  rag_engine_fallback      retriever.py:212
-  vertex_search_fallback   retriever.py:302
-  vector_search_fallback   retriever.py:382
-  rerank_fallback          retriever.py:503
+  routing_fallback         main.py:98
+  retrieval_pin_ignored    main.py:137
+  rag_engine_fallback      retriever.py:207
+  rag_engine_fallback      retriever.py:219
+  vertex_search_fallback   retriever.py:311
+  vector_search_fallback   retriever.py:391
+  rerank_fallback          retriever.py:512
   tier_exhausted           generator.py:304
   generation_truncated     generator.py:402
   tier_exhausted           generator.py:493
@@ -226,6 +226,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html`. All 21 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c7abb19efcfadcbf3543f389b135fca680b1166c`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html`. All 21 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0f996600a116814e0283b479aaac9e6b34305bb0`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html`, reviewed at blob `c7abb19efcfadcbf3543f389b135fca680b1166c`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_13.1_Debug_Wrong_Answer_WIX.html`, reviewed at blob `0f996600a116814e0283b479aaac9e6b34305bb0`. Learners read that page on the course site; this guide keeps its prose.
 
 An acme employee asks for the E3 notice period and DocuMind says 90 days, where the golden set says 60. Something between the question and the answer made that happen, and guessing where is slow. Every DocuMind answer carries a trail. It says whether the answer cache served it, which store retrieved it and whether a fallback rung stood in, how many chunks the reranker saw and who ordered them, and which version of which document each citation came from. The log's fallback events and the ledger's versions sit beside it. In this lesson you break one answer on purpose, then trace it using only the marks the answer and the lane recorded. You rule out each stage in the order the answer was made, name the cause, and put the lane back.
 
@@ -100,7 +100,7 @@ Choose a break. The panel shows:
 
 - what the trace names as the cause.
 
-The 7 answers come from the kit's own `query()` in `rag-api/main.py`, run at build time on a stand-in lane. The lane holds the handbook's two versions, cut by the kit's chunker. The index, Firestore, the Ranking API and Gemini are stood in; the model is a reader that answers from the packed clause. The six links are step 6's trace cell, run on each answer.
+The 7 answers come from the kit's own `query()` in `rag-api/main.py`, run at build time on a stand-in lane. The lane holds the handbook's two versions, cut by the kit's chunker and labelled as lesson 10.6's relabel leaves them: version 1 `policy`, revision 2 `unknown`. The filter case asks for `form`, which rag-api accepts and no row holds on any tenant. It is not one of the registry's seven classes, because each of those is held on acme. The index, Firestore, the Ranking API and Gemini are stood in; the model is a reader that answers from the packed clause. The six links are step 6's trace cell, run on each answer.
 
 It shows the kit's rules on a stand-in lane that holds one document. On your lane the index, the reranker and the model are real, acme holds many documents, and the numbers differ. For example, the Firestore rung's pool here is 10 of 20, because the handbook's retired version sits beside its current one. On your lane it depends on how many retired rows lie near the question.
 

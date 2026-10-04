@@ -4,17 +4,19 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html`, reviewed at blob `8c8650c57c7da57795b534e5c7b86462f1357233`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.3_Tool_Failures_WIX.html`, reviewed at blob `66ddfd7e81b075f90023864edcca844dc28ab813`. Learners read that page on the course site; this guide keeps its prose.
 
-A tool call can fail in more places than it can succeed. Some failures stop a request at the door, and some reach the model as an error. Some reach it as ordinary data that happens to say something went wrong. Some are noted in a log line that nobody reads. You force five failures through the kit's own LangChain brain: a blocked name, a wrong argument, a tool that does not exist, a retrieval that times out, and a call over its budget. Then you meet three identities at the chat service's door, and a filter argument the corpus cannot honour. For each one you find where it surfaced and who was told.
+A tool call can fail in more places than it can succeed. Some failures stop a request at the door, and some reach the model as an error. Some reach it as ordinary data that happens to say something went wrong. And some are not failures of a tool at all: a turn that never ends, because the model keeps asking. You force five failures through the kit's own LangChain brain: a blocked name, a wrong argument, a tool that does not exist, a retrieval that times out, and a retrieval cut at its budget. You stop a model that never stops asking, and see the next turn answer. Then you meet three identities at the chat service's door, and a filter argument the corpus cannot honour. For each one you find where it surfaced and who was told.
 
 - Every failure has a place, and a reader
 
-- The words: refusal, error result, payload, budget, client timeout, door, empty pool
+- The words: refusal, error result, payload, budget, Meter, stopped_by, door, empty pool
 
 - Before you run anything: set up the shell
 
 - Five failures through the kit's LangChain brain
+
+- A turn that will not stop: the call cap, the rupees and the deadline
 
 - Access failures at the chat service's door
 
@@ -26,7 +28,7 @@ A tool call can fail in more places than it can succeed. Some failures stop a re
 
 - Verify it yourself: the checklist
 
-You will learn the three places a failure can surface (the HTTP status, the tool result, the log) and which failures land in `refusals`. You will also learn why a timed-out retrieval does not land there, and why the kit's time budgets stop nothing. Then you will prove it: a non-empty `refusals`, a timed-out tool reported to the model rather than left hanging, a 401 and a 403 from the door, and a filter that empties the pool.
+You will learn the three places a failure can surface (the HTTP status, the tool result, the log) and which failures land in `refusals`. You will also learn why a timed-out retrieval does not land there, and how a turn is held to 12 model calls, Rs 5 and 100 seconds. Then you will prove it: a non-empty `refusals`, a tool cut at its budget and listed in `limits.tool_timeouts` with `refusals []`, a capped turn on your lane that answers HTTP 200 with `stopped_by`, a 401 and a 403 from the door, and a filter that empties the pool.
 
 ### Every failure has a place, and a reader
 
@@ -34,25 +36,27 @@ Before a turn, inside a turn, and in a log line.
 
 Before a turn, the caller is told. Cloud Run's IAM admits or refuses the token. The chat service then asks who the token names: a token that names nobody is a 401. It asks whether the roster lists them: an account on no roster is a 403. No brain runs and no model is called. The caller gets a status and a sentence, and the request log keeps the status. The tenant is decided here, from the roster, and it never becomes an argument a model could fill. So "search another tenant's documents" is not a failure the tool layer has to catch. It cannot be asked at all.
 
-Inside a turn, the model is told, in two different ways. Some failures produce an error result: a tool message marked `error`, and `_summary()` puts its name in `refusals`. A blocked name is one, refused by the guard before the tool runs. An argument of the wrong type is another, rejected by LangChain's check. So is a tool the model named that does not exist. Other failures produce an ordinary result that carries bad news. When rag-api does not answer within `RAG_TIMEOUT_S`, the one `retrieve()` returns `{"error": ...}` as data, and a filter that matches nothing returns an empty list. The model reads both, but `refusals` counts only the first kind.
+Inside a turn, the model is told, in two different ways. Some failures produce an error result: a tool message marked `error`, and `_summary()` puts its name in `refusals`. A blocked name is one, refused by the guard before the tool runs. An argument of the wrong type is another, rejected by LangChain's check. So is a tool the model named that does not exist, and so is a tier the cost tool does not know: the tool raises a `ToolException`, which LangChain also turns into an error result. Other failures produce an ordinary result that carries bad news. When rag-api does not answer within `RAG_TIMEOUT_S`, the one `retrieve()` returns `{"error": ...}` as data, and a filter that matches nothing returns an empty list. The model reads both, but `refusals` counts only the first kind.
 
-Some failures only reach a log. The LangChain brain's guard times every tool call against a budget in `TIMEOUTS`: 30 seconds for `retrieve`, 10 for the cost tool. It checks the clock after the call has returned. Over budget, it writes a warning; under, a note. It never stops a call. A tool that takes too long therefore holds the turn until its own client gives up, and for `retrieve` that is `RAG_TIMEOUT_S`, 90 seconds on the chat service.
+A slow tool is cut, and the model is told as data. Every tool has a budget in `TIMEOUTS`: 95 seconds for `retrieve` on the lane, which is `RAG_TIMEOUT_S`'s 90 plus 5 for the token and the connection, and 10 for the cost tool. `limits.timed_tool_call` runs each call in a pool of threads and waits no longer than the smaller of that budget and the time the turn has left. A call past it is abandoned: the model reads a payload error that says so, `refusals` stays empty, and the tool's name goes into `limits.tool_timeouts`. A call still waiting for a thread is cancelled and never runs. One already running finishes, but it adds nothing to the turn's citations. All three agent brains time their tools this way.
 
-A bank branch clearing cheques. The guard stops a stranger at the door, and the teller refuses a cheque on an account that is not yours. Both are told to your face, before anything is processed. A cheque made out for a prohibited purpose goes to the manager and comes back marked "needs approval". One whose amount in words does not match the figures comes back marked "returned". A cheque that cannot be cleared in time comes back too: "unpaid, present again", which is an answer, not a rejection. And the branch's service-time target is written in a register at closing, but it never stopped the queue.
+A turn has limits of its own. A tool failure ends one call. A model that keeps asking for tools would keep a turn going until something outside it gave up. So every turn carries a `Meter`, made by the chat service for that turn: at most 12 model calls, Rs 5 for its own model calls and its searches, and 100 seconds. It is checked before each model call. A tripped limit ends the turn with HTTP 200, a fixed sentence as the answer, and `limits.stopped_by` naming the limit. The thread stays whole, so the next turn on it answers. The rupee cap is named here; lesson 13.3 takes it up beside the month's.
+
+A bank branch clearing cheques. The guard stops a stranger at the door, and the teller refuses a cheque on an account that is not yours. Both are told to your face, before anything is processed. A cheque made out for a prohibited purpose goes to the manager and comes back marked "needs approval". One whose amount in words does not match the figures comes back marked "returned". A cheque that cannot be cleared in time comes back too: "unpaid, present again", which is an answer, not a rejection. A cheque the clearing house has not answered by the counter's cut-off is set aside, and you are told so, while the queue moves. And a customer who keeps presenting cheques is served a fixed number at one visit, then told the counter has closed for them and to come back, which they can.
 
 #### Where a failure surfaces
 
-Choose a failure to see which layer catches it, what the caller and the model are told, what the three keys say, what the logs keep, and whether the turn waits.
+Choose a failure to see which layer catches it, what the caller and the model are told, what the four keys say, what the logs keep, and whether the turn waits.
 
-The texts are the kit's own. The five failures inside a turn come from step 3's cell, run at build time on the kit's `brains.py`. The door's texts are read from `agent.py` and `shared/iap.py`, and the empty pool from `main.py`.
+The texts are the kit's own. The five tool failures come from step 3's cell, run at build time on the kit's `brains.py` and `limits.py`; the two stops are the kit's `limits.py` and its tests. The door's texts are read from `agent.py` and `shared/iap.py`, and the empty pool from `main.py`.
 
-It shows the LangChain brain, the chat service's default. The LangGraph brain refuses a blocked name with its refuse node (lesson 10.2) and has no timing guard at all. The ADK brain, in lesson 10.4, has a callback of its own.
+It shows the LangChain brain, the chat service's default. The LangGraph brain refuses a blocked name with its refuse node (lesson 10.2), times its tools through the same `timed_tool_call`, and checks the `Meter` in its own `agent` node. The ADK brain has callbacks of its own for both, in lesson 10.4.
 
-### The words: refusal, error result, payload, budget, client timeout, door, empty pool
+### The words: refusal, error result, payload, budget, Meter, stopped_by, door, empty pool
 
-Ten rows, each with the value it takes on your lane.
+Thirteen rows, each with the value it takes on your lane.
 
-One distinction to hold: an error result says the call did not happen, and a payload error says it happened and could not help. Only the first lands in `refusals`.
+One distinction to hold: an error result says the call did not happen, and a payload error says it happened and could not help. Only the first lands in `refusals`. A cut call is the second kind, and a stopped turn is neither: it is an answer that says it is incomplete.
 
 ### Before you run anything: set up the shell
 
@@ -80,15 +84,15 @@ How to tell which store answered any call: read `stages.retrieval_backend` on th
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok`. You need `~/graph-venv` from lesson 10.2, and the step 3 cell makes it if it is missing. The chat service must be running in your region, from lesson 10.1's step 3. Step 4 sends three requests to the chat service, and step 5 makes two retrievals. Nothing changes on your lane.
+The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok`. You need `~/graph-venv` from lesson 10.2, and the step 3 cell makes it if it is missing. The chat service must be running in your region, from lesson 10.1's step 3, built from this lesson's kit: an older image has no `limits` on its `/health`, and `make limits` says so. Step 4's drill changes one setting on the chat service for a minute or two and puts it back. Step 5 sends three requests to the chat service, and step 6 makes two retrievals.
 
 ### Five failures through the kit's LangChain brain
 
-A scripted model asks for five things that go wrong. The kit's guard, LangChain and the tool layer answer.
+A scripted model asks for five things that go wrong. The kit's guard, LangChain, the timer and the tool layer answer.
 
 #### Definition
 
-The cell builds the kit's `LangChainBrain`, the chat service's default, with a scripted model and an in-memory saver. It starts a rag-api on your machine that takes two seconds to answer, points the one `retrieve()` at it with a client timeout of half a second, and stands in its ID token. It captures the log lines of the guard, the adapter and `retrieve()`. Then it runs five turns. Each asks for one tool call and prints how long the turn took, `refusals`, and the result the model read, with its status. The five are:
+The cell builds the kit's `LangChainBrain`, the chat service's default, with a scripted model and an in-memory saver. It starts a rag-api on your machine that takes two seconds to answer, points the one `retrieve()` at it with a client timeout of half a second, and stands in its ID token. It captures the log lines of the guard, the timer, the adapter and `retrieve()`. Then it runs five turns, each with a `Meter` of its own. Each asks for one tool call and prints how long the turn took, `refusals`, the Meter's `tool_timeouts`, and the result the model read, with its status. The five are:
 
 - blocked: `delete_document`, a blocked name;
 
@@ -96,9 +100,9 @@ The cell builds the kit's `LangChainBrain`, the chat service's default, with a s
 
 - no such: `summon_rain`, a tool that does not exist;
 
-- timed out: `retrieve` against the slow rag-api;
+- timed out: `retrieve` against the slow rag-api, whose client gives up first;
 
-- over budget: the cost tool, with its budget set to zero seconds.
+- cut: `retrieve` again, with a client that would wait five seconds and a budget of one.
 
 #### The code
 
@@ -106,7 +110,29 @@ The cell builds the kit's `LangChainBrain`, the chat service's default, with a s
 
 #### Do it: five failures
 
-Three turns ended with a non-empty `refusals`: the blocked name, the bad argument and the unknown tool. That is half of this lesson's proof. Each was an error result, and the model read why. The three look alike in `refusals`. Only the result's text tells a policy refusal from a mistake. The timed-out retrieval took half a second, the client timeout, and was not left hanging. The model read `document search is unavailable` as ordinary data, so `refusals` stayed empty. That is the other half: a timed-out tool reported. The log shows three layers each saying so, in their own words: the one `retrieve()`, the adapter and the guard. The call over budget returned normally. Its only trace is the warning at the bottom, written after the fact.
+Three turns ended with a non-empty `refusals`: the blocked name, the bad argument and the unknown tool. That is the first proof. Each was an error result, and the model read why. The three look alike in `refusals`. Only the result's text tells a policy refusal from a mistake. The timed-out retrieval took half a second, the client timeout, and was not left hanging. The model read `document search is unavailable` as ordinary data, so `refusals` stayed empty. The cut retrieval took one second, its budget, though its client would have waited five. The model read that `retrieve` did not answer within 1s and was abandoned, `refusals` stayed empty, and `tool_timeouts` named it. That is the second: a timed-out tool reported, and counted. The log shows each layer saying so in its own words: the one `retrieve()`, the adapter and the timer. The timer's line for the timed-out run names a budget of 25 seconds: `RAG_TIMEOUT_S` is not set in your shell, so it is its default, 20, plus 5, computed when `tools.py` was imported. Setting `dt.RAG_TIMEOUT_S` to 0.5 afterwards does not move it; the cell sets `tools.TIMEOUTS["retrieve"]` itself before the cut run, which is why the next line reads `budget 1s`. Read the last two lines: the abandoned call ran on in its thread and finished at two seconds, after the turn had moved on. On the lane, rag-api answers that call and bills it on its own row, but the call writes nothing into the turn: its cost is not charged to the turn's `Meter`, and a citation it brings back is not numbered, so the answer never lists a source the model did not read.
+
+### A turn that will not stop: the call cap, the rupees and the deadline
+
+A looping model on your machine, every brain in the kit's tests, then your lane's limits and a capped turn on it.
+
+#### Definition
+
+The chat service makes a `Meter` for each turn and hands it to the brain in the runtime context. Before each model call the brain asks it `allow_model_call()`. The first call is always allowed. After that the Meter refuses a call once the turn has made 12 calls, once it has spent Rs 5, or once fewer than 5 of its 100 seconds are left. Each model call also gets a timeout of its own: the smaller of 30 seconds and the time left divided by its 2 attempts. A refused call is never made. The brain ends the turn with the stop sentence instead, and the Meter records the reason. In the LangChain brain that check is `TurnLimitsMiddleware`, which wraps the model call and nothing else, so a turn writes the same checkpoints it did before.
+
+The first cell builds the LangChain brain on a model that asks for the cost tool on every call, with a cap of 3 so the run is short, then asks a second question on the same thread with a model that answers. `make limits-check`, which is `commands/limits-check.sh`, runs the kit's own test file, `commands/tests/test_chat_limits.py`, on all three agent brains: the cap, the rupees and the deadline, a slow search, a hung model, and the chat service's HTTP 200. `make limits` reads what your deployed chat publishes. `make limits-drill STOP=model_calls`, which is `commands/limits-drill.sh`, sets `CHAT_MAX_MODEL_CALLS=1` on the chat service, runs `make smoke-chat`'s test expecting every agent brain to stop, puts the setting back and runs the test again. `STOP=turn_budget` does the same with the rupee cap, in lesson 13.3.
+
+#### The code
+
+#### Do it: a model that never stops asking
+
+#### Do it: every brain, offline
+
+#### Do it: your lane's limits
+
+#### Do it: a capped turn on your lane
+
+The looping model made three calls and ran the cost tool three times. The Meter refused the fourth call, so it was never made, and the turn ended with the stop sentence and `stopped_by model_calls`. The thread holds ten messages, and every tool call in it has its result, so the second question was answered as if nothing had happened. `make limits-check` ran 36 tests, and they include the same stop through the LangGraph and ADK brains. `make limits` shows the numbers your chat runs under. The A2A peer, which lesson 12.3 traces, publishes no cap yet, so ADK's own default of 500 applies there. In the drill, every agent brain answered HTTP 200 with the stop sentence after one model call, and `direct`, which makes no model call of its own here, answered as usual. With the setting restored, the same test passed with no stop. That is the proof for the turn's limits: a turn on your lane stopped at its limit, and still answered.
 
 ### Access failures at the chat service's door
 
@@ -140,7 +166,7 @@ Where each signal lives, in the order to look.
 
 When a chat turn goes wrong in production, the evidence is spread across three services and several stores. Look in this order.
 
-Two patterns cover most cases. `refusals` non-empty means the model asked for something it could not have: read the log line for the name. `refusals` empty with an answer that says it found nothing means either the corpus lacks it or the model narrowed the search. rag-api's row tells those apart: `pool 0` on a question you know the corpus answers points to an argument.
+Three patterns cover most cases. `stopped_by` set means the turn hit a limit: the answer says it is incomplete, and asking again, or a narrower question, usually answers. `refusals` non-empty means the model asked for something it could not have: read the log line for the name. `refusals` empty with an answer that says it found nothing means either the corpus lacks it or the model narrowed the search. rag-api's row tells those apart: `pool 0` on a question you know the corpus answers points to an argument.
 
 ### Why failures are handled this way, what it costs, and what the kit does not do yet
 
@@ -156,25 +182,35 @@ The design choices, from the kit's own comments, then the bill and the gaps.
 
 - Budgets beside the tools. `BLOCKED` and `TIMEOUTS` sit next to the tool definitions, so adding a tool without a budget or a block decision shows up in review.
 
+- A cut call is data, and a stop is an answer. An abandoned call returns a payload error like a failed search, so the model can explain it. A stopped turn answers HTTP 200 with a sentence that says it is incomplete, and leaves its thread whole: a 500 would lose the turn, and an open tool call would break the next one.
+
+- A turn ends before the walls around it. The deadline is 100 seconds. One retry's backoff, about 2 seconds, and the last tool's one-second floor bring the worst case to about 103 seconds, under the UI's 120, gunicorn's 120 and Cloud Run's 300. The kit's test checks that sum. The framework's own step limits stay, at 58 steps for the LangChain and LangGraph brains, as a backstop the Meter reaches first.
+
 #### What it costs
 
 Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-- The budgets are logged, never enforced. `TIMEOUTS` is read once, by the LangChain brain's guard, after each call has returned. No brain interrupts a slow tool. `retrieve` is bounded by its client's 90 seconds, and the other two tools by nothing.
+- An abandoned call still runs, and is still billed. The turn stops waiting, but the call's thread runs on until its client gives up, and rag-api answers it and bills it. The turn's rupees do not count that answer.
 
-- `refusals` mixes policy and mistakes. A blocked name, a bad argument and an unknown tool all land in the same list, and nothing in the three keys says which is which.
+- The month's counter does not see the turn's own spend. The chat row now carries the turn's `cost_usd`, but `tenant_daily` and `make usage` count rag-api's rows only, so the agent's own model calls are outside the monthly figure. Lesson 13.3 takes this up.
+
+- The limits are the service's, not the tenant's. One setting on the chat service holds every tenant and every caller to the same 12 calls, Rs 5 and 100 seconds.
+
+- The A2A peer has no cap of its own. Its `/health` names none, so ADK's default of 500 model calls a task applies to it.
+
+- `refusals` mixes policy and mistakes. A blocked name, a bad argument, an unknown tool and an unknown tier all land in the same list, and nothing in the four keys says which is which.
 
 - The arguments are logged nowhere. The guard logs names and times. The chat row keeps names. rag-api's row has no filters. A bad `doc_type` shows only as `pool 0`.
 
 - The tool invites filters the corpus cannot honour. `retrieve`'s docstring offers policy, contract, invoice, form and research_paper, and the worker stamps every text upload `unknown`.
 
-- The token is minted outside the `try`. In the one `retrieve()`, a failure to mint the ID token raises instead of returning data. An agent then gets an error result, and the direct brain fails the whole turn.
+- The token is minted outside the `try`. In the one `retrieve()`, a failure to mint the ID token raises instead of returning data. No brain catches it, by design: an error result is for a call the model got wrong, and a mint failure is the service's own. So the whole turn fails, in all four brains: a 500, with no answer.
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Twelve checks, each one block above, each with the value that proves it on your lane.
 
-Nothing. There are three requests in the chat service's log: a 403, a 401 and one answered turn in session `lesson103`. There are three rag-api rows: the member's turn, and step 5's two retrievals, one of them an empty pool. Lesson 10.4 puts the same question through all four brains and compares their costs and traces.
+The chat service has two new revisions from the drill, and the last one runs with `CHAT_MAX_MODEL_CALLS` as it was before. Its log holds the drill's eight turns, three of them with `stopped_by model_calls` on their rows, and three requests from step 5: a 403, a 401 and one answered turn in session `lesson103`. rag-api has a row for each search: the drill's, the member's turn, and step 6's two retrievals, one of them an empty pool. Lesson 10.4 puts the same question through all four brains and compares their costs and traces.
 
 Netsetos GenAI on GCP · Module 10 Agents · Lesson 10.3 Diagnose tool arguments, access failures and timeouts · v5.0
 

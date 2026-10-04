@@ -1,6 +1,6 @@
 {
   "modules": 18,
-  "lessons_expected": 60,
+  "lessons_expected": 62,
   "lessons": [
     {
       "lesson": "1.1",
@@ -61,14 +61,14 @@
     {
       "lesson": "3.4",
       "title": "Write, inspect and verify indexed records",
-      "source_sha": "0fed6e5f2f632604d917f822725869a9e2186f2e",
+      "source_sha": "210ec828d1fbc8bddc005b88f8f7628a8aa938aa",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "4.1",
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
-      "source_sha": "4e0b9d5eec2e3600a742e7ea82678d360613d541",
+      "source_sha": "266786f87d070114f56dd645ac5f3e9a4228224a",
       "source_kind": "main_html",
       "demos": 10
     },
@@ -89,14 +89,14 @@
     {
       "lesson": "4.4",
       "title": "Restore documents and reconcile index differences",
-      "source_sha": "52d1fbe549bb76a2fe1064f01171f2107c260a11",
+      "source_sha": "4bbd9c72fa443ebba227ab37a125bf213850fb3c",
       "source_kind": "main_html",
       "demos": 14
     },
     {
       "lesson": "5.1",
       "title": "Apply query embeddings and authorized filters",
-      "source_sha": "9b8d6d3ec02de2b4eddf4de5937d886bc4dfdbb5",
+      "source_sha": "0dd90805d01d1a1b437bb8c335f36323ac152187",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -117,7 +117,7 @@
     {
       "lesson": "5.4",
       "title": "Test fallback without losing tenant or metadata filters",
-      "source_sha": "9553c89dce4181161137e7caeba0cf202f30a3ac",
+      "source_sha": "9d543e45f0ba007f3a7308fb465bf1c366f8f394",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -180,21 +180,21 @@
     {
       "lesson": "8.2",
       "title": "Test valid access, denied access and cross-tenant requests",
-      "source_sha": "2bfa77b0d346884ddcee1c93f3b8bb4643d84862",
+      "source_sha": "13925f3b85458a0e5746b6e8524566d4e2ef7f38",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "8.3",
       "title": "Exercise DLP, guardrails and audit behavior",
-      "source_sha": "0f79843e15e5d20e67a5ce3f41943aca173c2e5d",
+      "source_sha": "de1cab1c8fd302b64b7662d3a4c4454dc4090a2b",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "9.1",
       "title": "Compare context caching and answer caching",
-      "source_sha": "ee993d0dd1999f045798aa2dc6a500e1d3d86122",
+      "source_sha": "240f3edc2b3bbf2a6e0177f7f0c288a696da5ae5",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -215,56 +215,70 @@
     {
       "lesson": "10.1",
       "title": "Understand tool contracts and the direct agent loop",
-      "source_sha": "f1868f835bc67f911ec89f0027a86e55fa9969ab",
+      "source_sha": "d12d91f61f0874ef613af21ea7f0d87936734ecc",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.2",
       "title": "Implement the main LangGraph workflow",
-      "source_sha": "73498f3f2d62aedcf2bd29a83ca1c8a08c7fa43b",
+      "source_sha": "d653ce9c48a969574766793e79b2212be4ff15ed",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "10.3",
       "title": "Diagnose tool arguments, access failures and timeouts",
-      "source_sha": "8c8650c57c7da57795b534e5c7b86462f1357233",
-      "source_kind": "main_html",
-      "demos": 6
-    },
-    {
-      "lesson": "10.4",
-      "title": "Compare the LangChain and ADK adapters",
-      "source_sha": "f3598f8936669b98d54a99f356e98faea20a469a",
+      "source_sha": "66ddfd7e81b075f90023864edcca844dc28ab813",
       "source_kind": "main_html",
       "demos": 7
     },
     {
+      "lesson": "10.4",
+      "title": "Compare the LangChain and ADK adapters",
+      "source_sha": "f330c4e200777574a7445b21a9fac5307dec72dd",
+      "source_kind": "main_html",
+      "demos": 7
+    },
+    {
+      "lesson": "10.5",
+      "title": "Hand a question to the person the law names",
+      "source_sha": "c047978890dc8cbbd8dbc3aef503b90ab3e5d435",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "10.6",
+      "title": "Route each question to one specialist agent",
+      "source_sha": "902bbfe348bfa460ec7a6008b52127b29e699ec6",
+      "source_kind": "main_html",
+      "demos": 14
+    },
+    {
       "lesson": "11.1",
       "title": "Distinguish agent state, conversation history and knowledge",
-      "source_sha": "6e59ae9a8bf97f0a9675aa8338318eaeca0e8a23",
+      "source_sha": "ee97c6b3e1370765aa66f12eae221bfb91923009",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.2",
       "title": "Configure and inspect durable conversation storage",
-      "source_sha": "8ff81098aa551cfdfcea7b74a70b6d674c710765",
+      "source_sha": "ca3be661b14fed97662fcbbdaa7f8f484cedaf5e",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.3",
       "title": "Verify restart recovery and session isolation",
-      "source_sha": "0f3fb29f23b886b2a6493c5a3474f442b8af3c17",
+      "source_sha": "c44aa8bbfd33aaa359878ff4b69914553f10b7c7",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "12.1",
       "title": "Expose, discover and invoke MCP tools",
-      "source_sha": "b81be587a267019af54628b140280c63f1a4bd46",
+      "source_sha": "6445f72b7a3eb45ac366efa9f37170e90c9ef1bb",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -285,14 +299,14 @@
     {
       "lesson": "13.1",
       "title": "Debug a wrong answer through the complete pipeline",
-      "source_sha": "c7abb19efcfadcbf3543f389b135fca680b1166c",
+      "source_sha": "0f996600a116814e0283b479aaac9e6b34305bb0",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "13.2",
       "title": "Reconcile usage events, reports and alerts",
-      "source_sha": "22c11174ed320d7ad4355dfac348e510cefca82b",
+      "source_sha": "9e59433d6f572c21dde05eedd031ee9acc67b317",
       "source_kind": "main_html",
       "demos": 7
     },
@@ -369,7 +383,7 @@
     {
       "lesson": "16.2",
       "title": "Exercise implemented Studio and voice features",
-      "source_sha": "f90dc609bf1dfc9befdb00d185c8e8f4286c122d",
+      "source_sha": "169d2b48fc8b50cd220083becc6860aed967d1f7",
       "source_kind": "main_html",
       "demos": 7
     },

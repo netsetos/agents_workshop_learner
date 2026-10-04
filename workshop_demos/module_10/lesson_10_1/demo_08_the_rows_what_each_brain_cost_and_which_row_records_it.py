@@ -1,9 +1,9 @@
-"""Lesson 10.1: The rows: what each brain cost, and what no row records
+"""Lesson 10.1: The rows: what each brain cost, and which row records it
 
-rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
 
 Run order inside this file:
-1. The rows: what each brain cost, and what no row records (source window 24)
+1. The rows: what each brain cost, and which row records it (source window 24)
 
 Prerequisites: demo_07_the_loop_the_model_chooses_its_tools.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -24,10 +24,10 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-def step_01_the_rows_what_each_brain_cost_and_what_no(session):
-    """Run The rows: what each brain cost, and what no row records at this checkpoint.
+def step_01_the_rows_what_each_brain_cost_and_which_ro(session):
+    """Run The rows: what each brain cost, and which row records it at this checkpoint.
 
-    rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+    rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 10.3 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (the rows both services wrote since the retrieve cell; reads only).
@@ -42,9 +42,8 @@ def step_01_the_rows_what_each_brain_cost_and_what_no(session):
         brain langchain  in   1650  out   88  Rs 0.2665   2390 ms
         brain direct     in   1705  out   92  Rs 0.2760   2620 ms
       the chat service, one row per turn:
-        brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
-        brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, event, latency_ms, refusals, session_id, surface, tenant, tool_calls, user)
-        brain langchain  tool
+        brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+        brain langchain  tool_calls ['
     """
     import json, os, subprocess
     def rows(service, event):
@@ -71,7 +70,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_24', step_01_the_rows_what_each_brain_cost_and_what_no),
+        ('source_24', step_01_the_rows_what_each_brain_cost_and_which_ro),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

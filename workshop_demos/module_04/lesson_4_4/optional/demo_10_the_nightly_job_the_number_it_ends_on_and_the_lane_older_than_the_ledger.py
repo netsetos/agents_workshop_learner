@@ -26,7 +26,7 @@ RETRY_FAILED_STEP = False
 
 # Original CLI workflow for step_01_read_the_deployed_job_and_backfill_plan.
 COMMANDS_01 = """gcloud run jobs describe documind-reconcile --region "$REGION" --project "$PROJECT" --format='value(name)' 2>/dev/null \\
-  || echo "no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform apply)"
+  || echo "no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform plan and apply)"
 gcloud scheduler jobs describe documind-reconcile-nightly --location "$REGION" --project "$PROJECT" --format='value(schedule,timeZone,state)' 2>/dev/null \\
   || echo "no schedule either: make reconcile from a shell is the walk until then"
 
@@ -45,7 +45,7 @@ def step_01_read_the_deployed_job_and_backfill_plan(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform apply)
+    Observe: no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform plan and apply)
     no schedule either: make reconcile from a shell is the walk until then
     {"event": "reconcile_backfill", "chunks": 0, "sources": N, "applied": false}
 

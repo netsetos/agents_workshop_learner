@@ -3,7 +3,7 @@
 Do it
 
 Run order inside this file:
-1. Do it (source window 15)
+1. Do it (source window 18)
 
 Prerequisites: demo_03_two_adapters_over_one_tool_side_by_side.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -42,15 +42,13 @@ def step_01_four_brains_on_health_and_the_module_s_gat(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: {"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain"}
+    Observe: {"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain","limits":{"max_model_calls":12,"budget_inr":5.0,"deadline_s":100.0,"model_timeout_s":30.0,"model_attempts":2,"min_model_s":5.0,"tool_budgets_s":{"retrieve":95.0,"calculate_processing_cost":10}}}
       DocuMind chat - live smoke test
       target: https://documind-chat-NUMBER.asia-south1.run.app
       --------------------------------------------------------
-      [PASS] health  profile=gcp default=langchain
-      [PASS] brain direct  3120 ms  tools=['retrieve']  'Gratuity becomes payable after not less than five years of c'
-      [PASS] brain langchain  11840 ms  tools=['retrieve']  'Gratuity becomes payable once you have rendered at least fiv'
-      [PASS] brain langgraph  9730 ms  tools=['retrieve']  'Gratuity is payable after at least five years of continuous '
-      [PASS] brain adk  14260 ms  tools=['r
+      [PASS] health  profile=gcp default=langchain limits=12 calls, Rs 5.0, 100.0 s
+      [PASS] brain direct  3120 ms  tools=['retrieve']  citations=5  calls=0 Rs 0.3699  'Gratuity becomes payable after not less than five years of c'
+      [PASS] brain la
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
@@ -62,7 +60,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_15', step_01_four_brains_on_health_and_the_module_s_gat),
+        ('source_18', step_01_four_brains_on_health_and_the_module_s_gat),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -40,7 +40,7 @@ def walk(o):
 walk(json.load(sys.stdin))"
   gcloud scheduler jobs describe documind-ingest-batch-hourly --location "$REGION" --project "$PROJECT" --format='value(schedule,timeZone,state)'
 else
-  echo "no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)"
+  echo "no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)"
 fi
 
 """
@@ -57,7 +57,7 @@ def step_01_read_the_lane_rs_0(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: 0 queued document(s)
-    no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform apply)
+    no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)

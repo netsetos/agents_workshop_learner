@@ -3,8 +3,8 @@
 Do it: the venv Do it: side by side
 
 Run order inside this file:
-1. Do it: the venv (source window 10)
-2. Do it: side by side (source window 12)
+1. Do it: the venv (source window 13)
+2. Do it: side by side (source window 15)
 
 Prerequisites: setup_prepare.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -103,28 +103,31 @@ def ak(label, name, args):                         # the same through the ADK br
     except Exception as e:
         return None, "raises", f"{type(e).__name__}: {str(e).splitlines()[0]}"
     read = [p.function_response.response for c in model.sent[-1].contents for p in c.parts or [] if p.function_response]
-    return out["refusals"], "success", json.dumps(read[0])
-print("1. what each model is shown for retrieve (* = required)")
+    return out["refusals"], read[0].get("status", "success"), json.dumps(read[0])
+print("1. what each model is shown for retrieve (* = required); raw = FunctionTool over the shared retrieve(), unadapted")
 shown = {"langchain": convert_to_openai_tool(tools.retrieve)["function"],
-         "adk": FunctionTool(dt.retrieve)._get_declaration().model_dump(mode="json", exclude_none=True)}
+         "adk": FunctionTool(tools.for_adk()[0])._get_declaration().model_dump(mode="json", exclude_none=True),
+         "raw": FunctionTool(dt.retrieve)._get_declaration().model_dump(mode="json", exclude_none=True)}
 for name, d in shown.items():
     schema = d.get("parameters") or d["parameters_json_schema"]
     params = [p + ("*" if p in schema.get("required", []) else "") for p in schema["properties"]]
-    print(f"   {name:9} {', '.join(params):54} {len(json.dumps(d)):,} characters")
+    print(f"   {name:9} {', '.join(params):64} {len(json.dumps(d)):,} characters")
 print(f"   langchain tools: {', '.join(t.name for t in tools.TOOLS)}")
-print(f"   adk tools:       {', '.join(t.name for t in adk.runner.agent.tools)}")
+print(f"   adk tools:       {', '.join(t.name for t in adk.runner.agent.tools)}   (tools.for_adk())")
 print('2. one retrieve(); the ADK model writes tenant_id "globex" and assertion "anything"')
 for name, run, args in (("langchain", lc, {"query": "gratuity"}),
                         ("adk", ak, {"query": "gratuity", "tenant_id": "globex", "assertion": "anything"})):
     refusals, status, text = run("r", "retrieve", args)
     tenant, brain, assertion = SEEN[-1]
     print(f"   {name:9} rag-api got tenant {tenant}, brain {brain}, assertion header {assertion!r}")
-    print(f"             the model read: {', '.join(json.loads(text))}")
-print("3. three calls that go wrong")
+    read = json.loads(text)
+    print(f"             the model read: {', '.join(read)}; citations numbered {[c['n'] for c in read['citations']]}")
+print("3. four calls that go wrong")
 for i, (call, name, args) in enumerate((('delete_document(doc="x")', "delete_document", {"doc": "x"}),
         ('calculate_processing_cost(total_pages="many")', "calculate_processing_cost", {"total_pages": "many"}),
         ('calculate_processing_cost(total_pages=10, processing_type="express")', "calculate_processing_cost",
-         {"total_pages": 10, "processing_type": "express"}))):
+         {"total_pages": 10, "processing_type": "express"}),
+        ("calculate_processing_cost()", "calculate_processing_cost", {}))):
     print("   " + call)
     for brain, run in (("langchain", lc), ("adk", ak)):
         refusals, status, text = run(str(i), name, args)
@@ -133,6 +136,41 @@ for i, (call, name, args) in enumerate((('delete_document(doc="x")', "delete_doc
         if status != "raises":
             print(f"               refusals {refusals}")
 print(f"4. ADK's sessions with no CHECKPOINT_DSN: {type(adk.svc).__name__}, at most {adk.run_config.max_llm_calls} model calls a turn")
+print("5. the turn's limits, wired three ways: a model that asks for a tool on every call, at a cap of 2")
+import limits
+from langchain.agents import create_agent
+from langchain.agents.middleware import ModelCallLimitMiddleware
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_core.outputs import ChatGeneration, ChatResult
+class Loop(BaseChatModel):                         # asks for the cost tool on every call, each time with a new id
+    n: int = 0
+    @property
+    def _llm_type(self): return "loop"
+    def bind_tools(self, tools, **kw): return self
+    def _generate(self, messages, stop=None, run_manager=None, **kw):
+        self.n += 1
+        ask = [{"name": "calculate_processing_cost", "args": {"total_pages": 10}, "id": f"c{self.n}"}]
+        return ChatResult(generations=[ChatGeneration(message=AIMessage("", tool_calls=ask))])
+def stop(name, brain):
+    meter = limits.Meter(max_model_calls=2)
+    out = brain.answer("...", config={"configurable": {"thread_id": "acme:you:loop" + name}}, context={**ctx, "brain": name, "meter": meter})
+    return f"stopped_by {meter.stopped_by} after {meter.model_calls} model calls: {out['answer'][:44]}..."
+nodes = lambda g: ", ".join(n for n in g.get_graph().nodes if not n.startswith("__"))
+lcb, lgb = brains.LangChainBrain(InMemorySaver(), llm=Loop()), brains.LangGraphBrain(InMemorySaver(), llm=Loop())
+print(f"   langchain  nodes {nodes(lcb.agent)}; TurnLimitsMiddleware wraps the model call\\n              {stop('langchain', lcb)}")
+print(f"   langgraph  nodes {nodes(lgb.graph)}; the agent node checks the Meter itself\\n              {stop('langgraph', lgb)}")
+root = adk.runner.agent
+root.model = AdkScript(turns=[said(name="calculate_processing_cost", args={"total_pages": 10}) for _ in range(3)], sent=[])
+print(f"   adk        {root.before_model_callback.__name__}, {root.after_model_callback.__name__}, {root.on_model_error_callback.__name__};"
+      f" RunConfig max_llm_calls {adk.run_config.max_llm_calls}\\n              {stop('adk', adk)}")
+def checkpoints(middleware):                       # one turn with one tool call, as each graph saves it
+    saver, cfg = InMemorySaver(), {"configurable": {"thread_id": "acme:you:ck"}}
+    model = Script(responses=[AIMessage("", tool_calls=[{"name": "calculate_processing_cost", "args": {"total_pages": 10}, "id": "c1"}]), AIMessage("done")])
+    g = create_agent(model=model, tools=tools.TOOLS, middleware=middleware, checkpointer=saver)
+    g.invoke({"messages": [{"role": "user", "content": "..."}]}, cfg, context={**ctx, "brain": "langchain"})
+    return f"nodes {nodes(g)}; a turn with one tool call writes {len(list(saver.list(cfg)))} checkpoints"
+print(f"   the kit's middleware:      {checkpoints([limits.TurnLimitsMiddleware(), brains._guard_middleware()])}")
+print(f"   ModelCallLimitMiddleware:  {checkpoints([ModelCallLimitMiddleware(run_limit=12), brains._guard_middleware()])}")
 srv.shutdown()
 PY
 
@@ -149,16 +187,15 @@ def step_02_side_by_side(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: 1. what each model is shown for retrieve (* = required)
-       langchain query*, doc_type, top_k                                481 characters
-       adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters
-       langchain tools: retrieve, calculate_processing_cost, get_usage_stats
-       adk tools:       retrieve, calculate_processing_cost
+    Observe: 1. what each model is shown for retrieve (* = required); raw = FunctionTool over the shared retrieve(), unadapted
+       langchain query*, doc_type, top_k                                          481 characters
+       adk       query*, doc_type, top_k                                          635 characters
+       raw       query*, tenant_id*, top_k, doc_type, assertion, brain, passages  3,420 characters
+       langchain tools: retrieve, calculate_processing_cost
+       adk tools:       retrieve, calculate_processing_cost   (tools.for_adk())
     2. one retrieve(); the ADK model writes tenant_id "globex" and assertion "anything"
        langchain rag-api got tenant acme, brain langchain, assertion header None
-                 the model read: citations, answerable, confidence
-       adk       rag-api got tenant acme, brain adk, assertion header 'anything'
-                 the model read: citations, answer
+            
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)
@@ -170,8 +207,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_10', step_01_the_venv),
-        ('source_12', step_02_side_by_side),
+        ('source_13', step_01_the_venv),
+        ('source_15', step_02_side_by_side),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

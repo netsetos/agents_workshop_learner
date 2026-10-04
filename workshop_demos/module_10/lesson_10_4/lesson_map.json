@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.4_Adapters_WIX.html",
-  "source_sha": "f3598f8936669b98d54a99f356e98faea20a469a",
+  "source_sha": "f330c4e200777574a7445b21a9fac5307dec72dd",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 20,
+  "source_window_count": 23,
   "persist_variables": [
     "API",
     "API_URL",
@@ -38,7 +38,7 @@
     },
     {
       "level": 3,
-      "heading": "The words: adapter, harness, ToolRuntime, FunctionTool, callback, session, cost line"
+      "heading": "The words: adapter, harness, ToolRuntime, FunctionTool, REQUEST, callback, session, limits, cost line"
     },
     {
       "level": 3,
@@ -94,7 +94,7 @@
     },
     {
       "level": 3,
-      "heading": "Four cost lines, as rag-api's rows draw them"
+      "heading": "Four cost lines, from rag-api's rows and the chat rows"
     },
     {
       "level": 4,
@@ -106,7 +106,7 @@
     },
     {
       "level": 3,
-      "heading": "The half the rows cannot see"
+      "heading": "The loop, call by call"
     },
     {
       "level": 4,
@@ -148,7 +148,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        364
+        367
       ],
       "offline": false,
       "live_verified": false,
@@ -166,7 +166,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 364,
+          "source_line": 367,
           "manual_checkpoint": null
         }
       ],
@@ -188,13 +188,13 @@
       ],
       "section_number": 3,
       "windows": [
-        10,
-        12
+        13,
+        15
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        447,
-        456
+        528,
+        537
       ],
       "offline": false,
       "live_verified": false,
@@ -207,10 +207,10 @@
           "label": "bash — run in the operator shell, in the kit (lesson 10.2's venv, with google-adk added)",
           "expected": "graph-venv ok: google-adk 2.8.0 langchain 1.4.0",
           "adaptations": [],
-          "id": "source_10",
+          "id": "source_13",
           "function": "step_01_the_venv",
-          "window": 10,
-          "source_line": 447,
+          "window": 13,
+          "source_line": 528,
           "manual_checkpoint": null
         },
         {
@@ -218,12 +218,12 @@
           "subheading": "Do it: side by side",
           "purpose": "Do it: side by side",
           "label": "bash — run in the operator shell, in the kit (the two adapters side by side; no model, no network beyond your machine)",
-          "expected": "1. what each model is shown for retrieve (* = required)\n   langchain query*, doc_type, top_k                                481 characters\n   adk       query*, tenant_id*, top_k, doc_type, assertion, brain  2,572 characters\n   langchain tools: retrieve, calculate_processing_cost, get_usage_stats\n   adk tools:       retrieve, calculate_processing_cost\n2. one retrieve(); the ADK model writes tenant_id \"globex\" and assertion \"anything\"\n   langchain rag-api got tenant acme, brain langchain, assertion header None\n             the model read: citations, answerable, confidence\n   adk       rag-api got tenant acme, brain adk, assertion header 'anything'\n             the model read: citations, answerable, confidence, answer\n3. three calls that go wrong\n   delete_document(doc=\"x\")\n     langchain [error] {\"error\": \"delete_document requires manual approval\"}\n               refusals ['delete_document']\n     adk       the turn raises ValueError: Tool 'delete_document' not found.\n   calculate_processing_cost(total_pages=\"many\")\n     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs\n               {'total_pages': 'many'} with error: total_pages: Input should be a valid\n               [...]\n               refusals ['calculate_processing_cost']\n     adk       the turn raises TypeError: '<=' not supported between instances of 'str' and\n               'int'\n   calculate_processing_cost(total_pages=10, processing_type=\"express\")\n     langchain [success] {\"num_documents\": 1, \"total_pages\": 10, \"processing_type\":\n               \"express\", \"rate_per_page\": 0.05, \"cost_usd\": 0.5, \"cost_inr\": 42.5}\n               refusals []\n     adk       the turn raises ValueError: unknown tier 'express'; expected one of ['bulk',\n               'priority', 'standard']\n4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn",
+          "expected": "1. what each model is shown for retrieve (* = required); raw = FunctionTool over the shared retrieve(), unadapted\n   langchain query*, doc_type, top_k                                          481 characters\n   adk       query*, doc_type, top_k                                          635 characters\n   raw       query*, tenant_id*, top_k, doc_type, assertion, brain, passages  3,420 characters\n   langchain tools: retrieve, calculate_processing_cost\n   adk tools:       retrieve, calculate_processing_cost   (tools.for_adk())\n2. one retrieve(); the ADK model writes tenant_id \"globex\" and assertion \"anything\"\n   langchain rag-api got tenant acme, brain langchain, assertion header None\n             the model read: citations, answerable, confidence; citations numbered [1]\n   adk       rag-api got tenant acme, brain adk, assertion header None\n             the model read: citations, answerable, confidence; citations numbered [1]\n3. four calls that go wrong\n   delete_document(doc=\"x\")\n     langchain [error] {\"error\": \"delete_document requires manual approval\"}\n               refusals ['delete_document']\n     adk       [error] {\"error\": \"delete_document requires manual approval\", \"status\":\n               \"error\"}\n               refusals ['delete_document']\n   calculate_processing_cost(total_pages=\"many\")\n     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs\n               {'total_pages': 'many'} with error: total_pages: Input should be a valid\n               [...]\n               refusals ['calculate_processing_cost']\n     adk       [error] {\"error\": \"1 validation error for\n               calculate_processing_cost\\ntotal_pages\\n Input should be a valid integer,\n               unable to parse string as an [...]\n               refusals ['calculate_processing_cost']\n   calculate_processing_cost(total_pages=10, processing_type=\"express\")\n     langchain [error] unknown tier 'express'; expected one of ['bulk', 'priority',\n               'standard']\n               refusals ['calculate_processing_cost']\n     adk       [error] {\"error\": \"unknown tier 'express'; expected one of ['bulk',\n               'priority', 'standard']\", \"status\": \"error\"}\n               refusals ['calculate_processing_cost']\n   calculate_processing_cost()\n     langchain [error] Error invoking tool 'calculate_processing_cost' with kwargs {} with\n               error: total_pages: Field required Please fix the error and try again.\n               refusals ['calculate_processing_cost']\n     adk       [error] {\"error\": \"Invoking `calculate_processing_cost()` failed as the\n               following mandatory input parameters are not present:\\ntotal_pages\\nYou\n               [...]\n               refusals ['calculate_processing_cost']\n4. ADK's sessions with no CHECKPOINT_DSN: InMemorySessionService, at most 12 model calls a turn\n5. the turn's limits, wired three ways: a model that asks for a tool on every call, at a cap of 2\n   langchain  nodes model, tools; TurnLimitsMiddleware wraps the model call\n              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...\n   langgraph  nodes agent, tools, refuse; the agent node checks the Meter itself\n              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...\n   adk        adk_before_model, adk_after_model, adk_model_error; RunConfig max_llm_calls 12\n              stopped_by model_calls after 2 model calls: I stopped this turn at one of its limits bef...\n   the kit's middleware:      nodes model, tools; a turn with one tool call writes 5 checkpoints\n   ModelCallLimitMiddleware:  nodes model, tools, ModelCallLimitMiddleware.before_model, ModelCallLimitMiddleware.after_model; a turn with one tool call writes 9 checkpoints",
           "adaptations": [],
-          "id": "source_12",
+          "id": "source_15",
           "function": "step_02_side_by_side",
-          "window": 12,
-          "source_line": 456,
+          "window": 15,
+          "source_line": 537,
           "manual_checkpoint": null
         }
       ],
@@ -245,11 +245,11 @@
       ],
       "section_number": 4,
       "windows": [
-        15
+        18
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        590
+        735
       ],
       "offline": false,
       "live_verified": false,
@@ -260,26 +260,26 @@
           "subheading": "Do it",
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (/health, then the module's gate)",
-          "expected": "{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\"}\n  DocuMind chat - live smoke test\n  target: https://documind-chat-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] health  profile=gcp default=langchain\n  [PASS] brain direct  3120 ms  tools=['retrieve']  'Gratuity becomes payable after not less than five years of c'\n  [PASS] brain langchain  11840 ms  tools=['retrieve']  'Gratuity becomes payable once you have rendered at least fiv'\n  [PASS] brain langgraph  9730 ms  tools=['retrieve']  'Gratuity is payable after at least five years of continuous '\n  [PASS] brain adk  14260 ms  tools=['retrieve']  'After five years of continuous service, gratuity becomes pay'\n  [PASS] outsider refused  status=403 not a member of any tenant\n  --------------------------------------------------------\n  6 passed, 0 failed",
+          "expected": "{\"status\":\"ok\",\"profile\":\"gcp\",\"brains\":[\"langchain\",\"langgraph\",\"adk\",\"direct\"],\"default_brain\":\"langchain\",\"limits\":{\"max_model_calls\":12,\"budget_inr\":5.0,\"deadline_s\":100.0,\"model_timeout_s\":30.0,\"model_attempts\":2,\"min_model_s\":5.0,\"tool_budgets_s\":{\"retrieve\":95.0,\"calculate_processing_cost\":10}}}\n  DocuMind chat - live smoke test\n  target: https://documind-chat-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] health  profile=gcp default=langchain limits=12 calls, Rs 5.0, 100.0 s\n  [PASS] brain direct  3120 ms  tools=['retrieve']  citations=5  calls=0 Rs 0.3699  'Gratuity becomes payable after not less than five years of c'\n  [PASS] brain langchain  11840 ms  tools=['retrieve']  citations=5  calls=2 Rs 0.8738  'Gratuity becomes payable once you have rendered at least fiv'\n  [PASS] brain langgraph  9730 ms  tools=['retrieve']  citations=5  calls=2 Rs 0.8777  'Gratuity is payable after at least five years of continuous '\n  [PASS] brain adk  14260 ms  tools=['retrieve']  citations=5  calls=2 Rs 1.0024  'After five years of continuous service, gratuity becomes pay'\n  [PASS] outsider refused  status=403 not a member of any tenant\n  --------------------------------------------------------\n  6 passed, 0 failed",
           "adaptations": [],
-          "id": "source_15",
+          "id": "source_18",
           "function": "step_01_four_brains_on_health_and_the_module_s_gat",
-          "window": 15,
-          "source_line": 590,
+          "window": 18,
+          "source_line": 735,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py"
+      "next": "demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py"
     },
     {
-      "id": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them",
+      "id": "demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows",
       "lesson": "10.4",
-      "file": "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py",
+      "file": "demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py",
       "category": "required",
       "requires": [
         "demo_04_four_brains_on_health_and_the_module_s_gate"
       ],
-      "heading": "Four cost lines, as rag-api's rows draw them",
+      "heading": "Four cost lines, from rag-api's rows and the chat rows",
       "purpose": "Do it",
       "anchor": "s5",
       "anchors": [
@@ -287,41 +287,41 @@
       ],
       "section_number": 5,
       "windows": [
-        17
+        20
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        619
+        764
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "Four cost lines, as rag-api's rows draw them",
+          "heading": "Four cost lines, from rag-api's rows and the chat rows",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (rag-api's rows since step 4, one line per brain)",
-          "expected": "direct    1 retrieve()  in  2,561  out   68  Rs 0.3699\n  langchain 1 retrieve()  in  2,498  out   64  Rs 0.3593\n  langgraph 1 retrieve()  in  2,504  out   66  Rs 0.3613\n  adk       1 retrieve()  in  2,537  out   71  Rs 0.3687",
+          "label": "bash — run in the operator shell, in the kit (rag-api's rows and the chat rows since step 4, one line per brain)",
+          "expected": "rag-api's rows        the chat rows             whole\n  direct    1 retrieve()  Rs 0.3699   0 model calls  Rs 0.0000   Rs 0.3699\n  langchain 1 retrieve()  Rs 0.3593   2 model calls  Rs 0.5144   Rs 0.8737\n  langgraph 1 retrieve()  Rs 0.3613   2 model calls  Rs 0.5164   Rs 0.8777\n  adk       1 retrieve()  Rs 0.3687   2 model calls  Rs 0.6337   Rs 1.0024",
           "adaptations": [],
-          "id": "source_17",
-          "function": "step_01_four_cost_lines_as_rag_api_s_rows_draw_the",
-          "window": 17,
-          "source_line": 619,
+          "id": "source_20",
+          "function": "step_01_four_cost_lines_from_rag_api_s_rows_and_th",
+          "window": 20,
+          "source_line": 764,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_the_half_the_rows_cannot_see.py"
+      "next": "demo_06_the_loop_call_by_call.py"
     },
     {
-      "id": "demo_06_the_half_the_rows_cannot_see",
+      "id": "demo_06_the_loop_call_by_call",
       "lesson": "10.4",
-      "file": "demo_06_the_half_the_rows_cannot_see.py",
+      "file": "demo_06_the_loop_call_by_call.py",
       "category": "required",
       "requires": [
-        "demo_05_four_cost_lines_as_rag_api_s_rows_draw_them"
+        "demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows"
       ],
-      "heading": "The half the rows cannot see",
+      "heading": "The loop, call by call",
       "purpose": "Do it",
       "anchor": "s6",
       "anchors": [
@@ -329,27 +329,27 @@
       ],
       "section_number": 6,
       "windows": [
-        19
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        655
+        806
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The half the rows cannot see",
+          "heading": "The loop, call by call",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (the kit's three agent brains on your machine, their own model calls counted)",
-          "expected": "langchain 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175\n  langgraph 2 model calls  in  1,451  out    51 (thinking     0)  Rs 0.2175\n  adk       2 model calls  in  2,477  out    47 (thinking     0)  Rs 0.3458\nthe four cost lines, whole: the brain's own model calls + rag-api's, from step 5\n  direct    Rs 0.0000 + Rs 0.3699 = Rs 0.3699\n  langchain Rs 0.2175 + Rs 0.3593 = Rs 0.5768\n  langgraph Rs 0.2175 + Rs 0.3613 = Rs 0.5788\n  adk       Rs 0.3458 + Rs 0.3687 = Rs 0.7145",
+          "label": "bash — run in the operator shell, in the kit (the kit's three agent brains on your machine, each model call counted)",
+          "expected": "langchain call 1: in   401 out   31   call 2: in   931 out   20   (thinking 0)\n            the Meter, as the chat row keeps it: 2 model calls, in 1,332, out 51, Rs 0.2023\n  langgraph call 1: in   401 out   31   call 2: in   931 out   20   (thinking 0)\n            the Meter, as the chat row keeps it: 2 model calls, in 1,332, out 51, Rs 0.2023\n  adk       call 1: in   501 out   21   call 2: in 1,058 out   20   (thinking 0)\n            the Meter, as the chat row keeps it: 2 model calls, in 1,559, out 41, Rs 0.2249",
           "adaptations": [],
-          "id": "source_19",
-          "function": "step_01_the_half_the_rows_cannot_see",
-          "window": 19,
-          "source_line": 655,
+          "id": "source_22",
+          "function": "step_01_the_loop_call_by_call",
+          "window": 22,
+          "source_line": 806,
           "manual_checkpoint": null
         }
       ],
@@ -373,7 +373,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_4/GUIDE.md",
       "source_lines": [
-        370
+        373
       ],
       "offline": false,
       "live_verified": false,
@@ -391,7 +391,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 370,
+          "source_line": 373,
           "manual_checkpoint": null
         }
       ],
@@ -424,84 +424,105 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 334
+      "line": 337
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 366
+      "line": 369
     },
     {
       "window": 6,
       "label": "services/chat/tools.py - the LangChain adapter: the model is shown three arguments; the tenant arrives through ToolRuntime",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 395
+      "line": 399
     },
     {
       "window": 7,
-      "label": "services/chat/brains.py - the ADK adapter: the shared functions wrapped as they are, and a callback before each call",
+      "label": "services/chat/tools.py - for_adk(): the same two tools as plain functions, their arguments checked by the @tool's own schema; the request arrives through REQUEST",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 410
+      "line": 414
     },
     {
       "window": 8,
-      "label": "services/chat/brains.py - refusals: every error result in LangChain and LangGraph, a blocked name in ADK",
+      "label": "services/chat/brains.py - the ADK brain: what goes wrong becomes an error result, as in LangChain",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 426
+      "line": 446
     },
     {
       "window": 9,
+      "label": "services/chat/brains.py - refusals: every error result, in LangChain and LangGraph and in ADK",
+      "heading": "Two adapters over one tool, side by side",
+      "anchor": "s3",
+      "line": 470
+    },
+    {
+      "window": 10,
       "label": "services/chat/brains.py - where the ADK brain keeps a conversation",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 433
+      "line": 478
     },
     {
       "window": 11,
-      "label": "expected",
+      "label": "services/chat/brains.py - the turn's limits, wired three ways: middleware, the node itself, model callbacks beside ADK's cap",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 452
+      "line": 490
     },
     {
-      "window": 13,
-      "label": "expected (this cell run on the kit's own brains.py and tools.py with google-adk 2.8.0; the LangChain texts are the installed LangChain's)",
+      "window": 12,
+      "label": "services/chat/limits.py - ADK's two model callbacks: the Meter before the call is counted, the tokens after",
       "heading": "Two adapters over one tool, side by side",
       "anchor": "s3",
-      "line": 542
+      "line": 503
     },
     {
       "window": 14,
-      "label": "services/chat/agent.py - /health: the names in a constant",
-      "heading": "Four brains on /health, and the module's gate",
-      "anchor": "s4",
-      "line": 584
+      "label": "expected",
+      "heading": "Two adapters over one tool, side by side",
+      "anchor": "s3",
+      "line": 533
     },
     {
       "window": 16,
-      "label": "expected (the body is the kit's own health(); the smoke lines are the kit's smoke_chat.py against a local stand-in, whose timings and answers are invented)",
+      "label": "expected (this cell run on the kit's own brains.py and tools.py with google-adk 2.8.0; the LangChain texts are the installed LangChain's)",
+      "heading": "Two adapters over one tool, side by side",
+      "anchor": "s3",
+      "line": 661
+    },
+    {
+      "window": 17,
+      "label": "services/chat/agent.py - /health: the names in a constant, and the limits every turn runs under",
       "heading": "Four brains on /health, and the module's gate",
       "anchor": "s4",
-      "line": 594
+      "line": 727
     },
     {
-      "window": 18,
-      "label": "expected (invented token counts from a fake gcloud, priced at cost.py's rate for gemini-3.6-flash)",
-      "heading": "Four cost lines, as rag-api's rows draw them",
+      "window": 19,
+      "label": "expected (the body is the kit's own health() with RAG_TIMEOUT_S=90; the smoke lines are the kit's smoke_chat.py against a local stand-in whose limits are the kit's Meter; the timings, answers, citations and token counts are invented)",
+      "heading": "Four brains on /health, and the module's gate",
+      "anchor": "s4",
+      "line": 739
+    },
+    {
+      "window": 21,
+      "label": "expected (invented token counts from a fake gcloud, priced at cost.py's rate for gemini-3.6-flash; the chat rows are the kit's Meter.row() over them)",
+      "heading": "Four cost lines, from rag-api's rows and the chat rows",
       "anchor": "s5",
-      "line": 638
+      "line": 788
     },
     {
-      "window": 20,
-      "label": "expected (the kit's brains against stand-in models that count each prompt at four characters a token and do no thinking; your run prints Gemini's own counts)",
-      "heading": "The half the rows cannot see",
+      "window": 23,
+      "label": "expected (the kit's brains and Meter against stand-in models that count each prompt at four characters a token and do no thinking; your run prints Gemini's own counts)",
+      "heading": "The loop, call by call",
       "anchor": "s6",
-      "line": 687
+      "line": 833
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -161,6 +161,7 @@ def retrieve(query: str, doc_type: str = "all", top_k: int = 5, tenant: str | No
            {"query_sha": hashlib.sha256(query.encode("utf-8")).hexdigest()[:16],
             "answerable": out.get("answerable"), "citations": len(out.get("citations") or []),
             "error": out.get("error")})
+    out.pop("usage", None)           # the chat's turn limits read rag-api's cost; this tool's contract is unchanged
     return out                       # the citations contract, or {"error": ...} as DATA the model can read
 
 

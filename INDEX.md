@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-937 files; 108 quoted by a lesson, 148 shown or named by one.
+1026 files; 128 quoted by a lesson, 202 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -23,55 +23,70 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `cloudbuild.yaml` | config | - | 12.2, 18.3 |
 | `commands/check-firestore-fallback.py` | code | 5.4, 13.1 | 3.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
+| `commands/desk-check.sh` | code | - | - |
+| `commands/desk_ops.py` | code | - | 10.5, 10.6 |
+| `commands/gchat.sh` | code | 10.6 | - |
 | `commands/git-source.sh` | code | - | - |
-| `commands/infrastructure.py` | code | - | 13.2 |
-| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
-| `commands/lane.py` | code | 8.1, 12.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/infrastructure.py` | code | - | 4.4, 10.5, 10.6, 13.2 |
+| `commands/ingest-one.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/lane.py` | code | 8.1, 12.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `commands/lesson-12.1.sh` | code | - | - |
-| `commands/lesson-12.2.sh` | code | 8.1 | 7.3, 8.2, 13.3 |
+| `commands/lesson-12.2.sh` | code | 8.1 | 7.3, 8.2, 10.5, 10.6, 13.3 |
 | `commands/lesson-12.3.sh` | code | - | - |
-| `commands/lesson-12.4.sh` | code | 6.4 | - |
+| `commands/lesson-12.4.sh` | code | 6.4 | 10.5, 10.6 |
 | `commands/lesson-12.5.sh` | code | 4.1 | - |
-| `commands/lesson-12.8.sh` | code | - | 10.1, 11.1 |
+| `commands/lesson-12.8.sh` | code | - | 10.1, 10.2, 10.3, 10.5, 10.6, 11.1 |
 | `commands/lesson-7.2.sh` | code | 12.2 | 12.3 |
 | `commands/lesson-8.4.sh` | code | 12.3 | - |
-| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
-| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
-| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/limits-check.sh` | code | - | 10.3 |
+| `commands/limits-drill.sh` | code | - | 10.3 |
+| `commands/poison.sh` | code | 4.1 | 3.1, 3.2, 3.3, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/reindex.sh` | code | 4.2 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/session-restart.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `commands/tests/terraform_reapply.tftest.hcl` | code | - | - |
+| `commands/tests/test_cases.py` | code | - | 10.5 |
+| `commands/tests/test_chat_brains.py` | code | - | 10.2, 10.4 |
+| `commands/tests/test_chat_limits.py` | code | - | 10.3 |
 | `commands/tests/test_check_firestore_fallback.py` | code | - | - |
+| `commands/tests/test_desk.py` | code | - | - |
+| `commands/tests/test_desk_operations.py` | code | - | - |
+| `commands/tests/test_desk_rules.py` | code | - | 10.5 |
+| `commands/tests/test_doc_types.py` | code | - | - |
 | `commands/tests/test_document_embeddings.py` | code | - | 3.3 |
+| `commands/tests/test_gchat.py` | code | - | 10.6 |
 | `commands/tests/test_git_source.py` | code | - | - |
 | `commands/tests/test_hybrid_plumbing.py` | code | - | - |
 | `commands/tests/test_infrastructure.py` | code | - | - |
 | `commands/tests/test_lane.py` | code | - | - |
 | `commands/tests/test_session_restart.py` | code | - | - |
 | `commands/tests/test_smoke_agent_expectations.py` | code | - | - |
+| `commands/tests/test_smoke_chat_markers.py` | code | - | - |
 | `commands/tests/test_smoke_mcp_setup.py` | code | - | - |
 | `commands/tests/test_spanner_graph.py` | code | - | 15.2 |
 | `commands/tests/test_terraform_reapply.sh` | code | - | - |
 | `commands/tests/test_verify_vector_index.py` | code | - | - |
 | `commands/vector-status.sh` | code | 3.4 | 5.4 |
 | `commands/verify-vector-index.py` | code | - | 3.4, 13.1 |
-| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `commands/wait-vectors.sh` | code | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `evals/README.md` | doc | - | 8.3 |
 | `evals/ablate.py` | code | 5.2, 15.4 | 5.3, 13.1 |
 | `evals/build_corpus.py` | code | - | - |
 | `evals/build_golden.py` | code | 7.1 | - |
 | `evals/build_media.py` | code | - | 16.1 |
+| `evals/build_routes.py` | code | - | 10.6 |
 | `evals/cache_threshold.py` | code | 7.1, 9.3 | - |
 | `evals/corpus/acme/annual_report_2026.md` | data | - | - |
 | `evals/corpus/acme/annual_report_2026_fig3.png` | data | - | - |
 | `evals/corpus/acme/cgst_act_2017.md` | data | - | 5.3, 6.1 |
 | `evals/corpus/acme/cgst_act_2017.pdf` | data | - | 4.1 |
-| `evals/corpus/acme/code_on_social_security_2020.md` | data | - | - |
+| `evals/corpus/acme/code_on_social_security_2020.md` | data | - | 10.5 |
 | `evals/corpus/acme/code_on_social_security_2020.pdf` | data | - | - |
-| `evals/corpus/acme/code_on_wages_2019.md` | data | - | 3.2, 3.3, 4.2 |
+| `evals/corpus/acme/code_on_wages_2019.md` | data | - | 3.2, 3.3, 4.2, 10.5 |
 | `evals/corpus/acme/code_on_wages_2019.pdf` | data | - | - |
-| `evals/corpus/acme/dpdp_act_2023.md` | data | - | - |
+| `evals/corpus/acme/dpdp_act_2023.md` | data | - | 10.5 |
 | `evals/corpus/acme/dpdp_act_2023.pdf` | data | - | - |
 | `evals/corpus/acme/hr_policy_2026.md` | data | - | 3.2, 3.3, 4.2, 4.3, 6.1, 6.2, 7.1, 9.2, 13.1 |
-| `evals/corpus/acme/industrial_relations_code_2020.md` | data | - | - |
+| `evals/corpus/acme/industrial_relations_code_2020.md` | data | - | 10.5 |
 | `evals/corpus/acme/industrial_relations_code_2020.pdf` | data | - | - |
 | `evals/corpus/acme/inv_2026_0412.md` | data | - | - |
 | `evals/corpus/acme/inv_2026_0412.png` | data | - | - |
@@ -84,7 +99,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/corpus/acme/maternity_benefit_amendment_act_2017.md` | data | - | - |
 | `evals/corpus/acme/maternity_benefit_amendment_act_2017.pdf` | data | - | 3.2 |
 | `evals/corpus/acme/msa_acme_2026.md` | data | - | - |
-| `evals/corpus/acme/osh_code_2020.md` | data | - | - |
+| `evals/corpus/acme/osh_code_2020.md` | data | - | 10.5 |
 | `evals/corpus/acme/osh_code_2020.pdf` | data | - | - |
 | `evals/corpus/acme/payment_of_bonus_act_1965.md` | data | - | - |
 | `evals/corpus/acme/payment_of_bonus_act_1965.pdf` | data | - | - |
@@ -116,15 +131,23 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/demo/smoke_note_v1.md` | data | - | 3.4, 4.3, 6.1 |
 | `evals/demo/smoke_note_v2.md` | data | - | 6.1 |
 | `evals/demo_corpus_gate.py` | code | - | - |
+| `evals/desk/clause_notes.acme.json` | config | - | - |
+| `evals/desk/queues.acme.json` | config | - | 10.5, 10.6 |
+| `evals/desk/queues.globex.json` | config | - | 10.6 |
+| `evals/desk/queues.zeta.json` | config | - | 10.6 |
 | `evals/fetch_real.py` | code | - | - |
 | `evals/golden.jsonl` | data | - | 4.2, 7.1, 7.2, 9.3, 17.1, 17.2, 17.3, 18.4 |
 | `evals/judge.py` | code | 7.2, 7.3, 17.3 | - |
 | `evals/make_evalset.py` | code | 7.1 | - |
 | `evals/make_trainset.py` | code | 17.1 | 17.2 |
-| `evals/manifest.json` | config | - | - |
+| `evals/manifest.json` | config | - | 10.6 |
 | `evals/paraphrases.jsonl` | data | 9.3 | 7.1 |
 | `evals/real_sources.json` | config | - | - |
 | `evals/required.json` | config | 7.1 | - |
+| `evals/route_eval.py` | code | - | 10.6 |
+| `evals/route_probe.py` | code | - | 10.6 |
+| `evals/route_threshold.py` | code | - | 10.6 |
+| `evals/routes.jsonl` | data | - | 10.5, 10.6 |
 | `evals/run_eval.py` | code | 4.2, 7.1, 7.2, 7.3, 8.2, 16.1 | 18.2 |
 | `evals/sft/documind_sft_v1.chat.jsonl` | data | - | - |
 | `evals/sft/documind_sft_v1.manifest.json` | data | - | - |
@@ -132,6 +155,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/tests/test_fetch_real.py` | code | - | - |
 | `evals/tests/test_make_trainset_helpdesk.py` | code | - | - |
 | `evals/tests/test_make_trainset_retry.py` | code | - | - |
+| `evals/tests/test_route_eval.py` | code | - | - |
 | `evals/tune.py` | code | 17.1, 17.2 | - |
 | `evals/upload.sh` | code | 16.1 | - |
 | `evals/usage_rows.py` | code | 5.3, 5.4, 6.3, 9.3, 13.2, 17.3 | 10.4 |
@@ -139,8 +163,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `gke/README.md` | doc | - | 18.3 |
 | `gke/vllm-deployment.yaml` | config | 18.3 | - |
 | `mk/README.md` | doc | - | - |
-| `mk/ingestion.mk` | code | 3.3, 4.1, 5.4 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
-| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `mk/agents.mk` | code | - | 10.6 |
+| `mk/ingestion.mk` | code | 3.3, 4.1, 5.4 | 3.1, 3.2, 3.4, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `mk/lifecycle.mk` | code | 4.3, 4.4 | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `operators/remirror_missing.py` | code | - | - |
 | `operators/tests/test_remirror_missing.py` | code | - | - |
 | `run-service.yaml` | config | - | 5.1, 8.1 |
@@ -155,11 +180,19 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/agent/agent.py` | code | 12.3 | - |
 | `services/agent/requirements.txt` | config | - | 12.3 |
 | `services/chat/Dockerfile` | code | - | - |
-| `services/chat/agent.py` | code | 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3 | 8.1 |
+| `services/chat/agent.py` | code | 10.1, 10.2, 10.3, 10.4, 10.5, 11.1, 11.2, 11.3 | 8.1 |
 | `services/chat/brains.py` | code | 10.1, 10.2, 10.3, 10.4, 11.1, 11.2 | - |
+| `services/chat/delegation.py` | code | 10.6 | - |
+| `services/chat/desk.py` | code | 10.5, 10.6 | - |
+| `services/chat/desk_agent.py` | code | - | 10.6 |
+| `services/chat/desk_graph.py` | code | 10.6 | - |
+| `services/chat/desk_overdue.py` | code | 10.5 | - |
+| `services/chat/desk_router.py` | code | 10.6 | - |
+| `services/chat/desk_routes.py` | code | 10.6 | - |
+| `services/chat/limits.py` | code | 10.3, 10.4 | - |
 | `services/chat/migrate.py` | code | 11.2 | - |
 | `services/chat/requirements-local.txt` | config | - | - |
-| `services/chat/requirements.txt` | config | - | - |
+| `services/chat/requirements.txt` | config | - | 10.6 |
 | `services/chat/tools.py` | code | 10.1, 10.2, 10.3, 10.4 | - |
 | `services/frontend/.streamlit/config.toml` | config | - | - |
 | `services/frontend/Dockerfile` | code | - | - |
@@ -168,10 +201,19 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/frontend/auth.py` | code | 3.1, 6.4, 8.1 | - |
 | `services/frontend/chat.py` | code | 6.3, 6.4, 8.1 | - |
 | `services/frontend/citations.py` | code | 6.4, 16.1 | - |
+| `services/frontend/desk.py` | code | 10.5, 10.6 | - |
 | `services/frontend/documents.py` | code | 6.4 | - |
 | `services/frontend/requirements.txt` | config | - | - |
 | `services/frontend/studio.py` | code | - | 16.2 |
 | `services/frontend/voice.py` | code | 16.2 | - |
+| `services/gchat/Dockerfile` | code | - | - |
+| `services/gchat/cards.py` | code | 10.6 | - |
+| `services/gchat/claims.py` | code | 10.6 | - |
+| `services/gchat/events.py` | code | - | 10.6 |
+| `services/gchat/main.py` | code | 10.6 | - |
+| `services/gchat/post.py` | code | - | - |
+| `services/gchat/replies.py` | code | - | - |
+| `services/gchat/requirements.txt` | config | - | - |
 | `services/gemma-vllm/Dockerfile` | code | 18.3 | - |
 | `services/gemma-vllm/auth.py` | code | 18.3 | - |
 | `services/gemma-vllm/cloudbuild.yaml` | config | - | - |
@@ -187,11 +229,12 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/ingest/graph.py` | code | 15.1 | - |
 | `services/ingest/idempotency.py` | code | 3.1, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 9.2 | - |
 | `services/ingest/indexer.py` | code | 3.1, 3.3, 3.4, 4.2, 5.2, 6.1 | 5.1 |
-| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 8.3, 15.4, 16.1 | 3.1 |
+| `services/ingest/main.py` | code | 3.2, 3.3, 3.4, 4.1, 4.3, 4.4, 8.3, 15.4, 16.1 | 3.1, 10.6 |
 | `services/ingest/managed.py` | code | 15.3, 15.4 | - |
 | `services/ingest/parser.py` | code | 3.2 | - |
 | `services/ingest/reconcile.py` | code | 4.3, 4.4, 5.4, 15.4 | 3.3 |
-| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `services/ingest/relabel.py` | code | 10.6 | - |
+| `services/ingest/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `services/litellm/Dockerfile` | code | - | - |
 | `services/litellm/config.yaml` | config | 18.2, 18.3 | 18.1, 18.4 |
 | `services/litellm/dlp_audit.py` | code | - | - |
@@ -202,7 +245,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/litellm/requirements.txt` | config | - | 18.1 |
 | `services/litellm/token_proxy.py` | code | 18.1 | 18.3 |
 | `services/mcp/Dockerfile` | code | - | - |
-| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `services/mcp/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `services/mcp/server.py` | code | 12.1, 12.2 | 8.1 |
 | `services/rag-api/Dockerfile` | code | - | - |
 | `services/rag-api/auth.py` | code | 5.1, 8.1, 8.2 | - |
@@ -213,14 +256,15 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/rag-api/config.py` | code | 3.3, 5.1, 5.2, 5.3, 6.1, 7.3, 18.2 | - |
 | `services/rag-api/context_budget.py` | code | 6.1, 16.1, 17.1 | - |
 | `services/rag-api/cost.py` | code | 6.1, 7.3, 9.1, 17.3 | 17.1, 17.2 |
+| `services/rag-api/desk_door.py` | code | 10.5 | - |
 | `services/rag-api/generator.py` | code | 5.3, 6.1, 6.2, 6.3, 9.1, 9.2, 17.2, 18.1, 18.2 | 17.1 |
 | `services/rag-api/guard.py` | code | 6.3, 8.3 | - |
 | `services/rag-api/hybrid.py` | code | 3.3, 5.1, 5.2 | - |
-| `services/rag-api/main.py` | code | 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 8.1, 8.2, 8.3, 9.1, 9.2, 13.1, 13.3, 15.3, 17.3 | 16.1 |
+| `services/rag-api/main.py` | code | 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 8.1, 8.2, 8.3, 9.1, 9.2, 10.5, 13.1, 13.3, 15.3, 17.3 | 16.1 |
 | `services/rag-api/media.py` | code | 16.2 | - |
-| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `services/rag-api/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
 | `services/rag-api/retriever.py` | code | 3.3, 3.4, 4.3, 5.1, 5.2, 5.3, 5.4, 6.3, 8.2, 13.1, 15.2, 15.3 | - |
-| `services/rag-api/router.py` | code | - | 13.3 |
+| `services/rag-api/router.py` | code | - | 10.6, 13.3 |
 | `services/rag-api/schemas.py` | code | 5.1, 5.4, 6.2 | - |
 | `services/rag-api/semantic_cache.py` | code | 9.1, 9.2, 9.3, 17.3 | - |
 | `services/rag-api/telemetry.py` | code | 6.3 | - |
@@ -231,22 +275,33 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/slm/make_modelfile.py` | code | 18.2 | - |
 | `services/slm/requirements.txt` | config | - | 18.2 |
 | `shared/audit_log.py` | code | 3.4, 8.3 | - |
+| `shared/cases.py` | code | 10.5 | - |
+| `shared/desk_calc.py` | code | - | 10.6 |
+| `shared/desk_law.py` | code | 10.5, 10.6 | - |
+| `shared/desk_rules.py` | code | 10.5 | - |
+| `shared/doc_types.py` | code | 10.6 | - |
 | `shared/documind_corpus.py` | code | 3.2, 3.3, 4.2 | 6.1, 17.1 |
 | `shared/documind_graph.py` | code | 15.2 | - |
 | `shared/documind_schemas.py` | code | 5.3, 6.2, 16.1 | 9.1, 17.1 |
 | `shared/documind_tools.py` | code | 10.1, 10.3, 18.4 | - |
 | `shared/iap.py` | code | 6.4, 8.1 | 10.3 |
+| `shared/identifiers.py` | code | - | 10.5 |
 | `shared/local_corpus.py` | code | - | - |
 | `shared/pii.py` | code | 8.3 | 7.1, 17.2 |
+| `shared/prices.py` | code | - | 10.4, 10.6 |
 | `shared/profile.py` | code | - | - |
-| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `shared/requirements.txt` | config | - | 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2, 6.3, 6.4, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 9.1, 9.2, 9.3, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 11.1, 11.2, 11.3, 12.1, 12.2, 12.3, 13.1, 13.2, 13.3, 15.1, 15.2, 15.3, 15.4, 16.1, 16.2, 17.1, 17.2, 17.3, 18.1, 18.2, 18.3, 18.4 |
+| `shared/roles.py` | code | 10.5 | - |
 | `shared/sparse_encoder.py` | code | 3.3 | 5.2 |
 | `shared/tenancy.py` | code | 3.1, 5.1, 5.4, 8.1, 8.2, 15.3, 17.2 | - |
 | `smoke/preflight.sh` | code | - | - |
 | `smoke/smoke.py` | code | 5.3, 5.4, 8.2 | - |
 | `smoke/smoke_agent.py` | code | - | - |
-| `smoke/smoke_chat.py` | code | 8.2 | - |
+| `smoke/smoke_cases.py` | code | - | 10.5, 10.6 |
+| `smoke/smoke_chat.py` | code | 8.2 | 10.6 |
+| `smoke/smoke_desk.py` | code | - | 10.6 |
 | `smoke/smoke_gateway.py` | code | 18.1 | - |
+| `smoke/smoke_gchat.py` | code | - | 10.6 |
 | `smoke/smoke_mcp.py` | code | - | - |
 | `smoke/smoke_media.py` | code | - | 16.1 |
 | `smoke/smoke_reindex.py` | code | 4.4 | - |
@@ -258,11 +313,14 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/clouddeploy.tf` | code | - | - |
 | `terraform/cloudsql.tf` | code | 11.2 | 11.1 |
 | `terraform/dataplex.tf` | code | 3.4 | - |
+| `terraform/desk.tf` | code | 10.5 | 10.1, 10.6 |
+| `terraform/desk_alerts.tf` | code | - | 10.5, 10.6, 13.2 |
 | `terraform/docai.tf` | code | - | 3.2 |
 | `terraform/eventarc.tf` | code | 4.1 | 3.1 |
 | `terraform/firestore.tf` | code | - | - |
 | `terraform/firestore_indexes.tf` | code | 3.4, 4.3, 5.4 | - |
 | `terraform/gateway.tf` | code | - | - |
+| `terraform/gchat.tf` | code | - | 10.6 |
 | `terraform/gke.tf` | code | - | - |
 | `terraform/managed.tf` | code | - | - |
 | `terraform/model_armor.tf` | code | 8.3 | - |
@@ -277,8 +335,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/sink.tf` | code | 13.2, 16.2 | - |
 | `terraform/spanner.tf` | code | 15.2 | - |
 | `terraform/sql/chunk_metadata.sql` | code | - | - |
+| `terraform/sql/desk_daily.sql` | code | - | 10.6, 13.2 |
 | `terraform/sql/tenant_daily.sql` | code | 5.2, 5.3, 5.4, 13.2 | 16.2 |
-| `terraform/storage.tf` | code | 6.4, 8.3 | - |
+| `terraform/storage.tf` | code | 6.4, 8.3 | 10.5 |
 | `terraform/variables.tf` | code | 3.3 | - |
 | `terraform/vector.tf` | code | 3.3 | 5.1 |
 | `terraform/wif.tf` | code | - | - |
@@ -628,7 +687,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_1/demo_05_the_one_retrieve_from_your_shell.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_1/demo_06_the_direct_brain_one_retrieve_no_loop.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_1/demo_07_the_loop_the_model_chooses_its_tools.py` | code | - | - |
-| `workshop_demos/module_10/lesson_10_1/demo_08_the_rows_what_each_brain_cost_and_what_no_row_records.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_1/demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_1/lesson_map.json` | config | - | - |
 | `workshop_demos/module_10/lesson_10_1/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_1/setup/prepare.py` | code | - | - |
@@ -645,8 +704,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_3/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_10/lesson_10_3/README.md` | doc | - | - |
 | `workshop_demos/module_10/lesson_10_3/demo_03_five_failures_through_the_kit_s_langchain_brain.py` | code | - | - |
-| `workshop_demos/module_10/lesson_10_3/demo_04_access_failures_at_the_chat_service_s_door.py` | code | - | - |
-| `workshop_demos/module_10/lesson_10_3/demo_05_an_argument_the_corpus_cannot_honour.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_3/demo_04_a_turn_that_will_not_stop_the_call_cap_the_rupees_and_the_deadline.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_3/demo_05_access_failures_at_the_chat_service_s_door.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_3/demo_06_an_argument_the_corpus_cannot_honour.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_3/lesson_map.json` | config | - | - |
 | `workshop_demos/module_10/lesson_10_3/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_3/setup/prepare.py` | code | - | - |
@@ -655,12 +715,41 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_4/README.md` | doc | - | - |
 | `workshop_demos/module_10/lesson_10_4/demo_03_two_adapters_over_one_tool_side_by_side.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_4/demo_04_four_brains_on_health_and_the_module_s_gate.py` | code | - | - |
-| `workshop_demos/module_10/lesson_10_4/demo_05_four_cost_lines_as_rag_api_s_rows_draw_them.py` | code | - | - |
-| `workshop_demos/module_10/lesson_10_4/demo_06_the_half_the_rows_cannot_see.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_4/demo_05_four_cost_lines_from_rag_api_s_rows_and_the_chat_rows.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_4/demo_06_the_loop_call_by_call.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_4/lesson_map.json` | config | - | - |
 | `workshop_demos/module_10/lesson_10_4/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_4/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_4/setup/restore_settings.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/GUIDE.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_5/README.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_03_your_lane_the_desk_s_resources_accounts_queues_and_roles.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_04_the_desk_page_tell_raise_read.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_05_one_fixed_reply_at_every_door.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_06_roles_and_cases_in_the_code.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_07_the_case_routes_over_rest.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/demo_08_the_records_the_audit_events_and_the_log_rows.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/lesson_map.json` | config | - | - |
+| `workshop_demos/module_10/lesson_10_5/setup/finish.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/setup/prepare.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_5/setup/restore_settings.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/GUIDE.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_6/README.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_03_your_lane_the_classes_the_example_index_and_the_switches.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_04_the_desk_page_and_the_hr_desk_app_in_google_chat.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_05_classes_desks_the_rules_first_and_the_google_chat_door_in_the_code.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_06_two_signals_and_one_arbiter_in_the_code.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_07_v1_route_and_v1_desk_over_rest.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_08_the_shadow_the_rows_and_the_log.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/demo_10_verify_it_yourself_the_eval_and_the_checklist.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/lesson_map.json` | config | - | - |
+| `workshop_demos/module_10/lesson_10_6/optional/demo_03_your_lane_the_classes_the_example_index_and_the_switches.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/optional/demo_04_the_desk_page_and_the_hr_desk_app_in_google_chat.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/optional/demo_07_v1_route_and_v1_desk_over_rest.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/optional/demo_08_the_shadow_the_rows_and_the_log.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/setup/finish.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/setup/prepare.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_6/setup/restore_settings.py` | code | - | - |
 | `workshop_demos/module_11/README.md` | doc | - | - |
 | `workshop_demos/module_11/lesson_11_1/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_11/lesson_11_1/README.md` | doc | - | - |

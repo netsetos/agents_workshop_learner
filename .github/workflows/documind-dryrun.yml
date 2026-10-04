@@ -61,6 +61,23 @@ jobs:
       - name: Corpus recovery regressions (offline)
         run: python -m unittest discover -s evals/tests -v
 
+      # The chat brains (workshop lessons 10.1 to 10.4) need the chat image's own pins - LangChain, LangGraph,
+      # google-adk - which the checks above do not install. They get a venv of their own, so nothing above changes,
+      # and DOCUMIND_REQUIRE_LIBS=1 makes a missing pin a failure rather than a skipped test. test_chat_limits.py's
+      # library half is the brains under a turn's limits (workshop lessons 10.3 and 10.4); make limits-check runs
+      # the same. test_cases.py's is the Desk's chat door and case routes (workshop lesson 10.5; make desk-check),
+      # test_desk.py's the router and the desk graph (workshop lesson 10.6), test_gchat.py's the Google Chat bridge and
+      # the Desk's delegation rules (workshop lesson 10.6).
+      - name: Chat brain regressions, in the chat image's pins (offline)
+        run: |
+          python -m venv /tmp/chat-venv
+          /tmp/chat-venv/bin/pip install -q -r services/chat/requirements.txt
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_chat_brains.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_chat_limits.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_cases.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_desk.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_gchat.py -v
+
       - name: Extraction check (a kit-only checkout has no notebooks, so it reports and passes)
         run: python extract_documind.py --check
 

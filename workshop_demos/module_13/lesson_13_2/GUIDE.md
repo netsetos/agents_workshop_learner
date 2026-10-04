@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`, reviewed at blob `22c11174ed320d7ad4355dfac348e510cefca82b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_13.2_Usage_Reconcile_WIX.html`, reviewed at blob `9e59433d6f572c21dde05eedd031ee9acc67b317`. Learners read that page on the course site; this guide keeps its prose.
 
 Every answer DocuMind gives writes one usage row: the tenant, the tokens, the cost priced at the model that answered, and where the time went. Four readers count those rows, each with its own filter and its own window. Cloud Logging keeps them all. A log sink copies some of them into BigQuery, where the `tenant_daily` view groups them by Indian day. `make usage` reads them straight from the log. A log-based metric counts them for an alert.
 
@@ -44,7 +44,7 @@ One row per answer. Each surface writes its own row:
 
 - Media Studio writes its own row with the same fields (event `media`).
 
-- The chat service writes a row per turn (event `chat`) with the brain, the tool calls and the latency, but no tokens and no cost.
+- The chat service writes a row per turn (event `chat`) with the brain, the tool calls and the latency, and, since lesson 10.3, the turn's own model calls with their tokens and cost.
 
 Each row is a line on the service's standard output, which Cloud Run turns into a Cloud Logging entry.
 
@@ -52,7 +52,7 @@ Four readers count the rows.
 
 - Cloud Logging keeps every entry for thirty days.
 
-- The sink, `documind-api-to-bq`, copies entries into BigQuery as they are written. It copies only from `documind-api` and `documind-chat`, and only the events `query`, `stream` and `chat`.
+- The sink, `documind-api-to-bq`, copies entries into BigQuery as they are written. It copies only from `documind-api` and `documind-chat`, and only the events `query`, `stream` and `chat`, and the four the Desk added: `desk`, `passages`, `desk_shadow` (never a sensitive one) and `desk_gate` (from `documind-chat` only).
 
 - `tenant_daily` groups the sink's table by Indian day and seven dimensions, reading `query`, `stream` and `media`.
 
@@ -138,9 +138,9 @@ Which services and events each one reads, over what window, and the one policy t
 
 #### Definition
 
-The cell reads four files and prints each reader's filter:
+The cell reads the four readers' files and prints each reader's filter:
 
-- `sink.tf`'s filter;
+- `sink.tf`'s filter, with the two events it copies only on a condition;
 
 - `tenant_daily.sql`'s WHERE and GROUP BY;
 
@@ -148,7 +148,7 @@ The cell reads four files and prints each reader's filter:
 
 - the `documind/queries` metric in `alerts.tf`.
 
-Then it lists, for each event, the readers that read it; the policies `alerts.tf` declares; and the one that reads `ingest-dlq-sub`. Nothing is called.
+Then it lists, for each event, the readers that read it, and the event the Desk's own view, `desk_daily.sql`, reads; the policies `alerts.tf` declares, and those the Desk keeps in `desk_alerts.tf`; and the one that reads `ingest-dlq-sub`. Nothing is called.
 
 #### The code
 
@@ -160,7 +160,9 @@ Then it lists, for each event, the readers that read it; the policies `alerts.tf
 
 - `chat` is copied by the sink and read by nothing after it.
 
-Both rupee columns use 85 rupees to the dollar. The last line is this lesson's kit change: `alerts.tf` now declares a policy on `ingest-dlq-sub` (its excerpt is in step 6). Your lane gets it only when you apply it.
+- The Desk's four events are copied too, and none of the other three readers reads them. A sensitive `desk_shadow` row and rag-api's `desk_gate` rows stay in Cloud Logging: each can sit beside a `chat` row of the same turn, which names the person. The Desk's own view, `desk_daily`, reads `desk` (lesson 10.6).
+
+Both rupee columns use 85 rupees to the dollar. The Desk's policies sit in their own file, the router's three only on a lane planned with `DESK_ROUTER_ALERTS=true`, so `alerts.tf`'s list is the one this lesson counts. The last line is this lesson's kit change: `alerts.tf` now declares a policy on `ingest-dlq-sub` (its excerpt is in step 6). Your lane gets it only when you apply it.
 
 ### Four questions, four rows
 
@@ -288,9 +290,9 @@ The design choices, from the kit's own comments, then the bill and the gaps.
 
 Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-- Media rows never reach BigQuery. The sink copies `query`, `stream` and `chat`. `tenant_daily`'s WHERE reads `media`, and its comment promises media spend per tenant, but no media row ever arrives. `make usage` counts them, so a day with images disagrees by exactly their rupees.
+- Media rows never reach BigQuery. The sink copies `query`, `stream`, `chat` and the Desk's four events, never `media`. `tenant_daily`'s WHERE reads `media`, and its comment promises media spend per tenant, but no media row ever arrives. `make usage` counts them, so a day with images disagrees by exactly their rupees.
 
-- A chat turn's own model calls are priced by no row. The chat service's turn row carries no tokens and no cost, and neither report reads it. The retrievals the brains make are priced, on rag-api's rows labelled with the brain; the agent's own Gemini calls are not.
+- A chat turn's own model calls are in no report. The chat service's turn row prices them, in `cost_usd`, but neither report reads that row. The retrievals the brains make are counted, on rag-api's rows labelled with the brain; the agent's own Gemini calls are not. Lesson 13.3 takes this up.
 
 - The answer does not carry its price. A Vertex answer's `cost_usd` is `None`. Only the row is priced, so a caller cannot see what an answer cost.
 

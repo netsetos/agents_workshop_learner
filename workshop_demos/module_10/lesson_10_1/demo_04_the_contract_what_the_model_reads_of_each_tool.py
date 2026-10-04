@@ -39,8 +39,7 @@ def step_01_the_contract_what_the_model_reads_of_each(session):
           Retrieve grounded passages from DocuMind's corpus.
       calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')
           Estimate document processing cost in USD and INR.
-      get_usage_stats(metric: str, days: int = 7)    hidden: runtime
-          Get DocuMind RAG pipeline usage statistics.
+      'express' refused: unknown tier 'express'; expected one of ['bulk', 'priority', 'standard']
     """
     import ast
     src = open("services/chat/tools.py", encoding="utf-8").read()
@@ -52,6 +51,11 @@ def step_01_the_contract_what_the_model_reads_of_each(session):
             hidden = [x.arg for x in a if x.arg == "runtime"]
             print(f"  {fn.name}({', '.join(shown)})" + (f"    hidden: {hidden[0]}" if hidden else ""))
             print(f"      {ast.get_docstring(fn).splitlines()[0]}")
+    from shared.documind_tools import calculate_processing_cost   # the function the chat's cost tool hands its arguments to
+    try:
+        calculate_processing_cost(283, processing_type="express")
+    except ValueError as exc:
+        print(f"  'express' refused: {exc}")
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

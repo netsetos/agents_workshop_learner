@@ -47,7 +47,7 @@ def step_01_four_filters_four_verdicts(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: 400 | unknown filter key(s) tenant_id; allowed: doc_type, kind
-    400 | filter doc_type must be a non-empty string
+    400 | filter doc_type must be a non-empty string or a list of 1 to 5 of them
     200 | answerable False pool 0 | The corpus holds nothing near this question: no passage of this
     200 | answerable True pool 20 | A confirmed employee at grade E3 or above serves a notice period
     """

@@ -35,14 +35,14 @@ def step_01_the_readers_as_the_kit_writes_them_down(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: reader                         services                     events                window
-    the sink, into BigQuery        documind-api, documind-chat  query, stream, chat   every row, as it is written
-    tenant_daily, the view         what the sink copied         query, stream, media  one row per India day and 7 dimensions
-    make usage                     documind-api                 query, stream, media  the last N hours (default 24), at most 2000 rows
-    documind/queries, for alerts   documind-api                 query, stream         counted as written
-    rupees: tenant_daily's cost_inr is cost_usd x 85; make usage's USD_INR is 85
-      chat    read by: the sink, into BigQuery
-      media   read by: tenant_da
+    Observe: reader                         services                     window
+    the sink, into BigQuery        documind-api, documind-chat  every row, as it is written
+                                   events: query, stream, chat, desk, passages, desk_shadow, desk_gate
+                                   desk_shadow only where NOT jsonPayload.case_type = "sensitive"
+                                   desk_gate only where resource.labels.service_name = "documind-chat"
+    tenant_daily, the view         what the sink copied         one row per India day and 7 dimensions
+                                   events: query, stream, media
+    make usage                     documind-api                 the last N hours (default 24), at 
     """
     import re
     def between(text, start, end):
@@ -55,9 +55,11 @@ def step_01_the_readers_as_the_kit_writes_them_down(session):
     view = open("terraform/sql/tenant_daily.sql", encoding="utf-8").read()
     tool = open("evals/usage_rows.py", encoding="utf-8").read()
     alerts = open("terraform/alerts.tf", encoding="utf-8").read()
+    desk_view = open("terraform/sql/desk_daily.sql", encoding="utf-8").read()
+    desk_alerts = open("terraform/desk_alerts.tf", encoding="utf-8").read()
     queries = between(alerts, 'name    = "documind/queries"', "EOT\n  metric")
     readers = [
-        ("the sink, into BigQuery", re.findall(r'service_name = "([\w-]+)"', sink), re.findall(r'event = "(\w+)"', sink),
+        ("the sink, into BigQuery", list(dict.fromkeys(re.findall(r'service_name = "([\w-]+)"', sink))), re.findall(r'event = "(\w+)"', sink),
          "every row, as it is written"),
         ("tenant_daily, the view", ["what the sink copied"], re.findall(r'"(\w+)"', between(view, "WHERE jsonPayload.event IN (", ")")),
          "one row per India day and " + str(len(between(view, "GROUP BY day,", ";").split(","))) + " dimensions"),
@@ -66,16 +68,24 @@ def step_01_the_readers_as_the_kit_writes_them_down(session):
          + re.search(r"limit: int = (\d+)", tool).group(1) + " rows"),
         ("documind/queries, for alerts", re.findall(r'service_name="([\w-]+)"', queries), re.findall(r'event="(\w+)"', queries), "counted as written"),
     ]
-    print(f"{'reader':30} {'services':28} {'events':21} window")
+    print(f"{'reader':30} {'services':28} window")
     for name, services, events, when in readers:
-        print(f"{name:30} {', '.join(services):28} {', '.join(events):21} {when}")
+        print(f"{name:30} {', '.join(services):28} {when}")
+        print(f"{'':30} events: {', '.join(events)}")
+        for ev, cond in re.findall(r'\(jsonPayload\.event = "(\w+)" AND ([^)]+)\)', sink) if name.startswith("the sink") else ():
+            print(f"{'':30} {ev} only where {cond}")
     inr = re.search(r"\* (\d+), 2\) AS cost_inr", view).group(1)
-    print(f"rupees: tenant_daily's cost_inr is cost_usd x {inr}; make usage's USD_INR is {re.search(r'USD_INR = (\d+)', tool).group(1)}")
+    usd_inr = re.search(r"USD_INR = (\d+)", tool).group(1)
+    print(f"rupees: tenant_daily's cost_inr is cost_usd x {inr}; make usage's USD_INR is {usd_inr}")
     events = {name: set(e) for name, _, e, _ in readers}
     for ev in sorted(set().union(*events.values())):
-        print(f"  {ev:7} read by: " + ", ".join(n for n, _, e, _ in readers if ev in e))
+        print(f"  {ev:11} read by: " + ", ".join(n for n, _, e, _ in readers if ev in e))
+    print("the Desk's own view, desk_daily (make desk-views), reads: " + ", ".join(re.findall(r'jsonPayload\.event = "(\w+)"', desk_view)))
     policies = re.findall(r'resource "google_monitoring_alert_policy" "(\w+)"', alerts)
     print(f"alert policies in terraform/alerts.tf: {len(policies)} - " + ", ".join(policies))
+    desk_policies = re.findall(r'resource "google_monitoring_alert_policy" "(\w+)" \{\n(  count += var\.\w+)?', desk_alerts)
+    print(f"alert policies in terraform/desk_alerts.tf: {len(desk_policies)} - " + ", ".join(n + "*" * bool(c) for n, c in desk_policies)
+          + " (* only on a lane planned with DESK_ROUTER_ALERTS=true)")
     print("the one that reads the dead-letter queue: " + ", ".join(p for p in policies
           if "ingest_dlq_sub" in between(alerts, f'"google_monitoring_alert_policy" "{p}"', "\n}\n")))
 

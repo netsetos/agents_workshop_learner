@@ -36,7 +36,9 @@ req = urllib.request.Request(os.environ["CHAT"] + "/v1/chat", data=body, method=
                              headers={"Content-Type": "application/json", "Authorization": "Bearer " + os.environ["TOKEN"]})
 try:
     a = json.load(urllib.request.urlopen(req, timeout=300))
-    print(f"  {a['brain']:9} tool_calls {a['tool_calls']}  refusals {a['refusals']}  citations {len(a.get('citations', []))}  {a['latency_ms']} ms")
+    n = [c["n"] for c in a.get("citations", []) if "n" in c]   # an agent brain numbers this turn's citations from 1
+    print(f"  {a['brain']:9} tool_calls {a['tool_calls']}  refusals {a['refusals']}  citations {len(a.get('citations', []))}"
+          + (f" n {n}" if n else "") + f"  {a['latency_ms']} ms")
     print(f"      {text(a['answer'])[:96]}")
 except urllib.error.HTTPError as e:
     print(f"  HTTP {e.code}  {e.read().decode(errors='replace')[:100]}")

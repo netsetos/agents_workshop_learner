@@ -71,9 +71,9 @@ def step_01_one_thread_step_by_step(session):
       step  2  input  messages unchanged
       step  3  loop   messages, version 3:    586 bytes
       step  4  loop   messages, version 4:    866 bytes
-      step  5  loop   messages, version 5:  2,285 bytes
-      step  6  loop   messages, version 6:  2,522 bytes
-    every version kept: 6,846 bytes; the latest alone: 2,522 bytes
+      step  5  loop   messages, version 5:  2,325 bytes
+      step  6  loop   messages, version 6:  2,562 bytes
+    every version kept: 6,926 bytes; the latest alone: 2,562 bytes
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)

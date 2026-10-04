@@ -56,9 +56,10 @@ from typing import Literal, Optional
 from fastapi import Depends, FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from brains import BRAINS, DEFAULT_BRAIN, build as build_brain
+import limits
+from brains import BRAINS, DEFAULT_BRAIN, MODEL, build as build_brain
 from shared import iap
-from shared.profile import PROFILE
+from shared.profile import LOCAL_MODEL, PROFILE
 from shared.tenancy import tenant_for
 
 # The row chat() logs on every turn is INFO, and so are the guard's timing lines. gunicorn configures only its own
@@ -171,7 +172,9 @@ def caller(request: Request) -> dict:
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "profile": PROFILE, "brains": list(BRAINS), "default_brain": DEFAULT_BRAIN}
+    # The limits every turn runs under (workshop lesson 10.3), one block for all four brains: make limits prints it.
+    return {"status": "ok", "profile": PROFILE, "brains": list(BRAINS), "default_brain": DEFAULT_BRAIN,
+            "limits": limits.published()}
 
 
 @app.post("/v1/chat")
@@ -189,6 +192,9 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
 
     name = req.brain or DEFAULT_BRAIN
     brain = brain_for(request.app, name)
+    # The turn's limits (workshop lesson 10.3): model calls, rupees and a deadline, counted from here, after the
+    # brain is built, so a cold import is not the turn's time. A tripped limit is still a 200, with stopped_by.
+    meter = limits.Meter(model=LOCAL_MODEL if PROFILE == "local" else MODEL)
 
     # The tenant, the assertion and the brain travel in the runtime context, NOT in the
     # question and NOT in the tool schema. tools.py reads them from the ToolRuntime the
@@ -199,14 +205,33 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
         req.question,
         config=thread_config(tenant_id, user["email"], req.session_id),
         context={"tenant_id": tenant_id, "user_id": user["email"],
-                 "assertion": user["assertion"] or "", "brain": name},
+                 "assertion": user["assertion"] or "", "brain": name, "meter": meter},
     )
     latency_ms = int((time.monotonic() - t0) * 1000)
+    used = meter.row()
     # One row per turn, in the shape 12.3's sink collects: WHICH brain answered is the field
-    # 8.7's cost comparison needs and the one the plan's M12 gate asks for.
+    # 8.7's cost comparison needs and the one the plan's M12 gate asks for. Since workshop lesson 10.3 it also
+    # says what the turn cost and which limit, if any, stopped it; each field is named here, so a reader of
+    # this line sees them all. rag_cost_usd is this turn's delivered searches as rag-api's own rows bill them
+    # (one cut at its budget is on rag-api's row only), priced here at list price (a tuned endpoint at
+    # flash's rate, where rag-api uses its base's); tenant_daily and
+    # make usage read rag-api's rows and not this one, so nothing is counted twice.
     logger.info(json.dumps({"event": "chat", "surface": "chat", "brain": name,
                             "tenant": tenant_id, "user": user["email"],
                             "session_id": req.session_id, "latency_ms": latency_ms,
                             "tool_calls": out.get("tool_calls", []),
-                            "refusals": out.get("refusals", [])}))
-    return {**out, "brain": name, "session_id": req.session_id, "latency_ms": latency_ms}
+                            "refusals": out.get("refusals", []),
+                            "model": used["model"], "model_calls": used["model_calls"],
+                            "tokens_in": used["tokens_in"], "tokens_out": used["tokens_out"],
+                            "cached_tokens": used["cached_tokens"], "cost_usd": used["cost_usd"],
+                            "rag_cost_usd": used["rag_cost_usd"], "stopped_by": used["stopped_by"],
+                            "tool_timeouts": used["tool_timeouts"], "max_model_calls": used["max_model_calls"],
+                            "budget_inr": used["budget_inr"]}))
+    return {**out, "brain": name, "session_id": req.session_id, "latency_ms": latency_ms,
+            "limits": meter.summary()}
+
+
+# The DocuMind Desk (workshop lesson 10.5): the case routes, and the chat door in front of POST /v1/chat, which answers
+# a question the law hands to a person before any brain runs. desk.py holds both; this is their one install line.
+import desk  # noqa: E402
+desk.install(app, caller=caller, tenant_for=tenant_for, thread_config=thread_config)

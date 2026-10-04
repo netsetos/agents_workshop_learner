@@ -29,14 +29,23 @@ gcloud run deploy documind-chat \
   --min-instances=0 --max-instances=10 \
   --service-account=documind-chat-sa@$PROJECT.iam.gserviceaccount.com \
   ${CHAT_SQL_FLAGS---add-cloudsql-instances=$PROJECT:${REGION:-us-central1}:documind-checkpoint --set-secrets=CHECKPOINT_DSN=documind-checkpoint-dsn:latest} \
-  --set-env-vars="^|^GOOGLE_CLOUD_PROJECT=$PROJECT|DOCUMIND_PROFILE=gcp|RAG_API_URL=https://documind-api-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|SELF_URL=https://documind-chat-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|RAG_TIMEOUT_S=90|DOCUMIND_BRAIN=langchain|GOOGLE_GENAI_USE_VERTEXAI=1|GOOGLE_CLOUD_LOCATION=global|IAP_AUDIENCE=/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-chat,/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-ui${CHAT_EXTRA_ENV-}"
+  --set-env-vars="^|^GOOGLE_CLOUD_PROJECT=$PROJECT|DOCUMIND_PROFILE=gcp|RAG_API_URL=https://documind-api-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|SELF_URL=https://documind-chat-$PROJECT_NUMBER.${REGION:-us-central1}.run.app|RAG_TIMEOUT_S=90|DOCUMIND_BRAIN=langchain|GOOGLE_GENAI_USE_VERTEXAI=1|GOOGLE_CLOUD_LOCATION=global|AUDIT_BUCKET=$PROJECT-audit|IAP_AUDIENCE=/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-chat,/projects/$PROJECT_NUMBER/locations/${REGION:-us-central1}/services/documind-ui${CHAT_EXTRA_ENV-}"
 
 # 2b. Who may call it (12 September 2026): the UI's account - the brain radio on the chat page posts here as
 #     ui-sa with the person's assertion (12.4) - and the eval gate's outsider, which make smoke-chat sends to
 #     /v1/chat to see the ROSTER's 403 and not the network's. Bound here, on the service, because the
 #     project-wide roles/run.invoker both accounts used to carry (sa.tf) admitted them to every service, the
 #     A2A peer included. sa.tf's caller graph is the list; the gate check_authz.py compares this loop with it.
-for who in documind-ui-sa documind-outsider-sa; do
+#     The DocuMind Desk (workshop lesson 10.5) adds six: the five eval accounts its live checks call as, each a
+#     person on one tenant's roster (make smoke-cases), and the Google Chat bridge's account, on no roster. Terraform
+#     creates the six (terraform/desk.tf), the bridge's only on a lane planned with GCHAT_DOOR=true; the loop names
+#     each that does not exist yet and binds the others, so deploy chat again once the door is on. AUDIT_BUCKET above
+#     is where the case queue's events are written.
+for who in documind-ui-sa documind-outsider-sa \
+           documind-evalacme-sa documind-evalzeta-sa documind-evalglobex-sa documind-evalleaver-sa documind-evalgrc-sa \
+           documind-gchat-sa; do
+  gcloud iam service-accounts describe "$who@$PROJECT.iam.gserviceaccount.com" --project=$PROJECT >/dev/null 2>&1 \
+    || { echo ">> $who does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound"; continue; }
   gcloud run services add-iam-policy-binding documind-chat \
     --region=${REGION:-us-central1} --project=$PROJECT \
     --member="serviceAccount:$who@$PROJECT.iam.gserviceaccount.com" --role=roles/run.invoker --quiet

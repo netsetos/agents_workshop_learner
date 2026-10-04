@@ -22,6 +22,7 @@ from pypdf import PdfReader
 from shared.pii import inspect_image as pii_inspect_image, inspect_many as pii_inspect_many
 from shared.audit_log import emit as audit_emit
 from shared.tenancy import policy_for
+from shared import doc_types
 
 from contracts import IngestMessage, DocumentContract, chunk_hash, effective_from_of, sha256_of
 from idempotency import (claim, current_chunks, finish, reactivate, record_source, refresh_fingerprint, release,
@@ -429,12 +430,14 @@ def index_document(doc: DocumentContract, msg: IngestMessage, content: bytes, la
     gone = {"activated": 0, "retired_doc_keys": [], "retired_ids": [], "retired_chunks": 0}
     counts = {"reused": 0, "embedded": 0}
     text = None                                          # a media document has none: the mirror below skips it
+    doc = doc_types.assign(_db, doc, msg.name)           # the registry's class for a pinned version (workshop lesson 10.6)
     try:
         image_findings = []
         if msg.content_type in MEDIA_TYPES:
             chunks = _describe_media(doc.gcs_uri, msg.content_type)
             pages = 1
-            doc = doc.model_copy(update={"pages": 1, "doc_type": MEDIA_TYPES[msg.content_type],
+            doc = doc.model_copy(update={"pages": 1, "doc_type": doc.doc_type if doc.doc_type != "unknown"
+                                        else MEDIA_TYPES[msg.content_type],
                                         "effective_from": effective_from_of(msg.name, None)})
             # 9.6: the PIXELS are scanned, not only the caption. The caption is Gemini's
             # description of the picture, and a description of an invoice can carry the

@@ -3,8 +3,8 @@
 Do it: the venv Do it: five failures
 
 Run order inside this file:
-1. Do it: the venv (source window 10)
-2. Do it: five failures (source window 12)
+1. Do it: the venv (source window 11)
+2. Do it: five failures (source window 13)
 
 Prerequisites: setup_prepare.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -57,16 +57,18 @@ from langchain_core.language_models.fake_chat_models import FakeMessagesListChat
 from langchain_core.messages import AIMessage, ToolMessage
 from langgraph.checkpoint.memory import InMemorySaver
 import shared.documind_tools as dt
-import tools, brains
+import tools, brains, limits
 class Slow(BaseHTTPRequestHandler):                # a rag-api that answers after two seconds
     def log_message(self, *a): pass
     def do_POST(self):
-        time.sleep(2); self.send_response(200); self.end_headers(); self.wfile.write(b"{}")
+        time.sleep(2)
+        try: self.send_response(200); self.end_headers(); self.wfile.write(b"{}")
+        except OSError: pass                       # the client stopped waiting
 srv = ThreadingHTTPServer(("127.0.0.1", 0), Slow)
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 dt.RAG_API_URL, dt.RAG_TIMEOUT_S, dt._id_token = f"http://127.0.0.1:{srv.server_address[1]}", 0.5, lambda aud: "TOKEN"
 log = io.StringIO()
-for name in ("documind.chat.brains", "documind.chat.tools", "documind.agents.tools"):
+for name in ("documind.chat.brains", "documind.chat.limits", "documind.chat.tools", "documind.agents.tools"):
     h = logging.StreamHandler(log); h.setFormatter(logging.Formatter("%(levelname)-7s %(message)s"))
     logging.getLogger(name).addHandler(h); logging.getLogger(name).setLevel(logging.INFO)
 class Scripted(FakeMessagesListChatModel):
@@ -74,20 +76,21 @@ class Scripted(FakeMessagesListChatModel):
 def run(label, name, **args):
     turns = [AIMessage("", tool_calls=[{"name": name, "args": args, "id": "c1"}]), AIMessage("(the model explains what it read)")]
     b = brains.LangChainBrain(InMemorySaver(), llm=Scripted(responses=turns))
-    cfg = {"configurable": {"thread_id": "acme:you:" + label}}
+    cfg, meter = {"configurable": {"thread_id": "acme:you:" + label}}, limits.Meter()
     t = time.time()
-    out = b.answer("...", config=cfg, context={"tenant_id": "acme", "brain": "langchain"})
+    out = b.answer("...", config=cfg, context={"tenant_id": "acme", "brain": "langchain", "meter": meter})
     res = [m for m in b.agent.get_state(cfg).values["messages"] if isinstance(m, ToolMessage)][0]
-    print(f"  {label:11} {time.time() - t:3.1f} s  refusals {out['refusals']}")
-    print(f"              result [{res.status}] {str(res.content)[:72]}")
+    print(f"  {label:9} {time.time() - t:3.1f} s  refusals {out['refusals']}  tool_timeouts {meter.tool_timeouts}")
+    print(f"            result [{res.status}] {str(res.content)[:72]}")
 run("blocked", "delete_document", doc="inv_2026_0412")
 run("bad args", "calculate_processing_cost", total_pages="many")
 run("no such", "summon_rain")
-run("timed out", "retrieve", query="gratuity")
-tools.TIMEOUTS["calculate_processing_cost"] = 0    # a budget of zero seconds: every call is over it
-run("over budget", "calculate_processing_cost", total_pages=283, processing_type="priority")
+run("timed out", "retrieve", query="gratuity")     # the client gives up first: RAG_TIMEOUT_S is 0.5 s here
+dt.RAG_TIMEOUT_S, tools.TIMEOUTS["retrieve"] = 5, 1   # now the client would wait 5 s, and the budget is 1 s
+run("cut", "retrieve", query="gratuity")
+limits.TOOL_POOL.shutdown(wait=True)               # the abandoned call runs on until rag-api answers; wait for it
 srv.shutdown()
-print("  the log lines, from the guard, the adapter and the one retrieve():")
+print("  the log lines, from the guard's timer, the adapter and the one retrieve():")
 for line in log.getvalue().splitlines():
     print("   ", line[:92])
 PY
@@ -105,16 +108,16 @@ def step_02_five_failures(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: blocked     0.0 s  refusals ['delete_document']
-                  result [error] {"error": "delete_document requires manual approval"}
-      bad args    0.0 s  refusals ['calculate_processing_cost']
-                  result [error] Error invoking tool 'calculate_processing_cost' with kwargs {'total_page
-      no such     0.0 s  refusals ['summon_rain']
-                  result [error] Error: summon_rain is not a valid tool, try one of [retrieve, calculate_
-      timed out   0.5 s  refusals []
-                  result [success] {"error": "document search is unavailable", "citations": [], "answerable
-      over budget 0.0 s  refusals []
-                  result [success] {"num_documents": 1, "total_pages": 283, "processing_type"
+    Observe: blocked   0.0 s  refusals ['delete_document']  tool_timeouts []
+                result [error] {"error": "delete_document requires manual approval"}
+      bad args  0.0 s  refusals ['calculate_processing_cost']  tool_timeouts []
+                result [error] Error invoking tool 'calculate_processing_cost' with kwargs {'total_page
+      no such   0.0 s  refusals ['summon_rain']  tool_timeouts []
+                result [error] Error: summon_rain is not a valid tool, try one of [retrieve, calculate_
+      timed out 0.5 s  refusals []  tool_timeouts []
+                result [success] {"error": "document search is unavailable", "citations": [], "answerable
+      cut       1.0 s  refusals []  tool_timeouts ['retrieve']
+       
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)
@@ -126,8 +129,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_10', step_01_the_venv),
-        ('source_12', step_02_five_failures),
+        ('source_11', step_01_the_venv),
+        ('source_13', step_02_five_failures),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

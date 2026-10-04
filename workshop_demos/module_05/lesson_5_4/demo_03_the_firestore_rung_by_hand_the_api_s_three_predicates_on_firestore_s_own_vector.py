@@ -66,7 +66,8 @@ def step_01_the_rung_under_three_predicate_sets(session):
     if CURRENT:
         q = q.where("current", "==", True)                                     # the ledger's, when RETRIEVAL_CURRENT_ONLY is on
     for k, v in F.items():
-        q = q.where(k, "==", v)                                                # the caller's: FILTER_KEYS only, checked by main.py
+        # the caller's: FILTER_KEYS only, checked by main.py; a doc_type list is one `in`
+        q = q.where(k, "in", v) if isinstance(v, list) else q.where(k, "==", v)
     hits = q.find_nearest("embedding", Vector(vec), distance_measure=DistanceMeasure.COSINE, limit=20, distance_result_field="d").get()
     pool = []
     for h in hits:

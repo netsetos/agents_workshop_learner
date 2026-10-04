@@ -6,6 +6,7 @@ the UI streams what it is told and renders it. The version this replaced
 generated through LiteLLM, imported answer_query and render_with_citations,
 and used neither - a plain chatbot wearing a RAG product's name.
 """
+import html
 import json
 import os
 import uuid
@@ -55,6 +56,15 @@ def _headers(audience: str = RAG_API_URL) -> dict:
     if assertion:
         h["x-goog-iap-jwt-assertion"] = assertion
     return h
+
+
+def _as_source(c: dict) -> dict:
+    """One citation of the chat service's reply, in the shape citations.py renders (workshop lesson
+    10.4). The service numbers them from 1 for the turn and sends them in that order, so the
+    answer's [n] is sources[n - 1], as it is for rag-api's stream below."""
+    return {"text": c.get("quote", ""), "source_uri": c.get("source_uri", ""), "page_start": c.get("page"),
+            "kind": c.get("kind", "text"), "media_url": c.get("media_url"),
+            "start": c.get("start"), "end": c.get("end")}
 
 
 def stream_answer(query: str, tenant_id: str):
@@ -133,6 +143,9 @@ def chat_page(user):
         # page renders what it returns. session_id keeps one conversation per browser session,
         # inside this user's own tenant - the service prefixes both from the verified identity.
         with st.chat_message("assistant"):
+            # 120 s is above the chat service's own bound: a turn ends by CHAT_TURN_DEADLINE_S (100 s) plus one
+            # retry's backoff and the last tool's floor, about 103 s, and still answers 200, with stopped_by
+            # (workshop lesson 10.3).
             with st.spinner(f"{brain} is thinking..."):
                 r = requests.post(f"{CHAT_URL}/v1/chat",
                                   json={"question": prompt, "session_id": st.session_state.session_id,
@@ -144,12 +157,22 @@ def chat_page(user):
             body = r.json()
             answer = body.get("answer", "")
             answer = answer if isinstance(answer, str) else str(answer)
-            st.markdown(answer)
+            cited = [_as_source(c) for c in body.get("citations") or []]
+            if cited:
+                # Every agent brain cites its turn's passages. render_with_citations draws with unsafe_allow_html,
+                # so the model's text is escaped first: a "<" in an answer is shown, never run. Inside a
+                # `code span` it shows as &lt;, a known limit: only Markdown's own parser knows what is code.
+                render_with_citations(html.escape(answer, quote=False), cited)
+            else:
+                st.markdown(answer)
             if st.session_state.get("read_aloud") and answer:
                 st.audio(cached_tts(answer[:1500]), format="audio/ogg")
+            lim = body.get("limits") or {}          # the turn's own bill and limits (workshop lesson 10.3)
             st.caption(f"brain: {body.get('brain')} · tools: {', '.join(body.get('tool_calls') or []) or 'none'}"
                        + (f" · refused: {', '.join(body['refusals'])}" if body.get("refusals") else "")
-                       + f" · {body.get('latency_ms', 0)} ms")
+                       + f" · {body.get('latency_ms', 0)} ms"
+                       + (f" · Rs {lim['cost_inr']:.2f}" if lim.get("cost_inr") is not None else "")
+                       + (f" · stopped: {lim['stopped_by']}" if lim.get("stopped_by") else ""))
         st.session_state.messages.append({"role": "assistant", "content": answer})
         return
 

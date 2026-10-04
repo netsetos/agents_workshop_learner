@@ -72,10 +72,14 @@ Expected shape, not a promised result:
 ```text
 1. a generation: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.039, 'cached': False}
 1. a DEMO_MODE hit: {'event': 'media', 'modality': 'image', 'model': 'gemini-3.1-flash-image', 'tokens_in': 0, 'cost_usd': 0.0, 'cached': True}
-2. event=chat    copied       by the sink, never read by tenant_daily
-2. event=media   never copied by the sink, read by tenant_daily
-2. event=query   copied       by the sink, read by tenant_daily
-2. event=stream  copied       by the sink, read by tenant_daily
+2. event=chat        copied       by the sink, never read by tenant_daily
+2. event=desk        copied       by the sink, never read by tenant_daily
+2. event=desk_gate   copied       by the sink, never read by tenant_daily
+2. event=desk_shadow copied       by the sink, never read by tenant_daily
+2. event=media       never copied by the sink, read by tenant_daily
+2. event=passages    copied       by the sink, never read by tenant_daily
+2. event=query       copied       by the sink, read by tenant_daily
+2. event=stream      copied       by the sink, read by tenant_daily
 3. read aloud 1, en-IN-Chirp3-HD-Kore: synthesised, then cached (1 object in the bucket)
 3. read aloud 2, en-IN-Chirp3-HD-Kore: read back from the cache (1 object in the bucket)
 3. read aloud 3, hi-IN-Chirp3-HD-Kore: synthesised, then cached (2 objects in the bucket)
@@ -176,6 +180,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f90dc609bf1dfc9befdb00d185c8e8f4286c122d`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_16.2_Studio_Voice_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `169d2b48fc8b50cd220083becc6860aed967d1f7`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.
