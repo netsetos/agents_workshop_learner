@@ -161,5 +161,5 @@ def principal(request, caller, tenant_for, settings) -> dict:
 
 
 def _switch_on(v) -> bool:
-    """desk.switch_on's rule: on only when the setting says so."""
+    """desk_gchat's rule: on only when the setting is True or says on (any case); anything else is off."""
     return v is True or (isinstance(v, str) and v.strip().lower() == "on")

@@ -16,8 +16,9 @@ is checkpointed.
     3. On the local profile there is no IAP and no Firestore: the tenant is LOCAL_TENANT, nobody is verified and no
        switch is read, as chat() itself never touches Firestore there. LOCAL_TENANT has the rules, as every tenant has
        until an operator writes off: a hit gets the fixed reply below, a number is masked, and nothing else changes.
-    4. No hit, no identifier and no tenant whose desk_gate is on (CHECKED, shared/desk_recall.OnTenants, read once a
-       minute): the original bytes go through untouched, and nothing is read or verified.
+    4. No hit, no identifier and no model check to run - a question with no words, or no tenant whose desk_gate is on
+       (CHECKED, shared/desk_recall.OnTenants, read once a minute): the original bytes go through untouched, and nothing
+       is read or verified.
     5. Otherwise the caller is verified with the caller() install() was given, and the tenant looked up with its
        tenant_for(), before any setting is read - so this door reads no tenant's settings for a caller it does not
        know. Then tenant_settings/{tenant}.desk_gate, as gate_state() reads it: rules unless it says off or on, and a
@@ -31,8 +32,9 @@ is checkpointed.
            brain does. A class is answered as a hit is, with the check's model and its one call in limits; none, or a
            check that fails, goes on below. Each check logs a "desk_gate_check" row: its outcome, tokens and cost, no
            question and no person, at WARNING when the check failed. The check and the CHECKED read run on
-           desk_recall.POOL. CHECKED is lane-wide: while any tenant is on, every turn the rules let through is looked
-           up, because the tenant is known only after the caller is.
+           desk_recall's own threads (POOL, READ_POOL), with the request's context. CHECKED is lane-wide: while any
+           tenant is on, every turn with words that the rules let through is looked up, because the tenant is known
+           only after the caller is.
          - Aadhaar or card numbers and no hit: a refused caller's body is replayed unchanged, so the handler gives its
            own 401 or 403; for a member, unless desk_gate is off, the numbers are masked before the body is replayed,
            so neither the brain, the checkpoint nor the model sees them.
@@ -160,13 +162,6 @@ def settings(tenant: str) -> dict:
     return doc
 
 
-def switch_on(doc, field: str) -> bool:
-    """An on/off Desk switch (desk_gchat) is on only when the tenant's settings say so; a missing field or a failed read
-    is off. desk_gate has three states: gate_state()."""
-    v = (doc or {}).get(field)
-    return v is True or (isinstance(v, str) and v.strip().lower() == "on")
-
-
 _GATE_SEEN: dict[str, str] = {}         # the last desk_gate state this process read, per tenant
 
 
@@ -264,9 +259,7 @@ class ChatDoor:
 
     async def _checking(self) -> bool:
         """True while some tenant's desk_gate is on: only then is a turn with no hit looked up for the model check."""
-        got = CHECKED.fresh()
-        return bool(got if got is not None
-                    else await asyncio.get_running_loop().run_in_executor(desk_recall.POOL, CHECKED.get))
+        return bool(await CHECKED.tenants())       # on the loop: only the turn that claims the read waits for it
 
     async def _pass(self, scope, receive, send, body: bytes, question: str, tenant: str | None):
         """chat() gets the turn, with the body as sent or its masked copy; the shadow hook runs beside it, in a task
@@ -307,7 +300,7 @@ class ChatDoor:
             return await self.app(scope, _replay(body, receive), send)
         cls, (masked, kinds) = await asyncio.to_thread(_read, question)
         local = PROFILE == "local"                 # no IAP, no Firestore: LOCAL_TENANT, the rules and no switch to read
-        checked = not local and cls is None and await self._checking()
+        checked = not local and cls is None and question.strip() != "" and await self._checking()   # no words: no check
         if cls is None and not kinds and not checked:
             return await self._pass(scope, receive, send, body, question,
                                     os.environ.get("LOCAL_TENANT", "acme") if local else None)
@@ -330,7 +323,7 @@ class ChatDoor:
             return await self._pass(scope, receive, send, body, question, tenant)
         method, meter = "rule", limits.Meter(model="none")
         if cls is None and checked and state == "on":
-            got = await asyncio.get_running_loop().run_in_executor(desk_recall.POOL, _check, masked)
+            got = await desk_recall.run(desk_recall.POOL, _check, masked)
             (log.warning if got["outcome"] == "error" else log.info)(json.dumps(desk_recall.row("chat", tenant, got)))
             if got["case"] is not None:
                 cls, method, meter = got["case"], "model", limits.Meter(model=got["model"])
@@ -890,11 +883,11 @@ def _skipped(tenant: str | None, reason: str) -> None:
 def _shadow_work(scope, question: str, tenant: str | None, t0: float) -> dict | None:
     """The caller, the tenant and its mode, then decide() with its own Meter, and the "desk_shadow" row logged here,
     so a decide that outlives the request's wait still writes its row. None and no row when the tenant is not in
-    shadow mode, its desk_gate is off (or unread), or chat() refuses the caller itself. None with a "desk_shadow_skipped" line,
-    and no model call, when SHADOW_DECIDES decides are running already ("busy") or SHADOW_TIMEOUT_S has passed before
-    decide() starts ("late"). A turn the gate hands to a person as posh, grievance or privacy_request writes no row,
-    only a "desk_shadow_skipped" line with no tenant ("withheld"): the turn's own chat row names the person, so even
-    a row with no user could be matched to it by time."""
+    shadow mode, its desk_gate is off (or unread), or chat() refuses the caller itself. None with a
+    "desk_shadow_skipped" line, and no model call, when SHADOW_DECIDES decides are running already ("busy") or
+    SHADOW_TIMEOUT_S has passed before decide() starts ("late"). A turn the gate hands to a person as posh, grievance
+    or privacy_request writes no row, only a "desk_shadow_skipped" line with no tenant ("withheld"): the turn's own
+    chat row names the person, so even a row with no user could be matched to it by time."""
     if time.monotonic() - t0 >= SHADOW_TIMEOUT_S:
         return _skipped(tenant, "late")
     request, user = Request(scope), None

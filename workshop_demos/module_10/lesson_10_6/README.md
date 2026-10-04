@@ -968,7 +968,7 @@ split test
   correct_rate                  not measured: the run carries no answer text (a /v1/route run)
   router cost                   Rs 0.0000 in all, Rs 0.00000 a turn
 FAIL  route accuracy 0/0 (no rows) is under 95%
-make: *** [mk/agents.mk:205: route-eval] Error 1
+make: *** [mk/agents.mk:214: route-eval] Error 1
 ```
 
 **`step_03_module_10_s_gate(session)` — Verify it yourself: the eval and the checklist / Do it: Module 10's gate**
@@ -1011,6 +1011,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.6_Desk_Router_WIX.html`. All 84 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `cdb64225afab8cb2b503ad4ff187e2471dfa6c51`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.6_Desk_Router_WIX.html`. All 84 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a9a1aa5a20a75e545f175af7d4a50630ecf55da8`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

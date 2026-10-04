@@ -2208,7 +2208,7 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual([(r["reason"], r["tenant"]) for r in (busy, slow)], [("busy", "acme"), ("late", "acme")])
         self.assertEqual([r["tenant"] for r in rows("desk_shadow_late")], ["acme"])
         self.assertEqual(self.log.warnings, [{"event": "desk_shadow_tenants_unread", "surface": "chat",
-                                              "error": "RuntimeError"}])
+                                              "error": "RuntimeError", "cause": None}])
         self.assertTrue(threads and all(n.startswith("documind-desk-shadow-router") for n in threads))
         self.assertEqual((self.calls, self.db.cases()), ([], {}))
         self.assertNotIn(LEAVE, json.dumps(self.log.rows))
@@ -2268,7 +2268,7 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual((len(streams), shadowing._reading), (3, False))
         self.assertEqual((self.desk.desk_recall.READ_TIMEOUT_S, shadowing._ttl), (2.0, self.desk.SHADOW_TENANTS_TTL_S))
         self.assertEqual(self.log.warnings, [{"event": "desk_shadow_tenants_unread", "surface": "chat",
-                                              "error": "RuntimeError"}])
+                                              "error": "RuntimeError", "cause": None}])
 
     def test_every_field_of_each_row_is_named_in_its_literal(self):
         tree = ast.parse((KIT / "services" / "chat" / "desk.py").read_text(encoding="utf-8"))

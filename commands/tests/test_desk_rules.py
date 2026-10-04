@@ -13,9 +13,8 @@ The question sets:
   - every question the rest of the course sends as acme from the kit - deploy/smoke/*.py, deploy/workshop_demos/**,
     and evals/handoff.jsonl and evals/adversarial/attacks.jsonl once they exist - fires on none and masks none,
     because every tenant has the gate's rules from lesson 10.5 on (desk_gate is rules unless an operator writes
-    off), acme included. A new smoke or demo question joins the set by itself
-    (questions_in_python() reads every string a question-shaped key, keyword or name holds, and every
-    one-line string that ends in "?");
+    off), acme included. A new smoke or demo question joins the set by itself (questions_in_python() reads every
+    string a question-shaped key, keyword or name holds, and every one-line string that ends in "?");
   - the escalation rows of evals/routes.jsonl: each fires its own class (skipped while none are written);
   - EXAMPLES below: positive and negative examples per class, MODEL-WRITTEN, so the gate is tested before the
     people-written rows exist. They are not evidence of recall on real disclosures.
@@ -717,18 +716,20 @@ def _run(door, path, body: bytes, method="POST", headers=None, chunks=None):
 
 
 class _OnTenants:
-    """shared/desk_recall.OnTenants as the door reads it: fresh() is None until get() has read once, as at a process's
-    first turn, and every read is counted."""
+    """shared/desk_recall.OnTenants as the door reads it: claim() is None until refresh() has read once, as at a
+    process's first turn; every claim and every read is counted. tenants() is the real one, the doors' own path."""
+    tenants = desk_recall.OnTenants.tenants
 
     def __init__(self, tenants):
-        self.tenants, self.reads = frozenset(tenants), 0
+        self.set, self.reads, self.claims = frozenset(tenants), 0, 0
 
-    def fresh(self):
-        return self.tenants if self.reads else None
+    def claim(self):
+        self.claims += 1
+        return self.set if self.reads else None
 
-    def get(self):
+    def refresh(self):
         self.reads += 1
-        return self.tenants
+        return self.set
 
 
 class DoorTests(unittest.TestCase):
@@ -995,7 +996,7 @@ class DoorTests(unittest.TestCase):
     def test_the_model_check_answers_what_the_rules_miss(self):
         self.assertIsNone(desk_rules.gate(self.MISS))
         self.checking(case="posh")
-        self.assertIsNone(self.door.checked.fresh())               # a process's first turn: nothing read yet
+        self.assertEqual((self.door.checked.claims, self.door.checked.reads), (0, 0))   # a process's first turn
         (status, headers, out), rows = self.logs(
             lambda: _run(self.door, "/v1/stream", self.body(self.MISS, brain="ui"), headers=self.me))
         self.assertEqual((status, self.app.calls, self.checks, self.door.checked.reads), (200, [], [self.MISS], 1))
@@ -1044,13 +1045,38 @@ class DoorTests(unittest.TestCase):
             _run(self.door, "/v1/query", raw, headers=self.me)
             self.assertEqual((self.app.calls[-1][1], self.checks, self.verified, self.door.checked.reads), (raw, [], [], 0), repr(q))
 
+    def test_the_check_and_the_read_run_on_the_kits_threads_with_the_requests_context(self):
+        import contextvars
+        import threading
+        var, seen = contextvars.ContextVar("request", default=None), []
+        self.checking(case="posh")
+        check, claim, refresh = self.door.check, self.door.checked.claim, self.door.checked.refresh
+        self.door.check = lambda q: (seen.append(("check", threading.current_thread().name, var.get())), check(q))[1]
+        self.door.checked.claim = lambda: (seen.append(("claim", threading.current_thread().name, var.get())), claim())[1]
+        self.door.checked.refresh = lambda: (seen.append(("read", threading.current_thread().name, var.get())), refresh())[1]
+        token = var.set("the request")                     # a request's trace span is a contextvar like this one
+        try:
+            _run(self.door, "/v1/query", self.body(self.MISS), headers=self.me)
+        finally:
+            var.reset(token)
+        self.assertEqual([(k, t.rsplit("_", 1)[0], v) for k, t, v in seen],       # the claim on the event loop's
+                         [("claim", threading.current_thread().name, "the request"),   # thread, no worker's
+                          ("read", "desk-check-read", "the request"), ("check", "desk-check", "the request")])
+
     def test_none_or_a_failed_check_goes_on_as_sent(self):
+        levels = []
+        handler = logging.Handler()
+        handler.emit = lambda r: levels.append((r.levelno, json.loads(r.getMessage()).get("outcome")))
+        logging.getLogger("documind-api").addHandler(handler)
+        self.addCleanup(logging.getLogger("documind-api").removeHandler, handler)
         for outcome in ("none", "error"):
             self.checking(outcome=outcome if outcome == "error" else None)
             raw = self.body(self.MISS)
             (status, _, out), rows = self.logs(lambda: _run(self.door, "/v1/query", raw, headers=self.me))
             self.assertEqual((status, out, self.app.calls[-1][1]), (200, b'{"handler": true}', raw), outcome)
             self.assertEqual([(r["event"], r["outcome"]) for r in rows], [("desk_gate_check", outcome)], outcome)
+        # a failed check is a WARNING, the stand-in for an alert until one exists; none is INFO
+        self.assertEqual(levels, [(logging.INFO, "none"), (logging.WARNING, "error")])
 
     def test_the_model_check_runs_only_where_it_should(self):
         self.checking(tenants=("acme",), case="posh")
@@ -1064,12 +1090,12 @@ class DoorTests(unittest.TestCase):
         for tenant, path, extra, why in cases:
             self.verified.clear()
             self.settings_reads.clear()
-            reads = self.door.checked.reads
+            claims = self.door.checked.claims
             raw = self.body(self.MISS, tenant=tenant, **extra)
             _run(self.door, path, raw, headers=self.me)
             self.assertEqual((self.app.calls[-1][1], self.checks, self.verified, self.settings_reads), (raw, [], [], []), why)
-            if tenant == "acme":                        # a skipped surface or label does not even read the list
-                self.assertEqual(self.door.checked.reads, reads, why)
+            if tenant == "acme":                        # a skipped surface or label does not even ask for the list
+                self.assertEqual(self.door.checked.claims, claims, why)
         # acme is listed, but its switch now says rules: looked up and read, no check
         self.flags["acme"] = {"desk_gate": "rules"}
         raw = self.body(self.MISS)
@@ -1083,9 +1109,10 @@ class DoorTests(unittest.TestCase):
         self.flags["acme"] = {"desk_gate": "on"}
         _run(self.door, "/v1/query", raw)
         self.assertEqual((self.app.calls[-1][1], self.checks), (raw, []))
-        # a rule hit is answered by the rule: the check never runs
+        # a rule hit is answered by the rule: the check never runs, and the list is not even asked for
+        claims = self.door.checked.claims
         _run(self.door, "/v1/query", self.body(self.POSH), headers=self.me)
-        self.assertEqual(self.checks, [])
+        self.assertEqual((self.checks, self.door.checked.claims), ([], claims))
         # and without a check to run, nothing is looked up
         self.door.check = None
         self.verified.clear()
@@ -1292,15 +1319,41 @@ class DeskRecallTests(unittest.TestCase):
             return got
         log = type("Log", (), {"warning": lambda s, m: warned.append(json.loads(m))})()
         on = desk_recall.OnTenants(read, log, "chat", ttl_s=60)
-        self.assertIsNone(on.fresh())
+        self.assertIsNone(on.fresh())                       # nothing read yet: the shadow reads off the loop (get())
         self.assertEqual((on.get(), on.get(), len(reads)), (frozenset({"acme"}), frozenset({"acme"}), 1))
+        self.assertEqual(on.fresh(), frozenset({"acme"}))   # under ttl_s: the set, with no read
         on._ttl = 0                                         # every get() reads again from here
         self.assertEqual(on.get(), frozenset({"acme"}))     # a failed read keeps the last set
         self.assertEqual(on.get(), frozenset({"acme"}))
-        self.assertEqual(warned, [{"event": "desk_check_tenants_unread", "surface": "chat", "error": "RuntimeError"}])
+        self.assertEqual(warned, [{"event": "desk_check_tenants_unread", "surface": "chat", "error": "RuntimeError",
+                                   "cause": None}])
         self.assertEqual(on.get(), frozenset({"zeta"}))
         first = desk_recall.OnTenants(lambda: (_ for _ in ()).throw(RuntimeError("down")), log, "api")
         self.assertEqual(first.get(), frozenset())          # before any read works: none
+
+    def test_the_cause_of_a_failed_read_is_logged_too(self):
+        warned = []
+
+        def read():
+            try:
+                raise TimeoutError("stream")
+            except TimeoutError:
+                raise AttributeError("retry")               # how Firestore re-raises a stream error with retry=None
+        log = type("Log", (), {"warning": lambda s, m: warned.append(json.loads(m))})()
+        desk_recall.OnTenants(read, log, "api").get()
+        self.assertEqual((warned[0]["error"], warned[0]["cause"]), ("AttributeError", "TimeoutError"))
+
+    def test_the_threads_and_the_context(self):
+        import contextvars
+        # checks never wait for a thread: above a worker's share of --concurrency (chat 20, rag-api 40; two workers)
+        self.assertGreaterEqual(desk_recall.POOL._max_workers, 20)
+        self.assertEqual(desk_recall.READ_POOL._max_workers, 1)        # the tenants read never queues behind a check
+        span = contextvars.ContextVar("span", default=None)
+
+        async def main():
+            span.set("the request's span")
+            return await desk_recall.run(desk_recall.POOL, span.get)
+        self.assertEqual(asyncio.run(main()), "the request's span")    # the check's model span stays in the trace
 
     def test_a_failed_read_waits_its_minute_before_the_next_try(self):
         from unittest.mock import patch
@@ -1317,6 +1370,7 @@ class DeskRecallTests(unittest.TestCase):
             self.assertEqual((on.get(), on.get(), len(reads)), (frozenset(), frozenset(), 1))
             self.assertEqual(on.fresh(), frozenset())
             now[0] += 31                                    # the minute is up: exactly one more try
+            self.assertIsNone(on.fresh())
             self.assertEqual((on.get(), on.get(), len(reads)), (frozenset(), frozenset(), 2))
 
     def test_on_tenants_has_one_reader_and_a_turn_never_waits_on_another(self):
@@ -1333,9 +1387,66 @@ class DeskRecallTests(unittest.TestCase):
         reader.start()
         self.assertTrue(started.wait(5))
         self.assertEqual((on.get(), len(reads)), (frozenset(), 1))     # the last set (none yet), at once, no second read
+        self.assertEqual(on.fresh(), frozenset())       # fresh() too: the shadow takes it on the loop, with no thread hop
         release.set()
         reader.join(5)
         self.assertEqual((on.get(), len(reads)), (frozenset({"acme"}), 1))
+
+    def test_through_the_door_a_turn_never_queues_behind_the_read(self):
+        import threading
+        started, release, reads = threading.Event(), threading.Event(), []
+        answers = [frozenset({"acme"}), frozenset({"acme", "zeta"})]
+
+        def slow_read():
+            reads.append(threading.current_thread().name)
+            started.set()
+            release.wait(5)
+            return answers[len(reads) - 1]
+        on = desk_recall.OnTenants(slow_read, type("Log", (), {"warning": lambda s, m: None})(), "api", ttl_s=60)
+        door = desk_door.DeskDoor(_App(), settings=dict, verify=None, member=None, checked=on, check=lambda q: None)
+
+        async def burst():                                  # five turns at the same moment, before any thread has run
+            turns = [asyncio.ensure_future(door._checked()) for _ in range(5)]
+            await asyncio.get_running_loop().run_in_executor(None, started.wait, 5)
+            waiting = sum(not t.done() for t in turns)      # only the turn that claimed the read waits for it
+            release.set()
+            return waiting, sorted(await asyncio.gather(*turns), key=sorted)
+        self.assertEqual(asyncio.run(burst()), (1, [frozenset()] * 4 + [frozenset({"acme"})]))
+        self.assertEqual(len(reads), 1)
+        self.assertTrue(reads[0].startswith("desk-check-read"), reads)
+        # the same at the minute's end, with a set to hand out: one turn reads, four take the last set at once
+        started.clear()
+        release.clear()
+        on._at -= 61
+        self.assertEqual(asyncio.run(burst()), (1, [frozenset({"acme"})] * 4 + [frozenset({"acme", "zeta"})]))
+        self.assertEqual(len(reads), 2)
+
+    def test_a_claimed_read_is_released_however_its_turn_ends(self):
+        import threading
+        reads, log = [], type("Log", (), {"warning": lambda s, m: None})()
+        on = desk_recall.OnTenants(lambda: (reads.append(1), frozenset({"acme"}))[1], log, "api", ttl_s=60)
+        busy, free = threading.Event(), threading.Event()
+
+        async def cancelled():                              # the claiming turn is cancelled while its read is queued
+            blocker = desk_recall.run(desk_recall.READ_POOL, lambda: (busy.set(), free.wait(5)))
+            await asyncio.get_running_loop().run_in_executor(None, busy.wait, 5)
+            turn = asyncio.ensure_future(on.tenants())
+            await asyncio.sleep(0)
+            turn.cancel()
+            free.set()
+            await blocker
+            await desk_recall.run(desk_recall.READ_POOL, lambda: None)   # READ_POOL's one thread: the read is done
+            return turn.cancelled()
+        self.assertTrue(asyncio.run(cancelled()))
+        self.assertEqual((reads, on._reading, on.claim()), ([1], False, frozenset({"acme"})))  # it ran, and let go
+
+        class Stop(BaseException):
+            pass
+        stopped = desk_recall.OnTenants(lambda: (_ for _ in ()).throw(Stop()), log, "api", ttl_s=0)
+        with self.assertRaises(Stop):
+            stopped.get()
+        self.assertEqual((stopped._reading, stopped._at is not None), (False, True))   # released, the minute begun
+        self.assertIsNone(stopped.claim())                  # and the next turn may read again
 
     def test_read_on_tenants_is_one_query(self):
         seen = []

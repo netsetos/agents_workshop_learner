@@ -22,19 +22,29 @@ queue a minute and a missed disclosure is a legal failure. The prompt carries no
 OnTenants is the doors' way to skip all of this cheaply: the tenants whose desk_gate is "on" (as make desk writes it),
 one query at most once a minute per process, so a lane with no such tenant does exactly what it did before. rag-api's
 door reads the tenant from the body, so it looks up only a turn for one of them; the chat door learns the tenant only
-by looking the caller up, so while any tenant is on it looks up every turn the rules let through, and none while no
-tenant is. The query is one attempt of at most READ_TIMEOUT_S, made by one thread at a time; a turn that arrives while
-it runs takes the last set, and a failed read keeps it, until the minute is up. So a turn waits at most READ_TIMEOUT_S
-for this, once a minute, and never on Firestore's own retries. That, and CHECK_TIMEOUT_S for an "on" tenant's check,
-run before the chat turn's own clock (services/chat/limits.py) starts: commands/tests/test_chat_limits.py adds both to
-the turn's worst case. Both run on POOL, threads of their own, so a slow check never holds the threads the doors' other
-lookups (the caller, the roster, the settings) run on.
+by looking the caller up, so while any tenant is on it looks up every turn with words that the rules let through, and
+none while no tenant is. The query is one attempt of at most READ_TIMEOUT_S, made by one thread at a time; a turn that
+arrives while it runs takes the last set, and a failed read keeps it, until the minute is up. So a turn waits at most
+READ_TIMEOUT_S for this, once a minute, and never on Firestore's own retries. That, and CHECK_TIMEOUT_S for an "on"
+tenant's check, run before the chat turn's own clock (services/chat/limits.py) starts:
+commands/tests/test_chat_limits.py adds both to the turn's worst case. The checks run on POOL, threads of their own
+sized above a worker's share of the services' --concurrency (20 for chat, 40 for rag-api, two workers each), so a
+check never waits for a thread and never holds the threads the doors' other lookups (the caller, the roster, the
+settings) run on; the tenants read runs on READ_POOL, one thread, so it never queues behind checks. The doors hand
+both the request's context (contextvars), so a check's model span stays in the request's trace.
+
+A check's cost is on its "desk_gate_check" row only: rag-api's budget counter, the usage rows and tenant_daily do not
+count it. The course's lane never pays it - no tenant there is switched on - and a company that switches it on reads
+that spend in Cloud Logging.
 
 This module imports the standard library and shared/ only. The google-genai client and the Firestore client are passed
 in, so commands/tests/test_desk_rules.py runs it with fakes.
 """
 from __future__ import annotations
 
+import asyncio
+import contextvars
+import functools
 import json
 import os
 import re
@@ -51,9 +61,17 @@ QUESTION_CHARS = 4000                   # the doors' own cap: the whole question
 ON_TENANTS_TTL_S = 60
 READ_TIMEOUT_S = 2.0                    # the tenants query, one attempt: a turn never waits on Firestore's retries
 PROMPT_VERSION = "2026-10-04.1"
-# The doors run the check and the tenants read here, never on the event loop's small default pool. Threads start only
-# when the first check or read does.
-POOL = ThreadPoolExecutor(max_workers=int(os.environ.get("DESK_CHECK_THREADS", "8")), thread_name_prefix="desk-check")
+# The doors run the checks on POOL and the tenants read on READ_POOL, never on the event loop's small default pool.
+# READ_POOL is the doors' list's alone: the chat service's shadow reads its own (SHADOWING) with asyncio.to_thread, so
+# the doors' read never queues behind it. Threads start only when the first check or read does.
+POOL = ThreadPoolExecutor(max_workers=int(os.environ.get("DESK_CHECK_THREADS", "24")), thread_name_prefix="desk-check")
+READ_POOL = ThreadPoolExecutor(max_workers=1, thread_name_prefix="desk-check-read")
+
+
+def run(pool, fn, *args):
+    """fn(*args) on pool, awaitable, in a copy of the caller's context: a request's trace span (a contextvar) goes with
+    it, as asyncio.to_thread would carry it and a bare run_in_executor does not."""
+    return asyncio.get_running_loop().run_in_executor(pool, functools.partial(contextvars.copy_context().run, fn, *args))
 
 CASES = desk_rules.CLASSES + ("none",)
 SCHEMA = {"type": "object", "properties": {"case": {"type": "string", "enum": list(CASES)}}, "required": ["case"]}
@@ -192,11 +210,12 @@ def read_on_tenants(db) -> frozenset:
 
 
 class OnTenants:
-    """read() - one query - at most once every ttl_s per process, by one thread at a time: a caller that finds a read
-    running takes the last set at once. A failed read keeps the last set (none before the first read works) and is
-    logged once until a read works again: the check stops only where it had not started, and the rules run either
-    way. event names that line: desk_check_tenants_unread, which terraform/desk_alerts.tf pages on, unless another
-    reader of tenant_settings (the chat service's shadow) names its own."""
+    """read() - one query - at most once every ttl_s per process, by one caller at a time: claim() marks the read as
+    running before it starts, and a caller that finds it running takes the last set at once. A failed read keeps the
+    last set (none before the first read works) and is logged once until a read works again: the check stops only
+    where it had not started, and the rules run either way. event names that line: desk_check_tenants_unread, which
+    terraform/desk_alerts.tf pages on, unless another reader of tenant_settings (the chat service's shadow) names
+    its own."""
 
     def __init__(self, read, log, surface: str, ttl_s: float = ON_TENANTS_TTL_S,
                  event: str = "desk_check_tenants_unread"):
@@ -208,23 +227,43 @@ class OnTenants:
         self._reading = False
 
     def fresh(self) -> frozenset | None:
-        """The set while it is under ttl_s old, else None: get() reads it again."""
+        """The set while it is under ttl_s old, or while a read is running (the last set, none before the first read
+        works), else None: what the chat service's shadow asks on the event loop before it reads off it (get())."""
         with self._lock:
-            ok = self._at is not None and time.monotonic() - self._at < self._ttl
+            ok = self._reading or (self._at is not None and time.monotonic() - self._at < self._ttl)
             return self._tenants if ok else None
 
-    def get(self) -> frozenset:
-        got = self.fresh()
-        if got is not None:
-            return got
+    def claim(self) -> frozenset | None:
+        """What tenants() calls on the event loop: the set when it is fresh or a read is running; otherwise the read is
+        claimed here, before any thread runs it, and None says the caller must run refresh() (tenants() does, on
+        READ_POOL). So exactly one turn reads, and a turn arriving at the same moment never queues behind it."""
         with self._lock:
-            if self._reading:                  # another thread is reading: the last set, without waiting for it
+            if self._reading or (self._at is not None and time.monotonic() - self._at < self._ttl):
                 return self._tenants
             self._reading = True
+            return None
+
+    def get(self) -> frozenset:
+        """claim() and, when it asks, refresh(), in the caller's thread."""
+        got = self.claim()
+        return got if got is not None else self.refresh()
+
+    async def tenants(self) -> frozenset:
+        """What both doors await, on the event loop: claim() there, and refresh() on READ_POOL only for the turn that
+        made the claim. The read is shielded, so a turn cancelled meanwhile still has it run and the claim released."""
+        got = self.claim()
+        return got if got is not None else await asyncio.shield(run(READ_POOL, self.refresh))
+
+    def refresh(self) -> frozenset:
+        """The read a claim() asked for: one query, then the claim is released, whatever the read did."""
         try:
             got, failed = frozenset(self._read()), None
         except Exception as e:  # noqa: BLE001 - the last set stands this minute
             got, failed = None, e
+        except BaseException:                  # released even so, and the minute's wait starts
+            with self._lock:
+                self._reading, self._at = False, time.monotonic()
+            raise
         with self._lock:
             self._reading = False
             if got is not None:
@@ -232,7 +271,9 @@ class OnTenants:
             warn = failed is not None and not self._warned
             self._at, self._warned = time.monotonic(), failed is not None
             tenants = self._tenants
-        if warn:
+        if warn:                               # the cause too: Firestore re-raises a stream error as another type
+            cause = failed.__context__
             self._log.warning(json.dumps({"event": self._event, "surface": self._surface,
-                                          "error": type(failed).__name__}))
+                                          "error": type(failed).__name__,
+                                          "cause": type(cause).__name__ if cause is not None else None}))
         return tenants

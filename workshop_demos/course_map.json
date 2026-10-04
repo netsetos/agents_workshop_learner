@@ -243,14 +243,14 @@
     {
       "lesson": "10.5",
       "title": "Hand a question to the person the law names",
-      "source_sha": "6b7d734a2a2946000e460afc23bb7a264b944c41",
+      "source_sha": "80635e5dd2421b1fbc965f0fac5e3513d0995514",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.6",
       "title": "Route each question to one specialist agent",
-      "source_sha": "cdb64225afab8cb2b503ad4ff187e2471dfa6c51",
+      "source_sha": "a9a1aa5a20a75e545f175af7d4a50630ecf55da8",
       "source_kind": "main_html",
       "demos": 14
     },

@@ -51,7 +51,7 @@ ME, GRC, HR, PAY, PRIV, OTHER = ("you@example.com", "grc@example.com", "hr@examp
                                  "dpo@example.com", "colleague@example.com")
 POSH = "My manager keeps making sexual comments about my body. What can I do?"
 PLAIN = "How many days of earned leave can I carry forward?"
-MISS = "He grabbed my hand in the lift yesterday and I keep thinking about it"   # no pattern catches it: the check may
+MISS = "He grabbed my hand in the lift yesterday and I keep thinking about it"   # no pattern catches it; the model check may
 
 
 def _load(name, path):
@@ -133,7 +133,7 @@ class Query:
     def limit(self, n):
         return Query(self.db, self.path, self.filters, self.order, n)
 
-    def stream(self):
+    def stream(self, **kw):                        # retry= and timeout=, as shared/desk_recall reads, are taken
         if self.db.fail_reads:
             raise RuntimeError("firestore is unwell")
         self.db.queries.append((self.path, self.filters, self.order))
@@ -750,6 +750,10 @@ class DeskOpsTests(Lane):
             code, out = self.run_ops("desk", "--tenant", "acme", "--gate", value)
             self.assertEqual((code, self.db.docs["tenant_settings/acme"]["desk_gate"]), (0, value), out)
             self.assertEqual(json.loads(out)["desk_gate"], value)
+            # on says what it costs, and how to keep the rules without it; rules and off print no such note
+            self.assertEqual("model_check" in json.loads(out), value == "on", value)
+            if value == "on":
+                self.assertIn("make desk TENANT=acme DESK_GATE=rules", json.loads(out)["model_check"])
         # the routed Desk answers a POSH disclosure with the card: on is refused until the POSH queue is complete
         code, out = self.run_ops("desk", "--tenant", "acme", "--route", "on")
         self.assertEqual(code, 2)
@@ -765,6 +769,13 @@ class DeskOpsTests(Lane):
         self.assertEqual(code, 2)
         self.assertIn("posh.units.pune: no Internal Committee member holds ic_member:pune", out)
         roles.role_ref(self.db, "acme", ME).set({"roles": ["employee", "ic_member:hyderabad", "ic_member:pune"]})
+        # the queue complete and every office read: the routed Desk is accepted, on and single, then off again
+        for args, mode in ((("--route", "on"), "on"), (("--route", "single", "--single", "handbook"), "single")):
+            code, out = self.run_ops("desk", "--tenant", "acme", *args)
+            self.assertEqual((code, self.db.docs["tenant_settings/acme"]["desk_route"], json.loads(out)["desk_route"]),
+                             (0, mode, mode), out)
+        code, out = self.run_ops("desk", "--tenant", "acme", "--route", "off")
+        self.assertEqual((code, self.db.docs["tenant_settings/acme"]["desk_route"]), (0, "off"), out)
         # while only the gate is on, a queue file that drops POSH is written: the gate's reply needs no queue
         no_posh = {k: v for k, v in self.queues.items() if k != "posh"}
         import tempfile
@@ -844,18 +855,21 @@ def synthetic_aadhaar(first11="23456789012"):
 
 
 class _OnTenants:
-    """shared/desk_recall.OnTenants as the door reads it, over a set the test may change: fresh() is None until get()
-    has read once, as at a process's first turn, and every read is counted."""
+    """shared/desk_recall.OnTenants as the door reads it, over a set the test may change: claim() is None until
+    refresh() has read once, as at a process's first turn; every claim and every read is counted. tenants() is the
+    real one, the doors' own path."""
+    tenants = desk_recall.OnTenants.tenants
 
     def __init__(self, tenants):
-        self.tenants, self.reads = tenants, 0
+        self.set, self.reads, self.claims = tenants, 0, 0
 
-    def fresh(self):
-        return frozenset(self.tenants) if self.reads else None
+    def claim(self):
+        self.claims += 1
+        return frozenset(self.set) if self.reads else None
 
-    def get(self):
+    def refresh(self):
         self.reads += 1
-        return frozenset(self.tenants)
+        return frozenset(self.set)
 
 
 class _App:
@@ -897,6 +911,7 @@ class ChatDoorTests(unittest.TestCase):
         from starlette.exceptions import HTTPException
         cls.desk, cls.HTTPException = desk, HTTPException
         cls.real_check = staticmethod(desk._check)       # setUp patches it; one test runs the real one
+        cls.real_checked = desk.CHECKED                  # and CHECKED, whose real read one test runs
 
     def setUp(self):
         self.app, self.door = _App(), self.desk.ChatDoor(_App())
@@ -949,12 +964,16 @@ class ChatDoorTests(unittest.TestCase):
         self.assertEqual([t for _, t in self.shadows], ["acme", None])
 
     def test_the_local_profile_has_the_rules_and_reads_no_setting(self):
+        touched = []
+
         def boom(*a):
+            touched.append(a)                       # recorded: gate_state() would swallow the exception itself
             raise AssertionError("the local profile read a setting, verified a caller or looked for a check")
         self.checked.add("zeta")                                                 # never read on the local profile
         a = synthetic_aadhaar()
         masked_q = f"My Aadhaar is {a[:4]} {a[4:8]} {a[8:]}. How do I update my address in the records?"
         with patch.object(self.desk, "PROFILE", "local"), patch.object(self.desk, "settings", boom), \
+                patch.object(self.desk, "gate_state", boom), \
                 patch.dict(self.desk._hooks, {"caller": boom, "tenant_for": boom}), patch.object(self.desk, "_check", boom), \
                 patch.dict(os.environ, {"LOCAL_TENANT": "zeta"}):
             status, _, out = _run(self.door, self.body(POSH))                     # a hit: the fixed reply, no model
@@ -965,7 +984,7 @@ class ChatDoorTests(unittest.TestCase):
             self.assertEqual((self.app.calls[-1][1], self.shadows), (raw, [(PLAIN, "zeta")]))
             _run(self.door, self.body(masked_q))                                  # a number: masked
             self.assertNotIn(a[8:], self.app.calls[-1][1].decode())
-        self.assertEqual(self.door_checked.reads, 0)
+        self.assertEqual((self.door_checked.claims, self.door_checked.reads, touched), (0, 0, []))
 
     def test_an_aadhaar_number_is_masked_unless_the_gate_is_off(self):
         a = synthetic_aadhaar()
@@ -1027,7 +1046,7 @@ class ChatDoorTests(unittest.TestCase):
         self.checked.add("acme")
         self.verdict = "posh"
         records = self.records()
-        self.assertIsNone(self.door_checked.fresh())                            # a process's first turn
+        self.assertEqual((self.door_checked.claims, self.door_checked.reads), (0, 0))   # a process's first turn
         status, _, out = _run(self.door, self.body(MISS, brain="langchain"), [(b"x-test-email", ME.encode())])
         body = json.loads(out)
         self.assertEqual((status, self.app.calls, self.checks, self.door_checked.reads), (200, [], [MISS], 1))
@@ -1057,6 +1076,61 @@ class ChatDoorTests(unittest.TestCase):
         self.assertEqual(records[-1]["method"], "model")
         self.assertNotIn(a[8:], json.dumps(records) + out.decode())
 
+    def test_the_check_and_the_read_run_on_the_kits_threads_with_the_requests_context(self):
+        import contextvars
+        import threading
+        var, seen = contextvars.ContextVar("request", default=None), []
+        self.checked.add("acme")
+        self.verdict = "posh"
+        check, claim, refresh = self.desk._check, self.door_checked.claim, self.door_checked.refresh
+        self.door_checked.claim = lambda: (seen.append(("claim", threading.current_thread().name, var.get())), claim())[1]
+        self.door_checked.refresh = lambda: (seen.append(("read", threading.current_thread().name, var.get())), refresh())[1]
+        wrapped = (lambda q: (seen.append(("check", threading.current_thread().name, var.get())), check(q))[1])
+        token = var.set("the request")                     # a request's trace span is a contextvar like this one
+        try:
+            with patch.object(self.desk, "_check", wrapped):
+                _run(self.door, self.body(MISS), [(b"x-test-email", ME.encode())])
+        finally:
+            var.reset(token)
+        self.assertEqual([(k, t.rsplit("_", 1)[0], v) for k, t, v in seen],       # the claim on the event loop's
+                         [("claim", threading.current_thread().name, "the request"),   # thread, no worker's
+                          ("read", "desk-check-read", "the request"), ("check", "desk-check", "the request")])
+
+    def test_a_question_with_no_words_costs_no_check(self):
+        self.checked.add("acme")
+        self.verdict = "posh"
+        for q in ("   ", "\n\t"):
+            raw = self.body(q)
+            _run(self.door, raw, [(b"x-test-email", ME.encode())])
+            self.assertEqual((self.app.calls[-1][1], self.checks, self.callers, self.door_checked.claims),
+                             (raw, [], [], 0), repr(q))
+
+    def test_through_the_door_a_turn_never_queues_behind_the_read(self):
+        import threading
+        started, release, reads = threading.Event(), threading.Event(), []
+
+        def slow_read():
+            reads.append(threading.current_thread().name)
+            started.set()
+            release.wait(5)
+            return frozenset({"acme"})
+        on = desk_recall.OnTenants(slow_read, self.desk.log, "chat", ttl_s=60)
+
+        async def burst():                                  # five turns at the same moment, before any thread has run
+            turns = [asyncio.ensure_future(self.door._checking()) for _ in range(5)]
+            await asyncio.get_running_loop().run_in_executor(None, started.wait, 5)
+            waiting = sum(not t.done() for t in turns)      # only the turn that claimed the read waits for it
+            release.set()
+            return waiting, sorted(await asyncio.gather(*turns))
+        with patch.object(self.desk, "CHECKED", on):
+            self.assertEqual(asyncio.run(burst()), (1, [False] * 4 + [True]))
+            started.clear()
+            release.clear()
+            on._at -= 61                                    # the minute's end: one turn reads again, four do not wait
+            self.assertEqual(asyncio.run(burst()), (1, [True] * 5))
+        self.assertEqual(len(reads), 2)
+        self.assertTrue(all(r.startswith("desk-check-read") for r in reads), reads)
+
     def test_the_real_check_passes_the_routed_desks_client(self):
         class _Usage:
             prompt_token_count, candidates_token_count, thoughts_token_count, cached_content_token_count = 900, 4, 0, 0
@@ -1079,14 +1153,45 @@ class ChatDoorTests(unittest.TestCase):
         a = synthetic_aadhaar()
         q = f"My Aadhaar is {a}. How do I update my address in the records?"
         self.checked.add("acme")
+        levels = []
+        handler = logging.Handler()
+        handler.emit = lambda r: levels.append((r.levelno, json.loads(r.getMessage()).get("outcome")))
+        lg = logging.getLogger("documind.chat.desk")
+        lg.addHandler(handler)
+        self.addCleanup(lg.removeHandler, handler)
+        self.addCleanup(setattr, lg, "level", lg.level)
+        lg.setLevel(logging.INFO)
+        disabled = logging.root.manager.disable
+        logging.disable(logging.NOTSET)
+        self.addCleanup(logging.disable, disabled)
         for verdict in (None, "error"):
             self.verdict = verdict
             _run(self.door, self.body(q), [(b"x-test-email", ME.encode())])
             self.assertEqual(self.checks[-1], "My Aadhaar is [Aadhaar]. How do I update my address in the records?")
             self.assertNotIn(a, self.app.calls[-1][1].decode())                  # masked, then on to chat()
+        # a failed check is a WARNING, the stand-in for an alert until one exists; none is INFO
+        self.assertEqual(levels, [(logging.INFO, "none"), (logging.WARNING, "error")])
         raw = self.body(PLAIN)
         _run(self.door, raw, [(b"x-test-email", ME.encode())])
         self.assertEqual(self.app.calls[-1][1], raw)                             # no identifier: the bytes as sent
+
+    def test_the_real_checked_reads_the_routed_desks_firestore(self):
+        seen = []
+
+        class _Query:
+            def where(self, field, op, value):
+                seen.append((field, op, value))
+                return self
+
+            def stream(self, **kw):
+                seen.append(kw)
+                return [types.SimpleNamespace(id="acme")]
+        db = types.SimpleNamespace(collection=lambda name: (seen.append(name), _Query())[1])
+        on = desk_recall.OnTenants(self.real_checked._read, self.desk.log, "chat")   # the module's own read
+        with patch.object(self.desk, "_client", lambda: db):
+            self.assertEqual(on.get(), frozenset({"acme"}))
+        self.assertEqual(seen, ["tenant_settings", ("desk_gate", "in", ["on", True]),
+                                {"retry": None, "timeout": desk_recall.READ_TIMEOUT_S}])
 
     def test_the_model_check_runs_only_for_a_tenant_whose_gate_is_on(self):
         raw = self.body(MISS)
@@ -1102,8 +1207,9 @@ class ChatDoorTests(unittest.TestCase):
         _run(self.door, raw)                                                      # a caller chat() refuses: its own 401
         self.assertEqual((self.checks, self.app.calls[-1][1]), ([], raw))
         self.verdict = "posh"
-        _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])       # a rule hit: the rule answers
-        self.assertEqual(self.checks, [])
+        claims = self.door_checked.claims
+        _run(self.door, self.body(POSH), [(b"x-test-email", ME.encode())])       # a rule hit: the rule answers,
+        self.assertEqual((self.checks, self.door_checked.claims), ([], claims))  # and the list is not asked for
         _run(self.door, raw, [(b"x-test-email", ME.encode())])
         self.assertEqual(self.checks, [MISS])
 
@@ -1232,7 +1338,7 @@ class ChatServiceTests(unittest.TestCase):
                   patch.object(self.desk, "PROFILE", "gcp"), patch.object(self.agent, "tenant_for", tenant_for),
                   patch.dict(self.desk._hooks, {"tenant_for": tenant_for}), patch.object(self.desk, "settings", settings),
                   patch.object(self.desk, "_client", lambda: db), patch.object(self.desk, "CHECKED", _OnTenants(set())),
-                  patch.object(self.desk, "SHADOWING", _OnTenants(set()))):
+                  patch.object(self.desk, "SHADOWING", desk_recall.OnTenants(frozenset, self.desk.log, "test"))):
             stack.enter_context(p)
         self.addCleanup(stack.close)
         return self.TestClient(self.agent.app)

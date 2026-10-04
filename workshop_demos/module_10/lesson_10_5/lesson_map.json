@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.5_Case_Desk_WIX.html",
-  "source_sha": "6b7d734a2a2946000e460afc23bb7a264b944c41",
+  "source_sha": "80635e5dd2421b1fbc965f0fac5e3513d0995514",
   "shared_setup_windows": [
     1
   ],
@@ -773,7 +773,7 @@
     },
     {
       "window": 24,
-      "label": "services/rag-api/main.py and services/chat/agent.py - each door is one install line",
+      "label": "services/rag-api/main.py and services/chat/agent.py - each door is one install call (rag-api's with the model check)",
       "heading": "One fixed reply at every door",
       "anchor": "s5",
       "line": 760

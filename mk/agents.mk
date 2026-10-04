@@ -100,9 +100,11 @@ limits-drill: guard-project
 # every tenant unless DESK_GATE=off: a POSH disclosure, a grievance, a privacy request, unpaid exit dues or "let me
 # talk to a person" (shared/desk_rules.py) gets the fixed reply of shared/desk_law.py with model none and cost 0, and
 # Aadhaar and card numbers are masked out of every other question - DESK_GATE=rules, what a tenant has until an
-# operator writes anything else. DESK_GATE=on adds the model check (shared/desk_recall.py) on the questions people send
-# that the rules let through: one flash-lite call each. Both services read the document once a minute. No value needs
-# a case queue. Without DESK_GATE it prints the switch.
+# operator writes anything else. DESK_GATE=on adds the model check (shared/desk_recall.py): one flash-lite call for each
+# question to that company the rules let through, at the chat door and on rag-api's /v1/query and /v1/stream for a body
+# with no brain label or "ui" (eval scripts included); while any company is on, the chat door looks up every company's
+# caller. Both services read the document once a minute. No value needs a case queue. Without DESK_GATE it prints the
+# switch, and beside desk_gate on what it costs.
 # DESK_MAX_PARTS=2 lets the routed Desk (lesson 10.6) run two desks for one question, one after the other; 1, the
 # default, offers the second as a button. DESK_ROUTE is the routed Desk's mode: off; shadow (each /v1/chat turn is also
 # decided by the router and logged as a desk_shadow row, nothing more); on (POST /v1/desk answers, and the Desk page

@@ -15,7 +15,7 @@ same rules and the same desk_gate switch.
        but pydantic reads it only after this door has read the body, so that cap does not bound the read.
     2. A body that is not JSON, has no string `query`, a query over QueryRequest's 4,000 characters, or one with no
        words, is replayed unchanged: the handler answers it. The gate and the masking run off the event loop, the
-       model check and its tenants read on desk_recall.POOL.
+       model check and its tenants read on desk_recall's own threads (POOL, READ_POOL), with the request's context.
     3. No hit, no identifier and no model check to run: the original bytes go through untouched, and nothing is read
        or verified. The model check runs only on /v1/query and /v1/stream, only for a question a person sent (brain
        unset, or "ui" - the Chat page; a chat brain, the Desk and the MCP server label their own calls, whose words
@@ -146,9 +146,7 @@ class DeskDoor:
         """The tenants the model check runs for: none without a check to run."""
         if self.checked is None or self.check is None:
             return frozenset()
-        got = self.checked.fresh()
-        return got if got is not None else await asyncio.get_running_loop().run_in_executor(desk_recall.POOL,
-                                                                                            self.checked.get)
+        return await self.checked.tenants()        # on the loop: only the turn that claims the read waits for it
 
     async def __call__(self, scope, receive, send):
         surface = PATHS.get(scope.get("path")) if scope.get("type") == "http" and scope.get("method") == "POST" else None
@@ -203,7 +201,7 @@ class DeskDoor:
         method = "rule"
         usage = {"tokens_in": 0, "tokens_out": 0, "cached_tokens": 0, "cost_usd": 0.0, "model": "none", "backend": "desk_gate"}
         if cls is None and checked and state == "on":
-            got = await asyncio.get_running_loop().run_in_executor(desk_recall.POOL, self.check, masked)
+            got = await desk_recall.run(desk_recall.POOL, self.check, masked)
             (log.warning if got["outcome"] == "error" else log.info)(json.dumps(desk_recall.row(surface, tenant, got)))
             if got["case"] is not None:
                 cls, method, usage = got["case"], "model", desk_recall.usage(got)
@@ -234,7 +232,7 @@ class DeskDoor:
 def install(app, settings, verify, member, checked=None, check=None) -> None:
     """Put the door in front of the app. settings(tenant) returns tenant_settings/{tenant}; verify(request) returns
     {"email": ...} or raises 401; member(email, tenant) raises 403. checked is the tenants whose desk_gate is on
-    (shared/desk_recall.OnTenants: fresh() and get()) and check(masked question) the model check's result
+    (shared/desk_recall.OnTenants: its tenants()) and check(masked question) the model check's result
     (desk_recall.check); without both, no model check runs. Starlette makes the middleware added last the outermost,
     so a line added after this one - main.py's CORSMiddleware - wraps the door."""
     app.add_middleware(DeskDoor, settings=settings, verify=verify, member=member, checked=checked, check=check)

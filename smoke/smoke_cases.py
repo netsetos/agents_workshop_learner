@@ -10,7 +10,8 @@ Before it, once per lane (the lesson's lane steps):
     make roles TENANT=acme EMAIL=documind-evalgrc-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com ROLES=grc_member
     make roles TENANT=acme EMAIL=you@example.com ROLES=employee,grc_member,ic_member:hyderabad,ic_member:pune
     make desk-queues TENANT=acme FILE=evals/desk/queues.acme.json     # your email in place of you@example.com
-    make desk TENANT=acme                                            # prints desk_gate: rules, unless it was switched off
+    make desk TENANT=acme                                            # desk_gate: rules (on, with a model_check note, if an
+                                                                     # earlier lesson wrote it; off only if someone wrote off)
 
     1. POST /v1/chat, a POSH disclosure, as documind-evalacme-sa  -> 200 from the door: model none, cost Rs 0, no tool
                                                                      call (no brain ran)
