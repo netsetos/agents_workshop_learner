@@ -1,4 +1,4 @@
-"""Who a Desk route serves when the Google Chat bridge asks on someone's behalf (the DocuMind Desk, workshop lesson 10.6).
+"""Who a Desk route serves when the Google Chat bridge asks on someone's behalf (the DocuMind Desk, workshop lesson 10.4).
 
 The chat service takes identity from one place, agent.py's caller(): the person's IAP assertion, or the caller's own
 Google ID token for SELF_URL (shared/iap.py). Neither can name an employee who messaged the "HR Desk" app in Google

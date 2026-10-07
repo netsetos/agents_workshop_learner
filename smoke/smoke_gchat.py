@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Live smoke test for the Google Chat door's refusals (workshop lesson 10.6).
+"""Live smoke test for the Google Chat door's refusals (workshop lesson 10.4).
 
     make smoke-gchat PROJECT=documind-ai-YOUR-ID          # from deploy/, after make deploy-gchat
 

@@ -1,6 +1,6 @@
-# The DocuMind Desk (workshop lesson 10.5): the case queue's Firestore pieces, its hourly overdue job, and the
+# The DocuMind Desk (workshop lesson 5.6): the case queue's Firestore pieces, its hourly overdue job, and the
 # identities its live checks call the chat service as. Kept apart from firestore_indexes.tf, whose index table
-# workshop lesson 5.4 computes from that file.
+# workshop lesson 2.4 computes from that file.
 
 # ---------------------------------------------------------------------------------------------
 # The case queue (shared/cases.py). cases/{case_id} carries its tenant; a draft carries expire_at, 30 minutes out,

@@ -1,5 +1,5 @@
 """A Google Chat event as one record, from either of the two shapes Chat may send (the Google Chat door, workshop lesson
-10.6). Standard library only.
+10.4). Standard library only.
 
     add-on shape    the Workspace add-on model, the one the "HR Desk" app is configured with: the body carries a "chat"
                     key, and a person's message is chat.messagePayload.message with its sender

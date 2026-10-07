@@ -1,4 +1,4 @@
-"""Offline tests for the DocuMind Desk route set, its eval and its probe (workshop lessons 10.5 and 10.6).
+"""Offline tests for the DocuMind Desk route set, its eval and its probe (workshop lessons 5.6 and 10.4).
 
 Run with ``python -m unittest discover -s evals/tests -p test_route_eval.py`` from deploy/ (``make desk-check``
 runs it). Stdlib only, except the one probe test that validates the request configs against google-genai's own
@@ -43,7 +43,7 @@ def a_row(**over):
 
 class WilsonTest(unittest.TestCase):
     def test_lesson_10_6_figures_when_every_row_passes(self):
-        # Lesson 10.6's figures: n / (n + 3.84). 20 a class, 73 the minimum for 95%, 75 a class, 100 pooled.
+        # Lesson 10.4's figures: n / (n + 3.84). 20 a class, 73 the minimum for 95%, 75 a class, 100 pooled.
         for n, want in {20: 83.9, 73: 95.0, 75: 95.1, 100: 96.3}.items():
             lo, hi = route_eval.wilson(n, n)
             self.assertEqual(round(100 * lo, 1), want, n)

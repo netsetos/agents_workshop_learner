@@ -1,4 +1,4 @@
-"""The DocuMind Desk's agent mode (workshop lesson 10.6): when a person asks for a figure, an answer desk runs as a
+"""The DocuMind Desk's agent mode (workshop lesson 10.4): when a person asks for a figure, an answer desk runs as a
 small agent that reads this turn's passages and works the figure out with code (shared/desk_calc.py).
 
     handbook   retrieve over [policy]; accrued_leave, carry_forward, encashable_days, notice_end

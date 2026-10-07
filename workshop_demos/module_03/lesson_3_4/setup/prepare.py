@@ -1,6 +1,6 @@
 """Lesson 3.4: Before you run anything: set up the shell
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index, the endpoint, the BigQuery table and the audit bucket are named in the environment of the two services that use them. Read them once into the shell; every cell below uses these variables. Both reads are read-only.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.
 
 Run order inside this file:
 1. Which store answers acme? Pin it to the kit's own index for this lesson (source window 3)
@@ -28,7 +28,7 @@ RETRY_FAILED_STEP = False
 def step_01_which_store_answers_acme_pin_it_to_the_kit(session):
     """Run Which store answers acme? Pin it to the kit's own index for this lesson at this checkpoint.
 
-    DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+    DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell now, before the lesson's first step.
@@ -39,34 +39,23 @@ def step_01_which_store_answers_acme_pin_it_to_the_kit(session):
     Observe: acme: retrieval_backend=vector
     """
     session.pin_vector()
-
-# Original CLI workflow for step_02_which_store_answers_acme_pin_it_to_the_kit.
-COMMANDS_02 = """svc_env() { gcloud run services describe "$1" --region "$REGION" --project "$PROJECT" \\
-  --format='value(spec.template.spec.containers[0].env)' | tr ';' '\\n' | grep "'name': '$2'" | sed -nE "s/.*'value': '([^']*)'.*/\\1/p"; }   # -n ... p: an entry with an empty value prints nothing
-export VECTOR_INDEX_NAME="$(svc_env documind-ingest VECTOR_INDEX_NAME)" BQ_CHUNK_TABLE="$(svc_env documind-ingest BQ_CHUNK_TABLE)" AUDIT_BUCKET="$(svc_env documind-ingest AUDIT_BUCKET)"
-export VECTOR_INDEX_ENDPOINT="$(svc_env documind-api VECTOR_INDEX_ENDPOINT)" VECTOR_DEPLOYED_INDEX_ID="$(svc_env documind-api VECTOR_DEPLOYED_INDEX_ID)"
-echo "index:    $VECTOR_INDEX_NAME"; echo "endpoint: $VECTOR_INDEX_ENDPOINT  deployed: $VECTOR_DEPLOYED_INDEX_ID"
-echo "mirror:   $BQ_CHUNK_TABLE  audit: $AUDIT_BUCKET"
-
-"""
+    from workshop_helpers.lesson31 import prepare_cache
+    prepare_cache(session)
 
 def step_02_which_store_answers_acme_pin_it_to_the_kit(session):
     """Run Which store answers acme? Pin it to the kit's own index for this lesson at this checkpoint.
 
-    Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index, the endpoint, the BigQuery table and the audit bucket are named in the environment of the two services that use them. Read them once into the shell; every cell below uses these variables. Both reads are read-only.
+    Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The budget's total, the answer's reserve, the model and the rupee rate live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty, because steps 4 and 5 import the kit and its settings class reads an empty variable as a value.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, once per shell.
+    Operations: bash — run in the operator shell, in $DEMO_ROOT, once per shell.
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: index:    projects/documind-ai-YOUR-ID/locations/asia-south1/indexes/1234567890123456789
-    endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876543210987654321  deployed: documind_chunks_v1
-    mirror:   documind-ai-YOUR-ID.rag_data.chunk_source  audit: documind-ai-YOUR-ID-audit
+    Observe: context: 8000 (default)  answer: 2048 (default)  model: gemini-3.6-flash (default)  prompt: v3 (default)  usd_inr: 85 (default)
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
+    session.service_environment('documind-api', ['MAX_CONTEXT_TOKENS', 'MAX_ANSWER_TOKENS', 'GENERATOR_MODEL', 'PROMPT_VERSION', 'USD_INR_RATE'])
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

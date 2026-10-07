@@ -1,4 +1,4 @@
-# ---------- Lifecycle (Module 4): 12.5's ledger - one current version per document - and the batch lane's consumer ----------
+# ---------- Lifecycle (Module 1): 12.5's ledger - one current version per document - and the batch lane's consumer ----------
 # Included by the Makefile (`include mk/*.mk`). reindex is commands/reindex.sh; the rest call the kit's own
 # Python (services/ingest/reconcile.py, batch.py) and run the same way without make: commands/lane.py.
 

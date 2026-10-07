@@ -103,7 +103,7 @@ resource "google_storage_bucket_iam_member" "api_audit" {
   role   = "roles/storage.objectCreator"
   member = "serviceAccount:${google_service_account.api.email}"
 }
-# The chat service writes the DocuMind Desk's events here (workshop lesson 10.5): case.open, case.update and case.close
+# The chat service writes the DocuMind Desk's events here (workshop lesson 5.6): case.open, case.update and case.close
 # from the case queue (shared/cases.py), each with a case reference for its actor and never an email, because nothing
 # here can be deleted. objectCreator again, and on this bucket only.
 resource "google_storage_bucket_iam_member" "chat_audit" {

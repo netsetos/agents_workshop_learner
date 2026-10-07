@@ -1,4 +1,4 @@
-"""The DocuMind Desk on the chat service (workshop lesson 10.5): the chat door and the case routes.
+"""The DocuMind Desk on the chat service (workshop lesson 5.6): the chat door and the case routes.
 
 agent.py installs both with one line, desk.install(app, caller=..., tenant_for=..., thread_config=...), so its own
 handlers stay exactly as they are.
@@ -42,7 +42,7 @@ is checkpointed.
        and the method (rule or model), never the question. For posh, grievance and privacy_request the row's user is
        null and its class "sensitive".
 Every turn the door hands to chat() also goes to _shadow(): while the tenant's desk_route is shadow, the routed Desk's
-router decides it there too and logs a row (workshop lesson 10.6), and the door's own lines did not change for it.
+router decides it there too and logs a row (workshop lesson 10.4), and the door's own lines did not change for it.
 
 THE CASE ROUTES (shared/cases.py, shared/roles.py):
 
@@ -63,7 +63,7 @@ route such as /v1/cases/offer is never taken for a case. The tenant is the roste
 field. The records live in Firestore, so on the local profile these routes answer 501. tenant_settings is read
 through settings(), once a minute per tenant.
 
-THE ROUTED DESK (workshop lesson 10.6: services/chat/desk_router.py decides a turn, desk_graph.py answers it):
+THE ROUTED DESK (workshop lesson 10.4: services/chat/desk_router.py decides a turn, desk_graph.py answers it):
 
     POST /v1/desk     one turn for a person. The handler makes the Meter, then runs decide() before any graph runs; the
                       thread's previous turn and the chips it offered are read back with graph.get_state(). A gate hit
@@ -240,7 +240,7 @@ def _with_length(scope, n: int):
 
 
 async def _shadow(scope, question: str, tenant: str | None) -> None:
-    """The routed Desk's shadow mode (workshop lesson 10.6) runs here, beside the brain and inside the request, and
+    """The routed Desk's shadow mode (workshop lesson 10.4) runs here, beside the brain and inside the request, and
     writes its own row, never the answer, while the tenant's desk_route is shadow. The door calls it on every turn
     it hands to chat(), with the question chat() will see, and the tenant when the door looked it up (else None)."""
     return await _shadow_turn(scope, question, tenant)
@@ -522,7 +522,7 @@ def set_case_status(case_id: str, body: CaseStatus, request: Request) -> dict:
     return cases.view(rec, queues)
 
 
-# ---------------------------------------------------------------- the routed Desk (workshop lesson 10.6)
+# ---------------------------------------------------------------- the routed Desk (workshop lesson 10.4)
 MODES = ("off", "shadow", "on", "single")
 SERVED = ("on", "single")                   # the modes in which /v1/desk answers a person
 EVAL_ROLE = "desk_eval"                     # shared/roles.py: the Desk's eval accounts

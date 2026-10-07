@@ -210,13 +210,13 @@ def _health(service: str, project: str, region: str) -> tuple[str, dict | str]:
 
 
 def cmd_limits(a) -> int:
-    """The limits a chat turn runs under, as the deployed service publishes them (workshop lesson 10.3), and the
+    """The limits a chat turn runs under, as the deployed service publishes them (workshop lesson 5.5), and the
     A2A peer's own call cap when its /health names one."""
     url, body = _health("documind-chat", a.project, a.region)
     print(f"documind-chat  {url}")
     lim = body.get("limits") if isinstance(body, dict) else None
     if not lim:
-        print(f"  no limits on /health: {body if isinstance(body, str) else 'an image from before workshop lesson 10.3'}")
+        print(f"  no limits on /health: {body if isinstance(body, str) else 'an image from before workshop lesson 5.5'}")
         return 1
     print(f"  model calls a turn    {lim['max_model_calls']}")
     print(f"  rupees a turn         Rs {lim['budget_inr']:g}")

@@ -1,43 +1,42 @@
 {
   "schema_version": 4,
   "lesson": "7.2",
-  "title": "Separate offline checks, live scoring and LLM judgment",
+  "title": "Compare Firestore and Spanner graph paths",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html",
-  "source_sha": "959e0e1f1d75f19ba7e9de02e79ee90ed9312944",
+  "source_page": "Netsetos_GCP_Capstone_7.2_Graph_Paths_WIX.html",
+  "source_sha": "1a20d1bb8fa54cb05200972a3aeeeb45d4c3e58d",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 40,
+  "source_window_count": 27,
   "persist_variables": [
     "API",
     "API_URL",
-    "CHAT_URL",
-    "HOME",
-    "JUDGE_ARGS",
+    "CAND",
     "ME",
     "NUMBER",
     "PROJECT",
     "REGION",
-    "TENANT"
+    "TENANT",
+    "URL"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Separate offline checks, live scoring and LLM judgment: the gate on every push, the gate on a deployment, and the judge that explains but never decides"
+      "heading": "Compare Firestore and Spanner graph paths: seeded by a name, or by meaning"
     },
     {
       "level": 3,
-      "heading": "Three instruments, three questions, and why only one may block"
+      "heading": "Two ways into one graph"
     },
     {
       "level": 4,
-      "heading": "The threshold board: what the live gate would say about a run you design"
+      "heading": "One question, two ways in"
     },
     {
       "level": 3,
-      "heading": "The words: offline half, live half, threshold, required row, two identities, exit code, report, candidate, judge, groundedness"
+      "heading": "The words: seed, containment, candidate name, meaning, cosine distance, threshold, hop, property graph, interleaving, graph_chunks"
     },
     {
       "level": 3,
@@ -57,7 +56,7 @@
     },
     {
       "level": 3,
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run"
+      "heading": "The seeders, run"
     },
     {
       "level": 4,
@@ -69,11 +68,11 @@
     },
     {
       "level": 4,
-      "heading": "Do it: the gate as CI runs it, and CI's result on your commit"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "The live half: every row, two identities, nine rates, three exit codes"
+      "heading": "The Firestore path: a name the question contains"
     },
     {
       "level": 4,
@@ -81,15 +80,11 @@
     },
     {
       "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the live gate, with a report"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "The judge: the lane's own answers, read with the context they cite"
+      "heading": "The Spanner path: build it, read it, walk it by meaning"
     },
     {
       "level": 4,
@@ -97,35 +92,23 @@
     },
     {
       "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the judge's venv and its self-test"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the judge on your lane"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Where the gate and the judge disagree: read the row"
-    },
-    {
-      "level": 3,
-      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3"
-    },
-    {
-      "level": 3,
-      "heading": "How each instrument lied before it was fixed, and what a run costs"
+      "heading": "The walk in front of the dense pool, on a candidate"
     },
     {
       "level": 4,
-      "heading": "The live gate, before 12 September"
+      "heading": "Definition"
     },
     {
       "level": 4,
-      "heading": "The judge, in its first live runs on 10 September"
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "Why two paths, what each costs, and what the kit does not do yet"
     },
     {
       "level": 4,
@@ -144,7 +127,7 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -155,7 +138,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        385
+        390
       ],
       "offline": false,
       "live_verified": false,
@@ -164,7 +147,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
@@ -173,279 +156,260 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 385,
+          "source_line": 390,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py"
+      "next": "demo_03_the_seeders_run.py"
     },
     {
-      "id": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run",
+      "id": "demo_03_the_seeders_run",
       "lesson": "7.2",
-      "file": "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py",
+      "file": "demo_03_the_seeders_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
-      "purpose": "Do it: the gate as CI runs it, and CI's result on your commit The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.",
+      "heading": "The seeders, run",
+      "purpose": "Do it",
       "anchor": "s3",
       "anchors": [
         "s3"
       ],
       "section_number": 3,
       "windows": [
-        8,
-        10
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        433,
-        446
+        461
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The offline half: on every push, and CI's verdict on the commit you run",
-          "subheading": "Do it: the gate as CI runs it, and CI's result on your commit",
-          "purpose": "Do it: the gate as CI runs it, and CI's result on your commit",
-          "label": "bash — run in the operator shell, in the kit (the offline half, as CI runs it)",
-          "expected": "python evals/run_eval.py\n== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [PASS] falsifiable\n  [PASS] anchors\n  [PASS] coverage\n\n  The golden set is sound. It can go red, and it still contains the rows that would.",
+          "heading": "The seeders, run",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the seeding rules, run; then the kit's tests; no model, no network)",
+          "expected": "eight names from the handbook's graph: Purchase approval, function head, CFO, Travel reimbursement, Notice period, probation, India, Remote work\nWho signs off on a big purchase?\n  candidate names ['who signs off on a big purchase?']\n  seeds by containment: none   auto: vector\nWhich purchases need the CFO?\n  candidate names ['which purchases need the cfo?']\n  seeds by containment: CFO   auto: graph\nWhat does the CFO approve?\n  candidate names ['what does the cfo approve?']\n  seeds by containment: CFO   auto: vector\nWho approves a purchase above two lakh?\n  candidate names ['who approves a purchase above two lakh?']\n  seeds by containment: none   auto: vector\nWho approves a Purchase above two lakh?\n  candidate names ['purchase']\n  seeds by containment: Purchase approval   auto: graph\nWho handles Indian travel claims?\n  candidate names ['indian']\n  seeds by containment: India   auto: graph\n........\n----------------------------------------------------------------------\nRan 8 tests in 0.004s\n\nOK",
           "adaptations": [],
-          "id": "source_8",
-          "function": "step_01_the_gate_as_ci_runs_it_and_ci_s_result_on",
-          "window": 8,
-          "source_line": 433,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The offline half: on every push, and CI's verdict on the commit you run",
-          "subheading": "Do it: the gate as CI runs it, and CI's result on your commit",
-          "purpose": "The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.",
-          "label": "bash — run in the operator shell, in the kit (one unauthenticated call to GitHub's public API)",
-          "expected": "your kit is at b89bbd8\n  b89bbd8  push  success  2026-09-23  <- the commit you run\n  6999d24  push  success  2026-09-22",
-          "adaptations": [],
-          "id": "source_10",
-          "function": "step_02_the_gate_as_ci_runs_it_and_ci_s_result_on",
-          "window": 10,
-          "source_line": 446,
+          "id": "source_9",
+          "function": "step_01_the_seeders_run",
+          "window": 9,
+          "source_line": 461,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py"
+      "next": "demo_04_the_firestore_path_a_name_the_question_contains.py"
     },
     {
-      "id": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes",
+      "id": "demo_04_the_firestore_path_a_name_the_question_contains",
       "lesson": "7.2",
-      "file": "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py",
+      "file": "demo_04_the_firestore_path_a_name_the_question_contains.py",
       "category": "required",
       "requires": [
-        "demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run"
+        "demo_03_the_seeders_run"
       ],
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "purpose": "Do it: the live gate, with a report Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.",
+      "heading": "The Firestore path: a name the question contains",
+      "purpose": "Do it",
       "anchor": "s4",
       "anchors": [
         "s4"
       ],
       "section_number": 4,
       "windows": [
-        18,
-        20,
-        22
+        11
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        546,
-        584,
-        621
+        521
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The live half: every row, two identities, nine rates, three exit codes",
-          "subheading": "Do it: the live gate, with a report",
-          "purpose": "Do it: the live gate, with a report",
-          "label": "bash — run in the operator shell, in the kit (every row as the member, every isolation row as the outsider: about ten minutes)",
-          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  65 rows (47 answerable, 18 not) against https://documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 65 rows)\n  [PASS] answerable_rate        97.9%  (threshold 80%; 47 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 46 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 46 rows)\n  [PASS] must_contain_rate      97.8%  (threshold 85%; 46 rows)\n  [PASS] correct_rate           95.7%  (threshold 68%; 47 rows)\n  [PASS] refusal_rate          100.0%  (threshold 90%; 18 rows)\n  [PASS] media_kind_rate       100.0%  (threshold 80%; 3 rows)\n  [PASS] isolation_403_rate    100.0%  (threshold 100%; 11 rows)\n  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)\n\n  shape        rows   ok   pass\n  lookup         34   34     33\n  join           11   11     10\n  refusal         8    8      8\n  isolation      11   11     11\n  version         1    1      1\n  latency ms  p50   ...  p95   ...   (round trip, 65 rows)\n  retrieve_ms p50   ...  p95   ...\n  rerank_ms   p50   ...  p95   ...\n  generate_ms p50   ...  p95   ...\n  pool        avg   ...   semantic cache hits ...\n\n  rows that cost a point (2):\n    jn-06  join      acme    answered without ['EMEA', '11.4'] | 'emea revenue fell in fy2026 [1].'\n    lk-27  lookup    acme    REFUSED conf=low cites=0 | What is the maximum rate of central tax the CGST Act allows?\n\n  report: evals/reports/lesson72.json\n  All thresholds met.",
-          "adaptations": [
-            "Retain the live gate's actual status and fresh structured report so the next functions can inspect a red result; missing reports remain errors."
-          ],
-          "id": "source_18",
-          "function": "step_01_the_live_gate_with_a_report",
-          "window": 18,
-          "source_line": 546,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The live half: every row, two identities, nine rates, three exit codes",
-          "subheading": "Do it: the live gate, with a report",
-          "purpose": "Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point.",
-          "label": "bash — run in the operator shell, in the kit (reads the report; changes nothing)",
-          "expected": "answerable_rate    46 answered          of 47 answerable rows\n  must_contain_rate  45 with the figure   of 46 ANSWERED\n  correct_rate       45 right             of 47 ANSWERABLE\n  refusal_rate       18 refused           of 18 unanswerable rows\n  pass  request_success_rate  100.0%  (needs 100%)\n  pass  answerable_rate        97.9%  (needs 80%)\n  pass  citation_rate         100.0%  (needs 95%)\n  pass  citation_valid_rate   100.0%  (needs 100%)\n  pass  must_contain_rate      97.8%  (needs 85%)\n  pass  correct_rate           95.7%  (needs 68%)\n  pass  refusal_rate          100.0%  (needs 90%)\n  pass  media_kind_rate       100.0%  (needs 80%)\n  pass  isolation_403_rate    100.0%  (needs 100%)\n  cost a point: jn-06 (answered without ['EMEA', '11.4']), lk-27 (refused)",
+          "heading": "The Firestore path: a name the question contains",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (two walks of the Firestore graph; reads only)",
+          "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --ask \"Who signs off on a big purchase?\"\n{\n \"question\": \"Who signs off on a big purchase?\",\n \"backend\": \"firestore\",\n \"seeded_by\": \"containment\",\n \"seeds\": [],\n \"nodes\": [],\n \"chunk_ids\": []\n}\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend firestore --ask \"Which purchases need the CFO?\"\n{\n \"question\": \"Which purchases need the CFO?\",\n \"backend\": \"firestore\",\n \"seeded_by\": \"containment\",\n \"seeds\": [\n  \"CFO\"\n ],\n \"nodes\": [\n  \"CFO\",\n  \"Purchase approval\"\n ],\n \"chunk_ids\": [\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#9\"\n ]\n}",
           "adaptations": [],
-          "id": "source_20",
-          "function": "step_02_the_live_gate_with_a_report",
-          "window": 20,
-          "source_line": 584,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The live half: every row, two identities, nine rates, three exit codes",
-          "subheading": "Do it: the live gate, with a report",
-          "purpose": "Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.",
-          "label": "bash — run in the operator shell, in the kit (the usage rows of the last hour, priced)",
-          "expected": "65 answers from documind-api in the last 1 h; USD_INR=85\n\nby tenant\ntenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans\n----------------------------------------------------------------------------------\nacme                        47       ...      ...       ...       ...     ...    ...\nzeta                        10       ...      ...       ...       ...     ...    ...\nglobex                       8       ...      ...       ...       ...     ...    ...",
-          "adaptations": [],
-          "id": "source_22",
-          "function": "step_03_the_live_gate_with_a_report",
-          "window": 22,
-          "source_line": 621,
+          "id": "source_11",
+          "function": "step_01_the_firestore_path_a_name_the_question_con",
+          "window": 11,
+          "source_line": 521,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py"
+      "next": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning.py"
     },
     {
-      "id": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite",
+      "id": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning",
       "lesson": "7.2",
-      "file": "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py",
+      "file": "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning.py",
       "category": "required",
       "requires": [
-        "demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes"
+        "demo_04_the_firestore_path_a_name_the_question_contains"
       ],
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "purpose": "Do it: the judge's venv and its self-test --reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "purpose": "Do it The CFO's edge came back two ways. As tables, GraphEdge is joined to GraphNode twice, for the names at both ends. As a graph, the kit's GQL walk goes from the CFO. Both reach Purchase approval and FIN-02. Now the kit's question, seeded by meaning. On Spanner, --ask prints the five nearest names, each with its distance and whether it passed 0.4. Then it walks from the names that passed.",
       "anchor": "s5",
       "anchors": [
         "s5"
       ],
       "section_number": 5,
       "windows": [
-        31,
-        33
+        15,
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        698,
-        707
+        616,
+        665
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The judge: the lane's own answers, read with the context they cite",
-          "subheading": "Do it: the judge's venv and its self-test",
-          "purpose": "Do it: the judge's venv and its self-test",
-          "label": "bash — run in the operator shell, in the kit (a second venv for the judge, then its offline self-test)",
-          "expected": "selftest: the cited chunk's text replaces its quote as the context and a miss keeps the quote; the prompt the judge reads carries the context then the question; the frame carries the six judge columns plus the baseline; the trajectory maths is right on the three cases",
+          "heading": "The Spanner path: build it, read it, walk it by meaning",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the same graph written to Spanner, then read back)",
+          "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend spanner --source hr_policy_2026.md --rebuild\n11 current text chunks for tenant 'acme' from 'hr_policy_2026.md'\n{\"event\": \"graph_extracted\", \"tenant\": \"acme\", \"chunks\": 11, \"extracted\": 11, \"fresh\": 0}\n{\"event\": \"graph_built\", \"tenant\": \"acme\", \"backend\": \"spanner\", \"chunks\": 11, \"surface_forms\": 28, \"nodes\": 25, \"edges\": 15}\ntenant acme: 25 nodes (25 with a 768-number vector), 15 edges in Spanner\nthe edges that name the CFO, as tables (the names joined from GraphNode):\n  CFO -[APPROVES_ABOVE_RS_2_00_000]-> Purchase approval   stated in FIN-02\none hop from CFO, by the kit's GQL walk: CFO, Purchase approval\n  the chunks they cite: FIN-02",
           "adaptations": [],
-          "id": "source_31",
-          "function": "step_01_the_judge_s_venv_and_its_self_test",
-          "window": 31,
-          "source_line": 698,
+          "id": "source_15",
+          "function": "step_01_the_spanner_path_build_it_read_it_walk_it",
+          "window": 15,
+          "source_line": 616,
           "manual_checkpoint": null
         },
         {
-          "heading": "The judge: the lane's own answers, read with the context they cite",
-          "subheading": "Do it: the judge on your lane",
-          "purpose": "--reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.",
-          "label": "bash — run in the operator shell, in the kit (the lane answers every row again, then Vertex AI Evaluation reads them)",
-          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n  65/65 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)\n  context: .../... cited chunks read in full from the store\n  trajectories: off (no --chat-url)\n  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-tcd7070)\n  pairwise: off (no --api-b)\n  judge: the service default (pass --judge-model to pin one)\n\n  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-tcd7070:\n    groundedness/mean                                ...\n    groundedness/mean[isolation]                     ...\n    groundedness/mean[join]                          ...\n    groundedness/mean[lookup]                        ...\n    groundedness/mean[refusal]                       ...\n    groundedness/mean[version]                       ...\n    groundedness/std                                 ...\n    instruction_following/mean                       ...\n    instruction_following/std                        ...\n    row_count                                        65.000\n\n  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.",
+          "heading": "The Spanner path: build it, read it, walk it by meaning",
+          "subheading": "Do it",
+          "purpose": "The CFO's edge came back two ways. As tables, GraphEdge is joined to GraphNode twice, for the names at both ends. As a graph, the kit's GQL walk goes from the CFO. Both reach Purchase approval and FIN-02. Now the kit's question, seeded by meaning. On Spanner, --ask prints the five nearest names, each with its distance and whether it passed 0.4. Then it walks from the names that passed.",
+          "label": "bash — run in the operator shell, in the kit (one walk of the Spanner graph, seeded by meaning; one embedding call)",
+          "expected": "cd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID PYTHONPATH=../.. \\\n  SPANNER_INSTANCE=documind-graph SPANNER_DATABASE=documind \\\n  python graph.py --project documind-ai-YOUR-ID --tenant acme --backend spanner --ask \"Who signs off on a big purchase?\"\n{\n \"question\": \"Who signs off on a big purchase?\",\n \"backend\": \"spanner\",\n \"seeded_by\": \"meaning\",\n \"seed_distance\": 0.4,\n \"nearest\": [\n  {\n   \"name\": \"Purchase approval\",\n   \"kind\": \"policy\",\n   \"distance\": 0.183,\n   \"seeded\": true\n  },\n  {\n   \"name\": \"CFO\",\n   \"kind\": \"person\",\n   \"distance\": 0.415,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"approved cloud bucket\",\n   \"kind\": \"system\",\n   \"distance\": 0.434,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"tax clearance\",\n   \"kind\": \"policy\",\n   \"distance\": 0.434,\n   \"seeded\": false\n  },\n  {\n   \"name\": \"Travel reimbursement\",\n   \"kind\": \"policy\",\n   \"distance\": 0.459,\n   \"seeded\": false\n  }\n ],\n \"seeds\": [\n  \"Purchase approval\"\n ],\n \"nodes\": [\n  \"Purchase approval\",\n  \"function head\",\n  \"CFO\"\n ],\n \"chunk_ids\": [\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#5\",\n  \"acme:497809ffbaa603c49577add351033f4374ad1aefa3394f761be0c9df5e3f3173#9\"\n ]\n}",
           "adaptations": [],
-          "id": "source_33",
-          "function": "step_02_the_judge_on_your_lane",
-          "window": 33,
-          "source_line": 707,
+          "id": "source_17",
+          "function": "step_02_the_spanner_path_build_it_read_it_walk_it",
+          "window": 17,
+          "source_line": 665,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py"
+      "next": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py"
     },
     {
-      "id": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row",
+      "id": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate",
       "lesson": "7.2",
-      "file": "demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py",
+      "file": "demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py",
       "category": "required",
       "requires": [
-        "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite"
+        "demo_05_the_spanner_path_build_it_read_it_walk_it_by_meaning"
       ],
-      "heading": "Where the gate and the judge disagree: read the row",
-      "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "purpose": "First with the walk from Firestore: First with the walk from Firestore: Then the same candidate, walking from Spanner: Choose a value just past the purchase or approval name, and below the first name that has nothing to do with purchases. The undo below removes it. Last, put the template back. Environment variables carry over from one revision to the next, so the candidate's settings would ride into the next gcloud run services update of the API. The undo writes RETRIEVAL_GRAPH=off and GRAPH_BACKEND=firestore, removes any GRAPH_SEED_DISTANCE, drops the tag, and deletes .candidate-revision.",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        35
+        21,
+        23,
+        26
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        747
-      ],
-      "offline": true,
-      "live_verified": false,
-      "implementation": "native_python",
-      "steps": [
-        {
-          "heading": "Where the gate and the judge disagree: read the row",
-          "subheading": "Where the gate and the judge disagree: read the row",
-          "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
-          "label": "bash — run in the operator shell, in the kit (reads both files; changes nothing)",
-          "expected": "2 row(s) cost the gate a point. The judge's own run answered them:\n  jn-06  gate: answered without ['EMEA', '11.4']\n         judge's answer: 'EMEA revenue fell in FY2026 [1].', 1 cited\n         EMEA present; 11.4 absent\n  lk-27  gate: refused\n         judge's answer: 'The documents do not say.', 0 cited\n         twenty per cent absent",
-          "adaptations": [],
-          "id": "source_35",
-          "function": "step_01_where_the_gate_and_the_judge_disagree_read",
-          "window": 35,
-          "source_line": 747,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py"
-    },
-    {
-      "id": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3",
-      "lesson": "7.2",
-      "file": "demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_7_3.py",
-      "category": "required",
-      "requires": [
-        "demo_06_where_the_gate_and_the_judge_disagree_read_the_row"
-      ],
-      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-      "purpose": "The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns. CHAT_URL is the service's documind-chat-NUMBER.REGION.run.app address, not the status.url gcloud prints, which is usually its hashed a.run.app address: the judge mints its token for CHAT_URL, and the chat service accepts only a token minted for its own SELF_URL.",
-      "anchor": "s7",
-      "anchors": [
-        "s7"
-      ],
-      "section_number": 7,
-      "windows": [
-        38
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
-      "source_lines": [
-        792
+        755,
+        796,
+        830
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-          "subheading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-          "purpose": "The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns. CHAT_URL is the service's documind-chat-NUMBER.REGION.run.app address, not the status.url gcloud prints, which is usually its hashed a.run.app address: the judge mints its token for CHAT_URL, and the chat service accepts only a token minted for its own SELF_URL.",
-          "label": "bash — run in the operator shell, in the kit (nine chat turns if your lane has the chat service; nothing otherwise)",
-          "expected": "no documind-chat service on this lane: trajectories need one",
+          "heading": "The walk in front of the dense pool, on a candidate",
+          "subheading": "Do it",
+          "purpose": "First with the walk from Firestore:",
+          "label": "bash — run in the operator shell, in the kit (a candidate with no traffic: the walk on, from Firestore; one question)",
+          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|...|RETRIEVAL_GRAPH=auto|GRAPH_BACKEND=firestore|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\n/version: retrieval_graph=auto graph_backend=firestore embedding=text-embedding-005@1\nQ: Who signs off on a big purchase?\nA: Purchases up to Rs 2,00,000 are approved by the function head; above that, the CFO approves [1].\npool 20: the walk put 0 chunk(s) first; retrieval_backend vector\ncites FIN-02 (hr_policy_2026.md): Purchases up to Rs 2,00,000 are approved by the function head.\nthe word CFO: not in the question, in the answer",
           "adaptations": [],
-          "id": "source_38",
-          "function": "step_01_the_judge_s_other_two_modes_trajectories_n",
-          "window": 38,
-          "source_line": 792,
+          "id": "source_21",
+          "function": "step_01_the_walk_in_front_of_the_dense_pool_on_a_c",
+          "window": 21,
+          "source_line": 755,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The walk in front of the dense pool, on a candidate",
+          "subheading": "Do it",
+          "purpose": "First with the walk from Firestore: Then the same candidate, walking from Spanner:",
+          "label": "bash — run in the operator shell, in the kit (the same candidate, the walk from Spanner; the same question)",
+          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|...|RETRIEVAL_GRAPH=auto|GRAPH_BACKEND=spanner|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\n/version: retrieval_graph=auto graph_backend=spanner embedding=text-embedding-005@1\nQ: Who signs off on a big purchase?\nA: Purchases up to Rs 2,00,000 are approved by the function head; above that, the CFO approves [1].\npool 20: the walk put 2 chunk(s) first; retrieval_backend vector\ncites FIN-02 (hr_policy_2026.md): Purchases up to Rs 2,00,000 are approved by the function head.\nthe word CFO: not in the question, in the answer",
+          "adaptations": [],
+          "id": "source_23",
+          "function": "step_02_the_walk_in_front_of_the_dense_pool_on_a_c",
+          "window": 23,
+          "source_line": 796,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The walk in front of the dense pool, on a candidate",
+          "subheading": "Do it",
+          "purpose": "Choose a value just past the purchase or approval name, and below the first name that has nothing to do with purchases. The undo below removes it. Last, put the template back. Environment variables carry over from one revision to the next, so the candidate's settings would ride into the next gcloud run services update of the API. The undo writes RETRIEVAL_GRAPH=off and GRAPH_BACKEND=firestore, removes any GRAPH_SEED_DISTANCE, drops the tag, and deletes .candidate-revision.",
+          "label": "bash — run in the operator shell, in the kit (the template put back, the tag dropped; the live revision was never touched)",
+          "expected": "100\tdocumind-api-000NN-xxx",
+          "adaptations": [],
+          "id": "source_26",
+          "function": "step_03_the_walk_in_front_of_the_dense_pool_on_a_c",
+          "window": 26,
+          "source_line": 830,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "recovery_demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate",
+      "lesson": "7.2",
+      "file": "recovery/demo_06_the_walk_in_front_of_the_dense_pool_on_a_candidate.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "purpose": "Notice what the first answer says, too. Dense retrieval found FIN-02 without any graph, because the handbook is small and the clause says \"purchase\". The Spanner walk made sure FIN-02 was in the pool whatever the dense ranking did. On a corpus where the answer's words are far from the question's, that is the difference. Set the threshold on the candidate alone, from your own numbers, and ask again. make candidate cannot pass it (step 7 says why), so this is a gcloud line:",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        25
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
+      "source_lines": [
+        823
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The walk in front of the dense pool, on a candidate",
+          "subheading": "Do it",
+          "purpose": "Notice what the first answer says, too. Dense retrieval found FIN-02 without any graph, because the handbook is small and the clause says \"purchase\". The Spanner walk made sure FIN-02 was in the pool whatever the dense ranking did. On a corpus where the answer's words are far from the question's, that is the difference. Set the threshold on the candidate alone, from your own numbers, and ask again. make candidate cannot pass it (step 7 says why), so this is a gcloud line:",
+          "label": "bash — run only if step 5 seeded nothing (the threshold, on the candidate alone)",
+          "expected": "",
+          "adaptations": [],
+          "id": "source_25",
+          "function": "step_01_the_walk_in_front_of_the_dense_pool_on_a_c",
+          "window": 25,
+          "source_line": 823,
           "manual_checkpoint": null
         }
       ],
@@ -458,7 +422,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -469,7 +433,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_2/GUIDE.md",
       "source_lines": [
-        391
+        396
       ],
       "offline": false,
       "live_verified": false,
@@ -478,7 +442,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
@@ -487,7 +451,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 391,
+          "source_line": 396,
           "manual_checkpoint": null
         }
       ],
@@ -520,201 +484,117 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 355
+      "line": 360
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 387
+      "line": 392
     },
     {
       "window": 6,
-      "label": ".github/workflows/documind-dryrun.yml - on every push, the offline half last",
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
+      "label": "shared/documind_graph.py - Firestore's seed: a stored name inside the question, or a capitalised run of the question inside a name",
+      "heading": "The seeders, run",
       "anchor": "s3",
-      "line": 409
+      "line": 424
     },
     {
       "window": 7,
-      "label": ".github/workflows/documind-cd.yml - the release path: a no-traffic candidate, the live gate on it, a person, the flip",
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
+      "label": "shared/documind_graph.py - FirestoreGraph.seed(): every node of the tenant, matched in Python, the longest names first",
+      "heading": "The seeders, run",
       "anchor": "s3",
-      "line": 420
+      "line": 437
     },
     {
-      "window": 9,
-      "label": "expected (the gate's own output, captured when this page was built)",
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
+      "window": 8,
+      "label": "shared/documind_graph.py - choose_mode(): auto walks only a relational question that found a seed",
+      "heading": "The seeders, run",
       "anchor": "s3",
-      "line": 435
+      "line": 449
     },
     {
-      "window": 11,
-      "label": "expected (captured when this page was built; a newer commit lists first on your lane)",
-      "heading": "The offline half: on every push, and CI's verdict on the commit you run",
+      "window": 10,
+      "label": "expected (this cell run on the kit's own documind_graph.py and its test)",
+      "heading": "The seeders, run",
       "anchor": "s3",
-      "line": 457
+      "line": 478
     },
     {
       "window": 12,
-      "label": "Makefile - eval-live: two tokens for the service's own URL, then the live half",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
+      "label": "expected (the kit's graph.py on a stand-in lane holding lesson 7.1's graph; your names are your flash-lite's)",
+      "heading": "The Firestore path: a name the question contains",
       "anchor": "s4",
-      "line": 472
+      "line": 524
     },
     {
       "window": 13,
-      "label": "evals/run_eval.py - THRESHOLDS: nine numbers in one place",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 485
+      "label": "terraform/spanner.tf - the tables and the property graph: tenant first in every key, edges interleaved in their source node",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "anchor": "s5",
+      "line": 568
     },
     {
       "window": 14,
-      "label": "evals/run_eval.py - live(): every row is sent, answerable or not",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 499
-    },
-    {
-      "window": 15,
-      "label": "evals/run_eval.py - live(): no outsider token, no run",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 507
+      "label": "shared/documind_graph.py - SpannerGraph: the nearest names by cosine distance, and the walk as one GQL statement",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "anchor": "s5",
+      "line": 600
     },
     {
       "window": 16,
-      "label": "evals/run_eval.py - live(): nine rates, each over its own rows",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 514
+      "label": "expected (the kit's graph.py and SpannerGraph on a stand-in lane; your counts are your build's)",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "anchor": "s5",
+      "line": 646
     },
     {
-      "window": 17,
-      "label": "evals/run_eval.py - live(): a leak is exit 2, anything else that fails is exit 1",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 526
+      "window": 18,
+      "label": "expected (the stand-in's distances, from a small table of concepts, not text-embedding-005: your numbers will differ)",
+      "heading": "The Spanner path: build it, read it, walk it by meaning",
+      "anchor": "s5",
+      "line": 667
     },
     {
       "window": 19,
-      "label": "expected shape (run_eval.py's own code over a stub API that misses two rows on purpose; your rates, rows and times are your lane's)",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 548
+      "label": "services/rag-api/retriever.py - graph_candidates(): which seeder, then the relational gate, then the walk",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "anchor": "s6",
+      "line": 731
     },
     {
-      "window": 21,
-      "label": "expected (this cell over the stub's report above)",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 604
+      "window": 20,
+      "label": "services/rag-api/retriever.py - retrieve(): the walk's chunks first, then the dense candidates not already there",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "anchor": "s6",
+      "line": 745
     },
     {
-      "window": 23,
-      "label": "expected shape (the counts assume nothing else asked the API in that hour; the rupees are your lane's)",
-      "heading": "The live half: every row, two identities, nine rates, three exit codes",
-      "anchor": "s4",
-      "line": 623
+      "window": 22,
+      "label": "expected (make's lines as a shape; then the kit's rag-api on a stand-in lane, Gemini stood in)",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "anchor": "s6",
+      "line": 783
     },
     {
       "window": 24,
-      "label": "evals/judge.py - the other judge",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 642
-    },
-    {
-      "window": 25,
-      "label": "Makefile - judge: the same token, the judge's own flags",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 649
-    },
-    {
-      "window": 26,
-      "label": "evals/judge.py - enrich_context(): the judge reads the chunks the answer cited, in full",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 657
+      "label": "expected (the same stand-ins, the walk from Spanner)",
+      "heading": "The walk in front of the dense pool, on a candidate",
+      "anchor": "s6",
+      "line": 799
     },
     {
       "window": 27,
-      "label": "evals/judge.py - to_frame(): the context goes into the prompt, because the template reads nothing else",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 664
-    },
-    {
-      "window": 28,
-      "label": "evals/judge.py - pointwise_metrics(): the second metric, resolved by name",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 673
-    },
-    {
-      "window": 29,
-      "label": "evals/judge.py - evaluate(): groundedness by shape, because a refusal has nothing to be grounded in",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 684
-    },
-    {
-      "window": 30,
-      "label": "evals/judge.py - main(): the judge's last line",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 694
-    },
-    {
-      "window": 32,
-      "label": "expected (the self-test's own line, captured when this page was built)",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 702
-    },
-    {
-      "window": 34,
-      "label": "expected shape (the metric names and the template hash are SDK 2.1.0's; every ... is your lane's; the SDK's progress lines are left out)",
-      "heading": "The judge: the lane's own answers, read with the context they cite",
-      "anchor": "s5",
-      "line": 710
-    },
-    {
-      "window": 36,
-      "label": "expected (this cell over the stub's two files)",
-      "heading": "Where the gate and the judge disagree: read the row",
+      "label": "expected shape (your revision's name)",
+      "heading": "The walk in front of the dense pool, on a candidate",
       "anchor": "s6",
-      "line": 762
-    },
-    {
-      "window": 37,
-      "label": "evals/judge.py - the reference trajectory, and three ways to match it",
-      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-      "anchor": "s7",
-      "line": 778
-    },
-    {
-      "window": 39,
-      "label": "expected on a lane without the chat service",
-      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-      "anchor": "s7",
-      "line": 798
-    },
-    {
-      "window": 40,
-      "label": "expected shape on a lane with it (the counts are your lane's)",
-      "heading": "The judge's other two modes: trajectories now, pairwise in lesson 7.3",
-      "anchor": "s7",
-      "line": 800
+      "line": 836
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "The live deployed lane, the golden set, and the CI account/access needed by the source's optional CI inspection.",
+  "prerequisites": "The Firestore graph from 7.1 and an explicitly configured Spanner graph for the alternative path.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

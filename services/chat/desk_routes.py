@@ -1,4 +1,4 @@
-"""The DocuMind Desk's routes (workshop lesson 10.6): one row per route, in code, which the router and the desk graph
+"""The DocuMind Desk's routes (workshop lesson 10.4): one row per route, in code, which the router and the desk graph
 both read.
 
     handbook       the company's own HR handbook                  direct: one rag-api answer over [policy]

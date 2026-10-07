@@ -109,7 +109,7 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
             rag-api's usage row records it and 8.7's cost comparison can be run from
             the warehouse rather than a notebook. Purely a label.
         passages: True for the passages themselves instead of an answer (workshop lesson
-            10.6): rag-api's /v1/passages, the same retrieval with no model call, each
+            10.4): rag-api's /v1/passages, the same retrieval with no model call, each
             chunk's full text where a citation carries one short quote. For an agent that
             writes its own answer.
 
@@ -173,7 +173,7 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
     }
     if answer.get("answer"):
         out["answer"] = answer["answer"]    # rag-api's grounded answer; the direct brain's whole job
-    # What rag-api says this answer cost (workshop lesson 10.3): the chat service charges it to the turn's limits.
+    # What rag-api says this answer cost (workshop lesson 5.5): the chat service charges it to the turn's limits.
     # cost_usd is set when the gateway priced the answer or the cache served it; otherwise the tokens are priced.
     out["usage"] = {k: answer.get(k) for k in ("model", "tokens_in", "tokens_out", "cached_tokens", "cost_usd")}
     return out
@@ -306,7 +306,7 @@ def _snippet(text: str, words: list[str], width: int = 500) -> str:
 
 def _doc_type_filter(doc_type):
     """(doc_type as rag-api's check_filters makes it, None), or (None, its 400 as data). A list or tuple is a set of
-    classes (workshop lesson 10.6): 1 to 5 non-empty strings - an empty list is that error too, never "no filter",
+    classes (workshop lesson 10.4): 1 to 5 non-empty strings - an empty list is that error too, never "no filter",
     so a scope that computes to no classes cannot read every class - sorted, de-duplicated, one class as its string.
     retrieve() checks it before either lane, so the gcp lane names the rule as the local lane does, not an outage."""
     if not isinstance(doc_type, (list, tuple)):

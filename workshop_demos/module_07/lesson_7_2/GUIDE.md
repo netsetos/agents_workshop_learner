@@ -4,65 +4,93 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.2_Live_Judge_WIX.html`, reviewed at blob `959e0e1f1d75f19ba7e9de02e79ee90ed9312944`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.2_Graph_Paths_WIX.html`, reviewed at blob `1a20d1bb8fa54cb05200972a3aeeeb45d4c3e58d`. Learners read that page on the course site; this guide keeps its prose.
 
-Lesson 7.1 made the golden set sound. This lesson runs the three instruments that use it, and keeps them apart on purpose. The offline gate checks the set on every push, with no credentials. The live gate sends every row to the deployed API, as a roster member and again as an outsider, and blocks a release on 9 thresholds and 15 required rows. The judge has Gemini read the lane's answers with the context they cite, and it never blocks anything. You will read CI's verdict on the kit you run, run the live gate and take its report apart, and run the judge beside it.
+Lesson 7.1 built the handbook's graph. A walk through it has to start somewhere: a seed, the node the question is about. The kit can keep the same graph in two stores, and they find the seed in different ways. Firestore looks for a stored name inside the question, so "Who signs off on a big purchase?" finds nothing: the handbook says Purchase approval and names the CFO, and the question says neither. Spanner compares the question's meaning with every node's name, so it can start from Purchase approval, and one hop along an edge reaches the CFO.
 
-- Three instruments, three questions, and why only one may block
+In this lesson you walk both graphs with that question, build the Spanner copy, and put the walk in front of the dense pool on a candidate, once from each store.
 
-- The words: offline half, live half, threshold, required row, two identities, exit code, report, candidate, judge, groundedness
+- Two ways into one graph
+
+- The words: seed, containment, candidate name, meaning, cosine distance, threshold, hop, property graph, interleaving, graph_chunks
 
 - Before you run anything: set up the shell
 
-- The offline half: on every push, and CI's verdict on the commit you run
+- The seeders, run
 
-- The live half: every row, two identities, nine rates, three exit codes
+- The Firestore path: a name the question contains
 
-- The judge: the lane's own answers, read with the context they cite
+- The Spanner path: build it, read it, walk it by meaning
 
-- Where the gate and the judge disagree: read the row
+- The walk in front of the dense pool, on a candidate
 
-- The judge's other two modes: trajectories now, pairwise in lesson 7.3
-
-- How each instrument lied before it was fixed, and what a run costs
+- Why two paths, what each costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn why an evaluation needs three instruments that fail for different reasons, what each one can and cannot see, and why only the deterministic one may block a release. Then you will prove it on your lane: CI's green run on the commit you cloned, a live gate run with its report taken apart, the judge's scores, and the rows where the two disagree.
+You will learn how a walk starts, and the two ways the kit finds its seed: containment on Firestore, cosine distance on Spanner. You will see what the walk hands the retriever, and when `auto` lets it run. Then you will prove it on your lane: the CFO question, which never says CFO, answered with the walk in front of the pool, and `/version` naming the store that walked.
 
-### Three instruments, three questions, and why only one may block
+### Two ways into one graph
 
-One judges the golden set, one judges a deployment, and one explains what the deployment said.
+A seed, a walk, and what the walk hands the pool.
 
-Each instrument answers a different question. The offline gate asks whether the golden set is sound. It reads files, needs no credentials and takes seconds, so it runs on every push. It never sees an answer. The live gate asks whether a deployment answers the set well enough to release. It sends every row to `/v1/query`, scores each reply with fixed string rules and exits 0, 1 or 2. It needs a deployment and two identities, takes minutes and costs rupees, so it runs before a release. The judge asks whether each answer is supported by the context it cites, and does what was asked. It is Gemini reading the lane's own answers, through Vertex AI Evaluation.
+A walk needs a seed. The graph from lesson 7.1 is nodes and edges, and each carries the chunk ids that state it. `retriever.graph_candidates()` uses it in three moves:
 
-Only the deterministic instrument may block. The live gate gives the same verdict for the same replies, every time. The judge is a model. Its score depends on its prompt template, the model behind the service and the context it is shown. The kit's first judged runs scored the lane 0.25 grounded, for reasons that were all about the judge's inputs. So the judge's scores go into an Experiments run named for the revision it judged, and the gate still decides. The judge's own last line says it: where they disagree, read the row.
+- Seed. Find the nodes the question is about: at most five.
 
-The live gate is strict in specific ways. Every row is sent, answerable or not; the first version scored only answerable rows and silently skipped every refusal. A 5xx or a malformed body is a failed request, never a refusal. Each rate has its own denominator. `must_contain_rate` divides by the rows answered and `correct_rate` by every answerable row, so a model that answers little cannot look accurate. A leak exits 2 whatever the rates say, and a required row that fails blocks on its own. Isolation is judged twice: by markers in every reply, and by an outsider who must be refused on every isolation row.
+- Walk. Follow edges from them in either direction, `GRAPH_HOPS` hops (one by default), keeping at most `GRAPH_CAP` nodes (20).
 
-A Test match. Before play, the match referee inspects the pitch and the balls: is the equipment fit for a fair game? That needs no players. During play, the umpire rules by the laws of the game: out or not out, no opinion, and the decision stands. The commentators say who played well and why, and they notice things the laws never ask about. They are worth hearing, but they never change the scorecard. The offline gate is the referee's inspection, the live gate is the umpire, and the judge is the commentary box.
+- Hand over. Fetch the chunks those nodes cite, by id, and put them in the pool ahead of the dense candidates.
 
-#### The threshold board: what the live gate would say about a run you design
+The graph can help only a question it can seed.
 
-Each chip is a golden row. Pick one and choose what the API replies to it, or start from a preset. The board scores the run the way `live()` does: 9 rates, each over its own rows, the required rows, and the exit code with the gate's own closing sentence.
+Firestore seeds by name. `FirestoreGraph.seed()` reads every node of the tenant. It keeps a node when the node's name is inside the lower-cased question, or when the name contains a capitalised run of the question of five letters or more (question words such as Who and Which are left out). There is no model call. A stored name has to appear in the question, even if only as part of a word.
 
-The arithmetic is the aggregate half of `live()` in `run_eval.py`, ported. For each of the 11 presets, the build ran the kit's own `live()` against a stub that replies to every row the way the preset says, and the board had to match its scores, failed thresholds, required rows, exit code and closing sentence.
+Spanner seeds by meaning. `make graph GRAPH_BACKEND=spanner` stores each node's name with its text-embedding-005 vector, in a column called `embedding`. At question time `SpannerGraph.seed_by_vector()` embeds the question once and asks Spanner for the five names nearest to it by cosine distance. A name farther than `GRAPH_SEED_DISTANCE` (0.4) does not seed, so a question about nothing in the graph seeds nothing.
 
-It calls no API. Each choice stands for a reply the live half could get, scored the way `live()` scores it. Latency, cache hits and quote support are printed by the gate but are not thresholds, so the board leaves them out. Try answers everything and refuses everything: two opposite models, both blocked, by different thresholds.
+The walk itself. On Firestore, each hop is two `in` queries per 30 node ids: edges out, then edges in. On Spanner, the whole walk is one GQL statement over the `DocuMindGraph` property graph. The seeds, their neighbours and the neighbours' chunk ids are all read in one consistent snapshot.
 
-### The words: offline half, live half, threshold, required row, two identities, exit code, report, candidate, judge, groundedness
+When the walk runs. `RETRIEVAL_GRAPH` is off on the lane:
 
-Twelve rows, each with the value it takes on your lane.
+- `on` walks every question that finds a seed.
 
-One distinction to hold: the live gate scores and the judge rates. A score comes from a rule you can read, and the same reply always gets it. A rating comes from a model reading the reply, and a new template, a new judge model or a new context changes it. Scores gate a release. Ratings tell you where to look.
+- `auto` also needs a relational word, such as who, which, whose, depend or supersede. `choose_mode()` checks for one with a regular expression, not a model.
+
+Either way, the walk's chunks join the pool first, at score 1.0, and the reranker then orders the whole pool.
+
+The directory board and the enquiry counter at a government hospital. At the gate, a board lists the departments by name: Cardiology, Orthopaedics, Nephrology. A visitor who knows the word walks straight there. A visitor who says "my father has chest pain" gets nothing from the board.
+
+The clerk at the enquiry counter understands what the visitor means and sends them to Cardiology. From Cardiology, a sign in the corridor points on to the ECG room.
+
+The board is containment: free and instant, but useless without the department's name. The clerk is meaning, and costs a salary whether or not anyone asks, as Spanner bills by the hour. A good clerk who is unsure says "go to the general OPD" rather than guess: that is the threshold, past which the dense pool answers alone. The corridor signs are the edges.
+
+#### One question, two ways in
+
+Pick one of the seven questions, or type your own. The panel runs both seeders over the handbook's graph from lesson 7.1:
+
+- the Firestore column runs the kit's containment rule exactly, on any question you type;
+
+- the Spanner column ranks the names by distance, and the slider sets `GRAPH_SEED_DISTANCE`;
+
+- both show whether `RETRIEVAL_GRAPH` lets the walk run, the nodes it reaches, and the clauses it puts first in the pool.
+
+The graph is lesson 7.1's: 25 nodes and 15 edges from the stand-in's extractions. The Firestore column is the kit's own `_candidate_names()`, `_seed_match()`, `choose_mode()` and walk, ported and checked against the kit's code on 1,926 cases. The Spanner column's distances come from this page's stand-in for text-embedding-005; step 5 prints yours.
+
+The distances come from a stand-in: a vector per phrase built from a small table of concepts, plus noise, so that related phrases land near each other. Your lane's numbers will differ, and so may the names that fall inside 0.4. The rules both columns apply are the kit's own.
+
+### The words: seed, containment, candidate name, meaning, cosine distance, threshold, hop, property graph, interleaving, graph_chunks
+
+Ten rows, each with the value it takes on your lane.
+
+One distinction to hold: the seed decides where a walk starts, and the edges decide where it goes. Spanner changes the first and not the second. Both stores hold the same nodes and edges, so from the same seeds they reach the same nodes; only which of them survive the 20-node cap can differ.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -74,124 +102,160 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit's folder, with the two token functions the block defines. The UI is not used. Step 5 makes a second venv for the judge, and step 7 needs the chat service only if your lane has one. The live gate and the judge each ask the API every golden row, so plan about twenty-five minutes for steps 4 and 5 together.
+You need the shell in the kit's folder, with `PROJECT`, `REGION` and `NUMBER` set by the setup above. Module 0 installed `google-cloud-spanner` with the ingest requirements. You also need:
 
-### The offline half: on every push, and CI's verdict on the commit you run
+- Lesson 7.1's graph in Firestore, with its cached extractions. If you skipped 7.1, run its build first: `make graph PROJECT="$PROJECT" TENANT=acme GRAPH_ARGS="--source hr_policy_2026.md --rebuild"`.
 
-Two workflows, one that runs by itself and one that waits for a person, and the dry run's result on your clone.
+- The Spanner instance `documind-graph`. `make up` created it with the rest of the lane, and it has billed by the hour ever since, whether or not anything reads it.
 
-#### Definition
+The two candidates in step 6 take no traffic. The live revision serves throughout, and step 6 ends by putting the template back.
 
-Two workflows carry the kit's gates, and only one runs by itself. `documind-dryrun.yml` runs on every push and pull request of the learner repository, with no Google credential. Every Python file compiles, the offline suites run, Terraform validates, the images build, and the last step is the offline gate. `documind-cd.yml` is the release. In the learner repository it runs only when started by hand, because no project stands behind a public repository. Its first job repeats the offline gate. Its release path makes a candidate revision that takes no traffic and runs the live gate against the candidate's own URL. Then it waits for a person, and only then moves traffic. The previous revision stays, so flipping back is the rollback.
+### The seeders, run
 
-#### The code
-
-#### Do it: the gate as CI runs it, and CI's result on your commit
-
-The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.
-
-The offline gate passed in seconds on your machine, as it does on every push. When the marked commit shows `success`, CI ran the same line on the kit you run, alongside the compile, the suites, the Terraform check and the image builds. That is what "the kit is sound" means before any money is spent. None of it talks to Google, so none of it can say anything about answers. That is the live gate's job, and it is why the live gate is a separate step with its own credentials.
-
-### The live half: every row, two identities, nine rates, three exit codes
-
-The target that mints two tokens, the loop that sends every row, the rates, the exit, and what one run costs.
+The containment rule and the relational gate on six questions, then the kit's own tests of the Spanner walk.
 
 #### Definition
 
-`make eval-live` mints two identity tokens, both for the API's canonical run.app URL, whichever URL is called: the member's and the outsider's. Then `run_eval.py` sends every golden row to `/v1/query` as the member, answerable or not. A non-200 reply, after one retry, or a malformed body is a failed request. Every reply is checked for every marker. An answerable row needs `answerable` true, a citation that names its own tenant and a current version, and every figure on its own boundaries. Then the gate asks every isolation row again as the outsider and requires 403. Nine rates come out, each over its own rows. The exit code is the verdict, and `REPORT` keeps every row's result in a file. The run points at the live revision by default. Lesson 7.3 points the same command at a candidate.
+The cell imports the kit's seeding functions and runs them against eight names from the handbook's graph:
+
+- `_candidate_names()` and `_seed_match()`, with the seeds sorted longest first, as `FirestoreGraph.seed()` sorts them;
+
+- `choose_mode()`, which decides whether `auto` walks.
+
+The six questions ask about purchases and approvals in different words. Then `unittest` runs `commands/tests/test_spanner_graph.py`: the kit's 8 checks of `SpannerGraph.expand()`, against a strict fake that refuses what live Spanner refuses.
 
 #### The code
 
-#### Do it: the live gate, with a report
+#### Do it
 
-Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point.
+- The CFO question seeds nothing. Neither "purchase approval" nor "cfo" is inside "who signs off on a big purchase?", and the question has no capitalised run of five letters. The Firestore path cannot start a walk from a description.
 
-Last, what the run cost. The API priced every answer on its usage row; `make usage` groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.
+- Naming the role works. "cfo" is inside "which purchases need the cfo?", so the CFO seeds, and "which" is a relational word, so `auto` walks.
 
-The gate asked all 65 rows as the member and the 11 isolation rows again as the outsider. Read the table from the top. A single failed request fails the first threshold outright, because a 500 is not a refusal. Each row that cost a point is printed with the API's own words, so a miss is something you can read. The arithmetic shows why two rates can disagree. In the stub's run, 45 of 46 answered rows carried their figure, and 45 of 47 answerable rows were right; your report gives your own pair. A model that refused half the set could not score well by being right about the other half. `make usage` turned the same hour of usage rows into rupees: 47 acme, 10 zeta and 8 globex answers, one full live run.
+- "What does the CFO approve?" seeds the CFO but stays dense. Neither "what" nor "approve" is in `choose_mode()`'s list, so `auto` never walks it; `on` would.
 
-### The judge: the lane's own answers, read with the context they cite
+- A capital letter changes the seeds. "Purchase" with a capital is a candidate name of eight letters, and it is inside "purchase approval". With a small p, the same question seeds nothing.
 
-Its own venv, its offline self-test, and a run that ends in Vertex AI Experiments.
+- Part of a word is enough. "india" is inside "indian", so India seeds a question about travel claims, and the walk would lead to WFH-01, the remote-work clause.
+
+- The Spanner walk passes its own tests: one snapshot for the whole walk, edges followed both ways, the cap counted on distinct nodes, no chunk from another tenant, and one or two hops only. The learner repository's dry run runs them on every push.
+
+### The Firestore path: a name the question contains
+
+The kit's question without the word CFO, then with it.
 
 #### Definition
 
-The judge collects its own answers with the same `ask()` and the same member token, so it judges the lane and not a prompt in a notebook. For each answer it reads the cited chunks in full from Firestore. It builds the prompt the judge model will see: the context, then the question. It asks Vertex AI Evaluation, in `us-central1`, for two ratings per row. GROUNDEDNESS is 1 when every part of the answer is attributable to that context and 0 otherwise. The second is the one its SDK names, which for the pinned 2.1.0 is INSTRUCTION_FOLLOWING, from 1 to 5. Each run is an Experiments run in `documind-eval`, named for the API revision's `GIT_SHA`, the time and a hash of the judge's templates, because a different template is a different judge. That SDK is 2.1.0, while the kit's services pin `google-cloud-aiplatform` 1.153.1, which the retriever, the indexer and the ablation harness import in your shell. So the judge gets its own venv, and `make judge` is told to use its python.
+`make graph` with `--ask` walks the graph for one question and prints what the API would fetch: the seeds, the nodes and the chunk ids. On Firestore it seeds by containment, as `graph_candidates()` does when `GRAPH_BACKEND` is firestore. It only reads; no model is called.
 
-#### The code
+#### Do it
 
-#### Do it: the judge's venv and its self-test
+The kit's question found no seed, so the walk had nowhere to start. The API would get an empty list, and the dense pool would answer alone.
 
-#### Do it: the judge on your lane
+With the word CFO, the CFO seeded, and the walk went one hop to Purchase approval and handed over one chunk id: FIN-02's. To seed, each walk read every node of acme's graph, 25 documents each time. That is what containment costs without an index.
 
-`--reuse` keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.
+### The Spanner path: build it, read it, walk it by meaning
 
-The self-test proved the judge's assembly offline: the full chunk text replaces the quote, the prompt carries the context and then the question, and the trajectory maths is right. The live run asked the lane every row again, read every cited chunk it could find, and sent 130 requests to the Evaluation service, two per answer. `groundedness/mean` is the share of answers judged fully grounded. The by-shape lines are the ones to read, because a refusal claims nothing and so says nothing about grounding. No SDK 2.1.0 setting pins the judge model, so the run says the service's default judged it. The template hash in the run's name is how you tell two judges apart later.
+The same graph written to Spanner with a vector per name, read back as tables and as a graph, then walked for the kit's question.
 
-### Where the gate and the judge disagree: read the row
+#### Definition
 
-Four ways the two can meet, and the gate's misses read against the judge's answers.
+- `make graph GRAPH_BACKEND=spanner` runs lesson 7.1's four passes and writes the result to Spanner. The extractions come from the cache in Firestore, so nothing is sent to flash-lite. Two embedding calls remain: one to resolve names, and one for the node vectors.
 
-`judge.py` prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+- `SpannerGraph.load()` writes every node, with its vector, and every edge in one commit. It prints nothing, so the `graph_built` line is the record.
 
-The stub's two misses read differently. jn-06 answered with one of its two figures, and everything it said was in its context, so a groundedness judge can call it grounded. lk-27 refused, and a refusal is always grounded. Neither is the judge failing; both are rows the gate caught and a groundedness rating cannot. The reverse happens too: an answer can carry the gate's figure and a sentence its context never said. That row passes the gate, and only a low by-shape rating, or your reading, finds it. The two collections are separate runs, so a row can differ between them; that difference is itself worth reading.
+- The cell then reads both tables in one snapshot. It prints the counts, how many nodes carry a vector, and the CFO's edge with the names at both ends joined from `GraphNode`. Last, it walks one hop from the CFO with the kit's own GQL.
 
-### The judge's other two modes: trajectories now, pairwise in lesson 7.3
+#### Do it
 
-The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate.
+Spanner now holds the same 25 nodes and 15 edges as Firestore, and every node carries a 768-number vector. The line shows `fresh 0`: lesson 7.1 cached the extractions, and the cache does not care which store the graph goes to. The load was one commit of 265 mutations, because Spanner counts one mutation per column written: seven for each node row and six for each edge row.
 
-With `CHAT_URL`, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in `judge.py`: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. `--no-vertex` skips the Evaluation service, and `--reuse` skips asking the API again, so this costs only the chat turns. `CHAT_URL` is the service's `documind-chat-NUMBER.REGION.run.app` address, not the `status.url` gcloud prints, which is usually its hashed `a.run.app` address: the judge mints its token for `CHAT_URL`, and the chat service accepts only a token minted for its own `SELF_URL`.
+Your terminal also shows lines this block leaves out: one `HTTP Request: POST ...` for each model call, printed by the SDK's own logging, here and in the walk below. The JSON lines are `graph.py`'s.
 
-Pairwise is the third mode. With `API_B`, the same questions also go to a candidate revision, and the judge says which of the two answers is better, row by row, with the live revision as the baseline. It needs a candidate with one setting changed, which is where lesson 7.3 begins.
+The CFO's edge came back two ways. As tables, `GraphEdge` is joined to `GraphNode` twice, for the names at both ends. As a graph, the kit's GQL walk goes from the CFO. Both reach Purchase approval and FIN-02.
 
-### How each instrument lied before it was fixed, and what a run costs
+Now the kit's question, seeded by meaning. On Spanner, `--ask` prints the five nearest names, each with its distance and whether it passed 0.4. Then it walks from the names that passed.
 
-The kit's own history of green runs that meant nothing, and the rupees of this lesson.
+Purchase approval is 0.183 from the question: the only seed. The CFO is 0.415, just outside 0.4, so it did not seed. The walk reached it anyway, one hop from Purchase approval along the approval edge. The function head came the same way and brought EXP-12, the clause on travel above the cap. So the walk hands over two chunk ids: FIN-02's, which answers the question, and EXP-12's.
 
-#### The live gate, before 12 September
+These distances are the stand-in's. Read your own before step 6. If no purchase or approval name on your lane is within 0.4, the walk seeds nothing, and step 6 shows how to set the threshold on the candidate from your numbers.
 
-- A 200 whose body was `{}` counted as a refusal. Every 200 is now checked against the response schema, and a malformed body is a failed request.
+### The walk in front of the dense pool, on a candidate
 
-- A 500 on the version row cost one point and never blocked. `request_success_rate` must now be 1.00, and a required row that errors blocks on its own.
+One question, one candidate, each store in turn; `/version` and the pool say which walked.
 
-- "60" was satisfied by "160 days". A figure must now stand on its own boundaries.
+#### Definition
 
-- A citation was any non-empty list. Each one must now name the row's tenant and a current version.
+`make candidate RETRIEVAL_GRAPH=auto GRAPH_BACKEND=...` makes a revision of the API that takes no traffic, tagged `candidate`, while the live revision keeps serving. `ask152` asks the candidate's `/version` what is serving. Then it asks the kit's question as `documind-ui-sa` and prints the answer, `stages.pool` and `stages.graph_chunks`, and each clause cited.
 
-- 33 correct answers of 47 read as 87%. The rates divided by the rows answered. `correct_rate` now divides answered-and-right by every answerable row.
+#### Do it
 
-- A missing outsider token printed a note and ran anyway. The run now refuses to start, because every isolation row would ask as a member and could only fail.
+First with the walk from Firestore:
 
-#### The judge, in its first live runs on 10 September
+Then the same candidate, walking from Spanner:
 
-- It read quotes. A citation's quote is at most twenty-five words, so every answer that said more looked unsupported: 0.25 grounded. It now reads the cited chunks in full.
+- `/version` named the store each time: firestore, then spanner, with `RETRIEVAL_GRAPH` auto.
 
-- It read the bare question. The template reads only the prompt and the response, so the chunk text in another column was never seen. It scored 0.25 again, because the sixteen refusals among sixty-four rows were the only answers that looked grounded. The prompt is now the context, then the question.
+- From Firestore, the walk put nothing in the pool: 0 of 20, because there was no seed, as in step 4.
 
-- It stopped after seventeen minutes. The SDK had renamed FULFILLMENT. The second metric is now resolved by preference and printed.
+- From Spanner, it put 2 chunks first: FIN-02 and EXP-12, found by meaning and fetched by id ahead of the dense candidates.
 
-- Two runs collided on one name, and Experiments refused the second. The name now carries the time.
+- Both answers name the CFO, and the question never did. That is the proof: the CFO question answered without the word CFO, with the walk's share in `graph_chunks` and the store in `/version`.
 
-- A candidate token for the tag URL got 401 on every row, and the judge wrote a run with no rows. Tokens now carry the canonical URL as their audience, and an empty collection stops the run.
+Notice what the first answer says, too. Dense retrieval found FIN-02 without any graph, because the handbook is small and the clause says "purchase". The Spanner walk made sure FIN-02 was in the pool whatever the dense ranking did. On a corpus where the answer's words are far from the question's, that is the difference.
+
+Set the threshold on the candidate alone, from your own numbers, and ask again. `make candidate` cannot pass it (step 7 says why), so this is a gcloud line:
+
+Choose a value just past the purchase or approval name, and below the first name that has nothing to do with purchases. The undo below removes it.
+
+Last, put the template back. Environment variables carry over from one revision to the next, so the candidate's settings would ride into the next `gcloud run services update` of the API. The undo writes `RETRIEVAL_GRAPH=off` and `GRAPH_BACKEND=firestore`, removes any `GRAPH_SEED_DISTANCE`, drops the tag, and deletes `.candidate-revision`.
+
+The live revision still takes 100 percent. It never changed, and its `RETRIEVAL_GRAPH` is still off.
+
+### Why two paths, what each costs, and what the kit does not do yet
+
+The design choices, from the kit's own comments, then the bill and the gaps.
+
+- Firestore first, because it is already there. The graph sits beside the chunks, in a database billed per operation. There is nothing to provision, nothing billed by the hour, and the tenant's predicate is on every read.
+
+- Spanner for the shape of the data. The walk is one GQL statement in one snapshot, however many hops. Edges are interleaved in their source node, and `tenant_id` comes first in every key. So a tenant's subgraph is stored together, and deleting a tenant cascades to its edges: DPDP erasure as a property of the schema, not a batch job.
+
+- Seeding by meaning, for the words people use. A question rarely contains the handbook's own name for a thing. A vector per name, and one embedding call per question, close that gap.
+
+- A threshold, because nearest is not the same as near. The five nearest names always exist. 0.4 decides which are close enough, so a question about nothing in the graph seeds nothing and `auto` stays dense.
+
+- Exact distance, no vector index. `spanner.tf` gives the reason: `COSINE_DISTANCE` over a few thousand nodes is enough, and an approximate index needs tuning that a lab cannot judge.
+
+- The walk goes first; the reranker decides. The walk's chunks join the pool at score 1.0. A wrong seed spends pool places, and the reranker still orders the whole pool.
 
 #### What it costs
 
-In an application repository, `documind-cd.yml` would run on every pull request and every push to main, as its header says. It is keyless: GitHub's short-lived token is exchanged through Workload Identity Federation for a Google credential that lasts about an hour, pinned to the repository's immutable id and to main. The learner repository has no project behind it, so there the workflow waits for a person to start it.
+Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
+
+- `make candidate` cannot set the threshold. It writes `RETRIEVAL_GRAPH` and `GRAPH_BACKEND`, but no make target and no deploy script passes `GRAPH_SEED_DISTANCE`, `GRAPH_SEED_K`, `GRAPH_HOPS` or `GRAPH_CAP`. `graph.py`'s comment says the threshold is set from `--ask`'s numbers; today that takes a gcloud line, as in step 6.
+
+- On Spanner, a name in the question does not count by itself. The API seeds by distance only. `SpannerGraph.seed()`, which runs the containment query in SQL, is reached by nothing on the lane. A question that names a node exactly still seeds nothing if its embedding is farther than 0.4 from that name.
+
+- The usage row does not say which store walked. It carries `retrieval_graph` and `graph_chunks`, not `graph_backend`. Rows from a Spanner candidate and a Firestore revision look the same in BigQuery; only `/version`, one revision at a time, tells them apart.
+
+- `SpannerGraph.load()` writes the whole graph in one commit. Spanner refuses more than 80,000 mutations in a commit, counted per column written: 7 for a node row and 6 for an edge row. The handbook's graph is 265. A tenant's graph past about 6,153 nodes, with as many edges, needs batching that the kit does not do. `FirestoreGraph.load()` commits every 400 writes.
+
+- Firestore's seed reads every node, for every question. Its docstring says production would keep a name-token index. There is none, so the reads grow with the graph: 25 on the handbook's, thousands on a whole corpus.
 
 ### Verify it yourself: the checklist
 
-Ten checks, each one block above, each with the value that proves it on your lane.
+Eight checks, each one block above, each with the value that proves it on your lane.
 
-In the cloud: the usage rows of the gate's and the judge's answers, the outsider's refused requests in the API's log, and one run in the Experiments experiment `documind-eval`, which stays until you delete it. On your machine: `evals/reports/lesson72.json` and `evals/reports/judge72.json`, which git ignores, and `~/judge-venv`, which you can delete. Nothing in the kit changed, so the setup block's `git pull` keeps working. Lesson 7.3 makes a candidate with one setting changed and turns all three instruments on it: the scoped live gate, the pairwise judge against the live revision, and the price of the difference.
+acme's graph now lives in Spanner as well: 25 nodes, each with a vector, and 15 edges, in the instance that was already billing. The API's template is back to `RETRIEVAL_GRAPH` off and `GRAPH_BACKEND` firestore, the candidate tag is gone, and the live revision never changed. Lesson 7.3 turns from the graph to the managed stores: RAG Engine and Vertex AI Search as mirrors of the kit's index, and the data-region policy that decides which tenants they may serve.
 
-Netsetos GenAI on GCP · Module 7 Evaluation · Lesson 7.2 Separate offline checks, live scoring and LLM judgment · v5.0
+Netsetos GenAI on GCP · Module 7 Graph and multimodal · Lesson 7.2 Compare Firestore and Spanner graph paths · v5.0
 
-Next: Lesson 7.3 Compare one controlled change against a baseline.
+Next: Lesson 7.3 Configure and query managed retrieval mirrors.

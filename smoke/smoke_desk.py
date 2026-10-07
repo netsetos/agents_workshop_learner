@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Live smoke test for the routed DocuMind Desk (workshop lesson 10.6), then the case queue's (smoke_cases.py).
+"""Live smoke test for the routed DocuMind Desk (workshop lesson 10.4), then the case queue's (smoke_cases.py).
 
     make smoke-desk PROJECT=documind-ai-YOUR-ID          # from deploy/, after documind-chat and documind-api are deployed
 

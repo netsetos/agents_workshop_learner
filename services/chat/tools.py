@@ -22,12 +22,12 @@ is `runtime: ToolRuntime`, whose `.context` is the dict agent.py passes to
 `agent.invoke(..., context=...)`. Proven offline on 2026-09-05 (gap G4): the runtime parameter
 is absent from `tool_call_schema`, and the context arrives.
 
-`calculate_processing_cost` delegates to the shared one. Before workshop lesson 10.3's fix it was a copy
+`calculate_processing_cost` delegates to the shared one. Before workshop lesson 5.5's fix it was a copy
 with its own rates that priced an unknown tier at the standard rate, while the shared one refused
 it; one function cannot disagree with itself. `get_usage_stats` is gone: it was a stub that always
 answered `value: None`, and wiring it would have given the chat service every tenant's usage rows.
 
-ONE TOOL LIST (workshop lesson 10.4). `TOOLS` is what LangChain and LangGraph bind;
+ONE TOOL LIST (workshop lesson 5.7). `TOOLS` is what LangChain and LangGraph bind;
 `for_adk()` is the same two tools for ADK, as plain functions with the same docstrings, whose
 request arrives through `REQUEST` rather than a ToolRuntime and whose arguments are checked
 against the same schemas. Both end in `search()`, so the two adapters can differ only in how the
@@ -63,7 +63,7 @@ logger = logging.getLogger("documind.chat.tools")
 # set and refuses these names before dispatch; keeping it beside the tools makes an omission
 # visible in review rather than at 2am.
 BLOCKED = {"delete_document", "send_email", "modify_access"}
-# Each tool's budget in seconds, ENFORCED by limits.timed_tool_call since workshop lesson 10.3: a call is cut at the
+# Each tool's budget in seconds, ENFORCED by limits.timed_tool_call since workshop lesson 5.5: a call is cut at the
 # smaller of its budget and the turn's time left. retrieve waits for rag-api up to RAG_TIMEOUT_S, so its budget is that
 # plus 5 s for the token mint and the connection: 95 on the lane, where commands/lesson-12.8.sh sets RAG_TIMEOUT_S=90.
 TIMEOUTS = {"retrieve": documind_tools.RAG_TIMEOUT_S + 5, "calculate_processing_cost": 10}
@@ -86,7 +86,7 @@ _LEDGER = threading.Lock()      # ToolNode runs one model message's calls in par
 
 def _number(citations: list, ledger: list) -> None:
     """Give each citation the n the answer cites it by: its place in this turn's ledger, and the same
-    n when a second search in the same turn finds the same chunk again (workshop lesson 10.1)."""
+    n when a second search in the same turn finds the same chunk again (workshop lesson 5.1)."""
     with _LEDGER:
         for c in citations:
             key = c.get("chunk_id") or c.get("quote")
@@ -122,8 +122,8 @@ def retrieve(query: str, doc_type: str = "all", top_k: int = 5,
 def search(query: str, doc_type: str = "all", top_k: int = 5, *, tenant_id: str = "",
            assertion: str = "", brain: str = "", cited: list | None = None, meter=None) -> dict:
     """The adapter itself, with no framework in it. LangChain's `retrieve` above and ADK's in for_adk()
-    both end here (workshop lesson 10.4). `cited` is the turn's ledger: each citation gets its n. `meter`
-    is the turn's limits.Meter: what rag-api billed for this search is charged to it (workshop lesson 10.3)."""
+    both end here (workshop lesson 5.7). `cited` is the turn's ledger: each citation gets its n. `meter`
+    is the turn's limits.Meter: what rag-api billed for this search is charged to it (workshop lesson 5.5)."""
     # ADAPTER, NOT IMPLEMENTATION (lesson 8.7). This function binds the tenant, renames the
     # filter and reshapes the response for the chat API's contract. What it does NOT do is talk
     # to rag-api itself - that is documind_tools.retrieve's job, and there is exactly one of it
@@ -138,7 +138,7 @@ def search(query: str, doc_type: str = "all", top_k: int = 5, *, tenant_id: str 
         logger.info("retrieve took %.2fs", time.monotonic() - started)
     # A call cut at its budget (limits.timed_tool_call) runs on in its thread, and rag-api still bills it on its own
     # row. It writes nothing into the turn: no cost on this turn's bill and no citation numbered into the ledger, or
-    # the answer would list a source the model never read (workshop lesson 10.3).
+    # the answer would list a source the model never read (workshop lesson 5.5).
     delivered = limits.may_commit()
     if meter is not None and delivered:
         meter.charge_rag(answer.get("usage"))       # rag-api's own cost line, on this turn's bill
@@ -178,7 +178,7 @@ def calculate_processing_cost(total_pages: int, num_documents: int = 1,
         num_documents: How many documents those pages are spread across
         processing_type: Service tier - standard, priority, or bulk
     """
-    # The shared function, not a copy (workshop lesson 10.3). It refuses an unknown tier with a
+    # The shared function, not a copy (workshop lesson 5.5). It refuses an unknown tier with a
     # ValueError; re-raised as a ToolException, LangChain hands the model an error result, as it does
     # for an argument of the wrong type, and the turn goes on.
     try:
@@ -194,7 +194,7 @@ TOOLS = [retrieve, calculate_processing_cost]
 def _checked(twin, **args) -> dict:
     """The model's arguments, checked against the @tool twin's own schema as LangChain checks them before a call:
     a value LangChain refuses is a ToolException here too, never a value passed on to rag-api (workshop
-    lesson 10.4)."""
+    lesson 5.7)."""
     from pydantic import ValidationError
     try:
         valid = twin.tool_call_schema.model_validate(args)
@@ -204,7 +204,7 @@ def _checked(twin, **args) -> dict:
 
 
 def for_adk() -> list:
-    """The same two tools for ADK, as plain functions (workshop lesson 10.4). FunctionTool declares a
+    """The same two tools for ADK, as plain functions (workshop lesson 5.7). FunctionTool declares a
     function's own signature, so these name only what the model may choose; the tenant, the assertion,
     the brain and the ledger arrive through REQUEST, and an argument the model invents is dropped."""
     def retrieve(query: str, doc_type: str = "all", top_k: int = 5) -> dict:

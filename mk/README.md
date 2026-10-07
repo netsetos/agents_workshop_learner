@@ -9,7 +9,7 @@ here, one file per lane, pulled in by `include mk/*.mk`:
 |---|---|---|
 | `ingestion.mk` | `roster`, `tenant-policy`, `tenant-backend`, `vector-status`, `wait-vectors`, `backfill-vectors`, `ingest-one`, `poison`, `dlq` | 3 Ingestion |
 | `lifecycle.mk` | `reindex`, `retire`, `restore`, `reconcile`, `backfill-current`, `reconcile-job`, `sources`, `purge`, `smoke-reindex`, `batch-job`, `batch`, `queued` | 4 Lifecycle |
-| `agents.mk` | `desk-check`, `route-probe`, `route-index`, `route-calibrate`, `doc-types`, `limits`, `limits-check`, `limits-drill`, `desk`, `roles`, `desk-queues`, `cases`, `cases-overdue`, `smoke-cases`, `smoke-desk`, `route-eval`, `desk-views`, `desk-job`, `desk-operators`, `deploy-gchat`, `smoke-gchat` | 10 Agents (a chat turn's limits, lesson 10.3; the DocuMind Desk, lessons 10.5 and 10.6, and its Google Chat door) |
+| `agents.mk` | `desk-check`, `route-probe`, `route-index`, `route-calibrate`, `doc-types`, `limits`, `limits-check`, `limits-drill`, `desk`, `roles`, `desk-queues`, `cases`, `cases-overdue`, `smoke-cases`, `smoke-desk`, `route-eval`, `desk-views`, `desk-job`, `desk-operators`, `deploy-gchat`, `smoke-gchat` | 10 Agents (a chat turn's limits, lesson 5.5; the DocuMind Desk, lessons 5.6 and 10.4, and its Google Chat door) |
 
 The Makefile pins the default goal to `dryrun` (Tier A: offline, free), so a bare `make` never depends on which file
 here sorts first. Still, always name the target. One file adds variables of its own: `agents.mk` declares `DESK_JOB`,
@@ -29,7 +29,7 @@ Three rules keep the files small:
 2. **The comment travels with the target.** The design notes that explained a target in the Makefile sit above it
    here, unchanged.
 3. **A new module is a new file.** Add `mk/<lane>.mk`, list its targets in the Makefile's `.PHONY`, and give any
-   long recipe a script, a `lane.py` subcommand or, for Module 10, a `desk_ops.py` subcommand first. Nothing else
+   long recipe a script, a `lane.py` subcommand or, for the Desk, a `desk_ops.py` subcommand first. Nothing else
    changes: `tools/check_*.py` read the Makefile and `mk/*.mk` as one text, and the publish (`tools/publish_learner.py`
    in the authoring repository) copies every tracked file under the kit.
 

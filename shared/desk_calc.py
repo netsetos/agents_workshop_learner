@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The DocuMind Desk's calculators (workshop lesson 10.6): a figure the desk states is computed here, in code, and
+"""The DocuMind Desk's calculators (workshop lesson 10.4): a figure the desk states is computed here, in code, and
 says which clause its rule comes from. The model in agent mode reads the passages and chooses the call; it never does
 the arithmetic.
 

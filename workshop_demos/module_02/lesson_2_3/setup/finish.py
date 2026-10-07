@@ -1,66 +1,31 @@
-"""Lesson 2.3: Lower service floors at session end
+"""Finish this lesson after success or failure; keep all saved evidence.
 
-Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.
-
-Run order inside this file:
-1. Lower service floors at session end (source window plan-3)
-
-Prerequisites: workshop setup; see this lesson README.
-Use the existing rag-shell-venv interpreter; Run or Debug this file.
-The functions below contain the lesson examples in source order. Helpers
-supply configuration, authentication, state and CLI execution. See README.md
-for expected observations, effects and the next file; GUIDE.md retains prose.
-Example: open this file at the matching HTML heading, Run once, then inspect
-the observations below before continuing to the next numbered section.
-A successful process is not proof that a live result matched the sample.
-
+Summary: call the cleanup section files in their documented restoration order.
+Example: Run this file once at lesson end, including after an earlier failure.
+It attempts remaining restorations and closes the session only after success.
 """
+from workshop_helpers.cleanup import finish_lesson
 from workshop_helpers.session import DemoSession
-from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# REPEAT replays the whole file; use only after reviewing its effects.
 REPEAT = False
-# A failed function may have partial effects. Inspect its saved attempt first.
-RETRY_FAILED_STEP = False
 
-
-def step_01_lower_service_floors_at_session_end(session):
-    """Run Lower service floors at session end at this checkpoint.
-
-    Run make off, then inspect the actual configured service floors. A zero minimum is not proof that every warm instance is already gone; the monitoring demonstration in 18.4 verifies eventual instance counts.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: Course-plan experiment — live deployment.
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe the printed/saved evidence for this heading; a zero exit alone is not proof.
-    """
-    import sys
-    session.command(["make", "off", "PROJECT=" + session.config.project, "REGION=" + session.config.cloud_run_region, "PY=" + sys.executable])
-    session.command(["gcloud", "run", "services", "list", "--project", session.config.project, "--region", session.config.cloud_run_region, "--format=json"])
 
 def demonstrate(session):
-    """Run this section in source order, saving each function's outcome.
+    """Restore the mapped cleanup sections and the original lesson settings.
 
-    Example: main() opens the configured session and calls demonstrate(session).
-    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    Example: main() opens the saved run and passes its session here.
     """
-    run_steps(session, [
-        ('source_finish_03_lower_service_floors_at_session_end', step_01_lower_service_floors_at_session_end),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=True, finalize=True)
+    finish_lesson(session)
 
 
 def main():
-    """Open the lesson session and run this section.
+    """Open this lesson's saved state with the IDE interpreter.
 
-    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
-    Project settings and completed prerequisites come from the shared setup.
+    Example: Run setup/finish.py after the numbered examples, or after failure.
     """
-    with DemoSession(__file__, live=True, repeat=REPEAT) as session:
+    with DemoSession(__file__, repeat=REPEAT) as session:
         demonstrate(session)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

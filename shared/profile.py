@@ -36,7 +36,7 @@ def build_llm():
     # immediately and raises DefaultCredentialsError on this line rather than at first request.
     # location="global" because Gemini 3.x generation is not served regionally. timeout and max_retries (the
     # attempts in all, the first included) bound a call no turn limit wraps; the chat brains set both per call from
-    # the turn's time left (workshop lesson 10.3). The default was no timeout and six attempts.
+    # the turn's time left (workshop lesson 5.5). The default was no timeout and six attempts.
     return ChatGoogleGenerativeAI(model=os.environ.get("CHAT_MODEL", "gemini-3.6-flash"),
                                   vertexai=True, project=os.environ["GOOGLE_CLOUD_PROJECT"],
                                   location="global", thinking_level="low",

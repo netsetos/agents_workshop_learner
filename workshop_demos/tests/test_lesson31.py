@@ -1,4 +1,4 @@
-"""Lesson 3.1 behavior regressions: all cloud responses are fakes, never credentials."""
+"""Lesson 1.1 behavior regressions: all cloud responses are fakes, never credentials."""
 from copy import deepcopy
 from dataclasses import replace
 import importlib.util
@@ -20,7 +20,7 @@ from workshop_helpers.lesson31 import (LessonCloud, poll_until, prepare_cache, r
 from workshop_helpers.session import DemoSession
 
 KIT = Path(__file__).resolve().parents[2]
-LESSON = KIT / "workshop_demos/module_03/lesson_3_1"
+LESSON = KIT / "workshop_demos/module_01/lesson_1_1"
 
 
 def load_demo(relative):

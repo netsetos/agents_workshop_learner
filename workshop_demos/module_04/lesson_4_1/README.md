@@ -1,4 +1,4 @@
-# Lesson 4.1: Follow upload events, retries, dead-letter handling and the batch lane
+# Lesson 4.1: Build a useful evaluation dataset
 
 ## What to run
 
@@ -9,17 +9,17 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | HTML section | File | What it demonstrates |
 |---|---|---|
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
-| 3 | [demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py](demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py) | The plumbing: read the notification, the topic and the subscription off your lane |
-| 4 | [demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py](demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py) | The verdicts: the HTTP-code rule, and your last upload's request log |
-| 5 | [demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py](demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py) | Poison: a message that can never succeed, and the retries you can watch |
-| 6 | [demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py](demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py) | The batch lane: the 250-page decision, the queued claim, the job |
-| 7 | [demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py](demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py) | Dead letters: reading the queue, deciding, cleaning up |
+| 3 | [demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py](demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py) | The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about |
+| 4 | [demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py](demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py) | A lookup row: written into build_golden.py, built, and judged |
+| 5 | [demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py](demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py) | An isolation row: the marker that cannot work, the list it must join, and the gate green again |
+| 6 | [demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py](demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py) | Ask the two rows once: the live half's own functions, and the outsider's 403 |
+| 7 | [demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py](demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py) | Paraphrase pairs and generated candidates: two kinds of row that are not golden |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-Lesson 3.4's upload evidence; batch-job availability determines whether a large PDF remains queued.
+A clean evaluation working set. The lesson backs up its four editable files and restores the exact originals.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -33,12 +33,12 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Optional extensions
 
-- [optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py](optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py) — Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
+- [optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py](optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py) — The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version. Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 11.5 runs them (make features). Before that, the count is zero and the cell stops there.
 
 ## Finish and restore
 
-- [cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py](cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py) — At lesson end: This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
-- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py](cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py) — At lesson end: Your clone now differs from the kit in four files. Lesson 4.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's git pull --ff-only also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch" brings them back whenever you want them.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -47,11 +47,11 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. Whether the batch job is declared on your lane is a fact the worker carries in its environment as BATCH_JOB. Read it once; step 6 uses it.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 Operation: bash — run in the operator shell now, before the lesson's first step.
 
@@ -63,197 +63,302 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### demo_03_the_set_as_it_stands_the_gate_the_rows_that_cite_the_handbook_and_the_clause_no.py
 
-Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. Whether the batch job is declared on your lane is a fact the worker carries in its environment as BATCH_JOB. Read it once; step 6 uses it.
+The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 4.4. The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 4.4. Ten rows cite the handbook, by --source. Now count by clause. The cell reads the handbook's sections and lists, for each clause that is not filler, the ACME rows that anchor on it.
 
-Operation: bash — run in the operator shell, once per shell.
+**`step_01_the_gate_the_rows_that_cite_the_handbook_a(session)` — The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about / Do it: the gate, the rows that cite the handbook, and the handbook's clauses**
+
+The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 4.4.
+
+Operation: bash — run in the operator shell, in the kit (the offline gate, then the rows that cite the handbook).
+
+IDE adaptation: Back up the exact four original evaluation files before any build/edit; cleanup preserves pre-existing learner edits.
 
 Expected shape, not a promised result:
 
 ```text
-batch job declared: no (BATCH_JOB is empty)
+python evals/run_eval.py
+== eval gate: OFFLINE (no credentials, no cost) ==
+  65 golden rows over 3 tenants, 27 documents
+
+  [PASS] falsifiable
+  [PASS] anchors
+  [PASS] coverage
+
+  The golden set is sound. It can go red, and it still contains the rows that would.
+  rows citing hr_policy_2026.md: 10 - the scoped live gate judges these
+    lk-01  lookup    What is the per-trip cap on domestic travel reimbursement?
+    lk-02  lookup    By when is Form 16 issued?
+    lk-03  lookup    How many days of earned leave can I carry forward?
+    lk-04  lookup    What notice period applies during probation?
+    lk-05  lookup    Are USB drives allowed on a company laptop?
+    lk-06  lookup    What is the notice period for a confirmed E3?
+    lk-07  lookup    At what rate does earned leave accrue?
+    lk-08  lookup    Who approves a purchase of Rs 3,00,000?
+    lk-09  lookup    How many days a month can I work remotely?
+    vr-01  version   What is the notice period for a confirmed E3?
 ```
 
-### demo_03_the_plumbing_read_the_notification_the_topic_and_the_subscription_off_your_lane.py
+**`step_02_the_gate_the_rows_that_cite_the_handbook_a(session)` — The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about / Do it: the gate, the rows that cite the handbook, and the handbook's clauses**
 
-Read it off the platform
+The second line lists the rows that cite hr_policy_2026.md. They are the set a reindex of that one document is judged on, in lesson 4.4. Ten rows cite the handbook, by --source. Now count by clause. The cell reads the handbook's sections and lists, for each clause that is not filler, the ACME rows that anchor on it.
 
-**`step_01_off_the_platform(session)` — The plumbing: read the notification, the topic and the subscription off your lane / Read it off the platform**
-
-Read it off the platform
-
-Operation: bash — run in the operator shell (all read-only).
+Operation: bash — run in the operator shell, in the kit (reads the handbook and golden.jsonl; changes nothing).
 
 Expected shape, not a promised result:
 
 ```text
----
-event_types:
-- OBJECT_FINALIZE
-id: '1'
-payload_format: JSON_API_V1
-topic: //pubsub.googleapis.com/projects/documind-ai-YOUR-ID/topics/documind-ingest
-ackDeadlineSeconds: 600
-deadLetterPolicy:
-  deadLetterTopic: projects/documind-ai-YOUR-ID/topics/documind-ingest-dlq
-  maxDeliveryAttempts: 12
-pushConfig:
-  oidcToken:
-    serviceAccountEmail: documind-ingest-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com
-  pushEndpoint: https://documind-ingest-NUMBER.asia-south1.run.app
-retryPolicy:
-  maximumBackoff: 600s
-  minimumBackoff: 10s
-projects/documind-ai-YOUR-ID/topics/documind-ingest-dlq
-spec:
-  template:
-    metadata:
-      annotations:
-        autoscaling.knative.dev/maxScale: '30'
-        run.googleapis.com/execution-environment: gen2
-    spec:
-      containerConcurrency: 1
-      timeoutSeconds: 600
+hr_policy_2026.md: 282 sections, 272 of them GEN- filler
+  NP-03      Notice period            lk-06 jn-02 jn-03 vr-01
+  PB-02      Probation                lk-04 jn-01
+  LV-01      Earned leave             lk-03 lk-07
+  LV-07      Leave on exit            jn-01 jn-02 jn-03
+  EXP-12     Travel reimbursement     lk-01
+  PR-05      Payroll and Form 16      lk-02
+  IT-SEC-04  Removable media          lk-05 jn-07
+  SEC-09     Access review            <- no golden row asks about this clause
+  FIN-02     Purchase approval        lk-08
+  WFH-01     Remote work              lk-09
 ```
 
-### demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.py
+### demo_04_a_lookup_row_written_into_build_golden_py_built_and_judged.py
 
-Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.
+The cell removes any earlier lk-32 line and inserts the row before the bracket that closes GOLDEN, so running it twice is harmless. The builder prints its first five lines and its last. make eval runs exactly the gate's line; calling it directly puts the exit code on a line of its own. The next cell judges six versions of the row in memory, with the gate's own two functions. It writes nothing.
 
-**`step_01_read_the_two_records_your_3_4_upload_left(session)` — The verdicts: the HTTP-code rule, and your last upload's request log / Read the two records your 3.4 upload left**
+**`step_01_add_the_row_build_gate(session)` — A lookup row: written into build_golden.py, built, and judged / Do it: add the row, build, gate**
 
-Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.
+The cell removes any earlier lk-32 line and inserts the row before the bracket that closes GOLDEN, so running it twice is harmless. The builder prints its first five lines and its last. make eval runs exactly the gate's line; calling it directly puts the exit code on a line of its own.
 
-Operation: bash — run in the operator shell (both read-only).
+Operation: bash — run in the operator shell, in the kit (one line into evals/build_golden.py, then the build and the gate).
 
 Expected shape, not a promised result:
 
 ```text
-TIMESTAMP                 REQUEST_METHOD  STATUS  LATENCY
-2026-09-22T12:06:41.118Z  POST            200     7.412s
-2026-09-22T11:58:07.902Z  POST            200     0.611s
-TIMESTAMP                 EVENT             DOC_KEY                 CHUNKS  LANE
-2026-09-22T12:06:41.001Z  ingest_ok         acme_9c41d0e2b7f5...    3       push
-2026-09-22T11:58:07.844Z  ingest_duplicate  acme_111510fcf0a6...
+66 rows in GOLDEN; the last is lk-32
+golden.jsonl
+  rows : 66
+  shape: isolation=11, join=11, lookup=35, refusal=8, version=1
+  tenants: acme, globex, zeta
+  every must_contain / must_retrieve verified against corpus/  OK
+wrote 66 rows -> /home/you/deploy_module_rag/evals/golden.jsonl
+== eval gate: OFFLINE (no credentials, no cost) ==
+  66 golden rows over 3 tenants, 27 documents
+
+  [PASS] falsifiable
+  [PASS] anchors
+  [PASS] coverage
+
+  The golden set is sound. It can go red, and it still contains the rows that would.
+exit code 0
 ```
 
-### demo_05_poison_a_message_that_can_never_succeed_and_the_retries_you_can_watch.py
+**`step_02_what_the_gate_catches_and_the_one_mistake(session)` — A lookup row: written into build_golden.py, built, and judged / What the gate catches, and the one mistake it cannot see**
 
-The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
+The next cell judges six versions of the row in memory, with the gate's own two functions. It writes nothing.
 
-**`step_01_start_the_drill_then_watch_the_first_retri(session)` — Poison: a message that can never succeed, and the retries you can watch / Do it: start the drill, then watch the first retries**
-
-The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0).
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.
+Operation: bash — run in the operator shell, in the kit (six versions of the row, judged in memory; writes nothing).
 
 Expected shape, not a promised result:
 
 ```text
->> zero-byte object in: poison-1758542871.pdf
->> the worker refused it (400): 1 validation error for IngestMessage
-size
-  Input should be greater than or equal to 1 [type=greater_than_equal, input_value='0', input_type=str]
->> Pub/Sub retries a non-2xx with backoff (10 s to 600 s, twelve attempts: eventarc.tf), then ingest-dlq: make dlq about an hour after this line
+as written                               accepted
+a figure the clause never gives          REFUSED
+    lk-32: must_contain '45 working days' is not in acme's corpus - the row can only fail
+words the file breaks across two lines   REFUSED
+    lk-32: must_contain 'disabled automatically' is not in acme's corpus - the row can only fail
+a clause code with a typo                REFUSED
+    lk-32: anchor 'SEC-9' matches nothing in acme's corpus (slug? clause id? typo?)
+nothing the answer must contain          REFUSED
+    lk-32: an answerable row with no must_contain accepts any answer at all
+another clause's figure                  accepted
 ```
 
-**`step_02_start_the_drill_then_watch_the_first_retri(session)` — Poison: a message that can never succeed, and the retries you can watch / Do it: start the drill, then watch the first retries**
+### demo_05_an_isolation_row_the_marker_that_cannot_work_the_list_it_must_join_and_the_gate.py
 
-The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
+The first try: the obvious marker The second try: ACME's phrase The third try: listed, and the gate green
 
-Operation: bash — run in the operator shell, a few minutes later (read-only).
+**`step_01_the_first_try_the_obvious_marker(session)` — An isolation row: the marker that cannot work, the list it must join, and the gate green again / The first try: the obvious marker**
 
-Manual action: The poison retries are asynchronous. Wait a few minutes after the drill, then type done to read its retry records. This does not prove a dead letter has arrived.
+The first try: the obvious marker
 
-IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+Operation: bash — run in the operator shell, in the kit (the isolation row, with the obvious marker).
 
-### demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py
-
-The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker.
-
-**`step_01_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
-
-The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (read-only).
+IDE adaptation: Capture the deliberately red gate and assert its exact exit/diagnostic. Bash errexit must not stop before the intended observation, and an arbitrary error must not count as success.
 
 Expected shape, not a promised result:
 
 ```text
-0 queued document(s)
-no batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)
+67 rows in GOLDEN; the last is iso-11
+golden.jsonl
+  rows : 67
+  shape: isolation=12, join=11, lookup=35, refusal=8, version=1
+  tenants: acme, globex, zeta
+
+  ASSERTIONS THAT DO NOT MATCH THE CORPUS:
+   ! iso-11: must_not_contain '45 days' is in zeta's OWN corpus - answering it correctly would fail the row
+exit code 1
+66
 ```
 
-### optional/demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.py
+**`step_02_the_second_try_acme_s_phrase(session)` — An isolation row: the marker that cannot work, the list it must join, and the gate green again / The second try: ACME's phrase**
 
-Optional, and it costs money (the page's own box): join the CGST and IT Acts into a 270-page PDF and upload it to acme. The worker queues it for the batch lane. Where the batch job is declared it parses all 270 pages at once: about Rs 34 on the OCR processor or Rs 230 on the Layout Parser, plus embeddings. The page leaves the PDF in acme's uploads. Decide before you run it.
+The second try: ACME's phrase
 
-**`step_01_read_the_lane_rs_0(session)` — The batch lane: the 250-page decision, the queued claim, the job / Read the lane, Rs 0**
+Operation: bash — run in the operator shell, in the kit (the same row with ACME's phrase as the marker, then the build and the gate).
 
-The queue is a Firestore query the kit prints for you. The job and its schedule exist only if BATCH_JOB was set when the lane was deployed; the box above the setup read it off the worker. The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and make queued shows it. Decide before you upload.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the join is free; the upload starts the paid parse if the job is declared).
+IDE adaptation: Capture the deliberately red gate and assert its exact exit/diagnostic. Bash errexit must not stop before the intended observation, and an arbitrary error must not count as success.
 
 Expected shape, not a promised result:
 
 ```text
-bundle pages: 270
->> queued: pages, consumer: 270	documind-ingest-batch started (run requested); the hourly schedule backstops it
-1 queued document(s)
-  acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678
+67 rows in GOLDEN; the last is iso-11
+golden.jsonl
+  rows : 67
+  shape: isolation=12, join=11, lookup=35, refusal=8, version=1
+  tenants: acme, globex, zeta
+  every must_contain / must_retrieve verified against corpus/  OK
+wrote 67 rows -> /home/you/deploy_module_rag/evals/golden.jsonl
+== eval gate: OFFLINE (no credentials, no cost) ==
+  67 golden rows over 3 tenants, 27 documents
+
+  [PASS] falsifiable
+  [PASS] anchors
+  [FAIL] coverage
+         iso-11: a isolation row that required.json does not list
+
+  1 problem(s). The golden set cannot judge the model until it judges itself.
+exit code 1
 ```
 
-### demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py
+**`step_03_the_third_try_listed_and_the_gate_green(session)` — An isolation row: the marker that cannot work, the list it must join, and the gate green again / The third try: listed, and the gate green**
 
-The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
+The third try: listed, and the gate green
 
-**`step_01_when_it_has_landed(session)` — Dead letters: reading the queue, deciding, cleaning up / Read it, when it has landed**
-
-The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
-
-Operation: bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged).
-
-Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+Operation: bash — run in the operator shell, in the kit (iso-11 listed in evals/required.json, then make eval).
 
 Expected shape, not a promised result:
 
 ```text
-MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT
-12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1
-{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
+16 required ids: iso-01 iso-02 iso-03 iso-04 iso-05 iso-06 iso-07 iso-08 iso-09 iso-10 iso-11 mm-01 mm-02 mm-03 mm-04 vr-01
+python evals/run_eval.py
+== eval gate: OFFLINE (no credentials, no cost) ==
+  67 golden rows over 3 tenants, 27 documents
+
+  [PASS] falsifiable
+  [PASS] anchors
+  [PASS] coverage
+
+  The golden set is sound. It can go red, and it still contains the rows that would.
+exit code 0
 ```
 
-### cleanup/demo_07_dead_letters_reading_the_queue_deciding_cleaning_up.py
+### demo_06_ask_the_two_rows_once_the_live_half_s_own_functions_and_the_outsider_s_403.py
 
-At lesson end: This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
+Do it
 
-**`step_01_decide_then_clean_up(session)` — Dead letters: reading the queue, deciding, cleaning up / Decide, then clean up**
+**`step_01_ask_the_two_rows_once_the_live_half_s_own(session)` — Ask the two rows once: the live half's own functions, and the outsider's 403 / Do it**
 
-This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
+Do it
 
-Operation: bash — run in the operator shell (removes the dead letter and the empty object; nothing else).
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.
+Operation: bash — run in the operator shell, in the kit (three requests to the API; under a rupee).
 
 Expected shape, not a promised result:
 
 ```text
-acme/poison-1758542871.pdf
-Removing gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...
+lk-32 as acme: HTTP 200, answerable True, 1 citation(s), 2410 ms
+   An account unused for 45 days is disabled automatically and must be re-approved to restore it [1].
+   must_contain '45 days': found
+   cites acme/hr_policy_2026.md
+iso-11 as zeta: HTTP 200, answerable True, 1 citation(s), 2230 ms
+   Earned leave is encashed on exit at basic pay, capped at 20 days [1].
+   must_contain '20 days': found
+   must_not_contain 'capped at 45 days': absent
+   cites zeta/hr_policy_zeta_2026.md
+iso-11 asked by documind-outsider-sa: HTTP 403 (the isolation gate requires 403)
+```
+
+### demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py
+
+The answer cache of Module 6 serves an earlier answer when a new question's embedding has a cosine similarity of at least 0.95 with an earlier one. That number was chosen, not measured. paraphrases.jsonl is what measures it. Each pair rewords a golden question. A pair marked same asks the same fact in other words, so a cache hit would be right. A pair marked different is a few words away with a different answer: E3 against E2, minimum against maximum, probation against confirmed. A cache hit there is a wrong answer served fast. cache_threshold.py embeds both sides and prints, for each candidate threshold, the hit rate on the same pairs and the false-hit rate on the different ones. The cache stays off until a threshold has no false hit on this set. The labels are yours to get right: the self-test checks that each pair names a real golden row and differs from its question, not that its label is true. Add two pairs against lk-32. One asks the same fact in other words. The other asks the clause's other fact, the kind of near miss a loose threshold would answer with 45 days. make make-evalset asks Gemini for one question and answer per chunk of the quality-gated feed. The feed is rag_data.index_feed, joined to the chunks the worker mirrors into BigQuery, so a chunk the quality scan held back never becomes a question. Each pair is scanned by the one PII list, shared/pii.py, and dropped on any finding, never rewritten. What comes out is a candidate: a question with no figure it must contain, and the chunk's id as its only anchor. A golden row is a contract a person writes, and a generated question inherits the blind spots of the model that wrote it. So the file is golden_generated.jsonl, and the gate never reads it. What would the gate say if a candidate were merged as it is? The cell builds one for SEC-09 the way make_evalset.py writes it. Its chunk id is the worker's own: the tenant, the hash of the handbook's bytes, and #8, SEC-09's position after the preamble and seven clauses. Then the cell judges the reviewed version.
+
+**`step_01_paraphrase_pairs(session)` — Paraphrase pairs and generated candidates: two kinds of row that are not golden / Paraphrase pairs**
+
+The answer cache of Module 6 serves an earlier answer when a new question's embedding has a cosine similarity of at least 0.95 with an earlier one. That number was chosen, not measured. paraphrases.jsonl is what measures it. Each pair rewords a golden question. A pair marked same asks the same fact in other words, so a cache hit would be right. A pair marked different is a few words away with a different answer: E3 against E2, minimum against maximum, probation against confirmed. A cache hit there is a wrong answer served fast. cache_threshold.py embeds both sides and prints, for each candidate threshold, the hit rate on the same pairs and the false-hit rate on the different ones. The cache stays off until a threshold has no false hit on this set. The labels are yours to get right: the self-test checks that each pair names a real golden row and differs from its question, not that its label is true. Add two pairs against lk-32. One asks the same fact in other words. The other asks the clause's other fact, the kind of near miss a loose threshold would answer with 45 days.
+
+Operation: bash — run in the operator shell, in the kit (two lines appended to evals/paraphrases.jsonl, then the offline self-test).
+
+Expected shape, not a promised result:
+
+```text
+44 pairs; the last two are against lk-32
+selftest OK - 44 pairs (25 same, 19 different) name real golden rows and differ from them; the curve counts hits and false hits per threshold; the recommendation is the lowest threshold with no false hit
+```
+
+**`step_02_generated_candidates(session)` — Paraphrase pairs and generated candidates: two kinds of row that are not golden / Generated candidates**
+
+make make-evalset asks Gemini for one question and answer per chunk of the quality-gated feed. The feed is rag_data.index_feed, joined to the chunks the worker mirrors into BigQuery, so a chunk the quality scan held back never becomes a question. Each pair is scanned by the one PII list, shared/pii.py, and dropped on any finding, never rewritten. What comes out is a candidate: a question with no figure it must contain, and the chunk's id as its only anchor. A golden row is a contract a person writes, and a generated question inherits the blind spots of the model that wrote it. So the file is golden_generated.jsonl, and the gate never reads it. What would the gate say if a candidate were merged as it is? The cell builds one for SEC-09 the way make_evalset.py writes it. Its chunk id is the worker's own: the tenant, the hash of the handbook's bytes, and #8, SEC-09's position after the preamble and seven clauses. Then the cell judges the reviewed version.
+
+Operation: bash — run in the operator shell, in the kit (a candidate for SEC-09 as make-evalset writes one, judged in memory).
+
+Expected shape, not a promised result:
+
+```text
+gen-001  REFUSED
+    gen-001: an answerable row with no must_contain accepts any answer at all
+    gen-001: anchor 'acme:497809ffbaa6...#8' matches nothing in acme's corpus (slug? clause id? typo?)
+lk-32    accepted
+```
+
+### optional/demo_07_paraphrase_pairs_and_generated_candidates_two_kinds_of_row_that_are_not_golden.py
+
+The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version. Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 11.5 runs them (make features). Before that, the count is zero and the cell stops there.
+
+**`step_01_generated_candidates(session)` — Paraphrase pairs and generated candidates: two kinds of row that are not golden / Generated candidates**
+
+The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version. Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 11.5 runs them (make features). Before that, the count is zero and the cell stops there.
+
+Operation: bash — run in the operator shell, in the kit (one BigQuery count; ten Gemini calls only if the feed has rows).
+
+Expected shape, not a promised result:
+
+```text
+feed rows for acme: 0
+no feed rows yet: lesson 11.5 builds the feed (make features)
+```
+
+### cleanup/demo_08_what_rows_cost_how_a_golden_set_rots_and_handing_the_kit_back.py
+
+At lesson end: Your clone now differs from the kit in four files. Lesson 4.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's git pull --ff-only also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch" brings them back whenever you want them.
+
+**`step_01_keep_your_rows_and_give_the_kit_its_files(session)` — What rows cost, how a golden set rots, and handing the kit back / Keep your rows, and give the kit its files back**
+
+Your clone now differs from the kit in four files. Lesson 4.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's git pull --ff-only also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch" brings them back whenever you want them.
+
+Operation: bash — run in the operator shell, in the kit (your rows kept as a patch, the four files given back).
+
+IDE adaptation: Restore exact saved originals and retain a copy of lesson edits; never discard pre-existing changes with git checkout.
+
+Expected shape, not a promised result:
+
+```text
+evals/build_golden.py   | 2 ++
+ evals/golden.jsonl      | 2 ++
+ evals/paraphrases.jsonl | 2 ++
+ evals/required.json     | 1 +
+ 4 files changed, 7 insertions(+)
+the four files match the kit again
+65
+7
 ```
 
 ### setup/restore_settings.py
 
-At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 Operation: bash — run in the operator shell when you finish the lesson, not now.
 
@@ -265,6 +370,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `266786f87d070114f56dd645ac5f3e9a4228224a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.1_Eval_Dataset_WIX.html`. All 45 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1842ef7a3c0ff2277b8154be660b88709080a151`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

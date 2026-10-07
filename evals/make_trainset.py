@@ -30,7 +30,7 @@ Four rules make the file defensible, and each is a function below with a fixture
 --batch writes the same requests as a Batch API file (10.3: half price, no rate limit), submits the job
 and prints how to collect; --collect turns the job's output back into the same rows. Tier B, live.
 
---style helpdesk (17.1's v3) keeps the four rules and adds four: the prompt the generator really serves,
+--style helpdesk (12.1's v3) keeps the four rules and adds four: the prompt the generator really serves,
 with distractor sources; answers in the house style that mark the source they cite; a Hinglish twin for
 every second chunk; quotes checked, filler left out, every chunk scanned, a validation file. Its section
 is below the files': make trainset PROJECT=... TRAINSET_ARGS="--version v3 --style helpdesk".
@@ -320,7 +320,7 @@ def upload(out_dir: str, version: str, dest: str) -> None:
             print(f"  uploaded gs://{bucket}/{blob.name}")
 
 
-# ----------------------------------------------------------------------------- the helpdesk style (17.1's v3)
+# ----------------------------------------------------------------------------- the helpdesk style (12.1's v3)
 # --style helpdesk: a better file, and one habit the served model does not have. The plain style above trains on a
 # prompt the generator never sends (one source, no header line, SYSTEM twice), on targets that never mark a source,
 # with quotes nobody checks. Here every row IS the served prompt - SYSTEM once, the answering chunk among DISTRACTORS
@@ -813,7 +813,7 @@ def main() -> int:
     ap.add_argument("--batch", default="", help="gs://PROJECT-datasets/sft/batch/ - submit the pairs as a Batch API job instead of calling inline")
     ap.add_argument("--collect", default="", help="a local predictions.jsonl from the batch job's output, to finish the build")
     ap.add_argument("--style", choices=("plain", "helpdesk"), default="plain",
-                    help="helpdesk (17.1's v3): the served prompt with distractors, the house style, Hinglish twins, checked "
+                    help="helpdesk (12.1's v3): the served prompt with distractors, the house style, Hinglish twins, checked "
                          "quotes, no filler, every chunk scanned, a validation file")
     ap.add_argument("--teacher", default="", help=f"the model that writes the helpdesk pairs (default {HELPDESK_TEACHER})")
     ap.add_argument("--distractors", type=int, default=DISTRACTORS, help="other sources beside the answering chunk (helpdesk)")

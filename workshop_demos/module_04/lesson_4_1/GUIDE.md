@@ -4,63 +4,67 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.1_Upload_Events_WIX.html`, reviewed at blob `266786f87d070114f56dd645ac5f3e9a4228224a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.1_Eval_Dataset_WIX.html`, reviewed at blob `1842ef7a3c0ff2277b8154be660b88709080a151`. Learners read that page on the course site; this guide keeps its prose.
 
-Module 3 followed a document from bytes to records and took for granted that the worker was called. This lesson is about the call. An object landing in the bucket becomes a message; the message reaches the worker carrying a token nobody else can mint; the worker answers with an HTTP status; and the platform does one of three things with that status: acknowledges it, tries again after a growing pause, or, after twelve refusals, parks the message where you can read it. Then the one document the push path must not attempt, and the lane that takes it instead.
+Module 4 measures the answer, and the measure is a set of questions with answer keys: the kit's golden set, 65 rows over 3 tenants. You find the one clause of ACME's handbook that no row asks about and write a row for it, which the offline gate accepts. Then you write the hardest shape, an isolation row for Zeta. The gate refuses it twice, each time with a sentence that says why, and accepts it on the third try. You ask both rows once against the API, label two paraphrases, and see why a question generated from a chunk is a candidate and not a row. Only step 6 and the last cell of step 7 call the cloud.
 
-- What an upload event is
+- What a golden row promises, and what makes it useful
 
-- The words: notification, push, ack, backoff, dead letter, queued claim
+- The words: row, shape, must_contain, must_not_contain, anchor, answerable, source, required, gate, pair, candidate
 
 - Before you run anything: set up the shell
 
-- The plumbing: read the notification, the topic and the subscription off your lane
+- The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about
 
-- The verdicts: the HTTP-code rule, and your last upload's request log
+- A lookup row: written into build_golden.py, built, and judged
 
-- Poison: a message that can never succeed, and the retries you can watch
+- An isolation row: the marker that cannot work, the list it must join, and the gate green again
 
-- The batch lane: the 250-page decision, the queued claim, the job
+- Ask the two rows once: the live half's own functions, and the outsider's 403
 
-- Dead letters: reading the queue, deciding, cleaning up
+- Paraphrase pairs and generated candidates: two kinds of row that are not golden
 
-- At-least-once, and what it costs
+- What rows cost, how a golden set rots, and handing the kit back
 
 - Verify it yourself: the checklist
 
-You will learn how an upload becomes a delivery (a bucket notification into a topic, a push subscription that calls the worker as the worker's own identity), the one rule that governs every delivery (a 2xx is acknowledged, anything else is retried with exponential backoff until a ceiling of twelve attempts sends the message to a dead-letter topic), and why a document over 250 pages is never attempted on that path but queued for a job on the same image. Then you will prove it on your lane: read the plumbing, read the request log of the upload you made in lesson 3.4, put a message in that can never succeed and watch it retried, list the batch queue, and read the dead letter when it lands.
+You will learn what makes a golden row useful. It can fail, its evidence can be found, and the rows that would go red cannot be deleted without a reviewed change. You will learn how the offline gate checks each of these, and the one thing no gate can check for you. Then you will prove it on your lane: add a lookup row and an isolation row to the kit's golden set, watch the gate refuse the isolation row twice and accept it on the third try, and ask both rows once against the API.
 
-### What an upload event is
+### What a golden row promises, and what makes it useful
 
-A record about an object, carried by a queue that promises to deliver it at least once, to a worker that answers with a number.
+A question with an answer key, and four things the key must be. The gate can check three of them.
 
-The bucket does not call the worker. When an object is finalized in the uploads bucket, Cloud Storage writes one record about it, the object's name, bucket, generation, size and content type, and publishes that record into a Pub/Sub topic. A push subscription on the topic delivers each record to the worker as an HTTP POST, with an identity token minted for the worker's own service account, so the worker, which allows no unauthenticated caller, accepts the call and nobody else on the internet can make it. The record is the whole message; the worker parses it into the `IngestMessage` contract from lesson 3.1, field for field.
+A golden row is a question with an answer key. Each row names a tenant and a question. It says which figures a right answer contains, where the evidence lives, and whether the tenant's documents can answer at all. The kit keeps 65 of them in `evals/golden.jsonl`. The eval gate judges the model with these rows, so the rows have to be judged first. A row that can never fail lets a broken system through. A row that can never pass blocks a good one. Both look like tests.
 
-The worker answers with a status, and the status is a decision. Pub/Sub does not read the response body. A 2xx means "delivered, done": the message is acknowledged and never seen again, whether the worker indexed the document, found it already indexed, or handed it to the batch lane. Anything else means "not done": the subscription waits, ten seconds the first time and up to ten minutes later on, and delivers the same message again. It does that up to twelve times. After the twelfth refusal the message is forwarded to a dead-letter topic, where a subscription holds it for a person to read. The worker chooses its answers with this in mind: a message it can never parse gets a 400, because retrying it changes nothing; a failure that might be transient gets a 500, because the next attempt may succeed.
+There are five shapes, and each catches a different way to be wrong. A lookup asks for one fact from one clause. A join needs two clauses, so the packing order and the budget of lesson 3.4 matter. A refusal asks for something the tenant's documents do not hold, and the right answer says so. An isolation row asks one tenant for a fact that only another tenant holds, or holds differently. An answer that carries the other tenant's figure is a leak. A version row asks about a document that has been re-issued, and forbids the figure only the retired version carries.
 
-At least once, not exactly once. The queue promises that every record is delivered, not that it is delivered once or in order. A worker that took a long time may see the same message again before it has answered; two workers may receive the same record concurrently; an older version's event may arrive after a newer version was indexed. Every one of these happens on a real lane, and Module 3's records are the defence: the claim taken in a transaction makes a duplicate harmless, and the ledger's generation makes a late event harmless. The last defence is a ceiling: a document that cannot finish inside the 600 seconds a push request is allowed is not attempted at all. Its pages are counted first, a claim marked `queued` is written, and a job with no request deadline picks it up.
+Useful means four things, and the gate can check three of them. The row is falsifiable: every figure it demands is in its own tenant's files, and every figure it forbids is in another tenant's files and not its own. It is anchored: every `must_retrieve` anchor, a clause code or a document's slug, can be found. It is covered: every isolation, version and media row is listed in `required.json`, so deleting one is a change somebody reviews. The fourth is that the key is right: that 45 days really answers the question you asked. No gate checks that, because a wrong figure from the right tenant's files passes every rule. You check it by reading the clause.
 
-A courier with a delivery rule. The bucket is the sender; the subscription is a courier who keeps a copy of every parcel until the receiver signs. Sign, and the copy is destroyed. Refuse, and the courier comes back tomorrow, then the day after, then in four days, then in eight, up to twelve visits, and after that the parcel goes to a depot where the sender can collect it. The receiver, who knows this, signs for parcels that are theirs even when the box is empty (a duplicate), and refuses only when refusing is worth another visit. And a parcel too big for the doorstep is not brought to the doorstep at all: the courier leaves a slip, and a lorry comes for it.
+An anchor is a figure, a date or a code, never a sentence. The live half matches figures, not wording. It lower-cases both sides, drops the commas, turns number words into digits and "per cent" into %, and then requires the figure to stand on its own. So "twelve weeks" matches "12 weeks", and "60" does not match "160 days". The words around the figure still have to match exactly. The kit learned this from its own rows. Three overtime rows anchored on "twice the rate of wages", and a model that wrote "twice the normal rate of wages" was scored wrong. A refusal row asked for a GST rate, and the invoice says "GST @ 18%", so the model was right and the row was wrong. Each fix is a line in `build_golden.py`, with a note that says why.
 
-#### Follow one delivery
+A question paper and its moderator. A teacher sets a paper and writes the answer key. Before the exam, a moderator checks the paper. Every answer in the key must be printed in the textbook, every page reference must exist, and the questions the board requires must all still be there. The moderator cannot tell whether the key's answer to question 7 is the right answer to question 7. Only someone who has read the chapter can. The offline gate is the moderator. You are the teacher. The live run of lesson 4.2 is the exam.
 
-The player below follows one message from the bucket to its end. Pick what the worker answers and watch the path change: the acknowledged verdicts end at a record from lesson 3.4, the refused ones enter the retry clock, whose timings are the subscription's own policy. The clock is arithmetic on the policy, not a measurement; Pub/Sub adds a little jitter of its own.
+#### The row scorer: a row, the evidence the offline gate finds, and an answer scored the way the live half scores it
 
-Every path starts the same way: an `OBJECT_FINALIZE` record, one topic, one push subscription, one POST with the worker's own token. The verdict decides the rest. The retry clock assumes the same verdict every time, which is what a poison message gets; a transient failure usually clears on the second or third attempt.
+Pick a row. The first box shows it as `golden.jsonl` holds it, without its note, and what the offline gate finds for each assertion. The second box scores an answer by the live half's rules: try the presets, then type your own. The 13 rows are kit rows that each carry a lesson, two rows as they were first written, and the rows you will add.
 
-### The words: notification, push, ack, backoff, dead letter, queued claim
+The evidence is the gate's own matching rule, run over `evals/corpus` when this page was built. The scorer is `normalise()`, `contains()` and the per-row judgment of `live()`, ported from `run_eval.py`. For every preset, the build checked the scorer's verdict against the kit's own `live()`.
 
-Nine words, each with the value it takes on your lane.
+It has no model and no retriever, so the answer is whatever you type. It assumes a valid citation of the right kind; the live half also checks that every citation names the row's tenant, its own document and a current version. It cannot tell you whether a refusal row is right, and neither can the offline gate. Only a live run can, which is how rf-07 was found.
 
-Two of these are Module 3's records seen from the queue's side. The claim is what makes a redelivery a duplicate instead of a second index; the generation on the ledger row is what makes a late event stale instead of a rollback. Lesson 4.3 takes the second one apart; this lesson watches the deliveries that make both necessary.
+### The words: row, shape, must_contain, must_not_contain, anchor, answerable, source, required, gate, pair, candidate
+
+Twelve rows, each with the value it takes in the kit you cloned.
+
+One distinction to hold: sound and right are two different claims. The gate proves a row is sound: it can fail, it can pass, and it cannot vanish unnoticed. Only the author can say the row is right, that the figure it demands answers the question it asks. Step 4 shows the gate accepting a row whose key is wrong.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -72,126 +76,144 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-Whether the batch job is declared on your lane is a fact the worker carries in its environment as `BATCH_JOB`. Read it once; step 6 uses it.
+Only the shell. Every cell runs in the kit's folder, where the setup block leaves you, and the venv's `python` runs the kit's own scripts. The UI is not used. Step 6 needs the two token functions the block defines, and step 7 needs `bq`, which comes with the Cloud SDK. Steps 4 and 5 change three files of your clone, and step 7 changes a fourth. Step 8 keeps your changes as a patch and gives the kit its files back.
 
-### The plumbing: read the notification, the topic and the subscription off your lane
+### The set as it stands: the gate, the rows that cite the handbook, and the clause no row asks about
 
-Three resources and two grants, declared in one Terraform file, and the four read-only commands that show them as the platform holds them.
-
-#### Definition
-
-Everything between the bucket and the worker is declared in `terraform/eventarc.tf`: the two topics (the ingest topic and its dead-letter twin), the bucket notification that publishes `OBJECT_FINALIZE` records into the first, the push subscription that delivers them to the worker's URL with an OIDC token, and the subscription that lets a person read the dead letters. Two IAM grants make it work and both fail silently without: Cloud Storage's own service agent must be allowed to publish into the topic, and Pub/Sub's service agent must be allowed to mint tokens as the worker's account. The file's opening comment records that an earlier draft used an Eventarc trigger instead, which delivers a CloudEvent around this subscription, its token, its ceiling and its DLQ; the worker, which parses a Pub/Sub envelope, answered 400 to it.
-
-#### The code
-
-Read the comment above the retry policy: it is the reason the ceiling is twelve, and it is a story from the first live load, not a default.
-
-#### Read it off the platform
-
-You read the same five facts from the platform that the Terraform file declares: one event type, one payload format, one push endpoint that is the worker's URL, one token identity that is the worker's account, and the policy: 600 seconds to answer, 10 to 600 seconds between attempts, twelve attempts, then the dead-letter topic. The worker's own settings close the loop: it answers one request per instance, in at most 600 seconds, on up to thirty instances. Nothing in this step can be changed from here; all of it is what every upload on your lane has been going through since Module 2.
-
-### The verdicts: the HTTP-code rule, and your last upload's request log
-
-The handler that turns a message into a status, its six answers, and the two log records every delivery leaves.
+The target, the rows, the checks the gate runs over them, and the gap you will fill.
 
 #### Definition
 
-The worker's `push()` handler is the only route the subscription calls. It decodes the envelope, parses the record into the contract, and answers 400 the moment parsing fails, because a message that fails to parse will fail the same way on every retry and the dead-letter queue is where it belongs. Everything after that is a 200 with a different body: `stale` when the ledger already holds a newer generation, `duplicate` when the claim is already taken, `withdrawn` when a person retired the source, `queued_batch` when the batch lane already has it, `already_current` when the other lane seeded the version, `reactivated` for the undo, `indexed` for the ordinary path. Only one thing is a 500: `index_document()` raising after it has released the claim with the error, which is the case where a retry might succeed.
+The offline gate is `run_eval.py` with no arguments. It loads the text files under `evals/corpus` and the committed `golden.jsonl`, then runs three checks. Falsifiable: every answerable row has a figure, every figure is in its tenant's files, and every marker is where its shape says it must be. Anchors: every anchor is found in the tenant's file names and text joined together, so a slug such as `hr_policy_2026` and a clause code such as `NP-03` can both be found. Coverage: no shape falls below its minimum, and `required.json` and the file agree. The matching is plain: the row's text, lower-cased, must appear in the file's text, lower-cased. Nothing is normalised offline. A row is a call to `R()` in `build_golden.py`. The builder applies the same rules when it writes the file, and the gate applies them again to the committed file, because that is the file CI runs.
 
 #### The code
 
-The contract's `size` field carries `ge=1`: a zero-byte object fails validation, and validation failing is what makes a message poison. That is the whole mechanism `make poison` exercises in the next step.
+#### Do it: the gate, the rows that cite the handbook, and the handbook's clauses
 
-#### Read the two records your 3.4 upload left
+The second line lists the rows that cite `hr_policy_2026.md`. They are the set a reindex of that one document is judged on, in lesson 4.4.
 
-Every delivery writes a request log entry (Cloud Run's, with the status the worker answered and how long it took) and, from the worker, a JSON line with the verdict. The first read below lists the last few POSTs the subscription made to the worker; the second lists the worker's own verdicts for the same window. Your note from lesson 3.4 should be there twice: once as the duplicate the unchanged bytes produced, once as the indexed version.
+Ten rows cite the handbook, by `--source`. Now count by clause. The cell reads the handbook's sections and lists, for each clause that is not filler, the ACME rows that anchor on it.
 
-Both deliveries were acknowledged, and the request log shows why they looked so different to the worker: the duplicate took a fraction of a second, because the claim was already taken and nothing was downloaded, while the indexed version took several seconds of parsing, embedding and writing. Neither was retried, because a 200 is a 200 whatever the body says. Keep the shape of these two reads: they are how you follow any delivery on this lane, and the next step fills them with a status you have not seen yet.
+The gate judged the set, not the model: no request left your machine. It found every figure in its tenant's files, every anchor findable and every required row present, so it exited 0. The handbook has 282 sections, and 272 of them are GEN- filler that makes it long enough to test retrieval. Of the 10 real clauses, nine are asked about and one is not: SEC-09, the access review. The clause table also shows what the listing hides. The join rows jn-01, jn-02, jn-03 and jn-07 depend on the handbook, but they anchor on clause codes only, and `sources_of()` counts only anchors that are document slugs. A reindex of the handbook judged with `--source` would not ask them. That is why the rows you write carry the slug as well as the code.
 
-### Poison: a message that can never succeed, and the retries you can watch
+### A lookup row: written into build_golden.py, built, and judged
 
-A zero-byte object, the 400 it earns, and the subscription trying again on the clock from step 1. Start this now: the clock runs for about an hour.
+One line of Python, the builder's check, the gate's verdict, and six versions of the row that show what the gate can and cannot see.
 
 #### Definition
 
-A poison message is one the worker refuses before it touches the document, because the record itself is unusable. The kit's drill makes the simplest one: an empty PDF. Cloud Storage publishes its record with `size: "0"`, the contract requires a size of at least one, validation fails, the worker logs `ingest_poison` with the field named and answers 400. From the subscription's side a 400 is a failed delivery like any other, so it retries: after ten seconds, then twenty, then forty, doubling to the ten-minute cap, twelve attempts in all. The worker refuses each one in a fraction of a second and costs nothing. The message, not the object, is what travels; the object sits in the bucket untouched, which is why the last step of this lesson deletes it.
+SEC-09 says production access is reviewed quarterly, and any account unused for 45 days is disabled automatically. The row asks the second fact. Its `must_contain` is the figure, `45 days`. Its anchors are the clause code, which finds the clause, and the slug, which ties the row to the handbook for `--source`. It is a lookup and not an isolation row, because Zeta's handbook has the same SEC-09, word for word. A leaked answer would also be the correct one, which is why the kit's README makes the tenants' figures differ on purpose. The row goes into `build_golden.py`, not into `golden.jsonl`. The builder checks every row against its tenant's files before it writes anything, then rewrites the whole file from its list. A line added to `golden.jsonl` by hand would pass the gate, and vanish the next time anybody runs the builder.
 
 #### The code
 
-#### Do it: start the drill, then watch the first retries
+#### Do it: add the row, build, gate
 
-The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
+The cell removes any earlier lk-32 line and inserts the row before the bracket that closes `GOLDEN`, so running it twice is harmless. The builder prints its first five lines and its last. `make eval` runs exactly the gate's line; calling it directly puts the exit code on a line of its own.
 
-One object produced one message, and the message has been delivered six times in five minutes: the gaps read ten, twenty, forty, eighty and one hundred and sixty seconds, the doubling the policy declares. Every delivery got the same 400 in about thirty milliseconds, because the worker refuses at the contract and never downloads the object. The seventh attempt comes five minutes after the sixth, the eighth ten minutes after that, and from there every ten minutes until the twelfth, about an hour after the first. Then, and only then, the message leaves this subscription for the dead-letter topic. Step 7 reads it there; step 6 fits in the meantime.
+#### What the gate catches, and the one mistake it cannot see
 
-### The batch lane: the 250-page decision, the queued claim, the job
+The next cell judges six versions of the row in memory, with the gate's own two functions. It writes nothing.
 
-The document a push request must not attempt, the record that hands it off, and the consumer that runs the same pipeline without a deadline.
+The builder found `45 days` and both anchors in ACME's files and wrote 66 rows. The gate checked the committed file again and exited 0. Four of the six versions were refused, each with the gate's own sentence. Two of those refusals are worth a second look. The words `disabled automatically` are in the clause, but the file breaks that line after `disabled`. The offline check reads the file's characters as they are, line break included, so a two-word phrase can fail where a figure would not. The last version, `60 days`, was accepted. It is NP-03's notice period, from ACME's own handbook, so every rule holds, and the row is wrong: a model that answered SEC-09 correctly would fail it. No gate can catch that. You catch it by reading the clause before you write the key.
+
+### An isolation row: the marker that cannot work, the list it must join, and the gate green again
+
+The same question asked of Zeta, three tries, and the rule each refusal quotes.
 
 #### Definition
 
-A push request has 600 seconds. Document AI reads about a page a second, so a 400-page contract cannot finish, and a worker killed at the deadline cannot release its claim: the retry finds the claim `processing` and is acknowledged as a duplicate, and the document is stuck until a person notices. The kit refuses to let that happen. Before any page is sent to Document AI, the worker counts a PDF's pages off its page tree (lesson 3.2) and, above `MAX_INLINE_PAGES` (250), writes two records instead of indexing: an `ingest_batch` record with everything needed to fetch the same bytes later, and the claim with status `queued`. The request is acknowledged. The consumer is a Cloud Run job on the very same image, started by the worker the moment it queues (when the job is declared) and by an hourly schedule regardless; it takes each queued claim in a transaction, downloads the bytes by generation, and calls the worker's own `index_document()` with `lane="batch"`, which is how the page ceiling is not consulted a second time. A failure leaves the claim `failed` with the error, and the next run does not retake it.
+LV-07 is a clause where the two handbooks disagree: ACME caps leave encashment on exit at 45 days, and Zeta at 20. So "How many days of earned leave are encashed on exit?" has a right answer for Zeta, `20 days`, and a leaked answer, ACME's. This is the sharpest isolation shape, the one iso-01 uses for the travel cap: answerable, with a marker that must never appear. The marker has two rules. It must be in another tenant's files, or there is nothing to leak and the row is decoration. It must not be in the row's own tenant's files, or a correct answer could fail it. The obvious marker is `45 days`, and it breaks the second rule, because Zeta's SEC-09, the clause of step 4, says 45 days too. An isolation row must also be listed in `required.json`. The builder does not check that; the gate does.
 
 #### The code
 
-#### Read the lane, Rs 0
+#### The first try: the obvious marker
 
-The queue is a Firestore query the kit prints for you. The job and its schedule exist only if `BATCH_JOB` was set when the lane was deployed; the box above the setup read it off the worker.
+The builder refused and wrote nothing: `golden.jsonl` still has 66 lines. Its sentence names the rule. The next try uses a phrase only ACME's clause holds, `capped at 45 days`.
 
-The corpus has no PDF over 250 pages, so the drill makes one: the CGST Act (236 pages) and the IT Act (34) joined with pypdf on your machine, at no cost. Uploading it costs nothing either, and that is the point of the first half: the worker counts 270 pages, writes the queued claim, answers 200, and no page has been sent to Document AI. The second half is where the money goes. When the job is declared, the worker starts it at once and it parses all 270 pages: about Rs 34 on the OCR processor, about Rs 230 on the Layout Parser (at the list prices lesson 3.2 quoted and Rs 85 to the dollar), plus a few rupees of embeddings for roughly six hundred windows. When the job is not declared, the claim simply waits, and `make queued` shows it. Decide before you upload.
+#### The second try: ACME's phrase
 
-With the job declared, the queue empties within minutes and the worker's usual records appear for the bundle, this time with `lane: batch` on the `ingest_ok` line and a `batch_run` line from the job. Without it, the claim stays queued; `make batch-job` declares and schedules the job with a plan through `make plan`'s guard, then its apply (keep `BATCH_JOB=true` on every later `make plan` or `make up`, or the guard refuses the plan that would delete the job), and `make batch` starts a run and waits for it.
+The builder wrote the row, and the gate refused the file. Its coverage rule found an isolation row that `required.json` does not list. The rule works both ways: a listed id missing from the file fails too. So a row can neither vanish nor arrive unlisted.
 
-You read the batch lane as three records and one job: the queue (a Firestore query, empty unless you took the optional drill), the job (the ingest image with a different command, two hours instead of ten minutes, no platform retries because the claim carries the retry), and the schedule that drains whatever the worker could not start. The decision that feeds it is made before the first rupee is spent, which you saw if you uploaded the bundle: 270 pages counted for free, a claim written, a 200 returned, and the parse belongs to the job.
+#### The third try: listed, and the gate green
 
-### Dead letters: reading the queue, deciding, cleaning up
+Each refusal came from a different check, and each quoted its rule. The builder refused a marker that was in Zeta's own handbook. The gate refused an isolation row that the required list did not name. With the marker moved to ACME's phrase and the id listed, both passed, and `make eval` exited 0 over 67 rows and 16 required ids. That is this lesson's proof. The marker is now a phrase, and a phrase has a weakness: a leak in other words, "up to 45 days", does not contain it. Try that answer on iso-11 in the scorer. The row still fails it, because the leaked answer lacks `20 days`. Step 6 shows why the live gate does not lean on the marker at all.
 
-Where a message goes after its twelfth refusal, how to read it without consuming it, and the three things a person can do with it.
+### Ask the two rows once: the live half's own functions, and the outsider's 403
+
+Three requests to `/v1/query`, scored with `run_eval.py`'s own code, before lesson 4.2 runs the whole set.
 
 #### Definition
 
-A dead-letter topic is not an error log; it is a queue of messages that still exist. When the push subscription has delivered a message twelve times without an acknowledgement, it forwards the message, unchanged, to `documind-ingest-dlq`, and the subscription `ingest-dlq-sub` holds it. Pulling from that subscription without acknowledging shows the message and leaves it there; acknowledging it is the only thing that removes it. A person reading a dead letter has three choices: fix the cause and upload the object again, which is a new event and a fresh twelve attempts; acknowledge the message to drop it, because the object was never meant to be indexed; or leave it while the cause is investigated. What a person must not do is fix the worker and expect the dead letter to retry itself: it is out of the push subscription for good.
+The live half, `make eval-live`, belongs to lesson 4.2. It sends every row to `/v1/query` with `top_k` 6, as the UI's service account, which `make roster` put on all three tenants. It looks for every marker in every reply and scores each answerable row by `contains()` and by its citations. Isolation is judged a second way. The retriever filters by tenant before anything reaches the model, so a marker can only fire if the model invents another tenant's exact figure, which the kit calls a lottery. The leg that can really leak is identity to tenant. So the gate also asks every isolation row as `documind-outsider-sa`, an account that may call the service and is on no roster, and requires 403 every time. The cell asks your two rows as a member, then asks iso-11 as the outsider, with the same `ask()` and `contains()` the gate uses.
 
 #### The code
 
-#### Read it, when it has landed
+#### Do it
 
-The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
+Both rows passed on your lane. Each answer held its figure, iso-11's held no marker, and each citation named the tenant's own handbook. The outsider got 403 from the roster check, which is what makes iso-11 a release blocker in lesson 4.2. If lk-32 comes back refused, the row has done its job early: it found a question your lane cannot answer yet. Look at what retrieval returned for it before you change the row.
 
-#### Decide, then clean up
+### Paraphrase pairs and generated candidates: two kinds of row that are not golden
 
-This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 4.4 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
+Labelled pairs that measure the answer cache, and questions Gemini writes from chunks, which a person has to turn into rows.
 
-You read a message that had been refused twelve times, decoded the record inside it and found the zero that made it poison, and then took the operator's decision: drop it, and remove its cause. Notice what did not need doing: no worker was restarted, no subscription touched, no retry forced. The platform did the retrying, stopped at the ceiling, and kept the evidence for you. A dead letter you could not explain would be the other case, and the first read in step 4, the request log, is where that investigation starts.
+#### Paraphrase pairs
 
-### At-least-once, and what it costs
+The answer cache of Module 6 serves an earlier answer when a new question's embedding has a cosine similarity of at least 0.95 with an earlier one. That number was chosen, not measured. `paraphrases.jsonl` is what measures it. Each pair rewords a golden question. A pair marked `same` asks the same fact in other words, so a cache hit would be right. A pair marked different is a few words away with a different answer: E3 against E2, minimum against maximum, probation against confirmed. A cache hit there is a wrong answer served fast. `cache_threshold.py` embeds both sides and prints, for each candidate threshold, the hit rate on the same pairs and the false-hit rate on the different ones. The cache stays off until a threshold has no false hit on this set. The labels are yours to get right: the self-test checks that each pair names a real golden row and differs from its question, not that its label is true.
 
-The three ways a delivery can surprise a worker, the defence for each, the one hazard the ceiling exists for, and where the rupees go.
+Add two pairs against lk-32. One asks the same fact in other words. The other asks the clause's other fact, the kind of near miss a loose threshold would answer with 45 days.
 
-#### Three surprises, three defences
+The self-test is offline. The curve itself, `python evals/cache_threshold.py --project "$PROJECT"`, embeds 68 short questions with `text-embedding-005` in `us-central1`. Lesson 6.4 reads it before the cache is switched on.
 
-#### The hazard the ceiling exists for
+#### Generated candidates
 
-There is one failure the claim cannot defend against on its own. A request that runs past 600 seconds is killed by the platform, not by the worker, so the code that releases the claim never runs. The claim stays `processing`; the subscription retries; the retry finds the claim taken and is acknowledged as a duplicate; and the document is never indexed while every delivery reports success. The 250-page ceiling is the answer: no push request is allowed to begin a document that could reach the deadline, and the job that takes such documents has two hours and no platform retries, because a failed document says why on its claim and the next run does not retake it. Lesson 4.4's reconcile is the backstop that would notice a claim stuck in `processing`.
+`make make-evalset` asks Gemini for one question and answer per chunk of the quality-gated feed. The feed is `rag_data.index_feed`, joined to the chunks the worker mirrors into BigQuery, so a chunk the quality scan held back never becomes a question. Each pair is scanned by the one PII list, `shared/pii.py`, and dropped on any finding, never rewritten. What comes out is a candidate: a question with no figure it must contain, and the chunk's id as its only anchor. A golden row is a contract a person writes, and a generated question inherits the blind spots of the model that wrote it. So the file is `golden_generated.jsonl`, and the gate never reads it.
 
-#### What deliveries bill, and what they do not
+What would the gate say if a candidate were merged as it is? The cell builds one for SEC-09 the way `make_evalset.py` writes it. Its chunk id is the worker's own: the tenant, the hash of the handbook's bytes, and `#8`, SEC-09's position after the preamble and seven clauses. Then the cell judges the reviewed version.
 
-The asymmetry to remember: the delivery machinery is nearly free, and the expensive thing is the document, which is why the kit spends nothing before it knows what it is dealing with: parse the record before downloading, count the pages before parsing, take the claim before embedding. Every refusal in this lesson happened before the first rupee.
+The candidate fails twice. It has no figure, so it would accept any answer. Its anchor names a version by its hash, which no file contains, and which would point at a retired version the day the handbook is re-issued. The reviewed row, with a figure, a code and a slug, is lk-32. That rewrite is what review means: a figure a person checked in the clause, and anchors that survive a new version.
+
+Last, the generator itself, if your feed has rows. The chunk feature job and the Dataplex quality scan fill the feed, and lesson 11.5 runs them (`make features`). Before that, the count is zero and the cell stops there.
+
+### What rows cost, how a golden set rots, and handing the kit back
+
+The rupees, the ways the kit's own history says a set decays, and your rows kept as a patch.
+
+#### What it costs
+
+#### How a golden set rots
+
+The kit's docstrings name five ways, and each has a guard.
+
+- A red build made green by hand. Somebody edits `golden.jsonl` to loosen a figure. The gate checks the committed file for exactly this reason, and the builder is deterministic, so a loosened figure is a diff with an author and a date.
+
+- The failing rows deleted. A green build with fewer tests looks like a fix. `MIN_ROWS` guards each shape, and `required.json` guards each row that would block a release.
+
+- A document re-issued without its rows. vr-01 and lk-06 move to the new figure in the same commit as the handbook, or the gate is red before anything deploys.
+
+- Anchors that are sentences. The overtime rows: the right figure, scored wrong, because the model added one word.
+
+- A bare numeral that a larger number satisfies. Until 12 September, "60" passed on "160 days". The live check now wants the figure on its own boundaries.
+
+Blind spots remain, and you have now seen each one. The offline gate cannot tell a right key from a wrong one (step 4). It has nothing to check on a refusal row, so only a live run found rf-07. `--source` misses a row anchored on clause codes alone (step 3). And a bare figure passes almost for free: `60` is in 13 of ACME's 17 text files, the CGST Act's table of contents among them, while `45 days` is in 1. The check proves the figure can be said, not that the right clause says it, so give a figure its unit.
+
+#### Keep your rows, and give the kit its files back
+
+Your clone now differs from the kit in four files. Lesson 4.2 runs the kit's own set, 65 rows and 15 required ids. The setup block's `git pull --ff-only` also refuses to run over local edits to a file the kit has changed. So keep your rows as a patch and restore the four files. `git -C "$DEMO_ROOT" apply "$HOME/lesson71_rows.patch"` brings them back whenever you want them.
 
 ### Verify it yourself: the checklist
 
-Eight checks, each one block above, each with the value that proves it on your lane.
+Eleven checks, each one block above, each with the value that proves it on your lane.
 
-One empty object, uploaded and then deleted; one dead letter, read and then acknowledged; and, only if you took the optional drill, one 270-page bundle under acme with its own records. Everything else was read. Lesson 4.2 goes back to a document that is already indexed and changes one clause of it, to see exactly what a re-issue costs.
+In the cloud, only the usage rows of step 6's two answers. In your clone, steps 4, 5 and 7 changed `build_golden.py`, `golden.jsonl`, `required.json` and `paraphrases.jsonl`, and step 8 put all four back; your seven lines are in `~/lesson71_rows.patch`. Two untracked things may remain: `evals/__pycache__`, from the cells that import `run_eval.py`, and `evals/golden_generated.jsonl` if your feed had rows. Both are safe to delete. Lesson 4.2 runs the set you just studied: the offline half as CI runs it, the live half against a candidate with 9 thresholds and 15 required rows, and a judge that scores but never gates.
 
-Netsetos GenAI on GCP · Module 4 Lifecycle · Lesson 4.1 Follow upload events, retries, dead-letter handling and the batch lane · v5.0
+Netsetos GenAI on GCP · Module 4 Evals and safety · Lesson 4.1 Build a useful evaluation dataset · v5.0
 
-Next: Lesson 4.2 Reindex a changed section and measure embedding reuse.
+Next: Lesson 4.2 Separate offline checks, live scoring and LLM judgment.

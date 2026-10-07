@@ -62,7 +62,7 @@ def _firestore_fallback(vec: list[float], tenant_id: str, top_k: int, filters: d
     ledger's `current`, and the caller's filters as equality pre-filters on the row's own
     fields. Until then this path had no `filters` parameter, so a doc_type-filtered
     question answered from here read the whole tenant. A doc_type list is one `in`
-    pre-filter (workshop lesson 10.6), served by the same composite indexes as `==`.
+    pre-filter (workshop lesson 10.4), served by the same composite indexes as `==`.
 
     Needs the composite index in 12.5's firestore_indexes.tf - one per predicate
     combination. Without it Firestore does not degrade, it refuses.
@@ -157,7 +157,7 @@ def _page_span(ctx) -> str:
 
 def matches(row: dict, filters: dict | None) -> bool:
     """The caller's filters on one row, in Python, for the paths that check a row after the store returned it: a
-    doc_type list (workshop lesson 10.6, main.py's check_filters made it canonical) is any of its classes, every
+    doc_type list (workshop lesson 10.4, main.py's check_filters made it canonical) is any of its classes, every
     other value is one equality. The same meaning as the restricts, the Firestore where() and the store's ANY()."""
     return all(row.get(k) in v if isinstance(v, list) else row.get(k) == v for k, v in (filters or {}).items())
 
@@ -257,7 +257,7 @@ def _search_serving_config(tenant_id: str) -> str:
 
 def _search_filter(filters: dict | None) -> str:
     """The caller's filters as a Vertex AI Search filter expression on the schema's indexable fields (managed.tf):
-    doc_type: ANY("policy"), or doc_type: ANY("guidance", "statute") for a list (workshop lesson 10.6). `kind` never
+    doc_type: ANY("policy"), or doc_type: ANY("guidance", "statute") for a list (workshop lesson 10.4). `kind` never
     reaches the store - it holds text only (D4): a media kind is answered from the kit's index before the store is
     asked, and text is what every document there is."""
     quoted = lambda v: ", ".join('"' + str(t).replace("\\", "\\\\").replace('"', '\\"') + '"' for t in (v if isinstance(v, list) else [v]))

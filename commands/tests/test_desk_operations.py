@@ -1,4 +1,4 @@
-"""The DocuMind Desk's operations (workshop lessons 10.5 and 10.6): the log sink's Desk events, the desk_daily view
+"""The DocuMind Desk's operations (workshop lessons 5.6 and 10.4): the log sink's Desk events, the desk_daily view
 (terraform/sql/desk_daily.sql) and the Desk's log-based metrics and alert policies (terraform/desk_alerts.tf).
 
     python -m unittest commands/tests/test_desk_operations.py          (from deploy/)

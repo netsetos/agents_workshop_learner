@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The case queue's hourly overdue scan (workshop lesson 10.5): the entry point of the documind-cases-overdue job.
+"""The case queue's hourly overdue scan (workshop lesson 5.6): the entry point of the documind-cases-overdue job.
 
     python desk_overdue.py --project documind-ai-YOUR-ID          # the job, on the chat image as chat-sa (terraform/desk.tf)
     make cases-overdue PROJECT=documind-ai-YOUR-ID                # the same code from deploy/, as you

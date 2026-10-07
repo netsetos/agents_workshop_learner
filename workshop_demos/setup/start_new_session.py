@@ -5,9 +5,9 @@ evidence and removes only the active pointer; the next demo creates a new run.
 It does not delete fixtures or perform cloud cleanup on your behalf.
 """
 import json
-from workshop_helpers.config import load_config
+from workshop_helpers.config import lesson_folder, load_config
 
-LESSON = "4.4"
+LESSON = "1.8"
 
 
 def main():
@@ -16,8 +16,7 @@ def main():
     Example: main()
     """
     config = load_config()
-    module = int(LESSON.split(".")[0])
-    base = config.results_dir / f"module_{module:02}" / f"lesson_{LESSON.replace('.', '_')}"
+    base = config.results_dir / lesson_folder(LESSON)
     if (base / "session.lock").exists():
         raise RuntimeError("A demo is running or its lock needs recovery. Do not start another session yet.")
     pointer = base / "active.json"
@@ -28,7 +27,7 @@ def main():
     state = json.loads((base / run / "session.json").read_text(encoding="utf-8"))
     if state.get("backend_restore_required"):
         raise RuntimeError("Run this lesson's finish file to restore its saved backend before starting again.")
-    mapping_path = config.kit_root / "workshop_demos" / f"module_{module:02}" / f"lesson_{LESSON.replace('.', '_')}" / "lesson_map.json"
+    mapping_path = config.kit_root / "workshop_demos" / lesson_folder(LESSON) / "lesson_map.json"
     mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
     cleanup = [step["id"] for step in mapping["demos"] if step["category"] == "cleanup"]
     if state["attempts"] and any(step not in state["completed"] for step in cleanup):

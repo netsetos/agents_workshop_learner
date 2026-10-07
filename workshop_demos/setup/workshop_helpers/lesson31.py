@@ -1,4 +1,4 @@
-"""Reusable I/O for lesson 3.1; the examples remain in numbered HTML-section files.
+"""Reusable I/O for lesson 1.1; the examples remain in numbered HTML-section files.
 
 Clients are created only inside an active DemoSession. HTTP evidence includes
 status and body, never bearer tokens. Exact-version polling replaces arbitrary
@@ -221,7 +221,7 @@ class LessonCloud:
         Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
         """
         from google.cloud import firestore, storage
-        require(session.config.tenant_id == "acme", "Lesson 3.1 uses the course's acme/zeta fixtures; set tenant_id to acme.")
+        require(session.config.tenant_id == "acme", "Lesson 1.1 uses the course's acme/zeta fixtures; set tenant_id to acme.")
         self.session = session
         self.db = firestore.Client(project=session.config.project, credentials=session.credentials)
         self.bucket = storage.Client(project=session.config.project, credentials=session.credentials).bucket(session.config.uploads_bucket)
@@ -353,7 +353,7 @@ class LessonCloud:
                                   "expected_generation": expected["generation"], "doc_key": source.get("doc_key"),
                                   "claim_status": claim.get("status"), "current_chunks": len(chunks)}}
             self.save(expected["tenant"] + "_index_observation", result)
-            require(source.get("status") != "withdrawn", "This source was withdrawn. Inspect it and use the lesson 4.4 restore procedure deliberately.")
+            require(source.get("status") != "withdrawn", "This source was withdrawn. Inspect it and use the lesson 1.8 restore procedure deliberately.")
             require(claim.get("status") != "failed", f"Worker failed: {claim.get('error')}; inspect the saved claim and ingest logs.")
             return result
 

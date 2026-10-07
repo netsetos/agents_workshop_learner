@@ -1,4 +1,4 @@
-# The DocuMind Desk, watched (workshop lessons 10.5 and 10.6): log-based metrics on the lines the Desk already writes,
+# The DocuMind Desk, watched (workshop lessons 5.6 and 10.4): log-based metrics on the lines the Desk already writes,
 # and the alert policies that read them. Kept out of alerts.tf, whose policy list lessons quote and count (13.2 asserts
 # it, and prints this file's list beside it), as quota.tf keeps a resource of its own; every policy here notifies
 # local.alert_channel_ids (alerts.tf).
@@ -152,7 +152,7 @@ resource "google_monitoring_alert_policy" "desk_fallback_share" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "7200s" }
   documentation {
-    content   = "The Desk's router is failing for this tenant: its turns are getting the fallback's direct answer instead of a desk. Read why: gcloud logging read 'jsonPayload.event=\"desk_router_failed\" OR jsonPayload.event=\"desk_router_signal_failed\"' --limit 20. A timeout on every turn is location=global or the model; an error is the code. The desk rows' fallback_reason says which (gcloud logging read 'jsonPayload.event=\"desk\" AND jsonPayload.method=\"fallback\"' --format='value(jsonPayload.tenant,jsonPayload.fallback_reason)'). Lesson 10.6."
+    content   = "The Desk's router is failing for this tenant: its turns are getting the fallback's direct answer instead of a desk. Read why: gcloud logging read 'jsonPayload.event=\"desk_router_failed\" OR jsonPayload.event=\"desk_router_signal_failed\"' --limit 20. A timeout on every turn is location=global or the model; an error is the code. The desk rows' fallback_reason says which (gcloud logging read 'jsonPayload.event=\"desk\" AND jsonPayload.method=\"fallback\"' --format='value(jsonPayload.tenant,jsonPayload.fallback_reason)'). Lesson 10.4."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_router]
@@ -175,7 +175,7 @@ resource "google_monitoring_alert_policy" "desk_l2_share" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "7200s" }
   documentation {
-    content   = "More than 15% of this tenant's routed turns went to the arbiter (L2). desk_daily shows the share by desk and day (make desk-views, then bq query on documind_observability.desk_daily). The thresholds that decide it, TAU_OOS and ACCEPT_VOTES, are swept by make route-calibrate; a change to them is a reviewed commit to services/chat/desk_router.py. Lesson 10.6."
+    content   = "More than 15% of this tenant's routed turns went to the arbiter (L2). desk_daily shows the share by desk and day (make desk-views, then bq query on documind_observability.desk_daily). The thresholds that decide it, TAU_OOS and ACCEPT_VOTES, are swept by make route-calibrate; a change to them is a reviewed commit to services/chat/desk_router.py. Lesson 10.4."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_router]
@@ -195,7 +195,7 @@ resource "google_monitoring_alert_policy" "desk_clarify_oos_trend" {
   }
   notification_channels = local.alert_channel_ids
   documentation {
-    content   = "A larger share of this tenant's questions is being asked back (clarify) or turned away (out_of_scope) than a week ago. desk_daily shows which desk and which day (make desk-views, then bq query on documind_observability.desk_daily): a new kind of question the exemplars do not cover is make route-index after people add dev rows; a desk switched off or not covered is make desk TENANT= and make doc-types TENANT=. Lesson 10.6."
+    content   = "A larger share of this tenant's questions is being asked back (clarify) or turned away (out_of_scope) than a week ago. desk_daily shows which desk and which day (make desk-views, then bq query on documind_observability.desk_daily): a new kind of question the exemplars do not cover is make route-index after people add dev rows; a desk switched off or not covered is make desk TENANT= and make doc-types TENANT=. Lesson 10.4."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_router]
@@ -257,14 +257,14 @@ resource "google_monitoring_alert_policy" "case_overdue" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "7200s" }
   documentation {
-    content   = "A case in this queue is due within 24 hours and nobody has acknowledged it, or it is past its due date. The alert names the queue and a count only (an hour can hold two scans, so one case may count twice); make cases TENANT=<tenant> lists each tenant's open cases with their ids, queues and due dates, and the queue's own members see the case in their Desk inbox. A sensitive queue is a POSH, grievance or privacy case: tell its committee or contact, never the wider team. The incident closes on its own once the hourly scans stop logging this queue and state. Lesson 10.5."
+    content   = "A case in this queue is due within 24 hours and nobody has acknowledged it, or it is past its due date. The alert names the queue and a count only (an hour can hold two scans, so one case may count twice); make cases TENANT=<tenant> lists each tenant's open cases with their ids, queues and due dates, and the queue's own members see the case in their Desk inbox. A sensitive queue is a POSH, grievance or privacy case: tell its committee or contact, never the wider team. The incident closes on its own once the hourly scans stop logging this queue and state. Lesson 5.6."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.case_overdue]
 }
 
 # ---------------------------------------------------------------------------------------------
-# A registered document arrived at a version nobody reviewed (shared/doc_types.py assign(), workshop lesson 10.6): it
+# A registered document arrived at a version nobody reviewed (shared/doc_types.py assign(), workshop lesson 10.4): it
 # is indexed as "unknown", and the desks that filter on a class do not see it until an operator re-pins it. The hook
 # runs on both lanes, the push worker and the batch job, so a PDF the push lane hands to the batch lane logs twice;
 # any line is worth a look, so the count's doubling does not matter here.
@@ -327,7 +327,7 @@ resource "google_monitoring_alert_policy" "doc_type_pin_miss" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "1800s" }
   documentation {
-    content   = "A new version of a document the registry names arrived, and its pin is still the old version, so it is indexed as unknown and the handbook and statute desks refuse rather than quote it. Read which: gcloud logging read 'jsonPayload.event=\"doc_type_pin_miss\"' --limit 5. Read the new version; if it is right, make doc-types TENANT=<tenant> FOLLOW=<name> APPLY=1. Lesson 10.6."
+    content   = "A new version of a document the registry names arrived, and its pin is still the old version, so it is indexed as unknown and the handbook and statute desks refuse rather than quote it. Read which: gcloud logging read 'jsonPayload.event=\"doc_type_pin_miss\"' --limit 5. Read the new version; if it is right, make doc-types TENANT=<tenant> FOLLOW=<name> APPLY=1. Lesson 10.4."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.doc_type_pin_miss]
@@ -381,7 +381,7 @@ resource "google_monitoring_alert_policy" "desk_delegation_refused" {
 }
 
 # ---------------------------------------------------------------------------------------------
-# The hard gate's model check (shared/desk_recall.py, workshop lesson 10.5), for a tenant whose desk_gate is on. Both
+# The hard gate's model check (shared/desk_recall.py, workshop lesson 5.6), for a tenant whose desk_gate is on. Both
 # doors log one desk_gate_check line per check - the chat service's POST /v1/chat (surface chat), rag-api's /v1/query
 # and /v1/stream (query, stream) - with its outcome: case, none or error. An error (a timeout, an exception, an answer
 # outside the schema, a door with no model client) is no class: the turn goes on with the rules alone, the person is
@@ -445,7 +445,7 @@ resource "google_monitoring_alert_policy" "desk_gate_error_share" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "7200s" }
   documentation {
-    content   = "The Desk's model check is failing for this tenant: more than a fifth of its checks in the last 30 minutes ended in error, and each of those questions was gated by the rules alone, with nothing said to the person. Read why: gcloud logging read 'jsonPayload.event=\"desk_gate_check\" AND jsonPayload.outcome=\"error\"' --limit 20 --format='value(jsonPayload.tenant,jsonPayload.surface,jsonPayload.error,jsonPayload.ms)'. error is the exception's class; parse is an answer outside the schema; unavailable is a door with no model client; ms near 3000 is the check's own timeout (CHECK_TIMEOUT_S in shared/desk_recall.py), which each such question waited out. While it cannot work, make desk TENANT=<tenant> DESK_GATE=rules stops the calls; the rules run either way. Lesson 10.5."
+    content   = "The Desk's model check is failing for this tenant: more than a fifth of its checks in the last 30 minutes ended in error, and each of those questions was gated by the rules alone, with nothing said to the person. Read why: gcloud logging read 'jsonPayload.event=\"desk_gate_check\" AND jsonPayload.outcome=\"error\"' --limit 20 --format='value(jsonPayload.tenant,jsonPayload.surface,jsonPayload.error,jsonPayload.ms)'. error is the exception's class; parse is an answer outside the schema; unavailable is a door with no model client; ms near 3000 is the check's own timeout (CHECK_TIMEOUT_S in shared/desk_recall.py), which each such question waited out. While it cannot work, make desk TENANT=<tenant> DESK_GATE=rules stops the calls; the rules run either way. Lesson 5.6."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_gate_check]
@@ -492,7 +492,7 @@ resource "google_monitoring_alert_policy" "desk_check_tenants_unread" {
   notification_channels = local.alert_channel_ids
   alert_strategy { auto_close = "1800s" }
   documentation {
-    content   = "A door of the Desk could not read which tenants have desk_gate on (one query of tenant_settings, one attempt of 2 s). Until a read works, that process keeps the last set it read, and one that never read a set runs the model check for nobody: a tenant that is on may be getting the rules alone. The line is logged once per failure streak, not per turn. Read it: gcloud logging read 'jsonPayload.event=\"desk_check_tenants_unread\"' --limit 20 (surface, error). Then see whether desk_gate_check lines are back for the tenants that are on: gcloud logging read 'jsonPayload.event=\"desk_gate_check\"' --limit 5. A read that keeps failing is Firestore or the service account's access to it. Lesson 10.5."
+    content   = "A door of the Desk could not read which tenants have desk_gate on (one query of tenant_settings, one attempt of 2 s). Until a read works, that process keeps the last set it read, and one that never read a set runs the model check for nobody: a tenant that is on may be getting the rules alone. The line is logged once per failure streak, not per turn. Read it: gcloud logging read 'jsonPayload.event=\"desk_check_tenants_unread\"' --limit 20 (surface, error). Then see whether desk_gate_check lines are back for the tenants that are on: gcloud logging read 'jsonPayload.event=\"desk_gate_check\"' --limit 5. A read that keeps failing is Firestore or the service account's access to it. Lesson 5.6."
     mime_type = "text/markdown"
   }
   depends_on = [google_logging_metric.desk_check_tenants_unread]

@@ -1,11 +1,11 @@
-"""India's four identifiers a question may carry, checked by their own arithmetic (workshop lesson 10.5). Stdlib only.
+"""India's four identifiers a question may carry, checked by their own arithmetic (workshop lesson 5.6). Stdlib only.
 
     Aadhaar   12 digits, the first 2 to 9, the last a Verhoeff check digit (UIDAI's scheme)
     card      13 to 19 digits, a payment network's first digit, the last a Luhn check digit (ISO/IEC 7812)
     PAN       AAAPA9999A: five letters, four digits, a letter; the fourth letter is the holder's type
     GSTIN     a 2-digit state code, the holder's PAN, an entity number, Z, and a mod-36 check character
 
-A pattern alone is not a number: "2234 5678 9012" has an Aadhaar's shape, and lesson 8.3 types it as a synthetic
+A pattern alone is not a number: "2234 5678 9012" has an Aadhaar's shape, and lesson 4.8 types it as a synthetic
 example, but its Verhoeff check fails, so it is not one. The check digit and the printed grouping are what separate
 an identifier from an invoice number, a phone number with a country code, a date range or an amount, which is why the
 masking in shared/desk_rules.py masks only what passes both. One figure in ten printed 4-4-4 passes Verhoeff by

@@ -1,4 +1,4 @@
-"""Own the lesson 4.1 empty-object drill and match its exact dead letter.
+"""Own the lesson 1.5 empty-object drill and match its exact dead letter.
 
 No wildcard object deletion or arbitrary subscription acknowledgement is used.
 The worker's ingest_poison log lacks an object ID: its time-window count remains

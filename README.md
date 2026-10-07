@@ -20,7 +20,7 @@ stack the Agents Workshop builds, lesson by lesson.
 ## Workstation infrastructure recovery and reruns
 
 **Run lessons in PyCharm or VS Code:** [workshop_demos/README.md](workshop_demos/README.md)
-contains setup instructions and the index for all 18 modules and 62 lessons.
+contains setup instructions and the index for every module and lesson.
 Each lesson has separate Python Run/Debug files, source-heading mappings and
 expected observations; reusable setup lives under `workshop_demos/setup/`.
 
@@ -456,7 +456,7 @@ The first Tier-A run flagged these real issues in the Module 12 source. They are
 ├── extract_documind.py   # notebooks -> this tree (static, no code execution); kept, a no-op without them
 ├── validate.py           # Tier-A offline checks
 ├── Makefile              # the variables and the core: dryrun / plan / up / smoke / down; `include mk/*.mk`
-├── mk/                   # one file per lane: ingestion.mk (Module 3), lifecycle.mk (Module 4), agents.mk (Module 10) - see mk/README.md
+├── mk/                   # one file per lane: ingestion.mk and lifecycle.mk (Module 1), agents.mk (Modules 5 and 10) - see mk/README.md
 ├── terraform/            # 11 .tf, all generated from the 12.1/12.3 notebooks:
 │   │                     #   variables.tf  project_id, region, india_region, env,
 │   │                     #                 admin_emails, residency (india | us)

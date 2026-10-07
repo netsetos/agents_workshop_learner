@@ -1,4 +1,4 @@
-"""Offline checks for the DocuMind Desk's case queue, its roles and the chat door (workshop lesson 10.5).
+"""Offline checks for the DocuMind Desk's case queue, its roles and the chat door (workshop lesson 5.6).
 
     python -m unittest commands/tests/test_cases.py -v                         # from deploy/
     DOCUMIND_REQUIRE_LIBS=1 python -m unittest commands/tests/test_cases.py     # CI's chat-pins step, make desk-check
@@ -719,7 +719,7 @@ class WiringTests(unittest.TestCase):
 
     def test_the_makefile(self):
         mk = self.read("Makefile")
-        self.assertEqual(len(mk.splitlines()), 885)                             # workshop lesson 18.3 counts it
+        self.assertEqual(len(mk.splitlines()), 885)                             # workshop lesson 9.3 counts it
         self.assertIn("\n.DEFAULT_GOAL := dryrun\n", mk)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         agents = self.read("mk", "agents.mk")

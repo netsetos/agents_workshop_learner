@@ -1,4 +1,4 @@
-"""The Google Chat bridge's duplicate claims (the Google Chat door, workshop lesson 10.6).
+"""The Google Chat bridge's duplicate claims (the Google Chat door, workshop lesson 10.4).
 
 Chat may deliver an event more than once, Pub/Sub delivers at least once, and a person may press a button twice. A
 claim is one document, gchat_events/{key}, in the bridge's own Firestore database, documind-gchat (never the default

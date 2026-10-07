@@ -36,7 +36,7 @@ gcloud run deploy documind-chat \
 #     /v1/chat to see the ROSTER's 403 and not the network's. Bound here, on the service, because the
 #     project-wide roles/run.invoker both accounts used to carry (sa.tf) admitted them to every service, the
 #     A2A peer included. sa.tf's caller graph is the list; the gate check_authz.py compares this loop with it.
-#     The DocuMind Desk (workshop lesson 10.5) adds six: the five eval accounts its live checks call as, each a
+#     The DocuMind Desk (workshop lesson 5.6) adds six: the five eval accounts its live checks call as, each a
 #     person on one tenant's roster (make smoke-cases), and the Google Chat bridge's account, on no roster. Terraform
 #     creates the six (terraform/desk.tf), the bridge's only on a lane planned with GCHAT_DOOR=true; the loop names
 #     each that does not exist yet and binds the others, so deploy chat again once the door is on. AUDIT_BUCKET above

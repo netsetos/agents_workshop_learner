@@ -9,6 +9,19 @@ SETUP_DIR = Path(__file__).resolve().parents[1]
 WORKSHOP_DIR = SETUP_DIR.parent
 
 
+def lesson_folder(lesson: str) -> str:
+    """Name a lesson's folder under the results directory and under workshop_demos, Basics included.
+
+    Example: lesson_folder("B.1") is "module_B/lesson_B_1"; lesson_folder("0.2") is "module_00/lesson_0_2".
+    """
+    match = re.fullmatch(r"(B|[0-9]{1,2})\.([0-9]{1,2})", lesson)
+    if not match:
+        raise ValueError(f"Not a lesson id such as 4.4 or B.1: {lesson!r}")
+    major, minor = match.groups()
+    module = "module_B" if major == "B" else f"module_{int(major):02}"
+    return f"{module}/lesson_{major}_{minor}"
+
+
 @dataclass(frozen=True)
 class DemoConfig:
     """Hold validated kit paths, project, region, service names and local result locations for every lesson.

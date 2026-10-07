@@ -64,7 +64,7 @@ from shared.tenancy import tenant_for
 
 # The row chat() logs on every turn is INFO, and so are the guard's timing lines. gunicorn configures only its own
 # loggers and nothing here configured any, so Python dropped every INFO record: the row never reached Cloud Logging,
-# only the warnings did, through Python's last-resort handler (found 23 September 2026, lesson 10.4). rag-api's line:
+# only the warnings did, through Python's last-resort handler (found 23 September 2026, lesson 5.7). rag-api's line:
 logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)  # bare JSON -> Cloud Run jsonPayload
 logger = logging.getLogger("documind.chat.agent")
 
@@ -172,7 +172,7 @@ def caller(request: Request) -> dict:
 
 @app.get("/health")
 def health() -> dict:
-    # The limits every turn runs under (workshop lesson 10.3), one block for all four brains: make limits prints it.
+    # The limits every turn runs under (workshop lesson 5.5), one block for all four brains: make limits prints it.
     return {"status": "ok", "profile": PROFILE, "brains": list(BRAINS), "default_brain": DEFAULT_BRAIN,
             "limits": limits.published()}
 
@@ -192,7 +192,7 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
 
     name = req.brain or DEFAULT_BRAIN
     brain = brain_for(request.app, name)
-    # The turn's limits (workshop lesson 10.3): model calls, rupees and a deadline, counted from here, after the
+    # The turn's limits (workshop lesson 5.5): model calls, rupees and a deadline, counted from here, after the
     # brain is built, so a cold import is not the turn's time. A tripped limit is still a 200, with stopped_by.
     meter = limits.Meter(model=LOCAL_MODEL if PROFILE == "local" else MODEL)
 
@@ -210,7 +210,7 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
     latency_ms = int((time.monotonic() - t0) * 1000)
     used = meter.row()
     # One row per turn, in the shape 12.3's sink collects: WHICH brain answered is the field
-    # 8.7's cost comparison needs and the one the plan's M12 gate asks for. Since workshop lesson 10.3 it also
+    # 8.7's cost comparison needs and the one the plan's M12 gate asks for. Since workshop lesson 5.5 it also
     # says what the turn cost and which limit, if any, stopped it; each field is named here, so a reader of
     # this line sees them all. rag_cost_usd is this turn's delivered searches as rag-api's own rows bill them
     # (one cut at its budget is on rag-api's row only), priced here at list price (a tuned endpoint at
@@ -231,7 +231,7 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
             "limits": meter.summary()}
 
 
-# The DocuMind Desk (workshop lesson 10.5): the case routes, and the chat door in front of POST /v1/chat, which answers
+# The DocuMind Desk (workshop lesson 5.6): the case routes, and the chat door in front of POST /v1/chat, which answers
 # a question the law hands to a person before any brain runs. desk.py holds both; this is their one install line.
 import desk  # noqa: E402
 desk.install(app, caller=caller, tenant_for=tenant_for, thread_config=thread_config)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The DocuMind Desk route eval (workshop lessons 10.5 and 10.6): the route set's own checks, and the score of a run.
+"""The DocuMind Desk route eval (workshop lessons 5.6 and 10.4): the route set's own checks, and the score of a run.
 
     python deploy/evals/route_eval.py --selftest                                  # OFFLINE - the set is sound
     python deploy/evals/route_eval.py --predictions run.jsonl --split dev [--arm B|C|Astar]
@@ -30,7 +30,7 @@ user turns, all dev) and keeps every hand-written row; this file holds the schem
 --selftest checks the set, not a model: every row against the schema, the split by GROUP (a golden id, its
 paraphrases, a follow-up pair, an SFT source passage and every row with the same normalised question text sit on one
 side), no identical normalised question - a follow-up's first turn included - on both sides of the split, and the
-Wilson helper against the figures lesson 10.6 states. It prints the rows per route and split, then "no cross-split
+Wilson helper against the figures lesson 10.4 states. It prints the rows per route and split, then "no cross-split
 pair". The embedding half of the contamination rule (a cosine of 0.95 or more across the split) needs a lane and is
 not checked here.
 
@@ -58,12 +58,12 @@ at 30 rows a desk one row is 3.3 points and a bare percentage hides that.
                      contains()), over every answer row - measured only when the run carries answer text
     denial           outcome denied with zero retrieve calls
 
---arm labels and scores a run by arm (workshop lesson 10.6): B is the routed Desk; C is code only (the gate,
+--arm labels and scores a run by arm (workshop lesson 10.4): B is the routed Desk; C is code only (the gate,
 coverage, then a direct answer over the person's doc types, no classifier); Astar is one agent with the real doc_type
 vocabulary and the calculators (services/chat/desk_agent.py). One run is one arm: a run that mixes arms is refused. B
 ships only if it is non-inferior to C and to Astar on the same rows. --live writes a run of any of the three (--save).
 
-THE DEPLOYED DESK (workshop lesson 10.6). --live sends every scored row, as the row's eval account (IDENTITIES: an ID
+THE DEPLOYED DESK (workshop lesson 10.4). --live sends every scored row, as the row's eval account (IDENTITIES: an ID
 token minted as it, so make desk-operators first), to the chat service's POST /v1/route for the decision, and each
 handbook, statute and denial row also to POST /v1/desk, in a session of its own, for the answer, its citations and
 retrieve calls; a follow-up row's first turn goes before it. A row the desk is not asked for takes its outcome from the
@@ -74,7 +74,7 @@ roster, so a run as one of them would score whichever tenant the roster gave it,
 another tenant than the row's stops the run. Arms C and Astar run with their arm on both routes (a desk_eval caller
 only). Rows in the groups of the prompt's examples are left out, as in --live-l1.
 
-THE ROUTER IN PROCESS (workshop lesson 10.6). --local runs decide() on every row of the split with a scripted
+THE ROUTER IN PROCESS (workshop lesson 10.4). --local runs decide() on every row of the split with a scripted
 classifier and offline embeddings (a hashed bag of words), so CI measures the cascade - the gate, the anchors, the
 acceptance rules, the arbiter, the checks - and not a model: the scripted L1 gives each row its own label except on
 about one row in eight, where it is deliberately wrong (never away from a case), and the scripted arbiter picks the
@@ -311,15 +311,15 @@ def rate(k: int, n: int) -> str:
     return f"{k}/{n} = {100 * k / n:.1f}% [{100 * lo:.1f}%, {100 * hi:.1f}%]"
 
 
-# Lesson 10.6's figures for a split where every row passes: n / (n + 3.84), to one decimal.
+# Lesson 10.4's figures for a split where every row passes: n / (n + 3.84), to one decimal.
 WILSON_FIGURES = {20: 83.9, 73: 95.0, 75: 95.1, 100: 96.3}
 
 
 def wilson_errors() -> list[str]:
-    why = [f"Wilson lower bound for {n} of {n} is {100 * wilson(n, n)[0]:.1f}%, lesson 10.6 says {want}%"
+    why = [f"Wilson lower bound for {n} of {n} is {100 * wilson(n, n)[0]:.1f}%, lesson 10.4 says {want}%"
            for n, want in WILSON_FIGURES.items() if round(100 * wilson(n, n)[0], 1) != want]
     if round(100 * wilson(72, 72)[0], 1) >= 95.0:
-        why.append("72 rows reach a 95% lower bound, but lesson 10.6 says 73 is the minimum")
+        why.append("72 rows reach a 95% lower bound, but lesson 10.4 says 73 is the minimum")
     return why
 
 
@@ -574,7 +574,7 @@ def report(result: dict, arm: str | None, split: str, out=None) -> None:
         line("within expect_model_calls_max", "model_calls")
 
 
-# --------------------------------------------------------------------- the router, in process (lesson 10.6)
+# --------------------------------------------------------------------- the router, in process (lesson 10.4)
 KIT = os.path.dirname(HERE)
 SINGLE = {"globex": "statute"}          # build_routes.SINGLE: the tenants that run one desk with no classifier
 QUEUES_DIR = os.path.join(HERE, "desk")
@@ -845,7 +845,7 @@ def run_router(a) -> int:
     return 1 if failures else 0
 
 
-# --------------------------------------------------------------------- the deployed Desk (lesson 10.6)
+# --------------------------------------------------------------------- the deployed Desk (lesson 10.4)
 LIVE_ARMS = ("B", "C", "Astar")         # every arm the deployed Desk serves a desk_eval caller
 DESK_ROWS = ("handbook", "statute")     # the expected routes whose rows also go to POST /v1/desk
 CODE_OUTCOMES = {"case": "case", "out_of_scope": "oos", "clarify": "clarify", "denied": "denied",

@@ -25,7 +25,7 @@ AUDIT_ACTIONS = {
     # The managed mirror (services/ingest/managed.py, 13 September 2026 evening): a copy of a tenant's
     # text went into, or left, a store outside the kit - the store, its region, the doc_key, the op.
     "doc.mirror",
-    # The DocuMind Desk (workshop lesson 10.5): the case queue (shared/cases.py, its actor a case reference and never an
+    # The DocuMind Desk (workshop lesson 5.6): the case queue (shared/cases.py, its actor a case reference and never an
     # email), the roles that read it (shared/roles.py), and the routed Desk's refusals.
     "desk.route_denied", "case.open", "case.update", "case.close", "role.grant", "role.revoke",
 }

@@ -1,49 +1,48 @@
 {
   "schema_version": 4,
   "lesson": "6.3",
-  "title": "Stream answers and handle failures",
+  "title": "Test cache scope, configuration changes and freshness",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_6.3_Streaming_WIX.html",
-  "source_sha": "c6e58b623f6b0a931efccb868a7e7dc1ba3f7f54",
+  "source_page": "Netsetos_GCP_Capstone_6.3_Cache_Freshness_WIX.html",
+  "source_sha": "42a67f4e01b8e91ddac46f96e60590b66df457d6",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 36,
+  "source_window_count": 31,
   "persist_variables": [
     "API",
     "API_URL",
-    "ARMOR",
-    "ARMOR_TEMPLATE",
     "CAND",
+    "F",
+    "K",
     "ME",
-    "N",
     "NUMBER",
     "PROJECT",
     "Q",
+    "Q92",
     "REGION",
-    "RERANK_TIMEOUT_S",
-    "ROUTING",
-    "SEMANTIC_CACHE",
+    "SINCE92",
     "TENANT",
-    "v"
+    "TOKEN",
+    "URL"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Stream answers and handle failures: four events on one connection, the sources before the first token, and the failures that degrade into a line instead of a 500"
+      "heading": "Test cache scope, configuration changes and freshness: what must match for a hit, what a reindex does to both caches, and what comes back with the old corpus"
     },
     {
       "level": 3,
-      "heading": "Why a stream, what its four events carry, and what degrades into a line"
+      "heading": "What each cache checks, and the fingerprint both follow"
     },
     {
       "level": 4,
-      "heading": "The stream reader: paste a transcript, read it event by event"
+      "heading": "Freshness over time"
     },
     {
       "level": 3,
-      "heading": "The words: SSE, citation event, token, done, error, held, blocked, fallback, stream row, first token"
+      "heading": "The words: fingerprint, doc_key, reindex, the undo, scope, cache_stale, the dated rule"
     },
     {
       "level": 3,
@@ -63,7 +62,7 @@
     },
     {
       "level": 3,
-      "heading": "A stream in curl: the raw events, their order, and a clock on each"
+      "heading": "Both caches, and the corpus they follow"
     },
     {
       "level": 4,
@@ -75,11 +74,15 @@
     },
     {
       "level": 4,
-      "heading": "Do it: one stream, timed, then the query's citations beside it"
+      "heading": "Do it: the two caches"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the state, and three asks"
     },
     {
       "level": 3,
-      "heading": "What a stream's citations are, and the streams of one token"
+      "heading": "Scope: the same words under other settings"
     },
     {
       "level": 4,
@@ -91,11 +94,11 @@
     },
     {
       "level": 4,
-      "heading": "Do it: the empty pool as one token, then the stream rows"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened"
+      "heading": "The corpus moves: revision 2, and both caches react"
     },
     {
       "level": 4,
@@ -107,11 +110,15 @@
     },
     {
       "level": 4,
-      "heading": "Read the lane, Rs 0"
+      "heading": "Do it: the release"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the state, both asks, and the log"
     },
     {
       "level": 3,
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log"
+      "heading": "make cache again: attached again, and what it packed"
     },
     {
       "level": 4,
@@ -123,35 +130,27 @@
     },
     {
       "level": 4,
-      "heading": "Do it: the ranker silent for one revision, the stream read, the line read, the undo"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Every failure and what it degrades to"
+      "heading": "The corpus comes back: version 1, and the old answer with it"
     },
     {
       "level": 4,
-      "heading": "The code"
+      "heading": "Every row of the walk"
+    },
+    {
+      "level": 4,
+      "heading": "Clean up"
     },
     {
       "level": 3,
-      "heading": "What a stream costs, what its row says, and who reads it"
+      "heading": "Why freshness works this way, what it costs, and what the kit does not do yet"
     },
     {
       "level": 4,
       "heading": "What it costs"
-    },
-    {
-      "level": 4,
-      "heading": "The rows by surface, and the reader in the UI"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the day by surface, Rs 0"
     },
     {
       "level": 3,
@@ -166,20 +165,18 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The guard, the answer cache, the router and the ranker's deadline live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty. /version reports the cache and the model.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
       ],
       "section_number": null,
       "windows": [
-        3,
-        6
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        370,
-        386
+        374
       ],
       "offline": false,
       "live_verified": false,
@@ -188,242 +185,326 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
-            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.",
-            "Temporarily disable an enabled answer cache for this retrieval/generation experiment and save its prior value. This changes the shared API; finish restores it. Cache lessons in Module 9 are unaffected."
+            "Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine."
           ],
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 370,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "Before you run anything: set up the shell",
-          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The guard, the answer cache, the router and the ranker's deadline live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty. /version reports the cache and the model.",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT, once per shell",
-          "expected": "guard: off (default)  template: documind-guard (default)  cache: off (default)  routing: off (default)  rerank timeout: 5.0 (default)\nversion: gemini-3.6-flash | documind-rag@v3 | semantic_cache off",
-          "adaptations": [
-            "Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed."
-          ],
-          "id": "source_6",
-          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
-          "window": 6,
-          "source_line": 386,
+          "source_line": 374,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_a_stream_in_curl_the_raw_events_their_order_and_a_clock_on_each.py"
+      "next": "demo_03_both_caches_and_the_corpus_they_follow.py"
     },
     {
-      "id": "demo_03_a_stream_in_curl_the_raw_events_their_order_and_a_clock_on_each",
+      "id": "demo_03_both_caches_and_the_corpus_they_follow",
       "lesson": "6.3",
-      "file": "demo_03_a_stream_in_curl_the_raw_events_their_order_and_a_clock_on_each.py",
+      "file": "demo_03_both_caches_and_the_corpus_they_follow.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
-      "purpose": "Do it: one stream, timed, then the query's citations beside it",
+      "heading": "Both caches, and the corpus they follow",
+      "purpose": "Do it: the two caches Do it: the state, and three asks",
       "anchor": "s3",
       "anchors": [
         "s3"
       ],
       "section_number": 3,
       "windows": [
-        12
+        8,
+        10
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        456
+        426,
+        445
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "native_python",
+      "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "A stream in curl: the raw events, their order, and a clock on each",
-          "subheading": "Do it: one stream, timed, then the query's citations beside it",
-          "purpose": "Do it: one stream, timed, then the query's citations beside it",
-          "label": "bash — run in the operator shell (a Python cell; one stream and one query, two rupees)",
-          "expected": "first citation at 1xxx ms | first token at 2xxx ms | done at 4xxx ms | the API's own latency_ms 4xxx\n5 citation events, then 3x token events, then done\n   citation 1 #  1 hr_policy_2026.md      kind text effective_from None quote 'NP-03 — Notice period\\nA confirmed em'\n   citation 2 #  4 hr_policy_2026.md      kind text effective_from None quote '...'\n   ...\nthe answer: A confirmed employee in grade E3 must serve a notice period of ... [1] ...\ndone: {'tokens_in': 1xxx, 'tokens_out': 4xx, 'cached_tokens': 0, 'model': 'gemini-3.6-flash', 'backend': 'vertex', 'cache_hit': 'none', 'prompt': 'documind-rag@v3'}\nstages: {'policy_fallback': 0, 'retrieval_backend': 'vector', 'retrieve_ms': 6xx, 'pool': 20, 'graph_chunks': 0, 'managed_chunks': 0, 'vector_chunks': 20, 'rerank_ms': 3xx, 'generate_ms': 2xxx}\nthe query's answer to the same question: 3 citations, the ones the model used; the stream's 5 were the packed set\nsaved /tmp/stream63.txt: paste it into the reader in step 1",
+          "heading": "Both caches, and the corpus they follow",
+          "subheading": "Do it: the two caches",
+          "purpose": "Do it: the two caches",
+          "label": "bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on)",
+          "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1ef46119bd89b143\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\ngcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00045-tqm (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
           "adaptations": [],
-          "id": "source_12",
-          "function": "step_01_one_stream_timed_then_the_query_s_citation",
-          "window": 12,
-          "source_line": 456,
+          "id": "source_8",
+          "function": "step_01_the_two_caches",
+          "window": 8,
+          "source_line": 426,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Both caches, and the corpus they follow",
+          "subheading": "Do it: the state, and three asks",
+          "purpose": "Do it: the state, and three asks",
+          "label": "bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks)",
+          "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed from 1ef46119bd89b143: current\n  vertex none     in  43109 cached  41259  2480 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2530 ms | A confirmed employee at grade E3 or above serves a\n  cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a",
+          "adaptations": [],
+          "id": "source_10",
+          "function": "step_02_the_state_and_three_asks",
+          "window": 10,
+          "source_line": 445,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_04_what_a_stream_s_citations_are_and_the_streams_of_one_token.py"
+      "next": "demo_04_scope_the_same_words_under_other_settings.py"
     },
     {
-      "id": "demo_04_what_a_stream_s_citations_are_and_the_streams_of_one_token",
+      "id": "demo_04_scope_the_same_words_under_other_settings",
       "lesson": "6.3",
-      "file": "demo_04_what_a_stream_s_citations_are_and_the_streams_of_one_token.py",
+      "file": "demo_04_scope_the_same_words_under_other_settings.py",
       "category": "required",
       "requires": [
-        "demo_03_a_stream_in_curl_the_raw_events_their_order_and_a_clock_on_each"
+        "demo_03_both_caches_and_the_corpus_they_follow"
       ],
-      "heading": "What a stream's citations are, and the streams of one token",
-      "purpose": "Do it: the empty pool as one token, then the stream rows",
+      "heading": "Scope: the same words under other settings",
+      "purpose": "Do it",
       "anchor": "s4",
       "anchors": [
         "s4"
       ],
       "section_number": 4,
       "windows": [
-        16
+        13
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        525
+        509
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "What a stream's citations are, and the streams of one token",
-          "subheading": "Do it: the empty pool as one token, then the stream rows",
-          "purpose": "Do it: the empty pool as one token, then the stream rows",
-          "label": "bash — run in the operator shell (one stream that costs nothing; one log read)",
-          "expected": "the one token: The corpus holds nothing near this question: no passage of this tenant's current documents was ...\ndone: backend none | tokens_in 0 | pool 0 | rerank_ms 0 | generate_ms 0\nevents: {'token': 1, 'done': 1}\nFalse\tnone\t0\t0\t0\toff\tui\nTrue\tvertex\t1xxx\t4xx\t20\toff\tui",
+          "heading": "Scope: the same words under other settings",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes)",
+          "expected": "vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade E3 or above serves a\n  vertex none     in  43109 cached  41259  2440 ms | A confirmed employee at grade E3 or above serves a\n  scope as asked   7a0875abc72b0f7b\n  scope top_k 8    bcc480117460bf66\n  scope kind: text 8d8d4a1d9912dc52\n  scope prompt v4  1d409edacc15c1d1",
           "adaptations": [],
-          "id": "source_16",
-          "function": "step_01_the_empty_pool_as_one_token_then_the_strea",
-          "window": 16,
-          "source_line": 525,
+          "id": "source_13",
+          "function": "step_01_scope_the_same_words_under_other_settings",
+          "window": 13,
+          "source_line": 509,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_the_guard_a_prompt_refused_before_the_stream_an_answer_held_until_it_is_screened.py"
+      "next": "demo_05_the_corpus_moves_revision_2_and_both_caches_react.py"
     },
     {
-      "id": "demo_05_the_guard_a_prompt_refused_before_the_stream_an_answer_held_until_it_is_screened",
+      "id": "demo_05_the_corpus_moves_revision_2_and_both_caches_react",
       "lesson": "6.3",
-      "file": "demo_05_the_guard_a_prompt_refused_before_the_stream_an_answer_held_until_it_is_screened.py",
+      "file": "demo_05_the_corpus_moves_revision_2_and_both_caches_react.py",
       "category": "required",
       "requires": [
-        "demo_04_what_a_stream_s_citations_are_and_the_streams_of_one_token"
+        "demo_04_scope_the_same_words_under_other_settings"
       ],
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
-      "purpose": "Read the lane, Rs 0",
+      "heading": "The corpus moves: revision 2, and both caches react",
+      "purpose": "Do it: the release Do it: the state, both asks, and the log",
       "anchor": "s5",
       "anchors": [
         "s5"
       ],
       "section_number": 5,
       "windows": [
-        22
+        17,
+        19
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        590
+        555,
+        564
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
-          "subheading": "Read the lane, Rs 0",
-          "purpose": "Read the lane, Rs 0",
-          "label": "bash — run in the operator shell (two log reads)",
-          "expected": "NN off",
+          "heading": "The corpus moves: revision 2, and both caches react",
+          "subheading": "Do it: the release",
+          "purpose": "Do it: the release",
+          "label": "bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release)",
+          "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_5560308823a62dc8...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
           "adaptations": [],
-          "id": "source_22",
-          "function": "step_01_read_the_lane_rs_0",
-          "window": 22,
-          "source_line": 590,
+          "id": "source_17",
+          "function": "step_01_the_release",
+          "window": 17,
+          "source_line": 555,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus moves: revision 2, and both caches react",
+          "subheading": "Do it: the state, both asks, and the log",
+          "purpose": "Do it: the state, both asks, and the log",
+          "label": "bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines)",
+          "expected": "ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1ef46119bd89b143: STALE\n  vertex none     in   1880 cached      0  2390 ms | From 1 October 2026 the notice period for a confir\n  vertex none     in   1880 cached      0  2455 ms | From 1 October 2026 the notice period for a confir\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13\n  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13",
+          "adaptations": [],
+          "id": "source_19",
+          "function": "step_02_the_state_both_asks_and_the_log",
+          "window": 19,
+          "source_line": 564,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_a_failure_forced_on_a_candidate_the_ranker_silent_the_stream_still_served_the_li.py"
+      "next": "demo_06_make_cache_again_attached_again_and_what_it_packed.py"
     },
     {
-      "id": "demo_06_a_failure_forced_on_a_candidate_the_ranker_silent_the_stream_still_served_the_li",
+      "id": "demo_06_make_cache_again_attached_again_and_what_it_packed",
       "lesson": "6.3",
-      "file": "demo_06_a_failure_forced_on_a_candidate_the_ranker_silent_the_stream_still_served_the_li.py",
+      "file": "demo_06_make_cache_again_attached_again_and_what_it_packed.py",
       "category": "required",
       "requires": [
-        "demo_05_the_guard_a_prompt_refused_before_the_stream_an_answer_held_until_it_is_screened"
+        "demo_05_the_corpus_moves_revision_2_and_both_caches_react"
       ],
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
-      "purpose": "Do it: the ranker silent for one revision, the stream read, the line read, the undo",
+      "heading": "make cache again: attached again, and what it packed",
+      "purpose": "Do it",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        27
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        629
+        603
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
-          "subheading": "Do it: the ranker silent for one revision, the stream read, the line read, the undo",
-          "purpose": "Do it: the ranker silent for one revision, the stream read, the line read, the undo",
-          "label": "bash — run in the operator shell (one new revision, no traffic; one stream to it; two log reads; the undo)",
-          "expected": "done.stages: rerank_fallback 1 | rerank_ms 1x | pool 20 | vector_chunks 20\nevents: {'citation': 3, 'token': 3x, 'done': 1} | the answer: A confirmed employee in grade E3 must serve a notice period of ...\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme\tDeadlineExceeded",
+          "heading": "make cache again: attached again, and what it packed",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the pack again, under the new fingerprint)",
+          "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1441fb4775d21e13\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row\n  ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: current\n  vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir",
           "adaptations": [],
-          "id": "source_27",
-          "function": "step_01_the_ranker_silent_for_one_revision_the_str",
-          "window": 27,
-          "source_line": 629,
+          "id": "source_22",
+          "function": "step_01_make_cache_again_attached_again_and_what_i",
+          "window": 22,
+          "source_line": 603,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_08_what_a_stream_costs_what_its_row_says_and_who_reads_it.py"
+      "next": "demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py"
     },
     {
-      "id": "demo_08_what_a_stream_costs_what_its_row_says_and_who_reads_it",
+      "id": "demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it",
       "lesson": "6.3",
-      "file": "demo_08_what_a_stream_costs_what_its_row_says_and_who_reads_it.py",
+      "file": "demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py",
       "category": "required",
       "requires": [
-        "demo_06_a_failure_forced_on_a_candidate_the_ranker_silent_the_stream_still_served_the_li"
+        "demo_06_make_cache_again_attached_again_and_what_it_packed"
       ],
-      "heading": "What a stream costs, what its row says, and who reads it",
-      "purpose": "Do it: the day by surface, Rs 0",
-      "anchor": "s8",
+      "heading": "The corpus comes back: version 1, and the old answer with it",
+      "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too. Every row of the walk",
+      "anchor": "s7",
       "anchors": [
-        "s8"
+        "s7"
       ],
-      "section_number": 8,
+      "section_number": 7,
       "windows": [
-        35
+        24,
+        26,
+        28
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        742
+        624,
+        631,
+        642
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "What a stream costs, what its row says, and who reads it",
-          "subheading": "Do it: the day by surface, Rs 0",
-          "purpose": "Do it: the day by surface, Rs 0",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT (one log read)",
-          "expected": "by surface\nevent                  answers    tok_in  tok_out       USD       INR  p95 ms  unans\n------------------------------------------------------------------------------------\nquery                       NN     xxxxx     xxxx    0.0xxx      x.xx    4xxx   0.xx\nstream                       4      xxxx      xxx    0.0xxx      x.xx    4xxx   0.25",
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "The corpus comes back: version 1, and the old answer with it",
+          "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
+          "label": "bash — run in the operator shell, in the kit (version 1's bytes again: the undo)",
+          "expected": ">> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_reactivated\tacme_497809ffbaa603c4...\t283\t283\t0\t283\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>",
           "adaptations": [],
-          "id": "source_35",
-          "function": "step_01_the_day_by_surface_rs_0",
-          "window": 35,
-          "source_line": 742,
+          "id": "source_24",
+          "function": "step_01_the_corpus_comes_back_version_1_and_the_ol",
+          "window": 24,
+          "source_line": 624,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "The corpus comes back: version 1, and the old answer with it",
+          "purpose": "Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.",
+          "label": "bash — run in the operator shell, in the kit (the state, and the candidate's ask)",
+          "expected": "ledger 1ef46119bd89b143 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: STALE\n  cache  semantic in      0 cached      0   165 ms | A confirmed employee at grade E3 or above serves a",
+          "adaptations": [],
+          "id": "source_26",
+          "function": "step_02_the_corpus_comes_back_version_1_and_the_ol",
+          "window": 26,
+          "source_line": 631,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "Every row of the walk",
+          "purpose": "Every row of the walk",
+          "label": "bash — run in the operator shell, in the kit (every acme usage row since the start; reads only)",
+          "expected": "00041-kqz  vertex  in  43109  cached  41259  Rs 1.0201   2480 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2530 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    170 ms\n  00045-tqm  vertex  in  43349  cached  41259  Rs 1.0507   2610 ms\n  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2440 ms\n  00041-kqz  vertex  in   1880  cached      0  Rs 0.4978   2390 ms\n  00045-tqm  vertex  in   1880  cached      0  Rs 0.4978   2455 ms\n  00041-kqz  vertex  in  43139  cached  41259  Rs 1.0239   2575 ms\n  00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms",
+          "adaptations": [],
+          "id": "source_28",
+          "function": "step_03_every_row_of_the_walk",
+          "window": 28,
+          "source_line": 642,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "cleanup_demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it",
+      "lesson": "6.3",
+      "file": "cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "The corpus comes back: version 1, and the old answer with it",
+      "purpose": "At lesson end: Clean up",
+      "anchor": "s7",
+      "anchors": [
+        "s7"
+      ],
+      "section_number": 7,
+      "windows": [
+        30
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
+      "source_lines": [
+        666
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The corpus comes back: version 1, and the old answer with it",
+          "subheading": "Clean up",
+          "purpose": "Clean up",
+          "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted)",
+          "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-00041-kqz      (the live revision, as before; no candidate tag)\ncd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  deleted acme's cache",
+          "adaptations": [],
+          "id": "source_30",
+          "function": "step_01_clean_up",
+          "window": 30,
+          "source_line": 666,
           "manual_checkpoint": null
         }
       ],
@@ -436,7 +517,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -447,7 +528,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_3/GUIDE.md",
       "source_lines": [
-        376
+        380
       ],
       "offline": false,
       "live_verified": false,
@@ -456,17 +537,16 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
-            "Run at lesson end despite its early HTML position, as the source label explicitly instructs.",
-            "Restore the saved answer-cache value and tenant backend, including after a failed experiment."
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs."
           ],
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 376,
+          "source_line": 380,
           "manual_checkpoint": null
         }
       ],
@@ -499,189 +579,126 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 340
+      "line": 344
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 372
+      "line": 376
+    },
+    {
+      "window": 6,
+      "label": "services/ingest/idempotency.py - the fingerprint: a hash of the tenant's current doc_keys, re-computed on every change",
+      "heading": "Both caches, and the corpus they follow",
+      "anchor": "s3",
+      "line": 398
     },
     {
       "window": 7,
-      "label": "expected (a lane deployed by make up leaves all four off)",
-      "heading": "Before you run anything: set up the shell",
-      "anchor": "setup",
-      "line": 392
-    },
-    {
-      "window": 8,
-      "label": "services/rag-api/generator.py - generate_stream(): why the citations are the packed set, and why there is no schema",
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
+      "label": "services/rag-api/main.py - _fingerprint(): the answer cache reads the ledger on every request",
+      "heading": "Both caches, and the corpus they follow",
       "anchor": "s3",
-      "line": 402
+      "line": 418
     },
     {
       "window": 9,
-      "label": "services/rag-api/generator.py - generate_stream(): the packed list once, then the tokens, then the usage",
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
+      "label": "expected shape (make cache's own printing and the candidate's lines; your names, counts and fingerprint differ)",
+      "heading": "Both caches, and the corpus they follow",
       "anchor": "s3",
-      "line": 409
-    },
-    {
-      "window": 10,
-      "label": "services/rag-api/main.py - /v1/stream: the citation events from the packed list, then each token as it comes",
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
-      "anchor": "s3",
-      "line": 423
+      "line": 430
     },
     {
       "window": 11,
-      "label": "services/rag-api/main.py - /v1/stream: the held tokens screened, the error or the tokens, then done",
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
+      "label": "expected (these cells against a fake Firestore and a local stub of the API; your fingerprints and tokens differ)",
+      "heading": "Both caches, and the corpus they follow",
       "anchor": "s3",
-      "line": 441
+      "line": 474
     },
     {
-      "window": 13,
-      "label": "expected (your milliseconds and words; the order, the five citations and the three clocks are the point)",
-      "heading": "A stream in curl: the raw events, their order, and a clock on each",
-      "anchor": "s3",
-      "line": 489
+      "window": 12,
+      "label": "services/rag-api/semantic_cache.py - scope_of() and _alive(): what else must match, and the clock",
+      "heading": "Scope: the same words under other settings",
+      "anchor": "s4",
+      "line": 490
     },
     {
       "window": 14,
-      "label": "services/rag-api/main.py - /v1/stream: the empty pool and a cache hit as one token each, with their backends",
-      "heading": "What a stream's citations are, and the streams of one token",
+      "label": "expected (the asks against a local stub; the four hashes are the kit's own scope_of())",
+      "heading": "Scope: the same words under other settings",
       "anchor": "s4",
-      "line": 510
+      "line": 519
     },
     {
       "window": 15,
-      "label": "services/rag-api/main.py - /v1/stream: the row, with event stream and the same columns",
-      "heading": "What a stream's citations are, and the streams of one token",
-      "anchor": "s4",
-      "line": 517
+      "label": "evals/demo/hr_policy_2026_v2.md - revision 2: a dated line, and one clause changed",
+      "heading": "The corpus moves: revision 2, and both caches react",
+      "anchor": "s5",
+      "line": 537
     },
     {
-      "window": 17,
-      "label": "expected (newest row first; the second stream is step 3's)",
-      "heading": "What a stream's citations are, and the streams of one token",
-      "anchor": "s4",
-      "line": 539
+      "window": 16,
+      "label": "services/rag-api/cache_manager.py - stale_against(): the record's fingerprint against the ledger's",
+      "heading": "The corpus moves: revision 2, and both caches react",
+      "anchor": "s5",
+      "line": 543
     },
     {
       "window": 18,
-      "label": "services/rag-api/main.py - screen_prompt(): before retrieval, a block is a 400",
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
+      "label": "expected shape (or ingest_ok with a few chunks embedded, when revision 2's rows have aged out of the 30-day window)",
+      "heading": "The corpus moves: revision 2, and both caches react",
       "anchor": "s5",
-      "line": 555
-    },
-    {
-      "window": 19,
-      "label": "services/rag-api/main.py - screen_response(): on the buffered answer, the row's verdict",
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
-      "anchor": "s5",
-      "line": 566
+      "line": 557
     },
     {
       "window": 20,
-      "label": "services/rag-api/main.py - /v1/stream: with the guard on, the tokens are held",
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
+      "label": "expected (against a fake Firestore, a local stub and a fake gcloud; your fingerprints differ)",
+      "heading": "The corpus moves: revision 2, and both caches react",
       "anchor": "s5",
-      "line": 574
+      "line": 578
     },
     {
       "window": 21,
-      "label": "services/rag-api/guard.py - the client and the template, built at import",
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
-      "anchor": "s5",
-      "line": 580
+      "label": "services/rag-api/generator.py - the dated rule: added when a packed chunk carries a date",
+      "heading": "make cache again: attached again, and what it packed",
+      "anchor": "s6",
+      "line": 594
     },
     {
       "window": 23,
-      "label": "expected (every row off; no guard line in a week)",
-      "heading": "The guard: a prompt refused before the stream, an answer held until it is screened",
-      "anchor": "s5",
-      "line": 595
-    },
-    {
-      "window": 24,
-      "label": "services/rag-api/main.py - /v1/stream: the rerank branch and its flag, on its own clock",
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
+      "label": "expected (make cache's own printing, then the stand-ins; the answer's words are the model's)",
+      "heading": "make cache again: attached again, and what it packed",
       "anchor": "s6",
       "line": 607
     },
     {
       "window": 25,
-      "label": "services/rag-api/retriever.py - rerank_fell_back(): the mark the handler reads",
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
-      "anchor": "s6",
-      "line": 613
+      "label": "expected shape (the same counts as lesson 1.6's undo)",
+      "heading": "The corpus comes back: version 1, and the old answer with it",
+      "anchor": "s7",
+      "line": 626
     },
     {
-      "window": 26,
-      "label": "services/rag-api/telemetry.py and main.py - content capture off by default, and the import that must never take the API down",
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
-      "anchor": "s6",
-      "line": 618
-    },
-    {
-      "window": 28,
-      "label": "expected (a RetryError names the same deadline through a retry; the telemetry read prints nothing)",
-      "heading": "A failure forced on a candidate: the ranker silent, the stream still served, the line in the log",
-      "anchor": "s6",
-      "line": 650
+      "window": 27,
+      "label": "expected (against a fake Firestore and a local stub)",
+      "heading": "The corpus comes back: version 1, and the old answer with it",
+      "anchor": "s7",
+      "line": 634
     },
     {
       "window": 29,
-      "label": "services/rag-api/main.py - choose_model_for(): a classifier failure is never an outage",
-      "heading": "Every failure and what it degrades to",
+      "label": "expected (this cell against a fake gcloud, priced by the kit's own price(); your numbers differ)",
+      "heading": "The corpus comes back: version 1, and the old answer with it",
       "anchor": "s7",
-      "line": 676
-    },
-    {
-      "window": 30,
-      "label": "services/rag-api/generator.py - _vertex_stream(): an exhausted tier before the first token, the default model instead",
-      "heading": "Every failure and what it degrades to",
-      "anchor": "s7",
-      "line": 679
+      "line": 653
     },
     {
       "window": 31,
-      "label": "services/rag-api/main.py - _semantic_hit(): a cache that fails is a miss and a warning",
-      "heading": "Every failure and what it degrades to",
+      "label": "expected shape (gcloud's own lines vary by version)",
+      "heading": "The corpus comes back: version 1, and the old answer with it",
       "anchor": "s7",
-      "line": 688
-    },
-    {
-      "window": 32,
-      "label": "services/rag-api/main.py - _record(): a counter that fails fails quietly",
-      "heading": "Every failure and what it degrades to",
-      "anchor": "s7",
-      "line": 691
-    },
-    {
-      "window": 33,
-      "label": "services/frontend/chat.py - stream_answer(): the UI's reader of the same three events",
-      "heading": "What a stream costs, what its row says, and who reads it",
-      "anchor": "s8",
-      "line": 721
-    },
-    {
-      "window": 34,
-      "label": "evals/usage_rows.py - the table by surface",
-      "heading": "What a stream costs, what its row says, and who reads it",
-      "anchor": "s8",
-      "line": 738
-    },
-    {
-      "window": 36,
-      "label": "expected (your counts; the stream row is this lesson's)",
-      "heading": "What a stream costs, what its row says, and who reads it",
-      "anchor": "s8",
-      "line": 744
+      "line": 670
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

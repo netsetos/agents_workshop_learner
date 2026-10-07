@@ -1,4 +1,4 @@
-"""The fixed replies of the DocuMind Desk's hard gate, one per class of shared/desk_rules.py (workshop lesson 10.5).
+"""The fixed replies of the DocuMind Desk's hard gate, one per class of shared/desk_rules.py (workshop lesson 5.6).
 
 One text per class, so a person gets the same words from every door that applies the gate; in this kit those are
 rag-api's (services/rag-api/desk_door.py) and the chat service's (services/chat/desk.py). Code returns these; no
@@ -24,7 +24,7 @@ The second half of this file is the case table (the case queue, shared/cases.py)
 law or the company names, the clock shown to the person, and the basis, each passage by its corpus file and lines and
 by the publisher's URL. Then the instrument table: the Acts the Labour Codes repealed, from the Codes' own repeal
 sections. A date an Act or a Code came into force is entered only after a person has checked it against the Gazette,
-and none is shown until then (IN_FORCE). Last, the statute desk's in-force note (workshop lesson 10.6): one line for
+and none is shown until then (IN_FORCE). Last, the statute desk's in-force note (workshop lesson 10.4): one line for
 each instrument a statute answer cites, saying only what the corpus's own text says about it.
 """
 from __future__ import annotations
@@ -70,7 +70,7 @@ def template(cls: str) -> str:
     return TEMPLATES[cls]
 
 
-# ---------------------------------------------------------------- the case table (workshop lesson 10.5)
+# ---------------------------------------------------------------- the case table (workshop lesson 5.6)
 # What a case shows the person who raised it, and which queue reads it. A clock is information, never a promise: a
 # period an Act sets is quoted or named, and a date the company sets is labelled as the company's own target
 # (tenant_settings/{tenant}.case_queues, which the operator writes with make desk-queues). Nothing here judges a case.
@@ -207,7 +207,7 @@ def basis_for(case_type: str) -> list[dict]:
     return [dict(BASIS[k]) for k in CASE_TYPES[case_type]["basis"]]
 
 
-# The statute desk's in-force note (workshop lesson 10.6), by the corpus file a citation comes from. Each line says
+# The statute desk's in-force note (workshop lesson 10.4), by the corpus file a citation comes from. Each line says
 # what the corpus's own text says and nothing more: the four Codes and the DPDP Act come into force on dates the
 # Central Government notifies (each one's section 1), an Act a Code repeals is repealed from the day that Code comes
 # into force, and a text's as-of wording is its file's own header ("as on 1 August 2021", "as enacted"). A date is

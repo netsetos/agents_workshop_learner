@@ -1,4 +1,4 @@
-"""The doc_type registry (workshop lesson 10.6): which class each object is, said by an operator, never by the uploader.
+"""The doc_type registry (workshop lesson 10.4): which class each object is, said by an operator, never by the uploader.
 
 Every text chunk the worker ingests from the uploads bucket carried doc_type "unknown" (DocumentContract's default,
 services/ingest/contracts.py), and the bytes cannot bring a class with them: doc_key is the tenant plus the sha256,

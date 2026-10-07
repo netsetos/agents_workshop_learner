@@ -1,4 +1,4 @@
-"""The routed DocuMind Desk (workshop lesson 10.6): services/chat/desk_routes.py, desk_router.py, desk_graph.py and
+"""The routed DocuMind Desk (workshop lesson 10.4): services/chat/desk_routes.py, desk_router.py, desk_graph.py and
 desk_agent.py, shared/desk_calc.py, commands/desk_ops.py route-index, evals/route_eval.py --local and
 evals/route_threshold.py.
 
@@ -1216,7 +1216,7 @@ class WiringTests(unittest.TestCase):
 
     def test_the_make_targets(self):
         mk, agents, readme = self.read("Makefile"), self.read("mk", "agents.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 18.3 counts it
+        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in ("route-index", "route-calibrate", "smoke-desk", "route-eval"):
             self.assertIn(target, phony)
@@ -2144,7 +2144,7 @@ class ServiceTests(unittest.TestCase):
             asyncio.run(self.desk._quietly(self.desk._shadow(scope(who), question, tenant)))
 
         def mode(m):                                   # the setting, and the per-process list of shadow tenants expired
-            self.flags["acme"].pop("desk_gate", None)  # desk_gate unwritten: the rules, as lesson 10.6 leaves zeta
+            self.flags["acme"].pop("desk_gate", None)  # desk_gate unwritten: the rules, as lesson 10.4 leaves zeta
             self.flags["acme"].update(desk_route=m)
             self.db.docs["tenant_settings/acme"] = {"desk_route": m}
             self.desk.SHADOWING._at = None

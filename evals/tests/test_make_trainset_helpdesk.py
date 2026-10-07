@@ -1,4 +1,4 @@
-"""Offline checks for make_trainset.py --style helpdesk, lesson 17.1's v3 (27 September 2026).
+"""Offline checks for make_trainset.py --style helpdesk, lesson 12.1's v3 (27 September 2026).
 
 Run with ``python -m unittest discover -s evals/tests -p test_make_trainset_helpdesk.py`` from deploy/. The teacher,
 Cloud Storage and DLP are stood in by modules that record what the kit asks of them; the chunks are the kit's own

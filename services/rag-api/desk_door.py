@@ -1,4 +1,4 @@
-"""The DocuMind Desk's door on rag-api: the hard gate before any handler runs (workshop lesson 10.5).
+"""The DocuMind Desk's door on rag-api: the hard gate before any handler runs (workshop lesson 5.6).
 
 A question the law hands to a person (shared/desk_rules.py: posh, grievance, privacy_request, exit_dues,
 human_requested) must never reach retrieval or a model, on any path into rag-api - the Chat page's direct brain

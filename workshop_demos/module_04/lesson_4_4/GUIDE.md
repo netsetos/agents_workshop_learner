@@ -4,79 +4,67 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html`, reviewed at blob `4bbd9c72fa443ebba227ab37a125bf213850fb3c`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.4_Controlled_Change_WIX.html`, reviewed at blob `97d97638098f6e3f140aba7bc44e9edda7bc2aa0`. Learners read that page on the course site; this guide keeps its prose.
 
-Start with a document that answers a question. Delete its cloud file and show why the index can still answer. Preview the reconciliation plan, apply retirement, and prove that storage and the index agree again. Then upload the exact original bytes and watch the worker reuse the existing embeddings. A fresh fixture, exact source checks and a clean baseline make each change visible.
+Lesson 4.2 measured the revision that serves today. This lesson changes one thing and measures the difference. You make a candidate revision of the API with a cheaper model behind it and no traffic, and prove from both revisions' settings that the model is the only difference. You run the live gate on the rows that cite the handbook against both, ask the pairwise judge which answers are better, and read the price of the difference off the usage rows. Then you remove the candidate's tag, because an experiment is not a release.
 
-- The demonstration: create a gap, repair it, restore the document
+- One change, one baseline, the same questions
 
-- How reconciliation decides: flow diagrams and the queued claim
+- The words: baseline, candidate, tag, template, controlled change, scoped gate, pairwise, win rate, rupee delta, ablation
 
-- Set up the operator shell
+- Before you run anything: set up the shell
 
-- Prepare: credentials, backend and a clean baseline
+- The candidate: a new revision with no traffic, and the proof that one setting differs
 
-- Create this chapter's note and the checks
+- The scoped gate on both revisions, and the rows that moved
 
-- Prove the document works
+- The pairwise judge: which answer is better, row by row
 
-- Delete the cloud file and show the stale index
+- The rupee delta, from the usage rows
 
-- Plan retirement, apply it, then prove zero drift
+- Retrieval-only changes: measure retrieval first, with no model
 
-- Restore the exact bytes and prove reuse
+- Deciding, the confounds that fake a result, and removing the candidate
 
-- Optional: watch an incomplete undo refuse
+- Verify it yourself: the checklist
 
-- The nightly job and older records
+You will learn what makes a comparison controlled: one setting changed, a baseline that stays put, the same questions for both, and a check that nothing else moved. You will learn which instrument answers which question about the change, and how to read a pairwise verdict. Then you will prove it on your lane: a candidate with a cheaper model, a diff of the two revisions' settings, the scoped gate on both, the pairwise win rates, and the rupees each answer saves.
 
-- The separate module smoke test
+### One change, one baseline, the same questions
 
-- Verify the story and restore the original backend
+A comparison names a cause only when one thing differs, and only a diff of the settings proves that.
 
-Prove one document's deletion, retirement and restoration before studying the exceptions. Then trace each reconciliation action to its real bucket, ledger and claim evidence.
+A comparison can name a cause only when one thing differs. The baseline is the revision serving today. The candidate is the same image and the same settings with one value changed, taking no traffic, reachable at its own tagged URL. Everything else is held still: the golden rows, the corpus, the retrieval and the hour. Then any difference in the gate's rates, the judge's verdict or the price belongs to that one value. Change two values and the numbers still move, but nobody can say which change moved them.
 
-### Create a gap, repair it, restore the document
+A candidate costs nothing to try and nothing to abandon. Users keep the live revision the whole time. The candidate answers only requests sent to its own URL. The kit's config says every switch is judged this way first: the ledger's current-only retrieval, the knowledge graph, Model Armor, the answer cache. Shipping would be lesson 4.2's release path: the full gate on the candidate, a person, then a traffic flip by name. This lesson stops before that and removes the tag.
 
-Storage, the source ledger and a cited answer are three observations. Watch them agree, disagree, and agree again.
+Three measurements answer three questions about the change. The scoped live gate asks whether the candidate still clears the thresholds on the rows the change can reach, in minutes rather than the full set's ten. The pairwise judge reads both answers to each question and says which is better, so its verdict is about the difference itself. The usage rows price every answer by the model that gave it, so the rupee delta is measured, not estimated. For a change that touches only retrieval, generation is noise and money: `make ablate` measures retrieval arms with no model at all.
 
-The ingestion worker handles upload events. Deleting an object sends no deletion event this worker acts on, so a file can disappear while its indexed rows remain current. Reconciliation compares live bucket objects with the source ledger and the per-version claims, names the differences, and repairs them only when the operator applies the plan. It never parses or embeds content itself: a reingest rewrites the object onto itself, creating a new finalize event for the existing worker.
+"One change" is a claim you have to check. `make candidate` writes eleven settings onto the service's latest template, taking each from the Makefile's defaults or from your shell, where an exported variable wins. Settings merge across revisions, so a value an earlier experiment left on the latest template rides along into the new revision. The only proof is a diff of the candidate's settings against the revision that serves traffic.
 
-The warehouse stock-take. A delivery is booked when it arrives. If an item leaves through a side door, the ledger still lists it. A stock-take spots the difference and corrects the record. If the same item comes back, its earlier record can be reactivated after checking that the retained pieces are complete.
+A chai stall trying a cheaper tea powder. The owner makes two cups with the same water, milk, sugar and boiling time; only the powder changes. The regulars taste both cups side by side and say which is better, or that they cannot tell. The owner prices both powders per hundred cups. If the milk changed too, nobody could say which change the regulars tasted. The live revision is today's cup, the candidate is the new powder, the pairwise judge is the regulars, and the usage rows are the owner's price list.
 
-N is the chunk count observed on your fixture, not a hardcoded three. Reuse depends on the retained rows still being complete and inside the undo window.
+#### The comparison planner: is it one change, what measures it, and what the model change costs
 
-Zero drift does not mean every document is present. A deleted file and a retired source agree with one another. Reconciliation can already be clean before restoration. The apply's summary describes the differences it found at the start; a new plan proves what remains afterward.
+The left column is what the live API runs by default, which is what `make candidate` writes too. Set the candidate's values, then the token counts from your own usage rows. The planner counts the changes, names the instrument for each, and prices the model change with the kit's own rates.
 
-### How reconciliation decides
+The defaults are the Makefile's, and the build checked that the API is deployed with the same ones (`commands/lesson-12.2.sh`). The price is `cost.price()` from the API, ported and checked against it: its three Gemini rates, cached input at a tenth, 85 rupees to the dollar.
 
-First compare the live object and ledger. Only then, if required, inspect the bytes.
+It cannot see your lane. If your live revision was deployed with other values, the left column is wrong for you; step 3's cell diffs the real revisions. The price uses the rates in `cost.py`; the API reads a price table in BigQuery first when one exists, so the usage rows are the bill.
 
-An object generation identifies an upload; uploading the same bytes creates a new generation. A hash identifies those bytes. A claim is the worker's per-version record in `documents/{tenant}_{sha256}`, with a status such as indexed, superseded or queued. The source ledger is a separate record in `sources/`, keyed by object name.
+### The words: baseline, candidate, tag, template, controlled change, scoped gate, pairwise, win rate, rupee delta, ablation
 
-Amber actions contribute to drift. Green outcomes do not. These flows cover document objects; the planner skips its configured sidecar suffixes. A queued match uses the same object name and generation, with a compatibility path for legacy claims that have no generation.
+Ten rows, each with the value it takes on your lane.
 
-`drift = retire + reingest + backfill`. These are counts of planned differences. A `touch` updates bookkeeping, and `queued` is work already assigned elsewhere.
-
-#### How do we know a PDF is queued?
-
-The worker writes `status: queued`, the object's `gcs_uri` and its `generation` into the version claim when handing the document to the batch lane. Reconciliation first matches the live file's name and generation to a queued claim. Legacy claims without a generation are also accepted. If the byte-check path is reached, a queued claim for the same tenant and hash produces the same decision. The filename, PDF size and an absent ledger row are not proof of queued status.
-
-In that example the first PDF contributes one unit of drift. The bundle contributes none. Queued means handed to batch processing; it can remain queued if no batch job has run. Use `make queued PROJECT=$PROJECT` to inspect the pending work before deciding how to operate the batch lane.
-
-#### The planner's rules, verbatim
-
-#### Explore a different bucket and ledger
-
-This simulator follows plan() and decide_bytes(). It changes no cloud resources. A queue selection represents a matching claim; an unrelated upload generation must be assessed separately.
+One distinction to hold: a candidate is not a release. The candidate exists to be measured, and removing its tag ends the experiment without touching users. A release is the traffic flip that follows a green gate and a person's approval.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -86,124 +74,112 @@ Every window has a label. A label that starts with bash is a block to paste into
 
 Every `make` target on these pages is a one-line entry in the kit's `mk/ingestion.mk` or `mk/lifecycle.mk`. The entry runs a script under `commands/` or the kit's own Python, and you can run that directly: the same code, the same output, no make. `PROJECT` comes from the setup block above.
 
-#### Keep the backend change with the demo
+#### Which store answers acme? Pin it to the kit's own index for this lesson
 
-Step 3 saves the existing tenant pin before selecting vector. Step 12 restores that saved value. Run them at their own checkpoints; copying a setup and restoration command together immediately undoes the lesson setting.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
-Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; the exact-source checks below use the operator token's tenant access.
+The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-### Credentials, backend and a clean baseline
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
-Do this before presenting. Stop at an error; do not paste the next stage until its checkpoint passes.
+Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-Use the same operator shell and virtual environment throughout. Create a chapter directory before changing the backend, save its original pin, and run the offline planner check. These files are local demo state; keep them out of commits.
+The shell, in the kit's folder, with `NUMBER`, `REGION` and the token functions from the setup block, and the judge's venv from lesson 4.2, step 5. If that venv is gone, its three lines make it again. Steps 3 to 6 run back to back in about twenty minutes, so both revisions are measured in the same hour.
 
-The baseline must have no pending retire, reingest, backfill or touch actions. Queued and withdrawn entries may remain; neither is drift. If an unrelated PDF is missing from the ledger, handle it in preparation: inspect the plan, apply only a plan you intend to execute, wait for ingestion and plan again. `APPLY=1` operates across acme, not only this chapter's note. Do not hide a failed managed-mirror operation by disabling the mirror midway through the demonstration.
+### The candidate: a new revision with no traffic, and the proof that one setting differs
 
-A Firestore `ACCESS_TOKEN_SCOPE_INSUFFICIENT` means the token used by Python lacks the required scope. Renew the intended Application Default Credentials in this workstation, and check whether `GOOGLE_APPLICATION_CREDENTIALS` is selecting a different credential file. A successful gcloud command alone does not prove Python's ADC works.
-
-### Create this chapter's note and the checks
-
-A fresh name, a new fact and an unchanged local copy remove the dependencies on earlier lessons.
-
-This chapter does not use `~/lesson34_note.md` or the smoke-lantern question. Another smoke note may still answer that question even after one copy is retired. Our primary checks are the exact source name, its object generation and its citation; a bare `answerable True` is insufficient.
-
-#### Load the checks once
-
-The helper block is preparation, not a slide to type live. It stops on failed uploads, polls the exact source and generation, checks citations, and refuses to apply an unexplained tenant-wide plan. The log filter includes both the version key and generation, so another acme upload cannot satisfy the wait. To resume after reopening a shell, first run the shared shell setup, then source this directory's `session.env` and `helpers.sh`; do not create a new note midway through a restore.
-
-The generated local directory contains the query, checksum, original pin and latest responses. If a command fails, inspect its message and the saved response. An upload failure must end that stage; there is no ingestion event to wait for.
-
-### Prove the document works
-
-Show the source ledger in the UI and the same source's evidence from the API.
-
-On the Documents page, use Refresh indexing status and find the exact `lesson44_.md` row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it.
-
-Checkpoint: source indexed at this upload's generation, a cited answer naming locker Q7 in Jaipur, and no pending repair. If the source is indexed but the query has not caught up, repeat `ch44_ask present` and inspect its evidence; do not upload again merely to wait.
-
-Storage, the source ledger and this cited answer agree. N is the count this worker produced; later we will prove that the same N chunks return without new embeddings.
-
-### Delete the cloud file and show the stale index
-
-The local original stays safe. Delete only this demonstration's live object.
-
-Checkpoint: before a reconciliation run, the ledger can still say indexed and the answer can still cite the fixture. If a scheduled reconciliation already retired it, say that automation closed the gap first; inspect the source and plan rather than claiming the stale state was observed. The bucket's retained version is not a live object in the walk's listing.
-
-The cloud file is gone, but this worker has not processed a deletion. Its current rows are still searchable. This is the difference the reconciliation plan will name.
-
-### Plan retirement, apply it, then prove zero drift
-
-Keep preview, mutation and verification as three visible operations.
-
-The action must be `retire` for `$SOURCE`, with reason gone from the bucket, `applied: false` and drift 1. A plan is evidence, not a repair. Pause other uploads during the demonstration; the kit's apply does not execute a saved, source-scoped plan.
-
-#### The code that applies the plan
-
-Checkpoint: the exact source is retired, the answer no longer cites it once retrieval reflects the change, and a new plan is clean. A refusal is the intended result for the unique question. If another source answers, inspect the citation; do not call that a failed retirement. The displayed reused and embedded counts on a retired ledger row describe its last ingestion, not a new restore.
-
-The apply reported the difference it found, so its own drift may still be 1. The following plan is 0: storage and the index now agree that this document is absent. Restoration is a separate action.
-
-### Restore the exact bytes and prove reuse
-
-A new upload generation, the same content hash, and the worker's verified reactivation.
-
-The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.
-
-Checkpoint: the worker reports `ingest_reactivated` for this version and upload generation, the source reads indexed with reused N and embedded 0, the answer again cites the exact fixture, and the plan is clean. If logs arrive later than the ledger, repeat the log read. A fresh `ingest_ok` may restore the document successfully but does not prove reuse; inspect whether retained rows were missing or the undo window closed.
-
-#### Why the undo counts first
-
-The original bytes returned under the original name. The worker checked that all retained chunks were still available and eligible, then reactivated them. We proved the new generation, the reuse counts and the cited source together.
-
-You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration.
-
-Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.
-
-After recovery, run `ch44_upload` and the checks from step 8. If the checksum file or the rest of the saved session is missing too, reconstruct and review that state before continuing.
-
-### Watch an incomplete undo refuse
-
-Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture.
-
-The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits `reactivate_incomplete`, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.
-
-Checkpoint: a `reactivate_incomplete` event explains the shortfall, followed by fresh `ingest_ok`; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude `reactivate_incomplete` because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.
-
-### The nightly job, the number it ends on, and the lane older than the ledger
-
-The job that runs the walk at 23:30, the metric and the pager that read its last line, and the one-time repair for a lane that predates the ledger.
+The target that makes it, the kit's rule that every switch is judged this way, and a diff of the two revisions.
 
 #### Definition
 
-The walk is a Cloud Run job on the ingest image, `documind-reconcile`, declared when `RECONCILE_JOB=true` is on the Terraform apply and scheduled at 23:30 IST, after the night switch has floored the lane, with the worker's own environment and no platform retries. Its last line, `reconcile_done`, carries the drift; a log-based metric extracts that field, and an alert policy pages when the metric stays above zero for twenty-four hours, which is two nightly runs: one night of drift is a lost event the walk repaired, two is a lane nobody is reconciling. `make backfill-current` is the other one-time tool: on a lane whose rows were written before the ledger existed, it gives every row a `current` flag and a version key and every indexed claim a ledger row; inspect its plan before deciding whether an older lane needs repair.
+`make candidate` runs one `gcloud run services update` with `--no-traffic` and `--tag candidate`. It writes eleven settings, and removes `GENERATOR_LOCATION` unless you give one. Here the only override is `GENERATOR_MODEL=gemini-3.1-flash-lite`, the kit's cheap-bulk model, served like the default on the global endpoint and priced from the same table. A model name needs no `RAG_MODEL_BASE` change; that setting only prices a tuned endpoint. The target then records the new revision's name and prints its URL. The candidate's token is the same one the gate uses, because the API checks every token against its canonical URL, whichever URL was called.
 
 #### The code
 
-#### Read the deployed job and backfill plan
+#### Do it: the candidate
 
-On a lane deployed with the defaults the job is not declared, so the walk is something you run; the page you are on has been that operator. Declaring it is one Terraform plan with the switch on, through `make plan`'s guard, and its apply; keep `RECONCILE_JOB=true` on every later plan, or the guard refuses the plan that would delete the job. From then the same script runs every night as the worker's account and the pager reads its last line. Read the actual backfill counts rather than assuming zero: `chunks 0` means no chunk flag needs that repair; the sources count describes the indexed claims the operation would record.
+#### Do it: prove it is one change
 
-### Run the broader module validation separately
+The cell finds the revision serving traffic and the one tagged `candidate`, reads both revisions' settings, and prints every setting that differs.
 
-The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair.
+Cloud Run made a revision from the service's latest template with eleven settings written over it, and gave it no traffic and its own URL. Users are still on the live revision. The diff compared the candidate with the revision that serves traffic, not with the template, because the template is where a forgotten setting would hide. One line means one change. If you see more, the extra lines name the settings to put back: pass the live value on the `make candidate` line, or unset the shell variable that carried it in, and make the candidate again.
 
-`make smoke-reindex` uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.
+### The scoped gate on both revisions, and the rows that moved
 
-The smoke leaves its own fixture indexed. That does not demonstrate that `$SOURCE` was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors.
+The same 10 rows on each side, the thresholds that have rows behind them, and a row-by-row comparison.
 
-Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying `jsonPayload.tenant`, and the line the worker writes for the unchanged fixture bytes, `ingest_duplicate`, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL.
+#### Definition
 
-The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, `acme/smoke_note_v1.md`, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.
+`SOURCE=hr_policy_2026.md` scopes the live gate to the rows that cite the handbook: a slug in `must_retrieve`, or the row's own `source`. A model change can reach any answer, so the handbook's rows are a sample, chosen because they run in a few minutes. A reindex of one document is judged the same way. Refusal, media and isolation rows do not cite the handbook, so those three thresholds have no rows behind them and are printed without a verdict. The baseline runs first with `tail`, so you see its verdict. The candidate runs in full, pointed at `$CAND` with the same token.
 
-### Verify the story and restore the original backend
+#### The code
 
-Use the state transition and the exact evidence, then return the tenant to its saved configuration.
+#### Do it: the gate on the live revision, then on the candidate
 
-Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.
+Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.
 
-One fresh chapter fixture was indexed, deleted, retired by reconciliation and restored from verified original bytes. Its new generation and exact citation proved the return. The original tenant backend was restored from the saved value, and unrelated batch work stayed separate. Module 5, Retrieval, starts with lesson 5.1: Apply query embeddings and authorized filters.
+Both revisions answered the same 10 questions within minutes of each other. The gate judged six thresholds and left three without a verdict, because a scoped run holds no refusal, media or isolation row. In the stub's run, the candidate missed one figure and still cleared every threshold. That is the point of reading the rows and not only the verdict: a green gate says the candidate may ship, and the moved row says what it would cost. The latency line is the third measurement you get for free, since a smaller model usually answers faster.
 
-Netsetos GenAI on GCP · Module 4 Lifecycle · Lesson 4.4 Restore documents and reconcile index differences · v5.0
+### The pairwise judge: which answer is better, row by row
 
-Next: Module 5 Retrieval, Lesson 5.1 Apply query embeddings and authorized filters.
+Both revisions answer the same twenty questions, the candidate is rated, and the judge picks a side or calls a tie.
+
+#### Definition
+
+With `API_B`, the judge collects answers from the live revision and then from the candidate, for the same rows. It rates the candidate's answers for groundedness and instruction following, as in lesson 4.2. It also adds one pairwise metric, question-answering quality, where the judge model reads both answers to each question and chooses the candidate, the baseline, or neither. The SDK turns those choices into two win rates, and a tie counts for neither side. `--rows 20` keeps the run to the first twenty golden rows, thirteen lookups and seven joins, which is enough to see a direction for a fraction of the full run's cost. The run's name ends in `-vs-candidate` and the template hash.
+
+#### The code
+
+#### Do it
+
+Forty answers came back, twenty from each revision, and the Evaluation service made 60 ratings: two pointwise and one pairwise for every row. Read the two win rates together. A candidate win rate near the baseline's, with many ties, says the cheaper model answers these questions about as well. A baseline win rate well above the candidate's says you would be buying the saving with quality. The pointwise lines describe the candidate alone, so compare them with lesson 4.2's run of the live revision. None of these numbers gates anything: step 4's gate decides whether the candidate may ship.
+
+### The rupee delta, from the usage rows
+
+Every answer of the last hour, grouped by the model that gave it, and the difference per answer.
+
+The API priced every answer on its usage row with `cost.price()`, at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.
+
+The usage rows priced about 60 answers, half on each model. The delta is measured, not estimated: the same questions, the same context, only the model's rates and the model's own token counts differ. For a sense of scale, an answer of 2,000 tokens in and 300 out costs Rs 0.4463 on flash and Rs 0.0808 on flash-lite, at the kit's rates: Rs 366 saved per thousand answers. Multiply your delta by your monthly volume, and set it beside step 5's win rates. That pair, the verdict and the rupees, is this lesson's proof.
+
+### Retrieval-only changes: measure retrieval first, with no model
+
+Which instrument fits which kind of change, and why a retrieval change starts with the ablation.
+
+A model change needs the gate and the judge, because only answers show it. A change that touches only retrieval is different: the current-only filter, the knowledge graph, another store as `RETRIEVAL_BACKEND`. Its effect is on which chunks reach the model, and the golden anchors measure that directly. `make ablate`, lesson 2.2's harness, runs retrieval arms against the anchors with no model in the loop, so it is cheap and repeatable. The Makefile's own advice for a new retrieval backend is to run the ablation first and then judge a candidate. Only an arm that retrieves better earns a candidate, the scoped gate and a judge.
+
+### Deciding, the confounds that fake a result, and removing the candidate
+
+What the three measurements decide together, five ways a comparison lies, and the end of the experiment.
+
+#### Deciding
+
+The gate decides whether the candidate may ship. The scoped gate is a first look. Before any release, lesson 4.2's path runs the full gate on the candidate, then a person approves, then `make promote` moves traffic by name. The judge's win rates say what you trade, and the usage rows say what you save. A cheaper model that clears the full gate, and loses no more rows than it wins, is a saving you can defend with numbers.
+
+#### Confounds: five ways a comparison fakes a result
+
+- A second setting on the template. A value an earlier experiment left on the latest template rides into the candidate. Step 3's diff against the serving revision catches it.
+
+- A variable in your shell. Make prefers an exported variable to its own default, and earlier lessons exported the API's settings. They usually match the live values; the diff proves it.
+
+- The answer cache. With `SEMANTIC_CACHE=on` on either side, a repeated question replays an earlier answer at no cost, and both the judge and the price compare replays.
+
+- Time. A reindex between the two runs changes the corpus under one side. Run both in the same sitting.
+
+- Different questions. A delta per answer over different question sets compares the questions, not the models. Every step here asks both sides the same rows.
+
+#### Do it: remove the candidate's tag
+
+This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: `make promote` refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in `.candidate-revision`. Deleting that file makes `make promote` stop with an error instead.
+
+#### What it costs
+
+### Verify it yourself: the checklist
+
+Nine checks, each one block above, each with the value that proves it on your lane.
+
+One more `documind-api` revision in the service's history, with no traffic and no tag; step 8 deleted the file that named it. Two reports, `evals/reports/base73.json` and `cand73.json`, also ignored. The usage rows of about 60 answers, and one Experiments run in `documind-eval` whose name ends in `-vs-candidate` and the template hash. The golden set is sound, the gate judges a deployment, the judge explains, and a change is measured against its baseline. Lesson 4.5 checks the judge against people, and lesson 4.6 turns to security, starting with how an authenticated identity becomes a tenant.
+
+Netsetos GenAI on GCP · Module 4 Evals and safety · Lesson 4.4 Compare one controlled change against a baseline · v5.0
+
+Next: Lesson 4.5 Check the LLM judge against people.

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Build routes.jsonl's 207 relabelled dev rows - the DocuMind Desk's route set (workshop lessons 10.5 and 10.6).
+"""Build routes.jsonl's 207 relabelled dev rows - the DocuMind Desk's route set (workshop lessons 5.6 and 10.4).
 
     python deploy/evals/build_routes.py            # rewrite the derived rows, keep every hand-written row
     python deploy/evals/build_routes.py --check    # exit 1 when a golden row has no label, a row is malformed, or
@@ -21,7 +21,7 @@ its writer wrote without seeing the rules:
 
 Hand-written rows (source "new") are kept as they are and validated, against the schema and the same labelling rule.
 
-THE LABELLING RULE (workshop lesson 10.6) is code here (rule_route), and --check holds every row to it: a first-person
+THE LABELLING RULE (workshop lesson 10.4) is code here (rule_route), and --check holds every row to it: a first-person
 question with no authority marker ("Can I carry forward leave?") is handbook; "under the Act / Code / law", or a named
 Act or Code, is statute. A question with both markers is two parts, and "both" means the employee handbook named
 beside an authority ("Does our handbook match the OSH Code?"): such a row is labelled handbook or statute and passes

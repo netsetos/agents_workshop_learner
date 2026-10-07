@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The DocuMind Desk router's thresholds, swept on the dev split (workshop lesson 10.6), the way
+"""The DocuMind Desk router's thresholds, swept on the dev split (workshop lesson 10.4), the way
 evals/cache_threshold.py sweeps the cache's.
 
     python deploy/evals/route_threshold.py --selftest                              # OFFLINE - the arithmetic

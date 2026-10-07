@@ -6,9 +6,9 @@ recovery/finish file can then use the saved state and original fixture.
 """
 import os
 from pathlib import Path
-from workshop_helpers.config import load_config
+from workshop_helpers.config import lesson_folder, load_config
 
-LESSON = "4.4"
+LESSON = "1.8"
 REMOVE_STOPPED_PROCESS_LOCK = False
 
 
@@ -18,7 +18,7 @@ def main():
     Example: main()
     """
     config = load_config()
-    lock = config.results_dir / f"module_{int(LESSON.split('.')[0]):02}" / f"lesson_{LESSON.replace('.', '_')}" / "session.lock"
+    lock = config.results_dir / lesson_folder(LESSON) / "session.lock"
     if not lock.exists():
         print("No lock to recover.")
         return

@@ -1,62 +1,43 @@
-"""Lesson 1.1: Stop this local chat service
+"""Restore lesson 1.1's settings after success OR failure.
 
-Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.
-
-Run order inside this file:
-1. Stop this local chat service (source window plan-4)
-
-Prerequisites: workshop setup; see this lesson README.
-Use the existing rag-shell-venv interpreter; Run or Debug this file.
-The functions below contain the lesson examples in source order. Helpers
-supply configuration, authentication, state and CLI execution. See README.md
-for expected observations, effects and the next file; GUIDE.md retains prose.
-Example: open this file at the matching HTML heading, Run once, then inspect
-the observations below before continuing to the next numbered section.
-A successful process is not proof that a live result matched the sample.
-
+Run this before changing lessons or deleting local results. Both restoration
+operations are attempted even if one fails. Fixture uploads and roster entries
+remain as the HTML intends; this file deletes no documents, chunks or evidence.
+It can also restore a backend saved by the old 13-file lesson 1.1 sequence.
 """
+from workshop_helpers.lesson31 import restore_cache
 from workshop_helpers.session import DemoSession
-from workshop_helpers.steps import manual_checkpoint, run_steps
 
-# REPEAT replays the whole file; use only after reviewing its effects.
-REPEAT = False
-# A failed function may have partial effects. Inspect its saved attempt first.
-RETRY_FAILED_STEP = False
+REPEAT = True  # Cleanup is safe to retry after an interrupted deployment.
 
-
-def step_01_stop_this_local_chat_service(session):
-    """Run Stop this local chat service at this checkpoint.
-
-    Stop only the background process group started by this lesson, after checking its PID, command and working directory. Preserve its log and lesson evidence.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: Course-plan experiment — local Python/kit inspection.
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe the printed/saved evidence for this heading; a zero exit alone is not proof.
-    """
-    session.stop_local_service()
 
 def demonstrate(session):
-    """Run this section in source order, saving each function's outcome.
-
-    Example: main() opens the configured session and calls demonstrate(session).
-    A failed step stops this sequence; inspect its evidence before an explicit retry.
+    """Attempt each pending restore independently, retaining flags for any failure.
+    
+    Example: demonstrate(session)
     """
-    run_steps(session, [
-        ('source_finish_04_stop_this_local_chat_service', step_01_stop_this_local_chat_service),
-    ], retry_failed=RETRY_FAILED_STEP, cleanup=True, finalize=True)
+    errors = []
+    operations = [lambda: restore_cache(session)]
+    if session.state.get("backend_restore_required"):
+        operations.append(session.restore_backend)
+    for restore in operations:
+        try:
+            restore()
+        except Exception as error:
+            errors.append(str(error))
+    if errors:
+        raise RuntimeError("Cleanup incomplete; rerun this file after inspecting:\n" + "\n".join(errors))
+    session.state["lesson31_closed"] = True
+    session.save()
+    print("Saved settings restored. Fixtures and local evidence retained.")
 
 
 def main():
-    """Open the lesson session and run this section.
-
-    Example: use Run/Debug on this file with the rag-shell-venv interpreter.
-    Project settings and completed prerequisites come from the shared setup.
+    """Cleanup bypasses demo prerequisites and can run after a failed preparation.
+    
+    Example: main()
     """
-    with DemoSession(__file__, live=False, repeat=REPEAT) as session:
+    with DemoSession(__file__, repeat=REPEAT) as session:
         demonstrate(session)
 
 

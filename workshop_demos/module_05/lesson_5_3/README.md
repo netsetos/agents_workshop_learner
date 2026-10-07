@@ -1,4 +1,4 @@
-# Lesson 5.3: Rerank and inspect retrieved candidates
+# Lesson 5.3: Deploy MCP and verify authorized access
 
 ## What to run
 
@@ -9,18 +9,16 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | HTML section | File | What it demonstrates |
 |---|---|---|
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
-| 3 | [demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py](demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py) | One answer, read end to end: the citations, their scores, the stages |
-| 4 | [demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py](demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py) | The Ranking API by hand: the API's pool, the API's request, the API's order |
-| 5 | [demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py](demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py) | The fallback: the pool by retrieval score, flagged on the row, forced on a candidate |
-| 6 | [demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py](demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py) | make usage: where the time went, p95 per stage, and the view behind it |
-| 7 | [demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py](demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py) | found_by: stamped on every chunk, counted on the answer, absent from the citation |
-| 8 | [demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py](demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py) | What the funnel costs, its knobs, and the packed set the citations come from |
+| 3 | [demo_03_the_door_as_the_kit_writes_it_down.py](demo_03_the_door_as_the_kit_writes_it_down.py) | The door, as the kit writes it down |
+| 4 | [demo_04_deploy_and_read_it_back.py](demo_04_deploy_and_read_it_back.py) | Deploy, and read it back |
+| 5 | [demo_05_the_gate_make_smoke_mcp.py](demo_05_the_gate_make_smoke_mcp.py) | The gate: make smoke-mcp |
+| 6 | [demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py](demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py) | One call at each door, and both sides of the answer |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The loaded HR/PDF corpus and Ranking API access. Saved answer/pool files are produced in this lesson.
+The shared workshop setup and the deployed/local inputs described in the reading guide.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -32,9 +30,13 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
+## Conditional recovery
+
+- [recovery/demo_04_deploy_and_read_it_back.py](recovery/demo_04_deploy_and_read_it_back.py) — Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
+
 ## Finish and restore
 
-- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -43,15 +45,15 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint and the deployed index are for step 4's pool; the reranker's settings say what the API is running with, and an empty value means the setting's default. Step 4's rank call and the in-process calls in steps 5 and 7 need the API's Ranking client in the venv at the API's own pin; the pip line is harmless if it is already there. A name the service does not set is unset here rather than exported empty, because the kit's settings class reads an empty variable as a value, not as an absence, and a cell that imports the kit would refuse it.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 Operation: bash — run in the operator shell now, before the lesson's first step.
 
-IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine. Temporarily disable an enabled answer cache for this retrieval/generation experiment and save its prior value. This changes the shared API; finish restores it. Cache lessons in Module 9 are unaffected.
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
 
 Expected shape, not a promised result:
 
@@ -59,262 +61,159 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-**`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+### demo_03_the_door_as_the_kit_writes_it_down.py
 
-Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The index endpoint and the deployed index are for step 4's pool; the reranker's settings say what the API is running with, and an empty value means the setting's default. Step 4's rank call and the in-process calls in steps 5 and 7 need the API's Ranking client in the venv at the API's own pin; the pip line is harmless if it is already there. A name the service does not set is unset here rather than exported empty, because the kit's settings class reads an empty variable as a value, not as an absence, and a cell that imports the kit would refuse it.
+Do it
 
-Operation: bash — run in the operator shell, once per shell.
+**`step_01_the_door_as_the_kit_writes_it_down(session)` — The door, as the kit writes it down / Do it**
 
-IDE adaptation: Read literal environment values as JSON from the serving revision; absent keys are unset. Repeated text parsing is removed.
+Do it
+
+Operation: bash — run in the operator shell, in the kit (the door as the kit writes it down; no network).
 
 Expected shape, not a promised result:
 
 ```text
-endpoint: projects/documind-ai-YOUR-ID/locations/asia-south1/indexEndpoints/9876543210987654321  deployed: documind_chunks_v1
-backend: vector  mode: dense (default)  top_k_retrieve: 20 (default)
-rerank timeout: 5.0 (default)  answer cache: off (default)
+documind-mcp, as commands/lesson-7.2.sh deploys it:
+  --no-allow-unauthenticated  --ingress=all  --min-instances=${MIN_INSTANCES:-0}  --service-account=documind-mcp-sa
+  SELF_URL=https://documind-mcp-$PROJECT_NUMBER.${REGION:-us-central1}.run.app
+  RAG_API_URL=https://documind-api-$PROJECT_NUMBER.${REGION:-us-central1}.run.app
+  FASTMCP_STATELESS_HTTP=true
+  RAG_TIMEOUT_S=90
+who may call it (roles/run.invoker): documind-ui-sa, documind-agent-sa, documind-outsider-sa
+the tenants each caller may read through it (lane.py's roster_plan):
+  documind-ui-sa         acme, zeta, globex
+  documind-agent-sa      acme
+  documind-outsider-sa   none
+the account rag-api sees for every MCP retrieval: documind-mcp-sa, on acme, zeta, globex
 ```
 
-### demo_03_one_answer_read_end_to_end_the_citations_their_scores_the_stages.py
+### demo_04_deploy_and_read_it_back.py
 
-The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.
+Do it: build and deploy Do it: read it back
 
-**`step_01_the_same_question_at_top_k_5_and_top_k_20(session)` — One answer, read end to end: the citations, their scores, the stages / Do it: the same question at top_k 5 and top_k 20**
+**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
 
-The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.
+Do it: build and deploy
 
-Operation: bash — run in the operator shell (a Python cell; two questions, the second with twenty chunks: a few rupees).
-
-IDE adaptation: Reject semantic-cache hits or a fallback-only pool before comparing top_k/reranker behavior.
+Operation: bash — run in the operator shell, in the kit (build the image, deploy it, bind its callers).
 
 Expected shape, not a promised result:
 
 ```text
-top_k 5: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 17xx ms of 28xx | rerank_fallback 0 | cache_hit none
-   3 citations: the sources the model used, in the order it used them; [N] in the answer is the packed position
-   [1] score 0.9xxx  #  1  hr_policy_2026.md          p.-  'NP-03 ...'
-   [2] score 0.8xxx  #  4  hr_policy_2026.md          p.-  '...'
-   [3] score 0.6xxx  #  2  hr_policy_2026.md          p.-  '...'
-   sorted by score, the ranker's order among them: ['#1', '#4', '#2']
-
-top_k 20: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 3xxx ms of 4xxx | rerank_fallback 0 | cache_hit none
-   4 citations: ...
-   sorted by score, the ranker's order among them: ['#1', '#4', '#2', '#7']
-
-saved /tmp/ans53_5.json and /tmp/ans53_20.json for steps 4, 7 and 8
+>> building asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/mcp:COMMIT from services/mcp
+Creating temporary archive of ... file(s) totalling ... MiB before compression.
+...
+DONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/mcp:COMMIT
+>> commands/lesson-7.2.sh (DEPLOY block)
+Deploying container to Cloud Run service [documind-mcp] in project [documind-ai-YOUR-ID] region [asia-south1]
+...
+Service URL: https://documind-mcp-NUMBER.asia-south1.run.app
+Updated IAM policy for service [documind-mcp].   (three times: ui, agent, outsider)
+...
+>> you@example.com may mint tokens as documind-ui-sa
+>> you@example.com may mint tokens as documind-outsider-sa
 ```
 
-### demo_04_the_ranking_api_by_hand_the_api_s_pool_the_api_s_request_the_api_s_order.py
+**`step_02_read_it_back(session)` — Deploy, and read it back / Do it: read it back**
 
-Do it: embed, pool, rank, compare
+Do it: read it back
 
-**`step_01_embed_pool_rank_compare(session)` — The Ranking API by hand: the API's pool, the API's request, the API's order / Do it: embed, pool, rank, compare**
-
-Do it: embed, pool, rank, compare
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one paid embedding and one rank request, well under a rupee).
+Operation: bash — run in the operator shell, in the kit (the service as deployed, against the script).
 
 Expected shape, not a promised result:
 
 ```text
-pool: 20 current ids from the index in 9xx ms, every one found_by vector
-ranker: 20 of 20 back in 2xx ms, 20 records sent, model semantic-ranker-fast-004
-   rank 1  score 0.9xxx  pool # 1  NP-03     hr_policy_2026.md
-   rank 2  score 0.xxxx  pool # x  ...       hr_policy_2026.md
-   ...
-the API's cited ids, by score: ['#1', '#4', '#2'] | by hand, first 5: ['#1', '#4', '#2', '#7', '#3']
-every citation is in the by-hand top 5: True | in the same relative order: True
-saved /tmp/pool53.json for steps 5, 7 and 8
+serving     documind-mcp-00004-k7w at https://documind-mcp-NUMBER.asia-south1.run.app
+  runs as     documind-mcp-sa
+  ingress     all
+  SELF_URL    https://documind-mcp-NUMBER.asia-south1.run.app
+  invokers    documind-agent-sa, documind-outsider-sa, documind-ui-sa
+  the script  documind-agent-sa, documind-outsider-sa, documind-ui-sa - the same
 ```
 
-### demo_05_the_fallback_the_pool_by_retrieval_score_flagged_on_the_row_forced_on_a_candidat.py
+### recovery/demo_04_deploy_and_read_it_back.py
 
-Do it, offline: the kit's fallback on the pool you saved Do it, on a candidate: a deadline no call can meet
+Only if the build stopped at storage.objects.get (the page's box): once, as a project owner, grant the project's default build account read access to its source in the PROJECT_cloudbuild bucket, push access to the documind repository and log writing. Then run the build and deploy again.
 
-**`step_01_offline_the_kit_s_fallback_on_the_pool_you(session)` — The fallback: the pool by retrieval score, flagged on the row, forced on a candidate / Do it, offline: the kit's fallback on the pool you saved**
+**`step_01_build_and_deploy(session)` — Deploy, and read it back / Do it: build and deploy**
 
-Do it, offline: the kit's fallback on the pool you saved
+Cloud Build runs a build as the project's default build account, and the kit names no other: cloudbuild.yaml has no serviceAccount, and make build passes no --service-account. On a project made since mid-2024 that account is the Compute Engine default account, NUMBER-compute@developer.gserviceaccount.com. In an organization created on or after 3 May 2024 it is created without the Editor role Google used to give it. The build then cannot read its own source, the archive gcloud builds submit has just uploaded to the documind-ai-YOUR-ID_cloudbuild bucket, and stops at could not resolve source with a 403 naming that account. This grants that account the three things this build does, once, as a project owner: read its source in that one bucket, push the image to the documind repository, and write its log lines (cloudbuild.yaml logs to Cloud Logging only). It does not grant Editor or roles/cloudbuild.builds.builder. Granted on the project, either one can read, write and delete every object in every bucket, the uploads bucket of customer documents included, and the Compute Engine default account is also what a VM or a Cloud Run service runs as when nobody names another.
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: nothing leaves the machine).
+Operation: bash — run in the operator shell, once, as a project owner, only if the build stopped at storage.objects.get.
+
+### demo_05_the_gate_make_smoke_mcp.py
+
+Do it
+
+**`step_01_the_gate_make_smoke_mcp(session)` — The gate: make smoke-mcp / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (the module's gate).
 
 Expected shape, not a promised result:
 
 ```text
-rerank_fell_back: True | every chunk marked: True
-the pool by retrieval score, what the caller gets while the ranker is down:
-   score 0.7xxx  pool # 1  NP-03     hr_policy_2026.md
-   score 0.7xxx  pool # 2  ...       hr_policy_2026.md
-   ...
-the ranker's five (step 4): ['NP-03', '...', '...', '...', '...']
-kept by the fallback: x of 5 | first is the same: True
+DocuMind MCP - live smoke test
+  target: https://documind-mcp-NUMBER.asia-south1.run.app
+  --------------------------------------------------------
+  [PASS] health  {"status":"ok","profile":"gcp","self_url":"https://documind-mcp-NUMBER.asia-south1.run.app"}
+  [PASS] tools/list  ['calculate_processing_cost', 'corpus_stats', 'list_documents', 'retrieve']
+  [PASS] retrieve  answerable=True citations=5  'Five years of continuous service [1].'
+  [PASS] outsider refused  documind-outsider-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com is not on tenant 'acme''s roster
+  --------------------------------------------------------
+  4 passed, 0 failed
 ```
 
-**`step_02_on_a_candidate_a_deadline_no_call_can_meet(session)` — The fallback: the pool by retrieval score, flagged on the row, forced on a candidate / Do it, on a candidate: a deadline no call can meet**
+### demo_06_one_call_at_each_door_and_both_sides_of_the_answer.py
 
-Do it, on a candidate: a deadline no call can meet
+Do it: every door Do it: both sides
 
-Operation: bash — run in the operator shell (one new revision, no traffic; one question to it; one log read).
+**`step_01_every_door(session)` — One call at each door, and both sides of the answer / Do it: every door**
+
+Do it: every door
+
+Operation: bash — run in the operator shell, in the kit (one call at each door).
 
 Expected shape, not a promised result:
 
 ```text
-candidate: rerank_fallback 1 | rerank_ms 1x | pool 20 | answerable True
-   score 0.7xxx  #1  hr_policy_2026.md
-   score 0.7xxx  #4  hr_policy_2026.md
-   score 0.6xxx  #2  hr_policy_2026.md
-2026-09-2xT1x:xx:xx.xxxxxxZ	acme	DeadlineExceeded
+no token                              HTTP 403 - Cloud Run, before the server ran
+  ui-sa, a token for rag-api's address  HTTP 401 - Cloud Run, before the server ran
+  ui-sa, no email in the token          tool error - not authenticated: the bearer token carries no verified email
+  the outsider, naming acme             tool error - documind-outsider-sa is not on tenant 'acme''s roster
+  ui-sa, naming zeta                    answered - answerable True, 5 citations
 ```
 
-**`step_03_on_a_candidate_a_deadline_no_call_can_meet(session)` — The fallback: the pool by retrieval score, flagged on the row, forced on a candidate / Do it, on a candidate: a deadline no call can meet**
+**`step_02_both_sides(session)` — One call at each door, and both sides of the answer / Do it: both sides**
 
-Do it, on a candidate: a deadline no call can meet
+Do it: both sides
 
-Operation: bash — run in the operator shell (the undo: the variable removed, the tag dropped, the live service asked once).
-
-Expected shape, not a promised result:
-
-```text
-live: rerank_fallback 0 | rerank_ms 3xx | first score 0.9xxx
-100;documind-api-00044-xyz
-```
-
-### demo_06_make_usage_where_the_time_went_p95_per_stage_and_the_view_behind_it.py
-
-Do it: the selftest, then the lane's last day, then its rows into the reader
-
-**`step_01_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
-
-Do it: the selftest, then the lane's last day, then its rows into the reader
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0: the selftest touches nothing, and reading the log is free).
+Operation: bash — run in the operator shell, in the kit (both sides of the answered calls).
 
 Expected shape, not a promised result:
 
 ```text
-selftest: by tenant
-tenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans
-------------------------------------------------------------------------------------
-zeta                         1      1500      120    0.0332      2.82    5200   0.00
-acme                         2      3800      450    0.0091      0.77    1400   0.50
-
-selftest: where the time went (p95 per stage, by tenant)
-tenant                 answers  p95 ms  retrieve  rerank  generate   pool
--------------------------------------------------------------------------
-zeta                         1    5200       200     120      4800   20.0
-acme                         2    1400       220     130       990   20.0
-
-selftest OK - grouped like tenant_daily: dearest tenant first, tokens summed, p95 the 95th latency, unanswerable a rate, p95 per stage and the pool beside it
-```
-
-**`step_02_the_selftest_then_the_lane_s_last_day_then(session)` — make usage: where the time went, p95 per stage, and the view behind it / Do it: the selftest, then the lane's last day, then its rows into the reader**
-
-Do it: the selftest, then the lane's last day, then its rows into the reader
-
-Operation: bash — run in the operator shell (the rows themselves, one JSON line each, for the reader in step 1).
-
-Expected shape, not a promised result:
-
-```text
-NN rows; 1 with rerank_fallback 1; 0 with an empty pool
-{"event": "query", "tenant": "acme", "user": "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com", "tokens_in": xxxx.0, "tokens_out": xxx.0, "cached_tokens": 0.0, "cost_usd": 0.00xxxx, "latency_ms": 2xxx.0, "answerable": true, "retrieve_ms": 6xx.0, "rerank_ms": 3xx.0, "generate_ms": 1xxx.0, "pool": 20.0, "rerank_fallback": 0.0, ...
-```
-
-### demo_07_found_by_stamped_on_every_chunk_counted_on_the_answer_absent_from_the_citation.py
-
-Do it: the join, then the kit's own retrieval in your process, then the smoke
-
-**`step_01_the_join_then_the_kit_s_own_retrieval_in_y(session)` — found_by: stamped on every chunk, counted on the answer, absent from the citation / Do it: the join, then the kit's own retrieval in your process, then the smoke**
-
-Do it: the join, then the kit's own retrieval in your process, then the smoke
-
-Operation: bash — run in the operator shell (a Python cell; Rs 0: two files on disk).
-
-Expected shape, not a promised result:
-
-```text
-the answer's counts: pool 20 | vector_chunks 20 | graph_chunks 0 | managed_chunks 0 | retrieval_backend vector
-a citation's fields: ['chunk_id', 'end', 'kind', 'media_url', 'page', 'quote', 'score', 'source_uri', 'start']
-   #  1 hr_policy_2026.md          found_by vector   (by the join)
-   #  4 hr_policy_2026.md          found_by vector   (by the join)
-   #  2 hr_policy_2026.md          found_by vector   (by the join)
-```
-
-**`step_02_the_join_then_the_kit_s_own_retrieval_in_y(session)` — found_by: stamped on every chunk, counted on the answer, absent from the citation / Do it: the join, then the kit's own retrieval in your process, then the smoke**
-
-Do it: the join, then the kit's own retrieval in your process, then the smoke
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; the kit's retrieve() in this process: one embedding, one index query, one Firestore read).
-
-Expected shape, not a promised result:
-
-```text
-20 chunks in the pool, found_by: {'vector': 20}
-first three: [('NP-03', 'vector', 0.7xxx), ('...', 'vector', 0.7xxx), ('...', 'vector', 0.7xxx)]
-```
-
-**`step_03_the_join_then_the_kit_s_own_retrieval_in_y(session)` — found_by: stamped on every chunk, counted on the answer, absent from the citation / Do it: the join, then the kit's own retrieval in your process, then the smoke**
-
-Do it: the join, then the kit's own retrieval in your process, then the smoke
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the smoke: one question, the same without a token, a version read; a rupee).
-
-IDE adaptation: Run with the page's pipeline status (no pipefail). The cell filters make smoke for the lines this lesson reads; a check failing elsewhere in the smoke shows in those lines instead of stopping the cell before its later lines.
-
-Expected shape, not a promised result:
-
-```text
-[PASS] health  {"status":"ok"}
-  [PASS] ready  ...
-  [PASS] query  answerable=True citations=3  '...'
-  [PASS] vector tier  20 of 20 chunks came from the index
-  [PASS] no token refused  status=403
-  ...
-```
-
-### demo_08_what_the_funnel_costs_its_knobs_and_the_packed_set_the_citations_come_from.py
-
-The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
-
-**`step_01_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
-
-The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: pure Python over the saved pool and a file in the kit).
-
-Expected shape, not a promised result:
-
-```text
-the budget: 7,832 tokens for the chunks, 168 for the fixed prompt, 2,048 reserved for the answer
-your ranked pool, top_k 5    packed  5, dropped  0, context   7xx tokens
-your ranked pool, top_k 20   packed 20, dropped  0, context  2xxx tokens
-twenty full CGST Act pages   packed 15, dropped  5, context  7633 tokens
-the first header the model reads: [Source 1] hr_policy_2026.md
-```
-
-**`step_02_the_api_s_packer_offline_then_a_pool_of_ac(session)` — What the funnel costs, its knobs, and the packed set the citations come from / Do it: the API's packer offline, then a pool of Act pages on the lane**
-
-The cell runs the kit's packer with the API's own budget over three lists: your ranked pool at top_k 5 and 20, and twenty full pages of the CGST Act's mirror, cut by the kit's own chunker from the file in evals/corpus. Then a golden question whose pool is Act pages goes to the API at top_k 20, and the log says what the packer dropped.
-
-Operation: bash — run in the operator shell (one question with twenty Act pages offered to the model, a couple of rupees; one log read).
-
-Expected shape, not a promised result:
-
-```text
-pool 20 | citations 2 | generate_ms 3xxx | tokens_in 8xxx | sources ['cgst_act_2017.pdf']
-2026-09-2xT1x:xx:xx.xxxxxxZ	1x	x
+documind-mcp, a line per answered call - who asked:
+  retrieve  tenant acme   caller documind-ui-sa
+  retrieve  tenant zeta   caller documind-ui-sa
+documind-api, a row per retrieval it served for the MCP server - who it served:
+  retrieve  tenant acme   user   documind-mcp-sa
+  retrieve  tenant zeta   user   documind-mcp-sa
 ```
 
 ### setup/restore_settings.py
 
-At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 Operation: bash — run in the operator shell when you finish the lesson, not now.
 
-IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs. Restore the saved answer-cache value and tenant backend, including after a failed experiment.
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
 ### setup/finish.py
 
@@ -322,6 +221,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.3_Rerank_WIX.html`. All 46 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `57bf349b566019103069ed16a192beac3c631f19`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.3_MCP_Deploy_WIX.html`. All 22 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `84a7e098461d32a587731e9d8ffc358d0dd77573`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

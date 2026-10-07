@@ -1,4 +1,4 @@
-"""The case queue (workshop lesson 10.5): a request handed to the person the law or the company names, kept as a record.
+"""The case queue (workshop lesson 5.6): a request handed to the person the law or the company names, kept as a record.
 
 A case lives at cases/{case_id}, one collection for every tenant, each record carrying its tenant. Ids are
 secrets.token_hex(16), so an id says nothing and cannot be guessed. Every read is a point read that checks the

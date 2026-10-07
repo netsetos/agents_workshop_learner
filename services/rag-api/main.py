@@ -201,7 +201,7 @@ def check_filters(filters: dict | None) -> None:
     are the roster's and the ledger's, never the caller's - a body field is a header in disguise. A typo is a 400
     that names the allowed keys, not an empty pool that reads like an honest "nothing found".
 
-    doc_type may name a set (workshop lesson 10.6: the statute desk asks for statute and guidance in one retrieval):
+    doc_type may name a set (workshop lesson 10.4: the statute desk asks for statute and guidance in one retrieval):
     a list of 1 to 5 classes, any of which a row may carry. It is made canonical in place - sorted, de-duplicated,
     one class as its string - because scope_of sorts the keys, not a list's values: one set, one cache scope. kind
     stays one string: its branches in retriever.py are scalar and differ by path, so a list would mean one thing on
@@ -529,7 +529,7 @@ def stream(req: QueryRequest, user=Depends(verify_iap)):
 
 @app.post("/v1/passages")
 def passages(req: QueryRequest, user=Depends(verify_iap)):
-    """The retrieval half of /v1/query and nothing after it (workshop lesson 10.6): the same door, identity,
+    """The retrieval half of /v1/query and nothing after it (workshop lesson 10.4): the same door, identity,
     membership, filters, prompt screen, backend, current-version rule and rerank, then this turn's passages with
     each chunk's full text - no model call, no answer cache, no retry. An agent that writes its own answer reads
     these instead of paying for rag-api's and throwing it away; a Citation's quote is one clause (at most 25 words,

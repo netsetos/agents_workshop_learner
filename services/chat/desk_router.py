@@ -1,4 +1,4 @@
-"""The DocuMind Desk's router (workshop lesson 10.6): decide(question, ctx) gives a question one route, and every
+"""The DocuMind Desk's router (workshop lesson 10.4): decide(question, ctx) gives a question one route, and every
 security decision on the way is made by code.
 
     0  who        no role at all is denied, with no model call

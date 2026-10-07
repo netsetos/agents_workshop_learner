@@ -1,4 +1,4 @@
-"""The DocuMind Desk's hard gate: the questions the law hands to a person, found by rule (workshop lesson 10.5).
+"""The DocuMind Desk's hard gate: the questions the law hands to a person, found by rule (workshop lesson 5.6).
 
 A gate class fires when a first-person marker and one of the class's topic patterns are both in the question, in
 English, in Devanagari Hindi or in Hinglish (Hindi typed in Latin letters). Five classes, most protective first:

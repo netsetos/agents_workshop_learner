@@ -1,4 +1,4 @@
-"""What a model call cost, priced where rag-api is not: the chat service's own model calls (workshop lesson 10.3).
+"""What a model call cost, priced where rag-api is not: the chat service's own model calls (workshop lesson 5.5).
 
 rag-api prices its answers in services/rag-api/cost.py, from BigQuery's model_prices table with a fallback. The chat
 service has no BigQuery role and needs no table: it prices each of its own calls at list price, from the same

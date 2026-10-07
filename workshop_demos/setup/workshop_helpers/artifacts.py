@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import re
 import uuid
+from .config import lesson_folder
 
 
 def json_default(value):
@@ -35,18 +36,19 @@ class ArtifactStore:
     
     Example: store = ArtifactStore(config, "planner"); store.save("plan", report)
     """
-    def __init__(self, config, demo, module=4, lesson="4.4"):
+    def __init__(self, config, demo, module=1, lesson="1.8"):
         """Create a unique local evidence directory and an initial running manifest.
         
         Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.
         """
         if not re.fullmatch(r"[0-9]{2}", demo):
             raise ValueError("Demo IDs use two digits.")
-        if not isinstance(module, int) or module < 1 or not re.fullmatch(r"[0-9]+\.[0-9]+", lesson):
-            raise ValueError("Use a positive module number and a numeric lesson such as 4.4.")
+        if module != "B" and (not isinstance(module, int) or module < 0):
+            raise ValueError("Use a module number (0 or more, or B for Basics) and a lesson such as 4.4 or B.1.")
+        folder = lesson_folder(lesson)
         self.run_id = uuid.uuid4().hex[:16]
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        self.directory = config.results_dir / f"module_{module:02}" / f"lesson_{lesson.replace('.', '_')}" / f"demo_{demo}" / f"{stamp}_{self.run_id}"
+        self.directory = config.results_dir / folder / f"demo_{demo}" / f"{stamp}_{self.run_id}"
         self.directory.mkdir(parents=True, exist_ok=False)
         self.manifest = {
             "schema_version": 1, "module": module, "lesson": lesson, "demo": demo, "run_id": self.run_id,

@@ -4,65 +4,67 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_6.3_Streaming_WIX.html`, reviewed at blob `c6e58b623f6b0a931efccb868a7e7dc1ba3f7f54`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.3_Cache_Freshness_WIX.html`, reviewed at blob `42a67f4e01b8e91ddac46f96e60590b66df457d6`. Learners read that page on the course site; this guide keeps its prose.
 
-Lesson 6.2 returned one JSON. This lesson returns the same answer as it is written. `/v1/stream` keeps one connection open and sends Server-Sent Events down it: the citations first, because the packed set is known before a single token exists, then each piece of text as the model produces it, then one `done` event with the envelope, or an `error` when the guard refuses the finished answer. The stream takes the same roads as the query and keeps the same clocks; a cache hit and an empty pool each arrive as a single token; and when something on the way fails, the retriever's index, the ranker, the classifier, the cache, the month's counter, the tracing, the answer is still served and one line in the log says what stood in. You will read a stream in curl with a clock on each event, see why its citations differ from the query's, stream the empty pool, read the guard's two doors, force a failure on a candidate that takes no traffic and watch the stream continue, and read the table of everything that degrades and what it degrades to.
+A cache is right only while the thing it copied has not changed. This lesson changes things on purpose and watches both caches react. You ask the E3 notice-period question under three scopes, then release revision 2 of acme's handbook, which makes the answer 90 days instead of 60. The answer cache misses, the context cache goes stale, and `make cache` brings the second one back. Finally you put version 1 back and watch the old answer return, because the corpus it was given under has returned.
 
-- Why a stream, what its four events carry, and what degrades into a line
+- What each cache checks, and the fingerprint both follow
 
-- The words: SSE, citation event, token, done, error, held, blocked, fallback, stream row, first token
+- The words: fingerprint, doc_key, reindex, the undo, scope, cache_stale, the dated rule
 
 - Before you run anything: set up the shell
 
-- A stream in curl: the raw events, their order, and a clock on each
+- Both caches, and the corpus they follow
 
-- What a stream's citations are, and the streams of one token
+- Scope: the same words under other settings
 
-- The guard: a prompt refused before the stream, an answer held until it is screened
+- The corpus moves: revision 2, and both caches react
 
-- A failure forced on a candidate: the ranker silent, the stream still served, the line in the log
+- make cache again: attached again, and what it packed
 
-- Every failure and what it degrades to
+- The corpus comes back: version 1, and the old answer with it
 
-- What a stream costs, what its row says, and who reads it
+- Why freshness works this way, what it costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn what the stream's four events carry and in what order, why its citations are the packed set rather than the model's, how the guard sits on both sides of the stream, and how each failure on the way degrades into a log line with the answer still served. Then you will prove it on your lane: time a stream event by event, stream the empty pool, read the guard's column on the rows, force the ranker to stand down on a candidate and read the line, and check the events the lane has never logged.
+You will learn exactly what each cache compares before it is used, why one fingerprint of the corpus is enough to keep both caches honest, and which configuration changes the kit's caches see and which they do not. Then you will prove it on your lane: the miss after `make reindex`, a hit again after `make cache`, and the old answer served again once the old document is back.
 
-### Why a stream, what its four events carry, and what degrades into a line
+### What each cache checks, and the fingerprint both follow
 
-The first token is the point, the sources come before it, the same clocks run without spans, and a failure is a line in the log rather than an empty screen.
+Two lists of conditions, one name for the corpus, and what each list leaves out.
 
-A stream exists for the first token, and the sources come before it. `/v1/query` answers once, when everything is done. `/v1/stream` answers as Server-Sent Events on one connection: `event: citation` lines first, one per packed chunk with the fields a `Citation` carries and the first 240 characters of the text as its quote; then `event: token` for each piece of text as the model produces it; then one `event: done` with the envelope, tokens, model, backend, the three clocks and the pool, the cache verdict and the prompt version. The citations are the packed set because that is known before a single token exists, so the UI can render the sources while the answer is being written; the price is that a stream cites every packed source and the query cites only the ones the model used, and lesson 6.2's resolver never runs here, because JSON cannot usefully be streamed. The tokens are prose with `[N]` marks, and `N` is the packed position.
+Each cache checks its own list before it is used. The answer cache serves a stored answer only when four things hold. It must be for the same tenant, under the same corpus fingerprint, for the same scope (the filters, `top_k` and the prompt version), and less than 24 hours old. The context cache is attached only when its record exists with more than two minutes left, the request runs on the cache's model, and the fingerprint it was packed from is still the ledger's. Everything else about the request can change without either cache noticing.
 
-The stream takes the same roads and keeps the same clocks. The handler's order is the query's: the roster, the filter keys, the guard before the stream starts, so a blocked prompt is a 400 and never a broken stream; then retrieve, rerank with its fallback, and generate, on the same three clocks without spans, because a generator suspended between tokens is no place to hold a span. A cache hit arrives as one token with backend `cache`; an empty pool arrives as one token with backend `none` and no model call; the row is logged with event `stream` and the same columns as a query's. The clock the caller feels is different from the API's: the time to the first citation, the time to the first token, and the time to `done` are three numbers, and only the last is `latency_ms`.
+The fingerprint is the corpus's name. After every reindex, retirement and reactivation, the worker hashes the tenant's sorted current `doc_key`s into `ledger/{tenant}`. A `doc_key` is the hash of a version's bytes, so a new version of any document gives the tenant a new fingerprint, even when the change is far from the question. The invalidation is coarse, but it is cheap and it is safe: one Firestore read per request, and no scan of the cache. Because the fingerprint names the set of current bytes and not a moment, putting the old bytes back brings the old fingerprint back. Every answer given under it that is still inside its 24 hours becomes a hit again. That is correct, because the same documents give the same answers.
 
-A failure degrades into a line, not a 500. Every rung the request climbs has a stand-in and a name: a classifier that fails is `routing_fallback` and the generator model answers; a routed tier out of quota before the first token is `tier_exhausted` and the default model streams; an index that raises is `vector_search_fallback`; a silent ranker is `rerank_fallback`; a cache that cannot be read is `semantic_cache_failed` and a miss; a cache that cannot be written is `semantic_cache_store_failed`; a month's counter that cannot be written is `budget_record_failed`; tracing that cannot load is `telemetry_not_instrumented`. In each case the answer is served, the log names the cause, and where it matters the row counts it. Two things do not degrade, on purpose: a prompt the guard blocks is refused before the stream, and a finished answer the guard blocks becomes `event: error` after the held tokens are screened, with `blocked_response` on the row.
+The scope holds what changes an answer, and leaves some of it out. Filters, `top_k` and the prompt version are in the scope, because each can change what the model reads or how it answers. The model, the retrieval backend and mode, and the reranker are not. Change the generator model and the answer cache keeps serving the old model's answers for up to a day; the row names the model that gave each one. The context cache is stricter here: it refuses any request on another model.
 
-The live commentary. A radio commentator reads out the team sheets before the whistle, every player who is on the pitch, which is the citations from the packed set. Then the commentary runs play by play, which is the tokens. With the delay censor switched on, the broadcast runs a few seconds behind and either goes out whole or is cut with one announcement, which is the guard holding the tokens and the error event. When the scoreboard feed dies mid-match, the commentator carries on from the referee's list and the producer notes it in the log; nobody at home hears a gap. The final whistle carries the bill, the clocks and who was in the booth, which is `done`.
+Stale means something different for each cache. A stale answer is simply never served. Nothing deletes it, and Firestore's TTL policy reaps it after its day. A stale context cache is not attached. The API writes `cache_stale` in its log for every such request and answers uncached until `make cache` packs again. `make cache` records the new fingerprint, but it packs the kit's own copy of the documents, not the tenant's current corpus. So after a reindex, the new cache is labelled current while holding the old text. What keeps the answer right then is the prompt's dated rule: when sources disagree, follow the one with the latest effective date.
 
-#### The stream reader: paste a transcript, read it event by event
+A bank's rate board. The counter answers "what is the one-year FD rate?" from a sheet stamped with the circular it was worked out under. A question for a senior citizen, or for two years, needs its own sheet: that is the scope. When a new circular arrives, every sheet stamped with the old one goes in the drawer, unread: that is the fingerprint moving. If head office withdraws the new circular and restores the old one, this morning's sheets are right again, and out they come. The thick rate manual on the counter is reissued for each circular too, but it is reprinted from head office's master copy, which may still carry last month's page.
 
-The reader parses the text `curl -N` prints, or the transcript step 3 saves: the events in order, the citations with their kinds and dates, the tokens joined back into the answer, and the `done` event's envelope, read against the handler's rules. It starts on a transcript shaped exactly as main.py writes one, with two of the kit's handbook chunks as the citations and that chunk's own words standing in for the model's; the cases turn it into the other shapes a stream can take.
+#### Freshness over time
 
-The event names and their fields are main.py's, the sample's clocks are the kit's usage selftest rows, and the readings under `done` are lesson 5.3's rules for a stages block. Paste your own transcript from step 3 and the numbers are yours.
+Start where step 3 leaves your lane: a context cache packed under version 1's fingerprint, and no stored answers. Then press the events in any order. Change the request's settings before an ask, and read what each cache did.
 
-It is not a client: it reads a finished transcript and cannot show the one thing a stream is for, the first token arriving before the rest. Step 3's cell times that. And its sample answer is a chunk's own words, because the model's are not known until it writes them.
+The timeline runs the kit's own rules. The build replayed 300 random sequences of these events, 905 asks in all, through `store()` and `lookup()` on a stand-in Firestore, and through `get()`, `stale_against()` and `generate_config_kwargs()` on a stand-in record. The panel agreed at every ask. The scope hashes shown are the kit's own `scope_of()`.
 
-### The words: SSE, citation event, token, done, error, held, blocked, fallback, stream row, first token
+The question's words never change here; paraphrases and the near rung were lesson 6.2's. The clock jumps rather than runs. Every answer is taken as answerable and cited, so every miss is stored. Your lane's fingerprints are longer hashes than F1 and F2, and they depend on every document acme holds.
 
-Ten rows, each with the value it takes on your lane.
+### The words: fingerprint, doc_key, reindex, the undo, scope, cache_stale, the dated rule
 
-One distinction carries the lesson: a fallback serves the answer and writes a line; a refusal serves the contract with `answerable false`; a failure is a status the caller sees. The stream has all three, and the reader below tells them apart by the events alone.
+Eleven rows, each with the value it takes on your lane.
+
+One distinction to hold: the fingerprint says whether the corpus is the same, and the scope says whether the question is the same. The answer cache needs both, and the context cache needs only the first.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -74,104 +76,124 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The guard, the answer cache, the router and the ranker's deadline live in the API's environment, each with a default the page names; a name the service does not set is unset rather than exported empty. `/version` reports the cache and the model.
+The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok`. This lesson changes acme's handbook for a few minutes. Step 5 makes revision 2 current, and step 7 puts version 1 back. In between, everyone who asks acme about an E3's notice period is told 90 days, so run steps 5 to 7 without a break, on a lane nobody else is demonstrating on. Step 3 also creates acme's context cache and a candidate with `SEMANTIC_CACHE=on`; step 7 removes both.
 
-### A stream in curl: the raw events, their order, and a clock on each
+### Both caches, and the corpus they follow
 
-The handler that writes the events, the generator that yields the packed list once and then the text, and a cell that times the first citation, the first token and done.
-
-#### Definition
-
-`generate_stream()` yields three kinds of thing: `packed` once, with the list the budget kept; `token` for each piece of text from `generate_content_stream`; and `usage` at the end from the last chunk's metadata, which carries the totals. The handler turns the packed list into citation events with the fields a `Citation` carries, sends each token as it comes unless the guard is holding them, and closes with `done`. The cell asks the notice-period question on the stream, records the millisecond each event kind first arrived, saves the raw transcript for the reader, and asks the same question on the query to set the two citation counts side by side.
-
-#### The code
-
-#### Do it: one stream, timed, then the query's citations beside it
-
-Three clocks the caller feels, one the API keeps. The citations arrived when retrieval and reranking were done, about a second in; the first token arrived when the model began, another second later; and `done` came when it stopped, which is the only number `latency_ms` measures. The five citations were the packed set, every chunk the model was shown, and the query's three were the ones it chose to cite, which is the difference between knowing the sources before the answer and knowing which sources the answer used. The tokens were prose with the packed positions in brackets, and the envelope in `done` was the query's minus the price, which the row carries.
-
-### What a stream's citations are, and the streams of one token
-
-The citation event from a packed chunk, the two cases that send one token and no model call, and the rows the three streams left.
+The fingerprint's source, both caches set up, and the E3 question asked three times.
 
 #### Definition
 
-A citation event is built from the packed chunk's own fields, the same nine a `Citation` carries, so the UI renders a figure or a video segment from the stream exactly as from the query. Two streams never reach the model. An answer-cache hit, when `SEMANTIC_CACHE` is on, sends the stored answer's citations, then the stored answer as one token, then `done` with backend `cache` and cost zero; the UI cannot tell, the row can. An empty pool sends no citation, one token that is the refusal the API writes itself, and `done` with backend `none`; the row's `answerable false` feeds the alert. The cell streams the empty pool with the same filter lessons 5.x used, and then reads the rows the streams of this step and the last have written, with the columns that tell them apart.
+The worker writes the fingerprint; the API reads it. `refresh_fingerprint()` runs at the end of every change to what is current, and stores the new value in `ledger/acme` with the event that caused it. `/v1/query` reads that document for the answer cache when `SEMANTIC_CACHE=on`, and `cache_manager` reads it again before it attaches a context cache. The first cell creates the context cache and the candidate. The second defines two functions. `ask92` asks the E3 question and prints the backend, the cache verdict, both token counts, the time and the start of the answer. `state92` prints the ledger's fingerprint beside the one the context cache was packed from. The cell then asks once on the live revision and twice on the candidate.
 
 #### The code
 
-#### Do it: the empty pool as one token, then the stream rows
+#### Do it: the two caches
 
-The filter emptied the pool, and the stream did what the query does in the same case, without a model: no citation events, because nothing was packed, one token carrying the API's own refusal, and a `done` whose backend is `none` and whose rerank and generate clocks read zero because they never ran. The rows told the same story in the columns lesson 5.3 read: the empty stream with `answerable False` and no tokens, the cited one with its pool of twenty and the model's tokens, both with the guard `off`. Both also read `ui` in the brain column, although curl sent no label: the API records a request that names no brain as `ui`, so that column cannot tell a shell from the UI. The row's `user` can, and lesson 6.4 reads it.
+#### Do it: the state, and three asks
 
-### The guard: a prompt refused before the stream, an answer held until it is screened
+The state line shows the two fingerprints equal, so the context cache is current. The live revision answered with the cache attached: 60 days, and `cached_tokens` non-zero. The candidate's first answer did the same and was stored under this fingerprint and this scope. Its second came back from the answer cache: `cache`, zero tokens, a fraction of the time. That is the baseline everything after this changes.
 
-Model Armor on both sides of the model, why the stream holds its tokens when the guard is on, and what each verdict does to the events and the row.
+### Scope: the same words under other settings
+
+Two asks under changed settings, and the scope hashes behind them.
 
 #### Definition
 
-The guard is a setting, `ARMOR`, and a template, and it is imported only when the setting is on, so a revision that never asked for it neither pays for its client nor fails on a template it does not have. On, it sits on both sides of the model. Before retrieval it screens the prompt, because an injection that reaches the retriever has already chosen which documents the model reads; a block is a 400 with the reason and a `guard` line, and the stream never starts. After generation it screens the finished answer, and a token stream cannot be screened, so the stream holds every token, screens the whole once, and then sends either all of them or one `error` event; the row is logged first, with `blocked_response`, so the rate is counted even when the caller sees nothing. Off, as on your lane, every row says `guard: off`, and the tokens go out as they come. Turning it on needs the template in Model Armor and the role on the service account, which Module 12 does; here you read the two doors and the column.
+`scope_of()` hashes the filters, `top_k` and the prompt version into 16 characters stored on each answer. `_alive()` compares that hash, the fingerprint and `expire_at`. The cell asks the same words with `top_k` 8, then with the filter `kind: text`, which keeps the same handbook chunks. It then prints four scope hashes with the kit's own function: as asked, the two you just used, and prompt version `v4`. Changing the prompt version takes a new revision, so the hash is enough to show it would miss.
 
 #### The code
 
-#### Read the lane, Rs 0
+#### Do it
 
-Every answer of the day carried the guard's verdict, and every verdict was `off`, which is the honest column for a lane that has not installed the template: not `pass`, which would claim a screening that did not happen. The two doors are in the code above, and the stream's held list is the part that costs something when the guard is on: the first token waits for the last, and the feature this lesson is about is traded for the screen. That trade is Module 12's to make.
+Both asks missed, although the words were the same and the answer was the same 60 days. A wider pool or a filtered one may not give the same answer, and the cache cannot know that it did. So each scope keeps its own entry: two more answers are stored now. The four hashes are all different, and a `v4` prompt would miss for the same reason. The model is not in the list, so a candidate on another model would still be served these answers; the timeline's model setting shows it.
 
-### A failure forced on a candidate: the ranker silent, the stream still served, the line in the log
+### The corpus moves: revision 2, and both caches react
 
-The stream's own rerank branch, a candidate whose ranker deadline is a millisecond, the citations and tokens that still arrive, the flag in done, and the line that names the cause.
+A release of revision 2, the new fingerprint, and both caches asked again.
 
 #### Definition
 
-The stream reranks on the same function as the query and reads the same mark: when the Ranking API does not answer inside `RERANK_TIMEOUT_S`, the pool by retrieval score stands in, every chunk is marked, and the handler puts `rerank_fallback 1` into the stages that `done` carries and the row logs. The caller sees citations in the retriever's order and tokens as usual; the log has one `rerank_fallback` line with the error's type. The way to see it without harming anyone is the candidate from lesson 5.3, a revision that takes no traffic with a deadline of one millisecond, asked on the stream this time; the undo removes the variable, because the live service does not set it. The same block reads the startup event the lane has never written, `telemetry_not_instrumented`, because a fallback that has never fired is worth one line of proof too.
+Revision 2 is version 1 with two changes: a dated line at the top, and NP-03's figure raised from 60 to 90 days. `make reindex` checks the golden rows that cite the handbook offline, uploads the file under the handbook's object name, and waits for the worker. Your lane has probably seen these bytes before, in lesson 1.3. If so, the worker brings back that version's rows without embedding anything (`ingest_reactivated`); if not, it embeds the changed chunks (`ingest_ok`). Either way, revision 2 becomes current, version 1 is retired, and the fingerprint moves. The next cell asks both revisions again and reads the API's `cache_stale` lines.
 
 #### The code
 
-#### Do it: the ranker silent for one revision, the stream read, the line read, the undo
+#### Do it: the release
 
-The ranker had one millisecond, did not make it, and the stream did not notice in any way a caller could see: three citations came first, then the tokens, then `done`. Only `done.stages` said what happened, `rerank_fallback 1`, and the log named the error, which is the whole design: a worse order served on time, counted where a person will look. The telemetry read printed nothing because the instrumentation loaded on every revision the lane has run, and a line that is absent when it should be is as much a proof as one that is present. Then the variable came out and the tag went.
+#### Do it: the state, both asks, and the log
 
-### Every failure and what it degrades to
+The ledger's fingerprint changed, and the state line calls the context cache STALE. The live revision answered 90 days with `cached_tokens` 0: its cache was packed from the old corpus, so it was not attached, and the log says `cache_stale`. The candidate missed on the words it answered from its cache a minute ago, because that answer belongs to the old fingerprint. That is the first proof: the miss after `make reindex`. Its new answer is 90 days, and it is stored under the new fingerprint. Served from the cache instead, the old answer would have been the wrong number, delivered faster.
 
-Eight named fallbacks in the API, where each one lives, what stands in, what the caller sees, and where it is counted; and the three things that do not degrade.
+### make cache again: attached again, and what it packed
 
-Three things do not degrade, on purpose. A prompt the guard blocks is a 400 before the stream starts, because a refusal dressed as an answer would hide the rate. A finished answer the guard blocks is one `error` event on the stream and a 502 on the query, after the row has said `blocked_response`. And a reply the generator cannot parse is a 502 on the query, never a refusal, which lesson 6.2 forced; on the stream there is no schema to fail, and a model that returns nothing simply ends the stream with `done` and no tokens. The managed stores' own fallbacks, `rag_engine_fallback` and `vertex_search_fallback`, take the same shape and belong to Module 15.
+A new pack under the new fingerprint, and one question to the live revision.
+
+#### Definition
+
+`make cache` builds the pack from the kit's copies of acme's documents, which still hold version 1's 60 days. It records the ledger's current fingerprint, so the record is current and the API attaches it again. The model now reads two things that disagree: the cached pack, which says 60 days and carries no date, and the retrieved NP-03 chunk, which says 90 days from 1 October 2026. Because a packed chunk carries a date, the generator adds the dated rule, and the rule tells the model which source to follow.
 
 #### The code
 
-Nothing ran here; the table is the map. Read it as one rule applied eight times: every place the request depends on something outside the container has a stand-in that serves, a name in the log, and, where the answer's quality changed, a count on the row. The two blocks and the 502 are the places where serving would be the wrong thing to do, and each says so to the caller instead.
+#### Do it
 
-### What a stream costs, what its row says, and who reads it
+The state line is current again, and the live answer carries `cached_tokens`. That is the second proof: a hit again after `make cache`. Now read the answer, which should still say 90 days. The reason is not the cache, which holds version 1's text under revision 2's fingerprint. It is the dated rule, which sends the model to the dated source. The cache's label is current, but its content is a version behind the index. A revision without a date line would leave the model to choose between 60 and 90 on its own.
 
-The rupee line, the rows by surface, the UI's own reader of the same events, and the two clocks a product manager will ask about.
+### The corpus comes back: version 1, and the old answer with it
+
+Version 1's bytes again, the state, one ask, every row, and the clean-up.
+
+The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current `doc_key`s is the same as at the start, the fingerprint is the same as at the start too.
+
+The ledger shows step 3's fingerprint again, and the context cache, packed under revision 2's, is STALE in turn. The candidate's ask was a hit, and the answer is 60 days: the entry it stored in step 3. It was never deleted, only unread. Its fingerprint is the tenant's again and it is still inside its day, so it is right again. The fingerprint names a corpus, not a moment.
+
+#### Every row of the walk
+
+Read the rows in order. There are three live answers: with the cache, stale, then with the cache again. The candidate's rows show a miss, a hit, two scope misses, a fingerprint miss, and the returning hit. The `vertex` rows at `cached` 0 are the minutes between the reindex and `make cache`, when every acme answer ran without the pack. Nothing alerted; only the log said `cache_stale`.
+
+#### Clean up
+
+The answer cache keeps this lesson's entries until their day is up. The 60-day ones match the current fingerprint, so any revision with the switch on may serve them until then, which is correct. The service's configuration says `SEMANTIC_CACHE=on` until the next deploy or candidate sets it back.
+
+### Why freshness works this way, what it costs, and what the kit does not do yet
+
+The design choices, from the kit's own comments, then the bill and the gaps.
+
+- Coarse on purpose. A new version of any document invalidates every answer the tenant has. A missed hit costs one model call, a wrong hit costs trust, and a fingerprint costs one read. A finer rule, tracing which documents each answer used, would be exact and would cost a join on every lookup.
+
+- The fingerprint moves after the swap, never before. The worker recomputes it only once the new version is current and recorded, so no cache is invalidated for a version a reader cannot yet retrieve.
+
+- Nothing is deleted on a reindex. Old answers and the old cache record stay where they are, unread, the same way the ledger retires a version with a flag. The undo brings the answers back for free.
+
+- Five candidates, not one. A stale twin of the question sits beside the current entry after a reindex, and the lookup reads five neighbours so the stale one cannot hide the current one.
+
+- The two-minute rule. A call never starts on a cache that could expire before the model reads it.
+
+- The dated rule is the backstop. When two sources in one prompt disagree, the model is told to follow the latest effective date and to say so. Step 6 depended on it.
 
 #### What it costs
 
-#### The rows by surface, and the reader in the UI
+Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-`make usage` groups the rows by the surface that wrote them, and a stream row is a query row with `event: stream`: the UI's chat page labels its streams `brain: ui`, and a request from a notebook or curl that names no brain is recorded as `ui` too, so the surface table counts the event, not who sent it. The UI reads the events with an iterator of a dozen lines, the same three names, and renders the sources as the citation events arrive and the answer as the tokens do, which is lesson 6.4's page. The two clocks worth keeping apart when someone asks whether the product is fast: the time to the first token, which is what the reader of a chat feels and which no row records, and `latency_ms`, which is when the model stopped. Step 3 measured both; a slow first token with a fast `done` points at retrieval and the ranker, the reverse at a long answer.
+- The scope leaves out the model. Every revision with the switch on shares one `answer_cache`. A candidate on a new model is served the answers other revisions stored, for up to a day, so evaluating a model through a cached candidate measures the old model on every cached question. The row names the model that answered, so this shows, but nothing stops it.
 
-#### The code
+- `make cache` packs the kit's files, not the corpus. Step 6's cache was labelled current while it held version 1's text, and only the dated rule kept the answer right.
 
-#### Do it: the day by surface, Rs 0
-
-The day's rows split by surface, and the stream rows were this lesson's: four of them, one unanswerable, priced like any query's, because a stream changes when the caller gets the answer and not what it costs. The UI's reader is the same dozen lines you wrote in step 3, which is why lesson 6.4 can render a cited answer as it streams without knowing anything about the model.
+- Nothing alerts on `cache_stale`. After every upload, a tenant's answers run without the pack until someone runs `make cache`. No metric or alert in `terraform/` counts the log line.
 
 ### Verify it yourself: the checklist
 
-Nine checks, each one block above, each with the value that proves it on your lane.
+Ten checks, each one block above, each with the value that proves it on your lane.
 
-Nothing that serves traffic. A candidate revision took no traffic, answered one stream with its ranker silenced, and lost its variable before the tag was dropped. The streams you ran are usage rows with `event: stream`, one of them unanswerable, and the transcript sits at `/tmp/stream63.txt`. Lesson 6.4 puts a screen in front of all of this: the upload, the versions list, and the chat that renders these events as they arrive.
+acme's handbook is version 1 again, and revision 2 is retired for another 30 days, as it was before this lesson. The ledger's fingerprint is back to its starting value. The context cache is deleted. `documind-api` has one more revision, which serves no traffic and has no tag, and the service's configuration says `SEMANTIC_CACHE=on` until the next deploy. `answer_cache` holds this lesson's answers until their day is up. The usage rows of seven answered questions and two hits. Lesson 6.4 measures what these caches buy: latency, avoided calls in rupees, and the threshold that keeps the near rung from answering the wrong question.
 
-Netsetos GenAI on GCP · Module 6 Generation · Lesson 6.3 Stream answers and handle failures · v5.0
+Netsetos GenAI on GCP · Module 6 Context and memory · Lesson 6.3 Test cache scope, configuration changes and freshness · v5.0
 
-Next: Lesson 6.4 Complete the Streamlit upload-to-answer journey.
+Next: Lesson 6.4 Measure latency, avoided calls and false cache hits.

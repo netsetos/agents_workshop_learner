@@ -1,6 +1,6 @@
 # Run the workshop from your IDE
 
-All **18 modules and 62 lessons** have their own folders. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each authored HTML section has its own numbered example file. Preparation, numbered cleanup sections and conditional extensions remain explicit. A lesson may therefore have more than three demo files: its HTML headings determine the count.
+Every written lesson, and every lesson with a course-plan demo, has its own folder. Start with [the course index](COURSE.md), then read the chosen lesson's README and run its files in the documented order. Each authored HTML section has its own numbered example file. Preparation, numbered cleanup sections and conditional extensions remain explicit. A lesson may therefore have more than three demo files: its HTML headings determine the count.
 
 The sequence, questions, fixtures and expected observations come from the main lesson HTML. Nine lessons currently have no main HTML: 1.1, 1.2, 2.1–2.3 and 14.1–14.4. Their examples were authored from the course plan and real kit entry points; their READMEs explicitly identify this difference. A `GUIDE.md` beside each converted lesson retains the main HTML prose, including browser actions. Required manual actions also pause at the relevant function; read-only code and diagrams remain reference material.
 
@@ -49,8 +49,8 @@ The authoring repository holds this tree under `deploy/workshop_demos/`. The lea
 3. Run `setup/bootstrap.py` with that interpreter. It installs the reusable package and creates `setup/config/settings.local.json`, retaining an existing file. It reads the active gcloud project when available; verify the project and region yourself in that file.
 4. If the workstation lacks the kit's Python dependencies, run `setup/install_dependencies.py` with the appropriate profile. Framework-specific isolated venvs remain at the lesson checkpoints that introduce them.
 5. If Python reports expired ADC, run `setup/authenticate.py` and complete the browser sign-in. `gcloud auth login` and Python application-default credentials are separate identities.
-6. For an **already deployed** project, run `setup/check_setup.py`. Modules 1 and 2 can run their own local/bootstrap examples before the cloud services exist; they do not require that deployed-lane preflight to pass.
-7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside the named `step_...` functions to inspect native Python variables. `demonstrate(session)` shows their complete call sequence. Lesson 3.1 retains its authored descriptive function names and uses the same function checkpoints.
+6. For an **already deployed** project, run `setup/check_setup.py`. Module 0's lessons can run their own local/bootstrap examples before the cloud services exist; they do not require that deployed-lane preflight to pass.
+7. Open the lesson README. Run its first required file, inspect the output, then Run the next file in the table. Place breakpoints inside the named `step_...` functions to inspect native Python variables. `demonstrate(session)` shows their complete call sequence. Lesson 1.1 retains its authored descriptive function names and uses the same function checkpoints.
 
 All examples retain the course's `acme`, `zeta` and `globex` fixtures. Keep `tenant_id: "acme"` for the standard course sequence; changing that setting does not rewrite hard-coded fixture tenants in source examples. Empty endpoint fields are discovered from the serving service at the relevant lesson checkpoint, rather than guessed or hard-coded.
 

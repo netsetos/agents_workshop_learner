@@ -9,7 +9,7 @@ class DemoContext:
     
     Example: with DemoContext("preflight", live=False) as context: print(context.kit)
     """
-    def __init__(self, demo, live=False, config=None, module=4, lesson="4.4"):
+    def __init__(self, demo, live=False, config=None, module=1, lesson="1.8"):
         """Prepare a single preflight context; defer cloud clients until first use.
         
         Example: Construct the owning class with the arguments shown above; subsequent methods reuse these settings.

@@ -1,4 +1,4 @@
-"""The relabel (workshop lesson 10.6): the doc_type registry applied to the rows already stored, one tenant at a time.
+"""The relabel (workshop lesson 10.4): the doc_type registry applied to the rows already stored, one tenant at a time.
 
     PYTHONPATH=.:services/ingest python services/ingest/relabel.py --project P --tenant acme           # the plan
     PYTHONPATH=.:services/ingest python services/ingest/relabel.py --project P --tenant acme --apply   # steps 1 to 7
@@ -20,7 +20,7 @@ is the registry's when the entry's pin is the version's doc_key (shared/doc_type
      is removed from the tier and left unwritten;
   3. its Vertex AI Search document gets a structData-only update of doc_type, written here and not through the
      managed mirror: the mirror's upsert writes the text to the audit bucket again, whose retention policy refuses
-     deletes, and workshop lesson 15.3 holds that only the worker calls it. For a tenant whose data_region lets the
+     deletes, and workshop lesson 7.3 holds that only the worker calls it. For a tenant whose data_region lets the
      store hold its text (acme and zeta), when MANAGED_MIRROR names the store and the store exists;
   4. BigQuery's chunk_source (BQ_CHUNK_TABLE) gets a DML UPDATE per label on tenant, source and version (the chunk_id
      before its '#': the table keeps every version's rows, and each takes its own label). Rows still in the streaming
@@ -47,7 +47,7 @@ their datapoints would leave the old label on the restricts where no later plan 
 deployment with no Vector Search tier at all.
 
 --reset plans every row of the tenant, current and retired, back to "unknown" (a media row to its media type) by the
-same steps and leaves the registry in place: the state workshop lessons 5.1 and 10.3 teach, for rehearsing them on a
+same steps and leaves the registry in place: the state workshop lessons 2.1 and 5.5 teach, for rehearsing them on a
 relabelled lane. Without --reset an unregistered source is never touched.
 """
 from __future__ import annotations

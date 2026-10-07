@@ -1,4 +1,4 @@
-# Lesson 9.2: Test cache scope, configuration changes and freshness
+# Lesson 9.2: Serve a supplied or stock model using Ollama
 
 ## What to run
 
@@ -9,17 +9,17 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | HTML section | File | What it demonstrates |
 |---|---|---|
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
-| 3 | [demo_03_both_caches_and_the_corpus_they_follow.py](demo_03_both_caches_and_the_corpus_they_follow.py) | Both caches, and the corpus they follow |
-| 4 | [demo_04_scope_the_same_words_under_other_settings.py](demo_04_scope_the_same_words_under_other_settings.py) | Scope: the same words under other settings |
-| 5 | [demo_05_the_corpus_moves_revision_2_and_both_caches_react.py](demo_05_the_corpus_moves_revision_2_and_both_caches_react.py) | The corpus moves: revision 2, and both caches react |
-| 6 | [demo_06_make_cache_again_attached_again_and_what_it_packed.py](demo_06_make_cache_again_attached_again_and_what_it_packed.py) | make cache again: attached again, and what it packed |
-| 7 | [demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py](demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py) | The corpus comes back: version 1, and the old answer with it |
+| 3 | [demo_03_a_modelfile_from_the_tokenizer.py](demo_03_a_modelfile_from_the_tokenizer.py) | A Modelfile from the tokenizer |
+| 4 | [demo_04_the_waits_and_the_bill_from_the_kit.py](demo_04_the_waits_and_the_bill_from_the_kit.py) | The waits and the bill, from the kit |
+| 5 | [demo_05_the_stand_in_deployed_and_smoke_tested.py](demo_05_the_stand_in_deployed_and_smoke_tested.py) | The stand-in, deployed and smoke-tested |
+| 6 | [demo_06_the_cold_start_timed.py](demo_06_the_cold_start_timed.py) | The cold start, timed |
+| 7 | [demo_07_the_small_model_behind_the_gateway_and_the_api.py](demo_07_the_small_model_behind_the_gateway_and_the_api.py) | The small model behind the gateway and the API |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The shared workshop setup and the deployed/local inputs described in the reading guide.
+The supplied model/tokenizer when using that path, or the page's stock-model alternative; GPU deployment is billed.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -33,8 +33,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Finish and restore
 
-- [cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py](cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py) — At lesson end: Clean up
-- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -43,11 +42,11 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 Operation: bash — run in the operator shell now, before the lesson's first step.
 
@@ -59,209 +58,262 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_03_both_caches_and_the_corpus_they_follow.py
+### demo_03_a_modelfile_from_the_tokenizer.py
 
-Do it: the two caches Do it: the state, and three asks
+Do it
 
-**`step_01_the_two_caches(session)` — Both caches, and the corpus they follow / Do it: the two caches**
+**`step_01_a_modelfile_from_the_tokenizer(session)` — A Modelfile from the tokenizer / Do it**
 
-Do it: the two caches
+Do it
 
-Operation: bash — run in the operator shell, in the kit (acme's context cache, and a candidate with the answer cache on).
+Operation: bash — run in the operator shell (once: a venv with a transformers that can read the tokenizer).
+
+**`step_02_a_modelfile_from_the_tokenizer(session)` — A Modelfile from the tokenizer / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (downloads the tokenizer's files, about 31 MB; no GPU, no Google Cloud).
 
 Expected shape, not a promised result:
 
 ```text
-cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \
-  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme
-  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID
-  location global (global or regional: the answer to CLAUDE.md's question)
-  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1ef46119bd89b143
-  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row
-gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \
-  --update-env-vars "^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|..."
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+# GENERATED by make_modelfile.py from the tokenizer. Do not hand-edit.
+# Regenerate whenever the checkpoint changes - the template belongs to the
+# weights, not to the project.
+
+FROM ./documind-slm.gguf
+
+TEMPLATE """<bos><|turn>user
+{{ .Prompt }}<turn|>
+<|turn>model
+"""
+
+PARAMETER stop "<turn|>"
+
+PARAMETER num_ctx 4096
+```
+
+### demo_04_the_waits_and_the_bill_from_the_kit.py
+
+Do it
+
+**`step_01_the_waits_and_the_bill_from_the_kit(session)` — The waits and the bill, from the kit / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (reads the kit's files; no network).
+
+Expected shape, not a promised result:
+
+```text
+the SLM: 1 nvidia-l4, 8 vCPU, 32Gi; 0 to 1 instance; 4 requests at a time; 600 s a request
+its startup probe: /api/tags after 10 s, every 5 s, 30 failures allowed: 160 s for Ollama to list the model
+make smoke-slm waits 240 s a call
+a gate row: run_eval waits 90 s for the API, and asks once more two seconds after a timeout
+the API waits 90 s for the gateway (GATEWAY_TIMEOUT_S)
+the gateway waits 110 s for documind-slm, then falls back to documind-general
+the gateway waits 110 s for documind-sensitive, then stops: it has no fallback
+the bill, by the instance: (0.0001867 + 8 x 0.000018 + 32 x 0.000002) USD a second = 1.4209 USD an hour = Rs 120.78
+  up to 10 idle minutes after the last request: Rs 20.13; min-instances 1 for a 720-hour month: Rs 86,960
+  the kit's own figure: Rs 86,904/month, at $1.42 an hour
+```
+
+### demo_05_the_stand_in_deployed_and_smoke_tested.py
+
+Do it
+
+**`step_01_the_stand_in_deployed_and_smoke_tested(session)` — The stand-in, deployed and smoke-tested / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (a GPU service: it bills while an instance lives).
+
+Expected shape, not a promised result:
+
+```text
+>> stand-in: gemma3:4b will be served as documind-slm
+gcloud run deploy documind-slm \
+  --source services/slm --region us-central1 --project documind-ai-YOUR-ID \
+  --gpu 1 --gpu-type nvidia-l4 --no-gpu-zonal-redundancy \
+  --cpu 8 --memory 32Gi \
+  --max-instances 1 --min-instances 0 --timeout 600 --concurrency 4 \
+  --no-allow-unauthenticated --labels slm-source=stock \
+  --startup-probe httpGet.path=/api/tags,httpGet.port=8080,initialDelaySeconds=10,periodSeconds=5,failureThreshold=30 --quiet
 ...
->> candidate revision: documind-api-00045-tqm (deploy/.candidate-revision - make promote moves traffic to it by name)
+>> slm: https://documind-slm-NUMBER.us-central1.run.app (min-instances 0; make slm-off after every session anyway)
+```
+
+**`step_02_the_stand_in_deployed_and_smoke_tested(session)` — The stand-in, deployed and smoke-tested / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit, right after the deploy.
+
+Expected shape, not a promised result:
+
+```text
+DocuMind SLM - live smoke test
+  target: https://documind-slm-NUMBER.us-central1.run.app
+  --------------------------------------------------------
+  [PASS] /api/tags lists documind-slm  HTTP 200 in 0.1s (cold start included): ['documind-slm:latest']
+  [PASS] /api/generate answers  'OK' in 12.0s
+  [PASS] /v1/chat/completions answers (the OpenAI-compatible door)  'OK' in 0.6s
+  [PASS] through the gateway's documind-slm route  HTTP 200, served by 'ollama_chat/documind-slm' in 0.6s
+  [PASS] what the service serves  stock	us-central1-docker.pkg.dev/documind-ai-YOUR-ID/cloud-run-source-deploy/documind-slm@sha256:DIGEST
+  --------------------------------------------------------
+  5 passed, 0 failed
+```
+
+### demo_06_the_cold_start_timed.py
+
+Do it
+
+**`step_01_the_cold_start_timed(session)` — The cold start, timed / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, after documind-slm has been idle for more than 10 minutes.
+
+Expected shape, not a promised result:
+
+```text
+/api/tags              41.4 s   documind-slm:latest (4.3B, Q4_K_M)
+/api/generate, first   12.0 s   'OK'
+/api/generate, again    0.6 s   'OK'
+a cold start: 53.4 s to the first answer - 41.4 s for an instance, then 11.4 s to load the model into the GPU
+```
+
+### demo_07_the_small_model_behind_the_gateway_and_the_api.py
+
+Do it
+
+**`step_01_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (lesson 9.1's three requests, through the gateway).
+
+Expected shape, not a promised result:
+
+```text
+USD a million tokens, in and out (config.yaml): documind-general 1.50 and 7.50, documind-sensitive 20.50 and 20.50
+  no personal data  HTTP 200  answered by gemini-3.6-flash; 11 tokens in, 1 out; x-litellm-response-cost 2.4e-05
+  a bare PAN        HTTP 200  answered by gemini-3.6-flash; 16 tokens in, 1 out; x-litellm-response-cost 3.15e-05
+  a PAN and a date  HTTP 200  answered by ollama_chat/documind-slm; 19 tokens in, 30 out; x-litellm-response-cost 0.0010045
+                    Your notice period depends on your grade and confirmation status; the documents you shared do not say which applies to you.
+```
+
+**`step_02_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (a no-traffic revision; the live one keeps its settings).
+
+Expected shape, not a promised result:
+
+```text
+gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \
+  --update-env-vars "^|^GENERATOR_MODEL=documind-slm|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=gateway|ARMOR=off|SEMANTIC_CACHE=off|RETRIEVAL_CURRENT_ONLY=off|RETRIEVAL_GRAPH=off|GRAPH_BACKEND=firestore|SPANNER_INSTANCE=documind-graph|SPANNER_DATABASE=documind" --remove-env-vars GENERATOR_LOCATION
+...
+>> candidate revision: documind-api-000NN-xxx (deploy/.candidate-revision - make promote moves traffic to it by name)
 >> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)
 CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-**`step_02_the_state_and_three_asks(session)` — Both caches, and the corpus they follow / Do it: the state, and three asks**
-
-Do it: the state, and three asks
-
-Operation: bash — run in the operator shell, in the kit (two small functions, a start time, the state, and three asks).
-
-Expected shape, not a promised result:
-
-```text
-ledger 1ef46119bd89b143 (17 versions, last ingest_ok) | context cache packed from 1ef46119bd89b143: current
-  vertex none     in  43109 cached  41259  2480 ms | A confirmed employee at grade E3 or above serves a
-  vertex none     in  43109 cached  41259  2530 ms | A confirmed employee at grade E3 or above serves a
-  cache  semantic in      0 cached      0   170 ms | A confirmed employee at grade E3 or above serves a
-```
-
-### demo_04_scope_the_same_words_under_other_settings.py
+**`step_03_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
-**`step_01_scope_the_same_words_under_other_settings(session)` — Scope: the same words under other settings / Do it**
+Operation: bash — run in the operator shell, in the kit (one golden question through the candidate).
+
+Expected shape, not a promised result:
+
+```text
+lk-06: What is the notice period for a confirmed E3?
+answer: A confirmed E3 serves a notice period of 60 days [1].
+  cites acme:lk-06#0
+model documind-slm, backend gateway: the route the API asked for, whoever answered
+cost 0.03977 USD for 1900 tokens in and 40 out: documind-slm's rate, so the small model answered
+```
+
+**`step_04_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
-Operation: bash — run in the operator shell, in the kit (the same question under two other scopes, and four scope hashes).
+Operation: bash — run in the operator shell, in the kit (the gate, scoped to the HR policy's rows).
 
 Expected shape, not a promised result:
 
 ```text
-vertex none     in  43349 cached  41259  2610 ms | A confirmed employee at grade E3 or above serves a
-  vertex none     in  43109 cached  41259  2440 ms | A confirmed employee at grade E3 or above serves a
-  scope as asked   7a0875abc72b0f7b
-  scope top_k 8    bcc480117460bf66
-  scope kind: text 8d8d4a1d9912dc52
-  scope prompt v4  1d409edacc15c1d1
+>> https://candidate---documind-api-NUMBER.asia-south1.run.app
+== eval gate: LIVE ==
+  scoped to hr_policy_2026.md: 10 row(s) cite it
+  10 rows (10 answerable, 0 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app
+
+  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)
+  [PASS] answerable_rate        90.0%  (threshold 80%; 10 rows)
+  [PASS] citation_rate         100.0%  (threshold 95%; 9 rows)
+  [PASS] citation_valid_rate   100.0%  (threshold 100%; 9 rows)
+  [PASS] must_contain_rate      88.9%  (threshold 85%; 9 rows)
+  [PASS] correct_rate           80.0%  (threshold 68%; 10 rows)
+  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)
+  [ -- ] media_kind_rate         0.0%  (threshold 80%; no rows in scope; 0 rows)
+  [ -- ] isolation_403_rate      0.0%  (threshold 100%; no rows in scope; 0 rows)
+  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)
+
+  shape        rows   ok   pass
+  lookup          9    9      7
+  version         1    1      1
+  latency ms  p50   ...  p95   ...   (round trip, 10 rows)
+  retrieve_ms p50   ...  p95   ...
+  rerank_ms   p50   ...  p95   ...
+  generate_ms p50   ...  p95   ...
+  pool        avg   ...   semantic cache hits 0
+
+  rows that cost a point (2):
+    lk-02  lookup    acme    answered without ['15 June'] | 'form 16 is issued every june [1].'
+    lk-08  lookup    acme    REFUSED conf=low cites=0 | Who approves a purchase of Rs 3,00,000?
+
+  report: /home/YOU/slm182.json
+  All thresholds met.
 ```
 
-### demo_05_the_corpus_moves_revision_2_and_both_caches_react.py
-
-Do it: the release Do it: the state, both asks, and the log
-
-**`step_01_the_release(session)` — The corpus moves: revision 2, and both caches react / Do it: the release**
-
-Do it: the release
-
-Operation: bash — run in the operator shell, in the kit (revision 2 of the handbook, as a release).
-
-Expected shape, not a promised result:
-
-```text
->> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
->> event doc_key chunks reused embedded retired effective_from
->> ingest_reactivated	acme_5560308823a62dc8...	283	283	0	283
->> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
-```
-
-**`step_02_the_state_both_asks_and_the_log(session)` — The corpus moves: revision 2, and both caches react / Do it: the state, both asks, and the log**
-
-Do it: the state, both asks, and the log
-
-Operation: bash — run in the operator shell, in the kit (the state, both asks again, and the API's cache_stale lines).
-
-Expected shape, not a promised result:
-
-```text
-ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1ef46119bd89b143: STALE
-  vertex none     in   1880 cached      0  2390 ms | From 1 October 2026 the notice period for a confir
-  vertex none     in   1880 cached      0  2455 ms | From 1 October 2026 the notice period for a confir
-  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13
-  cache_stale acme: packed from 1ef46119bd89b143, ledger now 1441fb4775d21e13
-```
-
-### demo_06_make_cache_again_attached_again_and_what_it_packed.py
+**`step_05_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
-**`step_01_make_cache_again_attached_again_and_what_i(session)` — make cache again: attached again, and what it packed / Do it**
+Operation: bash — run in the operator shell (reads the gate's report).
+
+Expected shape, not a promised result:
+
+```text
+lk-06: pass, 1 citation(s); the route it asked for: documind-slm, through the gateway
+8 of 10 rows passed; all thresholds met
+```
+
+**`step_06_the_small_model_behind_the_gateway_and_the(session)` — The small model behind the gateway and the API / Do it**
 
 Do it
 
-Operation: bash — run in the operator shell, in the kit (the pack again, under the new fingerprint).
+Operation: bash — run in the operator shell, in the kit, when you are done.
 
 Expected shape, not a promised result:
 
 ```text
-cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \
-  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme
-  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID
-  location global (global or regional: the answer to CLAUDE.md's question)
-  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint 1441fb4775d21e13
-  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row
-  ledger 1441fb4775d21e13 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: current
-  vertex none     in  43139 cached  41259  2575 ms | From 1 October 2026 the notice period for a confir
-```
-
-### demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py
-
-Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too. Every row of the walk
-
-**`step_01_the_corpus_comes_back_version_1_and_the_ol(session)` — The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
-
-Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.
-
-Operation: bash — run in the operator shell, in the kit (version 1's bytes again: the undo).
-
-Expected shape, not a promised result:
-
-```text
->> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
->> event doc_key chunks reused embedded retired effective_from
->> ingest_reactivated	acme_497809ffbaa603c4...	283	283	0	283
->> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
-```
-
-**`step_02_the_corpus_comes_back_version_1_and_the_ol(session)` — The corpus comes back: version 1, and the old answer with it / The corpus comes back: version 1, and the old answer with it**
-
-Version 1's bytes again, the state, one ask, every row, and the clean-up. The same release command with version 1's file puts the handbook back. The worker finds bytes it retired minutes ago, flips their rows back to current, retires revision 2 in turn, and recomputes the fingerprint. Because the set of current doc_keys is the same as at the start, the fingerprint is the same as at the start too.
-
-Operation: bash — run in the operator shell, in the kit (the state, and the candidate's ask).
-
-Expected shape, not a promised result:
-
-```text
-ledger 1ef46119bd89b143 (17 versions, last ingest_reactivated) | context cache packed from 1441fb4775d21e13: STALE
-  cache  semantic in      0 cached      0   165 ms | A confirmed employee at grade E3 or above serves a
-```
-
-**`step_03_every_row_of_the_walk(session)` — The corpus comes back: version 1, and the old answer with it / Every row of the walk**
-
-Every row of the walk
-
-Operation: bash — run in the operator shell, in the kit (every acme usage row since the start; reads only).
-
-Expected shape, not a promised result:
-
-```text
-00041-kqz  vertex  in  43109  cached  41259  Rs 1.0201   2480 ms
-  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2530 ms
-  00045-tqm  cache   in      0  cached      0  Rs 0.0000    170 ms
-  00045-tqm  vertex  in  43349  cached  41259  Rs 1.0507   2610 ms
-  00045-tqm  vertex  in  43109  cached  41259  Rs 1.0201   2440 ms
-  00041-kqz  vertex  in   1880  cached      0  Rs 0.4978   2390 ms
-  00045-tqm  vertex  in   1880  cached      0  Rs 0.4978   2455 ms
-  00041-kqz  vertex  in  43139  cached  41259  Rs 1.0239   2575 ms
-  00045-tqm  cache   in      0  cached      0  Rs 0.0000    165 ms
-```
-
-### cleanup/demo_07_the_corpus_comes_back_version_1_and_the_old_answer_with_it.py
-
-At lesson end: Clean up
-
-**`step_01_clean_up(session)` — The corpus comes back: version 1, and the old answer with it / Clean up**
-
-Clean up
-
-Operation: bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted).
-
-Expected shape, not a promised result:
-
-```text
-Updating traffic...done.
-Done.
-URL: https://documind-api-...run.app
-Traffic:
-  100% documind-api-00041-kqz      (the live revision, as before; no candidate tag)
-cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \
-  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme
-  deleted acme's cache
+...
+gcloud run services update documind-slm --region us-central1 --project documind-ai-YOUR-ID --min-instances 0 --quiet
+...
+documind-slm scaled to zero
 ```
 
 ### setup/restore_settings.py
 
-At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 Operation: bash — run in the operator shell when you finish the lesson, not now.
 
@@ -273,6 +325,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_9.2_Cache_Freshness_WIX.html`. All 31 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `11e9ef8b32dc608b3b9fcb57cae1cd8145b29fa7`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_9.2_Ollama_SLM_WIX.html`. All 36 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `ef4d07a96774afec01f7a333d643d470b90ee1c3`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

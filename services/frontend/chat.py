@@ -60,7 +60,7 @@ def _headers(audience: str = RAG_API_URL) -> dict:
 
 def _as_source(c: dict) -> dict:
     """One citation of the chat service's reply, in the shape citations.py renders (workshop lesson
-    10.4). The service numbers them from 1 for the turn and sends them in that order, so the
+    5.7). The service numbers them from 1 for the turn and sends them in that order, so the
     answer's [n] is sources[n - 1], as it is for rag-api's stream below."""
     return {"text": c.get("quote", ""), "source_uri": c.get("source_uri", ""), "page_start": c.get("page"),
             "kind": c.get("kind", "text"), "media_url": c.get("media_url"),
@@ -145,7 +145,7 @@ def chat_page(user):
         with st.chat_message("assistant"):
             # 120 s is above the chat service's own bound: a turn ends by CHAT_TURN_DEADLINE_S (100 s) plus one
             # retry's backoff and the last tool's floor, about 103 s, and still answers 200, with stopped_by
-            # (workshop lesson 10.3).
+            # (workshop lesson 5.5).
             with st.spinner(f"{brain} is thinking..."):
                 r = requests.post(f"{CHAT_URL}/v1/chat",
                                   json={"question": prompt, "session_id": st.session_state.session_id,
@@ -167,7 +167,7 @@ def chat_page(user):
                 st.markdown(answer)
             if st.session_state.get("read_aloud") and answer:
                 st.audio(cached_tts(answer[:1500]), format="audio/ogg")
-            lim = body.get("limits") or {}          # the turn's own bill and limits (workshop lesson 10.3)
+            lim = body.get("limits") or {}          # the turn's own bill and limits (workshop lesson 5.5)
             st.caption(f"brain: {body.get('brain')} · tools: {', '.join(body.get('tool_calls') or []) or 'none'}"
                        + (f" · refused: {', '.join(body['refusals'])}" if body.get("refusals") else "")
                        + f" · {body.get('latency_ms', 0)} ms"

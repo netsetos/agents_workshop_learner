@@ -1,4 +1,4 @@
-"""The Google Chat bridge's two writes (the Google Chat door, workshop lesson 10.6): an answer posted into the
+"""The Google Chat bridge's two writes (the Google Chat door, workshop lesson 10.4): an answer posted into the
 person's direct message as the app, and a question published to the work topic. No key file: the service's own
 credentials, through google-auth, imported inside the functions that use them (as shared/iap.py imports it), so the
 module imports without a cloud SDK.

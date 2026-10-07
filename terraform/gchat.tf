@@ -1,4 +1,4 @@
-# The Google Chat door onto the DocuMind Desk (workshop lesson 10.6): what documind-gchat, the bridge, runs on.
+# The Google Chat door onto the DocuMind Desk (workshop lesson 10.4): what documind-gchat, the bridge, runs on.
 # services/gchat/ is the bridge, commands/gchat.sh deploys it, and the Desk decides whom it may speak for
 # (services/chat/delegation.py). The bridge's own account, documind-gchat-sa, is declared in terraform/desk.tf.
 #
@@ -23,7 +23,7 @@
 variable "gchat_door" {
   type        = bool
   default     = false
-  description = "declare the Google Chat door's accounts, claims database, Chat API, work topic and push subscription (lesson 10.6)"
+  description = "declare the Google Chat door's accounts, claims database, Chat API, work topic and push subscription (lesson 10.4)"
 }
 
 output "gchat_door" {

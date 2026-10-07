@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The DocuMind Desk router's probe (workshop lesson 10.6): four facts about the models, measured on your lane before
+"""The DocuMind Desk router's probe (workshop lesson 10.4): four facts about the models, measured on your lane before
 the router is built on them.
 
     python deploy/evals/route_probe.py --project documind-ai-YOUR-ID   # LIVE: five small calls, well under Rs 1

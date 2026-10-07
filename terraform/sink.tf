@@ -6,7 +6,7 @@ resource "google_bigquery_dataset" "observability" {
   delete_contents_on_destroy  = false
 }
 
-# The DocuMind Desk's rows ride the same sink (workshop lessons 10.5 and 10.6): desk (POST /v1/desk, and the eval's
+# The DocuMind Desk's rows ride the same sink (workshop lessons 5.6 and 10.4): desk (POST /v1/desk, and the eval's
 # POST /v1/route as surface "route"), passages (rag-api's search-only answers), desk_shadow (a /v1/chat turn the
 # router decided in shadow) and desk_gate (a question a door answered). None carries question text, and a posh,
 # grievance or privacy row carries no person. No sensitive row is copied beside a row of the same turn that names the

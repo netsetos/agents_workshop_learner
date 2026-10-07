@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The DocuMind Desk's operator commands as direct Python calls (workshop lessons 10.5 and 10.6): what mk/agents.mk runs.
+"""The DocuMind Desk's operator commands as direct Python calls (workshop lessons 5.6 and 10.4): what mk/agents.mk runs.
 
     python commands/desk_ops.py doc-types --tenant acme [--seed manifest] [--follow hr_policy_2026.md] [--dry-run]   make doc-types
                                           [--export doc_types.json]                              make doc-types EXPORT=
@@ -36,7 +36,7 @@ company is on, the chat door also looks up every company's caller, and the print
 both off, and nothing but an explicit off does. The values are read exactly as this command writes them. None of the
 three needs a case queue: the doors' fixed replies name the committees and the contacts the law names, and a kind of
 case the company has not set up is offered as "contact the People team". --max-parts 1|2 sets desk_max_parts, how many
-desks the routed Desk (workshop lesson 10.6) may run for one question, one after the other; unset, it is 1, and a second
+desks the routed Desk (workshop lesson 10.4) may run for one question, one after the other; unset, it is 1, and a second
 desk is offered as a button instead.
 --route sets desk_route, the routed Desk's mode: off; shadow (each /v1/chat turn is also decided by the router, and only
 a desk_shadow row is written); on (POST /v1/desk answers people, and the Desk page shows Ask the Desk); single (the
@@ -53,7 +53,7 @@ company's note that the handbook desk shows beside an answer citing that clause 
 LV-01 and LV-07 against the OSH Code). The file is checked first and refused whole when anything is wrong. The chat
 service reads all of these within 60 s. While desk_route is on or single, the POSH queue must stay complete and
 readable: a queues file or a role change (roles, queues, below) that would break it is refused.
---gchat on|off sets desk_gchat, the Google Chat door (workshop lesson 10.6): while it is on, the chat service serves
+--gchat on|off sets desk_gchat, the Google Chat door (workshop lesson 10.4): while it is on, the chat service serves
 the people of this tenant whom the Google Chat bridge names (services/chat/delegation.py). on is refused while
 desk_gate is off, and unless desk_route is on or single, because the door asks the routed Desk; and for a tenant whose
 data_region is "in" it also needs --confirm-residency, because the Desk's answers and their quotes then sit in the
@@ -81,7 +81,7 @@ cases is the tenant's open cases for the operator, soonest due first: the id, th
 grievance and privacy_request), the queue, the status, due_at and the state (open, due within 24 hours and
 unacknowledged, or breached). No person, no summary.
 
-route-index is the routed Desk's exemplar index (workshop lesson 10.6): tenants/{tenant}/desk_exemplars/{row id},
+route-index is the routed Desk's exemplar index (workshop lesson 10.4): tenants/{tenant}/desk_exemplars/{row id},
 {route, vector, row_id, group, case_type, index_version, embedding_model}, which services/chat/desk_router.py reads
 once every 5 minutes per instance for its k=7 vote. The rows are evals/routes.jsonl's dev rows, never a test row,
 leaving out a single-mode tenant's (labelled for its one desk) and keeping only the routes this tenant is covered

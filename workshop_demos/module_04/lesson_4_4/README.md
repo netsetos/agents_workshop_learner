@@ -1,4 +1,4 @@
-# Lesson 4.4: Restore documents and reconcile index differences
+# Lesson 4.4: Compare one controlled change against a baseline
 
 ## What to run
 
@@ -8,19 +8,17 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 
 | HTML section | File | What it demonstrates |
 |---|---|---|
-| 2 | [demo_02_how_reconciliation_decides.py](demo_02_how_reconciliation_decides.py) | How reconciliation decides |
-| 3 | [demo_03_credentials_backend_and_a_clean_baseline.py](demo_03_credentials_backend_and_a_clean_baseline.py) | Credentials, backend and a clean baseline |
-| 4 | [demo_04_create_this_chapter_s_note_and_the_checks.py](demo_04_create_this_chapter_s_note_and_the_checks.py) | Create this chapter's note and the checks |
-| 5 | [demo_05_prove_the_document_works.py](demo_05_prove_the_document_works.py) | Prove the document works |
-| 6 | [demo_06_delete_the_cloud_file_and_show_the_stale_index.py](demo_06_delete_the_cloud_file_and_show_the_stale_index.py) | Delete the cloud file and show the stale index |
-| 7 | [demo_07_plan_retirement_apply_it_then_prove_zero_drift.py](demo_07_plan_retirement_apply_it_then_prove_zero_drift.py) | Plan retirement, apply it, then prove zero drift |
-| 8 | [demo_08_restore_the_exact_bytes_and_prove_reuse.py](demo_08_restore_the_exact_bytes_and_prove_reuse.py) | Restore the exact bytes and prove reuse |
+| setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
+| 3 | [demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py](demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py) | The candidate: a new revision with no traffic, and the proof that one setting differs |
+| 4 | [demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py](demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py) | The scoped gate on both revisions, and the rows that moved |
+| 5 | [demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py](demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py) | The pairwise judge: which answer is better, row by row |
+| 6 | [demo_06_the_rupee_delta_from_the_usage_rows.py](demo_06_the_rupee_delta_from_the_usage_rows.py) | The rupee delta, from the usage rows |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-A deployed lane. This lesson creates its own smoke-note fixture and does not depend on ~/lesson34_note.md.
+Lesson 4.2's judge environment and a single baseline revision; no other lesson should own the candidate tag.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -32,264 +30,221 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
-## Optional extensions
-
-- [optional/demo_09_watch_an_incomplete_undo_refuse.py](optional/demo_09_watch_an_incomplete_undo_refuse.py) — Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. Checkpoint: a reactivate_incomplete event explains the shortfall, followed by fresh ingest_ok; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude reactivate_incomplete because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.
-- [optional/demo_10_the_nightly_job_the_number_it_ends_on_and_the_lane_older_than_the_ledger.py](optional/demo_10_the_nightly_job_the_number_it_ends_on_and_the_lane_older_than_the_ledger.py) — Read the deployed job and backfill plan
-- [optional/demo_11_run_the_broader_module_validation_separately.py](optional/demo_11_run_the_broader_module_validation_separately.py) — The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair. make smoke-reindex uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.
-
-## Conditional recovery
-
-- [recovery/demo_08_restore_the_exact_bytes_and_prove_reuse.py](recovery/demo_08_restore_the_exact_bytes_and_prove_reuse.py) — You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration. Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.
-- [recovery/demo_11_run_the_broader_module_validation_separately.py](recovery/demo_11_run_the_broader_module_validation_separately.py) — The smoke leaves its own fixture indexed. That does not demonstrate that $SOURCE was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, acme/smoke_note_v1.md, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.
-
 ## Finish and restore
 
-- [cleanup/demo_12_verify_the_story_and_restore_the_original_backend.py](cleanup/demo_12_verify_the_story_and_restore_the_original_backend.py) — At lesson end: Use the state transition and the exact evidence, then return the tenant to its saved configuration. Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.
+- [cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py](cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py) — At lesson end: This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
 
 The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
 
-### demo_02_how_reconciliation_decides.py
+### setup/prepare.py
 
-Explain the page's two-PDF illustration. Reconciliation leaves the matching queued generation to the batch lane; only the new Act contributes to drift. Reproduce the five default widget documents before exploring its known-bytes and queued variations. The real plan(), decide_bytes() and drift_of() functions make the decisions.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
-**`step_01_how_do_we_know_a_pdf_is_queued(session)` — How reconciliation decides / How do we know a PDF is queued?**
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-Explain the page's two-PDF illustration. Reconciliation leaves the matching queued generation to the batch lane; only the new Act contributes to drift.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
-Operation: Python — simulated facts, actual kit planner; no network.
+Operation: bash — run in the operator shell now, before the lesson's first step.
 
-Expected shape, not a promised result:
-
-```text
-reingest 1, queued 1, drift 1; applied false
-```
-
-**`step_02_explore_a_different_bucket_and_ledger(session)` — How reconciliation decides / Explore a different bucket and ledger**
-
-Reproduce the five default widget documents before exploring its known-bytes and queued variations. The real plan(), decide_bytes() and drift_of() functions make the decisions.
-
-Operation: Python — simulated facts, actual kit planner; no network.
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
 
 Expected shape, not a promised result:
 
 ```text
-ok 1, retire 1, touch 1, reingest 1, withdrawn 1; drift 2
+acme: retrieval_backend=vector
 ```
 
-### demo_03_credentials_backend_and_a_clean_baseline.py
+### demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py
 
-Do this before presenting. Stop at an error; do not paste the next stage until its checkpoint passes. Use the same operator shell and virtual environment throughout. Create a chapter directory before changing the backend, save its original pin, and run the offline planner check. These files are local demo state; keep them out of commits.
+Do it: the candidate The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.
 
-**`step_01_credentials_backend_and_a_clean_baseline(session)` — Credentials, backend and a clean baseline / Credentials, backend and a clean baseline**
+**`step_01_the_candidate(session)` — The candidate: a new revision with no traffic, and the proof that one setting differs / Do it: the candidate**
 
-Do this before presenting. Stop at an error; do not paste the next stage until its checkpoint passes. Use the same operator shell and virtual environment throughout. Create a chapter directory before changing the backend, save its original pin, and run the offline planner check. These files are local demo state; keep them out of commits.
+Do it: the candidate
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT; prepare once per demonstration.
-
-IDE adaptation: Persist that backend cleanup is required even if baseline preparation fails.
-
-### demo_04_create_this_chapter_s_note_and_the_checks.py
-
-A fresh name, a new fact and an unchanged local copy remove the dependencies on earlier lessons. This chapter does not use ~/lesson34_note.md or the smoke-lantern question. Another smoke note may still answer that question even after one copy is retired. Our primary checks are the exact source name, its object generation and its citation; a bare answerable True is insufficient. The helper block is preparation, not a slide to type live. It stops on failed uploads, polls the exact source and generation, checks citations, and refuses to apply an unexplained tenant-wide plan. The log filter includes both the version key and generation, so another acme upload cannot satisfy the wait. To resume after reopening a shell, first run the shared shell setup, then source this directory's session.env and helpers.sh; do not create a new note midway through a restore.
-
-**`step_01_create_this_chapter_s_note_and_the_checks(session)` — Create this chapter's note and the checks / Create this chapter's note and the checks**
-
-A fresh name, a new fact and an unchanged local copy remove the dependencies on earlier lessons. This chapter does not use ~/lesson34_note.md or the smoke-lantern question. Another smoke note may still answer that question even after one copy is retired. Our primary checks are the exact source name, its object generation and its citation; a bare answerable True is insufficient.
-
-Operation: bash — run once; keep the note and its checksum unchanged.
-
-**`step_02_load_the_checks_once(session)` — Create this chapter's note and the checks / Load the checks once**
-
-The helper block is preparation, not a slide to type live. It stops on failed uploads, polls the exact source and generation, checks citations, and refuses to apply an unexplained tenant-wide plan. The log filter includes both the version key and generation, so another acme upload cannot satisfy the wait. To resume after reopening a shell, first run the shared shell setup, then source this directory's session.env and helpers.sh; do not create a new note midway through a restore.
-
-Operation: bash — save and load the chapter checks; no cloud writes in this block.
-
-### demo_05_prove_the_document_works.py
-
-Show the source ledger in the UI and the same source's evidence from the API. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. Checkpoint: source indexed at this upload's generation, a cited answer naming locker Q7 in Jaipur, and no pending repair. If the source is indexed but the query has not caught up, repeat ch44_ask present and inspect its evidence; do not upload again merely to wait.
-
-**`step_01_prove_the_document_works(session)` — Prove the document works / Prove the document works**
-
-Show the source ledger in the UI and the same source's evidence from the API. On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it.
-
-Operation: bash — upload, wait for this generation, then ask and record N.
-
-**`step_02_prove_the_document_works(session)` — Prove the document works / Prove the document works**
-
-On the Documents page, use Refresh indexing status and find the exact lesson44_<run-id>.md row. The first upload may need time for the worker and retrieval tier to catch up. The pin is cached for about a minute; the answer's stages prove which backend actually served it. Checkpoint: source indexed at this upload's generation, a cited answer naming locker Q7 in Jaipur, and no pending repair. If the source is indexed but the query has not caught up, repeat ch44_ask present and inspect its evidence; do not upload again merely to wait.
-
-Operation: bash — after the checkpoint passes, save the observed chunk count.
-
-### demo_06_delete_the_cloud_file_and_show_the_stale_index.py
-
-The local original stays safe. Delete only this demonstration's live object.
-
-**`step_01_delete_the_cloud_file_and_show_the_stale_i(session)` — Delete the cloud file and show the stale index / Delete the cloud file and show the stale index**
-
-The local original stays safe. Delete only this demonstration's live object.
-
-Operation: bash — check the backup before deleting; observe before running reconciliation.
-
-### demo_07_plan_retirement_apply_it_then_prove_zero_drift.py
-
-Keep preview, mutation and verification as three visible operations. Keep preview, mutation and verification as three visible operations. The action must be retire for $SOURCE, with reason gone from the bucket, applied: false and drift 1. A plan is evidence, not a repair. Pause other uploads during the demonstration; the kit's apply does not execute a saved, source-scoped plan. The code that applies the plan
-
-**`step_01_plan_retirement_apply_it_then_prove_zero_d(session)` — Plan retirement, apply it, then prove zero drift / Plan retirement, apply it, then prove zero drift**
-
-Keep preview, mutation and verification as three visible operations.
-
-Operation: bash — read-only: require exactly one repair, for this fixture.
-
-**`step_02_plan_retirement_apply_it_then_prove_zero_d(session)` — Plan retirement, apply it, then prove zero drift / Plan retirement, apply it, then prove zero drift**
-
-Keep preview, mutation and verification as three visible operations. The action must be retire for $SOURCE, with reason gone from the bucket, applied: false and drift 1. A plan is evidence, not a repair. Pause other uploads during the demonstration; the kit's apply does not execute a saved, source-scoped plan.
-
-Operation: bash — recheck immediately before the tenant-wide apply.
-
-**`step_03_the_code_that_applies_the_plan(session)` — Plan retirement, apply it, then prove zero drift / The code that applies the plan**
-
-The code that applies the plan
-
-Operation: bash — verify retirement, citations and the next read-only plan.
-
-### demo_08_restore_the_exact_bytes_and_prove_reuse.py
-
-A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.
-
-**`step_01_restore_the_exact_bytes_and_prove_reuse(session)` — Restore the exact bytes and prove reuse / Restore the exact bytes and prove reuse**
-
-A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.
-
-Operation: bash — upload only if the original checksum still passes; wait for the new generation.
-
-**`step_02_restore_the_exact_bytes_and_prove_reuse(session)` — Restore the exact bytes and prove reuse / Restore the exact bytes and prove reuse**
-
-A new upload generation, the same content hash, and the worker's verified reactivation. The checksum must still match. Changing the memo, adding today's date, or replacing it with a base smoke fixture creates different bytes and does not demonstrate the same-version undo. Keep the same object name too.
-
-Operation: bash — show this upload's event, restored citation and clean plan.
-
-### recovery/demo_08_restore_the_exact_bytes_and_prove_reuse.py
-
-You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration. Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.
-
-**`step_01_why_the_undo_counts_first(session)` — Restore the exact bytes and prove reuse / Why the undo counts first**
-
-You have shown a working document, a stale index, a planned repair, consistent absence, and a verified return. Steps 9 to 11 are separate extensions. Finish with step 12 even if you skip them: it restores the backend pin saved before the demonstration. Load this run's saved session variables first. Recover the exact generation named in its source ledger, then verify the content hash before writing the local file. Do not invent replacement text and expect a same-version reactivation. If the recorded generation is no longer retained, stop and inspect version recovery options; this path cannot reconstruct deleted bytes.
-
-Operation: bash — read the retained version; this writes only the verified local backup.
-
-### optional/demo_09_watch_an_incomplete_undo_refuse.py
-
-Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. Checkpoint: a reactivate_incomplete event explains the shortfall, followed by fresh ingest_ok; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude reactivate_incomplete because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.
-
-**`step_01_watch_an_incomplete_undo_refuse(session)` — Watch an incomplete undo refuse / Watch an incomplete undo refuse**
-
-Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.
-
-Operation: bash — retire the fixture again; require the exact one-item plan.
-
-**`step_02_watch_an_incomplete_undo_refuse(session)` — Watch an incomplete undo refuse / Watch an incomplete undo refuse**
-
-Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.
-
-Operation: bash — optional deliberate fault: remove one verified retired row of this fixture.
-
-**`step_03_watch_an_incomplete_undo_refuse(session)` — Watch an incomplete undo refuse / Watch an incomplete undo refuse**
-
-Run this only after the successful round trip. It deliberately removes one retired row from this chapter's fixture. The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents.
-
-Operation: bash — return the same bytes, then inspect the refused undo and fresh ingestion.
-
-**`step_04_watch_an_incomplete_undo_refuse(session)` — Watch an incomplete undo refuse / Watch an incomplete undo refuse**
-
-The worker will not reactivate a partial version. It compares the retained row count with the claim's count and checks the age of retirement. A shortfall or a closed window emits reactivate_incomplete, leaves the incomplete undo unapplied, and sends the document through fresh ingestion. This variation deletes a retired fixture row; it is separate from the main demonstration and from unrelated tenant documents. Checkpoint: a reactivate_incomplete event explains the shortfall, followed by fresh ingest_ok; the restored source and answer are valid again. The reused-N/embedded-0 checkpoint belongs to the successful undo in step 8, not this fault. The strict generation filter may exclude reactivate_incomplete because that event is emitted by the lower-level undo function; use the read below to see it for this version and time window.
-
-Operation: bash — read the undo refusal for this version; no cloud writes.
-
-### optional/demo_10_the_nightly_job_the_number_it_ends_on_and_the_lane_older_than_the_ledger.py
-
-Read the deployed job and backfill plan
-
-**`step_01_read_the_deployed_job_and_backfill_plan(session)` — The nightly job, the number it ends on, and the lane older than the ledger / Read the deployed job and backfill plan**
-
-Read the deployed job and backfill plan
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (all read-only; the backfill is printed, not applied).
+Operation: bash — run in the operator shell, in the kit (a new revision with no traffic; nothing moves for users).
 
 Expected shape, not a promised result:
 
 ```text
-no nightly job on this lane: make reconcile-job declares and schedules it (RECONCILE_JOB=true, a Terraform plan and apply)
-no schedule either: make reconcile from a shell is the walk until then
-{"event": "reconcile_backfill", "chunks": 0, "sources": N, "applied": false}
-
-documind-reconcile
-30 23 * * *	Asia/Kolkata	ENABLED
-{"event": "reconcile_backfill", "chunks": 0, "sources": N, "applied": false}
+gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \
+  --update-env-vars "^|^GENERATOR_MODEL=gemini-3.1-flash-lite|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|..." --remove-env-vars GENERATOR_LOCATION
+...
+>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)
+>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)
+CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 ```
 
-### optional/demo_11_run_the_broader_module_validation_separately.py
+**`step_02_prove_it_is_one_change(session)` — The candidate: a new revision with no traffic, and the proof that one setting differs / Do it: prove it is one change**
 
-The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair. make smoke-reindex uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.
+The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.
 
-**`step_01_run_the_broader_module_validation_separate(session)` — Run the broader module validation separately / Run the broader module validation separately**
-
-The reindex smoke tests a different fixture and a wider lifecycle; it is not the proof of this chapter's deletion repair. make smoke-reindex uploads the kit's version 1 and version 2 under its own name, checks carry-over and reactivation, and asks the smoke-lantern question. Existing copies of that fact can affect the answer checks. Rehearse this separately, inspect its citations and fixture state, and report its actual pass/fail result. Do not replace the exact source and generation checks above with a green answer from this other note.
-
-Operation: bash — optional module smoke; retain its exit status and inspect any failure.
-
-### recovery/demo_11_run_the_broader_module_validation_separately.py
-
-The smoke leaves its own fixture indexed. That does not demonstrate that $SOURCE was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, acme/smoke_note_v1.md, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.
-
-**`step_01_run_the_broader_module_validation_separate(session)` — Run the broader module validation separately / Run the broader module validation separately**
-
-The smoke leaves its own fixture indexed. That does not demonstrate that $SOURCE was retired or restored. Count embedding work from the worker's actual events; a refused undo can require fresh embeddings, while a successful reactivation reuses retained vectors. Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the worker's lines for the smoke's uploads; the kit pulled; the subscription's endpoint).
-
-IDE adaptation: Do not discard local smoke-script edits; a fast-forward update refuses conflicts so they can be inspected.
+Operation: bash — run in the operator shell, in the kit (reads both revisions; changes nothing).
 
 Expected shape, not a promised result:
 
 ```text
-2026-09-2xT1x:xx:xx.xxxxxxZ	ingest_duplicate	acme_9c41d0e2b7f5...
-1
-https://documind-ingest-NUMBER.asia-south1.run.app
+live documind-api-000NN-xxx   candidate documind-api-000NN-yyy
+  GENERATOR_MODEL        gemini-3.6-flash           -> gemini-3.1-flash-lite
+1 setting(s) differ
 ```
 
-**`step_02_run_the_broader_module_validation_separate(session)` — Run the broader module validation separately / Run the broader module validation separately**
+### demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py
 
-Two causes, told apart by one log read. A kit older than 23 September 2026 waits for a worker line carrying jsonPayload.tenant, and the line the worker writes for the unchanged fixture bytes, ingest_duplicate, carries only the document key, so the smoke waits its five minutes for a match that cannot come. The setup block pulls the latest kit every session; on a clone, one pull is the fix, after putting back any copy of the smoke file made by hand, and the count on the second line must be at least 1 afterwards. If the read shows nothing at all, the event never reached the worker, and the push subscription's endpoint is the place to look: it must be the worker's URL. The check wants the answer to say bay 7 and not bay 4. Lesson 3.4's note, acme/smoke_note_v1.md, which step 5 restored, carries the same clause with bay 4 and no date, so with it current the model reads two sources that disagree; rule six tells it to follow the dated one and say from when it applies, and an answer that mentions the old bay fails the check although it is right. Withdraw the note for the smoke and restore it after: both are the kit's own targets from lesson 4.3, and the restore embeds nothing.
+Do it: the gate on the live revision, then on the candidate Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the note withdrawn, the smoke, the note restored).
+**`step_01_the_gate_on_the_live_revision_then_on_the(session)` — The scoped gate on both revisions, and the rows that moved / Do it: the gate on the live revision, then on the candidate**
 
-IDE adaptation: Restore the temporarily withdrawn smoke note even when the separate smoke fails.
+Do it: the gate on the live revision, then on the candidate
+
+Operation: bash — run in the operator shell, in the kit (the 10 rows that cite the handbook, on each revision: a few minutes).
+
+IDE adaptation: Run both gates through live_gate: a red gate on the live revision or the candidate is an observation this lesson compares, and each keeps its fresh report. The page's `| tail -3` stopped the cell under pipefail on a red baseline; here the whole gate output shows. A missing report or an HTTP/auth failure still fails.
 
 Expected shape, not a promised result:
 
 ```text
-{"event": "reconcile_withdrawn", "gcs_uri": "gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md", ...}
-  ...
-  6 pass · 0 fail
-{"event": "reconcile_restored", "gcs_uri": "gs://documind-ai-YOUR-ID-uploads/acme/smoke_note_v1.md", "generation": "...", ...}
+>> https://documind-api-NUMBER.asia-south1.run.app
+
+  report: evals/reports/base73.json
+  All thresholds met.
+>> https://candidate---documind-api-NUMBER.asia-south1.run.app
+== eval gate: LIVE ==
+  scoped to hr_policy_2026.md: 10 row(s) cite it
+  10 rows (10 answerable, 0 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app
+
+  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)
+  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)
+  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)
+  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)
+  [PASS] must_contain_rate      90.0%  (threshold 85%; 10 rows)
+  [PASS] correct_rate           90.0%  (threshold 68%; 10 rows)
+  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)
+  [ -- ] media_kind_rate         0.0%  (threshold 80%; no rows in scope; 0 rows)
+  [ -- ] isolation_403_rate      0.0%  (threshold 100%; no rows in scope; 0 rows)
+  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)
+
+  shape        rows   ok   pass
+  lookup          9    9      8
+  version         1    1      1
+  latency ms  p50   ...  p95   ...   (round trip, 10 rows)
+  retrieve_ms p50   ...  p95   ...
+  rerank_ms   p50   ...  p95   ...
+  generate_ms p50   ...  p95   ...
+  pool        avg   ...   semantic cache hits ...
+
+  rows that cost a point (1):
+    lk-04  lookup    acme    answered without ['15'] | 'the documents cover this [1].'
+
+  report: evals/reports/cand73.json
+  All thresholds met.
 ```
 
-### cleanup/demo_12_verify_the_story_and_restore_the_original_backend.py
+**`step_02_the_gate_on_the_live_revision_then_on_the(session)` — The scoped gate on both revisions, and the rows that moved / Do it: the gate on the live revision, then on the candidate**
 
-At lesson end: Use the state transition and the exact evidence, then return the tenant to its saved configuration. Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.
+Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.
 
-**`step_01_verify_the_story_and_restore_the_original(session)` — Verify the story and restore the original backend / Verify the story and restore the original backend**
+Operation: bash — run in the operator shell, in the kit (reads the two reports; changes nothing).
 
-Use the state transition and the exact evidence, then return the tenant to its saved configuration. Before reporting the chapter complete, check the final source and plan. If the optional incomplete-undo variation was run, record its fresh ingestion separately from the successful reuse in step 8. Leave the verified fixture and local original available for the audience to inspect.
+Expected shape, not a promised result:
 
-Operation: bash — finish the demo, then restore the pin saved before it began.
+```text
+live  candidate  needs
+  request_success_rate   100.0%     100.0%   100%
+  answerable_rate        100.0%     100.0%    80%
+  citation_rate          100.0%     100.0%    95%
+  citation_valid_rate    100.0%     100.0%   100%
+  must_contain_rate      100.0%      90.0%    85%
+  correct_rate           100.0%      90.0%    68%
+  lk-04: pass on live, fail on the candidate (answered without ['15'])
+  1 row(s) changed verdict; median round trip ... ms live, ... ms candidate
+```
 
-IDE adaptation: Restore the saved backend in finally even when the final observation fails; the failed observation remains a failure.
+### demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py
+
+Do it
+
+**`step_01_the_pairwise_judge_which_answer_is_better(session)` — The pairwise judge: which answer is better, row by row / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (twenty rows on each revision, then the Evaluation service).
+
+Expected shape, not a promised result:
+
+```text
+>> https://documind-api-NUMBER.asia-south1.run.app
+  20/20 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)
+  20/20 candidate answers from https://candidate---documind-api-NUMBER.asia-south1.run.app
+  context: .../... cited chunks read in full from the store
+  trajectories: off (no --chat-url)
+  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070)
+  judge: the service default (pass --judge-model to pin one)
+
+  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070:
+    groundedness/mean                                ...
+    groundedness/mean[join]                          ...
+    groundedness/mean[lookup]                        ...
+    groundedness/std                                 ...
+    instruction_following/mean                       ...
+    instruction_following/std                        ...
+    pairwise_question_answering_quality/baseline_model_win_rate ...
+    pairwise_question_answering_quality/candidate_model_win_rate ...
+    row_count                                        20.000
+
+  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.
+```
+
+### demo_06_the_rupee_delta_from_the_usage_rows.py
+
+Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.
+
+**`step_01_the_rupee_delta_from_the_usage_rows(session)` — The rupee delta, from the usage rows / The rupee delta, from the usage rows**
+
+Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.
+
+Operation: bash — run in the operator shell, in the kit (the last hour of usage rows, by model).
+
+Expected shape, not a promised result:
+
+```text
+gemini-3.6-flash          ... answers  Rs ...  Rs ... an answer
+  gemini-3.1-flash-lite     ... answers  Rs ...  Rs ... an answer
+  the candidate costs Rs ... less an answer: Rs ... per 1,000 answers
+```
+
+### cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py
+
+At lesson end: This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.
+
+**`step_01_remove_the_candidate_s_tag(session)` — Deciding, the confounds that fake a result, and removing the candidate / Do it: remove the candidate's tag**
+
+This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.
+
+Operation: bash — run in the operator shell, in the kit (the candidate's tag and its recorded name removed; the live revision is untouched).
+
+Expected shape, not a promised result:
+
+```text
+...
+the candidate URL now: HTTP 404
+```
+
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+Operation: bash — run in the operator shell when you finish the lesson, not now.
+
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
 ### setup/finish.py
 
@@ -297,6 +252,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.4_Restore_Reconcile_WIX.html`. All 44 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4bbd9c72fa443ebba227ab37a125bf213850fb3c`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.4_Controlled_Change_WIX.html`. All 27 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `97d97638098f6e3f140aba7bc44e9edda7bc2aa0`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -430,7 +430,7 @@ def index_document(doc: DocumentContract, msg: IngestMessage, content: bytes, la
     gone = {"activated": 0, "retired_doc_keys": [], "retired_ids": [], "retired_chunks": 0}
     counts = {"reused": 0, "embedded": 0}
     text = None                                          # a media document has none: the mirror below skips it
-    doc = doc_types.assign(_db, doc, msg.name)           # the registry's class for a pinned version (workshop lesson 10.6)
+    doc = doc_types.assign(_db, doc, msg.name)           # the registry's class for a pinned version (workshop lesson 10.4)
     try:
         image_findings = []
         if msg.content_type in MEDIA_TYPES:

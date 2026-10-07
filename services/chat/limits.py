@@ -1,4 +1,4 @@
-"""DocuMind chat service - the limits of one turn: model calls, rupees and time (workshop lessons 10.3 and 10.4).
+"""DocuMind chat service - the limits of one turn: model calls, rupees and time (workshop lessons 5.5 and 5.7).
 
 Before these limits, a turn stopped when the model stopped asking for tools. LangChain's create_agent binds a
 recursion limit of 9,999 and LangGraph's default is 10,007, so a model that kept asking for the same search ran about
@@ -334,7 +334,7 @@ def timed_adk(fn):
 # ----------------------------------------------------------------------------- 1. langchain
 class TurnLimitsMiddleware(AgentMiddleware):
     """The Meter at LangChain's model seam. wrap_model_call only: a before_model or after_model hook would add graph
-    nodes, and every turn would write more checkpoints (workshop lesson 11.2 counts them)."""
+    nodes, and every turn would write more checkpoints (workshop lesson 6.6 counts them)."""
 
     def _before(self, request):
         meter = meter_of(request.runtime.context)

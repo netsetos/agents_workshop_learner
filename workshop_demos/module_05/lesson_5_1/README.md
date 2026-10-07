@@ -1,4 +1,4 @@
-# Lesson 5.1: Apply query embeddings and authorized filters
+# Lesson 5.1: Understand tool contracts and the direct agent loop
 
 ## What to run
 
@@ -9,17 +9,18 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | HTML section | File | What it demonstrates |
 |---|---|---|
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
-| 3 | [demo_03_the_question_s_vector_direct_candidates_and_api_citations.py](demo_03_the_question_s_vector_direct_candidates_and_api_citations.py) | The question's vector: direct candidates and API citations |
-| 4 | [demo_04_authorized_the_tenant_comes_from_identity_and_one_index_serves_three.py](demo_04_authorized_the_tenant_comes_from_identity_and_one_index_serves_three.py) | Authorized: the tenant comes from identity, and one index serves three |
-| 5 | [demo_05_filters_two_keys_a_400_for_everything_else.py](demo_05_filters_two_keys_a_400_for_everything_else.py) | Filters: two keys, a 400 for everything else |
-| 6 | [demo_06_the_restricts_the_per_request_backend_and_the_stages_block.py](demo_06_the_restricts_the_per_request_backend_and_the_stages_block.py) | The restricts, the per-request backend, and the stages block |
-| 7 | [demo_07_current_is_the_ledger_s_filter_never_the_caller_s.py](demo_07_current_is_the_ledger_s_filter_never_the_caller_s.py) | Current is the ledger's filter, never the caller's |
+| 3 | [demo_03_the_chat_service_in_your_lane_s_region.py](demo_03_the_chat_service_in_your_lane_s_region.py) | The chat service, in your lane's region |
+| 4 | [demo_04_the_contract_what_the_model_reads_of_each_tool.py](demo_04_the_contract_what_the_model_reads_of_each_tool.py) | The contract: what the model reads of each tool |
+| 5 | [demo_05_the_one_retrieve_from_your_shell.py](demo_05_the_one_retrieve_from_your_shell.py) | The one retrieve(), from your shell |
+| 6 | [demo_06_the_direct_brain_one_retrieve_no_loop.py](demo_06_the_direct_brain_one_retrieve_no_loop.py) | The direct brain: one retrieve(), no loop |
+| 7 | [demo_07_the_loop_the_model_chooses_its_tools.py](demo_07_the_loop_the_model_chooses_its_tools.py) | The loop: the model chooses its tools |
+| 8 | [demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py](demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py) | The rows: what each brain cost, and which row records it |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The intended Terraform state/index deployment; preflight rejects empty or mismatched endpoint IDs.
+The shared workshop setup and the deployed/local inputs described in the reading guide.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -31,13 +32,9 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
-## Conditional recovery
-
-- [recovery/setup_before_you_run_anything_set_up_the_shell.py](recovery/setup_before_you_run_anything_set_up_the_shell.py) — Continue only after PASS. Keep Acme on vector through steps 3–9. The API environment's RETRIEVAL_BACKEND is a default; the tenant pin overrides it. If step 3 still reports the old backend, wait for that one-minute cache to expire, then retry. This is a configuration repair for an existing index, not an index-creation step. Read the ID from the intended Terraform state and prove that it is deployed on the same endpoint. The following block refuses an endpoint mismatch or missing deployment. It creates a corrected API revision and routes 100% of the demo service's traffic to it. Other environment variables are retained; do not rerun the full infrastructure deployment to fix this one setting.
-
 ## Finish and restore
 
-- [cleanup/demo_09_verify_it_yourself_the_checklist.py](cleanup/demo_09_verify_it_yourself_the_checklist.py) — At lesson end: Run only after steps 3–9. Restore the value saved before the demo, which may be rag_engine, another backend or default. The last option removes the explicit pin. Do not assume every lane originally used RAG Engine, and do not place this command beside the setup command.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -46,139 +43,179 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-Run in $DEMO_ROOT. This reads the single revision receiving traffic, checks that its deployed ID exists, saves only the relevant settings under operator-evidence/lesson51/, and then selects vector for Acme. Empty optional settings take their code defaults. It stops before any embedding or tenant change if the deployment is invalid. A split-traffic service needs a chosen revision before this single-revision demonstration can proceed.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
-**`step_01_run_first_check_the_serving_revision_and_s(session)` — Before you run anything: set up the shell / Run first: check the serving revision and save the original pin**
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-Run in $DEMO_ROOT. This reads the single revision receiving traffic, checks that its deployed ID exists, saves only the relevant settings under operator-evidence/lesson51/, and then selects vector for Acme. Empty optional settings take their code defaults. It stops before any embedding or tenant change if the deployment is invalid. A split-traffic service needs a chosen revision before this single-revision demonstration can proceed.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
-Operation: bash — run before step 3; reads configuration and saves/sets the Acme pin.
+Operation: bash — run in the operator shell now, before the lesson's first step.
 
-### recovery/setup_before_you_run_anything_set_up_the_shell.py
-
-Continue only after PASS. Keep Acme on vector through steps 3–9. The API environment's RETRIEVAL_BACKEND is a default; the tenant pin overrides it. If step 3 still reports the old backend, wait for that one-minute cache to expire, then retry. This is a configuration repair for an existing index, not an index-creation step. Read the ID from the intended Terraform state and prove that it is deployed on the same endpoint. The following block refuses an endpoint mismatch or missing deployment. It creates a corrected API revision and routes 100% of the demo service's traffic to it. Other environment variables are retained; do not rerun the full infrastructure deployment to fix this one setting.
-
-**`step_01_run_first_check_the_serving_revision_and_s(session)` — Before you run anything: set up the shell / Run first: check the serving revision and save the original pin**
-
-Continue only after PASS. Keep Acme on vector through steps 3–9. The API environment's RETRIEVAL_BACKEND is a default; the tenant pin overrides it. If step 3 still reports the old backend, wait for that one-minute cache to expire, then retry. This is a configuration repair for an existing index, not an index-creation step. Read the ID from the intended Terraform state and prove that it is deployed on the same endpoint. The following block refuses an endpoint mismatch or missing deployment. It creates a corrected API revision and routes 100% of the demo service's traffic to it. Other environment variables are retained; do not rerun the full infrastructure deployment to fix this one setting.
-
-Operation: bash — optional repair; updates the API revision and its traffic.
-
-### demo_03_the_question_s_vector_direct_candidates_and_api_citations.py
-
-Run the preflight first. This cell uses its verified settings, checks the endpoint and Acme pin again before paying for an embedding, searches with the same tenant/current restricts, then compares candidate IDs with the API citations. Overlap and first-citation order are observations, not pass/fail assertions. Hybrid retrieval, graph candidates, current-version checks and reranking can change the final selection.
-
-**`step_01_embed_search_compare(session)` — The question's vector: direct candidates and API citations / Do it: embed, search, compare**
-
-Run the preflight first. This cell uses its verified settings, checks the endpoint and Acme pin again before paying for an embedding, searches with the same tenant/current restricts, then compares candidate IDs with the API citations. Overlap and first-citation order are observations, not pass/fail assertions. Hybrid retrieval, graph candidates, current-version checks and reranking can change the final selection.
-
-Operation: bash — run in the operator shell (a Python cell, then one question; a paid embedding of a few hundred characters).
-
-Expected shape, not a promised result:
-
-```text
-Actual deployed ID: the ID verified during preflight
-Direct dense candidates: non-empty for the loaded handbook
-stages.retrieval_backend: vector
-vector_chunks: greater than 0
-PASS: the direct search worked and Vector Search contributed to the API pool.
-```
-
-### demo_04_authorized_the_tenant_comes_from_identity_and_one_index_serves_three.py
-
-The UI's service account, which your tok() impersonates, sits on all three rosters. The first two calls send it the same question against acme and zeta; the third sends the outsider's token; the fourth sends the UI's token with a header that claims to be someone else. Each line shows the HTTP status. A request turned away for a reason that passes, a model quota hit, a Cloud Run scale-up or a dropped connection, is asked once more after five seconds; anything else prints the reason the service gave instead of a traceback.
-
-**`step_01_one_identity_two_tenants_one_outsider(session)` — Authorized: the tenant comes from identity, and one index serves three / Do it: one identity, two tenants, one outsider**
-
-The UI's service account, which your tok() impersonates, sits on all three rosters. The first two calls send it the same question against acme and zeta; the third sends the outsider's token; the fourth sends the UI's token with a header that claims to be someone else. Each line shows the HTTP status. A request turned away for a reason that passes, a model quota hit, a Cloud Run scale-up or a dropped connection, is asked once more after five seconds; anything else prints the reason the service gave instead of a traceback.
-
-Operation: bash — run in the operator shell (a Python cell; two answered questions, two refusals; paise).
-
-Expected shape, not a promised result:
-
-```text
-acme: HTTP 200 | The per-trip cap on domestic travel reimbursement is Rs 40,000. | ['hr_policy_2026.md']
-zeta: HTTP 200 | The per-trip cap on domestic travel reimbursement is Rs 25,000 against | ['hr_policy_zeta_2026.md']
-outsider on acme: HTTP 403 | not a member of this tenant
-ui-sa with a false header on zeta: HTTP 200 | The per-trip cap on domestic travel reimbursement | the header changed nothing
-```
-
-### demo_05_filters_two_keys_a_400_for_everything_else.py
-
-Do it: four filters, four verdicts
-
-**`step_01_four_filters_four_verdicts(session)` — Filters: two keys, a 400 for everything else / Do it: four filters, four verdicts**
-
-Do it: four filters, four verdicts
-
-Operation: bash — run in the operator shell (two 400s cost nothing; two questions, paise).
-
-Expected shape, not a promised result:
-
-```text
-400 | unknown filter key(s) tenant_id; allowed: doc_type, kind
-400 | filter doc_type must be a non-empty string or a list of 1 to 5 of them
-200 | answerable False pool 0 | The corpus holds nothing near this question: no passage of this
-200 | answerable True pool 20 | A confirmed employee at grade E3 or above serves a notice period
-```
-
-### demo_06_the_restricts_the_per_request_backend_and_the_stages_block.py
-
-Do it: the tenant's pin and policy, then a full stages block, Rs 0 plus one question
-
-**`step_01_the_tenant_s_pin_and_policy_then_a_full_st(session)` — The restricts, the per-request backend, and the stages block / Do it: the tenant's pin and policy, then a full stages block, Rs 0 plus one question**
-
-Do it: the tenant's pin and policy, then a full stages block, Rs 0 plus one question
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (two reads, one question).
+IDE adaptation: Save the actual previous pin before selecting vector; cleanup restores it instead of assuming rag_engine.
 
 Expected shape, not a promised result:
 
 ```text
 acme: retrieval_backend=vector
-acme: data_region=any
-{
- "policy_fallback": 0,
- "retrieval_backend": "vector",
- "retrieve_ms": 612,
- "pool": 20,
- "graph_chunks": 0,
- "managed_chunks": 0,
- "vector_chunks": 20,
- "rerank_ms": 388,
- "generate_ms": 1742
-}
-citations 3 | cache_hit none | latency_ms 2760
 ```
 
-### demo_07_current_is_the_ledger_s_filter_never_the_caller_s.py
+### demo_03_the_chat_service_in_your_lane_s_region.py
 
-Do it: the question the revisions answered differently
+Do it: deploy Do it: where it points, and its brains
 
-**`step_01_the_question_the_revisions_answered_differ(session)` — Current is the ledger's filter, never the caller's / Do it: the question the revisions answered differently**
+**`step_01_deploy(session)` — The chat service, in your lane's region / Do it: deploy**
 
-Do it: the question the revisions answered differently
+Do it: deploy
 
-Operation: bash — run in the operator shell (one question, then the cited row read off Firestore).
+Operation: bash — run in the operator shell, in the kit (the chat service built and deployed in your region; several minutes).
 
 Expected shape, not a promised result:
 
 ```text
-A confirmed employee at grade E3 or above serves a notice period of 60 days ... [Source 1]
-cited acme:497809ffbaa6...#1
-the cited row: NP-03 | current: True | doc_key: acme_497809ff... | text starts: NP-03 — Notice period A confirmed employee at grade E3 or above
-NP-03 rows on the lane: 3 | current: 1 | saying 90 days: 2 (retired, never cited)
+>> commands/lesson-12.8.sh (DEPLOY block)
+Creating temporary archive of ... file(s) totalling ... MiB before compression.
+...
+DONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT
+Deploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]
+...
+Service URL: https://documind-chat-NUMBER.asia-south1.run.app
+Updated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,
+   documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,
+   documind-evalgrc-sa)
+>> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound
+... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)
+Execution [documind-checkpoint-setup-xxxxx] has successfully completed.
+...
+>> you@example.com may mint tokens as documind-ui-sa
+>> you@example.com may mint tokens as documind-outsider-sa
 ```
 
-### cleanup/demo_09_verify_it_yourself_the_checklist.py
+**`step_02_where_it_points_and_its_brains(session)` — The chat service, in your lane's region / Do it: where it points, and its brains**
 
-At lesson end: Run only after steps 3–9. Restore the value saved before the demo, which may be rag_engine, another backend or default. The last option removes the explicit pin. Do not assume every lane originally used RAG Engine, and do not place this command beside the setup command.
+Do it: where it points, and its brains
 
-**`step_01_finish_restore_the_saved_tenant_pin(session)` — Verify it yourself: the checklist / Finish: restore the saved tenant pin**
+Operation: bash — run in the operator shell, in the kit (where the chat service points, and its brains).
 
-Run only after steps 3–9. Restore the value saved before the demo, which may be rag_engine, another backend or default. The last option removes the explicit pin. Do not assume every lane originally used RAG Engine, and do not place this command beside the setup command.
+Expected shape, not a promised result:
 
-Operation: bash — end of lesson only; restore the original Acme pin.
+```text
+RAG_API_URL https://documind-api-NUMBER.asia-south1.run.app | SELF_URL https://documind-chat-NUMBER.asia-south1.run.app | DOCUMIND_BRAIN langchain
+{"status":"ok","profile":"gcp","brains":["langchain","langgraph","adk","direct"],"default_brain":"langchain","limits":{"max_model_calls":12,"budget_inr":5.0,"deadline_s":100.0,"model_timeout_s":30.0,"model_attempts":2,"min_model_s":5.0,"tool_budgets_s":{"retrieve":95.0,"calculate_processing_cost":10}}}
+```
+
+### demo_04_the_contract_what_the_model_reads_of_each_tool.py
+
+Do it
+
+**`step_01_the_contract_what_the_model_reads_of_each(session)` — The contract: what the model reads of each tool / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (what the model reads of each tool; reads the source, installs nothing).
+
+Expected shape, not a promised result:
+
+```text
+retrieve(query: str, doc_type: str = 'all', top_k: int = 5)    hidden: runtime
+      Retrieve grounded passages from DocuMind's corpus.
+  calculate_processing_cost(total_pages: int, num_documents: int = 1, processing_type: str = 'standard')
+      Estimate document processing cost in USD and INR.
+  'express' refused: unknown tier 'express'; expected one of ['bulk', 'priority', 'standard']
+```
+
+### demo_05_the_one_retrieve_from_your_shell.py
+
+Do it
+
+**`step_01_the_one_retrieve_from_your_shell(session)` — The one retrieve(), from your shell / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (the one retrieve(), called from your shell as a roster member).
+
+Expected shape, not a promised result:
+
+```text
+5 citations | answerable True | confidence high | 2.7 s
+  first: {'chunk_id': 'acme:aaaaaaaa#0', 'page': 3, 'score': 0.94}
+  rag-api's own answer: Gratuity is payable on termination after not less than five years of continuous service [1
+```
+
+### demo_06_the_direct_brain_one_retrieve_no_loop.py
+
+Do it
+
+**`step_01_the_direct_brain_one_retrieve_no_loop(session)` — The direct brain: one retrieve(), no loop / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (a small chat function, and the direct brain).
+
+Expected shape, not a promised result:
+
+```text
+direct    tool_calls ['retrieve']  refusals []  citations 5  3180 ms
+      Gratuity is payable on termination after not less than five years of continuous service [1].
+```
+
+### demo_07_the_loop_the_model_chooses_its_tools.py
+
+Do it
+
+**`step_01_the_loop_the_model_chooses_its_tools(session)` — The loop: the model chooses its tools / Do it**
+
+Do it
+
+Operation: bash — run in the operator shell, in the kit (the LangChain loop on the same question, then a cost question on both brains).
+
+Expected shape, not a promised result:
+
+```text
+langchain tool_calls ['retrieve']  refusals []  citations 5 n [1, 2, 3, 4, 5]  7240 ms
+      After five years of continuous service, under the Payment of Gratuity Act, 1972 [1].
+  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 3 n [1, 2, 3]  11350 ms
+      The handbook has 283 pages [1]. At the priority tier (USD 0.12 a page) they cost USD 33.96, abou
+  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms
+      The documents give no per-page price for processing the handbook; the April invoice bills priori
+```
+
+### demo_08_the_rows_what_each_brain_cost_and_which_row_records_it.py
+
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 5.5 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+
+**`step_01_the_rows_what_each_brain_cost_and_which_ro(session)` — The rows: what each brain cost, and which row records it / The rows: what each brain cost, and which row records it**
+
+rag-api's row for every retrieve(), and the chat service's row for every turn. Each retrieve() posts to rag-api's /v1/query, and rag-api writes its usage row, now labelled with the brain that asked. The chat service writes a row of its own for each turn: the brain, the tenant, the user, the session, the time and the two lists, and the turn's own model calls, their tokens and their cost, beside what its searches billed. Lesson 5.5 shows the limits those numbers are counted against. The cell reads both kinds since step 5, the shell's own retrieval included, labelled ui because it named no brain.
+
+Operation: bash — run in the operator shell, in the kit (the rows both services wrote since the retrieve cell; reads only).
+
+Expected shape, not a promised result:
+
+```text
+rag-api, one row per retrieve():
+    brain ui         in   1790  out   96  Rs 0.2894   2600 ms
+    brain direct     in   1790  out   96  Rs 0.2894   2710 ms
+    brain langchain  in   1812  out  101  Rs 0.2954   2840 ms
+    brain langchain  in   1650  out   88  Rs 0.2665   2390 ms
+    brain direct     in   1705  out   92  Rs 0.2760   2620 ms
+  the chat service, one row per turn:
+    brain direct     tool_calls ['retrieve']    3180 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain langchain  tool_calls ['retrieve']    7240 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain langchain  tool_calls ['retrieve', 'calculate_processing_cost']   11350 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+    brain direct     tool_calls ['retrieve']    3420 ms  (keys: brain, budget_inr, cached_tokens, cost_usd, event, latency_ms, max_model_calls, model, model_calls, rag_cost_usd, refusals, session_id, stopped_by, surface, tenant, tokens_in, tokens_out, tool_calls, tool_timeouts, user)
+```
+
+### setup/restore_settings.py
+
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+**`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
+
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+
+Operation: bash — run in the operator shell when you finish the lesson, not now.
+
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
 ### setup/finish.py
 
@@ -186,6 +223,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Query_Filters_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0dd90805d01d1a1b437bb8c335f36323ac152187`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`. All 25 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `95a50fda25e996ce7c223e579e4c5a7596c02941`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

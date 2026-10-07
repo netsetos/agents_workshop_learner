@@ -1,4 +1,4 @@
-"""Offline checks for the DocuMind Desk's hard gate (workshop lesson 10.5): shared/desk_rules.py, shared/identifiers.py,
+"""Offline checks for the DocuMind Desk's hard gate (workshop lesson 5.6): shared/desk_rules.py, shared/identifiers.py,
 shared/desk_law.py, the model check behind the rules (shared/desk_recall.py, with a fake client), rag-api's door
 (services/rag-api/desk_door.py) and commands/desk_ops.py desk.
 
@@ -12,7 +12,7 @@ The question sets:
     route rows of evals/routes.jsonl that are not escalations - the gate fires on none of them;
   - every question the rest of the course sends as acme from the kit - deploy/smoke/*.py, deploy/workshop_demos/**,
     and evals/handoff.jsonl and evals/adversarial/attacks.jsonl once they exist - fires on none and masks none,
-    because every tenant has the gate's rules from lesson 10.5 on (desk_gate is rules unless an operator writes
+    because every tenant has the gate's rules from lesson 5.6 on (desk_gate is rules unless an operator writes
     off), acme included. A new smoke or demo question joins the set by itself (questions_in_python() reads every
     string a question-shaped key, keyword or name holds, and every one-line string that ends in "?");
   - the escalation rows of evals/routes.jsonl: each fires its own class (skipped while none are written);
@@ -616,7 +616,7 @@ class IdentifierTests(unittest.TestCase):
         self.assertTrue(identifiers.is_aadhaar(a))
         self.assertTrue(identifiers.is_aadhaar(f"{a[:4]} {a[4:8]} {a[8:]}"))
         self.assertFalse(identifiers.is_aadhaar("1" + a[1:]))           # the first digit is 2 to 9
-        # The synthetic numbers lessons 8.3 and 18.1 type fail the check, so the door never masks them.
+        # The synthetic numbers lessons 4.8 and 9.1 type fail the check, so the door never masks them.
         for shown in ("2234 5678 9012", "2345 6789 0123", "2345-6789-0123"):
             self.assertFalse(identifiers.is_aadhaar(shown), shown)
             self.assertEqual(desk_rules.mask(f"My Aadhaar is {shown}"), (f"My Aadhaar is {shown}", []))

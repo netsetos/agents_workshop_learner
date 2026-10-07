@@ -1,11 +1,11 @@
 {
   "schema_version": 4,
   "lesson": "9.3",
-  "title": "Measure latency, avoided calls and false cache hits",
+  "title": "Inspect the vLLM service and the GKE alternative",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html",
-  "source_sha": "ab26cd1a53661cdbf477d3268f9e721275f57273",
+  "source_page": "Netsetos_GCP_Capstone_9.3_VLLM_GKE_WIX.html",
+  "source_sha": "383d76df919ed8e9e3c09d023f05584889c7ce6d",
   "shared_setup_windows": [
     1
   ],
@@ -13,31 +13,33 @@
   "persist_variables": [
     "API",
     "API_URL",
-    "CAND",
+    "BURSTS",
+    "E2",
     "ME",
     "NUMBER",
     "PROJECT",
     "REGION",
-    "SINCE93",
+    "RUN",
     "TENANT",
-    "TOKEN"
+    "hour",
+    "hours"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Measure latency, avoided calls and false cache hits: the threshold on labelled pairs, the same pairs asked live, and what the hits saved"
+      "heading": "Inspect the vLLM service and the GKE alternative: an engine that batches, a pod that never sleeps, a manifest read before you pay for it, and the sum that picks between them"
     },
     {
       "level": 3,
-      "heading": "One number, two rates, and what a hit is worth"
+      "heading": "Three ways to serve the same small model"
     },
     {
       "level": 4,
-      "heading": "The threshold explorer"
+      "heading": "Always on, or on demand?"
     },
     {
       "level": 3,
-      "heading": "The words: threshold, similarity, pairs, hit rate, false-hit rate, the rule of three, avoided call"
+      "heading": "The words: vLLM, continuous batching, the gemma-vllm image, documind-inference, GKE Autopilot, the lab cluster, node billing, the manifest, ClusterIP, the duty cycle"
     },
     {
       "level": 3,
@@ -57,15 +59,11 @@
     },
     {
       "level": 3,
-      "heading": "The curve: every candidate threshold on the labelled pairs"
+      "heading": "The vLLM service, read"
     },
     {
       "level": 4,
       "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
     },
     {
       "level": 4,
@@ -73,7 +71,7 @@
     },
     {
       "level": 3,
-      "heading": "The replay: the same pairs, asked live at 0.95"
+      "heading": "The manifest, read"
     },
     {
       "level": 4,
@@ -81,19 +79,11 @@
     },
     {
       "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the candidate"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the replay"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Avoided calls in rupees, and the latency of a hit"
+      "heading": "The lane's cluster, inspected"
     },
     {
       "level": 4,
@@ -101,23 +91,23 @@
     },
     {
       "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the candidate's rows"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the kit's table"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Choosing the threshold, and the clean-up"
+      "heading": "The duty-cycle sum"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Why the cache is tuned this way, what it costs, and what the kit does not do yet"
+      "heading": "Why it works this way, what it costs, and what the kit does not do yet"
     },
     {
       "level": 4,
@@ -136,7 +126,7 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -147,7 +137,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        380
+        383
       ],
       "offline": false,
       "live_verified": false,
@@ -156,7 +146,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
@@ -165,21 +155,21 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 380,
+          "source_line": 383,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py"
+      "next": "demo_03_the_vllm_service_read.py"
     },
     {
-      "id": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs",
+      "id": "demo_03_the_vllm_service_read",
       "lesson": "9.3",
-      "file": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py",
+      "file": "demo_03_the_vllm_service_read.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "heading": "The vLLM service, read",
       "purpose": "Do it",
       "anchor": "s3",
       "anchors": [
@@ -187,194 +177,143 @@
       ],
       "section_number": 3,
       "windows": [
-        9
+        10
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        446
+        466
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
-          "heading": "The curve: every candidate threshold on the labelled pairs",
+          "heading": "The vLLM service, read",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (65 embeddings, about a minute; the report goes to your home folder)",
-          "expected": "42 pairs against 23 golden questions, text-embedding-005 @ us-central1\n\n  threshold   hit rate (same)   false-hit rate (different)\n       0.85      100% (24)          83% (15)\n       0.88      100% (24)          67% (12)\n       0.90       96% (23)          61% (11)\n       0.92       62% (15)          50% ( 9)\n       0.94       46% (11)          22% ( 4)\n       0.95       33% ( 8)          11% ( 2)\n       0.96       25% ( 6)           6% ( 1)\n       0.97       17% ( 4)           0% ( 0)\n       0.98        4% ( 1)           0% ( 0)\n\n  lowest threshold with no false hit: 0.97\n  nearest false pairs: pp-25 0.962, pp-31 0.955, pp-37 0.947, pp-35 0.941, pp-42 0.931, pp-41 0.929, pp-27 0.926, pp-30 0.926, pp-33 0.923, pp-40 0.914, pp-26 0.908, pp-36 0.885, pp-38 0.864, pp-39 0.858, pp-34 0.852, pp-29\n  report: /home/you/cache93_curve.json",
+          "label": "bash — run in the operator shell, in the kit (reads the service's files; no network)",
+          "expected": "the image: FROM vllm/vllm-openai:v0.28.0, then python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  weights in the image: none - no step fetches them, and the HF_TOKEN build-arg cloudbuild.yaml passes has no ARG to land in\n  so the engine downloads google/gemma-3-4b-it when it starts, from Hugging Face\n  the environment make deploy-vllm gives it: GOOGLE_CLOUD_PROJECT - no Hugging Face token\nthe service: 1 nvidia-l4, 8 vCPU, 32Gi; 0 to 1 instance; 32 requests at a time; startup probe 120 s + 5 x 30 s = 270 s\nits door: every chat completion needs an X-API-Key header, hashed and looked up in Firestore (api_keys then tenants)\n  what the gateway's token proxy sends: its own ID token as Authorization, and no X-API-Key\n  code elsewhere in the kit that writes an api_keys document: none\n  roles Terraform grants documind-vllm-sa, the account it runs as: none\nits request log: BigQuery table 'project.dataset.inference_logs'\nthe gateway's route to it: documind-inference, http://127.0.0.1:8090/vllm/v1, falling back to documind-slm, documind-general",
           "adaptations": [],
-          "id": "source_9",
-          "function": "step_01_the_curve_every_candidate_threshold_on_the",
-          "window": 9,
-          "source_line": 446,
+          "id": "source_10",
+          "function": "step_01_the_vllm_service_read",
+          "window": 10,
+          "source_line": 466,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py"
+      "next": "demo_04_the_manifest_read.py"
     },
     {
-      "id": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
+      "id": "demo_04_the_manifest_read",
       "lesson": "9.3",
-      "file": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
+      "file": "demo_04_the_manifest_read.py",
       "category": "required",
       "requires": [
-        "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs"
+        "demo_03_the_vllm_service_read"
       ],
-      "heading": "The replay: the same pairs, asked live at 0.95",
-      "purpose": "Do it: the candidate Do it: the replay",
+      "heading": "The manifest, read",
+      "purpose": "Do it",
       "anchor": "s4",
       "anchors": [
         "s4"
       ],
       "section_number": 4,
       "windows": [
-        12,
         14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        494,
-        506
+        577
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
-          "heading": "The replay: the same pairs, asked live at 0.95",
-          "subheading": "Do it: the candidate",
-          "purpose": "Do it: the candidate",
-          "label": "bash — run in the operator shell, in the kit (a revision with SEMANTIC_CACHE=on at the kit's 0.95, and a start time)",
-          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00046-wpk (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
-          "adaptations": [],
-          "id": "source_12",
-          "function": "step_01_the_candidate",
-          "window": 12,
-          "source_line": 494,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The replay: the same pairs, asked live at 0.95",
-          "subheading": "Do it: the replay",
-          "purpose": "Do it: the replay",
-          "label": "bash — run in the operator shell, in the kit (the 23 golden questions, then the 42 pairs, to the candidate; a few minutes)",
-          "expected": "pp-01 same right hit      211 ms  How much can I claim per trip for domestic travel?\n  pp-15 same right hit      188 ms  Gratuity is paid at what rate per completed year?\n  pp-16 same right hit      221 ms  What is the minimum bonus payable under the Bonus Ac\n  pp-17 same right hit      209 ms  Under the Code on Wages, what is the rate for overti\n  pp-18 same right hit      208 ms  Under the Code on Wages, what is the deadline for pa\n  pp-19 same right hit      217 ms  The standing orders chapter of the IR Code applies f\n  pp-20 same right hit      194 ms  Under the OSH Code, how many days of work earn a day\n  pp-21 same right hit      153 ms  Under the DPDP Act, what is a Consent Manager?\n  pp-25 diff FALSE HIT      230 ms  What is the notice period for a confirmed E2?\n  pp-31 diff FALSE HIT      236 ms  Who approves a purchase of Rs 30,000?\n  same-fact pairs served from the cache: 8 of 24\n  different pairs served from the cache: 2 of 18",
+          "heading": "The manifest, read",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (reads the manifest and the image it runs; no network)",
+          "expected": "Deployment documind-vllm: 1 replica, and no autoscaler\n  its node: nodeSelector cloud.google.com/gke-accelerator=nvidia-l4, so Autopilot provisions an L4 node for the pod\n  image: ${IMAGE}, which make gke-up fills in: asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/gemma-vllm:latest\n  limits: 1 GPU, 6 vCPU, 24Gi (requests default to the limits)\n  env: HF_HUB_OFFLINE=1\n  startup probe: GET /health every 10 s, 60 failures allowed: 600 s to load\n  args: --model=google/gemma-3-4b-it --dtype=bfloat16 --gpu-memory-utilization=0.90 --max-model-len=4096 --port=8080\nService documind-vllm: ClusterIP (no type named, so the default), port 80 to 8080: no address outside the cluster\nthe image it runs: ENTRYPOINT [], CMD python -m uvicorn main:app --host 0.0.0.0 --port 8080 --workers 1 --timeout-keep-alive 120\n  the manifest sets args and no command, and the ENTRYPOINT is empty: the container runs '--model=google/gemma-3-4b-it' as its program\n  main.py takes its model from the environment (MODEL_NAME), and reads none of those args\n  the image holds no weights (step 3), and HF_HUB_OFFLINE=1 forbids the download\nverdict: as written, this pod cannot start",
           "adaptations": [],
           "id": "source_14",
-          "function": "step_02_the_replay",
+          "function": "step_01_the_manifest_read",
           "window": 14,
-          "source_line": 506,
+          "source_line": 577,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
+      "next": "demo_05_the_lane_s_cluster_inspected.py"
     },
     {
-      "id": "recovery_demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
+      "id": "demo_05_the_lane_s_cluster_inspected",
       "lesson": "9.3",
-      "file": "recovery/demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
-      "category": "recovery",
-      "requires": [],
-      "heading": "The replay: the same pairs, asked live at 0.95",
-      "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
-      "anchor": "s4",
-      "anchors": [
-        "s4"
-      ],
-      "section_number": 4,
-      "windows": [
-        16
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
-      "source_lines": [
-        571
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "The replay: the same pairs, asked live at 0.95",
-          "subheading": "Do it: the replay",
-          "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
-          "label": "bash — run in the operator shell, only if the replay listed questions with no answer (the API's last three tracebacks)",
-          "expected": "",
-          "adaptations": [],
-          "id": "source_16",
-          "function": "step_01_the_replay",
-          "window": 16,
-          "source_line": 571,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
-    },
-    {
-      "id": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit",
-      "lesson": "9.3",
-      "file": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py",
+      "file": "demo_05_the_lane_s_cluster_inspected.py",
       "category": "required",
       "requires": [
-        "demo_04_the_replay_the_same_pairs_asked_live_at_0_95"
+        "demo_04_the_manifest_read"
       ],
-      "heading": "Avoided calls in rupees, and the latency of a hit",
-      "purpose": "Do it: the candidate's rows Do it: the kit's table",
+      "heading": "The lane's cluster, inspected",
+      "purpose": "Do it",
       "anchor": "s5",
       "anchors": [
         "s5"
       ],
       "section_number": 5,
       "windows": [
-        18,
-        20
+        17,
+        19
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        592,
-        616
+        649,
+        685
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
-          "heading": "Avoided calls in rupees, and the latency of a hit",
-          "subheading": "Do it: the candidate's rows",
-          "purpose": "Do it: the candidate's rows",
-          "label": "bash — run in the operator shell, in the kit (the candidate's rows since the start: hits, p95, rupees; reads only)",
-          "expected": "65 answers on the candidate: 10 from the answer cache, 55 from the model\n  p95 latency: 236 ms for a hit, 3187 ms for a model answer\n  a model answer cost Rs 0.4673 on average: the hits avoided 10 calls, about Rs 4.67\n  of those hits, 2 served a wrong answer: pp-25, pp-31",
+          "heading": "The lane's cluster, inspected",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (read-only: describes the lane's cluster, looks for the vLLM service and image)",
+          "expected": "documind-autopilot: STANDARD, a regional control plane in asia-south1, on documind-vpc, RUNNING\n  node pool documind-lab: 1 x e2-standard-2 in asia-south1-a, 30 GB pd-standard, GPU: none\n  what it bills while it exists: $0.10 an hour for the control plane (the free tier covers only zonal and Autopilot clusters) + $0.0805 for the node = $0.1805 an hour, Rs 15.34; Rs 11,199 for a 730-hour month, plus the disk\ndocumind-vllm on Cloud Run (us-central1): not deployed\nthe gemma-vllm image in asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind: not built",
           "adaptations": [],
-          "id": "source_18",
-          "function": "step_01_the_candidate_s_rows",
-          "window": 18,
-          "source_line": 592,
+          "id": "source_17",
+          "function": "step_01_the_lane_s_cluster_inspected",
+          "window": 17,
+          "source_line": 649,
           "manual_checkpoint": null
         },
         {
-          "heading": "Avoided calls in rupees, and the latency of a hit",
-          "subheading": "Do it: the kit's table",
-          "purpose": "Do it: the kit's table",
-          "label": "bash — run in the operator shell, in the kit (the kit's own table of the last hour, by model and backend)",
-          "expected": "by model and backend (what answered, through which door)\nmodel                 model_backend          answers    tok_in  tok_out       USD       INR  p95 ms  unans\n----------------------------------------------------------------------------------------------------------\ngemini-3.6-flash      vertex                      55     97661    20783    0.3024     25.70    3187   0.00\ngemini-3.6-flash      cache                       10         0        0    0.0000      0.00     236   0.00",
-          "adaptations": [],
-          "id": "source_20",
-          "function": "step_02_the_kit_s_table",
-          "window": 20,
-          "source_line": 616,
+          "heading": "The lane's cluster, inspected",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (it stops before changing anything on a Standard lab)",
+          "expected": "STOP: the Standard CPU lab cannot run the L4 GPU lesson. Set gke_autopilot=true in Terraform, review cluster replacement and quota, and apply before make gke-up.\nmake: *** [Makefile:711: gke-up] Error 1",
+          "adaptations": [
+            "The page runs make gke-up to watch its guard stop on the Standard CPU lab (exit 2 with STOP). Accept that stop as the observation, and exit 0 where the lab is Autopilot; any other exit is still an error."
+          ],
+          "id": "source_19",
+          "function": "step_02_the_lane_s_cluster_inspected",
+          "window": 19,
+          "source_line": 685,
           "manual_checkpoint": null
         }
       ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
+      "next": "demo_06_the_duty_cycle_sum.py"
     },
     {
-      "id": "cleanup_demo_06_choosing_the_threshold_and_the_clean_up",
+      "id": "demo_06_the_duty_cycle_sum",
       "lesson": "9.3",
-      "file": "cleanup/demo_06_choosing_the_threshold_and_the_clean_up.py",
-      "category": "cleanup",
-      "requires": [],
-      "heading": "Choosing the threshold, and the clean-up",
-      "purpose": "At lesson end: What the numbers allow, where the threshold lives, and the candidate put away. The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's hit from lines, which the curve cannot see. The threshold is an environment variable, SEMANTIC_CACHE_THRESHOLD, read once when a revision starts. No make target passes it, so trying 0.97 on a candidate takes gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97, with your region and project, and then the replay again.",
+      "file": "demo_06_the_duty_cycle_sum.py",
+      "category": "required",
+      "requires": [
+        "demo_05_the_lane_s_cluster_inspected"
+      ],
+      "heading": "The duty-cycle sum",
+      "purpose": "Do it",
       "anchor": "s6",
       "anchors": [
         "s6"
@@ -385,23 +324,23 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        632
+        722
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "Choosing the threshold, and the clean-up",
-          "subheading": "Choosing the threshold, and the clean-up",
-          "purpose": "What the numbers allow, where the threshold lives, and the candidate put away. The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's hit from lines, which the curve cannot see. The threshold is an environment variable, SEMANTIC_CACHE_THRESHOLD, read once when a revision starts. No make target passes it, so trying 0.97 on a candidate takes gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97, with your region and project, and then the replay again.",
-          "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed)",
-          "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-000MM-xxx      (the live revision, as before; no candidate tag)",
+          "heading": "The duty-cycle sum",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell (arithmetic only; no network)",
+          "expected": "your pattern: 8 bursts a day of 30 minutes, on 22 days a month\nCloud Run, on demand: each burst, then up to 10 idle minutes - an instance lives 320 minutes a day\n  the duty-cycle sum: 320 min x 22 days = 117.3 hours of 730 (16.1%) x $1.4209 = $166.72, Rs 14,171 a month\nGKE Autopilot, always on, for all 730 hours:\n  us-central1  $0.9558 an hour (node 0.8536 + L4 0.0670 + 8 vCPU 0.0240 + 32 GiB 0.0112): Rs 59,309; with the $0.10 cluster fee, Rs 65,514\n               cheaper than Cloud Run above 67.3% of the month (74.3% with the fee)\n  asia-south1  $1.0113 an hour (node 0.8886 + L4 0.0805 + 8 vCPU 0.0288 + 32 GiB 0.0134): Rs 62,753; with the $0.10 cluster fee, Rs 68,958\n               cheaper than Cloud Run above 71.2% of the month (78.2% with the fee)\nat 16.1%: Cloud Run is cheaper - Rs 14,171 against Rs 59,309 for the cheapest GKE line",
           "adaptations": [],
           "id": "source_22",
-          "function": "step_01_choosing_the_threshold_and_the_clean_up",
+          "function": "step_01_the_duty_cycle_sum",
           "window": 22,
-          "source_line": 632,
+          "source_line": 722,
           "manual_checkpoint": null
         }
       ],
@@ -414,7 +353,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -425,7 +364,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_3/GUIDE.md",
       "source_lines": [
-        386
+        389
       ],
       "offline": false,
       "live_verified": false,
@@ -434,7 +373,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
@@ -443,7 +382,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 386,
+          "source_line": 389,
           "manual_checkpoint": null
         }
       ],
@@ -476,96 +415,110 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 350
+      "line": 353
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 382
+      "line": 385
     },
     {
       "window": 6,
-      "label": "evals/paraphrases.jsonl - two of the 42 pairs: the same fact in other words, and one grade away",
-      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "label": "Makefile - make deploy-vllm: the engine on one L4, 32 requests at a time",
+      "heading": "The vLLM service, read",
       "anchor": "s3",
-      "line": 404
+      "line": 415
     },
     {
       "window": 7,
-      "label": "evals/cache_threshold.py - check_pairs(): the pairs can judge a threshold only if they are what they say",
-      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "label": "services/gemma-vllm/Dockerfile - the image make build-vllm builds",
+      "heading": "The vLLM service, read",
       "anchor": "s3",
-      "line": 408
+      "line": 424
     },
     {
       "window": 8,
-      "label": "evals/cache_threshold.py - curve() and recommend(): hits and false hits per threshold, and the lowest safe one",
-      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "label": "services/gemma-vllm/main.py - the engine loads the model before the server answers",
+      "heading": "The vLLM service, read",
       "anchor": "s3",
-      "line": 426
+      "line": 445
     },
     {
-      "window": 10,
-      "label": "expected (the kit's own printing over stand-in embeddings that reproduce the page's INVENTED example similarities; your curve is Google's)",
-      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "window": 9,
+      "label": "services/gemma-vllm/auth.py - the service's own door: a tenant's API key, looked up in Firestore",
+      "heading": "The vLLM service, read",
       "anchor": "s3",
-      "line": 448
+      "line": 456
     },
     {
       "window": 11,
-      "label": "services/rag-api/semantic_cache.py - the near rung: the five nearest, and the first at the threshold that is alive",
-      "heading": "The replay: the same pairs, asked live at 0.95",
+      "label": "expected (this cell, run on the kit's own files)",
+      "heading": "The vLLM service, read",
+      "anchor": "s3",
+      "line": 502
+    },
+    {
+      "window": 12,
+      "label": "gke/vllm-deployment.yaml - the container the Deployment runs",
+      "heading": "The manifest, read",
       "anchor": "s4",
-      "line": 476
+      "line": 529
     },
     {
       "window": 13,
-      "label": "expected shape (gcloud's progress lines are left out)",
-      "heading": "The replay: the same pairs, asked live at 0.95",
+      "label": "gke/vllm-deployment.yaml - the Service in front of it",
+      "heading": "The manifest, read",
       "anchor": "s4",
-      "line": 497
+      "line": 562
     },
     {
       "window": 15,
-      "label": "expected (against a local stub answering at 0.95 with the example similarities; only hits are printed)",
-      "heading": "The replay: the same pairs, asked live at 0.95",
+      "label": "expected (this cell, run on the kit's own files)",
+      "heading": "The manifest, read",
       "anchor": "s4",
-      "line": 554
+      "line": 613
     },
     {
-      "window": 17,
-      "label": "evals/usage_rows.py - p95(): the 95th position of the sorted latencies",
-      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "window": 16,
+      "label": "Makefile - make gke-up: the mode checked first",
+      "heading": "The lane's cluster, inspected",
       "anchor": "s5",
-      "line": 584
+      "line": 641
     },
     {
-      "window": 19,
-      "label": "expected (against a fake gcloud holding the replay's rows, priced by the kit's own price())",
-      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "window": 18,
+      "label": "expected (this cell, against gcloud stood in with what make up leaves: gke.tf's defaults, no vLLM service, no image; your region's node price may differ)",
+      "heading": "The lane's cluster, inspected",
       "anchor": "s5",
-      "line": 609
+      "line": 679
+    },
+    {
+      "window": 20,
+      "label": "expected (the recipe's own message on a Standard lab)",
+      "heading": "The lane's cluster, inspected",
+      "anchor": "s5",
+      "line": 687
     },
     {
       "window": 21,
-      "label": "expected (usage_rows.main()'s own printing over the same rows; your numbers differ)",
-      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "label": "services/litellm/config.yaml - the gateway's route to the GKE pod",
+      "heading": "The lane's cluster, inspected",
       "anchor": "s5",
-      "line": 618
+      "line": 704
     },
     {
       "window": 23,
-      "label": "expected shape",
-      "heading": "Choosing the threshold, and the clean-up",
+      "label": "expected (this cell, with the pattern above: 8 bursts of 30 minutes on 22 days)",
+      "heading": "The duty-cycle sum",
       "anchor": "s6",
-      "line": 635
+      "line": 749
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "prerequisites": "Read the vLLM/GKE definitions even if the optional GKE cluster has not been deployed; absence is not a serving comparison.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

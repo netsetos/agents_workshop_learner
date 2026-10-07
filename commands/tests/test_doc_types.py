@@ -1,5 +1,5 @@
 """Offline checks for the doc_type registry (shared/doc_types.py), the worker's hook and the relabel of stored rows
-(services/ingest/relabel.py, commands/desk_ops.py doc-types) - workshop lesson 10.6.
+(services/ingest/relabel.py, commands/desk_ops.py doc-types) - workshop lesson 10.4.
 
 Run: python -m unittest discover -s commands/tests -p test_doc_types.py
 Stdlib only, with a fake Firestore: nothing here imports a cloud client. The one case that builds the worker's own
@@ -309,11 +309,11 @@ class HookTests(unittest.TestCase):
         self.assertIn('"doc_type": doc.doc_type if doc.doc_type != "unknown"\n'
                       '                                        else MEDIA_TYPES[msg.content_type],', body)
         self.assertIn('MEDIA_TYPES = {"image/png": "figure", "image/jpeg": "figure",\n'
-                      '               "video/mp4": "segment", "audio/mpeg": "segment"}', src)           # workshop lessons 3.2, 15.3, 16.1
-        self.assertIn("text = None                                          # a media document has none", src)  # workshop lesson 15.3
+                      '               "video/mp4": "segment", "audio/mpeg": "segment"}', src)           # workshop lessons 1.2, 7.3 and 7.5
+        self.assertIn("text = None                                          # a media document has none", src)  # workshop lesson 7.3
         callers = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / "services").rglob("*.py")
                          if re.search(r"_mirror\.after_(swap|undo)\(|mirror\.upsert\(", p.read_text(encoding="utf-8")))
-        self.assertEqual(callers, ["services/ingest/main.py"])                  # workshop lesson 15.3's upsert-caller assert
+        self.assertEqual(callers, ["services/ingest/main.py"])                  # workshop lesson 7.3's upsert-caller assert
 
 
 class RelabelTests(unittest.TestCase):

@@ -1,4 +1,4 @@
-"""The DocuMind Desk's graph (workshop lesson 10.6): the desks a decided turn runs, as a LangGraph StateGraph.
+"""The DocuMind Desk's graph (workshop lesson 10.4): the desks a decided turn runs, as a LangGraph StateGraph.
 
     dispatch    reads the decision the handler passes in (services/chat/desk_router.decide()), calls no model, and
                 goes to the turn's first desk with Command(goto=...)

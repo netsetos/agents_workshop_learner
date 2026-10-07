@@ -1,4 +1,4 @@
-"""Offline checks for the chat service's agent brains (workshop lessons 10.1 to 10.4).
+"""Offline checks for the chat service's agent brains (workshop lessons 5.1, 5.4, 5.5 and 5.7).
 
 Each turn reports its own tool calls, refusals and numbered citations; the three agent brains bind one tool list,
 and no declaration a model reads names the tenant, the assertion or the brain; one error contract holds in all three

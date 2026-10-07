@@ -27,7 +27,7 @@ psycopg-pool==3.3.1
 # The third brain (lesson 8.7, gap G6). brains.py imports it lazily: leave it out and the
 # `adk` brain is a 501, not a crash at startup.
 google-adk==2.8.0
-# The DocuMind Desk (workshop lesson 10.5): the case queue writes its audit events (shared/audit_log.py opens
+# The DocuMind Desk (workshop lesson 5.6): the case queue writes its audit events (shared/audit_log.py opens
 # google.cloud.storage; the bucket grant is terraform/storage.tf's chat_audit). LangGraph, which the brains already
 # import through langchain, is pinned at the version that resolves with the pins above, so it cannot move under them.
 google-cloud-storage==3.13.1

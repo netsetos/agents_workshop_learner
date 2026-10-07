@@ -1,4 +1,4 @@
-# ---------- Agents (the v5 course's Module 10): the agent layer, lessons 10.1 to 10.6; the DocuMind Desk's first ----------
+# ---------- Agents (the v5 course's Modules 5 and 10): the agent layer, lessons 5.1, 5.4-5.7 and 10.4; the DocuMind Desk's first ----------
 # Included by the Makefile (`include mk/*.mk`); every variable it uses is declared there, except the Desk's own
 # below. A recipe longer than a few lines is a script under commands/, a subcommand of commands/lane.py (limits), or,
 # for the Desk, a subcommand of commands/desk_ops.py, run the same way without make (commands/lane.py's subcommand set
@@ -28,7 +28,7 @@ TF_EXTRA_VARS += -var desk_router_alerts=$(DESK_ROUTER_ALERTS)
 DESK_GATE_ALERTS ?= false
 TF_EXTRA_VARS += -var desk_gate_alerts=$(DESK_GATE_ALERTS)
 
-# The Google Chat door (terraform/gchat.tf, lesson 10.6) is off unless asked for: GCHAT_DOOR=true on make plan and
+# The Google Chat door (terraform/gchat.tf, lesson 10.4) is off unless asked for: GCHAT_DOOR=true on make plan and
 # make up declares what its bridge runs on, then GCHAT_DOOR=true on every later plan, as DESK_JOB. make deploy-gchat
 # and make smoke-gchat read terraform output gchat_door and refuse while the last apply had it off.
 GCHAT_DOOR ?= false
@@ -38,19 +38,19 @@ GCHAT_DOOR_ON = [ "$$(cd $(TF_DIR) && terraform output -raw gchat_door 2>/dev/nu
 # The Desk's offline half: no credential, no cost, part of CI (documind-dryrun.yml runs evals/tests): the route set,
 # its split, the eval's metrics and the probe's readers, the router on a scripted classifier (route_eval.py --local,
 # which exits 1 below the dev gates) and the threshold sweep's arithmetic, then the case queue's and the router and
-# desk graph's tests (workshop lessons 10.5 and 10.6) in ~/graph-venv with the chat image's pins. See
+# desk graph's tests (workshop lessons 5.6 and 10.4) in ~/graph-venv with the chat image's pins. See
 # commands/desk-check.sh.
 desk-check:
 	@PY=$(PY) bash commands/desk-check.sh
 
-# Before the router is built (lesson 10.6): four facts it depends on, measured on your lane - top-two logprobs on
+# Before the router is built (lesson 10.4): four facts it depends on, measured on your lane - top-two logprobs on
 # flash-lite at global, zero thinking tokens at thinking_budget 0, the enum schema's output tokens, and whether
 # flash takes thinking level MINIMAL. Five small calls on location=global, well under Rs 1; prints, writes nothing.
 # Needs google-genai in the shell (make ablate's line); --dry-run shows the requests without sending them.
 route-probe: guard-project
 	$(PY) evals/route_probe.py --project $(PROJECT)
 
-# The router's exemplar index for TENANT (lesson 10.6): evals/routes.jsonl's dev rows on the routes TENANT's doc_type
+# The router's exemplar index for TENANT (lesson 10.4): evals/routes.jsonl's dev rows on the routes TENANT's doc_type
 # registry covers (make doc-types first), embedded with text-embedding-005 on us-central1 into
 # tenants/{TENANT}/desk_exemplars, the stale entries deleted after: about 200 short questions, one embedding each.
 # DRY_RUN=1 prints the rows per route and the index version and embeds nothing. The chat service reads it within 5 min.
@@ -72,7 +72,7 @@ route-calibrate: $(if $(LOCAL),,guard-project)
 # (services/ingest/relabel.py). APPLY=1 applies it: the Firestore rows, the Vector Search restricts,
 # the Vertex AI Search structData, BigQuery's chunk_source, the tenant's answer cache expired; it exits 3 when BigQuery
 # deferred a statement (rows still in the streaming buffer: run it again later). RESET=1 plans every row back to
-# unknown (the state of workshop lessons 5.1 and 10.3, for rehearsing them), the registry kept. One tenant a run.
+# unknown (the state of workshop lessons 2.1 and 5.5, for rehearsing them), the registry kept. One tenant a run.
 # Like make backfill-vectors, best run between ingests: a swap racing the upsert is caught and taken off the tier.
 doc-types: guard-project
 	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) commands/desk_ops.py --project $(PROJECT) doc-types --tenant $(TENANT) $(if $(SEED),--seed $(SEED),) $(if $(FOLLOW),--follow "$(FOLLOW)",) $(if $(EXPORT),--export "$(EXPORT)",)
@@ -80,7 +80,7 @@ doc-types: guard-project
 	  VECTOR_INDEX_NAME=$${VECTOR_INDEX_NAME:-$$(cd $(TF_DIR) && terraform output -raw vector_index_name 2>/dev/null)} \
 	  $(PY) services/ingest/relabel.py --project $(PROJECT) --tenant $(TENANT) $(if $(APPLY),--apply,) $(if $(RESET),--reset,)
 
-# A chat turn's limits (workshop lesson 10.3): model calls, rupees and a deadline, from the deployed /health, and the
+# A chat turn's limits (workshop lesson 5.5): model calls, rupees and a deadline, from the deployed /health, and the
 # A2A peer's own call cap when its /health names one. Reads only; no model call.
 limits: guard-project
 	@$(PY) commands/lane.py --project $(PROJECT) --region $(REGION) limits
@@ -105,7 +105,7 @@ limits-drill: guard-project
 # with no brain label or "ui" (eval scripts included); while any company is on, the chat door looks up every company's
 # caller. Both services read the document once a minute. No value needs a case queue. Without DESK_GATE it prints the
 # switch, and beside desk_gate on what it costs.
-# DESK_MAX_PARTS=2 lets the routed Desk (lesson 10.6) run two desks for one question, one after the other; 1, the
+# DESK_MAX_PARTS=2 lets the routed Desk (lesson 10.4) run two desks for one question, one after the other; 1, the
 # default, offers the second as a button. DESK_ROUTE is the routed Desk's mode: off; shadow (each /v1/chat turn is also
 # decided by the router and logged as a desk_shadow row, nothing more); on (POST /v1/desk answers, and the Desk page
 # shows Ask the Desk); single (the same with one desk, DESK_SINGLE=handbook|statute, and no classifier). on and single
@@ -115,7 +115,7 @@ limits-drill: guard-project
 # not covered, with no search.
 # NOTES=evals/desk/clause_notes.acme.json writes the company's notes on handbook clauses (none clears them): the
 # handbook desk shows one beside an answer citing its clause.
-# DESK_GCHAT=on|off opens or closes the Google Chat door (lesson 10.6) for the tenant: on is refused while
+# DESK_GCHAT=on|off opens or closes the Google Chat door (lesson 10.4) for the tenant: on is refused while
 # DESK_GATE is off, and unless DESK_ROUTE is on or single, and for a tenant whose data_region is in it also needs
 # CONFIRM_RESIDENCY=1, because the answers and their quotes then sit in the company's Google Chat. The chat service
 # reads it within 60 s.
@@ -124,7 +124,7 @@ desk: guard-project
 	$(if $(filter shadow on,$(DESK_ROUTE)),@echo ">> the router's three alert policies (terraform/desk_alerts.tf): make plan up DESK_ROUTER_ALERTS=true after the router has taken some turns; then keep DESK_ROUTER_ALERTS=true on every later plan")
 	$(if $(filter on,$(DESK_GATE)),@echo ">> the gate check's alert on its failed share (terraform/desk_alerts.tf): make plan up DESK_GATE_ALERTS=true after the check has run on some questions; then keep DESK_GATE_ALERTS=true on every later plan")
 
-# The case queue (workshop lesson 10.5): shared/roles.py, shared/cases.py, and the routes on the chat service.
+# The case queue (workshop lesson 5.6): shared/roles.py, shared/cases.py, and the routes on the chat service.
 # A person's roles in TENANT: ROLES=employee,grc_member sets exactly those; REVOKE=grc_member (or all: an employee
 # again) takes some away; EMAIL alone prints that person's roles; neither lists the tenant's role documents. The person
 # must be on the roster first (make roster). Each grant and each revoke is an audit event (role.grant, role.revoke).
@@ -165,7 +165,7 @@ smoke-cases: guard-project
 	DOCUMIND_OUTSIDER_SA=documind-outsider-sa@$(PROJECT).iam.gserviceaccount.com DOCUMIND_PROJECT=$(PROJECT) DOCUMIND_TENANT=$(TENANT) \
 	$(if $(IC_EMAIL),DOCUMIND_IC_EMAIL=$(IC_EMAIL),) $(PY) smoke/smoke_cases.py
 
-# The routed Desk, live (smoke/smoke_desk.py, lesson 10.6), after make desk DESK_ROUTE=on for acme and
+# The routed Desk, live (smoke/smoke_desk.py, lesson 10.4), after make desk DESK_ROUTE=on for acme and
 # DESK_ROUTE=single DESK_SINGLE=statute for globex: a handbook answer citing acme's objects, a statute answer with its
 # in-force lines, a POSH disclosure answered by rule with the POSH card and no model call, an invoice question answered
 # out of scope by its anchor, the leaver's denied turn with no retrieval, globex in single mode, /v1/route as an eval
@@ -177,7 +177,7 @@ smoke-desk: guard-project
 	DOCUMIND_OUTSIDER_SA=documind-outsider-sa@$(PROJECT).iam.gserviceaccount.com DOCUMIND_PROJECT=$(PROJECT) DOCUMIND_TENANT=$(TENANT) \
 	$(if $(IC_EMAIL),DOCUMIND_IC_EMAIL=$(IC_EMAIL),) $(PY) smoke/smoke_desk.py
 
-# The Google Chat door (lesson 10.6): documind-gchat, the bridge (services/gchat/), built and deployed by
+# The Google Chat door (lesson 10.4): documind-gchat, the bridge (services/gchat/), built and deployed by
 # commands/gchat.sh after make plan up GCHAT_DOOR=true has created terraform/gchat.tf's accounts, claims database, topic
 # and push subscription (make up also deploys chat again, which lets the bridge's account call it). Deployed only on
 # request: a default lane has no bridge, and this refuses. The chat service carries the Desk's side of the door
@@ -202,7 +202,7 @@ smoke-gchat: guard-project tf-backend
 	DOCUMIND_OUTSIDER_SA=documind-outsider-sa@$(PROJECT).iam.gserviceaccount.com DOCUMIND_PROJECT=$(PROJECT) DOCUMIND_TENANT=$(TENANT) \
 	$(PY) smoke/smoke_gchat.py
 
-# The router's eval on the deployed Desk (evals/route_eval.py --live, lesson 10.6): every row of SPLIT (dev unless
+# The router's eval on the deployed Desk (evals/route_eval.py --live, lesson 10.4): every row of SPLIT (dev unless
 # given), as the row's eval account, to POST /v1/route for the decision, and each handbook, statute and denial row to
 # POST /v1/desk too, for its answer and citations. It prints the confusion matrix with intervals, escalation recall,
 # authority_rate, the router's cost and the p50 and p95 of router_ms and of the desk's latency. ARM=C runs arm C (code
@@ -215,7 +215,7 @@ route-eval: guard-project
 	case "$$NUMBER" in ''|*[!0-9]*) echo 'ERROR: gcloud did not return a project number; no request sent.' >&2; exit 1;; esac; \
 	DOCUMIND_CHAT_URL=https://documind-chat-$$NUMBER.$(REGION).run.app $(PY) evals/route_eval.py --live --project $(PROJECT) --split $(or $(SPLIT),dev) $(if $(ARM),--arm $(ARM),) $(if $(SAVE),--save "$(SAVE)",) $(if $(REPORT),--report "$(REPORT)",)
 
-# The Desk's day in BigQuery (terraform/sql/desk_daily.sql, lesson 10.6): per India day, tenant, desk and kind of
+# The Desk's day in BigQuery (terraform/sql/desk_daily.sql, lesson 10.4): per India day, tenant, desk and kind of
 # caller, the turns and their outcomes, the escalations by type with one count for every sensitive case, the method
 # mix, the L2 share, the chip re-route rate, the rupees and the p50 and p95 of latency and router_ms; no person, no
 # session, no question. Run after the desk rows have landed once, as bq-views is: the sink copies only what is logged

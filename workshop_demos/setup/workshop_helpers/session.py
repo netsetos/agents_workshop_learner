@@ -24,7 +24,7 @@ import time
 import uuid
 
 from .artifacts import write_json
-from .config import load_config
+from .config import lesson_folder, load_config
 
 
 def secret_name(name):
@@ -78,8 +78,7 @@ class DemoSession:
         self.config = config or load_config()
         self.live, self.repeat = live, repeat
         self.lesson = self.mapping["lesson"]
-        module = int(self.lesson.split(".")[0])
-        self.base = self.config.results_dir / f"module_{module:02}" / f"lesson_{self.lesson.replace('.', '_')}"
+        self.base = self.config.results_dir / lesson_folder(self.lesson)
         self.base.mkdir(parents=True, exist_ok=True)
         self.lock = self.base / "session.lock"
         self._lock_fd = None

@@ -1,4 +1,4 @@
-# Lesson 4.2: Reindex a changed section and measure embedding reuse
+# Lesson 4.2: Separate offline checks, live scoring and LLM judgment
 
 ## What to run
 
@@ -9,17 +9,17 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | HTML section | File | What it demonstrates |
 |---|---|---|
 | setup | [setup/prepare.py](setup/prepare.py) | Before you run anything: set up the shell |
-| 3 | [demo_03_the_gate_the_golden_set_scoped_to_one_document.py](demo_03_the_gate_the_golden_set_scoped_to_one_document.py) | The gate: the golden set, scoped to one document |
-| 4 | [demo_04_measure_reuse_six_kinds_of_edit_rs_0.py](demo_04_measure_reuse_six_kinds_of_edit_rs_0.py) | Measure reuse: six kinds of edit, Rs 0 |
-| 5 | [demo_05_do_it_revision_3_of_the_handbook_on_the_lane.py](demo_05_do_it_revision_3_of_the_handbook_on_the_lane.py) | Do it: revision 3 of the handbook, on the lane |
-| 6 | [demo_06_inspect_the_ledger_row_the_claims_the_vectors.py](demo_06_inspect_the_ledger_row_the_claims_the_vectors.py) | Inspect: the ledger row, the claims, the vectors |
-| 7 | [demo_07_the_gate_goes_red_and_the_two_ways_back_to_green.py](demo_07_the_gate_goes_red_and_the_two_ways_back_to_green.py) | The gate goes red, and the two ways back to green |
+| 3 | [demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py](demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py) | The offline half: on every push, and CI's verdict on the commit you run |
+| 4 | [demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py](demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py) | The live half: every row, two identities, nine rates, three exit codes |
+| 5 | [demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py](demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py) | The judge: the lane's own answers, read with the context they cite |
+| 6 | [demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py](demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py) | Where the gate and the judge disagree: read the row |
+| 7 | [demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_4_4.py](demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_4_4.py) | The judge's other two modes: trajectories now, pairwise in lesson 4.4 |
 
 ## Before starting
 
 Select `/home/user/rag-shell-venv/bin/python`. Run `workshop_demos/setup/bootstrap.py` once and edit `workshop_demos/setup/config/settings.local.json`. The helper sets the working directory and resolves project/API settings; terminal exports are unnecessary.
 
-The original handbook and unchanged golden set; the live gate deliberately fails for revision 3.
+The live deployed lane, the golden set, and the CI account/access needed by the source's optional CI inspection.
 
 Each demo contains named Python functions in teaching order. Set breakpoints in those functions. Kit CLI operations stay visible as command constants; Python calls use this interpreter. Repeated session, authentication, configuration and command handling live in `workshop_demos/setup/workshop_helpers/`.
 
@@ -33,7 +33,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Finish and restore
 
-- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -42,11 +42,11 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 Operation: bash — run in the operator shell now, before the lesson's first step.
 
@@ -58,19 +58,20 @@ Expected shape, not a promised result:
 acme: retrieval_backend=vector
 ```
 
-### demo_03_the_gate_the_golden_set_scoped_to_one_document.py
+### demo_03_the_offline_half_on_every_push_and_ci_s_verdict_on_the_commit_you_run.py
 
-Do it: the offline gate, scoped to the handbook, Rs 0
+Do it: the gate as CI runs it, and CI's result on your commit The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.
 
-**`step_01_the_offline_gate_scoped_to_the_handbook_rs(session)` — The gate: the golden set, scoped to one document / Do it: the offline gate, scoped to the handbook, Rs 0**
+**`step_01_the_gate_as_ci_runs_it_and_ci_s_result_on(session)` — The offline half: on every push, and CI's verdict on the commit you run / Do it: the gate as CI runs it, and CI's result on your commit**
 
-Do it: the offline gate, scoped to the handbook, Rs 0
+Do it: the gate as CI runs it, and CI's result on your commit
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (no credentials, no cost).
+Operation: bash — run in the operator shell, in the kit (the offline half, as CI runs it).
 
 Expected shape, not a promised result:
 
 ```text
+python evals/run_eval.py
 == eval gate: OFFLINE (no credentials, no cost) ==
   65 golden rows over 3 tenants, 27 documents
 
@@ -79,159 +80,209 @@ Expected shape, not a promised result:
   [PASS] coverage
 
   The golden set is sound. It can go red, and it still contains the rows that would.
-
-  rows citing hr_policy_2026.md: 10 - the scoped live gate judges these
-    lk-01  lookup    What is the per-trip cap on domestic travel reimbursement?
-    lk-02  lookup    By when is Form 16 issued?
-    lk-03  lookup    How many days of earned leave can I carry forward?
-    lk-04  lookup    What notice period applies during probation?
-    lk-05  lookup    Are USB drives allowed on a company laptop?
-    lk-06  lookup    What is the notice period for a confirmed E3?
-    lk-07  lookup    At what rate does earned leave accrue?
-    lk-08  lookup    Who approves a purchase of Rs 3,00,000?
-    lk-09  lookup    How many days a month can I work remotely?
-    vr-01  version   What is the notice period for a confirmed E3?
 ```
 
-### demo_04_measure_reuse_six_kinds_of_edit_rs_0.py
+**`step_02_the_gate_as_ci_runs_it_and_ci_s_result_on(session)` — The offline half: on every push, and CI's verdict on the commit you run / Do it: the gate as CI runs it, and CI's result on your commit**
 
-Do it: the six edits through the worker's planner
+The next cell asks GitHub's public API which commits the dry run has judged, and marks the one your clone is at.
 
-**`step_01_the_six_edits_through_the_worker_s_planner(session)` — Measure reuse: six kinds of edit, Rs 0 / Do it: the six edits through the worker's planner**
-
-Do it: the six edits through the worker's planner
-
-Operation: bash — run in the operator shell (a Python cell, wrapped so it pastes straight into bash).
+Operation: bash — run in the operator shell, in the kit (one unauthenticated call to GitHub's public API).
 
 Expected shape, not a promised result:
 
 ```text
-a figure in NP-03 (60 to 90)         chunks 283 -> 283  reused 282  embedded  1    234 chars  ['NP-03']
-a figure in PB-02 (15 to 20)         chunks 283 -> 283  reused 282  embedded  1    212 chars  ['PB-02']
-NP-03 re-wrapped (whitespace only)   chunks 283 -> 283  reused 283  embedded  0      0 chars  []
-NP-03's heading renamed              chunks 283 -> 283  reused 282  embedded  1    250 chars  ['NP-03']
-a clause inserted before PB-02       chunks 283 -> 284  reused 283  embedded  1     84 chars  ['NP-04']
-NP-03 and PB-02 swapped              chunks 283 -> 283  reused 283  embedded  0      0 chars  []
-wages: a sentence added on page 2    chunks  65 ->  65  reused  63  embedded  2   3261 chars  ['p2-0', 'p2-1']
+your kit is at b89bbd8
+  b89bbd8  push  success  2026-09-23  <- the commit you run
+  6999d24  push  success  2026-09-22
 ```
 
-### demo_05_do_it_revision_3_of_the_handbook_on_the_lane.py
+### demo_04_the_live_half_every_row_two_identities_nine_rates_three_exit_codes.py
 
-Do it
+Do it: the live gate, with a report Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.
 
-**`step_01_do_it_revision_3_of_the_handbook_on_the_la(session)` — Do it: revision 3 of the handbook, on the lane / Do it**
+**`step_01_the_live_gate_with_a_report(session)` — The live half: every row, two identities, nine rates, three exit codes / Do it: the live gate, with a report**
 
-Do it
+Do it: the live gate, with a report
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (writes the revision to your home directory, then one re-issue).
+Operation: bash — run in the operator shell, in the kit (every row as the member, every isolation row as the outsider: about ten minutes).
 
-Expected shape, not a promised result:
-
-```text
-/home/you/hr_policy_2026_rev3.md | version key acme_54337b4ba3f0...
->> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
->> event doc_key chunks reused embedded retired effective_from
->> ingest_ok	acme_54337b4ba3f0109a...	283	281	2	283	2026-11-01
->> retired (doc_keys, chunks, expire days): [u'acme_497809ffbaa603c4...']	283	30
->> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
-```
-
-### demo_06_inspect_the_ledger_row_the_claims_the_vectors.py
-
-Read the three
-
-**`step_01_read_the_three(session)` — Inspect: the ledger row, the claims, the vectors / Read the three**
-
-Read the three
-
-Operation: bash — run in the operator shell (the ledger row from the API, then the claims and the vectors from Firestore).
-
-Expected shape, not a promised result:
-
-```text
-acme/hr_policy_2026.md chunks 283 reused 281 embedded 2 retired 283 effective 2026-11-01 text-embedding-005@1
-3 claims (versions) for hr_policy_2026.md, oldest first
-  acme_497809ff...  superseded chunks 283  reused 0  embedded 283  superseded_by acme_54337b4b...  reactivated once
-  acme_55603088...  superseded chunks 283  reused 281  embedded 2  superseded_by acme_497809ff...
-  acme_54337b4b...  indexed    chunks 283  reused 281  embedded 2
-rows: 849 | current: 283 | retired: 566
-  LV-01  current hash ff463cede286  version 1's hash ff463cede286  same vector: True
-  NP-03  current hash 876232171dec  version 1's hash f4512754ae41  same vector: False
-```
-
-### demo_07_the_gate_goes_red_and_the_two_ways_back_to_green.py
-
-Ten questions to the API, each a generation call: a few rupees at most. The target mints two identity tokens, the UI's account as the member and the outsider's for the isolation rows, which is why it takes a moment to start. Version 1's bytes again, through the same release command. The offline gate passes, the upload lands, and the worker finds a version it has retired within the window: ingest_reactivated, nothing embedded, revision 3 retired in turn. The live gate then passes with the rows as they are.
-
-**`step_01_the_live_gate_red(session)` — The gate goes red, and the two ways back to green / Do it: the live gate, red**
-
-Ten questions to the API, each a generation call: a few rupees at most. The target mints two identity tokens, the UI's account as the member and the outsider's for the isolation rows, which is why it takes a moment to start.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (ten questions; a few rupees).
-
-IDE adaptation: Require a fresh report with evaluated answers that fail assertions; preserve the expected nonzero exit without treating authentication or command failure as the lesson's proof.
+IDE adaptation: Retain the live gate's actual status and fresh structured report so the next functions can inspect a red result; missing reports remain errors.
 
 Expected shape, not a promised result:
 
 ```text
 >> https://documind-api-NUMBER.asia-south1.run.app
 == eval gate: LIVE ==
-  scoped to hr_policy_2026.md: 10 row(s) cite it
-  10 rows (10 answerable, 0 not) against https://documind-api-NUMBER.asia-south1.run.app
+  65 rows (47 answerable, 18 not) against https://documind-api-NUMBER.asia-south1.run.app
 
-  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)
-  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)
-  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)
-  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)
-  [FAIL] must_contain_rate      80.0%  (threshold 85%; 10 rows)
-  [PASS] correct_rate           80.0%  (threshold 68%; 10 rows)
-  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)
-  ...
+  [PASS] request_success_rate  100.0%  (threshold 100%; 65 rows)
+  [PASS] answerable_rate        97.9%  (threshold 80%; 47 rows)
+  [PASS] citation_rate         100.0%  (threshold 95%; 46 rows)
+  [PASS] citation_valid_rate   100.0%  (threshold 100%; 46 rows)
+  [PASS] must_contain_rate      97.8%  (threshold 85%; 46 rows)
+  [PASS] correct_rate           95.7%  (threshold 68%; 47 rows)
+  [PASS] refusal_rate          100.0%  (threshold 90%; 18 rows)
+  [PASS] media_kind_rate       100.0%  (threshold 80%; 3 rows)
+  [PASS] isolation_403_rate    100.0%  (threshold 100%; 11 rows)
+  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)
 
   shape        rows   ok   pass
-  lookup          9    9      8
-  version         1    1      0
-  latency ms  p50  2410  p95  3980   (round trip, 10 rows)
+  lookup         34   34     33
+  join           11   11     10
+  refusal         8    8      8
+  isolation      11   11     11
+  version         1    1      1
+  latency ms  p50   ...  p95   ...   (round trip, 65 rows)
+  retrieve_ms p50   ...  p95   ...
+  rerank_ms   p50   ...  p95   ...
+  generate_ms p50   ...  p95   ...
+  pool        avg   ...   semantic cache hits ...
 
   rows that cost a point (2):
-    lk-06  lookup    acme    missing '60' | What is the notice period for a confirmed E3?
-    vr-01  version   acme    missing '60' | What is the notice period for a confirmed E3?
+    jn-06  join      acme    answered without ['EMEA', '11.4'] | 'emea revenue fell in fy2026 [1].'
+    lk-27  lookup    acme    REFUSED conf=low cites=0 | What is the maximum rate of central tax the CGST Act allows?
 
-  required rows that did not pass (1) - each one blocks on its own:
-    vr-01: missing '60'
-
-  Blocked: must_contain_rate: 80% < 85%; required: 1 mandatory row(s) did not pass
+  report: evals/reports/lesson72.json
+  All thresholds met.
 ```
 
-**`step_02_the_undo_then_the_gate_green(session)` — The gate goes red, and the two ways back to green / The undo, then the gate, green**
+**`step_02_the_live_gate_with_a_report(session)` — The live half: every row, two identities, nine rates, three exit codes / Do it: the live gate, with a report**
 
-Version 1's bytes again, through the same release command. The offline gate passes, the upload lands, and the worker finds a version it has retired within the window: ingest_reactivated, nothing embedded, revision 3 retired in turn. The live gate then passes with the rows as they are.
+Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point.
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the undo, then ten questions again).
+Operation: bash — run in the operator shell, in the kit (reads the report; changes nothing).
 
 Expected shape, not a promised result:
 
 ```text
->> gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md - waiting for the worker (up to 5 min)
->> event doc_key chunks reused embedded retired effective_from
->> ingest_reactivated	acme_497809ffbaa603c4...	283	283	0	283
->> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=hr_policy_2026.md API=<candidate url>
-...
-  [PASS] must_contain_rate     100.0%  (threshold 85%; 10 rows)
-  ...
-  shape        rows   ok   pass
-  lookup          9    9      9
-  version         1    1      1
-  All thresholds met.
+answerable_rate    46 answered          of 47 answerable rows
+  must_contain_rate  45 with the figure   of 46 ANSWERED
+  correct_rate       45 right             of 47 ANSWERABLE
+  refusal_rate       18 refused           of 18 unanswerable rows
+  pass  request_success_rate  100.0%  (needs 100%)
+  pass  answerable_rate        97.9%  (needs 80%)
+  pass  citation_rate         100.0%  (needs 95%)
+  pass  citation_valid_rate   100.0%  (needs 100%)
+  pass  must_contain_rate      97.8%  (needs 85%)
+  pass  correct_rate           95.7%  (needs 68%)
+  pass  refusal_rate          100.0%  (needs 90%)
+  pass  media_kind_rate       100.0%  (needs 80%)
+  pass  isolation_403_rate    100.0%  (needs 100%)
+  cost a point: jn-06 (answered without ['EMEA', '11.4']), lk-27 (refused)
+```
+
+**`step_03_the_live_gate_with_a_report(session)` — The live half: every row, two identities, nine rates, three exit codes / Do it: the live gate, with a report**
+
+Now take the report apart. The cell recounts the four rates whose denominators people misread, from the report's own rows, then prints all nine with their verdicts and the rows that cost a point. Last, what the run cost. The API priced every answer on its usage row; make usage groups the last hour of those rows. Run it straight after the gate, before step 5 asks the lane again.
+
+Operation: bash — run in the operator shell, in the kit (the usage rows of the last hour, priced).
+
+Expected shape, not a promised result:
+
+```text
+65 answers from documind-api in the last 1 h; USD_INR=85
+
+by tenant
+tenant                 answers    tok_in  tok_out       USD       INR  p95 ms  unans
+----------------------------------------------------------------------------------
+acme                        47       ...      ...       ...       ...     ...    ...
+zeta                        10       ...      ...       ...       ...     ...    ...
+globex                       8       ...      ...       ...       ...     ...    ...
+```
+
+### demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite.py
+
+Do it: the judge's venv and its self-test --reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.
+
+**`step_01_the_judge_s_venv_and_its_self_test(session)` — The judge: the lane's own answers, read with the context they cite / Do it: the judge's venv and its self-test**
+
+Do it: the judge's venv and its self-test
+
+Operation: bash — run in the operator shell, in the kit (a second venv for the judge, then its offline self-test).
+
+Expected shape, not a promised result:
+
+```text
+selftest: the cited chunk's text replaces its quote as the context and a miss keeps the quote; the prompt the judge reads carries the context then the question; the frame carries the six judge columns plus the baseline; the trajectory maths is right on the three cases
+```
+
+**`step_02_the_judge_on_your_lane(session)` — The judge: the lane's own answers, read with the context they cite / Do it: the judge on your lane**
+
+--reuse keeps the collected answers in a file. If the Evaluation step stops, the rerun judges the same answers without asking the lane again.
+
+Operation: bash — run in the operator shell, in the kit (the lane answers every row again, then Vertex AI Evaluation reads them).
+
+Expected shape, not a promised result:
+
+```text
+>> https://documind-api-NUMBER.asia-south1.run.app
+  65/65 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)
+  context: .../... cited chunks read in full from the store
+  trajectories: off (no --chat-url)
+  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-tcd7070)
+  pairwise: off (no --api-b)
+  judge: the service default (pass --judge-model to pin one)
+
+  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-tcd7070:
+    groundedness/mean                                ...
+    groundedness/mean[isolation]                     ...
+    groundedness/mean[join]                          ...
+    groundedness/mean[lookup]                        ...
+    groundedness/mean[refusal]                       ...
+    groundedness/mean[version]                       ...
+    groundedness/std                                 ...
+    instruction_following/mean                       ...
+    instruction_following/std                        ...
+    row_count                                        65.000
+
+  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.
+```
+
+### demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py
+
+Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+
+**`step_01_where_the_gate_and_the_judge_disagree_read(session)` — Where the gate and the judge disagree: read the row / Where the gate and the judge disagree: read the row**
+
+Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+
+Operation: bash — run in the operator shell, in the kit (reads both files; changes nothing).
+
+Expected shape, not a promised result:
+
+```text
+2 row(s) cost the gate a point. The judge's own run answered them:
+  jn-06  gate: answered without ['EMEA', '11.4']
+         judge's answer: 'EMEA revenue fell in FY2026 [1].', 1 cited
+         EMEA present; 11.4 absent
+  lk-27  gate: refused
+         judge's answer: 'The documents do not say.', 0 cited
+         twenty per cent absent
+```
+
+### demo_07_the_judge_s_other_two_modes_trajectories_now_pairwise_in_lesson_4_4.py
+
+The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns. CHAT_URL is the service's documind-chat-NUMBER.REGION.run.app address, not the status.url gcloud prints, which is usually its hashed a.run.app address: the judge mints its token for CHAT_URL, and the chat service accepts only a token minted for its own SELF_URL.
+
+**`step_01_the_judge_s_other_two_modes_trajectories_n(session)` — The judge's other two modes: trajectories now, pairwise in lesson 4.4 / The judge's other two modes: trajectories now, pairwise in lesson 4.4**
+
+The chat service's tool calls against the one grounded path, and why the pairwise judge needs a candidate. With CHAT_URL, the judge sends a few answerable acme rows to each of the chat service's three brains, langchain, langgraph and adk. It compares the tool calls each brain returns with the reference path: one retrieve, then the answer. The three matches are computed in judge.py: exact, in order and any order. A brain that answers without retrieving scores 0 on all three, whatever its answer says. --no-vertex skips the Evaluation service, and --reuse skips asking the API again, so this costs only the chat turns. CHAT_URL is the service's documind-chat-NUMBER.REGION.run.app address, not the status.url gcloud prints, which is usually its hashed a.run.app address: the judge mints its token for CHAT_URL, and the chat service accepts only a token minted for its own SELF_URL.
+
+Operation: bash — run in the operator shell, in the kit (nine chat turns if your lane has the chat service; nothing otherwise).
+
+Expected shape, not a promised result:
+
+```text
+no documind-chat service on this lane: trajectories need one
 ```
 
 ### setup/restore_settings.py
 
-At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
 Operation: bash — run in the operator shell when you finish the lesson, not now.
 
@@ -243,6 +294,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Reindex_WIX.html`. All 26 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `04da291943e43a6795223f296f39e4dafd0a5d8c`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a3b436e773ca4580adf995f55ba1ad0be7561a39`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

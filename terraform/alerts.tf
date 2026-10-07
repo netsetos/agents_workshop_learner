@@ -357,7 +357,7 @@ resource "google_monitoring_alert_policy" "reconcile_failed" {
   }
 }
 
-# The dead-letter queue, watched (24 September 2026, lesson 13.2). An upload the worker refused twelve times lands in
+# The dead-letter queue, watched (24 September 2026, lesson 11.5). An upload the worker refused twelve times lands in
 # documind-ingest-dlq (eventarc.tf), and until now nothing read ingest-dlq-sub unless someone ran make dlq: quota.tf
 # listed a dlq_depth alert, and no resource declared it. num_undelivered_messages is a gauge Pub/Sub samples once a
 # minute; above zero for a minute opens an incident, and it closes when the subscription is drained (read the

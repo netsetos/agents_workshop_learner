@@ -1,9 +1,9 @@
-"""Offline checks for make smoke-chat's citation gate (workshop lesson 10.4).
+"""Offline checks for make smoke-chat's citation gate (workshop lesson 5.7).
 
 An agent brain numbers its citations 1..k for the turn, so every [n] in its answer must name one of them. The direct
 brain passes rag-api's answer through: its [N] is a place in rag-api's packed context, and its citations are only the
 sources the model quoted, so a correct direct answer can cite [3] beside one citation. No network: smoke_chat.call is
-replaced by a stand-in that answers as the chat service would. Every turn reports its limits (workshop lesson 10.3):
+replaced by a stand-in that answers as the chat service would. Every turn reports its limits (workshop lesson 5.5):
 the gate wants them present, not stopped and within the cap, and an agent brain's turn priced above Rs 0; the drill
 (make limits-drill) wants each agent brain stopped by the limit it set.
 """

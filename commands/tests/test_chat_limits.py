@@ -1,4 +1,4 @@
-"""Offline checks for the limits of one chat turn: model calls, rupees and time (workshop lessons 10.3 and 10.4).
+"""Offline checks for the limits of one chat turn: model calls, rupees and time (workshop lessons 5.5 and 5.7).
 
     python -m unittest commands/tests/test_chat_limits.py -v          # from deploy/
     make limits-check                                                 # the same, in ~/graph-venv with the chat pins
@@ -553,7 +553,7 @@ class BrainsStop(unittest.TestCase):
             self.assertEqual(plain, timed, f.__name__)
 
     def test_a_turn_writes_the_same_checkpoints(self):
-        """wrap_model_call adds no graph node: +3 checkpoints a turn, +5 with a tool call (workshop lesson 11.2)."""
+        """wrap_model_call adds no graph node: +3 checkpoints a turn, +5 with a tool call (workshop lesson 6.6)."""
         from langgraph.checkpoint.memory import InMemorySaver
         saver = InMemorySaver()
         m = self.Model(steps=["text", "tool", "text"])

@@ -197,10 +197,10 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
         managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat
 
 # ---------- the module files (22 September 2026): one .mk per lane; the Makefile keeps the variables and the core ----------
-# mk/ingestion.mk  the roster and the tenant pins, the vector tier's status and repair, the ingest drills (the v5 course's Module 3)
-# mk/lifecycle.mk  the ledger (reindex, retire, restore, reconcile, sources, purge) and the batch lane (Module 4)
-# mk/agents.mk     the agent layer (Module 10). A long recipe is a commands/ script or a subcommand of commands/lane.py
-# (Module 10's: commands/desk_ops.py). tools/check_*.py read the Makefile and mk/*.mk as one text. Bare make: dryrun.
+# mk/ingestion.mk  the roster and the tenant pins, the vector tier's status and repair, the ingest drills (the v5 course's Module 1)
+# mk/lifecycle.mk  the ledger (reindex, retire, restore, reconcile, sources, purge) and the batch lane (Module 1)
+# mk/agents.mk     the agent layer (Modules 5 and 10). A long recipe is a commands/ script or a subcommand of commands/lane.py
+# (the Desk's: commands/desk_ops.py). tools/check_*.py read the Makefile and mk/*.mk as one text. Bare make: dryrun.
 .DEFAULT_GOAL := dryrun
 include mk/*.mk
 
@@ -311,7 +311,7 @@ build: guard-project
 	  fi; \
 	done
 
-# A checkout that was never connected to the lane's state - a fresh clone, a new workstation, lesson 3.1's clone
+# A checkout that was never connected to the lane's state - a fresh clone, a new workstation, lesson 1.1's clone
 # block - cannot read terraform output, and deploy-services stopped at "Backend initialization required" (24 September
 # 2026). This connects it to the state make up wrote (TFSTATE_BUCKET and TFSTATE_PREFIX above), and only when that
 # state exists: never an empty backend, never a migration (INFRASTRUCTURE.md). A connected checkout is left alone.

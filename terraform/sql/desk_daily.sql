@@ -1,4 +1,4 @@
--- The DocuMind Desk's day (workshop lesson 10.6): one row per India day, tenant, desk and kind of caller, from the
+-- The DocuMind Desk's day (workshop lesson 10.4): one row per India day, tenant, desk and kind of caller, from the
 -- "desk" rows POST /v1/desk writes (services/chat/desk.py, _desk_row). Surface "route" rows are the eval's dry runs
 -- on POST /v1/route, and are not turns. Applied by make desk-views, not by terraform and not by make bq-views.
 --

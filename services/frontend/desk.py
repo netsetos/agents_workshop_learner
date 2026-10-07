@@ -1,4 +1,4 @@
-"""The Desk page, its case half (workshop lesson 10.5): a person is one press away.
+"""The Desk page, its case half (workshop lesson 5.6): a person is one press away.
 
     What it reads   GET /v1/cases/offer: the person as the chat service saw them, their roles, the Desk's switches as
                     the doors read them (desk_gate, desk_route), the kinds of case set up in their company, and the
@@ -26,7 +26,7 @@
                     shared/desk_law.QUEUES), so it never shows another queue's case or who raised it.
 
 When the roles cannot be read (GET /v1/cases fails, or roles_for's "unread"), the page shows Raise a case and nothing
-else: shared/roles.py allows only the case desk then. The routed Desk's answers (workshop lesson 10.6) are
+else: shared/roles.py allows only the case desk then. The routed Desk's answers (workshop lesson 10.4) are
 routed_half(), which desk_page() reaches only for an employee while desk_route is on or single; with desk_route off or
 shadow, the page is the case half alone.
 
@@ -612,7 +612,7 @@ def _move(path: str, to: str) -> None:
 
 
 def routed_half(tenant_id: str, offer: dict) -> None:
-    """The routed Desk (workshop lesson 10.6), for an employee while the tenant's desk_route is on or single, in place
+    """The routed Desk (workshop lesson 10.4), for an employee while the tenant's desk_route is on or single, in place
     of Tell the Desk. desk_page() draws it before Raise a case, so a reply can open the POSH card or show its draft
     there."""
     if (not isinstance(offer, dict) or EMPLOYEE not in _roles(offer) or _word(offer.get("desk_route"))
@@ -769,7 +769,7 @@ def desk_page(user):
     roles, types = _roles(got), offered_types(offer)
     employee = offer is not None and EMPLOYEE in _roles(offer)
     if employee and offer.get("desk_route") in ROUTED_MODES:
-        routed_half(tenant_id, offer)        # in place of Tell the Desk, and before Raise a case (workshop lesson 10.6)
+        routed_half(tenant_id, offer)        # in place of Tell the Desk, and before Raise a case (workshop lesson 10.4)
     elif employee and offer.get("desk_gate") in ("rules", "on"):
         tell_section(types)
         reply_section(types)

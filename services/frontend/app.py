@@ -16,7 +16,7 @@ user = login_gate()
 # Navigation - admin tab only visible to admins. Studio (9.4) is for every roster member:
 # the API refuses a tenant the caller is not on, so the tab needs no gate of its own.
 pages = ["Chat", "Documents", "Studio", "Admin"] if is_admin(user) else ["Chat", "Documents", "Studio"]
-pages.insert(1, "Desk")   # the Desk (workshop lesson 10.5): every roster member raises a case there
+pages.insert(1, "Desk")   # the Desk (workshop lesson 5.6): every roster member raises a case there
 with st.sidebar:
     st.markdown(f"### 👤 {user.get('email')}")
     if st.button("Sign out"):

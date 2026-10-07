@@ -1,4 +1,4 @@
-# documind-gchat, the Google Chat door onto the DocuMind Desk (workshop lesson 10.6). Every pin is the chat service's
+# documind-gchat, the Google Chat door onto the DocuMind Desk (workshop lesson 10.4). Every pin is the chat service's
 # own (services/chat/requirements.txt), and validate.py holds them equal. The bridge calls Pub/Sub and the Chat API
 # over REST through google-auth and requests (services/gchat/post.py), so it pins no client library of either.
 fastapi==0.141.1

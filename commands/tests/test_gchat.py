@@ -1,4 +1,4 @@
-"""The Google Chat door (workshop lesson 10.6): the bridge, services/gchat/, and the Desk's side of it,
+"""The Google Chat door (workshop lesson 10.4): the bridge, services/gchat/, and the Desk's side of it,
 services/chat/delegation.py.
 
     python -m unittest commands/tests/test_gchat.py          (from deploy/)

@@ -1,49 +1,43 @@
 {
   "schema_version": 4,
   "lesson": "6.4",
-  "title": "Complete the Streamlit upload-to-answer journey",
+  "title": "Measure latency, avoided calls and false cache hits",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_6.4_UI_Journey_WIX.html",
-  "source_sha": "1434ee937aa77b8465276e8080c069b3d951e632",
+  "source_page": "Netsetos_GCP_Capstone_6.4_Cache_Measure_WIX.html",
+  "source_sha": "afcbff09c9738c4e6b84e3080c2c49c6941152f9",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 35,
+  "source_window_count": 23,
   "persist_variables": [
     "API",
     "API_URL",
-    "HOME",
+    "CAND",
     "ME",
-    "N",
     "NUMBER",
     "PROJECT",
     "REGION",
-    "S",
-    "SA",
+    "SINCE93",
     "TENANT",
-    "UI"
+    "TOKEN"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Complete the Streamlit upload-to-answer journey: one person, four identities, a page that holds no model, and a cited answer you can open"
+      "heading": "Measure latency, avoided calls and false cache hits: the threshold on labelled pairs, the same pairs asked live, and what the hits saved"
     },
     {
       "level": 3,
-      "heading": "What the page does, what it never does, and who each hop runs as"
+      "heading": "One number, two rates, and what a hit is worth"
     },
     {
       "level": 4,
-      "heading": "The journey: seven hops, the identity on each, and what proves it"
-    },
-    {
-      "level": 4,
-      "heading": "The citation renderer: the UI's pills and sources, from a transcript you paste"
+      "heading": "The threshold explorer"
     },
     {
       "level": 3,
-      "heading": "The words: IAP, assertion, roster, watched prefix, Versions, stream, pill, signed URL, surface, the row's user"
+      "heading": "The words: threshold, similarity, pairs, hit rate, false-hit rate, the rule of three, avoided call"
     },
     {
       "level": 3,
@@ -63,7 +57,7 @@
     },
     {
       "level": 3,
-      "heading": "The front door: IAP, the UI's settings, and who may sign in"
+      "heading": "The curve: every candidate threshold on the labelled pairs"
     },
     {
       "level": 4,
@@ -75,11 +69,11 @@
     },
     {
       "level": 4,
-      "heading": "Do it: the service's account, IAP's flag, who may sign in, and a request without one"
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger"
+      "heading": "The replay: the same pairs, asked live at 0.95"
     },
     {
       "level": 4,
@@ -91,11 +85,15 @@
     },
     {
       "level": 4,
-      "heading": "Do it: write the note, upload it in the browser, follow it"
+      "heading": "Do it: the candidate"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the replay"
     },
     {
       "level": 3,
-      "heading": "The answer: asked in Chat, streamed, and the row that names you"
+      "heading": "Avoided calls in rupees, and the latency of a hit"
     },
     {
       "level": 4,
@@ -107,59 +105,23 @@
     },
     {
       "level": 4,
-      "heading": "Do it: ask in the browser, ask from the shell, read both rows"
+      "heading": "Do it: the candidate's rows"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the kit's table"
     },
     {
       "level": 3,
-      "heading": "Citations: the pills, the sources, and the link signed through IAM"
-    },
-    {
-      "level": 4,
-      "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: open the source, then render your own transcript"
+      "heading": "Choosing the threshold, and the clean-up"
     },
     {
       "level": 3,
-      "heading": "The UI's account: what it may do, and the checks the page makes first"
-    },
-    {
-      "level": 4,
-      "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: read the account's grants, Rs 0"
-    },
-    {
-      "level": 3,
-      "heading": "What the journey costs, the sidebar's own price table, and what nothing records"
+      "heading": "Why the cache is tuned this way, what it costs, and what the kit does not do yet"
     },
     {
       "level": 4,
       "heading": "What it costs"
-    },
-    {
-      "level": 4,
-      "heading": "The sidebar's own price table"
-    },
-    {
-      "level": 4,
-      "heading": "The answer, drawn as HTML"
-    },
-    {
-      "level": 4,
-      "heading": "What nothing records"
     },
     {
       "level": 3,
@@ -174,29 +136,27 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The UI's own environment says how it signs people in, where it uploads and which API it calls. The block prints the five names that matter and exports the UI's address for the steps below. An empty CHAT_URL means the chat service is not deployed on this lane, and then Chat has no brain picker. The page streams from the API directly, which is the journey this lesson follows.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
       ],
       "section_number": null,
       "windows": [
-        3,
-        6
+        3
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        387,
-        403
+        380
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
@@ -205,254 +165,243 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 387,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "Before you run anything: set up the shell",
-          "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "Calls from the shell impersonate documind-ui-sa, the UI's own account, which make roster put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. otok mints a token for documind-outsider-sa, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible. The UI's own environment says how it signs people in, where it uploads and which API it calls. The block prints the five names that matter and exports the UI's address for the steps below. An empty CHAT_URL means the chat service is not deployed on this lane, and then Chat has no brain picker. The page streams from the API directly, which is the journey this lesson follows.",
-          "label": "bash — run in the operator shell, once per shell",
-          "expected": "AUTH_MODE      iap\nRAG_API_URL    https://documind-api-NUMBER.asia-south1.run.app\nUPLOAD_BUCKET  documind-ai-YOUR-ID-uploads\nIAP_AUDIENCE   /projects/NUMBER/locations/asia-south1/services/documind-ui\nCHAT_URL       https://documind-chat-NUMBER.asia-south1.run.app\nUI=https://documind-ui-NUMBER.asia-south1.run.app",
-          "adaptations": [],
-          "id": "source_6",
-          "function": "step_02_which_store_answers_acme_pin_it_to_the_kit",
-          "window": 6,
-          "source_line": 403,
+          "source_line": 380,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in.py"
+      "next": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py"
     },
     {
-      "id": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in",
+      "id": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs",
       "lesson": "6.4",
-      "file": "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in.py",
+      "file": "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "The front door: IAP, the UI's settings, and who may sign in",
-      "purpose": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "purpose": "Do it",
       "anchor": "s3",
       "anchors": [
         "s3"
       ],
       "section_number": 3,
       "windows": [
-        11
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        471
+        446
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The front door: IAP, the UI's settings, and who may sign in",
-          "subheading": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
-          "purpose": "Do it: the service's account, IAP's flag, who may sign in, and a request without one",
-          "label": "bash — run in the operator shell (four reads)",
-          "expected": "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\n    run.googleapis.com/iap-enabled: 'true'\nroles/iap.httpsResourceAccessor\tuser:you@example.com\nwithout a sign-in: HTTP 302 -> https://accounts.google.com/o/oauth2/v2/auth?client_id=...",
-          "adaptations": [
-            "Run with the page's shell semantics: every line is a read. If the UI is not behind IAP, grep prints nothing and the IAP policy and the unsigned request after it show why, instead of the cell stopping at grep."
-          ],
-          "id": "source_11",
-          "function": "step_01_the_service_s_account_iap_s_flag_who_may_s",
-          "window": 11,
-          "source_line": 471,
+          "heading": "The curve: every candidate threshold on the labelled pairs",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (65 embeddings, about a minute; the report goes to your home folder)",
+          "expected": "42 pairs against 23 golden questions, text-embedding-005 @ us-central1\n\n  threshold   hit rate (same)   false-hit rate (different)\n       0.85      100% (24)          83% (15)\n       0.88      100% (24)          67% (12)\n       0.90       96% (23)          61% (11)\n       0.92       62% (15)          50% ( 9)\n       0.94       46% (11)          22% ( 4)\n       0.95       33% ( 8)          11% ( 2)\n       0.96       25% ( 6)           6% ( 1)\n       0.97       17% ( 4)           0% ( 0)\n       0.98        4% ( 1)           0% ( 0)\n\n  lowest threshold with no false hit: 0.97\n  nearest false pairs: pp-25 0.962, pp-31 0.955, pp-37 0.947, pp-35 0.941, pp-42 0.931, pp-41 0.929, pp-27 0.926, pp-30 0.926, pp-33 0.923, pp-40 0.914, pp-26 0.908, pp-36 0.885, pp-38 0.864, pp-39 0.858, pp-34 0.852, pp-29\n  report: /home/you/cache93_curve.json",
+          "adaptations": [],
+          "id": "source_9",
+          "function": "step_01_the_curve_every_candidate_threshold_on_the",
+          "window": 9,
+          "source_line": 446,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger.py"
+      "next": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py"
     },
     {
-      "id": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger",
+      "id": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
       "lesson": "6.4",
-      "file": "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger.py",
+      "file": "demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
       "category": "required",
       "requires": [
-        "demo_03_the_front_door_iap_the_ui_s_settings_and_who_may_sign_in"
+        "demo_03_the_curve_every_candidate_threshold_on_the_labelled_pairs"
       ],
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
-      "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. In the browser, open Documents, choose the file, and click Index documents. The page reports the object it wrote and its generation, then says the upload is complete and indexing is still in progress. Wait half a minute and click Refresh indexing status until the note appears in Versions. Then follow it from the shell:",
+      "heading": "The replay: the same pairs, asked live at 0.95",
+      "purpose": "Do it: the candidate Do it: the replay",
       "anchor": "s4",
       "anchors": [
         "s4"
       ],
       "section_number": 4,
       "windows": [
-        16,
-        17
+        12,
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        527,
-        545
+        494,
+        506
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
-          "subheading": "Do it: write the note, upload it in the browser, follow it",
-          "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault.",
-          "label": "bash — run in the operator shell (writes one small file in your home directory)",
-          "expected": "",
+          "heading": "The replay: the same pairs, asked live at 0.95",
+          "subheading": "Do it: the candidate",
+          "purpose": "Do it: the candidate",
+          "label": "bash — run in the operator shell, in the kit (a revision with SEMANTIC_CACHE=on at the kit's 0.95, and a start time)",
+          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00046-wpk (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
           "adaptations": [],
-          "id": "source_16",
-          "function": "step_01_write_the_note_upload_it_in_the_browser_fo",
-          "window": 16,
-          "source_line": 527,
+          "id": "source_12",
+          "function": "step_01_the_candidate",
+          "window": 12,
+          "source_line": 494,
           "manual_checkpoint": null
         },
         {
-          "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
-          "subheading": "Do it: write the note, upload it in the browser, follow it",
-          "purpose": "First write the note on the operator machine. The page's file picker opens the computer your browser runs on, so the note has to get there. In a Cloud Workstation or the Cloud Shell editor, right-click the file in the explorer and choose Download. In a plain terminal, paste the printed text into a new file with any editor. A pasted copy can differ in its line endings, and then its hash differs from the one printed here. That is the version contract from lesson 3.1 at work, not a fault. In the browser, open Documents, choose the file, and click Index documents. The page reports the object it wrote and its generation, then says the upload is complete and indexing is still in progress. Wait half a minute and click Refresh indexing status until the note appears in Versions. Then follow it from the shell:",
-          "label": "bash — run in the operator shell (the object, the worker's line, your hash, the ledger row)",
-          "expected": "text/plain\t4xx\t17586xxxxxxxxxxx\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme_3f9c2b7e1a04...\t3\t0\t3\nyour file's hash begins: 3f9c2b7e1a04\nacme/pune_visitor_rules.md indexed chunks 3 reused 0 embedded 3\nversions NN | last event ingest_ok",
-          "adaptations": [
-            "Verify the exact UI-uploaded bytes, source generation, claim and current chunks; an unrelated latest ingest_ok event cannot satisfy this checkpoint.",
-            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
-          ],
-          "id": "source_17",
-          "function": "step_02_write_the_note_upload_it_in_the_browser_fo",
-          "window": 17,
-          "source_line": 545,
-          "manual_checkpoint": "In the ACME UI, Documents -> Upload: choose the exact ~/pune_visitor_rules.md created in the previous step, then Index documents. Refresh until indexed. If your browser runs elsewhere, download this exact file from the workstation first. Type done after the UI checkpoint."
+          "heading": "The replay: the same pairs, asked live at 0.95",
+          "subheading": "Do it: the replay",
+          "purpose": "Do it: the replay",
+          "label": "bash — run in the operator shell, in the kit (the 23 golden questions, then the 42 pairs, to the candidate; a few minutes)",
+          "expected": "pp-01 same right hit      211 ms  How much can I claim per trip for domestic travel?\n  pp-15 same right hit      188 ms  Gratuity is paid at what rate per completed year?\n  pp-16 same right hit      221 ms  What is the minimum bonus payable under the Bonus Ac\n  pp-17 same right hit      209 ms  Under the Code on Wages, what is the rate for overti\n  pp-18 same right hit      208 ms  Under the Code on Wages, what is the deadline for pa\n  pp-19 same right hit      217 ms  The standing orders chapter of the IR Code applies f\n  pp-20 same right hit      194 ms  Under the OSH Code, how many days of work earn a day\n  pp-21 same right hit      153 ms  Under the DPDP Act, what is a Consent Manager?\n  pp-25 diff FALSE HIT      230 ms  What is the notice period for a confirmed E2?\n  pp-31 diff FALSE HIT      236 ms  Who approves a purchase of Rs 30,000?\n  same-fact pairs served from the cache: 8 of 24\n  different pairs served from the cache: 2 of 18",
+          "adaptations": [],
+          "id": "source_14",
+          "function": "step_02_the_replay",
+          "window": 14,
+          "source_line": 506,
+          "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you.py"
+      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
     },
     {
-      "id": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you",
+      "id": "recovery_demo_04_the_replay_the_same_pairs_asked_live_at_0_95",
       "lesson": "6.4",
-      "file": "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you.py",
+      "file": "recovery/demo_04_the_replay_the_same_pairs_asked_live_at_0_95.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "The replay: the same pairs, asked live at 0.95",
+      "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        16
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
+      "source_lines": [
+        571
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The replay: the same pairs, asked live at 0.95",
+          "subheading": "Do it: the replay",
+          "purpose": "Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own run_eval.py gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it. The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:",
+          "label": "bash — run in the operator shell, only if the replay listed questions with no answer (the API's last three tracebacks)",
+          "expected": "",
+          "adaptations": [],
+          "id": "source_16",
+          "function": "step_01_the_replay",
+          "window": 16,
+          "source_line": 571,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py"
+    },
+    {
+      "id": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit",
+      "lesson": "6.4",
+      "file": "demo_05_avoided_calls_in_rupees_and_the_latency_of_a_hit.py",
       "category": "required",
       "requires": [
-        "demo_04_the_upload_a_note_you_write_uploaded_in_the_browser_followed_to_the_ledger"
+        "demo_04_the_replay_the_same_pairs_asked_live_at_0_95"
       ],
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
-      "purpose": "In the browser, open Chat and ask: What colour badge do visitors wear at the Pune warehouse? The sources arrive first and the answer streams after them. The answer ends with a pill. Hover over it to see the note's clause, and open Sources under the answer. Then ask the same question from the shell and read the two newest rows:",
+      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "purpose": "Do it: the candidate's rows Do it: the kit's table",
       "anchor": "s5",
       "anchors": [
         "s5"
       ],
       "section_number": 5,
       "windows": [
-        23
+        18,
+        20
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        609
+        592,
+        616
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The answer: asked in Chat, streamed, and the row that names you",
-          "subheading": "Do it: ask in the browser, ask from the shell, read both rows",
-          "purpose": "In the browser, open Chat and ask: What colour badge do visitors wear at the Pune warehouse? The sources arrive first and the answer streams after them. The answer ends with a pill. Hover over it to see the note's clause, and open Sources under the answer. Then ask the same question from the shell and read the two newest rows:",
-          "label": "bash — run in the operator shell (one question, a rupee; one log read)",
-          "expected": "from the shell: Every visitor to the Pune warehouse wears an amber badge, issued at gate | ['pune_visitor_rules.md']\n2026-09-2xT1x:xx:xx.xxxxxxZ\tquery\tdocumind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com\tui\tacme\t20\n2026-09-2xT1x:xx:xx.xxxxxxZ\tstream\tyou@example.com\tui\tacme\t20",
-          "adaptations": [
-            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
-          ],
-          "id": "source_23",
-          "function": "step_01_ask_in_the_browser_ask_from_the_shell_read",
-          "window": 23,
-          "source_line": 609,
-          "manual_checkpoint": "In the deployed UI Chat, ask the visitor-badge question from this lesson and wait for the cited answer. Type done to compare the browser and operator API records."
+          "heading": "Avoided calls in rupees, and the latency of a hit",
+          "subheading": "Do it: the candidate's rows",
+          "purpose": "Do it: the candidate's rows",
+          "label": "bash — run in the operator shell, in the kit (the candidate's rows since the start: hits, p95, rupees; reads only)",
+          "expected": "65 answers on the candidate: 10 from the answer cache, 55 from the model\n  p95 latency: 236 ms for a hit, 3187 ms for a model answer\n  a model answer cost Rs 0.4673 on average: the hits avoided 10 calls, about Rs 4.67\n  of those hits, 2 served a wrong answer: pp-25, pp-31",
+          "adaptations": [],
+          "id": "source_18",
+          "function": "step_01_the_candidate_s_rows",
+          "window": 18,
+          "source_line": 592,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Avoided calls in rupees, and the latency of a hit",
+          "subheading": "Do it: the kit's table",
+          "purpose": "Do it: the kit's table",
+          "label": "bash — run in the operator shell, in the kit (the kit's own table of the last hour, by model and backend)",
+          "expected": "by model and backend (what answered, through which door)\nmodel                 model_backend          answers    tok_in  tok_out       USD       INR  p95 ms  unans\n----------------------------------------------------------------------------------------------------------\ngemini-3.6-flash      vertex                      55     97661    20783    0.3024     25.70    3187   0.00\ngemini-3.6-flash      cache                       10         0        0    0.0000      0.00     236   0.00",
+          "adaptations": [],
+          "id": "source_20",
+          "function": "step_02_the_kit_s_table",
+          "window": 20,
+          "source_line": 616,
+          "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam.py"
+      "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
-      "id": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam",
+      "id": "cleanup_demo_06_choosing_the_threshold_and_the_clean_up",
       "lesson": "6.4",
-      "file": "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam.py",
-      "category": "required",
-      "requires": [
-        "demo_05_the_answer_asked_in_chat_streamed_and_the_row_that_names_you"
-      ],
-      "heading": "Citations: the pills, the sources, and the link signed through IAM",
-      "purpose": "In the browser, under the answer from step 5, open Sources and click Open source on the note. A new tab shows the note's text from the bucket, through a link that stops working in 15 minutes. Then capture the same answer as a transcript and paste it into the renderer in step 1:",
+      "file": "cleanup/demo_06_choosing_the_threshold_and_the_clean_up.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "Choosing the threshold, and the clean-up",
+      "purpose": "At lesson end: What the numbers allow, where the threshold lives, and the candidate put away. The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's hit from lines, which the curve cannot see. The threshold is an environment variable, SEMANTIC_CACHE_THRESHOLD, read once when a revision starts. No make target passes it, so trying 0.97 on a candidate takes gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97, with your region and project, and then the replay again.",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        28
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        678
+        632
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "Citations: the pills, the sources, and the link signed through IAM",
-          "subheading": "Do it: open the source, then render your own transcript",
-          "purpose": "In the browser, under the answer from step 5, open Sources and click Open source on the note. A new tab shows the note's text from the bucket, through a link that stops working in 15 minutes. Then capture the same answer as a transcript and paste it into the renderer in step 1:",
-          "label": "bash — run in the operator shell (one stream, a rupee)",
-          "expected": "citation events: 5 | tokens: NN | done: 1\nfirst citation: pune_visitor_rules.md | kind text | page None | quote 'VR-01 - Badges\\nEvery visitor to the Pune warehou'\n...",
-          "adaptations": [
-            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
-          ],
-          "id": "source_28",
-          "function": "step_01_open_the_source_then_render_your_own_trans",
-          "window": 28,
-          "source_line": 678,
-          "manual_checkpoint": "Open the answer's citation/source in the UI and inspect the signed link. Type done to render and inspect the transcript from Python."
-        }
-      ],
-      "next": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first.py"
-    },
-    {
-      "id": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first",
-      "lesson": "6.4",
-      "file": "demo_07_the_ui_s_account_what_it_may_do_and_the_checks_the_page_makes_first.py",
-      "category": "required",
-      "requires": [
-        "demo_06_citations_the_pills_the_sources_and_the_link_signed_through_iam"
-      ],
-      "heading": "The UI's account: what it may do, and the checks the page makes first",
-      "purpose": "Do it: read the account's grants, Rs 0",
-      "anchor": "s7",
-      "anchors": [
-        "s7"
-      ],
-      "section_number": 7,
-      "windows": [
-        33
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
-      "source_lines": [
-        731
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "The UI's account: what it may do, and the checks the page makes first",
-          "subheading": "Do it: read the account's grants, Rs 0",
-          "purpose": "Do it: read the account's grants, Rs 0",
-          "label": "bash — run in the operator shell (reads only)",
-          "expected": "project roles:\nroles/aiplatform.user\nroles/datastore.user\nroles/documentai.apiUser\nroles/secretmanager.secretAccessor\nroles/speech.editor\nuploads bucket: ['roles/storage.objectAdmin']\nmay invoke documind-api: ['roles/run.invoker']\nmay invoke documind-chat: ['roles/run.invoker']\nmay invoke documind-ingest: none\non itself: ['roles/iam.serviceAccountTokenCreator']",
+          "heading": "Choosing the threshold, and the clean-up",
+          "subheading": "Choosing the threshold, and the clean-up",
+          "purpose": "What the numbers allow, where the threshold lives, and the candidate put away. The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's hit from lines, which the curve cannot see. The threshold is an environment variable, SEMANTIC_CACHE_THRESHOLD, read once when a revision starts. No make target passes it, so trying 0.97 on a candidate takes gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97, with your region and project, and then the replay again.",
+          "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed)",
+          "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-000MM-xxx      (the live revision, as before; no candidate tag)",
           "adaptations": [],
-          "id": "source_33",
-          "function": "step_01_read_the_account_s_grants_rs_0",
-          "window": 33,
-          "source_line": 731,
+          "id": "source_22",
+          "function": "step_01_choosing_the_threshold_and_the_clean_up",
+          "window": 22,
+          "source_line": 632,
           "manual_checkpoint": null
         }
       ],
@@ -465,7 +414,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -476,7 +425,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_4/GUIDE.md",
       "source_lines": [
-        393
+        386
       ],
       "offline": false,
       "live_verified": false,
@@ -485,7 +434,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
@@ -494,7 +443,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 393,
+          "source_line": 386,
           "manual_checkpoint": null
         }
       ],
@@ -527,180 +476,96 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 357
+      "line": 350
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 389
+      "line": 382
+    },
+    {
+      "window": 6,
+      "label": "evals/paraphrases.jsonl - two of the 42 pairs: the same fact in other words, and one grade away",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "anchor": "s3",
+      "line": 404
     },
     {
       "window": 7,
-      "label": "expected (your ids differ; CHAT_URL is empty on a lane without the chat service)",
-      "heading": "Before you run anything: set up the shell",
-      "anchor": "setup",
-      "line": 407
+      "label": "evals/cache_threshold.py - check_pairs(): the pairs can judge a threshold only if they are what they say",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
+      "anchor": "s3",
+      "line": 408
     },
     {
       "window": 8,
-      "label": "commands/lesson-12.4.sh - IAP on the service itself, its agent the only invoker, and who may sign in",
-      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "label": "evals/cache_threshold.py - curve() and recommend(): hits and false hits per threshold, and the lowest safe one",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
       "anchor": "s3",
-      "line": 421
-    },
-    {
-      "window": 9,
-      "label": "services/frontend/auth.py - current_user(): the assertion, verified for this service's audience",
-      "heading": "The front door: IAP, the UI's settings, and who may sign in",
-      "anchor": "s3",
-      "line": 437
+      "line": 426
     },
     {
       "window": 10,
-      "label": "services/frontend/auth.py - tenant_for(): the roster, one query, never cached",
-      "heading": "The front door: IAP, the UI's settings, and who may sign in",
+      "label": "expected (the kit's own printing over stand-in embeddings that reproduce the page's INVENTED example similarities; your curve is Google's)",
+      "heading": "The curve: every candidate threshold on the labelled pairs",
       "anchor": "s3",
-      "line": 460
+      "line": 448
     },
     {
-      "window": 12,
-      "label": "expected (your accounts; the redirect is to Google's sign-in, and the container never saw the request)",
-      "heading": "The front door: IAP, the UI's settings, and who may sign in",
-      "anchor": "s3",
-      "line": 477
+      "window": 11,
+      "label": "services/rag-api/semantic_cache.py - the near rung: the five nearest, and the first at the threshold that is alive",
+      "heading": "The replay: the same pairs, asked live at 0.95",
+      "anchor": "s4",
+      "line": 476
     },
     {
       "window": 13,
-      "label": "services/frontend/documents.py - upload_document(): the checks, then one object under the tenant's folder",
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "label": "expected shape (gcloud's progress lines are left out)",
+      "heading": "The replay: the same pairs, asked live at 0.95",
       "anchor": "s4",
-      "line": 494
-    },
-    {
-      "window": 14,
-      "label": "services/frontend/documents.py - documents_page(): the upload is not the indexing, and the page says so",
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
-      "anchor": "s4",
-      "line": 513
+      "line": 497
     },
     {
       "window": 15,
-      "label": "services/frontend/documents.py - versions_section(): the ledger, read through the API with the page's two credentials",
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
+      "label": "expected (against a local stub answering at 0.95 with the example similarities; only hits are printed)",
+      "heading": "The replay: the same pairs, asked live at 0.95",
       "anchor": "s4",
-      "line": 522
+      "line": 554
     },
     {
-      "window": 18,
-      "label": "expected (your size, generation and hash; the key's hash is your file's)",
-      "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
-      "anchor": "s4",
-      "line": 552
+      "window": 17,
+      "label": "evals/usage_rows.py - p95(): the 95th position of the sorted latencies",
+      "heading": "Avoided calls in rupees, and the latency of a hit",
+      "anchor": "s5",
+      "line": 584
     },
     {
       "window": 19,
-      "label": "services/frontend/chat.py - _headers(): the UI's own token, and the person's assertion forwarded",
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "label": "expected (against a fake gcloud holding the replay's rows, priced by the kit's own price())",
+      "heading": "Avoided calls in rupees, and the latency of a hit",
       "anchor": "s5",
-      "line": 568
-    },
-    {
-      "window": 20,
-      "label": "services/frontend/chat.py - stream_answer(): the question, labelled ui, and the events as they come",
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
-      "anchor": "s5",
-      "line": 576
+      "line": 609
     },
     {
       "window": 21,
-      "label": "shared/iap.py - identity(): the assertion first, the bearer token second, never a header",
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
+      "label": "expected (usage_rows.main()'s own printing over the same rows; your numbers differ)",
+      "heading": "Avoided calls in rupees, and the latency of a hit",
       "anchor": "s5",
-      "line": 593
+      "line": 618
     },
     {
-      "window": 22,
-      "label": "services/rag-api/main.py - usage_row(): who asked, and a brain that defaults to ui",
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
-      "anchor": "s5",
-      "line": 602
-    },
-    {
-      "window": 24,
-      "label": "expected (newest row first; your email and wording)",
-      "heading": "The answer: asked in Chat, streamed, and the row that names you",
-      "anchor": "s5",
-      "line": 615
-    },
-    {
-      "window": 25,
-      "label": "services/frontend/citations.py - the pattern and the labels: [3], [Fig 3, p.12], [Clip 3, 03:20]",
-      "heading": "Citations: the pills, the sources, and the link signed through IAM",
+      "window": 23,
+      "label": "expected shape",
+      "heading": "Choosing the threshold, and the clean-up",
       "anchor": "s6",
-      "line": 629
-    },
-    {
-      "window": 26,
-      "label": "services/frontend/citations.py - render_with_citations(): the pills, drawn as HTML",
-      "heading": "Citations: the pills, the sources, and the link signed through IAM",
-      "anchor": "s6",
-      "line": 643
-    },
-    {
-      "window": 27,
-      "label": "services/frontend/citations.py - signing on Cloud Run: the account's email and token, and IAM signs",
-      "heading": "Citations: the pills, the sources, and the link signed through IAM",
-      "anchor": "s6",
-      "line": 658
-    },
-    {
-      "window": 29,
-      "label": "expected (your ids and counts; the whole transcript follows, ready to copy)",
-      "heading": "Citations: the pills, the sources, and the link signed through IAM",
-      "anchor": "s6",
-      "line": 685
-    },
-    {
-      "window": 30,
-      "label": "terraform/sa.tf - the UI's project roles, and the two it pointedly lacks",
-      "heading": "The UI's account: what it may do, and the checks the page makes first",
-      "anchor": "s7",
-      "line": 699
-    },
-    {
-      "window": 31,
-      "label": "terraform/storage.tf - object admin on the uploads bucket",
-      "heading": "The UI's account: what it may do, and the checks the page makes first",
-      "anchor": "s7",
-      "line": 718
-    },
-    {
-      "window": 32,
-      "label": "commands/lesson-12.4.sh - the account may sign as itself",
-      "heading": "The UI's account: what it may do, and the checks the page makes first",
-      "anchor": "s7",
-      "line": 723
-    },
-    {
-      "window": 34,
-      "label": "expected (your lane may carry a role more; the absent ones are the point: no BigQuery, no call to the worker)",
-      "heading": "The UI's account: what it may do, and the checks the page makes first",
-      "anchor": "s7",
-      "line": 738
-    },
-    {
-      "window": 35,
-      "label": "services/frontend/chat.py - the page's own rates, and the arithmetic the sidebar shows",
-      "heading": "What the journey costs, the sidebar's own price table, and what nothing records",
-      "anchor": "s8",
-      "line": 770
+      "line": 635
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "An ACME browser login through IAP and a deployed Streamlit UI, API and ingest lane.",
+  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

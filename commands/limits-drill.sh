@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # make limits-drill STOP=model_calls|turn_budget (mk/agents.mk): trip one of a chat turn's limits on the deployed
-# documind-chat, and see the turn still answer HTTP 200 with limits.stopped_by naming it (workshop lesson 10.3).
+# documind-chat, and see the turn still answer HTTP 200 with limits.stopped_by naming it (workshop lesson 5.5).
 #   STOP=model_calls   CHAT_MAX_MODEL_CALLS=1: the first model call asks for a search; the second is refused
 #   STOP=turn_budget   CHAT_TURN_BUDGET_INR=0.01: the first call costs more than a paisa; the second is refused
 # It sets the variable on the service (a new revision), checks that the latest revision takes all the traffic (else

@@ -1,4 +1,4 @@
-"""Roles in a tenant (workshop lesson 10.5): which desks a person may use and which case queues they read.
+"""Roles in a tenant (workshop lesson 5.6): which desks a person may use and which case queues they read.
 
 A role document is tenants/{tenant}/roles/{email}, {roles, set_by, set_at}, written only by the operator (make roles,
 commands/desk_ops.py roles). It is a document of its own, beside the member document, because shared/tenancy.py's
@@ -11,7 +11,7 @@ add_member writes the member document whole, without merge: a role kept there wo
     ic_member:<unit>   the POSH cases of that unit, and only those whose contacts name this person
     grc_member         grievance cases and their status
     privacy            privacy requests
-    desk_eval          the Desk's eval routes, for the eval accounts (the routed Desk, workshop lesson 10.6)
+    desk_eval          the Desk's eval routes, for the eval accounts (the routed Desk, workshop lesson 10.4)
 
 roles_for() is the one reader. A member with no role document is ["employee"]. A document lists every role it grants,
 so "employee" is never implied beside it: ["leaver"] is a leaver and nothing else. A person on no roster has no role

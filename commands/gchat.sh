@@ -1,4 +1,4 @@
-# The Google Chat door onto the DocuMind Desk (workshop lesson 10.6): documind-gchat, the bridge.
+# The Google Chat door onto the DocuMind Desk (workshop lesson 10.4): documind-gchat, the bridge.
 # NOT run automatically. make deploy-gchat runs the DEPLOY block below through make deploy-services, which passes
 # PROJECT, GIT_SHA, REGION, PROJECT_NUMBER and CHAT_URL. Terraform creates what it runs on first
 # (terraform/gchat.tf: make plan up GCHAT_DOOR=true), and the app is configured in the Google Cloud console (Google

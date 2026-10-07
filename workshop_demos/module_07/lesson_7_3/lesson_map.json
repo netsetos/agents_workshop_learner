@@ -1,42 +1,44 @@
 {
   "schema_version": 4,
   "lesson": "7.3",
-  "title": "Compare one controlled change against a baseline",
+  "title": "Configure and query managed retrieval mirrors",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_7.3_Controlled_Change_WIX.html",
-  "source_sha": "26b60d600a32c21f22d0a2778fe03515b0235248",
+  "source_page": "Netsetos_GCP_Capstone_7.3_Managed_Mirrors_WIX.html",
+  "source_sha": "5d2f8eed1c871bf3e8af3c1094e90280a07c7795",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 27,
+  "source_window_count": 26,
   "persist_variables": [
     "API",
     "API_URL",
-    "CAND",
+    "GOOGLE_CLOUD_PROJECT",
     "HOME",
     "ME",
     "NUMBER",
     "PROJECT",
     "REGION",
-    "TENANT"
+    "SINCE",
+    "TENANT",
+    "t"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Compare one controlled change against a baseline: a candidate that differs in one setting, the scoped gate on both, the pairwise judge between them, and the rupees of the difference"
+      "heading": "Configure and query managed retrieval mirrors: a copy outside India, by the tenant's leave"
     },
     {
       "level": 3,
-      "heading": "One change, one baseline, the same questions"
+      "heading": "A copy outside India, by the tenant's leave"
     },
     {
       "level": 4,
-      "heading": "The comparison planner: is it one change, what measures it, and what the model change costs"
+      "heading": "Where may this text go, and who answers?"
     },
     {
       "level": 3,
-      "heading": "The words: baseline, candidate, tag, template, controlled change, scoped gate, pairwise, win rate, rupee delta, ablation"
+      "heading": "The words: mirror, corpus, data store, data_region, permits, the skip, mirrored, pin, policy_fallback, found_by"
     },
     {
       "level": 3,
@@ -56,43 +58,7 @@
     },
     {
       "level": 3,
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs"
-    },
-    {
-      "level": 4,
-      "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the candidate"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: prove it is one change"
-    },
-    {
-      "level": 3,
-      "heading": "The scoped gate on both revisions, and the rows that moved"
-    },
-    {
-      "level": 4,
-      "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the gate on the live revision, then on the candidate"
-    },
-    {
-      "level": 3,
-      "heading": "The pairwise judge: which answer is better, row by row"
+      "heading": "The mirror's rules, run"
     },
     {
       "level": 4,
@@ -108,27 +74,43 @@
     },
     {
       "level": 3,
-      "heading": "The rupee delta, from the usage rows"
+      "heading": "The policies, the pins and the stores"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Retrieval-only changes: measure retrieval first, with no model"
+      "heading": "Ask the stores, and find who found the cited chunk"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "Deciding, the confounds that fake a result, and removing the candidate"
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides"
     },
     {
       "level": 4,
-      "heading": "Deciding"
+      "heading": "Definition"
     },
     {
       "level": 4,
-      "heading": "Confounds: five ways a comparison fakes a result"
+      "heading": "Do it"
     },
     {
-      "level": 4,
-      "heading": "Do it: remove the candidate's tag"
+      "level": 3,
+      "heading": "Why the mirror works this way, what it costs, and what the kit does not do yet"
     },
     {
       "level": 4,
@@ -147,7 +129,7 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -158,7 +140,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
       "source_lines": [
-        370
+        400
       ],
       "offline": false,
       "live_verified": false,
@@ -167,7 +149,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
@@ -176,247 +158,220 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 370,
+          "source_line": 400,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py"
+      "next": "demo_03_the_mirror_s_rules_run.py"
     },
     {
-      "id": "demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff",
+      "id": "demo_03_the_mirror_s_rules_run",
       "lesson": "7.3",
-      "file": "demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff.py",
+      "file": "demo_03_the_mirror_s_rules_run.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-      "purpose": "Do it: the candidate The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.",
+      "heading": "The mirror's rules, run",
+      "purpose": "Do it",
       "anchor": "s3",
       "anchors": [
         "s3"
       ],
       "section_number": 3,
       "windows": [
-        8,
-        10
+        9
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
       "source_lines": [
-        418,
-        431
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-          "subheading": "Do it: the candidate",
-          "purpose": "Do it: the candidate",
-          "label": "bash — run in the operator shell, in the kit (a new revision with no traffic; nothing moves for users)",
-          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.1-flash-lite|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|...\" --remove-env-vars GENERATOR_LOCATION\n...\n>> candidate revision: documind-api-000NN-yyy (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
-          "adaptations": [],
-          "id": "source_8",
-          "function": "step_01_the_candidate",
-          "window": 8,
-          "source_line": 418,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-          "subheading": "Do it: prove it is one change",
-          "purpose": "The cell finds the revision serving traffic and the one tagged candidate, reads both revisions' settings, and prints every setting that differs.",
-          "label": "bash — run in the operator shell, in the kit (reads both revisions; changes nothing)",
-          "expected": "live documind-api-000NN-xxx   candidate documind-api-000NN-yyy\n  GENERATOR_MODEL        gemini-3.6-flash           -> gemini-3.1-flash-lite\n1 setting(s) differ",
-          "adaptations": [],
-          "id": "source_10",
-          "function": "step_02_prove_it_is_one_change",
-          "window": 10,
-          "source_line": 431,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py"
-    },
-    {
-      "id": "demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved",
-      "lesson": "7.3",
-      "file": "demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved.py",
-      "category": "required",
-      "requires": [
-        "demo_03_the_candidate_a_new_revision_with_no_traffic_and_the_proof_that_one_setting_diff"
-      ],
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "purpose": "Do it: the gate on the live revision, then on the candidate Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.",
-      "anchor": "s4",
-      "anchors": [
-        "s4"
-      ],
-      "section_number": 4,
-      "windows": [
-        14,
-        16
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
-      "source_lines": [
-        478,
-        518
+        480
       ],
       "offline": true,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
         {
-          "heading": "The scoped gate on both revisions, and the rows that moved",
-          "subheading": "Do it: the gate on the live revision, then on the candidate",
-          "purpose": "Do it: the gate on the live revision, then on the candidate",
-          "label": "bash — run in the operator shell, in the kit (the 10 rows that cite the handbook, on each revision: a few minutes)",
-          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n\n  report: evals/reports/base73.json\n  All thresholds met.\n>> https://candidate---documind-api-NUMBER.asia-south1.run.app\n== eval gate: LIVE ==\n  scoped to hr_policy_2026.md: 10 row(s) cite it\n  10 rows (10 answerable, 0 not) against https://candidate---documind-api-NUMBER.asia-south1.run.app\n\n  [PASS] request_success_rate  100.0%  (threshold 100%; 10 rows)\n  [PASS] answerable_rate       100.0%  (threshold 80%; 10 rows)\n  [PASS] citation_rate         100.0%  (threshold 95%; 10 rows)\n  [PASS] citation_valid_rate   100.0%  (threshold 100%; 10 rows)\n  [PASS] must_contain_rate      90.0%  (threshold 85%; 10 rows)\n  [PASS] correct_rate           90.0%  (threshold 68%; 10 rows)\n  [ -- ] refusal_rate            0.0%  (threshold 90%; no rows in scope; 0 rows)\n  [ -- ] media_kind_rate         0.0%  (threshold 80%; no rows in scope; 0 rows)\n  [ -- ] isolation_403_rate      0.0%  (threshold 100%; no rows in scope; 0 rows)\n  [info] quote_support_rate      ...  (quoted words found in the tenant's corpus text; not a threshold - a Doc AI extraction and a pypdf mirror hyphenate differently)\n\n  shape        rows   ok   pass\n  lookup          9    9      8\n  version         1    1      1\n  latency ms  p50   ...  p95   ...   (round trip, 10 rows)\n  retrieve_ms p50   ...  p95   ...\n  rerank_ms   p50   ...  p95   ...\n  generate_ms p50   ...  p95   ...\n  pool        avg   ...   semantic cache hits ...\n\n  rows that cost a point (1):\n    lk-04  lookup    acme    answered without ['15'] | 'the documents cover this [1].'\n\n  report: evals/reports/cand73.json\n  All thresholds met.",
-          "adaptations": [
-            "Run both gates through live_gate: a red gate on the live revision or the candidate is an observation this lesson compares, and each keeps its fresh report. The page's `| tail -3` stopped the cell under pipefail on a red baseline; here the whole gate output shows. A missing report or an HTTP/auth failure still fails."
-          ],
-          "id": "source_14",
-          "function": "step_01_the_gate_on_the_live_revision_then_on_the",
-          "window": 14,
-          "source_line": 478,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The scoped gate on both revisions, and the rows that moved",
-          "subheading": "Do it: the gate on the live revision, then on the candidate",
-          "purpose": "Now set the two reports side by side: each judged threshold on both revisions, every row whose verdict changed, and the median round trip of each.",
-          "label": "bash — run in the operator shell, in the kit (reads the two reports; changes nothing)",
-          "expected": "live  candidate  needs\n  request_success_rate   100.0%     100.0%   100%\n  answerable_rate        100.0%     100.0%    80%\n  citation_rate          100.0%     100.0%    95%\n  citation_valid_rate    100.0%     100.0%   100%\n  must_contain_rate      100.0%      90.0%    85%\n  correct_rate           100.0%      90.0%    68%\n  lk-04: pass on live, fail on the candidate (answered without ['15'])\n  1 row(s) changed verdict; median round trip ... ms live, ... ms candidate",
+          "heading": "The mirror's rules, run",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the mirror's rules, run; no store, no network)",
+          "expected": "policy_of: {'None': 'in', 'any': 'any', 'ANY ': 'any', 'us': 'in'}\npermits: {'any -> us-central1': True, 'any -> global': True, 'any -> asia-south1': True, 'in -> us-central1': False, 'in -> global': False, 'in -> asia-south1': True}\n1. acme (any) makes version v1 current:\n     mirror_ok              rag_engine    upsert            acme_v1 uploaded\n     mirror_ok              vertex_search upsert            acme_v1 uploaded\n   held {'rag_engine': 'us-central1', 'vertex_search': 'global'}\n2. globex (in) adds a note:\n     mirror_policy_skipped  rag_engine    upsert            in\n     mirror_policy_skipped  vertex_search upsert            in\n   held {}\n3. globex adds a second note:\n   held {}\n4. acme's policy is turned to in, and version v2 becomes current:\n     mirror_policy_skipped  rag_engine    upsert            in\n     mirror_policy_skipped  vertex_search upsert            in\n   held {}\n   the stores still hold {'rag_engine': ['acme_v1'], 'vertex_search': ['acme_v1']}\n5. v1 is retired:\n     mirror_ok              rag_engine    delete:superseded 1\n     mirror_ok              vertex_search delete:superseded 1\n   the stores hold {'rag_engine': [], 'vertex_search': []}\nthe audit trail:\n   doc.mirror upsert rag_engine acme_v1\n   doc.mirror upsert vertex_search acme_v1\n   doc.mirror delete:superseded rag_engine acme_v1\n   doc.mirror delete:superseded vertex_search acme_v1",
           "adaptations": [],
-          "id": "source_16",
-          "function": "step_02_the_gate_on_the_live_revision_then_on_the",
-          "window": 16,
-          "source_line": 518,
+          "id": "source_9",
+          "function": "step_01_the_mirror_s_rules_run",
+          "window": 9,
+          "source_line": 480,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py"
+      "next": "demo_04_the_policies_the_pins_and_the_stores.py"
     },
     {
-      "id": "demo_05_the_pairwise_judge_which_answer_is_better_row_by_row",
+      "id": "demo_04_the_policies_the_pins_and_the_stores",
       "lesson": "7.3",
-      "file": "demo_05_the_pairwise_judge_which_answer_is_better_row_by_row.py",
+      "file": "demo_04_the_policies_the_pins_and_the_stores.py",
       "category": "required",
       "requires": [
-        "demo_04_the_scoped_gate_on_both_revisions_and_the_rows_that_moved"
+        "demo_03_the_mirror_s_rules_run"
       ],
-      "heading": "The pairwise judge: which answer is better, row by row",
+      "heading": "The policies, the pins and the stores",
       "purpose": "Do it",
+      "anchor": "s4",
+      "anchors": [
+        "s4"
+      ],
+      "section_number": 4,
+      "windows": [
+        13
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
+      "source_lines": [
+        592
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "The policies, the pins and the stores",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (reads only)",
+          "expected": "acme: data_region=any\nacme: retrieval_backend=vector\nzeta: data_region=any\nzeta: retrieval_backend=vertex_search\nglobex: data_region=in\nglobex: retrieval_backend=default (the deployment RETRIEVAL_BACKEND)\ncd services/ingest && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID RAG_LOCATION=us-central1 AUDIT_BUCKET=documind-ai-YOUR-ID-audit \\\n  python managed.py --project documind-ai-YOUR-ID --status --mode both\n{\"tenant\": \"acme\", \"store\": \"rag_engine\", \"ledger_current\": 21, \"held\": 18, \"missing\": 3, \"orphans\": 0, \"status\": \"drift\", \"missing_doc_keys\": [\"acme_0994e77d201672aa703e6d5a9a00590d117ad98239b319e900a0d6a787ede170\", \"acme_80403acbbf9b2ada3bb37bfa6983bd864696ed45ca459a5ad7cf0296596ca987\", \"acme_ef63c85dc631e96e6c46364c3188f3f7a9a9283ad2e88074494d378399e1a71b\"], \"orphan_doc_keys\": []}\n{\"tenant\": \"acme\", \"store\": \"vertex_search\", \"ledger_current\": 21, \"held\": 18, \"missing\": 3, \"orphans\": 0, \"status\": \"drift\", \"missing_doc_keys\": [\"acme_0994e77d201672aa703e6d5a9a00590d117ad98239b319e900a0d6a787ede170\", \"acme_80403acbbf9b2ada3bb37bfa6983bd864696ed45ca459a5ad7cf0296596ca987\", \"acme_ef63c85dc631e96e6c46364c3188f3f7a9a9283ad2e88074494d378399e1a71b\"], \"orphan_doc_keys\": []}\n{\"tenant\": \"globex\", \"store\": \"rag_engine\", \"ledger_current\": 3, \"status\": \"no store\", \"hint\": \"no RAG Engine corpus 'documind-globex' in us-central1: make rag-corpus TENANT=globex\"}\n{\"tenant\": \"globex\", \"store\": \"vertex_search\", \"ledger_current\": 3, \"status\": \"no store\", \"hint\": \"no Vertex AI Search data store 'documind-globex' in global: MANAGED_SEARCH=true make plan / make up declares one per tenant (managed.tf)\"}\n{\"tenant\": \"zeta\", \"store\": \"rag_engine\", \"ledger_current\": 7, \"held\": 7, \"missing\": 0, \"orphans\": 0, \"status\": \"in sync\", \"missing_doc_keys\": [], \"orphan_doc_keys\": []}\n{\"tenant\": \"zeta\", \"store\": \"vertex_search\", \"ledger_current\": 7, \"held\": 7, \"missing\": 0, \"orphans\": 0, \"status\": \"in sync\", \"missing_doc_keys\": [], \"orphan_doc_keys\": []}",
+          "adaptations": [],
+          "id": "source_13",
+          "function": "step_01_the_policies_the_pins_and_the_stores",
+          "window": 13,
+          "source_line": 592,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk.py"
+    },
+    {
+      "id": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk",
+      "lesson": "7.3",
+      "file": "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk.py",
+      "category": "required",
+      "requires": [
+        "demo_04_the_policies_the_pins_and_the_stores"
+      ],
+      "heading": "Ask the stores, and find who found the cited chunk",
+      "purpose": "Do it The answer's citation carries no found_by, because the kit's Citation has no such field. The stamp is on the chunk in the pool. This cell asks the API again, then runs the kit's own retrieve() in your shell with backend rag_engine, the call the API made, and looks for the cited chunk in that pool.",
       "anchor": "s5",
       "anchors": [
         "s5"
       ],
       "section_number": 5,
       "windows": [
-        21
+        17,
+        19
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
       "source_lines": [
-        589
+        649,
+        695
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The pairwise judge: which answer is better, row by row",
+          "heading": "Ask the stores, and find who found the cited chunk",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (twenty rows on each revision, then the Evaluation service)",
-          "expected": ">> https://documind-api-NUMBER.asia-south1.run.app\n  20/20 answers collected from https://documind-api-NUMBER.asia-south1.run.app in ...s (model gemini-3.6-flash)\n  20/20 candidate answers from https://candidate---documind-api-NUMBER.asia-south1.run.app\n  context: .../... cited chunks read in full from the store\n  trajectories: off (no --chat-url)\n  pointwise: GROUNDEDNESS + INSTRUCTION_FOLLOWING  (templates cd7070; run api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070)\n  judge: the service default (pass --judge-model to pin one)\n\n  Experiments run documind-eval/api-GITSHA-YYYYMMDD-HHMM-vs-candidate-tcd7070:\n    groundedness/mean                                ...\n    groundedness/mean[join]                          ...\n    groundedness/mean[lookup]                        ...\n    groundedness/std                                 ...\n    instruction_following/mean                       ...\n    instruction_following/std                        ...\n    pairwise_question_answering_quality/baseline_model_win_rate ...\n    pairwise_question_answering_quality/candidate_model_win_rate ...\n    row_count                                        20.000\n\n  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.",
+          "label": "bash — run in the operator shell, in the kit (acme's pin back to RAG Engine, then one question for each tenant)",
+          "expected": "acme: retrieval_backend=rag_engine\nacme: retrieval_backend rag_engine, policy_fallback 0; pool 17, 14 from a managed store\n  A: A confirmed employee at grade E3 or above serves a notice period of 60 days [2].\n  cites acme:acme_497809ff...#rag-c31c1f459b60 (hr_policy_2026.md)\nzeta: retrieval_backend vertex_search, policy_fallback 0; pool 12, 12 from a managed store\n  A: A confirmed employee at grade L4 or above serves a notice period of 30 days [1].\n  cites zeta:zeta_e920a147...#vs-9b9cb379153b (hr_policy_zeta_2026.md)\nglobex: retrieval_backend vector, policy_fallback 0; pool 20, 0 from a managed store\n  A: Either party may terminate the agreement for convenience on 120 days' written notice [1].\n  cites globex:a0d13745...#2 (msa_globex_2026.md)",
           "adaptations": [],
-          "id": "source_21",
-          "function": "step_01_the_pairwise_judge_which_answer_is_better",
-          "window": 21,
-          "source_line": 589,
+          "id": "source_17",
+          "function": "step_01_ask_the_stores_and_find_who_found_the_cite",
+          "window": 17,
+          "source_line": 649,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "Ask the stores, and find who found the cited chunk",
+          "subheading": "Do it",
+          "purpose": "The answer's citation carries no found_by, because the kit's Citation has no such field. The stamp is on the chunk in the pool. This cell asks the API again, then runs the kit's own retrieve() in your shell with backend rag_engine, the call the API made, and looks for the cited chunk in that pool.",
+          "label": "bash — run in the operator shell, in the kit (the same question to the API, then through the kit's own retrieve())",
+          "expected": "the API: retrieval_backend rag_engine, 14 of the pool's 17 chunks from the store\nthe same question through the kit's retrieve(), backend rag_engine: 17 chunks\n  found_by rag_engine    14   for example acme:acme_497809ff...#rag-c31c1f459b60\n  found_by (none)         3   for example acme:0994e77d...#0\nthe chunk the answer cites: acme:acme_497809ff...#rag-c31c1f459b60\n  found_by rag_engine, score 0.706 (1 minus its distance), from hr_policy_2026.md",
+          "adaptations": [],
+          "id": "source_19",
+          "function": "step_02_ask_the_stores_and_find_who_found_the_cite",
+          "window": 19,
+          "source_line": 695,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_the_rupee_delta_from_the_usage_rows.py"
+      "next": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides.py"
     },
     {
-      "id": "demo_06_the_rupee_delta_from_the_usage_rows",
+      "id": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides",
       "lesson": "7.3",
-      "file": "demo_06_the_rupee_delta_from_the_usage_rows.py",
+      "file": "demo_06_globex_stays_home_the_skip_the_ledger_row_and_a_pin_the_policy_overrides.py",
       "category": "required",
       "requires": [
-        "demo_05_the_pairwise_judge_which_answer_is_better_row_by_row"
+        "demo_05_ask_the_stores_and_find_who_found_the_cited_chunk"
       ],
-      "heading": "The rupee delta, from the usage rows",
-      "purpose": "Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.",
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+      "purpose": "Do it Then read what the worker's mirror said about the note, and the ledger row it stamped: If your lines are missing, the worker instance that took the note had already said it: the skip is said once per tenant and store per instance. The cell then prints the last week's lines instead, and the empty mirrored on the row is the record for this document. Last, try to move globex's text with a pin:",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        24
+        21,
+        23,
+        25
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
       "source_lines": [
-        636
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "native_python",
-      "steps": [
-        {
-          "heading": "The rupee delta, from the usage rows",
-          "subheading": "The rupee delta, from the usage rows",
-          "purpose": "Every answer of the last hour, grouped by the model that gave it, and the difference per answer. The API priced every answer on its usage row with cost.price(), at the rates of the model that answered. The gate's runs and the judge's collections asked both revisions the same questions, so the two groups are like for like. The cell groups the last hour's rows by model and divides.",
-          "label": "bash — run in the operator shell, in the kit (the last hour of usage rows, by model)",
-          "expected": "gemini-3.6-flash          ... answers  Rs ...  Rs ... an answer\n  gemini-3.1-flash-lite     ... answers  Rs ...  Rs ... an answer\n  the candidate costs Rs ... less an answer: Rs ... per 1,000 answers",
-          "adaptations": [],
-          "id": "source_24",
-          "function": "step_01_the_rupee_delta_from_the_usage_rows",
-          "window": 24,
-          "source_line": 636,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
-    },
-    {
-      "id": "cleanup_demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate",
-      "lesson": "7.3",
-      "file": "cleanup/demo_08_deciding_the_confounds_that_fake_a_result_and_removing_the_candidate.py",
-      "category": "cleanup",
-      "requires": [],
-      "heading": "Deciding, the confounds that fake a result, and removing the candidate",
-      "purpose": "At lesson end: This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.",
-      "anchor": "s8",
-      "anchors": [
-        "s8"
-      ],
-      "section_number": 8,
-      "windows": [
-        26
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
-      "source_lines": [
-        688
+        747,
+        765,
+        814
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "Deciding, the confounds that fake a result, and removing the candidate",
-          "subheading": "Do it: remove the candidate's tag",
-          "purpose": "This ends the experiment. The candidate revision stays in the service's history with no traffic and no URL. Removing the tag is not enough on its own: make promote refuses only when the tag points at another revision, and otherwise flips traffic to the revision named in .candidate-revision. Deleting that file makes make promote stop with an error instead.",
-          "label": "bash — run in the operator shell, in the kit (the candidate's tag and its recorded name removed; the live revision is untouched)",
-          "expected": "...\nthe candidate URL now: HTTP 404",
+          "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (a note to globex, whose text may not leave India)",
+          "expected": "...\n>> gs://documind-ai-YOUR-ID-uploads/globex/globex_visitor_note_2026.md - waiting for the worker (up to 5 min)\n>> event doc_key chunks reused embedded retired effective_from\n>> ingest_ok\tglobex_e1d732be92b3b1a9bf473b161aa5dc24da5a560289c49e4a5991032067516da9\t1\t0\t1\t0\t\n>> the gate, scoped to this document, on a candidate: make eval-live PROJECT=documind-ai-YOUR-ID SOURCE=globex_visitor_note_2026.md API=<candidate url>",
           "adaptations": [],
-          "id": "source_26",
-          "function": "step_01_remove_the_candidate_s_tag",
-          "window": 26,
-          "source_line": 688,
+          "id": "source_21",
+          "function": "step_01_globex_stays_home_the_skip_the_ledger_row",
+          "window": 21,
+          "source_line": 747,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+          "subheading": "Do it",
+          "purpose": "Then read what the worker's mirror said about the note, and the ledger row it stamped:",
+          "label": "bash — run in the operator shell, in the kit (reads only)",
+          "expected": "the worker's mirror lines for globex since 2026-09-24T07:30:00Z:\n  07:30:09 mirror_policy_skipped  store rag_engine    region us-central1 data_region in\n  07:30:10 mirror_policy_skipped  store vertex_search region global      data_region in\nthe ledger row for globex/globex_visitor_note_2026.md: status indexed, mirrored {}\nglobex's data_region, as GET /v1/sources reports it: in",
+          "adaptations": [],
+          "id": "source_23",
+          "function": "step_02_globex_stays_home_the_skip_the_ledger_row",
+          "window": 23,
+          "source_line": 765,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+          "subheading": "Do it",
+          "purpose": "If your lines are missing, the worker instance that took the note had already said it: the skip is said once per tenant and store per instance. The cell then prints the last week's lines instead, and the empty mirrored on the row is the record for this document. Last, try to move globex's text with a pin:",
+          "label": "bash — run in the operator shell, in the kit (globex pinned to a store for one question, then unpinned)",
+          "expected": "globex: retrieval_backend=rag_engine\nglobex: retrieval_backend vector, policy_fallback 1; pool 20, 0 from a managed store\n  A: Either party may terminate the agreement for convenience on 120 days' written notice [1].\n  cites globex:a0d13745...#2 (msa_globex_2026.md)\nglobex: retrieval_backend=default",
+          "adaptations": [],
+          "id": "source_25",
+          "function": "step_03_globex_stays_home_the_skip_the_ledger_row",
+          "window": 25,
+          "source_line": 814,
           "manual_checkpoint": null
         }
       ],
@@ -429,7 +384,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -440,7 +395,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_07/lesson_7_3/GUIDE.md",
       "source_lines": [
-        376
+        406
       ],
       "offline": false,
       "live_verified": false,
@@ -449,7 +404,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
@@ -458,7 +413,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 376,
+          "source_line": 406,
           "manual_checkpoint": null
         }
       ],
@@ -491,124 +446,117 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 340
+      "line": 370
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 372
+      "line": 402
     },
     {
       "window": 6,
-      "label": "Makefile - candidate: a revision with no traffic, its settings written over the service's latest template",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
+      "label": "shared/tenancy.py - the policy: `in` unless the tenant's settings say `any`, and the one rule a store's region is held to",
+      "heading": "The mirror's rules, run",
       "anchor": "s3",
-      "line": 394
+      "line": 435
     },
     {
       "window": 7,
-      "label": "services/rag-api/config.py - every switch is judged on a candidate first",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
+      "label": "services/ingest/managed.py - Mirror.permitted(): the stores a tenant's text may go to; a forbidden one is said once, then silence",
+      "heading": "The mirror's rules, run",
       "anchor": "s3",
-      "line": 408
+      "line": 449
     },
     {
-      "window": 9,
-      "label": "expected shape (gcloud's own progress lines are left out; the two >> lines are make's)",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
+      "window": 8,
+      "label": "services/ingest/managed.py - after_swap(): the text into the permitted stores, the replaced version out of every store, the ledger stamped",
+      "heading": "The mirror's rules, run",
       "anchor": "s3",
-      "line": 421
+      "line": 467
+    },
+    {
+      "window": 10,
+      "label": "expected (this cell run on the kit's own managed.py and tenancy.py)",
+      "heading": "The mirror's rules, run",
+      "anchor": "s3",
+      "line": 531
     },
     {
       "window": 11,
-      "label": "expected (this cell, run against a fake gcloud with two revisions' settings; your revision names differ)",
-      "heading": "The candidate: a new revision with no traffic, and the proof that one setting differs",
-      "anchor": "s3",
-      "line": 448
-    },
-    {
-      "window": 12,
-      "label": "evals/run_eval.py - --source: the rows that cite one document, judged in minutes",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
+      "label": "Makefile - managed-stores, which make up runs: a corpus per `any` tenant, then the demo's pins",
+      "heading": "The policies, the pins and the stores",
       "anchor": "s4",
-      "line": 463
-    },
-    {
-      "window": 13,
-      "label": "evals/run_eval.py - live(): a threshold with no rows behind it is not judged",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "anchor": "s4",
-      "line": 469
-    },
-    {
-      "window": 15,
-      "label": "expected shape (run_eval.py's own code over a stub API; the stub's candidate misses one row on purpose, and your rows, rates and times are your lane's)",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "anchor": "s4",
-      "line": 481
-    },
-    {
-      "window": 17,
-      "label": "expected (this cell over the stub's two reports)",
-      "heading": "The scoped gate on both revisions, and the rows that moved",
-      "anchor": "s4",
-      "line": 534
-    },
-    {
-      "window": 18,
-      "label": "evals/judge.py - pairwise: the candidate is judged, the live revision is the baseline",
-      "heading": "The pairwise judge: which answer is better, row by row",
-      "anchor": "s5",
-      "line": 554
-    },
-    {
-      "window": 19,
-      "label": "evals/judge.py - evaluate(): the pairwise metric joins the two pointwise ones",
-      "heading": "The pairwise judge: which answer is better, row by row",
-      "anchor": "s5",
-      "line": 568
-    },
-    {
-      "window": 20,
-      "label": "vertexai evaluation, google-cloud-aiplatform 2.1.0 - the two win rates, as the SDK computes them",
-      "heading": "The pairwise judge: which answer is better, row by row",
-      "anchor": "s5",
       "line": 573
     },
     {
-      "window": 22,
-      "label": "expected shape (the metric names are SDK 2.1.0's; every ... is your lane's; the SDK's progress lines are left out)",
-      "heading": "The pairwise judge: which answer is better, row by row",
+      "window": 12,
+      "label": "services/ingest/managed.py - status(): what the ledger calls current, which every store is held against",
+      "heading": "The policies, the pins and the stores",
+      "anchor": "s4",
+      "line": 580
+    },
+    {
+      "window": 14,
+      "label": "expected (the kit's tenancy CLI and managed.py on a stand-in lane holding the corpus make ingest-corpus sends; your counts include your own uploads)",
+      "heading": "The policies, the pins and the stores",
+      "anchor": "s4",
+      "line": 598
+    },
+    {
+      "window": 15,
+      "label": "services/rag-api/main.py - retrieval_backend_for(): a pin to a store, held against the tenant's policy on every request",
+      "heading": "Ask the stores, and find who found the cited chunk",
       "anchor": "s5",
-      "line": 591
+      "line": 628
     },
     {
-      "window": 23,
-      "label": "services/rag-api/cost.py - price(): the three Gemini rates, cached input at a tenth, both currencies",
-      "heading": "The rupee delta, from the usage rows",
+      "window": 16,
+      "label": "services/rag-api/retriever.py - a RAG Engine context made a chunk of the kit's contract: the version's row, an id from the text, found_by",
+      "heading": "Ask the stores, and find who found the cited chunk",
+      "anchor": "s5",
+      "line": 640
+    },
+    {
+      "window": 18,
+      "label": "expected (the kit's rag-api on a stand-in lane: RAG Engine, Vertex AI Search and Gemini stood in; your pool sizes and ids are your stores')",
+      "heading": "Ask the stores, and find who found the cited chunk",
+      "anchor": "s5",
+      "line": 674
+    },
+    {
+      "window": 20,
+      "label": "expected (the same stand-ins; the kit's retrieve() run in the cell's own process)",
+      "heading": "Ask the stores, and find who found the cited chunk",
+      "anchor": "s5",
+      "line": 728
+    },
+    {
+      "window": 22,
+      "label": "expected (gcloud's copy lines as a shape; the worker's line from the stand-in: your doc_key differs, the note carries your email and the time)",
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
       "anchor": "s6",
-      "line": 620
+      "line": 757
     },
     {
-      "window": 25,
-      "label": "expected shape (this cell, run against fake usage rows; your counts and rupees are your lane's)",
-      "heading": "The rupee delta, from the usage rows",
+      "window": 24,
+      "label": "expected (the kit's own Mirror, as the worker calls it after a swap, on the stand-in lane; your times are yours)",
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
       "anchor": "s6",
-      "line": 648
+      "line": 802
     },
     {
-      "window": 27,
-      "label": "expected (gcloud's traffic table first)",
-      "heading": "Deciding, the confounds that fake a result, and removing the candidate",
-      "anchor": "s8",
-      "line": 692
+      "window": 26,
+      "label": "expected (the kit's rag-api on the stand-in lane)",
+      "heading": "globex stays home: the skip, the ledger row, and a pin the policy overrides",
+      "anchor": "s6",
+      "line": 819
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "Lesson 7.2's judge environment and a single baseline revision; no other lesson should own the candidate tag.",
+  "prerequisites": "Configured RAG Engine/Vertex AI Search mirrors and tenant residency policies that permit those regions.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

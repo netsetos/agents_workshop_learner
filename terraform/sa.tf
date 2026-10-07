@@ -118,10 +118,10 @@ resource "google_service_account_iam_member" "api_self_impersonate" {
 # refusal the gate is testing for. It is never bound on the peer, which has no roster to refuse it
 # with. A person reaches the UI through IAP alone (lesson-12.4.sh binds IAP's service agent, and
 # nothing else invokes it). The outsider is also bound on documind-gchat, the Google Chat bridge
-# (workshop lesson 10.6, make smoke-gchat), whose code refuses every caller except Chat's add-on
+# (workshop lesson 10.4, make smoke-gchat), whose code refuses every caller except Chat's add-on
 # agent and Pub/Sub's push account (terraform/gchat.tf).
 #
-# The DocuMind Desk (workshop lesson 10.5) adds six callers to the chat service and to nothing
+# The DocuMind Desk (workshop lesson 5.6) adds six callers to the chat service and to nothing
 # else. The five documind-eval*-sa accounts are the people its live checks call as (make
 # smoke-cases): each is put on one tenant's roster (make roster), so the chat service verifies the
 # token and the roster answers, as it does for the outsider. documind-gchat-sa is the Google Chat

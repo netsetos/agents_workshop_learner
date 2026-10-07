@@ -1,46 +1,40 @@
 {
   "schema_version": 4,
   "lesson": "9.1",
-  "title": "Compare context caching and answer caching",
+  "title": "Trace and authorize gateway routes",
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
-  "source_page": "Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html",
-  "source_sha": "240f3edc2b3bbf2a6e0177f7f0c288a696da5ae5",
+  "source_page": "Netsetos_GCP_Capstone_9.1_Gateway_Routes_WIX.html",
+  "source_sha": "30740fa186a22ed90c835763dc109fdeb2bf0409",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 32,
+  "source_window_count": 24,
   "persist_variables": [
     "API",
     "API_URL",
-    "CAND",
     "ME",
     "NUMBER",
     "PROJECT",
-    "Q",
-    "Q91",
     "REGION",
-    "SINCE91",
-    "TENANT",
-    "TOKEN",
-    "URL"
+    "TENANT"
   ],
   "headings": [
     {
       "level": 1,
-      "heading": "Compare context caching and answer caching: a cached prefix the model still reads, and a stored answer the model never sees"
+      "heading": "Trace and authorize gateway routes: one door, a hook that re-routes, a token per backend, a cost per answer"
     },
     {
       "level": 3,
-      "heading": "Two caches: a prefix the model still reads, an answer the model never sees"
+      "heading": "One door for every model"
     },
     {
       "level": 4,
-      "heading": "Two caches, one question"
+      "heading": "Where would this request go?"
     },
     {
       "level": 3,
-      "heading": "The words: context cache, cached_tokens, TTL, fingerprint, answer cache, the two rungs, scope"
+      "heading": "The words: the gateway, the door, a route, a fallback, the sensitive route, the hook, the tiers, Presidio, the token proxy, the cost header"
     },
     {
       "level": 3,
@@ -60,31 +54,7 @@
     },
     {
       "level": 3,
-      "heading": "The context cache: a pack, a cache, and the next answer"
-    },
-    {
-      "level": 4,
-      "heading": "Definition"
-    },
-    {
-      "level": 4,
-      "heading": "The code"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the question, uncached"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the cache"
-    },
-    {
-      "level": 4,
-      "heading": "Do it: the same question, with the cache"
-    },
-    {
-      "level": 3,
-      "heading": "The rows: what the context cache did to the bill"
+      "heading": "The hook's decisions, traced"
     },
     {
       "level": 4,
@@ -100,7 +70,7 @@
     },
     {
       "level": 3,
-      "heading": "The answer cache: a candidate that remembers answers"
+      "heading": "The token the proxy sends"
     },
     {
       "level": 4,
@@ -108,7 +78,15 @@
     },
     {
       "level": 4,
-      "heading": "The code"
+      "heading": "Do it"
+    },
+    {
+      "level": 3,
+      "heading": "The gateway, deployed and smoke-tested"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
     },
     {
       "level": 4,
@@ -116,15 +94,19 @@
     },
     {
       "level": 3,
-      "heading": "Four asks: a miss, two hits and a paraphrase"
+      "heading": "A PAN re-routed, and the cost header"
+    },
+    {
+      "level": 4,
+      "heading": "Definition"
+    },
+    {
+      "level": 4,
+      "heading": "Do it"
     },
     {
       "level": 3,
-      "heading": "What each cache is holding, and the clean-up"
-    },
-    {
-      "level": 3,
-      "heading": "Why the caches are shaped this way, what they cost, and what the kit does not do yet"
+      "heading": "Why it works this way, what it costs, and what the kit does not do yet"
     },
     {
       "level": 4,
@@ -143,7 +125,7 @@
       "category": "required",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+      "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -154,7 +136,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        392
+        385
       ],
       "offline": false,
       "live_verified": false,
@@ -163,7 +145,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.",
           "label": "bash — run in the operator shell now, before the lesson's first step",
           "expected": "acme: retrieval_backend=vector",
           "adaptations": [
@@ -172,93 +154,78 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 392,
+          "source_line": 385,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer.py"
+      "next": "demo_03_the_hook_s_decisions_traced.py"
     },
     {
-      "id": "demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer",
+      "id": "demo_03_the_hook_s_decisions_traced",
       "lesson": "9.1",
-      "file": "demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer.py",
+      "file": "demo_03_the_hook_s_decisions_traced.py",
       "category": "required",
       "requires": [
         "setup_prepare"
       ],
-      "heading": "The context cache: a pack, a cache, and the next answer",
-      "purpose": "Do it: the question, uncached Do it: the cache Do it: the same question, with the cache",
+      "heading": "The hook's decisions, traced",
+      "purpose": "Do it",
       "anchor": "s3",
       "anchors": [
         "s3"
       ],
       "section_number": 3,
       "windows": [
-        10,
-        12,
-        14
+        8,
+        10
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        498,
-        518,
-        529
+        454,
+        459
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The context cache: a pack, a cache, and the next answer",
-          "subheading": "Do it: the question, uncached",
-          "purpose": "Do it: the question, uncached",
-          "label": "bash — run in the operator shell, in the kit (a small ask function, a start time for the rows, and one question to the live API)",
-          "expected": "backend vertex cache_hit none     tokens_in   1812  cached_tokens      0   2410 ms  | Employees may work remotely up to eight days",
+          "heading": "The hook's decisions, traced",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (once: a venv with the gateway image's Presidio and spaCy model)",
+          "expected": "en_core_web_lg installed: the image's model, 400 MB",
+          "adaptations": [],
+          "id": "source_8",
+          "function": "step_01_the_hook_s_decisions_traced",
+          "window": 8,
+          "source_line": 454,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The hook's decisions, traced",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (the gateway's own classifier and hook; no network)",
+          "expected": "Presidio's recognizers: CreditCard, Crypto, Date, Email, Iban, Ip, MacAddress, MedicalLicense, Nhs, Phone, Spacy, Url, UsBank, UsItin, UsLicense, UsPassport, UsSsn\nthe classifier's own test cases, which nothing runs:\n  'What is GDPR?'                  expected PUBLIC       got PUBLIC\n  'Email me at user@acme.com'      expected CONFIDENTIAL got CONFIDENTIAL\n  'My Aadhaar is 2345-6789-0123'   expected RESTRICTED   got PUBLIC\n  'SSN 123-45-6789'                expected RESTRICTED   got PUBLIC\n  'PAN ABCDE1234F'                 expected RESTRICTED   got PUBLIC\nthe hook, on four requests for documind-general:\n  PUBLIC       -> documind-general   'What is the notice period for a confirmed E3?'\n  PUBLIC       -> documind-general   'My PAN is ABCDE1234F. What is the notice period for a confirmed E3?'\n  RESTRICTED   -> documind-sensitive 'My PAN is ABCDE1234F and I joined on 5 March 2026. What is my notice period?'\n  CONFIDENTIAL -> documind-general   'Context:'\nand what the last one sends to Gemini:\n  Context:\n  [Source 1] hr_policy_<URL>\n  NP-03. A confirmed <US_DRIVER_LICENSE> serves a notice period of <DATE_TIME>. Queries go to <EMAIL_ADDRESS>.\n  \n  Question: What is the notice period for a confirmed <US_DRIVER_LICENSE>?",
           "adaptations": [],
           "id": "source_10",
-          "function": "step_01_the_question_uncached",
+          "function": "step_02_the_hook_s_decisions_traced",
           "window": 10,
-          "source_line": 498,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The context cache: a pack, a cache, and the next answer",
-          "subheading": "Do it: the cache",
-          "purpose": "Do it: the cache",
-          "label": "bash — run in the operator shell, in the kit (acme's context cache: its pack, on Gemini, for an hour)",
-          "expected": "cd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  cache projects/NUMBER/locations/global/cachedContents/CACHE_ID\n  location global (global or regional: the answer to CLAUDE.md's question)\n  model gemini-3.6-flash | tokens 41259 | expires YYYY-MM-DD HH:MM:SS.ssssss+00:00 | corpus 75b21a03f12f | ledger fingerprint FINGERPRINT\n  the next /v1/query for acme carries cached_content; read cached_tokens in its usage row",
-          "adaptations": [],
-          "id": "source_12",
-          "function": "step_02_the_cache",
-          "window": 12,
-          "source_line": 518,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "The context cache: a pack, a cache, and the next answer",
-          "subheading": "Do it: the same question, with the cache",
-          "purpose": "Do it: the same question, with the cache",
-          "label": "bash — run in the operator shell, in the kit (the same question again, to the live API)",
-          "expected": "backend vertex cache_hit none     tokens_in  43071  cached_tokens  41259   2650 ms  | Employees may work remotely up to eight days",
-          "adaptations": [],
-          "id": "source_14",
-          "function": "step_03_the_same_question_with_the_cache",
-          "window": 14,
-          "source_line": 529,
+          "source_line": 459,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_04_the_rows_what_the_context_cache_did_to_the_bill.py"
+      "next": "demo_04_the_token_the_proxy_sends.py"
     },
     {
-      "id": "demo_04_the_rows_what_the_context_cache_did_to_the_bill",
+      "id": "demo_04_the_token_the_proxy_sends",
       "lesson": "9.1",
-      "file": "demo_04_the_rows_what_the_context_cache_did_to_the_bill.py",
+      "file": "demo_04_the_token_the_proxy_sends.py",
       "category": "required",
       "requires": [
-        "demo_03_the_context_cache_a_pack_a_cache_and_the_next_answer"
+        "demo_03_the_hook_s_decisions_traced"
       ],
-      "heading": "The rows: what the context cache did to the bill",
+      "heading": "The token the proxy sends",
       "purpose": "Do it",
       "anchor": "s4",
       "anchors": [
@@ -266,41 +233,41 @@
       ],
       "section_number": 4,
       "windows": [
-        17
+        14
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        567
+        538
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "native_python",
+      "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The rows: what the context cache did to the bill",
+          "heading": "The token the proxy sends",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (every acme usage row since the first ask; reads only)",
-          "expected": "00041-kqz  vertex  in   1812  cached      0  Rs 0.4937   2410 ms\n  00041-kqz  vertex  in  43071  cached  41259  Rs 1.0197   2650 ms",
+          "label": "bash — run in the operator shell, in the kit (the token proxy's token, with the metadata server stood in; no network)",
+          "expected": "the SLM, first call       <token 1>   minted so far: 1\nthe SLM, a minute later   <token 1>   minted so far: 1\nthe SLM, 55 minutes in    <token 2>   minted so far: 2\nthe vLLM engine           <token 3>   minted so far: 3\nthe proxy drops these request headers, then adds its own Authorization: authorization, connection, content-length, host, transfer-encoding",
           "adaptations": [],
-          "id": "source_17",
-          "function": "step_01_the_rows_what_the_context_cache_did_to_the",
-          "window": 17,
-          "source_line": 567,
+          "id": "source_14",
+          "function": "step_01_the_token_the_proxy_sends",
+          "window": 14,
+          "source_line": 538,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_05_the_answer_cache_a_candidate_that_remembers_answers.py"
+      "next": "demo_05_the_gateway_deployed_and_smoke_tested.py"
     },
     {
-      "id": "demo_05_the_answer_cache_a_candidate_that_remembers_answers",
+      "id": "demo_05_the_gateway_deployed_and_smoke_tested",
       "lesson": "9.1",
-      "file": "demo_05_the_answer_cache_a_candidate_that_remembers_answers.py",
+      "file": "demo_05_the_gateway_deployed_and_smoke_tested.py",
       "category": "required",
       "requires": [
-        "demo_04_the_rows_what_the_context_cache_did_to_the_bill"
+        "demo_04_the_token_the_proxy_sends"
       ],
-      "heading": "The answer cache: a candidate that remembers answers",
+      "heading": "The gateway, deployed and smoke-tested",
       "purpose": "Do it",
       "anchor": "s5",
       "anchors": [
@@ -308,166 +275,84 @@
       ],
       "section_number": 5,
       "windows": [
-        23
+        17,
+        19
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        663
+        588,
+        593
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
-          "heading": "The answer cache: a candidate that remembers answers",
+          "heading": "The gateway, deployed and smoke-tested",
           "subheading": "Do it",
           "purpose": "Do it",
-          "label": "bash — run in the operator shell, in the kit (a revision with SEMANTIC_CACHE=on and no traffic)",
-          "expected": "gcloud run services update documind-api --region asia-south1 --project documind-ai-YOUR-ID --no-traffic --tag candidate \\\n  --update-env-vars \"^|^GENERATOR_MODEL=gemini-3.6-flash|RAG_MODEL_BASE=gemini-3.6-flash|ROUTING=off|MODEL_BACKEND=vertex|ARMOR=off|SEMANTIC_CACHE=on|...\"\n...\n>> candidate revision: documind-api-00044-rtv (deploy/.candidate-revision - make promote moves traffic to it by name)\n>> candidate: https://candidate---documind-api-NUMBER.asia-south1.run.app (no traffic; remove with gcloud run services update-traffic documind-api --remove-tags candidate)\nCAND=https://candidate---documind-api-NUMBER.asia-south1.run.app",
+          "label": "bash — run in the operator shell, in the kit where make up ran (it reads the database URL from Terraform's state)",
+          "expected": "...\n>> gateway: https://documind-gateway-NUMBER.asia-south1.run.app (the API and the UI's account may call it)",
           "adaptations": [],
-          "id": "source_23",
-          "function": "step_01_the_answer_cache_a_candidate_that_remember",
-          "window": 23,
-          "source_line": 663,
+          "id": "source_17",
+          "function": "step_01_the_gateway_deployed_and_smoke_tested",
+          "window": 17,
+          "source_line": 588,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The gateway, deployed and smoke-tested",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit",
+          "expected": "DocuMind gateway - live smoke test\n  target: https://documind-gateway-NUMBER.asia-south1.run.app\n  --------------------------------------------------------\n  [PASS] no token is refused at the door  HTTP 403\n  [PASS] liveliness as the member's account  HTTP 200 in ...s\n  [PASS] documind-general answers JSON  '{\"ok\": true}' in ...s, model gemini-3.6-flash\n  [PASS] the cost header rag-api prices from  x-litellm-response-cost=3.45e-05\n  [PASS] a PAN is routed by the guardrail  served by 'gemini-3.6-flash' in ...s (the sensitive route is the self-hosted model, no fallback)\n  [PASS] documind-slm answers, or its fallback does  model 'gemini-3.6-flash' in ...s, cost 1.8e-05\n  --------------------------------------------------------\n  6 passed, 0 failed",
+          "adaptations": [],
+          "id": "source_19",
+          "function": "step_02_the_gateway_deployed_and_smoke_tested",
+          "window": 19,
+          "source_line": 593,
           "manual_checkpoint": null
         }
       ],
-      "next": "demo_06_four_asks_a_miss_two_hits_and_a_paraphrase.py"
+      "next": "demo_06_a_pan_re_routed_and_the_cost_header.py"
     },
     {
-      "id": "demo_06_four_asks_a_miss_two_hits_and_a_paraphrase",
+      "id": "demo_06_a_pan_re_routed_and_the_cost_header",
       "lesson": "9.1",
-      "file": "demo_06_four_asks_a_miss_two_hits_and_a_paraphrase.py",
+      "file": "demo_06_a_pan_re_routed_and_the_cost_header.py",
       "category": "required",
       "requires": [
-        "demo_05_the_answer_cache_a_candidate_that_remembers_answers"
+        "demo_05_the_gateway_deployed_and_smoke_tested"
       ],
-      "heading": "Four asks: a miss, two hits and a paraphrase",
-      "purpose": "One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.",
+      "heading": "A PAN re-routed, and the cost header",
+      "purpose": "Do it",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        25,
-        27
+        23
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        681,
-        691
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "Four asks: a miss, two hits and a paraphrase",
-          "subheading": "Four asks: a miss, two hits and a paraphrase",
-          "purpose": "One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.",
-          "label": "bash — run in the operator shell, in the kit (four asks to the candidate)",
-          "expected": "backend vertex cache_hit none     tokens_in  43071  cached_tokens  41259   2590 ms  | Employees may work remotely up to eight days\n  backend cache  cache_hit semantic tokens_in      0  cached_tokens      0    182 ms  | Employees may work remotely up to eight days\n  backend cache  cache_hit semantic tokens_in      0  cached_tokens      0    176 ms  | Employees may work remotely up to eight days\n  backend vertex cache_hit none     tokens_in  43053  cached_tokens  41259   2720 ms  | Employees may work remotely up to eight days",
-          "adaptations": [],
-          "id": "source_25",
-          "function": "step_01_four_asks_a_miss_two_hits_and_a_paraphrase",
-          "window": 25,
-          "source_line": 681,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "Four asks: a miss, two hits and a paraphrase",
-          "subheading": "Four asks: a miss, two hits and a paraphrase",
-          "purpose": "One question four ways, then the rows. The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which qhash treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.",
-          "label": "bash — run in the operator shell, in the kit (the same rows cell, now with the candidate's)",
-          "expected": "00041-kqz  vertex  in   1812  cached      0  Rs 0.4937   2410 ms\n  00041-kqz  vertex  in  43071  cached  41259  Rs 1.0197   2650 ms\n  00044-rtv  vertex  in  43071  cached  41259  Rs 1.0197   2590 ms\n  00044-rtv  cache   in      0  cached      0  Rs 0.0000    182 ms\n  00044-rtv  cache   in      0  cached      0  Rs 0.0000    176 ms\n  00044-rtv  vertex  in  43053  cached  41259  Rs 1.0085   2720 ms",
-          "adaptations": [],
-          "id": "source_27",
-          "function": "step_02_four_asks_a_miss_two_hits_and_a_paraphrase",
-          "window": 27,
-          "source_line": 691,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "demo_07_what_each_cache_is_holding_and_the_clean_up.py"
-    },
-    {
-      "id": "demo_07_what_each_cache_is_holding_and_the_clean_up",
-      "lesson": "9.1",
-      "file": "demo_07_what_each_cache_is_holding_and_the_clean_up.py",
-      "category": "required",
-      "requires": [
-        "demo_06_four_asks_a_miss_two_hits_and_a_paraphrase"
-      ],
-      "heading": "What each cache is holding, and the clean-up",
-      "purpose": "The record behind the context cache, the entry behind the hit, and both caches put away. The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it.",
-      "anchor": "s7",
-      "anchors": [
-        "s7"
-      ],
-      "section_number": 7,
-      "windows": [
-        29
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
-      "source_lines": [
-        717
+        636
       ],
       "offline": false,
       "live_verified": false,
       "implementation": "native_python",
       "steps": [
         {
-          "heading": "What each cache is holding, and the clean-up",
-          "subheading": "What each cache is holding, and the clean-up",
-          "purpose": "The record behind the context cache, the entry behind the hit, and both caches put away. The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it.",
-          "label": "bash — run in the operator shell, in the kit (what each cache is holding; reads only)",
-          "expected": "context cache  (Firestore holds a pointer; the pack itself is on Google's side)\n    cache_name: projects/NUMBER/locations/global/cachedContents/CACHE_ID\n    location: global\n    model: gemini-3.6-flash\n    tokens: 41259\n    expire_time: YYYY-MM-DD HH:MM:SS.ssssss+00:00\n    corpus_fingerprint: FINGERPRINT\nanswer cache  (2 acme entries; 1 for this question's words)\n    question: How many days a month can I work remotely?\n    qhash: 79ae9ca70e9e21c4c23aca5b  scope: 7a0875abc72b0f7b  fingerprint: FINGERPRINT_\n    model: gemini-3.6-flash  expire_at: YYYY-MM-DD HH:MM:SS+00:00  embedding: 768 numbers\n    answer: Employees may work remotely up to eight days per month with   citations: 1",
+          "heading": "A PAN re-routed, and the cost header",
+          "subheading": "Do it",
+          "purpose": "Do it",
+          "label": "bash — run in the operator shell, in the kit (three short answers through the gateway)",
+          "expected": "documind-general is priced at 1.50 and 7.50 USD a million tokens, in and out (config.yaml)\n  no personal data  HTTP 200  answered by gemini-3.6-flash; 11 tokens in, 20 out; x-litellm-response-cost 0.0001665\n  a bare PAN        HTTP 200  answered by gemini-3.6-flash; 16 tokens in, 20 out; x-litellm-response-cost 0.000174\n  a PAN and a date  HTTP 500  no answer: the route the hook chose has no backend yet, and no fallback",
           "adaptations": [],
-          "id": "source_29",
-          "function": "step_01_what_each_cache_is_holding_and_the_clean_u",
-          "window": 29,
-          "source_line": 717,
-          "manual_checkpoint": null
-        }
-      ],
-      "next": "See README: optional choices, then setup/finish.py if listed."
-    },
-    {
-      "id": "cleanup_demo_07_what_each_cache_is_holding_and_the_clean_up",
-      "lesson": "9.1",
-      "file": "cleanup/demo_07_what_each_cache_is_holding_and_the_clean_up.py",
-      "category": "cleanup",
-      "requires": [],
-      "heading": "What each cache is holding, and the clean-up",
-      "purpose": "At lesson end: The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it. The two records show where each cache keeps its weight. For the context cache, Firestore holds only a pointer and a few facts, and the pack's forty-odd thousand tokens sit on Google's side, billed by the hour until they expire or are deleted. For the answer cache, Firestore holds everything: the answer, its citations and the question's 768-number embedding. That costs Firestore storage and reads, for 24 hours. The clean-up removes the candidate's tag and recorded name, and deletes the context cache. The next acme question to the live API finds no record and runs uncached at once.",
-      "anchor": "s7",
-      "anchors": [
-        "s7"
-      ],
-      "section_number": 7,
-      "windows": [
-        31
-      ],
-      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
-      "source_lines": [
-        752
-      ],
-      "offline": false,
-      "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
-      "steps": [
-        {
-          "heading": "What each cache is holding, and the clean-up",
-          "subheading": "What each cache is holding, and the clean-up",
-          "purpose": "The cell prints tenant_caches/acme, then the answer-cache entry for the question's words. It uses the kit's own qhash, imported from services/rag-api, so the key is computed exactly as the API computes it. The two records show where each cache keeps its weight. For the context cache, Firestore holds only a pointer and a few facts, and the pack's forty-odd thousand tokens sit on Google's side, billed by the hour until they expire or are deleted. For the answer cache, Firestore holds everything: the answer, its citations and the question's 768-number embedding. That costs Firestore storage and reads, for 24 hours. The clean-up removes the candidate's tag and recorded name, and deletes the context cache. The next acme question to the live API finds no record and runs uncached at once.",
-          "label": "bash — run in the operator shell, in the kit (the candidate's tag and recorded name removed, the context cache deleted)",
-          "expected": "Updating traffic...done.\nDone.\nURL: https://documind-api-...run.app\nTraffic:\n  100% documind-api-00041-kqz      (the live revision, as before; no candidate tag)\ncd services/rag-api && GOOGLE_CLOUD_PROJECT=documind-ai-YOUR-ID GENERATOR_MODEL=gemini-3.6-flash \\\n  python cache_admin.py ${CACHE_OP:-create} --project documind-ai-YOUR-ID --tenant acme\n  deleted acme's cache",
-          "adaptations": [],
-          "id": "source_31",
-          "function": "step_01_what_each_cache_is_holding_and_the_clean_u",
-          "window": 31,
-          "source_line": 752,
+          "id": "source_23",
+          "function": "step_01_a_pan_re_routed_and_the_cost_header",
+          "window": 23,
+          "source_line": 636,
           "manual_checkpoint": null
         }
       ],
@@ -480,7 +365,7 @@
       "category": "cleanup",
       "requires": [],
       "heading": "Before you run anything: set up the shell",
-      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+      "purpose": "At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
       "anchor": "setup",
       "anchors": [
         "setup"
@@ -491,7 +376,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_09/lesson_9_1/GUIDE.md",
       "source_lines": [
-        398
+        391
       ],
       "offline": false,
       "live_verified": false,
@@ -500,7 +385,7 @@
         {
           "heading": "Before you run anything: set up the shell",
           "subheading": "Which store answers acme? Pin it to the kit's own index for this lesson",
-          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
+          "purpose": "DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.",
           "label": "bash — run in the operator shell when you finish the lesson, not now",
           "expected": "",
           "adaptations": [
@@ -509,7 +394,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 398,
+          "source_line": 391,
           "manual_checkpoint": null
         }
       ],
@@ -542,145 +427,110 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 362
+      "line": 355
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 394
+      "line": 387
     },
     {
       "window": 6,
-      "label": "services/rag-api/cache_admin.py - pack_for(): the tenant's synthetic documents, joined, and the corpus manifest's hash",
-      "heading": "The context cache: a pack, a cache, and the next answer",
+      "label": "services/litellm/documind_classifier.py - classify_tier(): a pattern, then Presidio's confirmation",
+      "heading": "The hook's decisions, traced",
       "anchor": "s3",
-      "line": 416
+      "line": 420
     },
     {
       "window": 7,
-      "label": "services/rag-api/cache_manager.py - create(): one cache on global, a regional fallback, and the record in tenant_caches",
-      "heading": "The context cache: a pack, a cache, and the next answer",
+      "label": "services/litellm/documind_router.py - the pre-call hook's decision",
+      "heading": "The hook's decisions, traced",
       "anchor": "s3",
-      "line": 427
-    },
-    {
-      "window": 8,
-      "label": "services/rag-api/cache_manager.py - generate_config_kwargs(): attached only when alive, the model's, and not stale",
-      "heading": "The context cache: a pack, a cache, and the next answer",
-      "anchor": "s3",
-      "line": 447
+      "line": 434
     },
     {
       "window": 9,
-      "label": "services/rag-api/generator.py - the prompt is the same with or without a cache; the cache is one more keyword",
-      "heading": "The context cache: a pack, a cache, and the next answer",
+      "label": "expected (the install's own lines are sent to /dev/null)",
+      "heading": "The hook's decisions, traced",
       "anchor": "s3",
-      "line": 472
+      "line": 457
     },
     {
       "window": 11,
-      "label": "expected (this cell against a local stub that answers the way the API does; your tokens and times differ)",
-      "heading": "The context cache: a pack, a cache, and the next answer",
+      "label": "expected (this cell, run with the gateway image's pins: Presidio 2.2.364 and en_core_web_lg)",
+      "heading": "The hook's decisions, traced",
       "anchor": "s3",
-      "line": 514
+      "line": 486
     },
     {
-      "window": 13,
-      "label": "expected shape (make cache's own printing; Google counts your tokens, this block uses the kit's estimate)",
-      "heading": "The context cache: a pack, a cache, and the next answer",
-      "anchor": "s3",
+      "window": 12,
+      "label": "services/litellm/token_proxy.py - the caller's token stays at the door; the proxy sends its own",
+      "heading": "The token the proxy sends",
+      "anchor": "s4",
       "line": 520
     },
     {
+      "window": 13,
+      "label": "services/litellm/gcp_id_token.py - get_id_token(): one token per audience, refreshed five minutes early",
+      "heading": "The token the proxy sends",
+      "anchor": "s4",
+      "line": 524
+    },
+    {
       "window": 15,
-      "label": "expected (this cell against a local stub; cached_tokens is the cache's count)",
-      "heading": "The context cache: a pack, a cache, and the next answer",
-      "anchor": "s3",
-      "line": 531
+      "label": "expected (this cell, run on the kit's own gcp_id_token.py)",
+      "heading": "The token the proxy sends",
+      "anchor": "s4",
+      "line": 557
     },
     {
       "window": 16,
-      "label": "services/rag-api/cost.py - price(): the cached tokens at a tenth of the input rate",
-      "heading": "The rows: what the context cache did to the bill",
-      "anchor": "s4",
-      "line": 544
+      "label": "Makefile - make deploy-gateway: behind IAM, and two accounts that may call it",
+      "heading": "The gateway, deployed and smoke-tested",
+      "anchor": "s5",
+      "line": 575
     },
     {
       "window": 18,
-      "label": "expected (this cell against a fake gcloud, priced by the kit's own price(); your numbers differ)",
-      "heading": "The rows: what the context cache did to the bill",
-      "anchor": "s4",
-      "line": 578
-    },
-    {
-      "window": 19,
-      "label": "services/rag-api/semantic_cache.py - _alive(): the same corpus, the same scope, not expired",
-      "heading": "The answer cache: a candidate that remembers answers",
+      "label": "expected (gcloud's build and deploy lines are left out)",
+      "heading": "The gateway, deployed and smoke-tested",
       "anchor": "s5",
-      "line": 594
+      "line": 590
     },
     {
       "window": 20,
-      "label": "services/rag-api/semantic_cache.py - lookup(): the exact rung, then the five nearest at 0.95",
-      "heading": "The answer cache: a candidate that remembers answers",
+      "label": "expected (the kit's own smoke, against a stand-in gateway that serves config.yaml's routes behind the kit's own hook, with the real Presidio; the self-hosted backend is absent, as it is until lesson 9.2)",
+      "heading": "The gateway, deployed and smoke-tested",
       "anchor": "s5",
-      "line": 603
+      "line": 595
     },
     {
       "window": 21,
-      "label": "services/rag-api/main.py - _semantic_hit(): a stored answer comes back as backend cache, cost 0",
-      "heading": "The answer cache: a candidate that remembers answers",
+      "label": "smoke/smoke_gateway.py - the PAN check",
+      "heading": "The gateway, deployed and smoke-tested",
       "anchor": "s5",
-      "line": 630
+      "line": 616
     },
     {
       "window": 22,
-      "label": "services/rag-api/main.py - _semantic_store(): only an answer the caller is getting, answerable and cited",
-      "heading": "The answer cache: a candidate that remembers answers",
-      "anchor": "s5",
-      "line": 648
+      "label": "services/rag-api/generator.py - _gateway_call(): the cost header becomes the usage row's price",
+      "heading": "A PAN re-routed, and the cost header",
+      "anchor": "s6",
+      "line": 631
     },
     {
       "window": 24,
-      "label": "expected shape (gcloud's progress lines are left out)",
-      "heading": "The answer cache: a candidate that remembers answers",
-      "anchor": "s5",
-      "line": 666
-    },
-    {
-      "window": 26,
-      "label": "expected (this cell against a local stub; the fourth line is a hit or a miss, and 9.3 measures which)",
-      "heading": "Four asks: a miss, two hits and a paraphrase",
+      "label": "expected (this cell, against the same stand-in: your token counts and cost differ)",
+      "heading": "A PAN re-routed, and the cost header",
       "anchor": "s6",
-      "line": 686
-    },
-    {
-      "window": 28,
-      "label": "expected (this cell against a fake gcloud, priced by the kit's own price(); your numbers differ)",
-      "heading": "Four asks: a miss, two hits and a paraphrase",
-      "anchor": "s6",
-      "line": 702
-    },
-    {
-      "window": 30,
-      "label": "expected (this cell against a fake Firestore; your names, dates and fingerprints differ)",
-      "heading": "What each cache is holding, and the clean-up",
-      "anchor": "s7",
-      "line": 737
-    },
-    {
-      "window": 32,
-      "label": "expected shape (gcloud's own lines vary by version)",
-      "heading": "What each cache is holding, and the clean-up",
-      "anchor": "s7",
-      "line": 756
+      "line": 677
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
   "layout_version": 3,
   "curated": true,
-  "prerequisites": "The shared workshop setup and the deployed/local inputs described in the reading guide.",
+  "prerequisites": "The intended gateway backend services and IAM configuration.",
   "source_line_basis": "Teaching HTML before generated IDE-DEMO-LINKS blocks; use the section anchor in the rendered page."
 }

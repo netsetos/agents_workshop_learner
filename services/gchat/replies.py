@@ -1,4 +1,4 @@
-"""The Google Chat bridge's own fixed replies (the Google Chat door, workshop lesson 10.6). Standard library only.
+"""The Google Chat bridge's own fixed replies (the Google Chat door, workshop lesson 10.4). Standard library only.
 
 Every reply here is the bridge's: what the HR Desk app says when it does not ask the Desk, or when the Desk refused
 the person. None names a law or a committee: legal text comes only from the Desk, whose one source is

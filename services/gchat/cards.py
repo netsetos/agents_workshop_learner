@@ -1,4 +1,4 @@
-"""The Desk's reply as one Google Chat message in the Cards v2 shape (the Google Chat door, workshop lesson 10.6).
+"""The Desk's reply as one Google Chat message in the Cards v2 shape (the Google Chat door, workshop lesson 10.4).
 Standard library only.
 
 render(desk, self_url, session_id) takes the JSON POST /v1/desk returned and returns one message: cardsV2[].card with

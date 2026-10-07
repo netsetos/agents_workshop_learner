@@ -4,65 +4,83 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_9.3_Cache_Measure_WIX.html`, reviewed at blob `ab26cd1a53661cdbf477d3268f9e721275f57273`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_9.3_VLLM_GKE_WIX.html`, reviewed at blob `383d76df919ed8e9e3c09d023f05584889c7ce6d`. Learners read that page on the course site; this guide keeps its prose.
 
-One number decides what the answer cache is worth: how similar a new question must be to an earlier one before it gets the earlier answer. Set it too low and the cache answers the wrong question fast; too high and it never answers at all. You measure that number offline on the kit's 42 labelled pairs. Then you ask the same pairs live on a candidate at the kit's 0.95, and check whether the offline curve predicted the live false hits. Finally you turn the hits into avoided calls in rupees, and set their latency beside a model answer's.
+Lesson 9.2 served the small model with Ollama. The kit holds two more ways to serve it, both optional, and no lesson deploys either. One is vLLM, an engine built to answer many requests at once, on the same Cloud Run L4. The other runs vLLM on GKE Autopilot: a pod that stays up all month, billed every hour, and the only self-serve L4 in Mumbai.
 
-- One number, two rates, and what a hit is worth
+In this lesson you read the vLLM service and the GKE manifest from their files, the way you would before paying for either. Then you inspect what your lane actually has. Last, you work out from your own traffic when an always-on pod costs less than an instance that sleeps.
 
-- The words: threshold, similarity, pairs, hit rate, false-hit rate, the rule of three, avoided call
+- Three ways to serve the same small model
+
+- The words: vLLM, continuous batching, the gemma-vllm image, documind-inference, GKE Autopilot, the lab cluster, node billing, the manifest, ClusterIP, the duty cycle
 
 - Before you run anything: set up the shell
 
-- The curve: every candidate threshold on the labelled pairs
+- The vLLM service, read
 
-- The replay: the same pairs, asked live at 0.95
+- The manifest, read
 
-- Avoided calls in rupees, and the latency of a hit
+- The lane's cluster, inspected
 
-- Choosing the threshold, and the clean-up
+- The duty-cycle sum
 
-- Why the cache is tuned this way, what it costs, and what the kit does not do yet
+- Why it works this way, what it costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn why the questions most likely to be served a wrong answer are the ones one word away, how a labelled set turns a guessed threshold into a measured one, and how much a set this size can promise. Then you will prove it on your lane: the threshold curve from your own embeddings, the live false hits beside it, and the calls the hits avoided, in rupees.
+You will learn what vLLM does that Ollama does not, and how GKE Autopilot bills a GPU. You will learn why an always-on pod and an instance that scales to zero are a question of duty cycle. Then you will prove it on your lane: the manifest read against the image it runs, and the duty-cycle sum for your own traffic.
 
-### One number, two rates, and what a hit is worth
+### Three ways to serve the same small model
 
-The threshold buys savings and wrong answers together; a labelled set says how many of each.
+Ollama on Cloud Run, vLLM on Cloud Run, vLLM on GKE: the same L4 class, different engines, different bills.
 
-One number decides what the answer cache is worth. On the near rung, a new question gets an earlier answer when the cosine similarity of the two questions' embeddings is at or above the threshold. Every threshold therefore buys two rates. The hit rate is the share of genuine rephrasings that are answered from the cache, which is the saving. The false-hit rate is the share of near-miss questions that are answered from it too, which is a wrong answer. The two move together: lower the threshold and both rise.
+vLLM on Cloud Run. vLLM is an inference engine built for many requests at once. It adds new requests to a running batch as they arrive (continuous batching), and pages the model's attention cache through GPU memory, as an operating system pages memory. Ollama answers a few requests at a time: the kit lets an Ollama instance take 4, and a vLLM instance 32.
 
-The dangerous questions are the ones one word away. "The notice period for a confirmed E3" and "for a confirmed E2" differ by one character. So do Rs 3,00,000 and Rs 30,000, "minimum" and "maximum", and "before" and "after". An embedding summarises what a question is about, and one token barely moves the summary. Such pairs are often the most similar pairs of all, which is why the kit chose 0.95 rather than a looser 0.92, and why the switch stays off until the number is measured.
+- The service. The kit's vLLM service, `services/gemma-vllm`, is its own FastAPI app around vLLM's engine. It loads Gemma 3 4B into the GPU before it answers. Then it serves an OpenAI-compatible `/v1/chat/completions`, and two DocuMind endpoints that classify and extract with structured output.
 
-Measure it on labelled pairs, and read how big the set is. `evals/paraphrases.jsonl` holds 24 pairs that ask a golden row's fact in other words, where a hit is right, and 18 pairs a few words away with a different answer, where a hit is wrong. `cache_threshold.py` embeds both sides the way the API embeds a query and prints both rates for nine candidate thresholds. The kit's rule is to take the lowest candidate with no false hit. But zero false hits on 18 pairs does not prove zero. By the rule of three, the true rate could still be as high as about 17%, with 95% confidence. Only a bigger, harder set narrows that.
+- The targets. `make build-vllm` builds the image on Cloud Build. `make deploy-vllm` deploys it on the same L4 shape as the SLM, behind IAM, and lets the gateway's and the UI's accounts call it.
 
-Then count what the hits bought, and what they cost. Every hit is a model call not made: its row says `cache` at a cost of 0, and its latency is an embedding and a Firestore read. The rupees avoided are the hits times the average cost of a model answer. A false hit is counted among those hits as well: it saved a call by being wrong. So report both numbers side by side.
+- The route. The gateway's `documind-inference` route points at it through the token proxy, and falls back to `documind-slm`, then to Gemini. `config.yaml` logs its answers at 6.80 USD a million tokens, against the SLM's 20.50. Both are rates, not prices: the price is the GPU's hour.
 
-A pharmacy counter. An assistant is allowed to hand over what was dispensed a minute ago when the next customer asks for the same thing, so the pharmacist is not called every time. "Paracetamol 500" and "the 500 milligram paracetamol tablet" are the same request, and serving it at once is right. "Paracetamol 650" looks almost identical and is a different dose, and serving that is the mistake that matters. A careful pharmacy tests the assistant on labelled pairs before allowing it, counts how many pharmacist minutes the assistant saves, and knows that twenty clean tests do not prove the assistant never errs.
+GKE Autopilot. Autopilot is Kubernetes where Google runs the nodes. You submit a pod, and Autopilot finds or creates a node that fits it. A pod that asks for a GPU gets a whole node of that class, here a `g2-standard-8` with one L4. It pays for the node plus an Autopilot premium, busy or not.
 
-#### The threshold explorer
+- The manifest. `gke/vllm-deployment.yaml` runs one replica of the vLLM image, with no autoscaler. It is always up and always has the model in the GPU, so there is no cold start, and there is a bill at 3 a.m.
 
-Each dot is one pair, placed by its similarity: teal pairs ask the same fact, red pairs ask something else. Move the line and read what the cache would serve. It starts on an invented example; step 3 gives you your own report to paste in.
+- The address. Its Service is a ClusterIP: an address only inside the cluster, which you reach with `kubectl port-forward`.
 
-The counts and the recommendation are `curve()` and `recommend()` from `evals/cache_threshold.py`. The build ran the kit's two functions on the example and on 61 random sets, and the port agreed with each. The day's figures are arithmetic on your inputs; the rupee default is the example rows' average model answer at `cost.py`'s rates.
+- Mumbai. GKE is the only self-serve way to an L4 in Mumbai, because Cloud Run's L4 there is by invitation.
 
-The starting similarities are invented for this page. There is no recorded measurement, and the example exists to show the shape of the trade. Your own report, from step 3, is the only curve that says anything about your lane. The explorer places each pair against its own golden question, as the tool does; the live cache compares a question with every stored one, and step 4 shows where that differs.
+The lane's cluster. `make up` creates a cluster called `documind-autopilot`, but by default it is not Autopilot. Since 17 September 2026, `gke.tf` has built a Standard cluster with one small CPU node, an `e2-standard-2`, because Autopilot needs SSD quota a new project may not have. That lab cannot schedule the GPU pod, so `make gke-up` checks the mode and stops. Setting `gke_autopilot` to true replaces the cluster.
 
-### The words: threshold, similarity, pairs, hit rate, false-hit rate, the rule of three, avoided call
+The duty cycle. Cloud Run bills an instance for as long as it lives: each burst of traffic, plus up to 10 idle minutes after it. The duty cycle is that time as a share of the month. Cloud Run bills it at $1.4209 an hour. An always-on pod bills every hour, but at less: $0.9558 in Iowa and $1.0113 in Mumbai, plus a $0.10 cluster fee unless the free tier pays it. So the sum has a crossover. Above roughly two-thirds to four-fifths of the month, the pod is cheaper; below it, the instance that sleeps.
 
-Eleven rows, each with the value it takes on your lane.
+Office lunches in Bengaluru: a caterer on call, or a canteen with its own cook. The caterer comes when you call, cooks, stays a few minutes to clear up, and bills for every hour he was in the building. The canteen cook is on the payroll every hour of the month, cooking or not. His hourly rate is lower, and lunch is ready the moment anyone walks in. If the office eats in short bursts, call the caterer. If someone is eating most of the day, hire the cook: past roughly three-quarters of the day, the payroll is the cheaper bill.
 
-One distinction to hold: the curve measures embeddings, and the replay measures the cache. The curve compares each pair with its own golden question only. The live cache compares a question with every question stored for the tenant, and serves the first alive one at the threshold. Step 4 shows both, side by side.
+The caterer's firm works only from another city; the cook can be hired locally. Before hiring, you read the job description. This one gives the cook instructions he never reads, sends him to a kitchen with no tandoor, and forgets his groceries.
+
+The caterer is Cloud Run, and clearing up is the idle window. The cook is the GKE pod, and the payroll is the always-on node. The job description is the manifest. The kitchen with no tandoor is the lane's CPU cluster, and the groceries are the model's weights.
+
+#### Always on, or on demand?
+
+Pick how often your traffic comes, how long each burst lasts, on how many days, where the pod would run, and who pays the cluster fee. The first box sums the time a Cloud Run instance lives. The second prices an always-on pod. The third says which is cheaper and where the crossover sits.
+
+The rates are Google's, from the Cloud Run, Compute Engine and GKE pricing pages on 24 September 2026. The 10 idle minutes are Cloud Run's limit for a GPU instance, and a month is 730 hours, as Google counts it. The sum is compared with a Python version on all 280 combinations.
+
+It counts only the minutes an instance lives, not the minutes an instance takes to start (lesson 9.2 timed that start on your lane). It prices Cloud Run in `us-central1`, the one self-serve L4 region the kit uses. It leaves out disks, image storage and network.
+
+### The words: vLLM, continuous batching, the gemma-vllm image, documind-inference, GKE Autopilot, the lab cluster, node billing, the manifest, ClusterIP, the duty cycle
+
+Ten rows, each with the value it takes on your lane.
+
+One distinction to hold: Cloud Run bills an instance while it lives, and GKE bills a node while it exists. An idle instance stops by itself; a node stays until the pod or the cluster is deleted.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -74,106 +92,170 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok`. Step 3 makes 65 embeddings, which cost a fraction of a paisa. Step 4 creates a candidate with `SEMANTIC_CACHE=on` that serves no traffic, and asks it 65 questions. About fifty of them reach the model, so the replay costs roughly as many rupees as it has misses, at half a rupee each. Step 6 removes the candidate's tag.
+You need the shell in the kit's folder, with `PROJECT`, `REGION` and `NUMBER` set by the setup above.
 
-### The curve: every candidate threshold on the labelled pairs
+- The lane as `make up` left it. Its cluster, `documind-autopilot`, is what step 5 inspects.
 
-The pairs, the check that they can judge anything, and both rates for nine thresholds.
+- Nothing to build or deploy. The lesson's one live step reads the lane with gcloud. It also runs `make gke-up`, which stops on the lab cluster before it changes anything.
+
+- No Hugging Face token, no GPU quota and no change to the cluster. The lesson reads what those would take instead: `make build-vllm` runs for 20 to 30 minutes on a 32-vCPU build machine, and needs a token with Gemma access.
+
+- The GPU pod needs `gke_autopilot=true`, which replaces the cluster, and Compute Engine GPU quota in the region.
+
+- What the lesson changes: nothing. The lab cluster already bills while it exists (step 5).
+
+### The vLLM service, read
+
+The image, the engine, the service's door and the gateway's route, from the kit's files. No network.
 
 #### Definition
 
-A pair names its golden row, its tenant, the question, and whether it asks the same fact. `check_pairs()` refuses a set that cannot judge a threshold. It rejects a pair whose row does not exist, a same-fact pair against an unanswerable row, a pair identical to its golden question (the exact rung would serve that, so it tests nothing), a pair on the wrong tenant, and a set with fewer than 15 same-fact or 10 different pairs. The tool then embeds the 23 golden questions and the 42 pairs with `text-embedding-005`, `RETRIEVAL_QUERY`, 768 numbers, which is how the API embeds a question. For each pair it takes the cosine similarity to its own golden question. `curve()` counts the hits and false hits at each candidate threshold, and `recommend()` picks the lowest one with no false hit. It embeds in us-central1 by default; the model is the same one the API calls in its own region.
+`make deploy-vllm` puts the image on the same L4 shape as the SLM, with room for 32 requests at a time:
 
-#### The code
+The image is vLLM's own base, with the app installed on top:
+
+The app loads the engine before the server answers:
+
+And it keeps a door of its own, in front of every chat completion:
+
+The cell reads these files, together with the token proxy, the gateway's config and Terraform. It prints what the service needs, and whether anything on the lane supplies it.
 
 #### Do it
 
-Read the table from the bottom up. At the top candidates, no different pair hits, but few same-fact pairs do either. Moving down, the same-fact hits climb quickly, and so do the false hits. The line under the table is your lane's lowest safe threshold, and the list after it is the different pairs sorted by how close they came. That table is this lesson's first proof, the threshold curve. The nearest false pairs are usually the one-token ones: a grade, a zero, minimum against maximum. Now run `cat ~/cache93_curve.json`, copy the output into the explorer above, and press Read my report. The dots then become your similarities.
+- The image carries no weights. The Dockerfile installs the app on vLLM's base image and never downloads a model. `cloudbuild.yaml` passes the Hugging Face token as a build-arg, but no `ARG` receives it. The Makefile's comment, the GKE manifest and the GKE README all say the weights are in the image, and they are not.
 
-### The replay: the same pairs, asked live at 0.95
+- So the engine would download Gemma 3 4B when it starts, and that download would be refused. Gemma's weights on Hugging Face are gated behind Google's licence, and `make deploy-vllm` gives the service no token.
 
-A candidate with the answer cache on, the golden questions first, then every pair.
+- The service keeps its own door. Every chat completion needs an `X-API-Key`, hashed and looked up in Firestore. The gateway's token proxy sends an ID token and no `X-API-Key`. Nothing in the kit writes an `api_keys` document, and the service's account has no roles, Firestore's included. A request from the gateway would be refused, and `documind-inference` would fall back to the SLM.
 
-#### Definition
+- Its request log goes to a placeholder: a BigQuery table named `project.dataset.inference_logs`.
 
-The live cache does more than the curve. For a new question, the near rung asks Firestore for the tenant's five nearest stored questions, walks them nearest first, stops at the first below the threshold, and serves the first one that is still alive. The replay asks the candidate the 23 golden questions first. Those are misses, and each answerable, cited answer is stored. Then it asks every pair. A hit returns a stored answer word for word, so the cell can tell which golden question it came from. Its own golden answer on a same-fact pair is a right hit; its own golden answer on a different pair is a false hit. Another question's answer is a hit from that question, which you judge by reading it. The cell prints only the hits, then a count for each kind of pair, and saves every result to `~/cache93_replay.json`.
+- What it would do well, once fed: 32 requests at a time on one L4, the model loaded before the first request (the startup probe allows 270 s), and structured output for classifying and extracting.
 
-#### The code
+### The manifest, read
 
-#### Do it: the candidate
-
-#### Do it: the replay
-
-Each question gets a second try, two seconds after a 5xx or a timeout, as the kit's own `run_eval.py` gives it: one retry separates a blip from an outage. A blip, such as the first request to a fresh revision failing once, shows as a line saying how many questions were answered on a second try. A question that fails twice is listed with its HTTP status, and the replay carries on without it.
-
-The status is all the client sees. The reason is in the API's own log, and this reads the last three tracebacks, with the revision that threw each one:
-
-If every question failed, the candidate cannot answer at all; if a few did, those questions reach a step the others do not. The traceback's last lines name the step.
-
-Set the replay's count of different pairs served from the cache beside the curve's false hits at 0.95. If the two agree, the offline curve predicted the live cache, which is what makes it worth running before any threshold goes live. A difference has a reason you can find in the hits list. A line reading `hit from` means another stored golden question was nearer than the pair's own. Read its answer: sometimes it is the right answer for the pair, and sometimes it is a second kind of false hit that the curve cannot see. Every `FALSE HIT` line is a customer who would have got a confident, cited, wrong answer at the kit's 0.95.
-
-### Avoided calls in rupees, and the latency of a hit
-
-The candidate's own rows, then the kit's usage table for the same hour.
+What gke/vllm-deployment.yaml asks the cluster for, checked against the image it names. No network.
 
 #### Definition
 
-Every answer on the candidate wrote a usage row, and a hit's row says `model_backend` `cache`, with zero tokens and zero cost. The cell reads the candidate revision's rows since step 4 began and splits them into hits and model answers. It prints the p95 latency of each, the average cost of a model answer, and the calls the hits avoided, priced at that average. It then reads the replay's file and names the hits that served a wrong answer. `make usage` groups the same rows the way the warehouse view does, and its "by model and backend" table shows the cache as a row of its own.
+`make gke-up` fills in the image's name and applies two objects. The Deployment's container:
 
-#### The code
+The Service in front of it:
 
-#### Do it: the candidate's rows
+The cell reads the manifest the way Kubernetes would, and checks it against the image's own start: the Dockerfile's `ENTRYPOINT` and `CMD`, and what `main.py` reads.
 
-#### Do it: the kit's table
+#### Do it
 
-The avoided calls, in rupees, are this lesson's second proof. Read them together with the line under them. Every hit saved a model call and cost nothing on the row, and a hit's p95 is a fraction of a model answer's. That time is the embedding and a Firestore read, and the embedding is paid on a miss too. But the wrong answers are counted among the savings. On this replay the cache was cheap and fast, and for the different pairs it was also wrong. The warehouse view, `tenant_daily`, groups the same way, so the cache's share of answers and its latency are one query away every day.
+- The manifest, read. That is the first proof. It asks for one replica on an L4 node, with 6 vCPU and 24 GiB, which stays under the `g2-standard-8`'s 8 and 32. Ask for all 8 and 32, the manifest's comment says, and Autopilot rounds up to a `g2-standard-12`. The weights get 600 seconds to load, and the Service is a ClusterIP.
 
-### Choosing the threshold, and the clean-up
+- It cannot start this image. A container's `args` replace the image's `CMD` and run after its `ENTRYPOINT`. This image's `ENTRYPOINT` is empty, so Kubernetes runs the first arg, `--model=google/gemma-3-4b-it`, as the program. The args were written for vLLM's own server image, whose entrypoint is its API server. The kit's image starts uvicorn from `CMD`, and the args replace it.
 
-What the numbers allow, where the threshold lives, and the candidate put away.
+- Even the right command would find nothing to load. The image holds no weights (step 3), and `HF_HUB_OFFLINE=1` forbids the download.
 
-The kit's rule is the lowest candidate with no false hit on the set, and your curve names it. Before moving the switch, weigh three things. First, the rule of three: 18 different pairs with no false hit still allow a true rate of about 17%. The honest next step is more different pairs, written from real questions one word away, not a lower threshold. Second, the saving at that threshold: if it hits only a few same-fact pairs, the exact rung (the same words, no threshold at all) may be most of what the cache is worth. Third, the replay's `hit from` lines, which the curve cannot see. The threshold is an environment variable, `SEMANTIC_CACHE_THRESHOLD`, read once when a revision starts. No `make` target passes it, so trying 0.97 on a candidate takes `gcloud run services update documind-api --no-traffic --tag candidate --update-env-vars SEMANTIC_CACHE_THRESHOLD=0.97`, with your region and project, and then the replay again.
+- The args would not configure it either. `main.py` takes its model from `MODEL_NAME` in its environment, and sets `max_model_len=8192` in code, whatever `--max-model-len` says.
 
-The answers the replay stored stay in `answer_cache` for their day. The service's configuration says `SEMANTIC_CACHE=on` until the next deploy or candidate sets it back. Your two reports stay in your home folder: `~/cache93_curve.json` and `~/cache93_replay.json`.
+### The lane's cluster, inspected
 
-### Why the cache is tuned this way, what it costs, and what the kit does not do yet
+What documind-autopilot is, what it bills, what make gke-up says about it, and whether any vLLM service exists. Read-only.
+
+#### Definition
+
+The cell describes `documind-autopilot` with gcloud: its mode, its node pool and the hour it bills. It also looks for the vLLM service on Cloud Run and its image in the lane's registry. Then `make gke-up` checks the mode before anything else:
+
+#### Do it
+
+- The cluster is a Standard lab: one `e2-standard-2` with no GPU, in one zone, under a regional control plane.
+
+- It bills while it exists: $0.1805 an hour, Rs 11,199 a month in Mumbai. $0.10 an hour is the control plane. The free tier covers that fee only for zonal and Autopilot clusters, and this one is regional.
+
+- The rest is the node, and no lesson schedules a pod on it.
+
+- `make gke-up` read the mode and stopped. This is the kit's own guard: without it, a GPU pod would sit Pending on a cluster that has no GPU node.
+
+- No vLLM service and no image. Both are optional, and no lesson builds them.
+
+- The gateway's GKE route has nowhere to go. Here it is:
+
+`GKE_VLLM_URL` is never set: `make deploy-gateway` sets the SLM's and the vLLM service's URLs, and not this one. A ClusterIP has no address outside the cluster, and the gateway has no route into the VPC. So `documind-gke` falls through to `documind-inference`, and then to Gemini.
+
+### The duty-cycle sum
+
+Your traffic as bursts, the minutes an instance lives for them, and the crossover where an always-on pod gets cheaper.
+
+#### Definition
+
+The sum is an instance's life. Each burst of traffic, plus the idle minutes after it (up to 10, or less when the next burst is sooner), capped at a day, times the days with traffic. Cloud Run bills that share of the month's 730 hours at $1.4209 an hour. A GKE pod bills all 730 hours, at the node's price plus Autopilot's premiums, and the cluster fee unless the free tier pays it. The free tier pays one Autopilot cluster's fee per billing account.
+
+Put your own traffic in the first line: how many bursts a day, how many minutes each, and on how many days a month.
+
+#### Do it
+
+- The duty-cycle sum. That is the second proof. Eight bursts of 30 minutes, each with 10 idle minutes after it, make 320 minutes a day. On 22 days that is 117.3 hours, 16.1% of the month: Rs 14,171 on Cloud Run.
+
+- An always-on pod costs more than four times as much at this pattern: Rs 59,309 in Iowa and Rs 62,753 in Mumbai, before any cluster fee.
+
+- The crossovers. GKE is cheaper above 67.3% of the month in Iowa (74.3% with the fee), and above 71.2% in Mumbai (78.2%). That is an instance alive for roughly 16 to 19 hours of every 24.
+
+- The kit's README does the same sum for Iowa, with the fee, and gets 74%. It counts the fee as due "after the free-tier credit", but the credit pays that fee for one Autopilot cluster per billing account.
+
+- For traffic in bursts during a working day, Cloud Run wins by a wide margin. GKE earns its bill with steady traffic, or when the model must run on an L4 in India.
+
+### Why it works this way, what it costs, and what the kit does not do yet
 
 The design choices, from the kit's own comments, then the bill and the gaps.
 
-- Tight first, then measured. 0.95, not 0.92: a cache that answers "what is the notice period" to "what is the probation period" serves a wrong answer fast. The kit starts tight and keeps the switch off until a curve says otherwise.
+- vLLM is the engine for concurrency. Continuous batching lets 32 requests share one L4. The image runs one worker, because GPU memory is not shared across processes.
 
-- A false hit is worse than a miss. A miss costs a model call. A false hit returns a confident answer with real citations to a question it does not fit, and nothing on the page tells the reader. That is why the rule counts false hits, not the balance of the two rates.
+- The engine loads before the server answers, so the service's `/health` means the weights are on the GPU.
 
-- The exact rung needs no threshold. The same words, lower-cased and without punctuation, are found by two equality filters. Whatever the near rung's threshold, repeated questions still hit.
+- The pod asks for 6 vCPU and 24 GiB, not 8 and 32. A pod that asks for the whole `g2-standard-8` leaves nothing for the kubelet, and Autopilot provisions a `g2-standard-12`, at about $0.16 an hour more.
 
-- The pairs are checked before they judge. A pair against a missing row, an unanswerable row or the wrong tenant, or identical to its golden question, would make the curve lie. `check_pairs()` refuses such a set, and so does `--selftest`, offline.
+- The Service is a ClusterIP on purpose: no public IP and no load-balancer charge, for a service only a benchmark talks to.
 
-- Per tenant, always. Every lookup is filtered by tenant, so a threshold can only confuse one tenant's questions with each other, never with another tenant's.
+- The lab cluster is Standard, with standard disks, because Autopilot needs SSD quota a new project may lack. `make gke-up` checks the mode, instead of leaving a GPU pod Pending.
+
+- Both are optional. The lane's self-hosted model is the SLM on Cloud Run; vLLM and GKE are the alternatives you price before you choose.
 
 #### What it costs
 
-Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
+Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does. The prices are Google's, read on 24 September 2026.
 
-- The tool embeds with a fixed model. `cache_threshold.py` names `text-embedding-005` in its code, while the API reads `EMBEDDING_MODEL`. On a lane that declares another embedding model, the curve describes a model the cache does not use.
+- The vLLM image carries no weights. The Dockerfile downloads nothing, and the Hugging Face token passed as a build-arg has no `ARG` to land in. The model is gated, and `make deploy-vllm` gives the service no token to fetch it at start-up.
 
-- No `make` target sets the threshold. Neither `make candidate` nor `make up` passes `SEMANTIC_CACHE_THRESHOLD`, so a measured value reaches a revision only by hand.
+- The vLLM service cannot answer the gateway. It wants an `X-API-Key` that the token proxy never sends, looked up in Firestore collections nothing writes, as an account with no roles. It also logs to a placeholder BigQuery table.
 
-- The cache-hit alert is not created. `quota.tf` lists `cache_hit_low`, "documind/cache_hit_rate < 0.30 for 1h", in a map nothing reads, and no metric of that name exists. A cache that stopped paying for itself would go unnoticed.
+- The manifest cannot start its image. It sets args and no command on an image with an empty `ENTRYPOINT`, so the first arg runs as the program. `main.py` reads none of those args, and `HF_HUB_OFFLINE=1` meets an image with no weights.
+
+- The `documind-gke` route reaches nothing. `GKE_VLLM_URL` is never set, a ClusterIP has no address outside the cluster, and the gateway has no VPC egress.
+
+- The lab cluster bills for nothing. A regional Standard control plane, which the free tier does not cover, plus one CPU node, comes to about Rs 11,199 a month in Mumbai. No lesson schedules a pod on it, and only `make down` removes it.
+
+- A GKE GPU pod is outside the three cost controls. `make gpu-cap` caps Cloud Run's GPU quota only.
+
+- `gpu_left_warm` watches the two Cloud Run GPU services only.
+
+- The nightly job skips the cluster.
+
+- The nightly job's account keeps cluster-admin on a cluster it no longer touches: its script only prints a line about it.
+
+- The docs lag the code. `gke/README.md` still lists "no VPC attachment", though `gke.tf` attaches `documind-vpc`. It also counts the $0.10 fee as due after the free-tier credit, which pays it for one Autopilot cluster.
+
+- `UNOWNED.md` still calls `gke.tf` Autopilot, and still says the manifest pins `vllm/vllm-openai:v0.28.0`.
 
 ### Verify it yourself: the checklist
 
 Eight checks, each one block above, each with the value that proves it on your lane.
 
-`documind-api` has one more revision, which serves no traffic and has no tag. The service's configuration says `SEMANTIC_CACHE=on` until the next deploy sets it back, and `.candidate-revision` is gone. `answer_cache` holds the replay's answers until their day is up. Your home folder has two reports, and the log has the usage rows of about 65 questions. Module 10 turns from answering to acting: lesson 10.1 reads a tool's contract and runs the direct agent loop.
+Nothing. The lesson built and deployed nothing, and `make gke-up` stopped before it changed anything. The lab cluster, `documind-autopilot`, is still there and still billing, as it was before; `make down` removes it with the rest of the lane. Lesson 9.4 compares the backends that actually answer, and checks that no GPU instance is left running.
 
-Netsetos GenAI on GCP · Module 9 Caching · Lesson 9.3 Measure latency, avoided calls and false cache hits · v5.0
+Netsetos GenAI on GCP · Module 9 Serving · Lesson 9.3 Inspect the vLLM service and the GKE alternative · v5.0
 
-Next: Lesson 10.1 Understand tool contracts and the direct agent loop.
+Next: Lesson 9.4 Compare actual backends and verify shutdown behavior.

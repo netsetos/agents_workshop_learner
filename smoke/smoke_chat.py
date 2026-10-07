@@ -9,7 +9,7 @@
     2. POST /v1/chat, brain=direct    -> an answer with citations, as a roster member, in a session new to this run
     3. POST /v1/chat x langchain, langgraph, adk -> retrieve() among the tool calls, citations n = 1..k, [n] in range,
                                          and limits: not stopped, within the call cap, a cost above Rs 0
-                                         (workshop lesson 10.3)
+                                         (workshop lesson 5.5)
        DOCUMIND_EXPECT_STOP=model_calls|turn_budget (make limits-drill): each agent brain answers 200, stopped by it
     4. POST /v1/chat as the outsider  -> 403 from the roster, not 401 from the verifier
                                          (optional: DOCUMIND_OUTSIDER_SA, the eval gate's identity)
@@ -37,7 +37,7 @@ OUTSIDER = os.environ.get("DOCUMIND_OUTSIDER_SA", "")
 QUESTION = os.environ.get("DOCUMIND_SMOKE_QUESTION",
                           "After how many years of continuous service does gratuity become payable?")
 BRAINS = ("direct", "langchain", "langgraph", "adk")
-# A conversation of its own per run (workshop lesson 10.4): a fixed session made every run one turn longer
+# A conversation of its own per run (workshop lesson 5.7): a fixed session made every run one turn longer
 # on the agent brains' threads, so the second run was graded on a conversation, not a question.
 RUN = uuid.uuid4().hex[:8]
 MARKER = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")      # citations.py's pill pattern: [1] or [1, 3]
@@ -122,7 +122,7 @@ def main() -> int:
                                      f"calls={lim.get('model_calls')} Rs {lim.get('cost_inr')}  {answer[:60]!r}")
             continue
         # Every turn reports its limits: not stopped, within its call cap, and - for an agent brain, which pays
-        # for its own model calls - a cost above Rs 0 (workshop lesson 10.3).
+        # for its own model calls - a cost above Rs 0 (workshop lesson 5.5).
         limited = (bool(lim) and lim.get("stopped_by") is None
                    and (lim.get("model_calls") or 0) <= (lim.get("max_model_calls") or 0)
                    and (brain == "direct" or (lim.get("cost_inr") or 0) > 0))

@@ -1,4 +1,4 @@
-"""documind-gchat: the Google Chat door onto the DocuMind Desk (workshop lesson 10.6).
+"""documind-gchat: the Google Chat door onto the DocuMind Desk (workshop lesson 10.4).
 
 An employee messages the "HR Desk" app in Google Chat, in a direct message, and gets the Desk the Desk page gives: a
 cited handbook or statute answer as a card, a question back with two buttons, a case to confirm, or the POSH template

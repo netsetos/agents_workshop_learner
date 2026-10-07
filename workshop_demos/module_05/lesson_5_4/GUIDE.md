@@ -4,75 +4,65 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_5.4_Fallback_WIX.html`, reviewed at blob `9d543e45f0ba007f3a7308fb465bf1c366f8f394`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.4_LangGraph_WIX.html`, reviewed at blob `0f0a7699c5f7e6eb5b1785fcdc570c29b0198022`. Learners read that page on the course site; this guide keeps its prose.
 
-Lesson 5.3 followed the pool through the ranker. This lesson takes the pool's other source. Firestore holds every embedding the worker wrote, as a field on the row, and its own vector index can answer a question when the kit's index will not, or when a tenant is pinned beneath it. What must not change on the way down is the three predicates: the tenant from the roster, the ledger's current, and the caller's filters. On Firestore each combination of them needs a composite vector index the kit declares, 8 of them, and without one Firestore refuses rather than degrades. Every chunk the rung returns is stamped `found_by: firestore`, the answer counts `vector_chunks 0`, and the smoke fails a vector deployment that answers from beneath, because that failure is the one a working demo hides. You will read the rung by hand with the API's predicates, move one tenant onto it and back, break the index for a candidate revision and watch the chaos rung answer with a line in the log, run the kit's own read-only probe of the combined filters, see the tier rebuilt from the rows, and price the rung.
+The LangChain brain hands its loop to a framework. The LangGraph brain draws it: an agent node that calls the model, a route that reads what the model asked for, a tools node, a refuse node, and a checkpointer that keeps each conversation. You list the kit's own graph and force the refuse node with a scripted model. The model on your lane is never offered a blocked tool, so it cannot reach that node any other way. Then you use the graph on your lane: a thread that remembers, a new thread that does not, and a request to delete that meets no tool at all.
 
-- Why a second rung exists, and what must survive the drop
+- A loop you can draw, and a guard that is a node
 
-- The words: rung, backend, pin, chaos rung, found_by, pre-filter, composite index, policy, probe, backfill
+- The words: StateGraph, node, route, ToolNode, refuse, error result, checkpointer, thread
 
 - Before you run anything: set up the shell
 
-- The Firestore rung by hand: the API's three predicates on Firestore's own vector index
+- The graph, in a venv of its own
 
-- Moving one tenant beneath the index by hand, and back
+- The refuse node, forced to fire
 
-- The chaos rung: an index that will not answer, on a candidate that takes no traffic
+- The graph on your lane: one thread, a new thread, and a request to delete
 
-- The probe: the kit's read-only check of the combined filters
+- What the checkpointer keeps
 
-- The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung
-
-- What the rung costs, where it cannot go, and the policy that sends a tenant home
+- Why the graph is built this way, what it costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn why Firestore holds a second copy of every vector, how the same three predicates are applied on that rung as pre-filters, why each combination needs its own composite index, and how a chosen rung and a fallen-into one read differently on the answer. Then you will prove it on your lane: reproduce the rung with the API's predicates, pin acme beneath the index and back, force the chaos rung on a candidate revision and read `vector_search_fallback`, run `commands/check-firestore-fallback.py`, and read `make smoke`'s verdict both ways.
+You will learn how the LangGraph brain wires a tool-using loop by hand, why its guard is a node in the graph rather than a filter around it, and why a turn that asks for one blocked tool is refused whole. You will also learn what the checkpointer stores and what it deliberately leaves out. Then you will prove it: the refuse node firing on a blocked tool with an answer that says so, and a thread on your lane remembering its first turn.
 
-### Why a second rung exists, and what must survive the drop
+### A loop you can draw, and a guard that is a node
 
-An outage is not a refusal, a filter is a predicate on the corpus and not on one way through it, and a substitution nobody noticed is the failure the smoke exists for.
+Nodes, one conditional edge, and a saver compiled in.
 
-Firestore already holds every vector, so an outage is not a refusal. The worker mirrors each chunk's 768 numbers into its row as a vector field, and Firestore's own vector index, a flat scan over the tenant's rows by cosine distance, can find the nearest chunks to a question. It is slower than the kit's index and it skips the ANN tier, but a slower answer is a different thing from no answer. Three roads lead onto that rung: the deployment's `RETRIEVAL_BACKEND=firestore`, a tenant pinned to it in `tenant_settings`, and the chaos rung, which is what `_dense_retrieve()` does when the index raises. On every road the chunks come back stamped `found_by: firestore`. The answer tells the two kinds apart: `stages.retrieval_backend` is the backend chosen for the request, and `stages.vector_chunks` is the index's share of the pool. A pinned tenant reads `firestore` and 0; a fallen-into rung reads `vector` and 0.
+A loop you can draw. The graph's state is the conversation, a list of messages. The `agent` node calls the model with the system prompt in front of the messages and appends its reply. A function called `route` reads that reply. If the model asked for no tool, the turn ends. If it asked only for allowed tools, the `tools` node runs them and appends their results. If it asked for any blocked tool, the `refuse` node answers instead. Both `tools` and `refuse` lead back to `agent`, which reads the new messages and decides again. Nothing is hidden: the whole harness is these nodes and edges, compiled.
 
-Three predicates hold on the way down. The tenant is the roster's, never the body's. `current` is the ledger's, applied when `RETRIEVAL_CURRENT_ONLY` is on. The caller's filters are the two keys the API allows, `doc_type` and `kind`, and any other key is a 400 before retrieval starts. On the index they travel as restricts; on Firestore they are pre-filters in front of `find_nearest`, an equality each, or one `in` for a `doc_type` list, which runs on the same composite index as the equality, and Firestore will only run a vector query whose pre-filter combination has a composite vector index of its own. The kit declares 8: the tenant alone, the tenant with current, and every combination of the two filter keys with and without current. That is why a new filter key is a Terraform change before it is a code change: without its index Firestore does not degrade, it refuses.
+The guard is a node, and it refuses the whole turn. `route` sends a turn to `refuse` if any requested name is in `BLOCKED`: `delete_document`, `send_email`, `modify_access`. Every call in that turn then gets an error result, including an allowed one asked for alongside. A model therefore cannot slip a deletion in beside a search and have the search run. Each error reads "requires manual approval", and the system prompt tells the model to say so plainly and never to claim the action was taken.
 
-The smoke refuses a quiet substitution. A vector deployment answering from beneath looks right from every angle a demonstration checks: answers come, citations come, `/version` still says Vector Search. Only the row says what happened, `vector_chunks 0` under `retrieval_backend vector`, and `make smoke` fails on exactly that pair, naming the two commands that put the tier back: `make vector-status` to count it and `make backfill-vectors` to fill it from the rows' stored vectors, with no model call, because the vectors were never lost.
+You have to force it. The model is bound to the two real tools only, and Gemini's function calling returns calls to the functions it was given, nothing else. On your lane the model has no way to ask for `delete_document`. The refuse node is defence in depth: for the day a blocked tool is registered by mistake, or another framework lets a name through. So the proof uses a scripted model: the kit's own graph, with a model that replies exactly as scripted, including a request for a blocked tool.
 
-The second counter. A records office has a fast desk and an archive counter. The fast desk keeps an index card for every file and finds the nearest ones in a moment; the archive counter keeps the files themselves, every one, and finds the same ones by walking the shelf, slower. When the fast desk is closed, or a department has been told to use the archive, the archive counter serves the same person with the same three rules: it checks the badge for the department, it hands out current files only, and it applies whatever filing-cabinet restriction the request named, provided the shelf has a divider for that combination. Every slip is stamped with the counter that served it. And the office manager's audit rule is blunt: a day when the fast desk was open on paper but every slip came from the archive is a failed audit, however happy the customers were.
+The checkpointer keeps the conversation, not the instructions. The graph is compiled with a checkpointer, which saves the thread's messages after each step. The next turn on the same thread starts from them. The thread id is `tenant:user:session`, built by the server from the verified identity. The system prompt is added on every call and never saved, so a changed prompt reaches old conversations too. On your lane the saver is Postgres on Cloud SQL. Its tables are created once by a job, not by the service at startup.
 
-#### The ladder: three tiers, one contract
+A file moving through a government office. Each officer writes a noting and passes the file on. When a noting asks only for records from the registry, the file goes to the registry and comes back with the papers attached. When any line asks for a record to be destroyed, the whole file goes to the competent authority. It comes back with every request on that noting marked "needs approval", the harmless ones included. Nothing leaves the file: the next officer reads every noting before writing the next one. The office rules are pinned on the wall, not copied into each file.
 
-- managed storesRAG Engine or Vertex AI Search hold a copy of an `any` tenant's current versions and rank on their own terms (Module 15); the kit reranks, packs and cites as alwaysfound_by rag_engine | vertex_search · managed_chunks
+#### Step through the graph
 
-- the kit's indexVector Search, dense or hybrid, with the tenant, current and filter restricts; the deployment's default and acme's pinfound_by vector · vector_chunks 20
+Choose a turn and step it through the kit's graph: which node runs, what the route decides, and the two lists that come back.
 
-- Firestore's own vector indexthe same rows, a flat cosine scan behind the same pre-filters; chosen by a setting or a pin, or fallen into when the index raisesfound_by firestore · vector_chunks 0 · vector_search_fallback when fallen into
+Every turn here was run at build time through the kit's own `LangGraphBrain`, with a scripted model and LangGraph. The panel had to produce the same node path, the same `tool_calls` and `refusals`, and the same error texts. Step 4's cell runs three of them on your machine.
 
-Whatever rung answers, `prefer_current()` drops retired versions, the reranker orders, the packer fits, and the citations resolve against the packed set (lesson 5.3). The rung changes where the pool comes from, never what happens to it.
+The model's replies are scripted; on your lane, the model decides what to ask for. The panel does not show the checkpointer, and the tools node's results are stood in. Step 5 is the real thing.
 
-#### The rung finder: the handler's rules, on the settings you choose
+### The words: StateGraph, node, route, ToolNode, refuse, error result, checkpointer, thread
 
-Which rung answers a request is decided by four things in order: the startup validator, the deployment's backend against the tenant's pin, the tenant's data-region policy against a managed store, and then whether the index answers. The finder below applies the kit's rules in that order, `check_retrieval_modes()`, `choose_for()`, `retrieval_backend_for()` and `_dense_retrieve()`, and says what the answer, the log and the smoke would show, and which of the 8 composite indexes a Firestore query would need for the predicates you set.
+Eleven rows, each with the value it takes on your lane.
 
-The index list is read from `terraform/firestore_indexes.tf` when this page is built; the backend names from config.py; the smoke's two sentences from `smoke/smoke.py`. Nothing here calls your lane; steps 3 to 7 do.
-
-It is not the lane: it says what the code would do, not what your lane did, and the pin it models is read once a minute by the API, so a change you make in step 4 takes up to a minute to show. The managed rungs are Module 15's; here they matter only as the case the policy sends home.
-
-### The words: rung, backend, pin, chaos rung, found_by, pre-filter, composite index, policy, probe, backfill
-
-Ten rows, each with the value it takes on your lane.
-
-One pair of words carries the lesson: chosen and fallen into. Both produce a pool stamped `firestore`, and only the answer's `retrieval_backend` beside its `vector_chunks` tells you which happened. The smoke reads the pair; so should you.
+One distinction to hold: `route` decides where a turn goes, and `refuse` decides what the model hears about it. The first keeps a blocked call from running. The second is the only explanation the model gets.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -84,112 +74,100 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The index names and the retrieval settings live in the API's environment; a name the service does not set is unset rather than exported empty, because the kit's settings class reads an empty variable as a value, and steps 5 and 6 import the kit. The pins live in Firestore, one document per tenant, and the lane helper prints them.
+The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER` and `tok`. The chat service must be running in your region, which lesson 5.1's step 3 deployed. Step 3 creates `~/graph-venv` in your home folder, and nothing on the lane changes for it. Step 5 asks the LangGraph brain four questions, and the checkpointer keeps two threads.
 
-### The Firestore rung by hand: the API's three predicates on Firestore's own vector index
+### The graph, in a venv of its own
 
-The one function that answers from beneath, the two keys it accepts from a caller, the indexes that let it, and a cell that runs it three ways for a fraction of a paisa.
-
-#### Definition
-
-`_firestore_fallback()` is short because Firestore does the work. It starts from the chunks collection filtered to the tenant, adds `current == true` when the switch is on, adds each caller filter as an equality, or as one `in` for a `doc_type` list, and asks `find_nearest` on the embedding field for the nearest rows by cosine distance, `TOP_K_RETRIEVE` of them. Each row becomes a chunk with its distance flipped into a score, so the reranker and the fallback's own ordering read it like an index result, the 768 numbers dropped so they never reach the model, and `found_by` set to `firestore`. The cell reproduces it with the same client calls, prints the first five rows with the fields the predicates read, and estimates what Firestore bills for the query: one read per hundred index entries it scans and one per document it returns.
-
-#### The code
-
-#### Do it: the rung under three predicate sets
-
-Run the cell as it is, then twice more with a filter in front of its first line: `F='{"doc_type":"policy"}' python - <<'PY'` and `F='{"kind":"text"}' python - <<'PY'`, the rest unchanged. The worker stamped the lane's uploads `doc_type: unknown`, so the first filter empties the pool on this rung exactly as it did on the index in lesson 5.1, and the second keeps it whole.
-
-Firestore found the same clause the index finds, NP-03 first, from the rows alone: the vector on the row was enough, which is the whole reason the rung exists. The predicates behaved as predicates on the corpus rather than on one way through it: the tenant narrowed the shelf, the `doc_type` filter emptied it exactly as it had on the index, and `kind` kept it whole. Each combination named a different composite index, and every one you asked for existed because the kit declares them all; ask for one that is not declared, a new key say, and the same call raises a failed-precondition error with a link, which is a Terraform change before it is a code change. The bill was tens of reads, which step 8 turns into paise.
-
-### Moving one tenant beneath the index by hand, and back
-
-The document that pins one tenant, the minute the API takes to notice, the same three predicates on the chosen rung, two tenants that do not cross, and the smoke's line for a chosen rung.
+The chat image's LangChain pins in a separate venv, then the kit's graph built and listed.
 
 #### Definition
 
-A pin is a field, `retrieval_backend` on `tenant_settings/{tenant}`, written by `make tenant-backend` and read by `choose_for()` once a minute per tenant. A pin the deployment cannot serve, an unknown name or a managed store under hybrid mode, is ignored with a `retrieval_pin_ignored` line rather than a 500; a pin to a managed store is then held against the tenant's `data_region`, which is step 8. A pin to `firestore` takes the chosen road in `_dense_retrieve()`: no endpoint is asked, the rung answers with the same predicates, and the answer says `retrieval_backend firestore` beside `vector_chunks 0`. The smoke reads that pair as a request that ran somewhere else and skips its vector-tier check, because a chosen rung is not a fault. The cells pin acme, wait for the API to notice, ask the same questions under the same filters as step 3, ask two tenants the same question, read the smoke's line, and pin acme back.
+The operator shell's venv holds rag-api's packages and not LangChain, and the two sets of pins should not share an environment. So the lesson makes a small venv beside it. It holds the chat image's own versions: LangChain 1.4.0 and LangChain Core 1.6.2, which bring LangGraph with them, plus `requests` and `google-auth` for the tool layer. The graph cell builds the kit's `LangGraphBrain` with a scripted model and an in-memory saver, and prints its nodes and edges. Nothing calls a model or the network.
 
 #### The code
 
-#### Do it: pin acme beneath the index, and wait for the API to notice
+#### Do it: the venv
 
-#### Do it: the same predicates on the chosen rung, and two tenants that do not cross
+#### Do it: the graph
 
-#### Do it: the smoke's line for a chosen rung, then the pin back
+Five nodes, counting LangGraph's own start and end, and six edges. Three of the edges leave `agent`, and `route` picks one of them each time the model has replied. `tools` and `refuse` each have one edge, back to `agent`. So a turn can run the tools any number of times, but it can never end straight from a tool result: the model always reads it first.
 
-One field moved a tenant beneath the index without a deploy, and the API noticed within its minute. On the chosen rung the three predicates held exactly as on the index: the `doc_type` filter emptied the pool again, the `kind` filter kept it, and the answer was the same clause. Two tenants asked the same question on two rungs and got their own handbooks' amounts, because the tenant predicate is the roster's on every rung. The smoke saw a request that ran on `firestore` by choice and said so instead of failing, which is the line to expect for a pinned tenant; after the pin came back it counted twenty of twenty again. Step 5 is the case it does fail.
+### The refuse node, forced to fire
 
-### The chaos rung: an index that will not answer, on a candidate that takes no traffic
-
-The except branch, a candidate revision whose deployed index does not exist, the answer that still comes, the log line that says why, the smoke's verdict on it, and the template put back.
+Three scripted turns through the kit's own graph: a plain one, a blocked one, and a mixed one.
 
 #### Definition
 
-When `find_neighbors` raises, for an undeployed index, an unreachable endpoint or a deployed index the endpoint does not know, `_dense_retrieve()` logs one `vector_search_fallback` line with the error's text and answers from Firestore with the same predicates; hybrid takes the same rung, dense only. The answer then says `retrieval_backend vector`, because that was the request's backend, and `vector_chunks 0`, because none came from the index, and that pair under a vector deployment is the one `make smoke` refuses. The safe way to see it is a candidate revision, no traffic and a tag, whose deployed index name is wrong: the endpoint raises for it as it would for an undeployed index, and the code path is the same one a release-day drill exercises by undeploying the real index for an hour. The undo is different from lesson 5.2's: the variable exists on the live service, so it is set back to its real value rather than removed, or the next revision would inherit the wrong one.
+The scripted model returns its prepared replies in order: first a request for tools, then an answer. The cell streams each turn through the graph and prints the nodes it visited, the two lists from `_summary()`, every error result, and the final answer. `retrieve()` is stood in with a fixed result, so the plain turn needs no network. The blocked turn asks for `delete_document`. The mixed turn asks for `retrieve` and `delete_document` in the same reply. The `agent` node's first lines are the turn's limits, which lesson 5.7 reads; the scripted turns stay far inside them.
 
 #### The code
 
-#### Do it: a candidate that cannot reach the index
+#### Do it
 
-The candidate asked its endpoint for a deployed index that does not exist, the endpoint raised, and the request was answered anyway from the rows beneath, with the same citations as ever and one line in the log that names the cause. Nobody calling that revision would have known; the answer's own pair, `vector` with 0, is the only witness, and the smoke's rule turned it into a red line naming the two commands. Then the template got its real name back, in place, and the live service kept counting twenty of twenty throughout, because a candidate with no traffic never touched it. On a release day the same drill undeploys the real index, and the smoke stays red until the tier is back.
+The plain turn went `agent → tools → agent`. The blocked turn went `agent → refuse → agent`. The deletion never reached a tool, the model read an error result saying it needs manual approval, and its answer says nothing was removed. That is this lesson's proof: the refuse node fires on a blocked tool, and the answer says so. The mixed turn shows "refused whole". The search was refused too, and never ran. But read its error result: the model was told that `retrieve` requires manual approval, which is not true, and a real model may repeat it.
 
-### The probe: the kit's read-only check of the combined filters
+### The graph on your lane: one thread, a new thread, and a request to delete
 
-A command that verifies the rung's plumbing with a real source's stored metadata, both current modes, and leaves an evidence file; what it checks and what it refuses to certify.
+Four turns to the LangGraph brain, through the chat service.
 
 #### Definition
 
-`commands/check-firestore-fallback.py` is the kit's own probe of this rung, written for the day the fallback answered with the wrong tenant's rows. It reads the handbook's ledger row and refuses to continue unless the ledger's hash matches the kit's copy of the file, so the check runs against a version it can vouch for; it picks one current row as the seed, verifies the embedding stamps lesson 3.3 wrote, and uses that row's stored `doc_type` and `kind` as the combined filter. Then it calls `_firestore_fallback()` in-process with current off and on, and for every row that comes back it requires the tenant, both filters, no staging and, in the second mode, `current`. It writes what it saw to an evidence file and says plainly what it did not test: classification and answer quality are not its business, and it notes when the stored `doc_type` differs from the manifest, which on a lane whose uploads went through the bucket it does.
+With `brain` set to `langgraph`, `/v1/chat` builds the thread id from the roster's tenant, your caller's email and the session you send. It then invokes the graph once on that thread, with the tenant in the runtime context. The graph loads the thread's saved messages, runs the turn, saves the new ones, and `_summary()` returns the four keys for this turn alone: `_turn()` gave the question an id, and the turn is that message and what follows it. If that message is missing from the thread, `_summary()` raises a `ValueError` rather than count the whole thread again, so anything that trims a thread must keep each turn's question. The cell asks the first question in session `lesson102`, then a follow-up that only makes sense after it: "how is it paid". It asks the follow-up again in a new session, `lesson102-new`. Finally it asks to delete a document, in the first session.
 
 #### The code
 
-#### Do it: the probe, then its evidence
+#### Do it
 
-The probe did in one command what steps 3 and 4 did by hand, against a source it first proved was the version the ledger holds: the combined filter held on the rung with current off and with it on, every returned row belonged to acme, carried both filter values, was not staged, and in the second mode was current. It refused nothing on your lane because the plumbing is right, and it said what it would not vouch for, which is the honest shape of a probe. The evidence file is the kind of artefact a release review reads: which key, which filters, which rows, in a file rather than in someone's memory. It sits inside the kit's clone; `git status` will show it, and it is yours to keep or delete.
+The follow-up in the same session knew that "it" was gratuity. The graph started the turn from the saved thread, so the model read the first question and answer before the second question. The same words in a new session had no thread behind them, and the model could only ask what "it" meant. The request to delete called no tool: the model has no delete tool to call, so the refuse node was never involved, and `refusals` is empty. The model refused in words, as the system prompt asks. Each turn's `tool_calls` names its own calls only: the second turn ran on a thread that already held a retrieval, and lists one, and the last lists none. This is the other half of step 4. On your lane the refuse node is a net under a model that has not been offered the rope.
 
-### The tier from the rows: vector-status, backfill-vectors, and the rows that count the rung
+### What the checkpointer keeps
 
-The index's own count, the plan that would refill it from the rows without a model, and the usage rows that say which rung served the pool for the last hour.
+The saver behind step 5's threads, and what it stores.
 
-#### Definition
+On your lane the saver is `PostgresSaver` over a small connection pool to the Cloud SQL instance, opened once when the process starts and kept for its life. Returning from inside the saver's own connection helper would close it after the first request. The tables are created by a Cloud Run job, `documind-checkpoint-setup`, which lesson 5.1's deploy ran. The service never calls `setup()` itself, because its migrations take exclusive locks, and a scale-out of instances racing to run them fails at random. After every step, the saver stores the whole state: your question, the model's tool requests, every tool result with its quotes, and the answer. It does not store the system prompt, which the `agent` node adds on each call. The build checked this with the same graph: two turns on one thread leave four saved messages and no system message.
 
-Because Firestore holds every vector, the ANN tier is rebuildable from the rows: `backfill-vectors` reads every current row of a tenant, checks that its stored vector was made with the document profile, and streams the datapoints up, with no embedding call. It exists for two states, a worker deployed before the index did and an apply that lost its index, and it is the second half of the smoke's own advice. Without `APPLY=1` it is a plan: the current rows, how many would need a fresh document embedding, how many are invalid, and a note on what to pause during a repair. `vector-status` is the first half, the index's own datapoint count and the deployment's last sync, which is what a claim about Vector Search rests on. The last cell reads the usage rows the way lesson 5.3 did, grouped by the rung that served the pool: the pinned minutes of step 4 sit in a `firestore` row of their own.
+The laptop lane saves to a SQLite file instead, and `CHECKPOINT_DSN=memory` gives an in-memory saver that forgets on restart. The service logs a warning for it, because it is for tests only. The thread id puts the tenant first and refuses a `:` in any part, so no session name can reach into another tenant's conversations.
 
-#### The code
+### Why the graph is built this way, what it costs, and what the kit does not do yet
 
-#### Do it: count the tier, plan its refill, read the rows by rung, Rs 0
+The design choices, from the kit's own comments, then the bill and the gaps.
 
-The index reported its own count, a few thousand datapoints across the three tenants, synced; the plan found every current acme row already carrying a document-profile vector and nothing invalid, so a repair would upload them all and embed none; and the usage rows showed the last hour split by rung, the minutes acme spent pinned in a row of their own with the one unanswerable question from the emptied pool counted against it. That table is also where a day of silent fallbacks would show: a `vector` row whose answers came from beneath still reads `vector` here, which is why the smoke reads `vector_chunks` and not this column.
+- The harness is edges and nodes. Nothing happens that is not drawn: no hidden retries, no middleware. Adding a step, such as a check before an answer is returned, is one more node and one more edge.
 
-### What the rung costs, where it cannot go, and the policy that sends a tenant home
+- A guard in the graph, not around it. The LangChain brain refuses inside a middleware that wraps each tool call. The LangGraph brain refuses with a node, so the refusal is part of the state, visible in the thread and in `refusals`, and the model reads it like any other result.
 
-The rupee line, the two places the rung cannot serve, and the data-region rule run offline.
+- Refused whole. A turn is the unit the model decided as a whole, so it is refused as a whole. Running the allowed calls and refusing the rest would let a model learn that a blocked call can travel with an allowed one.
+
+- The prompt is not state. The system prompt is added per call and never saved, so fixing a prompt fixes every conversation, including old ones.
+
+- One saver, one thread id. The LangChain and LangGraph brains are built with the process's one checkpointer and the same `tenant:user:session` ids. The ADK brain keeps its own sessions, which lesson 5.7 compares.
 
 #### What it costs
 
-#### Where the rung cannot go
+Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-Two places. It has no sparse leg, so `RETRIEVAL_MODE=hybrid` with `RETRIEVAL_BACKEND=firestore` is refused at startup by the validator lesson 5.2 ran, and a hybrid deployment that falls onto the rung is served dense for that request. And it holds only the kit's rows: a tenant whose pool comes from a managed store is on a different tier with its own copy, which is Module 15's, and the only part of that story this lesson needs is the policy below.
+- The refuse node cannot fire on the lane. No blocked name is ever bound to the model. Its proof is offline: step 4's cell, and the kit's own `commands/tests/test_chat_brains.py`, which runs this graph with a scripted model in the chat image's pins on every push.
 
-#### The policy that sends a tenant home
+- A refused mixed turn misinforms the model. Every call gets "requires manual approval", so an allowed `retrieve` asked for beside a blocked tool is reported to the model as needing approval.
 
-A tenant's `data_region` says where its text may be held: `any` lets the managed mirror copy its current versions abroad, `in` keeps it on the kit's rows in India, and a missing or unknown value is `in`, because an unreadable policy is the strict one. `retrieval_backend_for()` holds every request's backend against it: a managed pin for an `in` tenant is served from the kit's own rung instead, the deployment's if that is vector or firestore, otherwise Firestore, with `policy_fallback 1` on the row, which the warehouse sums into a column. The cell runs the two pure functions behind that decision offline; nothing leaves the machine.
+- The graph's limits are written by hand. No middleware runs in a hand-built graph, so the `agent` node checks the turn's `Meter` itself before each model call, and `ToolNode` times each tool call through `limits.timed_tool_call`. A node added later that calls the model gets no limit unless it does the same. Lessons 5.5 and 5.7 show the limits.
+
+- Nothing deletes a thread. No code in the kit removes checkpoints. Every conversation, with its questions, quotes and answers, stays in Cloud SQL until someone deletes it by hand.
 
 ### Verify it yourself: the checklist
 
-Nine checks, each one block above, each with the value that proves it on your lane.
+Eight checks, each one block above, each with the value that proves it on your lane.
 
-Nothing that serves traffic. acme's pin went to `firestore` and back to `vector`, where lesson 3.1 left it. A candidate revision of the API took no traffic and its wrong index name was replaced by the real one on the template before the tag was dropped; run `make plan` if you want Terraform's word that the service matches its declaration. The probe wrote `operator-evidence/firestore-combined-filters.json` inside the kit's clone. The questions you asked are usage rows, five of them under `firestore`. Module 6 takes the pool from here into the prompt, starting with the budget the packer keeps.
+Two threads in the checkpointer: `lesson102` with three turns, and `lesson102-new` with one. There are two rag-api usage rows, from the two retrievals, and four chat rows. Your home folder has `~/graph-venv`; delete it whenever you like. No roster, role, policy or setting changed. Lesson 5.5 breaks the tools on purpose: a bad argument, a refused tenant, and a tool that takes too long.
 
-Netsetos GenAI on GCP · Module 5 Retrieval · Lesson 5.4 Test fallback without losing tenant or metadata filters · v5.0
+Netsetos GenAI on GCP · Module 5 MCP and agents · Lesson 5.4 Implement the main LangGraph workflow · v5.0
 
-Next: Lesson 6.1 Pack evidence within the context budget.
+Next: Lesson 5.5 Diagnose tool arguments, access failures and timeouts.

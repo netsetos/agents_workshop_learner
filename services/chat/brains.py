@@ -20,11 +20,11 @@ DatabaseSessionService on the same Cloud SQL when CHECKPOINT_DSN is set, InMemor
 otherwise. And each brain imports its framework lazily, so a deployment that does not install
 google-adk simply reports that brain as unavailable (501), rather than failing to start.
 
-Verified offline by commands/tests/test_chat_brains.py (workshop lessons 10.1-10.4): each turn's
+Verified offline by commands/tests/test_chat_brains.py (workshop lessons 5.1, 5.4, 5.5 and 5.7): each turn's
 own tool calls, refusals and numbered citations from all three agent brains, one tool declaration,
 and one error contract. The ADK brain follows 8.7 cell 12 (google-adk 2.8.0). Each turn's limits -
 model calls, rupees, time - are limits.py's, checked at each brain's own seam, and verified by
-commands/tests/test_chat_limits.py (workshop lessons 10.3 and 10.4).
+commands/tests/test_chat_limits.py (workshop lessons 5.5 and 5.7).
 """
 from __future__ import annotations
 
@@ -60,7 +60,7 @@ SYSTEM = (
 
 def _summary(messages, turn: str | None = None, citations: list | None = None) -> dict:
     """The same four keys from every brain, for THIS turn, so agent.py and the UI never branch on the brain."""
-    # A checkpointed thread hands back the whole conversation. Before workshop lesson 10.2's fix, every
+    # A checkpointed thread hands back the whole conversation. Before workshop lesson 5.4's fix, every
     # turn's tool_calls and refusals counted the earlier turns' too: three turns reported 1, 2 and 3
     # calls. `turn` is the id _turn() gave this turn's question, so the turn is that message and what
     # follows it. A thread without it is an error, never the whole thread: a trim must keep it.
@@ -71,7 +71,7 @@ def _summary(messages, turn: str | None = None, citations: list | None = None) -
         messages = messages[ids.index(turn):]
     # Gemini 3 through langchain-google-genai can send a turn's content as blocks - [{"type": "text", "text": ...}], a
     # thought signature beside them - where older models sent a string. The answer is the text blocks' text, a string
-    # either way: until 24 September 2026 the list itself went out, and lesson 11.1's cell failed on .split().
+    # either way: until 24 September 2026 the list itself went out, and lesson 6.5's cell failed on .split().
     last = messages[-1].content if messages else ""
     return {
         "answer": last if isinstance(last, str) else "".join(b if isinstance(b, str) else b.get("text", "") for b in last
@@ -106,7 +106,7 @@ def _guard_middleware():
                 return ToolMessage(content=json.dumps({"error": f"{name} requires manual approval"}),
                                    name=name, tool_call_id=request.tool_call["id"], status="error")
             # Cut at the smaller of TIMEOUTS[name] and the turn's time left, and timed in the log either way
-            # (workshop lesson 10.3). Until then the budget was read after the call returned, and only logged.
+            # (workshop lesson 5.5). Until then the budget was read after the call returned, and only logged.
             return limits.timed_tool_call(request, handler)
 
     return GuardMiddleware()
@@ -153,7 +153,7 @@ class LangGraphBrain:
         model = (llm or build_llm()).bind_tools(TOOLS)
 
         def agent(state, runtime):
-            # The turn's limits, by hand (workshop lesson 10.4): no middleware here, so the node checks the
+            # The turn's limits, by hand (workshop lesson 5.7): no middleware here, so the node checks the
             # Meter before the call, gives the call its timeout, and turns a timed-out call into the stop.
             meter = limits.meter_of(runtime.context)
             if not meter.allow_model_call():
@@ -229,9 +229,9 @@ class AdkBrain:
             return None
 
         def tool_failed(tool, args, tool_context, error):
-            """An error result, as LangChain gives one (workshop lesson 10.4): a name ADK does not hold, and an
+            """An error result, as LangChain gives one (workshop lesson 5.7): a name ADK does not hold, and an
             argument a tool refused (the ToolException for_adk() raises, as the @tool does). Anything else returns
-            None, so it raises and fails the turn in every brain, the token mint included (workshop lesson 10.3)."""
+            None, so it raises and fails the turn in every brain, the token mint included (workshop lesson 5.5)."""
             unknown = tool.name not in {t.name for t in TOOLS} and isinstance(error, ValueError)
             if not (unknown or isinstance(error, ToolException)):
                 return None
@@ -242,7 +242,7 @@ class AdkBrain:
         def mark_error(tool, args, tool_context, tool_response):
             """ADK's own argument check answers {"error": ...} and nothing else, so it is marked as the
             error result it is. A failed search carries citations as well: data, not a refusal (workshop
-            lesson 10.3)."""
+            lesson 5.5)."""
             if isinstance(tool_response, dict) and set(tool_response) == {"error"}:
                 return {**tool_response, "status": "error"}
             return None

@@ -4,67 +4,89 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_9.1_Cache_Compare_WIX.html`, reviewed at blob `240f3edc2b3bbf2a6e0177f7f0c288a696da5ae5`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_9.1_Gateway_Routes_WIX.html`, reviewed at blob `30740fa186a22ed90c835763dc109fdeb2bf0409`. Learners read that page on the course site; this guide keeps its prose.
 
-DocuMind has two caches, and they hold different things. Gemini's context cache holds part of the model's input: acme's documents, packed once and read at a tenth of the price by every question for an hour. The answer cache holds the model's output: the answer and its citations, returned without retrieval or a model call when the same question comes back. You create the first with `make cache` and read `cached_tokens` on the next usage row. You switch the second on for a candidate, ask one question twice, and read `model_backend=cache` on the second row. Along the way you find out what the first one really does to the bill.
+The gateway is one door in front of every model DocuMind can use: Gemini on the global endpoint, and the self-hosted models the next lessons deploy. It is a Cloud Run service behind IAM, and the caller's ID token is its only key. Every request passes a hook that decides whether its text may leave. Restricted text goes to the self-hosted model, with no fallback to Gemini, and confidential text is masked. Every completion carries a cost header, which the API writes on its usage row.
 
-- Two caches: a prefix the model still reads, an answer the model never sees
+In this lesson you trace the hook's decisions offline, with the gateway image's own Presidio, and see which texts it re-routes and which it lets through. You see how the gateway calls a self-hosted backend with a token of its own. Then you deploy the gateway, run its smoke test, and send it three requests: one for its cost header, one PAN it re-routes, and the smoke test's PAN, which it does not.
 
-- The words: context cache, cached_tokens, TTL, fingerprint, answer cache, the two rungs, scope
+- One door for every model
+
+- The words: the gateway, the door, a route, a fallback, the sensitive route, the hook, the tiers, Presidio, the token proxy, the cost header
 
 - Before you run anything: set up the shell
 
-- The context cache: a pack, a cache, and the next answer
+- The hook's decisions, traced
 
-- The rows: what the context cache did to the bill
+- The token the proxy sends
 
-- The answer cache: a candidate that remembers answers
+- The gateway, deployed and smoke-tested
 
-- Four asks: a miss, two hits and a paraphrase
+- A PAN re-routed, and the cost header
 
-- What each cache is holding, and the clean-up
-
-- Why the caches are shaped this way, what they cost, and what the kit does not do yet
+- Why it works this way, what it costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn what each cache stores, the conditions under which each is used, and what each costs to keep and to use. Then you will prove both on your lane: `cached_tokens` on a usage row once acme's context cache exists, and `model_backend=cache` at a cost of zero on the second of two identical questions. You will also measure something the kit's comments do not say: attached the way the kit attaches it, the context cache makes each answer dearer, not cheaper.
+You will learn how the gateway decides who may call it, which model answers a request, and what that answer costs. You will learn how its classifier and hook decide whether text may leave, and where they fall short with the image's own Presidio. Then you will prove it on your lane: a PAN re-routed, and the cost header on a completion.
 
-### Two caches: a prefix the model still reads, an answer the model never sees
+### One door for every model
 
-One makes reading cheaper. The other skips the reading.
+IAM at the door, routes behind it, a hook in between, a token per backend, a price on every answer.
 
-The two caches store different things. The context cache is Gemini's explicit cache: part of the model's input, a long prefix, stored on Google's side and referenced by name. Every question still goes to the model, which still reads the prefix. It reads the cached tokens at a tenth of the input rate, the figure `cost.py` uses, and Google bills the cache's storage by the hour while it lives. The answer cache is the kit's own: the model's output, the answer with its citations, stored in Firestore. A hit returns that answer without retrieval, without the reranker and without the model. The usage row then says `model_backend` `cache`, with zero tokens and a cost of zero.
+The door. The gateway is LiteLLM (`services/litellm`), a Cloud Run service like every other on the lane. `make deploy-gateway` deploys it with `--no-allow-unauthenticated`, and lets two accounts invoke it: the API's and the UI's. The caller's Google ID token is the key. There is no master key, because a master key would make every caller's ID token an invalid virtual key (`config.yaml`'s own words). The API reaches models through the gateway only when its `MODEL_BACKEND` is `gateway`; on your lane it is still `vertex`.
 
-The context cache has hard rules. It must hold at least 4,096 tokens for the Gemini 3 family. It belongs to one model. It lives for 60 minutes by default, and there is no maximum, so something has to refresh or delete it. The kit creates it on the global endpoint, where Gemini 3 generation runs, and falls back to the regional client only if global refuses. It records the cache in `tenant_caches/{tenant}`, together with the tenant's corpus fingerprint. The API attaches it to a question only when three things hold: more than two minutes are left, the request's model is the cache's model, and the fingerprint has not moved since packing. Otherwise the answer runs uncached, and a moved fingerprint writes `cache_stale` in the log.
+The routes. `config.yaml` names the model groups:
 
-What the kit puts in it is added to the prompt, not swapped for anything. The pack is acme's 5 synthetic documents: 164,618 characters, about 41,154 tokens by the kit's own four-characters-a-token estimate. The generator's prompt does not change when a cache is attached. The system text, the retrieved chunks and the question are sent exactly as before, and the cache is one more keyword on the call. So the model reads the whole pack as well as the chunks. The cache makes those extra tokens cheap but not free. At the kit's flash rates, the pack adds about Rs 0.53 to every acme question; sent uncached, the same pack would add Rs 5.26. Step 4 measures this on your lane.
+- Managed: `documind-general`, which is `gemini-3.6-flash` on the global endpoint, and `documind-reasoning`, which is `gemini-3.1-pro-preview`.
 
-The answer cache has rules too, all of them about when an old answer is still this question's answer. The cache is kept per tenant, always. The entry's corpus fingerprint must still be the tenant's, and its scope must match: the filters, `top_k` and the prompt version. It must be less than 24 hours old. There are two rungs. The exact rung matches the same words, lower-cased with punctuation removed. The near rung reads the five nearest earlier questions by cosine similarity and takes the first at 0.95 or closer. Only an answer that is answerable, cited and not blocked is ever stored. The switch, `SEMANTIC_CACHE`, is off by default, because 0.95 is a guess until lesson 9.3 measures it.
+- Self-hosted: `documind-slm` and `documind-sensitive`, the small model on a Cloud Run GPU, which lesson 9.2 deploys.
 
-A chartered accountant's office in March. The client's file stays open on the CA's desk for the afternoon. Every question still takes the CA's time, but nobody fetches and re-reads the whole file for each one, and the desk is paid for by the hour. That is the context cache. At the front desk, the receptionist keeps this morning's written answers. If the same client asks what was asked earlier, in the same words or very nearly, the receptionist hands over that answer with the same references, and the CA is never disturbed. That is the answer cache. It works only for that client, only if nothing in the file has changed since, and only until the end of the day.
+- Optional: `documind-inference` (vLLM) and `documind-gke`, which lesson 9.3 inspects.
 
-#### Two caches, one question
+When a self-hosted backend is cold, scaled to zero or not deployed, the router hands the request down a chain of fallbacks that ends at Gemini. `documind-sensitive` has no fallback. Its point is that the text does not leave: a cold GPU means a slow answer or an error, never Gemini.
 
-The first box decides whether the context cache is attached to a call, the second whether the answer cache answers, and the third prices one question each way. Every rule is the kit's.
+The hook. Before LiteLLM sends a request anywhere, a pre-call hook (`documind_router.py`) classifies all of its text, the question and any retrieved context, with `documind_classifier.py`. There are three tiers:
 
-The first box runs `get()`, `stale_against()` and `generate_config_kwargs()` from `cache_manager.py`, the second `lookup()` from `semantic_cache.py` with the switch and the store rule from `main.py`, and the third `price()` from `cost.py` with its fallback rates. The build executed the kit's own functions on all 16, all 128 and 36 combinations, against stand-in Firestore records, and every box had to agree.
+- RESTRICTED (a PAN, an Aadhaar number, an SSN, a card number): the request goes to `documind-sensitive`.
 
-It shows the kit's rules, not Google's cache or your embeddings. The two paraphrase similarities are set by the panel, not measured: how close a real paraphrase lands is lesson 9.3's work. The prices are `cost.py`'s fallback table, which the kit uses when BigQuery's price table does not answer. The kit carries no storage rate, so that one is yours to enter from your model's price page.
+- CONFIDENTIAL (an email address or a phone number): Presidio masks every entity it finds, and the request goes to `documind-general`.
 
-### The words: context cache, cached_tokens, TTL, fingerprint, answer cache, the two rungs, scope
+- PUBLIC: the request keeps the model it asked for.
 
-Twelve rows, each with the value it takes on your lane.
+RESTRICTED takes two layers: a pattern must match, and then Presidio, a PII detector, must confirm it with any entity it scores at 0.7 or more. `ROUTER_ENFORCE=0` is shadow mode, which classifies and logs but moves nothing.
 
-One distinction to hold: the context cache lowers the price of reading, and the answer cache removes the reading. The first still sends every question to the model, so every answer is new. The second returns an old answer, so its risks are an answer that no longer fits the question (a false hit) or no longer fits the facts (a stale hit). The threshold guards against the first; the fingerprint and the 24 hours guard against the second.
+The token proxy. LiteLLM reads a backend's key once, at startup, and a Cloud Run ID token lasts an hour. So the self-hosted routes point at a small proxy inside the gateway's container. It drops the caller's `Authorization` header and forwards each request with an ID token of its own for the backend's URL. That token is minted as the gateway's account, cached per backend, and replaced five minutes before the hour.
+
+The cost header. Every completion carries `x-litellm-response-cost`: the answer's tokens at the per-token rates `config.yaml` gives the route that answered, a fallback included. When the API goes through the gateway, it writes that figure on its usage row.
+
+A company's dispatch counter in Nariman Point. Every outgoing packet passes one counter, and you show your staff card to reach it; nobody holds a master pass. The clerk reads each label before choosing the courier. A label with an Aadhaar or PAN on it goes by the company's own van, never an outside courier, even when the van is late. A letter with an email address gets its personal details blacked out, then goes by the national courier. Everything else goes by the courier you asked for, and if a private courier is not running today, the national one takes it.
+
+The van waits in another building, and the clerk carries the company's own pass there, renewed every hour; your card never leaves the counter. Every dispatch slip shows the charge. The catch is the clerk's rulebook: it knows American ID formats and not Indian ones, so a label with only a PAN on it goes out by the outside courier. And the black marker covers dates and figures too.
+
+The counter is the gateway and the staff card is the ID token. The clerk is the hook, and the rulebook is Presidio. The company's van is the sensitive route, the national courier is Gemini, the pass is the token proxy's token, and the slip is the cost header.
+
+#### Where would this request go?
+
+Pick a request's text, the model it asks for, the shadow-mode switch, and whether the self-hosted model is deployed. The first box shows how the classifier reads the text. The second shows where the hook sends it, the chain of fallbacks, and what answers.
+
+The patterns, the Presidio scores and the tiers are the kit's classifier's, computed with the gateway image's pins (Presidio 2.2.364 and `en_core_web_lg`) when this page was built. The routing is the kit's hook and `config.yaml`'s fallback chains, ported and compared with the kit's own on all 42 combinations.
+
+It offers five texts, each classified when the page was built, because Presidio does not run in a browser. Step 3 runs the classifier itself, on any text you give it.
+
+### The words: the gateway, the door, a route, a fallback, the sensitive route, the hook, the tiers, Presidio, the token proxy, the cost header
+
+Ten rows, each with the value it takes on your lane.
+
+One distinction to hold: the door decides who may call the gateway, and the hook decides where their text may go. The door is Cloud Run IAM, checked before LiteLLM sees the request. The hook runs inside LiteLLM, on the request's text.
 
 ### Before you run anything: set up the shell
 
-You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 1 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
+You need three things open: the DocuMind UI at `https://documind-ui-NUMBER.REGION.run.app` signed in as a roster member, the operator shell you set up in Module 0 (the `rag-shell-venv` environment, the kit at `$DEMO_ROOT` as a clone of the public learner repository, and the restart helper), and a Python cell in that same shell or in Colab with `google-cloud-firestore` installed and Application Default Credentials. Every command on this page is one you run; every output shown is what the lane prints. Where a value belongs to your lane (a project number, a hash), it is written as `NUMBER` or shortened with `...`.
 
 Set up the shell once per session. The block below works on any machine with `git` and `gcloud` signed in. The first time, it clones the kit from the public learner repository, `netsetos/agents_workshop_learner`, into `~/deploy_module_rag`; every session after, it pulls the latest kit. Then it reads your project from the gcloud configuration (so there is nothing to type), moves into the kit, builds the API URL from the project number, and defines two small functions that mint identity tokens. The last line proves the API answers.
 
-`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 1's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 1 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 2 granted it to the operator. If your machine has the restart helper from Module 1 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
+`PROJECT=` empty means gcloud has no default project on this machine: run `gcloud config set project YOUR-PROJECT-ID` with your real id, then the block again. `ME=` empty means gcloud is not signed in: `gcloud auth login` first. A `ModuleNotFoundError: No module named 'google'` from any `make` target or Python cell, or an `externally-managed-environment` error from the pip line, means this shell is not inside the venv: the prompt should start with `(rag-shell-venv)`, so run the `source` line of the block again. If that line says the file is missing, the environment was never made on this machine: Module 0's install is `python -m pip install -r shared/requirements.txt -r services/ingest/requirements.txt -r services/rag-api/requirements.txt -r services/mcp/requirements.txt`, run inside `rag-shell-venv`; the setup block installs the one package this lesson needs. `adc NOT ok` means Python's own sign-in, Application Default Credentials, cannot read Firestore. The Python cells and every `make` target that reads Firestore use it, and gcloud's sign-in does not cover it. `Reauthentication is needed` in the message means the credentials file is there but your organisation's session rules have expired it; a `make` target reports the same as `RetryError: Timeout of 60.0s exceeded` after a minute of retries. `insufficient authentication scopes` or `credentials were not found` means there is no file, and Python fell back to the machine's own service-account token, which covers the bucket but not Firestore. Either way, run `gcloud auth application-default login --no-launch-browser`, open the link it prints, sign in as the account you use on this lane, paste the code back, and run the block again. A fresh workstation instance (the hostname changes) needs this again, as it needs the venv again. If `gcloud` itself asks you to reauthenticate, run `gcloud auth login`: the two sign-ins are separate, and each can expire on its own. `git clone` failing means this machine cannot reach GitHub. `git pull` refusing with Your local changes would be overwritten means a kit file was edited on this machine: `git -C "$DEMO_ROOT" status` names it, and `git -C "$DEMO_ROOT" stash` sets the edit aside. On a machine where Module 0 copied the kit file by file, the first run keeps that copy as `~/deploy_module_rag-before-git.tgz` and turns the folder into a clone; untracked files, `.terraform` and saved `.tfvars` stay where they are. If your kit lives somewhere else, set `DEMO_ROOT` before the block. A `403` from `print-identity-token` means your account lacks the Service Account Token Creator role on the two accounts; Module 0 granted it to the operator. If your machine has the restart helper from Module 0 (`commands/session-restart.sh` in the kit), `source` it and run `rag_resume` in place of the `export PROJECT` and `export ME` lines: it restores the same values from your saved session and also sets `API_URL`, which you then copy into `API`.
 
 #### Three kinds of code window on this page
 
@@ -76,116 +98,148 @@ Every `make` target on these pages is a one-line entry in the kit's `mk/ingestio
 
 #### Which store answers acme? Pin it to the kit's own index for this lesson
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 5 compares the four stores; Module 15 studies the mirrors.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. `make up` pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like `acme:acme_497809ff...#rag-532341da71fe`, a `page` of `null` even for a PDF, and `stages.retrieval_backend: rag_engine`. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors.
 
 The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 
-How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 5.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
+How to tell which store answered any call: read `stages.retrieval_backend` on the response and `stages.vector_chunks` beside it. With the pin on `vector`, the backend says `vector` and `vector_chunks` equals the pool. The stamp behind that count, `found_by`, sits on each chunk inside the API and is not a field of a citation; lesson 2.3 shows how to join it to one. The chunk ids are the kit's `tenant:sha256#position` form with the page on every PDF citation.
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok`. Step 3 creates acme's context cache. The live API attaches it to every acme question until step 7 deletes it, an hour at most, and each of those answers costs a little more in the meantime. Step 5 creates a candidate with `SEMANTIC_CACHE=on` that serves no traffic. Its answers stay in `answer_cache` for 24 hours, and nothing else reads them.
+You need the shell in the kit's folder, with `PROJECT`, `REGION` and `NUMBER` set by the setup above.
 
-### The context cache: a pack, a cache, and the next answer
+- The checkout where `make up` ran. `make deploy-gateway` reads the gateway's database URL from Terraform's state; anywhere else it stops at `terraform output`. The database itself already exists, because Terraform declares it with the rest of the lane.
 
-One question without a cache, `make cache`, and the same question with one.
+- About 750 MB for `~/gw-venv`. Step 3 installs the gateway image's Presidio and its 400 MB spaCy model once. Cloud Shell's home directory has room.
 
-#### Definition
+- No self-hosted model yet. Lesson 9.2 deploys it. Until then the sensitive route has no backend, which is how its missing fallback shows.
 
-`make cache` runs `cache_admin.py create`. It builds the pack from the kit's own copies of acme's synthetic documents: every `.md` file under `evals/corpus/acme/` that has no PDF twin. The generator's system text becomes the cache's system instruction, so the cache and the request agree on the rules. The cache is created with a one-hour TTL, and the record written to `tenant_caches/acme` keeps the ledger's fingerprint at packing time. From then on, every acme answer goes through `generate_config_kwargs()`. That costs one Firestore read of the record and one of the ledger, and it returns `cached_content` when the cache qualifies. The first cell below defines `ask91`, a small function that asks acme one question and prints the fields that show a cache at work. It notes the time for step 4 and asks once, before any cache exists. The question is a golden row whose answer is in the handbook, which is also in the pack.
+- What the lesson changes. It deploys `documind-gateway`, which scales to zero, stores its image in Artifact Registry, and lets two accounts invoke it. It also creates `~/gw-venv` and asks Gemini a handful of short questions.
 
-#### The code
+### The hook's decisions, traced
 
-#### Do it: the question, uncached
-
-#### Do it: the cache
-
-#### Do it: the same question, with the cache
-
-The first answer's `tokens_in` is the whole RAG prompt: the system text, the chunks the reranker kept, and the question. `make cache` then packed the 5 documents and printed where the cache landed. It should say `global`, the endpoint that serves generation; a regional location means global refused the create. It also printed Google's count of the cached tokens. The second answer is the same question with the cache attached. `cached_tokens` equals that count, and `tokens_in` grew by the same number, because the prompt itself did not change. If `cached_tokens` is 0, the panel's first box lists the reasons a cache is not attached.
-
-### The rows: what the context cache did to the bill
-
-The usage rows of both answers, priced the way the API prices them.
+The classifier's own test cases and four requests, run with the gateway image's Presidio. Offline.
 
 #### Definition
 
-Every answer writes one usage row to the API's log. `tokens_in` is the whole prompt, the cached part included, and `cached_tokens` is the cached part. `price()` charges the uncached tokens at the input rate, the cached ones at a tenth of it, and the output at the output rate. The cell reads every acme row written since the first ask and prints the revision, the backend, both token counts, the cost in rupees at 85 to the dollar, and the latency. Cloud Logging can take half a minute to show a row, so if one is missing, run the cell again.
+The first cell makes a venv with the Presidio pins from the gateway's `requirements.txt`, and the spaCy model its `Dockerfile` downloads. The second imports the gateway's own classifier and hook, with LiteLLM's base class stood in, and prints three things:
+
+- the recognizers Presidio loads for English;
+
+- the classifier's own test cases, a list in `documind_classifier.py` that nothing runs;
+
+- the hook's decision on four requests for `documind-general`, and what the last one would send to Gemini.
 
 #### The code
 
 #### Do it
 
-The second row carries `cached_tokens`: this lesson's first proof. Now compare the two costs. The cached row is dearer, by about a tenth of the pack's full price. That is roughly Rs 0.53 at the kit's flash rates, against Rs 0.49 for the whole uncached answer in the expected block. The cache did exactly what it promises. The pack's tokens cost a tenth of their full price, Rs 5.26 if they had been sent uncached. But nothing was sent uncached before: the retrieved chunks carried the context, and they still do. Compare the latency on the two rows yourself, because the model now reads some forty thousand more tokens for each answer.
+- Presidio loads 17 recognizers, and none of them is Indian. There are American ones (SSN, ITIN, passport, driving licence, bank account) and none for a PAN or an Aadhaar number.
 
-A context cache saves money when the same long prefix would otherwise travel uncached with every call. That covers a policy manual every answer must follow, a long contract that is questioned all afternoon, or a set of examples each prompt repeats. Then it replaces full-price tokens with cheap ones, and the saving has to beat the storage bill. The kit's cache does not replace anything: the pack is added beside the retrieval. What it buys is grounding. The model sees every acme policy, even when retrieval misses the right chunk, and that costs about Rs 0.53 an answer plus storage. Whether that is worth it is a quality question, and lesson 7.3's controlled comparison is how to answer it.
+- 3 of the classifier's own five test cases fail. The Aadhaar number, the SSN and the PAN all come back PUBLIC. Their patterns match, but Presidio confirms nothing at 0.7, so the tier falls through to PUBLIC.
 
-### The answer cache: a candidate that remembers answers
+- The smoke test's own request, a bare PAN, is PUBLIC. It goes where it asked: `documind-general`, which is Gemini.
 
-The lookup, the store rule, and a revision with the switch on.
+- The same PAN with a date is RESTRICTED. Presidio scored the date at 0.85, and the rule "any entity at 0.7" confirmed a pattern the date has nothing to do with. That request goes to `documind-sensitive`.
+
+- An email address in the context makes a request CONFIDENTIAL, and the mask removes the answer. Every entity Presidio finds is replaced, whatever its score: the 60 days, the grade E3 (read as a US driving licence) and the file name. Gemini is asked for the notice period with the notice period taken out.
+
+### The token the proxy sends
+
+gcp_id_token.py with the metadata server stood in, and the headers the proxy drops. Offline.
 
 #### Definition
 
-With `SEMANTIC_CACHE=on`, `/v1/query` embeds the question once, as it does anyway for retrieval, and asks `lookup()` before any retrieval happens. The exact rung compares `qhash`es; the near rung asks Firestore's vector index for the tenant's five nearest earlier questions. An entry counts only if `_alive()` agrees: the same fingerprint, the same scope, not expired. A hit becomes a response carrying the stored answer and its original citations, with `backend` `cache` and a cost of 0. On a miss the question runs as usual. Afterwards `_semantic_store()` keeps the answer, but only if it is answerable and cited, and never if Model Armor blocked it. The switch belongs to one revision, so the candidate gets it and the live revision keeps it off. Both revisions share the same Firestore, and acme's context cache from step 3 is still alive, so the candidate's model calls carry it too.
+The token proxy replaces the caller's credentials with the gateway's own:
 
-#### The code
+It gets that token from `get_id_token()`, which keeps one token per backend:
+
+The cell stands in the metadata server with a counter, moves a clock, and asks for tokens four times. Then it prints the headers the proxy drops.
 
 #### Do it
 
-Cloud Run built a revision with `SEMANTIC_CACHE=on` and gave it the `candidate---` address. Every other request still reaches the live revision, whose switch stays off. The target recorded the revision's name in `.candidate-revision`, and step 7 deletes that file. The candidate accepts the same token as the live service, because the API checks every token against its canonical URL.
+- One token per backend. It is minted on the first call, reused for 55 minutes, and minted again five minutes before the hour. The vLLM engine's URL gets its own token; its `/v1` suffix is stripped first.
 
-### Four asks: a miss, two hits and a paraphrase
+- The caller's token never reaches the backend. The proxy drops the `Authorization` header with the hop-by-hop ones, and adds a token minted as the gateway's account. The backend's own IAM then decides: each self-hosted service grants the gateway's account `run.invoker` when it is deployed.
 
-One question four ways, then the rows.
+### The gateway, deployed and smoke-tested
 
-The first ask is a miss: the candidate has never seen the question, so it retrieves, calls the model and stores the answer. The second is the same words, for the exact rung. The third is the same words in lower case without the question mark, which `qhash` treats as identical. The fourth says the same thing in other words. It is a hit only if its embedding lands within 0.95 of the first question's; otherwise it is a miss, and its own answer is stored beside the first.
+make deploy-gateway, then the kit's smoke test: the door, JSON, the cost header, the PAN and the fallback.
 
-The second and third asks came back from the answer cache. Their rows read `cache` with zero tokens and Rs 0, and that is this lesson's second proof. They were not free in every sense: their latency is the embedding plus a few Firestore reads. That is far shorter than a model call, but not zero, and neither cost appears on the row. The first ask shows both caches in one row: the answer cache missed, the model ran, and the context cache made `cached_tokens` non-zero. The fourth row tells you where your paraphrase landed. Lesson 9.3 measures that line on labelled pairs before anyone relies on the near rung.
+#### Definition
 
-### What each cache is holding, and the clean-up
+`make deploy-gateway` builds the image from `services/litellm` and deploys it behind IAM:
 
-The record behind the context cache, the entry behind the hit, and both caches put away.
+The first build downloads the 400 MB spaCy model into the image, so it takes several minutes. `make smoke-gateway` then runs six checks as the UI's account.
 
-The cell prints `tenant_caches/acme`, then the answer-cache entry for the question's words. It uses the kit's own `qhash`, imported from `services/rag-api`, so the key is computed exactly as the API computes it.
+#### Do it
 
-The two records show where each cache keeps its weight. For the context cache, Firestore holds only a pointer and a few facts, and the pack's forty-odd thousand tokens sit on Google's side, billed by the hour until they expire or are deleted. For the answer cache, Firestore holds everything: the answer, its citations and the question's 768-number embedding. That costs Firestore storage and reads, for 24 hours. The clean-up removes the candidate's tag and recorded name, and deletes the context cache. The next acme question to the live API finds no record and runs uncached at once.
+- The door works. With no token, Cloud Run answered 403 before LiteLLM saw anything. With the UI account's token, the gateway answered.
 
-The answer-cache entries stay until their `expire_at`, and Firestore's TTL policy deletes them some time after that. Nothing reads them in the meantime, because the live revision's switch is off. The candidate revision stays in the service's list with no traffic. The service's configuration says `SEMANTIC_CACHE=on` until the next deploy or candidate sets it: `make up` and `make candidate` both pass it, and both default it to `off`.
+- `documind-general` answered in JSON, and the response carried the cost header.
 
-### Why the caches are shaped this way, what they cost, and what the kit does not do yet
+- `documind-slm`'s backend is not deployed yet, so its fallback answered: Gemini.
+
+- The PAN check passed, but read what it printed: served by `gemini-3.6-flash`. The check has two branches, and both pass:
+
+Step 3 showed why the PAN went to Gemini.
+
+### A PAN re-routed, and the cost header
+
+Three requests for documind-general: no personal data, the smoke test's bare PAN, and a PAN with a date.
+
+#### Definition
+
+The cell mints the UI account's token for the gateway, as the smoke test does, and reads `config.yaml`'s rates. Then it sends three requests, and prints for each the status, the model that answered, the tokens and the cost header. When the API goes through the gateway, it prices the answer from that header:
+
+#### Do it
+
+- The cost header on a completion. `x-litellm-response-cost` was 0.0001665 USD for 11 tokens in and 20 out: `config.yaml`'s `documind-general` rates times the usage. On your lane the token counts are Gemini's own. That is the first proof.
+
+- The bare PAN was answered by Gemini: the hook did not re-route it (step 3).
+
+- The PAN with a date was re-routed. The hook sent it to `documind-sensitive`, whose backend is not deployed until lesson 9.2 and which has no fallback. So the gateway returned an error, not a Gemini answer. That is the second proof: a PAN re-routed. The stand-in's error is a 500; on your lane it is whatever LiteLLM returns for a backend that does not exist. After lesson 9.2, the same request is answered by the small model.
+
+### Why it works this way, what it costs, and what the kit does not do yet
 
 The design choices, from the kit's own comments, then the bill and the gaps.
 
-- Per tenant, always. An answer cache keyed on the question alone would serve one customer's answer to another. It would look like a performance win right up until someone noticed.
+- IAM is the door. The gateway is behind IAM like every service on the lane. A master key would make every caller's ID token an invalid virtual key, so there is none.
 
-- Per fingerprint, and five candidates. Every entry carries the fingerprint it was answered under, so a reindex makes every earlier answer a miss without scanning anything. The near rung reads five neighbours, not one, so a stale twin of the question cannot hide the current entry.
+- One place decides what may leave. Presidio lives in the gateway and only there, so the decision "may this text leave our perimeter" is made once, where every route passes.
 
-- 0.95, not 0.92. A looser threshold answers "what is the probation period" with the notice period's answer: a wrong answer, served fast. The kit starts tight and leaves the switch off until 9.3 measures the line.
+- The sensitive route has no fallback. A cold GPU means a slow answer, not a leak.
 
-- Only the contract, and only a good one. An entry stores the answer, citations, confidence and answerable flag, never the envelope of tokens and cost. A refusal is not worth keeping for a day, and a blocked answer is not worth keeping at all.
+- Shadow mode first. `ROUTER_ENFORCE=0` classifies and logs every request and changes nothing: the safe rollout for a classifier that moves traffic.
 
-- A failing cache is a miss, never an error. A context-cache problem returns no keyword and the answer runs uncached. An answer-cache failure logs `semantic_cache_failed` and the question runs as usual. Either way the answer is still one retrieval away.
+- The proxy mints its own tokens. A pasted token expires at 3 a.m., on a path nobody is watching.
 
-- A context cache is one model's. A routed tier or a tuned endpoint is never handed another model's cache, which the API would refuse.
-
-- The exact rung still pays for one embedding. The API embeds the question before the lookup, because on a miss retrieval needs the same vector. The hit saves the reranker and the model, not the embedding.
+- The gateway prices what it served, fallbacks included, and the API writes that price on its usage row.
 
 #### What it costs
 
-Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
+Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does. The Presidio facts come from the gateway image's own pins, run when this page was built.
 
-- The context cache is added to the prompt, not substituted for anything. `cache_admin.py` says that without a cache "every answer paid full price for its context". With the cache, every answer still pays full price for the retrieved context, plus a tenth of the pack's price. Step 4 measured it.
+- A bare PAN or Aadhaar number leaves. Presidio 2.2.364 loads no Indian recognizer, and the classifier's second layer needs some entity scored at 0.7 or more; the pattern's own match does not count. A PAN alone is PUBLIC and goes to Gemini. The same PAN beside a date or a name is RESTRICTED.
 
-- The pack is the kit's copy of the documents, not the tenant's corpus. `pack_for()` reads `evals/corpus/acme/`. After a reindex with a new version, such as lesson 4.2's handbook, `make cache` packs the old text again, and the fingerprint calls it current. The cache can then contradict the index it sits beside.
+- The classifier's test cases are a list nothing runs. Three of its five fail with the image's own pins.
 
-- Nothing refreshes a cache. `cache_manager.py`'s docstring names a Cloud Scheduler job that calls `refresh()` while a tenant is active. `terraform/` defines four scheduler jobs, and none of them touches caches. A cache simply expires after its hour, unless `make cache CACHE_OP=refresh` extends it.
+- The smoke test's PAN check cannot fail. Both branches pass it, so `make smoke-gateway` is green while the PAN goes to Gemini.
+
+- The mask removes the answer. A CONFIDENTIAL request has every entity Presidio finds replaced, whatever its score: durations and dates, grade codes, file names. The notice period is masked out of the very context that answers it.
+
+- The tag budgets bind nothing. `config.yaml` sets budgets for `tenant-acme` and `tenant-enterprise`. The API sends the tenant as metadata, never as a tag, and the lane has no tenant called enterprise.
+
+- `dlp_audit.py` is in the image, and nothing calls it. The gateway's `dlp.user` role serves an audit that never runs.
+
+- The database bills without the gateway. Terraform declares the Cloud SQL instance with the rest of the lane, so it runs by the hour whether `make deploy-gateway` ever does or not.
 
 ### Verify it yourself: the checklist
 
-Ten checks, each one block above, each with the value that proves it on your lane.
+Eight checks, each one block above, each with the value that proves it on your lane.
 
-acme's context cache lived from step 3 to step 7 and is deleted. `tenant_caches/acme` is gone, and the live API answers acme uncached again. `documind-api` has one more revision, which serves no traffic and has no tag. The service's configuration says `SEMANTIC_CACHE=on` until the next deploy sets it back, and `.candidate-revision` is gone. `answer_cache` holds this lesson's one or two acme answers until they expire in 24 hours. The usage rows of three or four answered questions and two or three hits. Lesson 9.2 tests what makes each cache miss (a reindex, a changed filter or prompt version, the clock) and gets a hit again after `make cache`.
+`documind-gateway` runs on Cloud Run, scaled to zero between calls, and the API's and the UI's accounts may invoke it. Its image is in Artifact Registry, `~/gw-venv` holds the image's Presidio, and Gemini answered a handful of short questions. The API still answers through Vertex AI (`MODEL_BACKEND=vertex`). Lesson 9.2 deploys the self-hosted model behind the sensitive route, and puts the API behind the gateway on a candidate revision.
 
-Netsetos GenAI on GCP · Module 9 Caching · Lesson 9.1 Compare context caching and answer caching · v5.0
+Netsetos GenAI on GCP · Module 9 Serving · Lesson 9.1 Trace and authorize gateway routes · v5.0
 
-Next: Lesson 9.2 Test cache scope, configuration changes and freshness.
+Next: Lesson 9.2 Serve a supplied or stock model using Ollama.

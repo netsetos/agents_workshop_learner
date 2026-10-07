@@ -1,4 +1,4 @@
-# ---------- Ingestion (the v5 course's Module 3): the roster and the tenant pins, the vector tier, the ingest drills ----------
+# ---------- Ingestion (the v5 course's Module 1): the roster and the tenant pins, the vector tier, the ingest drills ----------
 # Included by the Makefile (`include mk/*.mk`); every variable it uses is declared there. The drills that upload
 # and wait are scripts under commands/ (the same operation without make); the roster is commands/lane.py roster.
 

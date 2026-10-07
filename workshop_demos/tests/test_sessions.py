@@ -39,6 +39,20 @@ class SessionTests(unittest.TestCase):
         """Use a real session with temporary evidence and no cloud initialization."""
         return DemoSession(self.lesson / name, live=False, config=self.config, **kwargs)
 
+    def test_basics_and_module_0_lessons_have_their_own_folders(self):
+        from workshop_helpers.artifacts import ArtifactStore
+        from workshop_helpers.config import lesson_folder
+        self.assertEqual(lesson_folder("B.1"), "module_B/lesson_B_1")
+        self.assertEqual(lesson_folder("0.2"), "module_00/lesson_0_2")
+        self.assertEqual(lesson_folder("12.3"), "module_12/lesson_12_3")
+        with self.assertRaises(ValueError):
+            lesson_folder("X.1")
+        write_json(self.lesson / "lesson_map.json", dict(self.mapping, lesson="B.1"))
+        with self.open("one.py") as session:
+            self.assertEqual(session.base, self.config.results_dir / "module_B" / "lesson_B_1")
+        store = ArtifactStore(self.config, "00", module="B", lesson="B.1")
+        self.assertEqual(store.directory.parent.parent, self.config.results_dir / "module_B" / "lesson_B_1")
+
     def test_state_and_selected_interpreter_survive_new_instances(self):
         old_cwd = Path.cwd()
         with self.open("one.py") as first:
