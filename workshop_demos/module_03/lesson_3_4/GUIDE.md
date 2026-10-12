@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`, reviewed at blob `c89c3559bfa48cb1af933e66ce4e1b275de68eda`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`, reviewed at blob `3cd6df0de649ad7d6598cd5da10c3fa8c9c27220`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 2 ended with a ranked pool. This lesson is about the space it has to fit into. A prompt is a sum of lines, the system rules, the question, the evidence, and a reserve for the answer, and the kit gives the evidence whatever is left of a total after the fixed parts are counted. `pack_chunks()` fills that room most relevant first, one `[Source N]` header per chunk carrying the file, the page and the date the document declares, drops what does not fit and logs the drop, and the citations resolve against what was packed. The count behind all of it is an estimate, four characters a token, and a real counter can be injected where the estimate misleads. You will read the budget's lines from the kit, pack real chunks offline with the kit's own functions, put the model's counter beside the estimate for English and for Hindi, read one answer's `tokens_in` against the estimate of its packed set and price it in rupees, watch a dated document put its date on the header and the dated rule in the prompt, and shrink the budget on a candidate revision to see the drop line appear.
 
@@ -168,7 +168,7 @@ The rupee line, a candidate revision with a budget too small for five sections, 
 
 Two of the five lines are zero in the API's budget on purpose. The tenant pack is a stable prefix of the tenant's corpus that a context cache serves at a tenth of the rate, from 4,096 tokens up, and Module 6 fills it: on the answer it appears as `cached_tokens` inside `tokens_in`. The history is a conversation's earlier turns, and this API keeps none. The chat service keeps them, as the checkpointed thread Module 6 inspects, and today every model call its agents make resends the whole thread: nothing trims it and nothing summarises it. The budget class knows both so that the sum can be read in one place when they are filled; the packer only ever sees the chunks line.
 
-A budget a thirteenth of the default packed three sections and dropped two, the log said so, the answer came from the three, and the live service never knew; the variable came out again and the template returned to the default. That is the whole shape of the knob: a number in the environment, judged on a candidate, with the drop line and `tokens_in` as the two measurements, and lesson 7's eval as the judge of whether the smaller prompt still answers.
+A budget a thirteenth of the default packed three sections and dropped two, the log said so, the answer came from the three, and the live service never knew; the variable came out again and the template returned to the default. That is the whole shape of the knob: a number in the environment, judged on a candidate, with the drop line and `tokens_in` as the two measurements, and Module 4's eval as the judge of whether the smaller prompt still answers.
 
 ### Verify it yourself: the checklist
 

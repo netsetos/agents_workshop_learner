@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_9/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html",
-  "source_sha": "56f0bda25645d6e116a3f85889128f54661b5e99",
+  "source_sha": "4f90969f4077fb364fe35e4f7ac870458fcb4021",
   "shared_setup_windows": [
     1
   ],
@@ -326,7 +326,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_9/GUIDE.md",
       "source_lines": [
-        742
+        744
       ],
       "offline": true,
       "live_verified": false,
@@ -342,7 +342,7 @@
           "id": "source_29",
           "function": "step_01_the_alerts_the_kit_declares_against_the_on",
           "window": 29,
-          "source_line": 742,
+          "source_line": 744,
           "manual_checkpoint": null
         }
       ],
@@ -369,8 +369,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_9/GUIDE.md",
       "source_lines": [
-        835,
-        886
+        837,
+        888
       ],
       "offline": false,
       "live_verified": false,
@@ -386,7 +386,7 @@
           "id": "source_34",
           "function": "step_01_the_cost_model_as_a_script",
           "window": 34,
-          "source_line": 835,
+          "source_line": 837,
           "manual_checkpoint": null
         },
         {
@@ -399,7 +399,7 @@
           "id": "source_36",
           "function": "step_02_your_lane_s_tokens_a_claim_from_the_rows",
           "window": 36,
-          "source_line": 886,
+          "source_line": 888,
           "manual_checkpoint": null
         }
       ],
@@ -426,8 +426,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_9/GUIDE.md",
       "source_lines": [
-        958,
-        990
+        960,
+        992
       ],
       "offline": false,
       "live_verified": false,
@@ -443,7 +443,7 @@
           "id": "source_41",
           "function": "step_01_the_ceilings_from_the_kit_s_files_then_you",
           "window": 41,
-          "source_line": 958,
+          "source_line": 960,
           "manual_checkpoint": null
         },
         {
@@ -456,7 +456,7 @@
           "id": "source_43",
           "function": "step_02_the_ceilings_from_the_kit_s_files_then_you",
           "window": 43,
-          "source_line": 990,
+          "source_line": 992,
           "manual_checkpoint": null
         }
       ],
@@ -482,7 +482,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_9/GUIDE.md",
       "source_lines": [
-        1050
+        1052
       ],
       "offline": false,
       "live_verified": false,
@@ -498,7 +498,7 @@
           "id": "source_47",
           "function": "step_01_the_gate_offline_and_the_rows_that_cannot",
           "window": 47,
-          "source_line": 1050,
+          "source_line": 1052,
           "manual_checkpoint": null
         }
       ],
@@ -720,112 +720,112 @@
       "label": "terraform/quota.tf - five alerts named, two declared",
       "heading": "Failure modes: four the kit reproduces, and which ones the alerts see",
       "anchor": "s5",
-      "line": 713
+      "line": 715
     },
     {
       "window": 28,
       "label": "evals/run_eval.py - today's quote support: the tenant's whole corpus, reported and not judged",
       "heading": "Failure modes: four the kit reproduces, and which ones the alerts see",
       "anchor": "s5",
-      "line": 731
+      "line": 733
     },
     {
       "window": 30,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it line for line)",
       "heading": "Failure modes: four the kit reproduces, and which ones the alerts see",
       "anchor": "s5",
-      "line": 758
+      "line": 760
     },
     {
       "window": 31,
       "label": "services/rag-api/config.py - the input total and the output reserve",
       "heading": "Cost: a claim, a month and a floor, at 1k, 10k and 100k claims",
       "anchor": "s6",
-      "line": 817
+      "line": 819
     },
     {
       "window": 32,
       "label": "services/rag-api/generator.py - _budget(): the fixed prompt counted, the chunks get the rest of max_context_tokens",
       "heading": "Cost: a claim, a month and a floor, at 1k, 10k and 100k claims",
       "anchor": "s6",
-      "line": 823
+      "line": 825
     },
     {
       "window": 33,
       "label": "shared/prices.py - the kit's rates and its rupee rate",
       "heading": "Cost: a claim, a month and a floor, at 1k, 10k and 100k claims",
       "anchor": "s6",
-      "line": 826
+      "line": 828
     },
     {
       "window": 35,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it line for line)",
       "heading": "Cost: a claim, a month and a floor, at 1k, 10k and 100k claims",
       "anchor": "s6",
-      "line": 875
+      "line": 877
     },
     {
       "window": 37,
       "label": "expected (the author's lane, recorded once; your answers and averages are your own)",
       "heading": "Cost: a claim, a month and a floor, at 1k, 10k and 100k claims",
       "anchor": "s6",
-      "line": 889
+      "line": 891
     },
     {
       "window": 38,
       "label": "commands/lesson-12.2.sh - documind-api's deploy: forty at a time, twenty instances, none kept warm",
       "heading": "Cost at 10×: the limits the kit declares, and the one it does not",
       "anchor": "s7",
-      "line": 915
+      "line": 917
     },
     {
       "window": 39,
       "label": "terraform/vector.tf - the deployed index: one replica, and no more",
       "heading": "Cost at 10×: the limits the kit declares, and the one it does not",
       "anchor": "s7",
-      "line": 925
+      "line": 927
     },
     {
       "window": 40,
       "label": "terraform/quota.tf - the ceiling under the budget, off by default",
       "heading": "Cost at 10×: the limits the kit declares, and the one it does not",
       "anchor": "s7",
-      "line": 937
+      "line": 939
     },
     {
       "window": 42,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it line for line)",
       "heading": "Cost at 10×: the limits the kit declares, and the one it does not",
       "anchor": "s7",
-      "line": 981
+      "line": 983
     },
     {
       "window": 44,
       "label": "expected (the machine is e2-standard-2 on a SMALL shard, e2-standard-16 on MEDIUM; the last line counts quota.tf's override in your state)",
       "heading": "Cost at 10×: the limits the kit declares, and the one it does not",
       "anchor": "s7",
-      "line": 998
+      "line": 1000
     },
     {
       "window": 45,
       "label": "evals/run_eval.py - what a green run has to clear",
       "heading": "Evals: what blocks, what advises, and what cannot fail",
       "anchor": "s8",
-      "line": 1020
+      "line": 1022
     },
     {
       "window": 46,
       "label": "evals/run_eval.py - check_isolation(): why must_not_contain is not the isolation gate",
       "heading": "Evals: what blocks, what advises, and what cannot fail",
       "anchor": "s8",
-      "line": 1033
+      "line": 1035
     },
     {
       "window": 48,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it line for line)",
       "heading": "Evals: what blocks, what advises, and what cannot fail",
       "anchor": "s8",
-      "line": 1068
+      "line": 1070
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.6_System_One_WIX.html",
-  "source_sha": "007dfe9500fda08f49af0400dd038bb3fd449c21",
+  "source_sha": "1a8b4569c0efebe86e7910d26e538ef2914bd3b5",
   "shared_setup_windows": [
     1
   ],
@@ -407,7 +407,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1142
+        1156
       ],
       "offline": false,
       "live_verified": false,
@@ -423,7 +423,7 @@
           "id": "source_35",
           "function": "step_01_zeta_s_rows_on_your_lane",
           "window": 35,
-          "source_line": 1142,
+          "source_line": 1156,
           "manual_checkpoint": null
         }
       ],
@@ -449,7 +449,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1154
+        1168
       ],
       "offline": false,
       "live_verified": false,
@@ -465,7 +465,7 @@
           "id": "source_37",
           "function": "step_01_against_the_gate_refusal_recall_false_answ",
           "window": 37,
-          "source_line": 1154,
+          "source_line": 1168,
           "manual_checkpoint": null
         }
       ],
@@ -698,7 +698,7 @@
     },
     {
       "window": 34,
-      "label": "evals/decide.py - generator_live(): /v1/query's own answerable, and the cost_usd it carries",
+      "label": "evals/decide.py - list_usd() and generator_live(): /v1/query's own answerable, and its price",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
       "line": 1119
@@ -708,28 +708,28 @@
       "label": "expected (the author's lane, with make's echo of the recipe: your ids, times and verdicts are yours)",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1144
+      "line": 1158
     },
     {
       "window": 38,
       "label": "expected (the author's full run, 65 rows: the figures below are computed from its saved file)",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1156
+      "line": 1170
     },
     {
       "window": 39,
       "label": "evals/run_eval.py - THRESHOLDS: the gate's refusal rate",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1161
+      "line": 1175
     },
     {
       "window": 40,
       "label": "evals/decide.py - calibration() and rupees()",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1187
+      "line": 1201
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

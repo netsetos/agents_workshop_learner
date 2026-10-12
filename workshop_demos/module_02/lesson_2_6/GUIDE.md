@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`, reviewed at blob `007dfe9500fda08f49af0400dd038bb3fd449c21`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`, reviewed at blob `1a8b4569c0efebe86e7910d26e538ef2914bd3b5`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.5 rewrote the question before retrieval. This lesson decides what happens to the pool that retrieval hands back: answer from it, or refuse. The kit decides twice today. Code refuses an empty pool before any model runs, for nothing. Otherwise the generator reads the passages and may refuse by setting `answerable` to false, a refusal that has already paid for a full generator call. A decision could sit between rerank and generate instead: a System One model, which returns a typed decision with a calibrated probability rather than text. TypeSafe AI describes its Jev as one. It is the kit's first model that is not Google's, so it sits behind `JEV_MODE`, off by default, and in this course it is not on the request path at all. `evals/decide.py` asks three arms to decide every golden row from the same pool: the kit's evidence rule at Rs 0, the generator's own `answerable`, and Jev. It scores each against the golden set's truth, with Wilson intervals, calibration, latency and rupees. You will move the rule's floor across the 65 rows, ask a refusal row in the UI and see what it paid for, read the two refusals and the seam Jev would plug into, run the eval for Rs 0 and on your lane, and hold every arm against the gate's 0.90.
 
@@ -218,7 +218,7 @@ This run takes zeta's rows: 10 of them, 5 answerable and 5 isolation rows that a
 
 #### Do it: zeta's rows on your lane
 
-The rule decided each of zeta's rows from your lane's pool, with the corpus's idf, and the generator decided each from its own answer. Three lines are worth reading. The rows where the arms disagree are the ones to open: a row the rule answered and the generator refused is a pool that carries the question's words without its answer, and a row the generator answered and the rule refused is an answer the floor would have cost you. Kappa says how much of the arms' agreement is more than chance. And the generator's rupee line reads unpriced: `decide.py` prices an arm from the `cost_usd` its answer carries, which `/v1/query` fills only when the gateway priced the answer or no model ran, so for a Gemini answer it is null, as step 3 showed. Step 7 prices those decisions from their tokens.
+The rule decided each of zeta's rows from your lane's pool, with the corpus's idf, and the generator decided each from its own answer. Three lines are worth reading. The rows where the arms disagree are the ones to open: a row the rule answered and the generator refused is a pool that carries the question's words without its answer, and a row the generator answered and the rule refused is an answer the floor would have cost you. Kappa says how much of the arms' agreement is more than chance. And the generator's rupee line is priced from its tokens: `/v1/query` fills `cost_usd` only when the gateway priced the answer or no model ran, so for a Gemini answer it is null, as step 3 showed, and `decide.py` prices that answer's tokens at `shared/prices.py`'s list price, as `cost.py` prices the usage row.
 
 ### Against the gate: refusal recall, false answers, calibration, latency and rupees
 
@@ -238,7 +238,7 @@ An isolation row in that list is the one to read first: a tenant was asked about
 
 #### Calibration, latency and rupees
 
-The generator's rupees are priced here from its tokens with `shared/prices.py`, gemini-3.6-flash at USD 1.50 in and USD 7.50 out per million tokens and 85 rupees to the dollar, because `decide.py`'s own line leaves it unpriced (step 6). Jev's are priced at TypeSafe's page rate, USD 42 per billion input tokens, and never at `shared/prices.py`'s, which would bill an unknown model at flash's rate; a decision that reports output tokens is left unpriced, because the page names no output price. On the Rs 0 lane's pools, the 57 rows Jev could be sent come to about 90,914 tokens by the kit's own count, about Rs 0.32 at that rate for all of them: the price is not what decides whether Jev belongs on the path.
+The generator's rupees are its tokens at `shared/prices.py`'s list price, as `decide.py`'s own line prices them (step 6): gemini-3.6-flash at USD 1.50 in and USD 7.50 out per million tokens, and 85 rupees to the dollar. Jev's are priced at TypeSafe's page rate, USD 42 per billion input tokens, and never at `shared/prices.py`'s, which would bill an unknown model at flash's rate; a decision that reports output tokens is left unpriced, because the page names no output price. On the Rs 0 lane's pools, the 57 rows Jev could be sent come to about 90,914 tokens by the kit's own count, about Rs 0.32 at that rate for all of them: the price is not what decides whether Jev belongs on the path.
 
 #### Refusing first: what it would save, and what it would lose
 

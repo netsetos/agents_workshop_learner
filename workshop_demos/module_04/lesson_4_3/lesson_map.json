@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html",
-  "source_sha": "26b52b7486d99ed577a9381d40b45cd75fc6594a",
+  "source_sha": "fa065738aa8c1e457005a690533c8e0446fc39d7",
   "shared_setup_windows": [
     1
   ],
@@ -516,7 +516,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
       "source_lines": [
-        1000
+        1002
       ],
       "offline": false,
       "live_verified": false,
@@ -532,7 +532,7 @@
           "id": "source_42",
           "function": "step_01_the_metrics_the_policies_and_the_windows",
           "window": 42,
-          "source_line": 1000,
+          "source_line": 1002,
           "manual_checkpoint": null
         }
       ],
@@ -796,21 +796,21 @@
       "label": "expected (the author's lane: your windows are your lane's hours)",
       "heading": "The alert's own inputs: two log metrics, two policies, and the windows they saw",
       "anchor": "s7",
-      "line": 1047
+      "line": 1049
     },
     {
       "window": 44,
       "label": "evals/judge.py - main(): the scores are printed, and the exit is 0 whatever they are",
       "heading": "The judge's place, the gaps the placements leave, and what each costs",
       "anchor": "s8",
-      "line": 1058
+      "line": 1060
     },
     {
       "window": 45,
       "label": "terraform/desk_alerts.tf - the Desk's metric made the other choice: no service account counts",
       "heading": "The judge's place, the gaps the placements leave, and what each costs",
       "anchor": "s8",
-      "line": 1077
+      "line": 1079
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

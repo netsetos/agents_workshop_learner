@@ -159,42 +159,42 @@
     {
       "lesson": "2.6",
       "title": "Decide answer-or-refuse with a System One model (Jev)",
-      "source_sha": "007dfe9500fda08f49af0400dd038bb3fd449c21",
+      "source_sha": "1a8b4569c0efebe86e7910d26e538ef2914bd3b5",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
-      "source_sha": "c89c3559bfa48cb1af933e66ce4e1b275de68eda",
+      "source_sha": "3cd6df0de649ad7d6598cd5da10c3fa8c9c27220",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.5",
       "title": "Generate structured answers, citations and refusals",
-      "source_sha": "be4ba0adff0eefafe272eebc8c9d04137e150d3b",
+      "source_sha": "69535362b4304805040783944ce7ce885ffb98ac",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.7",
       "title": "Stream answers and handle failures",
-      "source_sha": "9ff597141a0ff947d0c0cf9acf42158424a2f234",
+      "source_sha": "bd95ee4c0aed5d6c7ad2ac5b6edccc2149fef824",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.8",
       "title": "Complete the Streamlit upload-to-answer journey",
-      "source_sha": "f27f9d0481047e5469cc8e52c3997f8bea47a544",
+      "source_sha": "04eff0d81a73201035219835076b61b7ee3ddb9f",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.9",
       "title": "System design: a fact-checking system built from DocuMind's parts",
-      "source_sha": "56f0bda25645d6e116a3f85889128f54661b5e99",
+      "source_sha": "4f90969f4077fb364fe35e4f7ac870458fcb4021",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -208,14 +208,14 @@
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "57cd76f6377942b540c2dec0b93371c4c56ed768",
+      "source_sha": "d4f2908a19ad29e2f5d01c93d24c9fd39ffe5e7b",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.3",
       "title": "Place evals in the pipeline: CI, the candidate gate and live traffic",
-      "source_sha": "26b52b7486d99ed577a9381d40b45cd75fc6594a",
+      "source_sha": "fa065738aa8c1e457005a690533c8e0446fc39d7",
       "source_kind": "main_html",
       "demos": 8
     },

@@ -62,7 +62,7 @@ for _p in (str(KIT), str(HERE)):
 from route_eval import TOKEN_MAX_AGE_S, mint, rate, wilson  # noqa: E402 - one Wilson interval, the route eval's
 from run_eval import ask, load_golden, pct, validate_body  # noqa: E402 - one /v1/query client, the eval gate's
 
-from shared import system_one  # noqa: E402
+from shared import prices, system_one  # noqa: E402
 from shared.prices import USD_INR  # noqa: E402
 
 ARMS = ("rule", "generator", "jev")
@@ -259,6 +259,16 @@ def policy_reader(base=None):
 
 
 # --------------------------------------------------------------------- the generator arm
+def list_usd(model: str, tokens_in: int, tokens_out: int) -> float:
+    """A lane answer's tokens at shared/prices.py's list price, whatever DOCUMIND_PROFILE this shell carries: the
+    answer came from the deployed lane, which Lane calls on the gcp profile the same way."""
+    saved, prices.PROFILE = prices.PROFILE, "gcp"
+    try:
+        return round(prices.usd(model, tokens_in, tokens_out), 6)
+    finally:
+        prices.PROFILE = saved
+
+
 def generator_live(question: str, tenant: str, lane) -> dict:
     """The generator's own decision: /v1/query's answerable, through run_eval.ask(). A non-200 or a body that is
     not the answer contract is an error, never a refusal."""
@@ -272,9 +282,13 @@ def generator_live(question: str, tenant: str, lane) -> dict:
                                  reason="the generator's answer did not arrive")
     empty = body.get("backend") == "none" and not body["citations"] and (body.get("stages") or {}).get("pool") == 0
     tin, tout = body.get("tokens_in"), body.get("tokens_out")
+    counted = isinstance(tin, int) and isinstance(tout, int)
+    cost = body.get("cost_usd")
+    if cost is None and counted and body.get("model"):   # /v1/query fills cost_usd only when the gateway priced the
+        cost = list_usd(body["model"], tin, tout)        # answer; a Gemini answer's tokens, as cost.py prices its row
     res = system_one.result("answer" if body["answerable"] else "refuse", source="code" if empty else "live",
-                            model=body.get("model"), ms=ms, cost_usd=body.get("cost_usd"),
-                            tokens={"input": tin, "output": tout} if isinstance(tin, int) and isinstance(tout, int) else None,
+                            model=body.get("model"), ms=ms, cost_usd=cost,
+                            tokens={"input": tin, "output": tout} if counted else None,
                             reason=f"answerable {str(body['answerable']).lower()}, confidence {body['confidence']}"
                                    + (f", cache {body['cache_hit']}" if body.get("cache_hit") not in (None, "none") else ""))
     res["confidence"] = body["confidence"]

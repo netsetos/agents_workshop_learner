@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.5_Structured_Answers_WIX.html`, reviewed at blob `be4ba0adff0eefafe272eebc8c9d04137e150d3b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.5_Structured_Answers_WIX.html`, reviewed at blob `69535362b4304805040783944ce7ce885ffb98ac`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 3.4 packed the evidence. This lesson is what comes back. The model is not asked for an answer in prose; it is asked to fill a schema, `ModelDraft`, whose citations are the `[Source N]` numbers it read in the context and the words it relied on, because those are the only things it can see. `resolve()` turns that draft into the contract every module passes along, `RAGAnswer`, with real chunk ids, pages and scores it never saw, dropping a number that was never packed. A refusal has the same shape, `answerable false` and no citations, and it comes in two kinds: the model's, when the packed evidence does not answer, and the API's own, when nothing was retrieved at all and no model is called. Every answer carries what it cost, in dollars and in rupees, and the model that produced it is a setting: a name served from the global endpoint, or a tuned endpoint served from wherever its path says. You will validate and resolve drafts offline, read one lane answer field by field and check its quotes against the rows, watch three refusals differ in their envelopes, make the model's call yourself with the kit's own schema, and shrink the answer's reserve on a candidate to see the failure that is not a refusal.
 
@@ -104,7 +104,7 @@ The contract and the envelope printed apart, the [N] marks against the citations
 
 #### Definition
 
-The response is the contract plus the envelope, and the cell prints them apart. Then it does two checks the API does not: it lists the `[N]` marks in the answer's text and compares them with the citations that came back, and for each citation it reads the chunk's row from Firestore and asks whether the quote's words, whitespace folded, occur in the row's text. Rule five asks the model for the clause that answers, at most twenty-five words, exact; the contract stores up to 500 characters of it; nothing in the API verifies the words. A False on that line is the model paraphrasing where it was told to quote, which lesson 7's eval does not score either, and which is worth knowing about your model before you trust a quote in the UI.
+The response is the contract plus the envelope, and the cell prints them apart. Then it does two checks the API does not: it lists the `[N]` marks in the answer's text and compares them with the citations that came back, and for each citation it reads the chunk's row from Firestore and asks whether the quote's words, whitespace folded, occur in the row's text. Rule five asks the model for the clause that answers, at most twenty-five words, exact; the contract stores up to 500 characters of it; nothing in the API verifies the words. A False on that line is the model paraphrasing where it was told to quote, which Module 4's eval does not score either, and which is worth knowing about your model before you trust a quote in the UI.
 
 #### The code
 
@@ -162,7 +162,7 @@ The rupee line for an answer and for each refusal, and a candidate whose reserve
 
 #### The failure that is not a refusal
 
-A reserve too small for any JSON is the cleanest way to see the rule that a cut-off answer is never scored as the model declining. On a candidate that takes no traffic, set the reserve to 16 tokens: the first attempt hits the cap before a draft exists, the generator logs `generation_truncated` and asks once more with 48, which is still not enough, and the handler returns 502 with `generation_unparsed` and the finish reason in the message. No usage row is written for it, so the tenant is not billed a refusal it never got, and lesson 7's gate counts it as plumbing. The variable is not set on the live service, so the undo removes it.
+A reserve too small for any JSON is the cleanest way to see the rule that a cut-off answer is never scored as the model declining. On a candidate that takes no traffic, set the reserve to 16 tokens: the first attempt hits the cap before a draft exists, the generator logs `generation_truncated` and asks once more with 48, which is still not enough, and the handler returns 502 with `generation_unparsed` and the finish reason in the message. No usage row is written for it, so the tenant is not billed a refusal it never got, and Module 4's gate counts it as plumbing. The variable is not set on the live service, so the undo removes it.
 
 #### The code
 

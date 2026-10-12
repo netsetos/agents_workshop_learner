@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html`, reviewed at blob `26b52b7486d99ed577a9381d40b45cd75fc6594a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html`, reviewed at blob `fa065738aa8c1e457005a690533c8e0446fc39d7`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 4.2 ran three instruments, one at a time. This lesson puts each where it runs. The offline gate runs in CI on every push, and both release paths of the delivery workflow need it to pass first. The live gate runs on a candidate, a revision of the API that takes no traffic, and holds the release on 9 thresholds and 15 required rows. After the release nothing gates: each answer leaves a usage row, and two alert policies read rates from the rows. You will break a golden row and watch the offline check refuse it, gate a candidate and remove it, find the gate's own rows in the live log, and read one refusal the alert can never count.
 
@@ -208,7 +208,7 @@ No step of either workflow runs `judge.py`. Its `main()` prints the scores and r
 
 - The eval's rows are traffic. `documind/unanswerable` and `documind/queries` count the gate's rows and the candidate's like anyone's. The Desk's own router metric made the other choice: it drops every service account, so that the eval accounts cannot page a lane where nobody has asked anything.
 
-- A mean of percentiles. The latency policy averages the p95 of each series it matches and reads every request to the service, the setup block's `/health` among them. An average of percentiles is not the percentile of all requests: a quiet revision with fast answers pulls it down. Its comment says `/v1/query` over a 30-minute window; its condition says every request, for 5 minutes.
+- A mean of percentiles. The latency policy averages the p95 of each series it matches and reads every request to the service, the setup block's `/health` among them. An average of percentiles is not the percentile of all requests: a quiet revision with fast answers pulls it down. Its comment says as much: every request, for 5 minutes.
 
 - A tenant the gate barely asks. Globex has 2 answerable rows of 47. With globex's index empty, the matrix's stub run lost those two rows and still exited 0, at an answerable_rate of 95.7%. Only the unanswerable alert would see it, once people asked.
 

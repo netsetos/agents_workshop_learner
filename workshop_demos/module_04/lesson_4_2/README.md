@@ -294,6 +294,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `57cd76f6377942b540c2dec0b93371c4c56ed768`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d4f2908a19ad29e2f5d01c93d24c9fd39ffe5e7b`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

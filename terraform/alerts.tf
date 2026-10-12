@@ -15,7 +15,9 @@ resource "google_monitoring_notification_channel" "oncall" {
   }
 }
 
-# SLO: p95 /v1/query < 3s over 30-min rolling window
+# Latency: documind-api's p95 over 3 s for 5 minutes. Every request to the service counts, not /v1/query alone, and
+# the figure is the mean of the series' p95s (REDUCE_MEAN), not the p95 of all requests: a quiet, fast revision pulls
+# it down.
 resource "google_monitoring_alert_policy" "api_latency" {
   display_name = "API p95 latency > 3s"
   combiner     = "OR"

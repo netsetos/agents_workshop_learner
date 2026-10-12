@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`, reviewed at blob `56f0bda25645d6e116a3f85889128f54661b5e99`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`, reviewed at blob `4f90969f4077fb364fe35e4f7ac870458fcb4021`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 3 built the parts one lesson at a time: the budget that packs the evidence, the contract that makes the model cite or refuse, the stream and its fallbacks, and the journey from an upload to a cited answer. This page puts them to a use none of those lessons had. A fact desk takes a claim and returns one of two things: a verdict that stands on a clause from the tenant's own documents, quoted and cited, or a refusal. It is a design page, written the way lesson 11.8 scores the capstone, so its sections are the rubric's five dimensions and each one shows what a 3 looks like. Every number on it is computed from the kit or read from a dated price page, and the sections on the first four dimensions each end in a script you can run for Rs 0.
 

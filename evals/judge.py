@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 """make judge: the lane's own answers, scored by a second judge. Module 10 (10.4 Vertex AI Evaluation).
 
-    make judge PROJECT=...                                # the deployed API's answers to the 64 golden rows
+    make judge PROJECT=...                                # the deployed API's answers to the 65 golden rows
     make judge PROJECT=... API_B=https://candidate---...  # + pairwise: the candidate revision against the live one
     make judge PROJECT=... CHAT_URL=https://documind-chat-...   # + trajectories: /v1/chat's tool_calls, three brains
     python evals/judge.py --selftest                      # the assembly and the trajectory maths, offline
 
 run_eval.py is the gate: nine thresholds and fifteen required rows, no model in the loop, green or red. This is the OTHER judge -
-Gemini reading the same 64 answers for groundedness (is the answer supported by the context it cites?)
+Gemini reading the same 65 answers for groundedness (is the answer supported by the context it cites?)
 and fulfilment (did it answer what was asked?) through Vertex AI Evaluation, with bring-your-own
 responses: nothing here generates; every response was produced by the deployed service, so the score
 is a score of the lane, not of a prompt in a notebook. Every run is an Experiments run named by the

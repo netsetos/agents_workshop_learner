@@ -48,13 +48,9 @@ for who in $(echo "$ADMIN_EMAILS" | tr ',' ' '); do
     --member="user:$who" --role=roles/iap.httpsResourceAccessor
 done
 
-# Admin SA needs BQ data viewer + Firestore user
-gcloud projects add-iam-policy-binding $PROJECT \
-  --member="serviceAccount:documind-admin-sa@$PROJECT.iam.gserviceaccount.com" \
-  --role="roles/bigquery.dataViewer"
-gcloud projects add-iam-policy-binding $PROJECT \
-  --member="serviceAccount:documind-admin-sa@$PROJECT.iam.gserviceaccount.com" \
-  --role="roles/bigquery.jobUser"
+# admin-sa's project roles (BigQuery, Firestore, logs, the audit bucket) are Terraform's: sa.tf's admin_roles,
+# applied before this block runs. Two gcloud grants here repeated them without --condition=None, which stops
+# make up's sh -ec on a project whose policy carries a condition (12 October 2026).
 
 # ---- SMOKE ----
 # 1. Sink is writing

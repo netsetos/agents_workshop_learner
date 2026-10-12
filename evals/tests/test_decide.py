@@ -405,6 +405,26 @@ class RuleTest(unittest.TestCase):
         self.assertEqual(decide.rule_arm(PASSAGES, 0.9, 0.5)["cost_usd"], 0.0)
 
 
+class GeneratorPriceTest(unittest.TestCase):
+    """The generator arm's price: /v1/query's cost_usd when it carries one (the gateway's), else a Gemini answer's
+    tokens at shared/prices.py's list price, whatever profile this shell is on. No tokens, no price: never a guess."""
+
+    def arm(self, **fields):
+        body = {"answer": "...", "citations": [], "answerable": True, "confidence": "high", "model": "gemini-3.6-flash",
+                "backend": "vertex", "cost_usd": None, "tokens_in": 1000, "tokens_out": 200, "stages": {"pool": 20}}
+        body.update(fields)
+        return decide.generator_live("q", "acme", types.SimpleNamespace(ask=lambda question, tenant: (200, body, 900)))
+
+    def test_a_gemini_answer_is_priced_from_its_tokens(self):
+        self.assertAlmostEqual(self.arm()["cost_usd"], (1000 * 1.50 + 200 * 7.50) / 1e6)
+        with patch.object(decide.prices, "PROFILE", "local"):          # the lane answered, not this shell's profile
+            self.assertAlmostEqual(self.arm()["cost_usd"], 0.003)
+            self.assertEqual(decide.prices.PROFILE, "local")
+        self.assertEqual(self.arm(cost_usd=0.0012)["cost_usd"], 0.0012)  # the gateway's own price stands
+        self.assertIsNone(self.arm(tokens_in=None)["cost_usd"])
+        self.assertEqual(self.arm(tokens_in=None)["verdict"], "answer")
+
+
 class FakeLane:
     """The deployed API, stood in for: a pool and a /v1/query answer per question and tenant. (An isolation row asks
     another tenant's question, so the question alone names no row; lk-06 and vr-01 are one question to one tenant,

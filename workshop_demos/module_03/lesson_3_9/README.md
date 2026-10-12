@@ -250,6 +250,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`. All 48 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `56f0bda25645d6e116a3f85889128f54661b5e99`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`. All 48 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4f90969f4077fb364fe35e4f7ac870458fcb4021`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.
