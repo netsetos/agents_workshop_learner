@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.1_Billing_Project_WIX.html`, reviewed at blob `e8752816c7f6df23f638d88cde838439debb5a23`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.1_Billing_Project_WIX.html`, reviewed at blob `e5942beb5af237a1bae016533190895a266f26a6`. Learners read that page on the course site; this guide keeps its prose.
 
 Before the kit builds anything, someone has to pay for it, and someone has to be told when it costs more than planned. This lesson sets up the three things every later lesson stands on: a billing account, on the free trial or paid; a project of its own for the lane, linked to that account, with the 40 APIs the kit uses switched on; and a budget that emails at the kit's own thresholds. Then it prices what the lane will cost per day just for existing, from the kit's Terraform, so you know the number before lesson 0.3 starts the meter.
 
@@ -216,7 +216,7 @@ That sentence names the index, the two Cloud SQL instances and the cluster. Read
 
 #### The six, as the kit declares them
 
-The index. One replica (`min_replica_count = 1`), on the machine its shard size names. `vector.tf` does not choose the shard size: the index is created without one, the API picks it, and the comment above the map records an existing index that came back `MEDIUM`. A small shard runs one `e2-standard-2`, Rs 230 a day; a medium one runs one `e2-standard-16`, Rs 1,839 a day. Once the index exists its description names its shard size; until then this page carries both.
+The index. One replica (`min_replica_count = 1`), on the machine its shard size names. `vector.tf` creates a new index with a small shard, so the lane lesson 0.3 deploys gets one. An index created before the kit named the size keeps the one the API picked, and the comment above the map records an existing index that came back `MEDIUM`. A small shard runs one `e2-standard-2`, Rs 230 a day; a medium one runs one `e2-standard-16`, Rs 1,839 a day. Once the index exists its description names its shard size; this page carries both.
 
 Spanner. Enterprise edition, which Spanner Graph needs, at 100 processing units: a tenth of a node, the smallest a provisioned instance can be, in `regional-asia-south1`. The comment above it says it bills by the hour while it exists, and asks for it to be priced on the Spanner page for `regional-asia-south1` before a cohort. That pricing is the table below: Rs 351 a day.
 
@@ -250,7 +250,7 @@ Storage, which bills by the gigabyte-month: Firestore, the buckets, BigQuery, th
 
 The index, Spanner, both databases and the connector are not touched by it either. Only `make down` removes them, by destroying what the Terraform made, and the last lines it prints name the one action that stops everything at once, which is why the lane gets a project of its own:
 
-This is the lesson's proof. In your notes, with today's date: Rs 1,057 a day with a small-shard index, Rs 2,666 a day with a medium one; Rs 2,114 or Rs 5,333 for a weekend left up. Plan for the larger until you know which machine your index got. Lesson 0.4 comes back to this number when it switches the lane off.
+This is the lesson's proof. In your notes, with today's date: Rs 1,057 a day with a small-shard index, Rs 2,666 a day with a medium one; Rs 2,114 or Rs 5,333 for a weekend left up. The lane lesson 0.3 deploys gets the small-shard index; the larger figure is for an index created before the kit named its size. Lesson 0.4 comes back to this number when it switches the lane off.
 
 ### Verify it yourself: the checklist
 

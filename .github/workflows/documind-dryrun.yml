@@ -67,7 +67,12 @@ jobs:
       # library half is the brains under a turn's limits (workshop lessons 5.5 and 5.7); make limits-check runs
       # the same. test_cases.py's is the Desk's chat door and case routes (workshop lesson 5.6; make desk-check),
       # test_desk.py's the router and the desk graph (workshop lesson 10.4), test_gchat.py's the Google Chat bridge and
-      # the Desk's delegation rules (workshop lesson 10.4).
+      # the Desk's delegation rules (workshop lesson 10.4), test_agent_bench.py's the agent bench's patterns on a
+      # scripted model (workshop lessons 10.1-10.3 and 10.5; make agent-tests), test_agent_patterns.py's workshop
+      # lesson 10.1's two, prompted ReAct parsed by code and the plan-first loop (make agent-tests), and
+      # test_approvals.py's a person in the loop (workshop lesson 5.8, services/chat/approval.py; make approval-check),
+      # which also needs the local lane's SQLite checkpointer, at the version services/chat/requirements-local.txt pins;
+      # test_thread_read.py's a thread's checkpoints read back, replayed and forked (workshop lesson 6.8).
       - name: Chat brain regressions, in the chat image's pins (offline)
         run: |
           python -m venv /tmp/chat-venv
@@ -77,6 +82,11 @@ jobs:
           DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_cases.py -v
           DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_desk.py -v
           DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_gchat.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_agent_bench.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_agent_patterns.py -v
+          /tmp/chat-venv/bin/pip install -q "$(grep -E '^langgraph-checkpoint-sqlite==' services/chat/requirements-local.txt)"
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_approvals.py -v
+          DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_thread_read.py -v
 
       - name: Extraction check (a kit-only checkout has no notebooks, so it reports and passes)
         run: python extract_documind.py --check

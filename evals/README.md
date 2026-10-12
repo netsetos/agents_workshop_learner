@@ -201,6 +201,17 @@ figures); `route_eval.py --predictions` scores a run with every rate's denominat
 `route_probe.py` measures four model facts on a lane (`make route-probe`). `make desk-check` runs the offline
 half.
 
+## agent_tasks.jsonl - the agent bench's task set (Module 10)
+
+One row per question an agent pattern is scored on (lessons 10.1-10.3 and 10.5): calculator rows whose figure the
+kit's own `shared/desk_calc.py` recomputes (the gratuity on Rs 52,000 a month after 7 years 8 months is Rs 2,40,000),
+single-hop lookups from golden, a provenance trap and a refusal. Every row carries its expected figure, the clause or
+section it rests on and the figures a right answer never states. `agent_eval.py --check` recomputes every figure and
+runs the hard gate on every question (`make agent-eval CHECK=1`); a run scores correctness, provenance (a calculator
+wrote the figure, `desk_calc.unsupported()`), model calls, thinking and visible tokens and rupees, offline on a
+scripted model or on a lane; `paired.py` compares two arms on the same rows. The rows are model drafts until people
+write a held-out split.
+
 ## Refreshing the real documents
 
 A publisher moves files. When `fetch_real.py` reports a 404, find the Act on the ministry's site

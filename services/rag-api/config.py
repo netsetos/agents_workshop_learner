@@ -1,4 +1,4 @@
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RETRIEVAL_BACKENDS = ("vector", "firestore", "rag_engine", "vertex_search")   # rag_engine: 4.3's corpus (P9.4); vertex_search: 4.4's data store (R4) - each as the retrieval stage
@@ -129,6 +129,12 @@ class Settings(BaseSettings):
     # of the same tenant under the same corpus fingerprint is answered from Firestore - no retrieval, no model call.
     # Off on the lane until the threshold is measured on paraphrase pairs (the RAG plan, W4).
     semantic_cache: str = Field("off", alias="SEMANTIC_CACHE")
+    # Workshop lesson 2.5's rewrite stage (rewrite.py, shared/query_rewrite.py): off | on, anything else refused below.
+    # On, /v1/query asks QUERY_REWRITE_MODEL (on the global endpoint) for the question in the documents' words and
+    # searches with that - it never reranks or answers with it - and searches the question itself when the rewrite drops
+    # a code, a grade or a figure, or fails. Off on the lane until evals/ablate.py --rewrite measures it.
+    query_rewrite: str = Field("off", alias="QUERY_REWRITE")
+    query_rewrite_model: str = Field("gemini-3.1-flash-lite", alias="QUERY_REWRITE_MODEL")
     prompt_id: str = "documind-rag"
     prompt_version: str = "v3"
     retrieval_mode: str = "dense"          # dense | hybrid (4.5's hybrid.py)
@@ -154,6 +160,16 @@ class Settings(BaseSettings):
     # BigQuery model_prices table so a rate change is not a redeploy.
     price_in: float = 1.50
     price_out: float = 7.50
+
+    @field_validator("query_rewrite")
+    @classmethod
+    def _query_rewrite_known(cls, value: str) -> str:
+        # Refused at import, as RETRIEVAL_GRAPH is: a typo must not start a revision that searches the question as
+        # asked while its environment says the stage is on.
+        if value not in ("off", "on"):
+            raise ValueError(f"QUERY_REWRITE={value!r}: off or on - off searches the question as asked; on searches workshop "
+                             "lesson 2.5's rewrite of it and still reranks and answers the question")
+        return value
 
     @model_validator(mode="after")
     def _retrieval_modes_agree(self):

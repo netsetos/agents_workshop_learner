@@ -245,3 +245,57 @@ desk-operators: guard-project
 	  gcloud iam service-accounts add-iam-policy-binding $$sa@$(PROJECT).iam.gserviceaccount.com --project=$(PROJECT) \
 	    --member="user:$$who" --role=roles/iam.serviceAccountTokenCreator --condition=None --quiet >/dev/null \
 	  && echo ">> $$who may mint tokens as $$sa"; done; done
+
+# ---------- the agent bench (workshop lessons 10.1-10.3 and 10.5): one task set, many agent patterns ----------
+# Appended below every Desk target, and so are the bench's next targets: lesson 10.4's page reads route-eval's recipe
+# by its line number in this file.
+#
+# One turn of an agent pattern, printed whole (commands/agent_turn.py): each model call with its thinking and visible
+# tokens and rupees, the tools it asked for with their arguments and what each returned, then the answer as the Desk
+# shows it and the figure check. PATTERN=loop (the Desk agent's own loop, commands/agent_patterns.py, which the
+# patterns of lessons 10.1-10.3 join), THINKING=minimal|low|medium|high (unset: the desk agent's own, low),
+# DESK=astar|handbook|statute (astar, the default: one retrieve over every class, and every calculator), TENANT, Q
+# (unset: the gratuity row of evals/agent_tasks.jsonl). OFFLINE=1 needs no PROJECT: a scripted model and the kit's own
+# corpus, Rs 0. Otherwise one real turn on your lane: a few gemini-3.6-flash calls on location global, under the chat
+# service's 12 calls and Rs 5, and rag-api's /v1/passages as documind-ui-sa. In ~/graph-venv with the chat image's
+# pins: commands/agent-turn.sh.
+agent-turn: $(if $(OFFLINE),,guard-project)
+	@PROJECT=$(PROJECT) REGION=$(REGION) PATTERN=$(PATTERN) THINKING=$(THINKING) DESK=$(DESK) TENANT=$(TENANT) Q="$(Q)" OFFLINE=$(OFFLINE) PY=$(PY) bash commands/agent-turn.sh
+
+# The task set scored (evals/agent_eval.py). CHECK=1 recomputes every row's figure with shared/desk_calc.py and runs
+# the hard gate on every question; REPLAY=<file> rescores saved runs, BEST_OF=N keeping the run of each row the figure
+# check chooses; COMPARE="A B" pairs two saved arms (Newcombe's interval and an exact McNemar test, evals/paired.py).
+# Those three are Rs 0 and need no venv. Otherwise every row through each of PATTERNS (comma-separated) at each of
+# THINKING (comma-separated; default is the desk agent's own), on DESK (astar, or row for each row's own desk), RUNS
+# times (pass@k and pass^k), SLICE (kinds, tags or ids), SAVE=<file>: OFFLINE=1 on the scripted model, Rs 0; on your
+# lane each row and run is one agent turn, as make agent-turn's. In ~/graph-venv: commands/agent-turn.sh.
+agent-eval: $(if $(or $(OFFLINE),$(CHECK),$(REPLAY),$(COMPARE)),,guard-project)
+	@$(if $(or $(CHECK),$(REPLAY),$(COMPARE)),$(PY),PROJECT=$(PROJECT) REGION=$(REGION) OFFLINE=$(OFFLINE) PY=$(PY) bash commands/agent-turn.sh) evals/agent_eval.py $(if $(CHECK),--check,$(if $(REPLAY),--replay "$(REPLAY)",$(if $(COMPARE),--compare $(COMPARE),$(if $(OFFLINE),--offline,--live)))) $(if $(PATTERNS),--patterns $(PATTERNS),) $(if $(THINKING),--thinking $(THINKING),) $(if $(DESK),--desk $(DESK),) $(if $(RUNS),--runs $(RUNS),) $(if $(SLICE),--slice $(SLICE),) $(if $(BEST_OF),--best-of $(BEST_OF),) $(if $(SAVE),--save "$(SAVE)",)
+
+# The bench's own tests, offline and free: paired.py's arithmetic and the task set's check and scorer (stdlib), then
+# the patterns on a scripted model (commands/tests/test_agent_bench.py, and lesson 10.1's test_agent_patterns.py) in
+# ~/graph-venv with the chat image's pins, as CI's chat-pins step runs them.
+agent-tests:
+	$(PY) -m unittest discover -s evals/tests -p test_paired.py
+	$(PY) -m unittest discover -s evals/tests -p test_agent_eval.py
+	@OFFLINE=1 DOCUMIND_REQUIRE_LIBS=1 PY=$(PY) bash commands/agent-turn.sh -m unittest commands/tests/test_agent_bench.py -v
+	@OFFLINE=1 DOCUMIND_REQUIRE_LIBS=1 PY=$(PY) bash commands/agent-turn.sh -m unittest commands/tests/test_agent_patterns.py -v
+
+# A person in the loop (workshop lesson 5.8), offline and free: services/chat/approval.py, which the chat service does
+# not import, on scripted models. A withdrawal waits for a second person (the requester's own approval is refused) and
+# a second process resumes it from the same SQLite checkpoint file; a rejection errors that call alone; the person who
+# asked answers a clarifying question; a case is offered with nothing written. In ~/graph-venv with the chat image's
+# pins and the local lane's SQLite checkpointer (made, or completed, here). See commands/approval-check.sh.
+approval-check:
+	@PY=$(PY) bash commands/approval-check.sh
+
+# The classifier's examples on and off (workshop lesson 3.2): evals/route_eval.py with the L1 prompt's examples swapped
+# for one run, in process - EXEMPLARS=kit (desk_routes.PROMPT_EXEMPLARS, the eight; the default), none, or a JSON file
+# of [row id, route, question] - on the same 187 dev rows, the groups of the kit's eight still left out of the score. It
+# prints the usual report, the examples used and "L1 alone": flash-lite's own route on the turns it was asked, before
+# the vote and the arbiter. On your lane (--live-l1, google-genai in the shell): 126 of the rows reach flash-lite, the
+# disputed ones flash, with one embedding each and the 198-row index embedded first; RUNS=3 asks every row three times.
+# LOCAL=1 runs it offline on the scripted classifier, which reads no example: the arms then differ in the router's cost
+# alone, what the eight cost in prompt tokens (Rs 0, no PROJECT).
+exemplars: $(if $(LOCAL),,guard-project)
+	$(PY) evals/route_eval.py $(if $(LOCAL),--local,--live-l1 --project $(PROJECT)) --exemplars $(or $(EXEMPLARS),kit) $(if $(RUNS),--runs $(RUNS),)

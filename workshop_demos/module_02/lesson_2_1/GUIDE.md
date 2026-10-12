@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.1_Query_Filters_WIX.html`, reviewed at blob `eec99fabc474ce0ab221815772043a8d9d45a33f`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.1_Query_Filters_WIX.html`, reviewed at blob `d87702c772274382d96c92309e4db9d8679c638a`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 1 put the records in place. This module reads them. A question arrives as text and leaves the API as a vector; the caller's identity, not the request, decides whose documents it may search; two named filters may narrow the search and anything else is refused before any work is done; and the index is asked with restricts that make one index serve three tenants without a leak. You will embed a question yourself and compare a direct index search with the API's citations, ask the same question of two tenants with one identity and get two answers, send the wrong filters and read the 400s, and read the stages block that says which store answered.
 

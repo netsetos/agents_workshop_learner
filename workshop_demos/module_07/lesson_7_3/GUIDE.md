@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.3_Managed_Mirrors_WIX.html`, reviewed at blob `5d2f8eed1c871bf3e8af3c1094e90280a07c7795`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.3_Managed_Mirrors_WIX.html`, reviewed at blob `66ef89e9ce840a9eff905ec94d08298a7c546b81`. Learners read that page on the course site; this guide keeps its prose.
 
 The kit's own index lives in Mumbai, asia-south1. Two Google-managed stores can hold a copy of a tenant's documents too: a Vertex AI RAG Engine corpus in us-central1 and a Vertex AI Search data store in `global`. The worker copies each version it makes current into them, but only for a tenant whose `data_region` says `any`. The API reads a store only for a tenant pinned to it, and holds that pin against the same policy.
 
@@ -249,8 +249,6 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 - A Vertex AI Search copy is recorded before it exists. The import is a long-running operation. `mirror_ok`, the `doc.mirror` event and the ledger's `mirrored` all follow the request, and nothing checks that the import finished.
 
 - `found_by` stops at the pool. The Citation contract has no `found_by`, so an answer shows its store only in the chunk id's `#rag-` or `#vs-`. The figure rows that join a managed pool carry no `found_by` at all.
-
-- `make down` cannot finish while the data stores exist. `managed.tf` marks them `prevent_destroy`, and Terraform rejects any plan that would destroy such a resource, so `make down`'s `terraform destroy` fails before it removes anything. The README says `make down` names the protected stores; its closing list does not. Deleting the throwaway project, which is `make down`'s own last line, is the sure way to stop the bills.
 
 ### Verify it yourself: the checklist
 

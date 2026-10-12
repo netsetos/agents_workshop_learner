@@ -362,6 +362,9 @@ def _guard():
     return guard
 
 
+from rewrite import search_query  # noqa: E402 - workshop lesson 2.5's stage, on /v1/query only (QUERY_REWRITE, off)
+
+
 def screen_prompt(text: str, tenant_id: str) -> str:
     """Before retrieval, never after: an injection that reaches the retriever has already chosen which documents the
     model reads. A block is a 400 with the reason - a refusal dressed as an answer would hide the rate."""
@@ -397,7 +400,8 @@ def query(req: QueryRequest, user=Depends(verify_iap)):
     with stage(stages, "retrieve"):
         qvec = embed_query(req.query)                     # once: the answer cache and the retrieval share it
         hit = _semantic_hit(req, qvec, fingerprint)
-        chunks = [] if hit else retrieve(req.query, req.tenant_id, req.top_k, req.filters, vec=qvec, backend=rbackend)
+        search_q, search_vec = (req.query, qvec) if hit else search_query(req.query, qvec, stages, req.tenant_id)   # workshop lesson 2.5: what is searched; off (the default), the question and qvec
+        chunks = [] if hit else retrieve(search_q, req.tenant_id, req.top_k, req.filters, vec=search_vec, backend=rbackend)
     stages["pool"] = len(chunks)                          # what the reranker sees: TOP_K_RETRIEVE, as served
     stages["graph_chunks"] = sum(1 for c in chunks if c.get("found_by") == "graph")   # 4.6's walk, counted
     stages["managed_chunks"] = sum(1 for c in chunks if c.get("found_by") in MANAGED_BACKENDS)   # P9.4 / R4: the store's share of the pool

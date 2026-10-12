@@ -94,12 +94,13 @@ resource "google_discovery_engine_data_store" "tenant" {
     }
   }
 
-  # A parser/identity change or disabling managed_search must never silently
-  # delete the students' indexed documents. Review a migration or teardown
-  # explicitly before removing this guard; do not work around it with state rm.
-  lifecycle {
-    prevent_destroy = true
-  }
+  # No prevent_destroy (8 October 2026). A parser or identity change, or managed_search
+  # turned off, would plan a delete of the students' indexed documents, and
+  # commands/infrastructure.py refuses every delete and replacement on make plan and
+  # make up, so none reaches an apply. prevent_destroy refused more than that: Terraform
+  # rejected make down's whole destroy over these stores, after the services and the
+  # corpora were gone, and every hourly line kept billing. make down is the one target
+  # that destroys them. Do not work around the plan check with state rm.
 }
 
 resource "google_discovery_engine_schema" "tenant" {

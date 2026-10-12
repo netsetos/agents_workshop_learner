@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `b482dea9a2284388eb04f3568de55f25c04ffeac`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `de6124e80529374df060e703fc310467a749d82c`. Learners read that page on the course site; this guide keeps its prose.
 
 The DocuMind kit is 11 services and the Python that builds, tests and feeds them, and three habits run through all of it. Every service runs in an environment of its own with pinned libraries; data moves as JSON; and the parts talk to each other over HTTP. This page practises each habit on your laptop, with Python's standard library and the venv the setup block makes, and then shows you the kit's own lines doing the same. You will make a venv and delete it, write and read a file shaped like the kit's golden set, start a small web server and call it, make two calls at once, and give a call the timeout, the retry and the check the kit gives its own.
 
@@ -108,7 +108,7 @@ A path as an object, JSON's kinds of value and their Python twins, and a JSONL f
 
 pathlib makes a path an object. `Path.home()` is your home folder on any operating system, and `/` joins parts, so `Path.home() / "basics-b1"` needs no slash or backslash typed by hand. The path itself can make the folder, open the file, read it whole and report its size. JSON is text with a few kinds of value, and the `json` module turns each into a Python type and back:
 
-A JSONL file, JSON Lines, is one JSON value per line: UTF-8, a newline after each value, no blank lines. The shape suits datasets. Rows are written and read one at a time, a new row is one more line at the end, and each line can be checked on its own. The kit keeps 5 of its datasets this way, 948 lines in all, the golden set among them.
+A JSONL file, JSON Lines, is one JSON value per line: UTF-8, a newline after each value, no blank lines. The shape suits datasets. Rows are written and read one at a time, a new row is one more line at the end, and each line can be checked on its own. The kit keeps 6 of its datasets this way, 966 lines in all, the golden set among them.
 
 #### Write four golden rows, read them back
 

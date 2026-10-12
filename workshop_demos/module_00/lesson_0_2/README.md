@@ -51,7 +51,7 @@ Expected shape, not a promised result:
 
 ### demo_04_the_rs_0_lane_the_notice_period_question_with_citations.py
 
-The lane gets a venv of its own, ~/rag-local-venv. Its packages are the chat service's, LangChain, LangGraph, Chroma and the Ollama client among them, installed on top of the service's image pins as services/chat/requirements-local.txt asks. Keeping them out of ~/rag-shell-venv leaves the operator pins exactly where rag_check_python_dependencies expects them, and every later session runs that check; the kit's CI keeps the chat service's pins in a venv of their own for the same reason. Then Ollama pulls the model, once. Start it in the second terminal, so the first stays free for questions. One line in this block matters more than it looks. The recipe seeds from the kit's root and serves from services/chat, and the store's default path, ./documind_chroma, is relative, so the two commands would open two different directories: the service would find an empty store and answer local corpus is empty. Exporting one absolute path as DOCUMIND_CHROMA_DIR gives both commands the same directory. From the first terminal. The health check first: it names the profile, and the brains this service can run. From the first terminal. The health check first: it names the profile, and the brains this service can run. The service has 4 brains (langchain, langgraph, adk and direct), and langchain is the default: a tool loop in which the model decides when to search. This lesson asks the direct brain, which has no loop at all: one retrieve() for the top 5, then one call to the model with those quotes as its only context. It does not depend on a small model choosing the right tool, which the comment in profile.py warns it sometimes will not. Module 5 compares the brains. Press Ctrl+C in the second terminal. The directory stays on disk, and a Python cell can open it the way the service does, with the same build_store() and the same retrieve():
+The lane gets a venv of its own, ~/rag-local-venv. Its packages are the chat service's, LangChain, LangGraph, Chroma and the Ollama client among them, installed on top of the service's image pins as services/chat/requirements-local.txt asks. Keeping them out of ~/rag-shell-venv leaves the operator pins exactly where rag_check_python_dependencies expects them, and every later session runs that check; the kit's CI keeps the chat service's pins in a venv of their own for the same reason. Then Ollama pulls the model, once. Start it in the second terminal, so the first stays free for questions. From the first terminal. The health check first: it names the profile, and the brains this service can run. From the first terminal. The health check first: it names the profile, and the brains this service can run. The service has 4 brains (langchain, langgraph, adk and direct), and langchain is the default: a tool loop in which the model decides when to search. This lesson asks the direct brain, which has no loop at all: one retrieve() for the top 5, then one call to the model with those quotes as its only context. It does not depend on a small model choosing the right tool, which the comment in profile.py warns it sometimes will not. Module 5 compares the brains. Press Ctrl+C in the second terminal. The directory stays on disk, and a Python cell can open it the way the service does, with the same build_store() and the same retrieve():
 
 **`step_01_install_the_lane_once(session)` — The Rs 0 lane: the notice-period question, with citations / Install the lane, once**
 
@@ -61,7 +61,7 @@ Operation: bash — run once, in a second terminal, which the lane will keep: it
 
 **`step_02_start_the_lane(session)` — The Rs 0 lane: the notice-period question, with citations / Start the lane**
 
-Start it in the second terminal, so the first stays free for questions. One line in this block matters more than it looks. The recipe seeds from the kit's root and serves from services/chat, and the store's default path, ./documind_chroma, is relative, so the two commands would open two different directories: the service would find an empty store and answer local corpus is empty. Exporting one absolute path as DOCUMIND_CHROMA_DIR gives both commands the same directory.
+Start it in the second terminal, so the first stays free for questions.
 
 Operation: bash — run in the second terminal, and leave it running.
 
@@ -136,7 +136,7 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
   DocuMind AI — Tier-A offline dry run
   ------------------------------------------------------------
   [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)
-  [PASS] py_compile    125 python files parse  (Ns)
+  [PASS] py_compile    136 python files parse  (Ns)
   [PASS] imports       all local imports resolve  (Ns)
   [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)
   [PASS] requirements  11 files, all deps pinned  (Ns)
@@ -208,7 +208,7 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
   DocuMind AI — Tier-A offline dry run
   ------------------------------------------------------------
   [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)
-  [PASS] py_compile    125 python files parse  (Ns)
+  [PASS] py_compile    136 python files parse  (Ns)
   [PASS] imports       all local imports resolve  (Ns)
   [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)
   [PASS] requirements  11 files, all deps pinned  (Ns)
@@ -253,6 +253,6 @@ Expected shape, not a promised result:
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `8085442943c65c12c22f9b8bcad6a06e9f4e71bc`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `246abc9c9644425b0ac4a6b68ec7779e18266482`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

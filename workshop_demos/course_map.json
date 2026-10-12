@@ -1,11 +1,11 @@
 {
   "modules": 14,
-  "lessons_expected": 66,
+  "lessons_expected": 70,
   "lessons": [
     {
       "lesson": "B.1",
       "title": "Run Python the way the kit does: venvs, JSON and HTTP calls",
-      "source_sha": "b482dea9a2284388eb04f3568de55f25c04ffeac",
+      "source_sha": "de6124e80529374df060e703fc310467a749d82c",
       "source_kind": "main_html",
       "demos": 5
     },
@@ -26,7 +26,7 @@
     {
       "lesson": "B.4",
       "title": "Encode with BERT-style models: embeddings and rankers",
-      "source_sha": "c5e0d3ccaccb4143687b69cae20a2d562c329369",
+      "source_sha": "f74e018047caf9355b8dfb815924ad262624bc98",
       "source_kind": "main_html",
       "demos": 4
     },
@@ -40,28 +40,28 @@
     {
       "lesson": "0.1",
       "title": "Set up the Google Cloud billing account, budget and project",
-      "source_sha": "e8752816c7f6df23f638d88cde838439debb5a23",
+      "source_sha": "e5942beb5af237a1bae016533190895a266f26a6",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "0.2",
       "title": "Reproduce the local environment, read the master diagram and prove a first success",
-      "source_sha": "8085442943c65c12c22f9b8bcad6a06e9f4e71bc",
+      "source_sha": "246abc9c9644425b0ac4a6b68ec7779e18266482",
       "source_kind": "main_html",
       "demos": 4
     },
     {
       "lesson": "0.3",
       "title": "Understand the project, identities and resource map, and deploy the lane",
-      "source_sha": "840ab0010164fb7bf8900b43fb668aa2e80d08fb",
+      "source_sha": "60e083f2ea735e186506e72b5401ae25d0327111",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "0.4",
       "title": "Prove the lane, break it once, and switch it off",
-      "source_sha": "227e9752d5a191e48fe77a44ab7d3f59135b88bd",
+      "source_sha": "291b440e580eb85652476a3e6cb256323635d340",
       "source_kind": "main_html",
       "demos": 14
     },
@@ -82,7 +82,7 @@
     {
       "lesson": "1.3",
       "title": "Create and validate compatible embeddings",
-      "source_sha": "56ae46416219aee8c45075960c9f86bab98015ac",
+      "source_sha": "1ebec17a6951bbbf35c78118b7308c52817d7c5a",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -124,21 +124,21 @@
     {
       "lesson": "2.1",
       "title": "Apply query embeddings and authorized filters",
-      "source_sha": "eec99fabc474ce0ab221815772043a8d9d45a33f",
+      "source_sha": "d87702c772274382d96c92309e4db9d8679c638a",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.2",
       "title": "Compare dense and hybrid retrieval",
-      "source_sha": "e328b1eb4da48eab527de6f40bfc73967d53aefb",
+      "source_sha": "fce7ebd0e25935eb19ecf351a873a457e6fee3cc",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.3",
       "title": "Rerank and inspect retrieved candidates",
-      "source_sha": "8add3ea3d051cb7b8df416e54ddb7e3cb12dc3a9",
+      "source_sha": "070a1c9acdbcf7e274747a69a8bb2b86c96fbc82",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -150,9 +150,23 @@
       "demos": 9
     },
     {
+      "lesson": "2.5",
+      "title": "Rewrite the query before retrieval, and measure it",
+      "source_sha": "e834ec75151063cb0e865fed7a4c47e9fa8b0f28",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "2.6",
+      "title": "Decide answer-or-refuse with a System One model (Jev)",
+      "source_sha": "007dfe9500fda08f49af0400dd038bb3fd449c21",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
-      "source_sha": "451850344630a66cad10a9fdc60c7712b39b2c4f",
+      "source_sha": "c89c3559bfa48cb1af933e66ce4e1b275de68eda",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -178,6 +192,13 @@
       "demos": 8
     },
     {
+      "lesson": "3.9",
+      "title": "System design: a fact-checking system built from DocuMind's parts",
+      "source_sha": "56f0bda25645d6e116a3f85889128f54661b5e99",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
       "lesson": "4.1",
       "title": "Build a useful evaluation dataset",
       "source_sha": "1842ef7a3c0ff2277b8154be660b88709080a151",
@@ -187,7 +208,14 @@
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "a3b436e773ca4580adf995f55ba1ad0be7561a39",
+      "source_sha": "57cd76f6377942b540c2dec0b93371c4c56ed768",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
+      "lesson": "4.3",
+      "title": "Place evals in the pipeline: CI, the candidate gate and live traffic",
+      "source_sha": "26b52b7486d99ed577a9381d40b45cd75fc6594a",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -215,7 +243,7 @@
     {
       "lesson": "4.8",
       "title": "Exercise DLP, guardrails and audit behavior",
-      "source_sha": "b60e0c11b63c21fda4508d9185902d1106f5f2ee",
+      "source_sha": "af30f5270404da072508dd4f82451437005d803a",
       "source_kind": "main_html",
       "demos": 10
     },
@@ -327,7 +355,7 @@
     {
       "lesson": "7.3",
       "title": "Configure and query managed retrieval mirrors",
-      "source_sha": "5d2f8eed1c871bf3e8af3c1094e90280a07c7795",
+      "source_sha": "66ef89e9ce840a9eff905ec94d08298a7c546b81",
       "source_kind": "main_html",
       "demos": 7
     },
@@ -446,7 +474,7 @@
     {
       "lesson": "12.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "74d0c88ef6b682c383fddeaf29771c03fe9980f8",
+      "source_sha": "4216f323523c313cfdc094eda0e1d3fb5cd570ac",
       "source_kind": "main_html",
       "demos": 8
     },

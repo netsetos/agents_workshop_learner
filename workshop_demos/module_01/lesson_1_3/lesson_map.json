@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_1.3_Embeddings_WIX.html",
-  "source_sha": "56ae46416219aee8c45075960c9f86bab98015ac",
+  "source_sha": "1ebec17a6951bbbf35c78118b7308c52817d7c5a",
   "shared_setup_windows": [
     1
   ],
@@ -864,14 +864,14 @@
       "label": "shared/documind_corpus.py - seed(): the carry-over, the loader's copy",
       "heading": "The sparse twin, the notebook twin, and what embedding bills",
       "anchor": "s8",
-      "line": 1036
+      "line": 1037
     },
     {
       "window": 48,
       "label": "shared/documind_corpus.py - seed(): the row it writes (model and version, no task type)",
       "heading": "The sparse twin, the notebook twin, and what embedding bills",
       "anchor": "s8",
-      "line": 1045
+      "line": 1046
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

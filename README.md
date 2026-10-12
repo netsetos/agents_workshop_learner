@@ -361,22 +361,23 @@ from outside the API; `make candidate RETRIEVAL_BACKEND=rag_engine` judges it. T
 Run on a **disposable** project so nothing real is touched. Teardown is not total: `make down` deletes the
 Cloud Run services, the candidate tag and the context caches (`make down-services`) and then runs
 `terraform destroy`, but it cannot remove Firestore (delete protection), a bucket that holds objects
-(`force_destroy = false`), protected managed search stores (`prevent_destroy = true`), a tuned endpoint (`make tune`) or the BigQuery views (`make bq-views`) - it names
+(`force_destroy = false`), a tuned endpoint (`make tune`) or the BigQuery views (`make bq-views`) - it names
 them and `gcloud projects delete` is what removes them. With `AUDIT_LOCK=true` the audit bucket's retention
 policy is LOCKED (`storage.tf`, `is_locked = var.audit_lock`), which blocks even the project's deletion for five
 years, by design; a lab keeps the five-year term without the lock, so its project can go.
 
 ```bash
-# 0. one-time: a throwaway project + billing + the tf-state bucket
+# 0. one-time: a throwaway project + billing + the tf-state bucket, named after the project
+#    (the Makefile's TFSTATE_BUCKET default: a bucket name is global, so one fixed name serves one lane)
 gcloud projects create documind-ai-live-0901 --set-as-default
 gcloud billing projects link documind-ai-live-0901 --billing-account=XXXXXX-XXXXXX-XXXXXX
-gsutil mb -l asia-south1 -b on gs://documind-tfstate && gsutil versioning set on gs://documind-tfstate
+gsutil mb -l asia-south1 -b on gs://documind-ai-live-0901-tfstate && gsutil versioning set on gs://documind-ai-live-0901-tfstate
 
 # 1. Initialize the chosen state once, select the new CI identity, then plan.
 #    For existing resources use their original bucket, prefix and workspace.
 cd ~/deploy_module_rag                 # the kit root: your clone
 terraform -chdir=terraform init -input=false \
-  -backend-config="bucket=documind-tfstate" \
+  -backend-config="bucket=documind-ai-live-0901-tfstate" \
   -backend-config="prefix=documind/documind-ai-live-0901"
 python commands/infrastructure.py prepare --project documind-ai-live-0901 --region us-central1 \
   --github-repository netsetos/agentic-ai-weekend-gcp \
@@ -456,7 +457,7 @@ The first Tier-A run flagged these real issues in the Module 12 source. They are
 ├── extract_documind.py   # notebooks -> this tree (static, no code execution); kept, a no-op without them
 ├── validate.py           # Tier-A offline checks
 ├── Makefile              # the variables and the core: dryrun / plan / up / smoke / down; `include mk/*.mk`
-├── mk/                   # one file per lane: ingestion.mk and lifecycle.mk (Module 1), agents.mk (Modules 5 and 10) - see mk/README.md
+├── mk/                   # one file per lane: ingestion.mk and lifecycle.mk (Module 1), retrieval.mk (Module 2), agents.mk (Modules 5 and 10) - see mk/README.md
 ├── terraform/            # 11 .tf, all generated from the 12.1/12.3 notebooks:
 │   │                     #   variables.tf  project_id, region, india_region, env,
 │   │                     #                 admin_emails, residency (india | us)

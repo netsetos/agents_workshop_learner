@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `840ab0010164fb7bf8900b43fb668aa2e80d08fb`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `60e083f2ea735e186506e72b5401ae25d0327111`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 0.2 left you with an operator shell and a lane that runs on your laptop for nothing. This lesson builds the real one in your Google Cloud project, and reads it before it exists: the accounts the kit creates and what each of them may touch, the stores it declares, the switches that would add more, and the items that bill by the hour whether anyone uses them or not. Then you run one `make plan`, read it, let the kit's guard check it, and run one `make up` from a blank project: images built, every service deployed as its own account, the UI behind Google's sign-in, and your address on the roster.
 
@@ -144,7 +144,7 @@ What it prints is gcloud's own report of the operations it waited for. Step 5's 
 
 #### 2. A state bucket of your own
 
-Terraform keeps its record of what it built, the state, in a bucket, so that the next plan in any shell compares the files with what exists instead of trying to create everything again. Bucket names are global: the first person in the world to create a name owns it. The Makefile's default, `documind-tfstate`, is one name for the whole world and can serve only one lane, so the setup block named yours after your project, the form the kit's own `smoke/preflight.sh` uses in its example. It exported `TFSTATE_BUCKET` and `TFSTATE_PREFIX` too, so the targets that connect to the state later (`make tf-backend`, `make down`) find this one. Versioning keeps every earlier copy of the state file, which is how a damaged state is recovered.
+Terraform keeps its record of what it built, the state, in a bucket, so that the next plan in any shell compares the files with what exists instead of trying to create everything again. Bucket names are global: the first person in the world to create a name owns it, so the kit names yours after your project. `-tfstate` is the default of the Makefile and of `smoke/preflight.sh`, and the setup block exported the same name as `TFSTATE_BUCKET`, with `TFSTATE_PREFIX`, so the targets that connect to the state later (`make tf-backend`, `make down`) find this one. Versioning keeps every earlier copy of the state file, which is how a damaged state is recovered.
 
 The last command ends on Terraform's line Terraform has been successfully initialized! It connects this checkout to the state and downloads the providers `terraform/backend.tf` pins. Run it again only on a new machine or a fresh clone, and always with the same bucket and prefix: `terraform/` in a checkout pointed at another prefix is a checkout that believes the lane does not exist.
 
@@ -212,7 +212,7 @@ A new index takes minutes to build, and a vector query against an index still bu
 
 #### The other stores, and the rest of what a plan creates once
 
-One line in `terraform/vector.tf` deserves a second look before step 10 prices it. The deployed index runs on a machine chosen by the index's shard size, and the index declares none, so the service picks it. The kit's own comment records an existing index whose service-selected size was MEDIUM, which deploys on `e2-standard-16`, not on SMALL's `e2-standard-2`. Step 8 reads which one your lane got.
+One line in `terraform/vector.tf` deserves a second look before step 10 prices it. The deployed index runs on a machine chosen by the index's shard size. The index declares SMALL, so a new lane's index deploys on `e2-standard-2`, and the declaration is ignored once the index exists, because changing a shard size replaces the index. An index created before the kit named the size keeps the one the service picked: the kit's own comment records one whose size was MEDIUM, which deploys on `e2-standard-16`. Step 8 reads which one your lane has.
 
 #### 234 resource instances, file by file
 
@@ -270,9 +270,9 @@ Cloud Run keeps the account a service runs as on the service itself. Listing the
 
 A service missing from the list was not deployed: `~/up.log` shows which DEPLOY block stopped, and the services after it in the order (`documind-ingest`, `documind-api`, `documind-admin`, `documind-ui`, `documind-chat`, `documind-mcp`, `documind-agent`) are missing too, because the loop stops at the first failure. A service running as the Compute Engine default account would mean a script lost its `--service-account` flag; none of the seven does today. Besides the services, the lane now has two Cloud Run jobs: `documind-off`, from `terraform/off.tf`, and `documind-checkpoint-setup`, which the chat service's script creates and runs to prepare its database.
 
-#### The shard size the service chose
+#### The shard size of your index
 
-Step 5 left one fact open: the deployed index's machine follows the index's shard size, and the kit lets the service choose it. Read both from the live lane; step 10 prices the row that matches.
+Step 5 left one fact to read: the deployed index's machine follows the index's shard size, SMALL on a new lane and whatever an older index was created with. Read both from the live lane; step 10 prices the row that matches.
 
 ### The UI behind IAP, and the roster behind the UI
 
@@ -302,7 +302,7 @@ Most of the lane bills for what you do with it: a page parsed, a token generated
 
 The cluster and the connector complete the list. The cluster is a regional Standard one, so its management fee is not covered by GKE's free-tier credit, and its node is an ordinary Compute Engine machine. The connector keeps at least two small machines running so that the services can reach the VPC.
 
-The table prices each line as lesson 0.1 does: the declaration's size times Google's list price for Mumbai (`asia-south1`, where the course's lane runs its services and where `spanner.tf` keeps the graph), read from Google's pricing pages on 7 October 2026, at the kit's rate of Rs 85 to the dollar from `shared/prices.py`. Of the kit's own figures above, the cluster fee matches; Cloud SQL comes to $11.24 a month for each instance at these prices, above the roughly $8-10 that `cloudsql.tf`'s comment gives. The Vector Search row has two machines because the service chose the shard size: step 8's output says which line is yours.
+The table prices each line as lesson 0.1 does: the declaration's size times Google's list price for Mumbai (`asia-south1`, where the course's lane runs its services and where `spanner.tf` keeps the graph), read from Google's pricing pages on 7 October 2026, at the kit's rate of Rs 85 to the dollar from `shared/prices.py`. Of the kit's own figures above, the cluster fee matches; Cloud SQL comes to $11.24 a month for each instance at these prices, above the roughly $8-10 that `cloudsql.tf`'s comment gives. The Vector Search row has two machines because an index keeps the shard size it was created with: SMALL on a new lane, MEDIUM on the older index the kit's comment records. Step 8's output says which line is yours.
 
 What is not in the table matters as much. The seven Cloud Run services cost nothing while idle at their default floor of zero instances; `MIN_INSTANCES=1`, the kit's setting for a session day, would floor `documind-ui`, `documind-mcp` and `documind-agent` at one instance each. Firestore, the buckets, BigQuery, Pub/Sub, Secret Manager, Document AI, Gemini and the managed stores bill per use or per gigabyte stored, so they cost little until something is ingested or asked. `make off` floors the UI and the GPU services to zero but leaves every row of the table running; only `make down` and deleting the project remove them. Lesson 0.4 turns these rows into what a day of a lane left up costs, and switches it off.
 

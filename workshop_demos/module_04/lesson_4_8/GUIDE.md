@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.8_DLP_Guard_Audit_WIX.html`, reviewed at blob `b60e0c11b63c21fda4508d9185902d1106f5f2ee`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.8_DLP_Guard_Audit_WIX.html`, reviewed at blob `af30f5270404da072508dd4f82451437005d803a`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 4.6 and 4.7 settled who may ask. This lesson is about what may be read, what may be said, and what is written down. You upload a note carrying the kit's synthetic PAN, GSTIN, Aadhaar and mobile, and find each one recorded by type, never by value. You switch Model Armor on for a candidate revision and send it a plain question, an injection in English, the same injection in Hinglish and a question about a PAN. Then you read the audit events the upload left in a bucket that refuses to delete them, and you check what the admin console's audit tab can and cannot show.
 

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.1_Query_Filters_WIX.html",
-  "source_sha": "eec99fabc474ce0ab221815772043a8d9d45a33f",
+  "source_sha": "d87702c772274382d96c92309e4db9d8679c638a",
   "shared_setup_windows": [
     1
   ],
@@ -271,7 +271,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        530
+        531
       ],
       "offline": false,
       "live_verified": false,
@@ -287,7 +287,7 @@
           "id": "source_8",
           "function": "step_01_embed_search_compare",
           "window": 8,
-          "source_line": 530,
+          "source_line": 531,
           "manual_checkpoint": null
         }
       ],
@@ -313,7 +313,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        670
+        671
       ],
       "offline": false,
       "live_verified": false,
@@ -329,7 +329,7 @@
           "id": "source_13",
           "function": "step_01_one_identity_two_tenants_one_outsider",
           "window": 13,
-          "source_line": 670,
+          "source_line": 671,
           "manual_checkpoint": null
         }
       ],
@@ -355,7 +355,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        752
+        753
       ],
       "offline": false,
       "live_verified": false,
@@ -371,7 +371,7 @@
           "id": "source_16",
           "function": "step_01_four_filters_four_verdicts",
           "window": 16,
-          "source_line": 752,
+          "source_line": 753,
           "manual_checkpoint": null
         }
       ],
@@ -397,7 +397,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        830
+        831
       ],
       "offline": false,
       "live_verified": false,
@@ -413,7 +413,7 @@
           "id": "source_21",
           "function": "step_01_the_tenant_s_pin_and_policy_then_a_full_st",
           "window": 21,
-          "source_line": 830,
+          "source_line": 831,
           "manual_checkpoint": null
         }
       ],
@@ -439,7 +439,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        875
+        876
       ],
       "offline": false,
       "live_verified": false,
@@ -455,7 +455,7 @@
           "id": "source_25",
           "function": "step_01_the_question_the_revisions_answered_differ",
           "window": 25,
-          "source_line": 875,
+          "source_line": 876,
           "manual_checkpoint": null
         }
       ],
@@ -479,7 +479,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_1/GUIDE.md",
       "source_lines": [
-        962
+        963
       ],
       "offline": false,
       "live_verified": false,
@@ -495,7 +495,7 @@
           "id": "source_29",
           "function": "step_01_finish_restore_the_saved_tenant_pin",
           "window": 29,
-          "source_line": 962,
+          "source_line": 963,
           "manual_checkpoint": null
         }
       ],
@@ -556,112 +556,112 @@
       "label": "expected — success checks; candidate count and citation order depend on the lane",
       "heading": "The question's vector: direct candidates and API citations",
       "anchor": "s3",
-      "line": 602
+      "line": 603
     },
     {
       "window": 10,
       "label": "services/rag-api/auth.py - verify_iap() and enforce_membership()",
       "heading": "Authorized: the tenant comes from identity, and one index serves three",
       "anchor": "s4",
-      "line": 618
+      "line": 619
     },
     {
       "window": 11,
       "label": "shared/tenancy.py - is_member(): one document read",
       "heading": "Authorized: the tenant comes from identity, and one index serves three",
       "anchor": "s4",
-      "line": 645
+      "line": 646
     },
     {
       "window": 12,
       "label": "services/rag-api/schemas.py - the request: the two filter keys, the unread user_id",
       "heading": "Authorized: the tenant comes from identity, and one index serves three",
       "anchor": "s4",
-      "line": 653
+      "line": 654
     },
     {
       "window": 14,
       "label": "expected (your wording differs; the two figures and the 403 are the point; a line in brackets means the first try was turned away and the cell asked again)",
       "heading": "Authorized: the tenant comes from identity, and one index serves three",
       "anchor": "s4",
-      "line": 709
+      "line": 710
     },
     {
       "window": 15,
       "label": "services/rag-api/main.py - check_filters(): a 400 before any work",
       "heading": "Filters: two keys, a 400 for everything else",
       "anchor": "s5",
-      "line": 724
+      "line": 725
     },
     {
       "window": 17,
       "label": "expected",
       "heading": "Filters: two keys, a 400 for everything else",
       "anchor": "s5",
-      "line": 760
+      "line": 761
     },
     {
       "window": 18,
       "label": "services/rag-api/retriever.py - _dense_retrieve(): the restricts, in order, then the ids hydrated and marked",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 776
+      "line": 777
     },
     {
       "window": 19,
       "label": "services/rag-api/hybrid.py - the same restricts under hybrid, the tenant exactly once",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 792
+      "line": 793
     },
     {
       "window": 20,
       "label": "services/rag-api/main.py - choose_for() and retrieval_backend_for(): the store, per request",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 798
+      "line": 799
     },
     {
       "window": 22,
       "label": "expected (your milliseconds differ; rerank_fallback appears only when the Ranking API stood down)",
       "heading": "The restricts, the per-request backend, and the stages block",
       "anchor": "s6",
-      "line": 837
+      "line": 838
     },
     {
       "window": 23,
       "label": "services/rag-api/retriever.py - prefer_current(): a retired row is never a source",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 862
+      "line": 863
     },
     {
       "window": 24,
       "label": "services/rag-api/config.py - the setting, and the two sizes",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 869
+      "line": 870
     },
     {
       "window": 26,
       "label": "expected",
       "heading": "Current is the ledger's filter, never the caller's",
       "anchor": "s7",
-      "line": 892
+      "line": 893
     },
     {
       "window": 27,
       "label": "services/rag-api/main.py - _semantic_hit(): the vector, the fingerprint and the scope",
       "heading": "The cache shares the vector, the pool is not the answer, and what a question costs",
       "anchor": "s8",
-      "line": 905
+      "line": 906
     },
     {
       "window": 28,
       "label": "services/rag-api/schemas.py - top_k on the request",
       "heading": "The cache shares the vector, the pool is not the answer, and what a question costs",
       "anchor": "s8",
-      "line": 926
+      "line": 927
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

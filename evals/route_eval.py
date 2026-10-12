@@ -89,10 +89,22 @@ leave-one-group-out: its own group - its id, its golden row, its paraphrases, it
 same normalised text - is out of its neighbours (knn_vote), and --selftest checks that no dev row can retrieve itself.
 Rows in the groups of the classifier's prompt examples (services/chat/desk_routes.py) are left out of both runs'
 scores, since the prompt has seen them.
+
+THE PROMPT'S EXAMPLES (workshop lesson 3.2). --exemplars kit|none|FILE, with --local or --live-l1, swaps the L1 prompt's
+examples for the run and puts them back after: kit is desk_routes.PROMPT_EXEMPLARS (the eight), none an empty list, and
+FILE a JSON list or JSON lines of [row id, route, question] (or {id, route, question}), at most twelve, none of them a
+scored row, a row of a scored group or a scored row's question. Only desk_router.PROMPT_EXEMPLARS is patched - the name
+desk_router imports from desk_routes and prompt() reads - so prompt_groups(), which reads desk_routes' own tuple, leaves
+the same rows out of every arm's score. The run then prints the examples it used and "L1 alone": L1's own route against
+the row's acceptable routes, before the vote, the acceptance rules and the arbiter, on the turns it was asked (a call
+that failed counts as asked and wrong; decision["l1"] and decision["l1_error"]). --local's scripted L1 reads no example,
+so offline the arms agree: what the examples change is a model's answer, and --live-l1 measures it. Without
+--exemplars, nothing is printed that was not printed before.
 """
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import math
@@ -796,6 +808,95 @@ def gate_failures(result: dict) -> list[str]:
     return why
 
 
+# --------------------------------------------------------------------- the prompt's examples (lesson 3.2)
+EXEMPLARS_MAX = 12                      # desk_routes: at most twelve; prompt() reads PROMPT_EXEMPLARS[:12]
+_FENCES = re.compile(r"<{3,}|>{3,}")
+
+
+def load_exemplars(spec: str, rows: list[dict], scored: list[dict]) -> tuple[tuple[str, str, str], ...]:
+    """--exemplars: the L1 prompt's examples for this run. kit is desk_routes.PROMPT_EXEMPLARS; none is no example; any
+    other value is a file of [row id, route, question] triples or {id, route, question} objects, as one JSON list or as
+    JSON lines. A file's example is refused when it is a scored row, a row of a scored group or a scored row's question
+    (normalised): the comparison is on rows no prompt has seen, and the scored rows are the same in every arm."""
+    _, desk_routes = router()
+    if spec == "kit":
+        return tuple(desk_routes.PROMPT_EXEMPLARS)
+    if spec == "none":
+        return ()
+    try:
+        with open(spec, encoding="utf-8") as f:
+            text = f.read()
+    except OSError as e:
+        raise SystemExit(f"--exemplars {spec}: kit, none or a readable file ({e.strerror})")
+    try:
+        items = json.loads(text)
+    except ValueError:
+        try:
+            items = [json.loads(line) for line in text.splitlines() if line.strip()]
+        except ValueError as e:
+            raise SystemExit(f"--exemplars {spec}: neither a JSON list nor JSON lines ({e})")
+    if not isinstance(items, list) or len(items) > EXEMPLARS_MAX:
+        raise SystemExit(f"--exemplars {spec}: a list of at most {EXEMPLARS_MAX} examples")
+    group_of = {r["id"]: r["group"] for r in rows}
+    scored_ids, scored_groups = {r["id"] for r in scored}, {r["group"] for r in scored}
+    scored_text = {normalise(r["question"]): r["id"] for r in scored}
+    out = []
+    for n, item in enumerate(items, 1):
+        if isinstance(item, dict):
+            item = [item.get("id"), item.get("route"), item.get("question")]
+        if not (isinstance(item, list) and len(item) == 3 and all(isinstance(x, str) and x.strip() for x in item)):
+            raise SystemExit(f"--exemplars {spec}: example {n} is not [row id, route, question]")
+        rid, route, question = item
+        if route not in ROUTES:
+            raise SystemExit(f"--exemplars {spec}: example {n}'s route {route!r} is not one of {ROUTES}")
+        if len(question) > 1000 or "\n" in question or _FENCES.search(question):
+            raise SystemExit(f"--exemplars {spec}: example {n}'s question is one line of at most 1,000 characters with "
+                             f"no <<< or >>> fence")
+        why = ("is a scored row" if rid in scored_ids else
+               f"is in a scored group, {group_of[rid]}" if group_of.get(rid) in scored_groups else
+               f"asks scored row {scored_text[normalise(question)]}'s question" if normalise(question) in scored_text
+               else None)
+        if why:
+            raise SystemExit(f"--exemplars {spec}: example {n} ({rid}) {why}: the score would include a row the "
+                             f"prompt has seen")
+        out.append((rid, route, question))
+    return tuple(out)
+
+
+@contextlib.contextmanager
+def exemplars_in_prompt(desk_router, examples):
+    """desk_router.PROMPT_EXEMPLARS swapped for `examples` for the duration, then put back whatever happens; None leaves
+    it alone. desk_router imported the name from desk_routes and prompt() reads it there, so the L1 prompt is all that
+    changes: desk_routes.PROMPT_EXEMPLARS, which prompt_groups() reads, is never touched."""
+    if examples is None:
+        yield
+        return
+    kept = desk_router.PROMPT_EXEMPLARS
+    desk_router.PROMPT_EXEMPLARS = tuple(examples)
+    try:
+        yield
+    finally:
+        desk_router.PROMPT_EXEMPLARS = kept
+
+
+def l1_alone(rows: list[dict], run: list[dict]) -> tuple[int, int, int]:
+    """(right, asked, failed): L1's own route - decision["l1"], before the vote, the acceptance rules and the arbiter -
+    against the row's acceptable routes, over the turns L1 was asked. A call that failed (decision["l1_error"]: a
+    timeout, an error, an answer outside the schema, the turn's limits) is asked and wrong; a turn decided before L1
+    (the gate, an anchor, single mode) is not counted."""
+    by_id = {r["id"]: r for r in rows}
+    asked = [x for x in run if x["decision"].get("l1") is not None or x["decision"].get("l1_error") is not None]
+    right = sum(1 for x in asked if x["decision"].get("l1")
+                and x["decision"]["l1"]["route"] in by_id[x["id"]]["acceptable_routes"])
+    return right, len(asked), sum(1 for x in asked if x["decision"].get("l1") is None)
+
+
+def exemplars_line(spec: str, examples) -> str:
+    what = {"kit": "the kit's own, desk_routes.PROMPT_EXEMPLARS", "none": "none"}.get(spec, f"from {spec}")
+    return (f"  exemplars: {what} - {len(examples)} in the L1 prompt; the rows of the kit's "
+            f"{len(router()[1].PROMPT_EXEMPLARS)} stay out of the score in every arm")
+
+
 def run_router(a) -> int:
     """--local and --live-l1."""
     desk_router, desk_routes = router()
@@ -806,6 +907,8 @@ def run_router(a) -> int:
         return 1
     held = prompt_groups(rows)
     scored = [r for r in rows if (a.split == "all" or r["split"] == a.split) and r["group"] not in held]
+    spec = getattr(a, "exemplars", None)                # lesson 3.2: the L1 prompt's examples, swapped for this run
+    examples = None if spec is None else load_exemplars(spec, rows, scored)
     pool = index_rows(rows)
     if a.live_l1:
         if not a.project:
@@ -819,13 +922,20 @@ def run_router(a) -> int:
     base = build_index(pool, vectors)
     indexes = {t: [e for e in base if e["route"] in desk_routes.enabled_routes(classes.get(t, ()))]
                for t in TENANTS if t not in SINGLE}
-    runs = [route_run(scored, indexes, models) for _ in range(max(1, a.runs))]
+    with exemplars_in_prompt(desk_router, examples):
+        runs = [route_run(scored, indexes, models) for _ in range(max(1, a.runs))]
     print(f"{'live: flash-lite, flash and text-embedding-005' if a.live_l1 else 'local: the classifier is scripted, so this measures the cascade, not a model'}")
     print(f"  {len(scored)} rows scored; {sum(1 for r in rows if r['group'] in held and (a.split == 'all' or r['split'] == a.split))} "
           f"left out (the groups of the prompt's examples); index of {len(base)} dev rows")
+    if examples is not None:
+        print(exemplars_line(spec, examples))
     result = score(scored, predictions(runs[0]), classes_from_manifest())
     report(result, "B", a.split)
     router_report(scored, runs[0])
+    if examples is not None:
+        right, asked, failed = l1_alone(scored, runs[0])
+        print(f"  {'L1 alone':<30}{rate(right, asked)}  (L1's own route, before the vote and the arbiter, on the turns "
+              f"it was asked; {failed} failed)")
     if len(runs) > 1:
         by_id = {r["id"]: r for r in scored}
         stable = [i for i in by_id if all(predictions([x for x in run if x["id"] == i])[i]["route"]
@@ -835,6 +945,8 @@ def run_router(a) -> int:
     if a.report:
         with open(a.report, "w", encoding="utf-8") as f:
             json.dump({"arm": "B", "split": a.split, "tally": result["tally"], "confusion": result["confusion"],
+                       **({"exemplars": {"spec": spec, "examples": [list(e) for e in examples]},
+                           "l1_alone": list(l1_alone(scored, runs[0]))} if examples is not None else {}),
                        "rows": result["verdicts"], "decisions": [{"id": x["id"], **desk_router.record(x["decision"])}
                                                                  for x in runs[0]]}, f, indent=1)
     failures = gate_failures(result)
@@ -1028,7 +1140,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--live", action="store_true", help="the deployed Desk, as each row's eval account (LIVE)")
     ap.add_argument("--chat-url", help="--live: the chat service's URL (default DOCUMIND_CHAT_URL)")
     ap.add_argument("--save", help="--live: write the run's predictions here, for --predictions later")
+    ap.add_argument("--exemplars", metavar="kit|none|FILE", help="--local or --live-l1: the L1 prompt's examples for this "
+                                                               "run (lesson 3.2), then 'L1 alone'")
     a = ap.parse_args(argv)
+    if a.exemplars is not None and (a.selftest or a.live or not (a.local or a.live_l1)):
+        ap.error("--exemplars swaps the examples of the router in process: it runs with --local or --live-l1 alone")
     if a.selftest:
         return selftest(a.routes)
     if a.live:

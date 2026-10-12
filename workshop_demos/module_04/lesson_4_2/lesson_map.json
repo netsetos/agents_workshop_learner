@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html",
-  "source_sha": "a3b436e773ca4580adf995f55ba1ad0be7561a39",
+  "source_sha": "57cd76f6377942b540c2dec0b93371c4c56ed768",
   "shared_setup_windows": [
     1
   ],
@@ -376,7 +376,7 @@
         "demo_05_the_judge_the_lane_s_own_answers_read_with_the_context_they_cite"
       ],
       "heading": "Where the gate and the judge disagree: read the row",
-      "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
+      "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary, and writes per-row ratings only when --save-rows names a file, which the run above does not, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
       "anchor": "s6",
       "anchors": [
         "s6"
@@ -396,7 +396,7 @@
         {
           "heading": "Where the gate and the judge disagree: read the row",
           "subheading": "Where the gate and the judge disagree: read the row",
-          "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
+          "purpose": "Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary, and writes per-row ratings only when --save-rows names a file, which the run above does not, so \"read the row\" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.",
           "label": "bash — run in the operator shell, in the kit (reads both files; changes nothing)",
           "expected": "2 row(s) cost the gate a point. The judge's own run answered them:\n  jn-06  gate: answered without ['EMEA', '11.4']\n         judge's answer: 'EMEA revenue fell in FY2026 [1].', 1 cited\n         EMEA present; 11.4 absent\n  lk-27  gate: refused\n         judge's answer: 'The documents do not say.', 0 cited\n         twenty per cent absent",
           "adaptations": [],

@@ -240,11 +240,11 @@ Expected shape, not a promised result:
 
 ### demo_06_where_the_gate_and_the_judge_disagree_read_the_row.py
 
-Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary, and writes per-row ratings only when --save-rows names a file, which the run above does not, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
 
 **`step_01_where_the_gate_and_the_judge_disagree_read(session)` — Where the gate and the judge disagree: read the row / Where the gate and the judge disagree: read the row**
 
-Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary and writes no per-row ratings, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
+Four ways the two can meet, and the gate's misses read against the judge's answers. judge.py prints its summary, and writes per-row ratings only when --save-rows names a file, which the run above does not, so "read the row" means reading the answers. The cell takes each row the gate failed and prints what the judge's own collection received for it.
 
 Operation: bash — run in the operator shell, in the kit (reads both files; changes nothing).
 
@@ -294,6 +294,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a3b436e773ca4580adf995f55ba1ad0be7561a39`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `57cd76f6377942b540c2dec0b93371c4c56ed768`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

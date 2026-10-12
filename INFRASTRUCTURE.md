@@ -15,8 +15,9 @@ Terraform replacements into the terminal.
 - `terraform/managed.tf` declares the existing default digital parser explicitly.
   Removing an implicit `document_processing_config` used to propose replacing
   Acme and Zeta's search stores on a second plan. Their names, IDs, data and schema
-  remain the same. `prevent_destroy` blocks an accidental replacement; it is not
-  an instruction to delete or recreate a store.
+  remain the same. `commands/infrastructure.py` refuses an accidental replacement,
+  as it refuses every delete on `make plan` and `make up`; only `make down`
+  destroys a store.
 - `terraform/budget.tf` discovers the project's linked billing account when
   `billing_account_id` is omitted or empty. A supplied nonempty ID is still
   validated. This reads billing linkage; it never changes which account pays for
@@ -204,6 +205,7 @@ plan refusal. Native Terraform changes must also be validated/planned against
 your project. Permissions, quotas, API enablement and service readiness are live
 requirements; offline checks cannot certify them.
 
-`prevent_destroy` also blocks deliberate data-store teardown while the resource
-declaration remains. Plan any eventual cleanup separately and account for indexed
-documents, retention and data-store ID reuse delays.
+The data stores carry no `prevent_destroy` (8 October 2026): it made Terraform refuse
+`make down`'s whole destroy, so nothing was removed. `make down` now destroys them with
+the rest of the Terraform, and their indexed documents with them. Before deploying into
+the same project again, account for retention and data-store ID reuse delays.

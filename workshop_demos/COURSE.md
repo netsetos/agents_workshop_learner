@@ -23,12 +23,16 @@ The sequence comes from each main HTML; the 4 lessons whose main HTML is not wri
 - [2.2: Compare dense and hybrid retrieval](module_02/lesson_2_2/README.md) — 9 files; main_html
 - [2.3: Rerank and inspect retrieved candidates](module_02/lesson_2_3/README.md) — 9 files; main_html
 - [2.4: Test fallback without losing tenant or metadata filters](module_02/lesson_2_4/README.md) — 9 files; main_html
+- [2.5: Rewrite the query before retrieval, and measure it](module_02/lesson_2_5/README.md) — 9 files; main_html
+- [2.6: Decide answer-or-refuse with a System One model (Jev)](module_02/lesson_2_6/README.md) — 8 files; main_html
 - [3.4: Pack evidence within the context budget](module_03/lesson_3_4/README.md) — 9 files; main_html
 - [3.5: Generate structured answers, citations and refusals](module_03/lesson_3_5/README.md) — 9 files; main_html
 - [3.7: Stream answers and handle failures](module_03/lesson_3_7/README.md) — 8 files; main_html
 - [3.8: Complete the Streamlit upload-to-answer journey](module_03/lesson_3_8/README.md) — 8 files; main_html
+- [3.9: System design: a fact-checking system built from DocuMind's parts](module_03/lesson_3_9/README.md) — 9 files; main_html
 - [4.1: Build a useful evaluation dataset](module_04/lesson_4_1/README.md) — 10 files; main_html
 - [4.2: Separate offline checks, live scoring and LLM judgment](module_04/lesson_4_2/README.md) — 8 files; main_html
+- [4.3: Place evals in the pipeline: CI, the candidate gate and live traffic](module_04/lesson_4_3/README.md) — 8 files; main_html
 - [4.4: Compare one controlled change against a baseline](module_04/lesson_4_4/README.md) — 8 files; main_html
 - [4.6: Trace authenticated identity into tenant membership](module_04/lesson_4_6/README.md) — 8 files; main_html
 - [4.7: Test valid access, denied access and cross-tenant requests](module_04/lesson_4_7/README.md) — 8 files; main_html

@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import tempfile
 import unittest
@@ -162,6 +163,18 @@ class InfrastructureTests(unittest.TestCase):
         self.assertFalse((self.root / infra.SELECTED_FILE).exists())
         for switch in ("DESK_JOB", "RECONCILE_JOB", "BATCH_JOB", "DESK_ROUTER_ALERTS", "DESK_GATE_ALERTS", "GCHAT_DOOR"):
             self.assertIn(switch, str(stopped.exception))     # the refusal names every switch a lane must keep passing
+
+    def test_no_terraform_resource_carries_prevent_destroy(self):
+        """No resource needs prevent_destroy: inspect_plan refuses every delete on make plan and make up (the test above).
+        prevent_destroy refused more: Terraform rejects a whole destroy that includes one such resource, so make down
+        removed nothing once the services and the corpora were gone (8 October 2026, managed.tf's data stores)."""
+        root = Path(__file__).resolve().parents[2] / "terraform"
+        files = sorted(p for p in root.rglob("*.tf") if ".terraform" not in p.parts)
+        self.assertTrue(files, root)
+        guarded = [f"{p.relative_to(root).as_posix()}:{number}" for p in files
+                   for number, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1)
+                   if re.match(r"\s*prevent_destroy\s*=", line)]
+        self.assertEqual(guarded, [], "prevent_destroy makes Terraform refuse make down's whole destroy")
 
     def test_failed_plan_clears_old_selection(self):
         infra.write_json(self.root / infra.SELECTED_FILE, {"plan": "old.tfplan"})

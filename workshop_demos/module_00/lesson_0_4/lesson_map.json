@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html",
-  "source_sha": "227e9752d5a191e48fe77a44ab7d3f59135b88bd",
+  "source_sha": "291b440e580eb85652476a3e6cb256323635d340",
   "shared_setup_windows": [
     1
   ],
@@ -217,7 +217,7 @@
         "demo_03_the_ui_the_smoke_s_question_asked_by_you"
       ],
       "heading": "make preflight: what the lane stands on",
-      "purpose": "The script is short enough to read whole. It checks the tools (gcloud, terraform, make, python), that Terraform is at least 1.9, that gcloud is signed in, that the project exists and has billing, that the state bucket exists, that 22 APIs are enabled, and that the one Python package make roster needs is importable. Every check is a read, and every MISS line carries the command that fixes it. Run it with your state bucket. The script's own usage line names the bucket after the project, <project>-tfstate, and the cell uses that name unless you have already exported another. Do not leave TFSTATE_BUCKET off: the Makefile's default, documind-tfstate, is a bucket name only one project in the world can own, and it is not yours.",
+      "purpose": "The script is short enough to read whole. It checks the tools (gcloud, terraform, make, python), that Terraform is at least 1.9, that gcloud is signed in, that the project exists and has billing, that the state bucket exists, that 22 APIs are enabled, and that the one Python package make roster needs is importable. Every check is a read, and every MISS line carries the command that fixes it. Run it with your state bucket. The Makefile and the script both default to the bucket named after the project, <project>-tfstate, the one lesson 0.3 created, and the cell exports that name unless you have already exported another: step 8 reads the state through it.",
       "anchor": "s4",
       "anchors": [
         "s4"
@@ -237,7 +237,7 @@
         {
           "heading": "make preflight: what the lane stands on",
           "subheading": "make preflight: what the lane stands on",
-          "purpose": "The script is short enough to read whole. It checks the tools (gcloud, terraform, make, python), that Terraform is at least 1.9, that gcloud is signed in, that the project exists and has billing, that the state bucket exists, that 22 APIs are enabled, and that the one Python package make roster needs is importable. Every check is a read, and every MISS line carries the command that fixes it. Run it with your state bucket. The script's own usage line names the bucket after the project, <project>-tfstate, and the cell uses that name unless you have already exported another. Do not leave TFSTATE_BUCKET off: the Makefile's default, documind-tfstate, is a bucket name only one project in the world can own, and it is not yours.",
+          "purpose": "The script is short enough to read whole. It checks the tools (gcloud, terraform, make, python), that Terraform is at least 1.9, that gcloud is signed in, that the project exists and has billing, that the state bucket exists, that 22 APIs are enabled, and that the one Python package make roster needs is importable. Every check is a read, and every MISS line carries the command that fixes it. Run it with your state bucket. The Makefile and the script both default to the bucket named after the project, <project>-tfstate, the one lesson 0.3 created, and the cell exports that name unless you have already exported another: step 8 reads the state through it.",
           "label": "bash — run in the operator shell, in the kit (read-only; creates nothing; under a minute)",
           "expected": "[awaiting the author's run: data/preflight.txt]",
           "adaptations": [],
@@ -668,7 +668,7 @@
         "demo_11_next_session_a_restored_shell"
       ],
       "heading": "make down, and what only deleting the project removes",
-      "purpose": "MANAGED_SEARCH is true by default, so the state holds two Vertex AI Search data stores, one for acme and one for zeta, each with prevent_destroy. Terraform rejects any plan that would destroy such a resource, and a destroy plan destroys everything, so this one destroys nothing: the six lines of step 10 keep billing after make down, still Rs 2,666 a day with a MEDIUM index. The list the recipe prints afterwards does not name the data stores; the kit's README does. Lesson 7.3 meets the same guard from the stores' side. The recipe's last line is the one that ends the bill: delete the throwaway project. Shutting a project down stops all of its billing; for 30 days the project can still be restored, and then it and everything in it are deleted. The same page adds two cautions: charges already run up can still arrive until the current billing cycle ends, and it advises disabling billing on the project before you shut it down. One switch would block the deletion itself: AUDIT_LOCK=true locks the audit bucket's five-year retention and liens the project, which is why it is false for a lab.",
+      "purpose": "So the six lines of step 10 stop billing with make down. What the destroy cannot delete is what the list names: Firestore, which keeps its delete protection, and every bucket that still holds objects, because no bucket in storage.tf sets force_destroy to true. A used lane's uploads bucket holds the corpus, so the destroy ends with an error for each such bucket, and the recipe prints its list and exits with that error. No bucket depends on any of the six lines, so the error holds none of them back. The recipe's last line is the one that ends the bill: delete the throwaway project. Shutting a project down stops all of its billing; for 30 days the project can still be restored, and then it and everything in it are deleted. The same page adds two cautions: charges already run up can still arrive until the current billing cycle ends, and it advises disabling billing on the project before you shut it down. One switch would block the deletion itself: AUDIT_LOCK=true locks the audit bucket's five-year retention and liens the project, which is why it is false for a lab.",
       "anchor": "s12",
       "anchors": [
         "s12"
@@ -679,7 +679,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_4/GUIDE.md",
       "source_lines": [
-        1346
+        1347
       ],
       "offline": false,
       "live_verified": false,
@@ -688,14 +688,14 @@
         {
           "heading": "make down, and what only deleting the project removes",
           "subheading": "make down, and what only deleting the project removes",
-          "purpose": "MANAGED_SEARCH is true by default, so the state holds two Vertex AI Search data stores, one for acme and one for zeta, each with prevent_destroy. Terraform rejects any plan that would destroy such a resource, and a destroy plan destroys everything, so this one destroys nothing: the six lines of step 10 keep billing after make down, still Rs 2,666 a day with a MEDIUM index. The list the recipe prints afterwards does not name the data stores; the kit's README does. Lesson 7.3 meets the same guard from the stores' side. The recipe's last line is the one that ends the bill: delete the throwaway project. Shutting a project down stops all of its billing; for 30 days the project can still be restored, and then it and everything in it are deleted. The same page adds two cautions: charges already run up can still arrive until the current billing cycle ends, and it advises disabling billing on the project before you shut it down. One switch would block the deletion itself: AUDIT_LOCK=true locks the audit bucket's five-year retention and liens the project, which is why it is false for a lab.",
+          "purpose": "So the six lines of step 10 stop billing with make down. What the destroy cannot delete is what the list names: Firestore, which keeps its delete protection, and every bucket that still holds objects, because no bucket in storage.tf sets force_destroy to true. A used lane's uploads bucket holds the corpus, so the destroy ends with an error for each such bucket, and the recipe prints its list and exits with that error. No bucket depends on any of the six lines, so the error holds none of them back. The recipe's last line is the one that ends the bill: delete the throwaway project. Shutting a project down stops all of its billing; for 30 days the project can still be restored, and then it and everything in it are deleted. The same page adds two cautions: charges already run up can still arrive until the current billing cycle ends, and it advises disabling billing on the project before you shut it down. One switch would block the deletion itself: AUDIT_LOCK=true locks the audit bucket's five-year retention and liens the project, which is why it is false for a lab.",
           "label": "bash — run in the operator shell, in the kit, when you are finished with the lane - not now: Module 1 starts on this lane",
           "expected": "[awaiting the author's run: data/down.txt]",
           "adaptations": [],
           "id": "source_75",
           "function": "step_01_make_down_and_what_only_deleting_the_proje",
           "window": 75,
-          "source_line": 1346,
+          "source_line": 1347,
           "manual_checkpoint": null
         }
       ],
@@ -1061,7 +1061,7 @@
     },
     {
       "window": 59,
-      "label": "terraform/vector.tf - the machine follows the shard size the API chose",
+      "label": "terraform/vector.tf - the machine follows the index's shard size",
       "heading": "What still bills when nothing runs",
       "anchor": "s10",
       "line": 1111
@@ -1145,7 +1145,7 @@
     },
     {
       "window": 73,
-      "label": "terraform/managed.tf - the guard on the two Vertex AI Search data stores",
+      "label": "terraform/managed.tf - the two Vertex AI Search data stores: no guard against the destroy",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
       "line": 1330
@@ -1155,14 +1155,14 @@
       "label": "Makefile - the switch that declares them, and the variable destroy passes",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1337
+      "line": 1338
     },
     {
       "window": 76,
       "label": "expected (the author's lane: your ids, times and counts are yours)",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1348
+      "line": 1349
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

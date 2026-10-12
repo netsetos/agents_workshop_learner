@@ -146,8 +146,8 @@ TF_PROJECT_VARS = $(abspath $(TF_DIR)/runbook-project.auto.tfvars.json)
 BUDGET_AMOUNT      ?= 5000
 PAGERDUTY_KEY      ?= unset-in-dryrun
 # Explicit legacy import and teardown targets use this init recipe; the job targets plan and apply as plan and up do.
-# The safe plan/up path requires an initialized backend and never switches its bucket.
-TFSTATE_BUCKET     ?= documind-tfstate
+# The safe plan/up path requires an initialized backend and never switches its bucket: <project>-tfstate unless set (names are global).
+TFSTATE_BUCKET     ?= $(PROJECT)-tfstate
 TFSTATE_PREFIX     ?= documind/$(PROJECT)
 
 TF_EXTRA_VARS = -var audit_lock=$(AUDIT_LOCK) \
@@ -194,13 +194,13 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
         release-candidate record-candidate promote rollback smoke-all usage ingest-one poison dlq down-services \
         reindex retire restore reconcile reconcile-job backfill-current sources purge smoke-reindex \
         batch queued batch-job graph managed-status rag-corpus rag-engine-enable tenant-policy tenant-backend \
-        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat
+        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat decide bench exemplars label-sheet judge-agree judge-frozen prompt-version agent-turn agent-eval agent-tests approval-check thread replay ci-vars keys-check
 
 # ---------- the module files (22 September 2026): one .mk per lane; the Makefile keeps the variables and the core ----------
 # mk/ingestion.mk  the roster and the tenant pins, the vector tier's status and repair, the ingest drills (the v5 course's Module 1)
 # mk/lifecycle.mk  the ledger (reindex, retire, restore, reconcile, sources, purge) and the batch lane (Module 1)
 # mk/agents.mk     the agent layer (Modules 5 and 10). A long recipe is a commands/ script or a subcommand of commands/lane.py
-# (the Desk's: commands/desk_ops.py). tools/check_*.py read the Makefile and mk/*.mk as one text. Bare make: dryrun.
+# (the Desk's: commands/desk_ops.py). mk/retrieval.mk: decide (Module 2). tools/check_*.py read them as one text. Bare make: dryrun.
 .DEFAULT_GOAL := dryrun
 include mk/*.mk
 
@@ -563,11 +563,11 @@ smoke-media: guard-project
 # The Rs 0 lane (lesson 6.4 step 7, gap G3): the SAME chat service, DOCUMIND_PROFILE=local -
 # Ollama gemma3:4b for the model, a Chroma directory for the corpus, no IAP and no roster
 # (LOCAL_USER / LOCAL_TENANT stand in). Needs `pip install -r services/chat/requirements.txt
-# -r services/chat/requirements-local.txt` once, and `ollama pull gemma3:4b`. Seeds the six
-# teaching passages first; Chroma upserts, so re-running is harmless.
+# -r services/chat/requirements-local.txt` once, and `ollama pull gemma3:4b`. Seeds acme's corpus first;
+# Chroma upserts, so re-running is harmless. One absolute directory for both: the service runs from services/chat.
 chat-local:
-	DOCUMIND_PROFILE=local $(PY) -m shared.local_corpus acme
-	cd services/chat && DOCUMIND_PROFILE=local PYTHONPATH=../.. \
+	DOCUMIND_PROFILE=local DOCUMIND_CHROMA_DIR="$(CURDIR)/documind_chroma" $(PY) -m shared.local_corpus acme
+	cd services/chat && DOCUMIND_PROFILE=local DOCUMIND_CHROMA_DIR="$(CURDIR)/documind_chroma" PYTHONPATH=../.. \
 	  $(PY) -m uvicorn agent:app --host 127.0.0.1 --port 8081
 
 # destroy needs the SAME variables plan/apply need - terraform resolves every declared
@@ -860,9 +860,9 @@ managed-stores: guard-project
 	@GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) -m shared.tenancy backend zeta vertex_search
 	@echo ">> managed stores ready: corpora for $(MANAGED_TENANTS); acme reads rag_engine, zeta vertex_search, globex the kit's rows; make managed-status after make ingest-corpus"
 
-# The corpora bill storage until deleted and are not Terraform's to destroy: make down runs this first.
-# The data stores go with terraform destroy. The pins are cleared so a redeploy of the same project does not
-# send acme and zeta to stores that no longer exist.
+# The corpora bill storage until deleted and are not Terraform's to destroy: make down runs this before its terraform
+# destroy, which takes the data stores too (managed.tf's prevent_destroy refused that whole destroy until 8 October 2026).
+# The pins are cleared so a redeploy of the same project does not send acme and zeta to stores that no longer exist.
 managed-stores-down: guard-project
 	@for t in $(MANAGED_TENANTS); do \
 	  (cd services/ingest && GOOGLE_CLOUD_PROJECT=$(PROJECT) RAG_LOCATION=$(RAG_LOCATION) $(PY) managed.py --project $(PROJECT) --delete-corpus --tenant $$t) || exit 1; \

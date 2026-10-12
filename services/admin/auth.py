@@ -33,8 +33,8 @@ def current_user() -> dict:
         st.error("403 - invalid IAP assertion.")
         st.stop()
     email = (claims.get("email") or "").lower()
-    # The IAP group binding is the gate; this is defence in depth, and it is the
-    # check that still holds if somebody widens the group by accident.
+    # The IAP binding is the gate (one grant per ADMIN_EMAILS address, lesson-12.3.sh); this is
+    # defence in depth, and it is the check that still holds if somebody widens IAP by accident.
     if ADMIN_EMAILS and email not in ADMIN_EMAILS:
         st.error("403 - Admins only")
         st.stop()
