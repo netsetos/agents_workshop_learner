@@ -56,6 +56,7 @@ The sequence comes from each main HTML; the 4 lessons whose main HTML is not wri
 - [7.4: Compare quality and test update/withdrawal freshness](module_07/lesson_7_4/README.md) — 7 files; main_html
 - [7.5: Query a video clip and validate media citations](module_07/lesson_7_5/README.md) — 7 files; main_html
 - [7.6: Exercise implemented Studio and voice features](module_07/lesson_7_6/README.md) — 7 files; main_html
+- [8.3: Size RAG for ten million documents](module_08/lesson_8_3/README.md) — 7 files; main_html
 - [9.1: Trace and authorize gateway routes](module_09/lesson_9_1/README.md) — 7 files; main_html
 - [9.2: Serve a supplied or stock model using Ollama](module_09/lesson_9_2/README.md) — 8 files; main_html
 - [9.3: Inspect the vLLM service and the GKE alternative](module_09/lesson_9_3/README.md) — 7 files; main_html

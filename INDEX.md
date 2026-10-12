@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1179 files; 157 quoted by a lesson, 243 shown or named by one.
+1190 files; 157 quoted by a lesson, 243 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -33,23 +33,23 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/git-source.sh` | code | 0.4 | - |
 | `commands/graph-venv.sh` | code | - | - |
 | `commands/infrastructure.py` | code | 0.1, 0.3, 0.4 | 1.8, 5.6, 10.4, 11.5 |
-| `commands/ingest-one.sh` | code | - | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
-| `commands/lane.py` | code | 0.3, 0.4, 3.9, 4.6, 5.3 | 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 4.1, 4.2, 4.3, 4.4, 4.7, 4.8, 5.1, 5.2, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/ingest-one.sh` | code | - | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/lane.py` | code | 0.3, 0.4, 3.9, 4.6, 5.3 | 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 4.1, 4.2, 4.3, 4.4, 4.7, 4.8, 5.1, 5.2, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `commands/lesson-12.1.sh` | code | 0.3 | 0.1 |
 | `commands/lesson-12.2.sh` | code | 2.5, 3.9, 4.6 | 0.3, 4.4, 4.7, 5.6, 10.4, 11.6 |
 | `commands/lesson-12.3.sh` | code | - | 0.3 |
 | `commands/lesson-12.4.sh` | code | 0.3, 3.8 | 5.6, 10.4 |
-| `commands/lesson-12.5.sh` | code | 1.5 | 0.3 |
+| `commands/lesson-12.5.sh` | code | 1.5, 8.3 | 0.3 |
 | `commands/lesson-12.8.sh` | code | - | 0.3, 5.1, 5.4, 5.5, 5.6, 6.5, 10.4 |
 | `commands/lesson-7.2.sh` | code | 5.3 | 0.3, 10.6 |
 | `commands/lesson-8.4.sh` | code | 10.6 | 0.3 |
 | `commands/limits-check.sh` | code | - | 5.5 |
 | `commands/limits-drill.sh` | code | - | 5.5 |
-| `commands/poison.sh` | code | 1.5 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/poison.sh` | code | 1.5 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `commands/prompt_pin.py` | code | - | - |
-| `commands/reindex.sh` | code | 1.6 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/reindex.sh` | code | 1.6 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `commands/release.py` | code | - | - |
-| `commands/session-restart.sh` | code | 0.2, 0.4 | 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/session-restart.sh` | code | 0.2, 0.4 | 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `commands/tests/terraform_reapply.tftest.hcl` | code | - | - |
 | `commands/tests/test_agent_bench.py` | code | - | - |
 | `commands/tests/test_agent_patterns.py` | code | - | - |
@@ -85,7 +85,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/thread_replay.py` | code | - | - |
 | `commands/vector-status.sh` | code | 1.4 | 0.3, 2.4 |
 | `commands/verify-vector-index.py` | code | - | 1.4, 11.4 |
-| `commands/wait-vectors.sh` | code | - | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `commands/wait-vectors.sh` | code | - | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `evals/README.md` | doc | - | 0.2, 4.8 |
 | `evals/ablate.py` | code | 2.2, 2.5, 7.4 | 2.3, 4.3, 11.4 |
 | `evals/agent_eval.py` | code | - | - |
@@ -207,8 +207,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `mk/agents.mk` | code | 0.3 | 10.4 |
 | `mk/evaluation.mk` | code | - | - |
 | `mk/generation.mk` | code | - | - |
-| `mk/ingestion.mk` | code | 0.3, 1.3, 1.5, 2.4 | 0.4, 1.1, 1.2, 1.4, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
-| `mk/lifecycle.mk` | code | 1.7, 1.8 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `mk/ingestion.mk` | code | 0.3, 1.3, 1.5, 2.4 | 0.4, 1.1, 1.2, 1.4, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `mk/lifecycle.mk` | code | 1.7, 1.8 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `mk/memory.mk` | code | - | - |
 | `mk/release.mk` | code | - | - |
 | `mk/retrieval.mk` | code | 2.6 | - |
@@ -274,14 +274,14 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/ingest/batch.py` | code | - | - |
 | `services/ingest/contracts.py` | code | 1.1, 1.5, 1.7, 3.4 | 1.6 |
 | `services/ingest/graph.py` | code | 7.1 | - |
-| `services/ingest/idempotency.py` | code | 1.1, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 6.3 | - |
-| `services/ingest/indexer.py` | code | B.2, B.3, B.4, 1.1, 1.3, 1.4, 1.6, 2.2, 3.4 | 2.1 |
-| `services/ingest/main.py` | code | B.3, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 4.8, 7.4, 7.5 | 1.1, 10.4 |
+| `services/ingest/idempotency.py` | code | 1.1, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 6.3, 8.3 | - |
+| `services/ingest/indexer.py` | code | B.2, B.3, B.4, 1.1, 1.3, 1.4, 1.6, 2.2, 3.4, 8.3 | 2.1 |
+| `services/ingest/main.py` | code | B.3, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 4.8, 7.4, 7.5, 8.3 | 1.1, 10.4 |
 | `services/ingest/managed.py` | code | 7.3, 7.4 | - |
 | `services/ingest/parser.py` | code | 1.2 | - |
-| `services/ingest/reconcile.py` | code | 1.7, 1.8, 2.4, 7.4 | 1.3 |
+| `services/ingest/reconcile.py` | code | 1.7, 1.8, 2.4, 7.4, 8.3 | 1.3 |
 | `services/ingest/relabel.py` | code | 10.4 | - |
-| `services/ingest/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `services/ingest/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `services/litellm/Dockerfile` | code | - | - |
 | `services/litellm/config.yaml` | config | 9.2, 9.3 | 9.1, 9.4 |
 | `services/litellm/dlp_audit.py` | code | - | - |
@@ -292,7 +292,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/litellm/requirements.txt` | config | - | B.1, 9.1 |
 | `services/litellm/token_proxy.py` | code | 9.1 | 9.3 |
 | `services/mcp/Dockerfile` | code | - | - |
-| `services/mcp/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `services/mcp/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `services/mcp/server.py` | code | 5.2, 5.3 | 4.6 |
 | `services/rag-api/Dockerfile` | code | B.1 | - |
 | `services/rag-api/auth.py` | code | 0.4, 2.1, 4.6, 4.7 | - |
@@ -310,7 +310,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/rag-api/main.py` | code | B.1, B.4, 0.4, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.3, 4.6, 4.7, 4.8, 5.6, 6.2, 6.3, 7.3, 11.4, 11.6, 12.3 | 7.5 |
 | `services/rag-api/media.py` | code | 7.6 | - |
 | `services/rag-api/prompt_versions.json` | config | - | - |
-| `services/rag-api/requirements.txt` | config | - | B.1, 0.2, 0.3, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `services/rag-api/requirements.txt` | config | - | B.1, 0.2, 0.3, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `services/rag-api/retriever.py` | code | B.2, B.4, 1.3, 1.4, 1.7, 2.1, 2.2, 2.3, 2.4, 3.7, 4.7, 7.2, 7.3, 11.4 | - |
 | `services/rag-api/rewrite.py` | code | 2.5 | - |
 | `services/rag-api/router.py` | code | - | 10.4, 11.6 |
@@ -330,7 +330,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/desk_recall.py` | code | - | 5.6 |
 | `shared/desk_rules.py` | code | 3.9, 5.6 | - |
 | `shared/doc_types.py` | code | 10.4 | - |
-| `shared/documind_corpus.py` | code | B.3, 1.2, 1.3, 1.6 | 0.2, 3.4, 12.1 |
+| `shared/documind_corpus.py` | code | B.3, 1.2, 1.3, 1.6, 8.3 | 0.2, 3.4, 12.1 |
 | `shared/documind_graph.py` | code | 7.2 | - |
 | `shared/documind_schemas.py` | code | B.5, 2.3, 3.5, 3.9, 7.5 | 6.2, 12.1 |
 | `shared/documind_tools.py` | code | B.1, 0.2, 2.6, 3.9, 5.1, 5.5, 9.4 | B.2, B.5 |
@@ -341,7 +341,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/prices.py` | code | B.2, B.5, 3.9 | 0.1, 0.2, 0.3, 0.4, 2.5, 2.6, 5.7, 10.4 |
 | `shared/profile.py` | code | 0.2 | B.2, B.5 |
 | `shared/query_rewrite.py` | code | 2.5 | - |
-| `shared/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
+| `shared/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 3.5, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.3, 9.1, 9.2, 9.3, 9.4, 10.4, 10.6, 11.4, 11.5, 11.6, 12.1, 12.2, 12.3 |
 | `shared/roles.py` | code | 5.6 | - |
 | `shared/sparse_encoder.py` | code | 1.3 | 2.2 |
 | `shared/system_one.py` | code | 2.6 | - |
@@ -368,9 +368,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/desk.tf` | code | 0.3, 5.6 | 5.1, 10.4 |
 | `terraform/desk_alerts.tf` | code | 4.3 | 0.3, 5.6, 10.4, 11.5 |
 | `terraform/docai.tf` | code | - | 0.3, 1.2 |
-| `terraform/eventarc.tf` | code | 1.5 | 0.2, 0.3, 1.1 |
+| `terraform/eventarc.tf` | code | 1.5, 8.3 | 0.2, 0.3, 1.1 |
 | `terraform/firestore.tf` | code | - | 0.3 |
-| `terraform/firestore_indexes.tf` | code | 0.3, 1.4, 1.7, 2.4 | - |
+| `terraform/firestore_indexes.tf` | code | 0.3, 1.4, 1.7, 2.4, 8.3 | - |
 | `terraform/gateway.tf` | code | - | 0.3 |
 | `terraform/gchat.tf` | code | - | 0.3, 10.4 |
 | `terraform/gke.tf` | code | 0.1, 0.3, 0.4 | - |
@@ -380,7 +380,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/off.tf` | code | 0.4, 11.6 | 0.3, 9.4 |
 | `terraform/org_policy.tf` | code | - | - |
 | `terraform/quota.tf` | code | 3.9 | - |
-| `terraform/reconcile.tf` | code | 1.8 | - |
+| `terraform/reconcile.tf` | code | 1.8, 8.3 | - |
 | `terraform/registry.tf` | code | - | 0.3 |
 | `terraform/sa.tf` | code | 0.3, 3.8, 4.7 | 5.3, 10.6 |
 | `terraform/secrets.tf` | code | - | 0.3 |
@@ -391,7 +391,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/sql/tenant_daily.sql` | code | 2.2, 2.3, 2.4, 11.5 | 0.3, 7.6 |
 | `terraform/storage.tf` | code | 0.3, 3.8, 4.8 | 0.2, 5.6 |
 | `terraform/variables.tf` | code | 1.3 | 0.3 |
-| `terraform/vector.tf` | code | B.2, B.4, 0.1, 0.3, 0.4, 1.3, 3.9 | 2.1 |
+| `terraform/vector.tf` | code | B.2, B.4, 0.1, 0.3, 0.4, 1.3, 3.9, 8.3 | 2.1 |
 | `terraform/wif.tf` | code | - | 0.3 |
 | `validate.py` | code | B.1, 0.2 | 0.4 |
 | `workshop_demos/.gitignore` | config | - | - |
@@ -960,6 +960,17 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_07/lesson_7_6/setup/finish.py` | code | - | - |
 | `workshop_demos/module_07/lesson_7_6/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_07/lesson_7_6/setup/restore_settings.py` | code | - | - |
+| `workshop_demos/module_08/README.md` | doc | - | - |
+| `workshop_demos/module_08/lesson_8_3/GUIDE.md` | doc | - | - |
+| `workshop_demos/module_08/lesson_8_3/README.md` | doc | - | - |
+| `workshop_demos/module_08/lesson_8_3/demo_03_the_ui_your_corpus_counted_by_the_lane.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/demo_05_measure_the_corpus_with_the_kit_s_own_chunker.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/demo_06_rest_the_index_s_own_size.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/demo_07_direct_reads_firestore_s_counts_and_the_worker_s_seconds.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/lesson_map.json` | config | - | - |
+| `workshop_demos/module_08/lesson_8_3/setup/finish.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/setup/prepare.py` | code | - | - |
+| `workshop_demos/module_08/lesson_8_3/setup/restore_settings.py` | code | - | - |
 | `workshop_demos/module_09/README.md` | doc | - | - |
 | `workshop_demos/module_09/lesson_9_1/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_09/lesson_9_1/README.md` | doc | - | - |

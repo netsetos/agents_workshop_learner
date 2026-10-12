@@ -1,6 +1,6 @@
 {
   "modules": 14,
-  "lessons_expected": 70,
+  "lessons_expected": 71,
   "lessons": [
     {
       "lesson": "B.1",
@@ -377,6 +377,13 @@
       "lesson": "7.6",
       "title": "Exercise implemented Studio and voice features",
       "source_sha": "fbbf9c146875e365f93128d312d1b7bed2f13340",
+      "source_kind": "main_html",
+      "demos": 7
+    },
+    {
+      "lesson": "8.3",
+      "title": "Size RAG for ten million documents",
+      "source_sha": "6265f86b792bfa61209bf92a4258fd52b330d20c",
       "source_kind": "main_html",
       "demos": 7
     },
