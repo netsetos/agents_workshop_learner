@@ -109,7 +109,7 @@ def step_03_diagnose_a_first_failure_one_loosened_row(session):
       DocuMind AI — Tier-A offline dry run
       ------------------------------------------------------------
       [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)
-      [PASS] py_compile    136 python files parse  (Ns)
+      [PASS] py_compile    147 python files parse  (Ns)
       [PASS] imports       all local imports resolve  (Ns)
       [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)
       [PASS] requirements  11 files, all deps pinned  (Ns)

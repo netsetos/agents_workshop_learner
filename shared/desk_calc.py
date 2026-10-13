@@ -305,7 +305,9 @@ def gratuity_estimate(monthly_wage, years, months=0, fixed_term: bool = False, t
     wage = _dec(monthly_wage, "monthly_wage")
     if wage <= 0:
         raise CalcError("monthly_wage must be above 0")
-    y, m = _whole(years, "years"), _whole(months, "months", high=11)
+    # Sixty years of service is the longest a career holds (13 October 2026: a model once passed years=2020, the year in
+    # the Code's own title, and the estimate came to crores).
+    y, m = _whole(years, "years", high=60), _whole(months, "months", high=11)
     if not isinstance(fixed_term, bool) or not isinstance(term_expired, bool):
         raise CalcError("fixed_term and term_expired are true or false")
     notes = ["An estimate, not the amount owed: the wages are the monthly rate last drawn as given; a better term in an "
@@ -462,12 +464,17 @@ _DATE_LIKE = re.compile(
 _CLAUSE = re.compile(r"\b[A-Z]{2,4}(?:-[A-Z]{2,4})*-\d{2,3}\b")
 # A negation just before a flag's words: "not fixed-term", "isn't on a fixed term", "non-fixed-term", "has not expired".
 _NEGATED = re.compile(r"(?:\b(?:not|no|never|without|nor)|n't|\bnon)\W*(?:\w+\W+){0,2}$", re.I)
+# The year in an instrument's name (the Code on Wages, 2019; the Act of 1972) names the instrument, as a date's digits
+# name a day: no number is written there (13 October 2026: "years = 2020" was read from the Code's own title, and the
+# gratuity came to crores). The figure check below reads an answer the same way, through _PROVISION.
+_INSTRUMENT = re.compile(r"\b(?:Act|Code|Rules|Regulations|Ordinance)\b[^.;:\d]{0,60}?(?:,\s*|\bof\s+)"
+                         r"(?:1[89]|20)\d\d\b", re.I)
 
 
 def numbers_in(text: str) -> set[Decimal]:
     """Every number written in the text, as digits or words, normalised (45 == 45.0; 40,000 == 40000). The digits of
-    a date are not numbers here."""
-    text = text or ""
+    a date, and the year in an instrument's name, are not numbers here."""
+    text = _INSTRUMENT.sub(" ", text or "")
     dates = [m.span() for m in _DATE_LIKE.finditer(text)]
     out: set[Decimal] = set()
     for m in _DIGITS.finditer(text):
@@ -592,7 +599,7 @@ _CITE_MARK = re.compile(r"\[\d+(?:\s*[,-]\s*\d+)*\]")
 _PROVISION = re.compile(r"\b(?:ss?|secs?|cl|paras?|arts?)\.\s*\(?\d+[A-Za-z]?\)?(?:\s*\(\w{1,5}\))*"
                         r"|\b(?:sections?|sub-?sections?|rules?|clauses?|paragraphs?|articles?|chapters?|schedules?|"
                         r"explanations?|forms?)\s+\(?\d+[A-Za-z]?\)?(?:\s*\(\w{1,5}\))*"
-                        r"|\b(?:Act|Code|Rules|Regulations|Ordinance)\b[^.;:\d]{0,60}?(?:,\s*|\bof\s+)(?:1[89]|20)\d\d\b",
+                        r"|" + _INSTRUMENT.pattern,
                         re.I)
 
 

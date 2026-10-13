@@ -221,5 +221,27 @@ class InfrastructureTests(unittest.TestCase):
             infra.parse_trust(CONDITION + " && assertion.actor == 'alice'")
 
 
+class SubscriptionsNeverExpire(unittest.TestCase):
+    """Every Pub/Sub subscription the kit declares holds expiration_policy { ttl = "" } (13 October 2026). Left to the
+    default, Google deletes a subscription after 31 days without subscriber activity: a lane with no upload for a month
+    lost documind-ingest-push and ingest-dlq-sub, and the next upload published to a topic nobody read."""
+
+    TERRAFORM = Path(__file__).resolve().parents[2] / "terraform"
+
+    def subscriptions(self) -> dict:
+        out = {}
+        for tf in sorted(self.TERRAFORM.glob("*.tf")):
+            text = tf.read_text(encoding="utf-8")
+            for m in re.finditer(r'^resource "google_pubsub_subscription" "(\w+)" \{\n(.*?)^\}', text, re.M | re.S):
+                out[f"{tf.name}:{m.group(1)}"] = m.group(2)
+        return out
+
+    def test_every_subscription_holds_the_policy(self):
+        subs = self.subscriptions()
+        self.assertLessEqual({"eventarc.tf:ingest_push", "eventarc.tf:ingest_dlq_sub", "gchat.tf:gchat_push"}, set(subs))
+        for name, body in subs.items():
+            self.assertRegex(body, r'(?m)^  expiration_policy \{\n    ttl = ""\n  \}$', name)
+
+
 if __name__ == "__main__":
     unittest.main()

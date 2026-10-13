@@ -176,9 +176,10 @@ runs uncached on a mismatch (`cache_stale`), until `make cache` packs the corpus
 - **Offline, every PR** (`run_eval.py`): the `version` shape - `must_contain` from the current version of its
   `source`, `must_not_contain` a figure only a retired version under `evals/demo` holds. Re-issue the handbook
   without moving `lk-06` and `vr-01` and the gate is red before anything deploys.
-- **Wiring** (`tools/check_auth_wiring.py`): the chunker measured on the handbook's two revisions (281 of 283
-  reused), the carry-over plan, the newest-per-source guard, the fake-Firestore swap / reactivate / fingerprint,
-  the TTL field, the job, the metrics, the Makefile and the deploy scripts.
+- **Wiring** (`commands/tests/test_twin_chunker.py`, in CI): the worker's chunker and its twin in
+  `shared/documind_corpus.py` agree on every corpus text and edge case, at the kit's size and overlap and at
+  lesson 8.2's, so a lane and a notebook mint one set of chunk ids and hashes; the carry-over and the swap are
+  the lifecycle check's, below.
 - **Lifecycle** (`tools/check_lifecycle.py`): the tombstone (a withdrawn source is never re-ingested by the plan,
   never reactivated), the verified undo (a shortfall and a closed window refuse, flip nothing, log both numbers),
   the batch claim left `queued` and skipped by the plan, the job's take and run (`take_batch`, `batch.py`: by

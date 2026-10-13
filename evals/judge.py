@@ -355,7 +355,8 @@ def main() -> int:
     # Evaluation service should not have to ask the lane again. The file holds the rows as collected.
     if a.reuse and os.path.isfile(a.reuse):
         rows = json.load(open(a.reuse, encoding="utf-8"))
-        print(f"  {len(rows)} rows reused from {a.reuse} (delete it to collect again)")
+        print(f"  {len(rows)} rows reused from {a.reuse} (under make judge-frozen these are the frozen rows, kept; to "
+              f"collect afresh, name another --reuse file)")
     else:
         rows = collect(a.api_url, golden, token, member, a.rows)
         if a.reuse:

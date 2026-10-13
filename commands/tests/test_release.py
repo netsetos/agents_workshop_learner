@@ -401,7 +401,8 @@ class WiringTests(unittest.TestCase):
             self.assertIn(f"`{target}`", readme)
             self.assertIn(f"\n{target}: guard-project\n\t@$(PY) commands/release.py {sub} --project $(PROJECT)", release_mk)
         self.assertIn("ci-vars --project $(PROJECT) --region $(REGION) --terraform-dir $(TF_DIR)\n", release_mk)
-        self.assertIn("| `release.mk` | `ci-vars`, `keys-check` |", readme)
+        row = next(line for line in readme.splitlines() if line.startswith("| `release.mk` | "))
+        self.assertIn("`ci-vars`, `keys-check`", row.split(" | ")[1])      # later lessons' targets follow in the row
 
     def test_the_names_release_py_expects_are_the_kits(self):
         wif, sa = self.read("terraform", "wif.tf"), self.read("terraform", "sa.tf")

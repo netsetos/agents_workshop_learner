@@ -271,9 +271,9 @@ revision and records its name in `deploy/.candidate-revision`, `make eval-live A
 promote the wrong one - 12 September 2026), recording the one it moved traffic off in `deploy/.previous-revision`,
 and `make rollback` moves it back to exactly that one; `documind-cd.yml`'s `path` input picks the candidate jobs
 (`release-candidate`, then `promote` behind the `production` environment's reviewers), which run exactly those
-targets with no Cloud Deploy verb, or `release-clouddeploy` (staging, the live gate, a person, a canary), `wif.tf` pins the branch through `var.deploy_ref` (`DEPLOY_REF`, default
+targets with no Cloud Deploy verb, or `release-clouddeploy` (staging, the live gate, a person, a canary), `wif.tf` pins the branch through `var.deploy_ref` (`infrastructure.py prepare --deploy-ref`, default
 `refs/heads/main`) and lets `sa-documind-cicd` mint the gate's two identities' tokens. *The smokes are one*:
-`make smoke-all` runs the seven smokes with their exports, tallies PASS/FAIL and exits non-zero when any smoke failed
+`make smoke-all` runs the eight smokes with their exports, tallies PASS/FAIL and exits non-zero when any smoke failed
 (12 September: a FAIL line satisfied the grep and the target exited 0), `smoke.py` refuses the golden
 question without a token as its fourth check, and `services/frontend/requirements.txt` no longer pins the two
 model clients nothing imports. *The rows are a tool*: `make usage HOURS=` (`evals/usage_rows.py`) groups the
@@ -281,8 +281,8 @@ usage rows in Cloud Logging by tenant, model and backend, brain and surface with
 where the time went (p95 per stage: retrieve, rerank, generate, with the pool the reranker saw) - the same
 figures `tenant_daily` holds, from the rows before the sink has copied them. *Ingestion has live cells*: `make ingest-one FILE= TENANT=` waits for the worker's
 `ingest_ok` line, `make poison` puts a zero-byte object in and waits for `ingest_poison`, `make dlq` peeks at
-`ingest-dlq-sub` without acking. `tools/check_contract.py` applies the lane rules to 12.1 to 12.8 and
-`tools/check_auth_wiring.py` pins every seam above.
+`ingest-dlq-sub` without acking. `tools/check_contract.py` applies the lane rules to 12.1 to 12.8 and the kit's tests
+under `commands/tests/` pin the seams above (`test_twin_chunker.py` holds the worker's chunker and its twin equal).
 
 The ledger (11 September 2026, night) gives the index a *current*. The worker keeps `sources/{tenant~path}` - which
 version of an object path is current, its generation, its declared date - beside the per-version claim in

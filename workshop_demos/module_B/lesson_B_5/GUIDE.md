@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_B.5_Decoder_Models_WIX.html`, reviewed at blob `456244a622c02be64d37a8550d556e129277b6ae`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_B.5_Decoder_Models_WIX.html`, reviewed at blob `77d7dca417a3c1975ede40797118ccfe48266564`. Learners read that page on the course site; this guide keeps its prose.
 
 Every answer DocuMind gives is written one token at a time: the model scores every candidate for the next token, one is picked, and the loop runs again. This page opens that loop. You will build it in numpy on a tiny vocabulary, watch greedy decoding repeat itself while sampling varies, see temperature, top-k and top-p reshape the odds, and read why the kit sends Gemini none of the three. Then you will send Gemini one question five times with the kit's own settings, count the distinct answers, and price its thinking at two levels in rupees.
 

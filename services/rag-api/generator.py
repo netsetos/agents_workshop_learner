@@ -271,7 +271,7 @@ def _call(prompt: str, packed: list[dict], tenant_id: str | None, max_tokens: in
         contents=_contents(prompt, packed),   # + the figures being cited (9.6, gap G7)
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
-            # ModelDraft, from shared/documind_schemas.py - the same class 3.2 teaches.
+            # ModelDraft, from shared/documind_schemas.py - the same class workshop lesson 3.5 teaches.
             # The model cites by [Source N] and QUOTES the words it relied on; resolve()
             # below turns that into Citations with ids, pages and scores it never saw.
             response_schema=ModelDraft,
@@ -496,3 +496,14 @@ def _vertex_stream(prompt: str, packed: list[dict], tenant_id: str | None, model
         return
     # The model that answered, for the usage row: the tier, or the default it fell back to.
     yield "usage", {**usage, "model": model}
+
+
+# Workshop lesson 12.4 (13 October 2026): the prompt version's own rules, after SYSTEM's five. prompt_rules.py reads
+# them from prompt_rules.json, numbers them on from 6, and refuses at import a PROMPT_VERSION that file does not list
+# and prompt_versions.json does not register (lesson 3.6). v3, config.py's default, adds none: SYSTEM stays the literal
+# above, byte for byte, and with it the tuning set's copy (evals/make_trainset.py). Bound through globals() so that the
+# literal stays SYSTEM's one assignment, the text make prompt-version and the lessons read by AST. generate(),
+# generate_stream(), _budget() and the gateway's two turns read SYSTEM when they run, and cache_admin.py imports it
+# after this line, so each of them carries the version's rules.
+from prompt_rules import with_rules  # noqa: E402
+globals()["SYSTEM"] = with_rules(SYSTEM, settings.prompt_id, settings.prompt_version)

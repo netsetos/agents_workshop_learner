@@ -5,19 +5,27 @@ thinking level and desk, offline or on a lane.
     python evals/agent_eval.py --check                                      # Rs 0, stdlib: the task set is sound
     python evals/agent_eval.py --offline [--patterns loop] [--thinking low,high] [--runs 3] [--slice calc]
                                          [--desk astar|row|handbook|statute] [--best-of 3] [--save runs.jsonl]
+                                         [--exec-model default,gemini-3.1-flash-lite]
     python evals/agent_eval.py --live ...                                   # your lane: make agent-eval sets it up
-    python evals/agent_eval.py --replay runs.jsonl [--best-of 3]            # Rs 0: saved runs, rescored
+    python evals/agent_eval.py --replay runs.jsonl [more.jsonl] [--best-of 3]   # Rs 0: saved runs, rescored
     python evals/agent_eval.py --compare low.jsonl high.jsonl               # Rs 0: two saved arms, paired
 
 THE TASK SET, evals/agent_tasks.jsonl, one row a question:
 
     {id, kind, tenant, desk, question, calcs, expected, unit, clause, rule, wrong, search, of, tags, note}
     refuse rows add {missing, invented, says}
+    chained rows are {id, kind, tenant, desk, question, parts, of, tags, note}, each part
+    {calcs, expected, unit, clause, rule, wrong, search} as a calc row's, and stated when the question states a figure
+    for an argument a clause must give
 
     kind      calc     a figure a calculator works out from the question and a clause (desk_calc.CALCULATORS)
               lookup   a figure a clause states, one hop, no arithmetic
               trap     a calc row whose figure the clause also writes, so a copied figure is right without a calculator
               refuse   a figure the question cannot give: the answer names the missing input and states no figure
+              chained  several figures in one question (lesson 10.2), from both desks (desk astar), each a search and
+                       then its calculator; no figure feeds another calculator, since check_args takes a calculator's
+                       inputs from the question or a clause only. stated is a figure the question states that is not
+                       the clause's (a manager's cap): check_args refuses it, so a plan that takes it meets a refusal
     expected  the figure (a number, a date YYYY-MM-DD, true or false), recomputed by desk_calc in --check; null on refuse
     clause    the clause or section the figure rests on; rule the desk_calc.RULES key quoting a Code's words
     wrong     figures a right answer never states: the other count, the wrong clause's figure, another company's
@@ -29,28 +37,42 @@ desk_calc.check_args against the question and the clause's own chunk (as shared/
 calculator runs on the right desk and on a Code the tenant holds, and calculate() returns the expected figure citing
 the row's clause; a lookup's figure is written in its clause; a trap's figure is also the clause's own; a refuse row's
 calculator cannot run on what the question states and check_args refuses the input a model might invent; no wrong
-figure is the expected one or in the question; a golden row's must_contain holds the figure. Then desk_calc's
-selftest, which holds every RULES quote to its corpus lines.
+figure is the expected one or in the question; a golden row's must_contain holds the figure; a chained row's every part
+passes as a calc row of its calculator's desk on the row's question, and check_args refuses each stated figure. Then
+desk_calc's selftest, which holds every RULES quote to its corpus lines.
 
 SCORING. The answer scored is the model's own text, never desk_agent.compose()'s "Worked out in code" lines, which code
 writes from the calculator and so always agree with it.
 
     correct     the expected figure is stated (a number in digits or words, a date in any form desk_calc reads; the
                 one yes/no row by an unnegated "must", "required", "yes") and no wrong figure is; a refuse row
-                names its missing input, states no figure without a source, and no calculator worked one out
+                names its missing input, states no figure without a source, and no calculator worked one out; a
+                chained row, every part's figure stated and no part's wrong figure
     provenance  calc and trap: a call of the row's calculator returned the expected figure, and
                 desk_calc.unsupported() finds no figure in the answer that a calculator, the question or a passage the
                 turn read did not write; lookup: a passage of the row's clause holding the figure was read, and
-                unsupported() finds nothing; refuse: unsupported() finds nothing
+                unsupported() finds nothing; refuse: unsupported() finds nothing; chained: every part's calculator
+                returned its figure, and unsupported() finds nothing
     verified    correct, with its provenance
     tokens      each model call's input, thinking and visible tokens and its rupees (agent_patterns' recorder)
 
 A row is scored on every run; the rates with a Wilson interval are over each row's first run. pass@k is the chance at
 least one of k runs passes, pass^k that all k do (the unbiased estimates over each row's n runs, averaged over rows),
-for correct and for verified. --best-of N keeps one of a row's first N runs, chosen by the figure check alone - no
-unsupported figure first, then a calculator's figure stated, then the earliest - so the choice never reads the
-expected figure. Two arms in one run, or --compare, print the paired difference on each row's first run, correct and
-verified: Newcombe's interval and an exact McNemar test (evals/paired.py), read against its pre-registered margin.
+for correct and for verified. --best-of N keeps one of a row's first N runs, chosen without the expected figure - a run
+the check passes first (commands/agent_patterns.py's figure_check(), verify's critic: no unsupported figure, every [n]
+a passage the run read, no stop; a failed run never passes), then a calculator's figure stated, then the earliest - so
+the choice never reads the expected figure; an arm with fewer runs a row than N says so instead. Two arms in one run,
+or --compare, print the paired difference on each row's first run, correct and verified: Newcombe's interval and an
+exact McNemar test (evals/paired.py), read against its pre-registered margin.
+
+CHECK, RETRY OR CHOOSE (lesson 10.3). A verify arm's run is its answer that ships, scored as any run; its report adds on
+which attempt the figure check passed, the attempts, reflect calls and notes a run, the notes that write a figure (a
+note is never a source: each is refused or flagged), and the ceiling, a row with any attempt correct. With verify and
+another arm in the same records (one run, or one --replay of several saves), the three ways print side by side, each
+with its calls and rupees a row: that arm's pass@1 (its first run), pass@k re-rolls (any of its first k runs correct:
+the ceiling a perfect chooser reaches) and best-of-k (the run the figure check chooses), k being --best-of or its runs
+a row; verify's pass@3 with notes, the answer it ships; then the check's precision, the runs and attempts it passes
+that are correct. All of it rescores saved runs, so --replay prints it at Rs 0.
 
 THE RUNS. Every row through every arm: each pattern of --patterns (commands/agent_patterns.py) at each level of
 --thinking (comma-separated; default is the desk agent's own, low), on --desk (astar, the default: one agent with every
@@ -59,6 +81,12 @@ patterns in this process: --offline on the scripted model and the kit's corpus (
 the script slips on about one run in five, agent_patterns.py says how), --live on Gemini and the lane's rag-api, which
 make agent-eval sets up (commands/agent-turn.sh): a few gemini-3.6-flash calls a row and run. --save keeps every run,
 one JSON line each, with its passages by file name, so --replay rescores it at Rs 0 and --compare pairs two arms.
+
+THE EXECUTOR (lesson 10.2). --exec-model (comma-separated; default is the planner's own model) runs plan_execute and
+rewoo once for each executor model named, their act and extract calls on it (agent_patterns' EXEC_MODELS: gemini-3.1-
+flash-lite the cheaper one); the other patterns run once, as they are. Each of their arms adds a line of calls and
+rupees a run by role, each role with its model, and one of how its plans went: runs replanned, plans refused before any
+tool ran, waves a run.
 """
 from __future__ import annotations
 
@@ -93,7 +121,10 @@ MANIFEST = HERE / "manifest.json"
 FIELDS = ("id", "kind", "tenant", "desk", "question", "calcs", "expected", "unit", "clause", "rule", "wrong", "search",
           "of", "tags", "note")
 REFUSE_FIELDS = ("missing", "invented", "says")
-KINDS = ("calc", "lookup", "trap", "refuse")
+CHAINED_FIELDS = ("id", "kind", "tenant", "desk", "question", "parts", "of", "tags", "note")
+PART_FIELDS = ("calcs", "expected", "unit", "clause", "rule", "wrong", "search")
+KINDS = ("calc", "lookup", "trap", "refuse", "chained")
+ROLES = ("plan", "act", "extract", "replan", "solve")     # a planning pattern's calls, as agent_patterns.ROLES
 UNITS = ("INR", "days", "date", "yes/no", "years", "days a month")
 DESKS = ("handbook", "statute")
 ROW_ID = re.compile(r"^[a-z0-9][a-z0-9-]*$")
@@ -160,8 +191,24 @@ def score(row: dict, run: dict) -> dict:
     answer, calcs = run.get("answer") or "", run.get("calculations") or []
     flagged = desk_calc.unsupported(answer, calcs, run.get("question") or row["question"],
                                     *[p.get("text") or "" for p in run.get("passages") or ()])
-    unit, want, why = row["unit"], row["expected"], []
-    if row["kind"] == "refuse":
+    unit, want, why = row.get("unit"), row.get("expected"), []
+    if row["kind"] == "chained":                 # each part as a calc row: every figure stated, every one a calculator's
+        correct = by_all = True
+        for part in row["parts"]:
+            names = {c["calculator"] for c in part["calcs"]}
+            label = ", ".join(sorted(names))
+            stated = states(answer, part["expected"], part["unit"])
+            wrong = [w for w in part["wrong"] if states(answer, w, part["unit"])]
+            by = any(c.get("calculator") in names and same(c.get("value"), part["expected"], part["unit"]) for c in calcs)
+            correct, by_all = correct and stated and not wrong, by_all and by
+            if not by:
+                why.append(f"no {label} call returned it")
+            if not stated:
+                why.append(f"{label}: the figure is not stated")
+            if wrong:
+                why.append(f"{label}: states " + ", ".join(str(w) for w in wrong))
+        provenance = by_all and not flagged
+    elif row["kind"] == "refuse":
         worked = [c for c in calcs if c.get("value") is not None]
         says = any(re.search(r"\b" + re.escape(w), answer, re.I) for w in row["says"])
         correct, provenance = says and not worked and not flagged, not flagged
@@ -202,16 +249,28 @@ def backed(run: dict) -> bool:
                for c in run.get("calculations") or () if c.get("unit") in ("INR", "days", "date", "yes/no"))
 
 
-def best_of(runs: list[dict], n: int) -> dict:
-    """One of the first n runs, chosen by the figure check alone: no unsupported figure, then a calculator's figure
-    stated, then the earliest. It never reads the row's expected figure."""
-    first = sorted(runs, key=lambda r: r["run"])[:n]
+def _ap():
+    """commands/agent_patterns.py, which needs the standard library and shared/ only at import: its figure check."""
+    if str(KIT / "commands") not in sys.path:
+        sys.path.insert(0, str(KIT / "commands"))
+    import agent_patterns
+    return agent_patterns
 
-    def key(r):
-        flagged = desk_calc.unsupported(r.get("answer") or "", r.get("calculations") or [], r.get("question") or "",
-                                        *[p.get("text") or "" for p in r.get("passages") or ()])
-        return (not flagged, backed(r), -r["run"])
-    return max(first, key=key)
+
+def passes(run: dict) -> bool:
+    """The figure check passes a saved run, as it passes an attempt of verify (agent_patterns.figure_check()): no
+    figure its calculations, question and passages do not write, every [n] a passage it read, no stop. A run that
+    failed never passes."""
+    return not run.get("error") and _ap().figure_check(run.get("answer") or "", run.get("calculations") or [],
+                                                       run.get("question") or "", run.get("passages") or [],
+                                                       run.get("stopped_by"))["passed"]
+
+
+def best_of(runs: list[dict], n: int) -> dict:
+    """One of the first n runs, chosen by the figure check alone: a run it passes, then a calculator's figure stated,
+    then the earliest. It never reads the row's expected figure."""
+    first = sorted(runs, key=lambda r: r["run"])[:n]
+    return max(first, key=lambda r: (passes(r), backed(r), -r["run"]))
 
 
 def pass_at_k(n: int, c: int, k: int) -> float:
@@ -315,7 +374,59 @@ def _in_clause(row: dict) -> bool:
     return bool(chunk) and want in desk_calc.numbers_in(desk_calc.clause_text(chunk, row["clause"]))
 
 
+def _check_chained(row: dict, held: dict) -> tuple[list[str], str]:
+    """A chained row: its fields, its question through the gate and the mask, then each part as a calc row of its
+    calculator's desk on the row's question, its wrong figures, and check_args refusing each stated figure."""
+    missing = [f for f in CHAINED_FIELDS if f not in row]
+    missing += [f"part {i} {f}" for i, p in enumerate(row.get("parts") or (), 1) for f in PART_FIELDS if f not in p]
+    if missing:
+        return [f"missing {', '.join(missing)}"], ""
+    if row["tenant"] not in held:
+        return [f"tenant {row['tenant']!r} is not one of {', '.join(held)}"], ""
+    if row["desk"] != "astar":
+        return [f"desk {row['desk']!r}: a chained row's figures are both desks', so it runs on astar"], ""
+    why, said, q = [], [], row["question"]
+    if not ROW_ID.match(row["id"]):
+        why.append("the id is not lower-case words and digits")
+    if len(row["parts"]) < 2:
+        why.append("a chained row has two figures or more")
+    if desk_rules.gate(q) is not None:
+        why.append(f"the hard gate takes it as {desk_rules.gate(q)}: no agent would see it")
+    if desk_rules.mask(q)[1]:
+        why.append("it holds an identifier the router masks")
+    for i, part in enumerate(row["parts"], 1):
+        spec = desk_calc.CALCULATORS.get(part["calcs"][0]["calculator"]) if len(part["calcs"]) == 1 else None
+        if spec is None or part["unit"] not in UNITS or (part["rule"] is not None and part["rule"] not in desk_calc.RULES):
+            why.append(f"part {i} is not one known calculator, a unit of {', '.join(UNITS)} and a rule or none")
+            continue
+        sub = {**part, "kind": "calc", "tenant": row["tenant"], "question": q, "desk": spec["desk"]}
+        more, done = _check_calc(sub, held)
+        why += [f"part {i}: {w}" for w in more]
+        if not str(part["search"] or "").strip():
+            why.append(f"part {i}: no search words for the scripted model")
+        for w in part["wrong"]:
+            if same(w, part["expected"], part["unit"]):
+                why.append(f"part {i}: the wrong figure {w} is the expected one")
+            if states(q, w, part["unit"]):
+                why.append(f"part {i}: the wrong figure {w} is written in the question")
+        stated = part.get("stated") or {}
+        if stated:
+            calc = part["calcs"][0]
+            passages = [] if part["rule"] else [clause_chunk(row["tenant"], part["clause"])]
+            refused, _ = desk_calc.check_args(calc["calculator"], {**calc["args"], **stated}, passages, q)
+            for k, v in stated.items():
+                if not states(q, v, "date" if k in spec["dates"] else "days"):
+                    why.append(f"part {i}: the stated {k} = {v} is not written in the question")
+                elif not any(m.startswith(f"{k} ") for m in refused):
+                    why.append(f"part {i}: check_args takes the stated {k} = {v}")
+            done += "; " + ", ".join(f"the stated {k} = {v} is refused by check_args" for k, v in stated.items())
+        said.append(done)
+    return why, "; ".join(said)
+
+
 def _check_row(row: dict, golden: dict, held: dict) -> tuple[list[str], str]:
+    if row.get("kind") == "chained":
+        return _check_chained(row, held)
     need = FIELDS + (REFUSE_FIELDS if row.get("kind") == "refuse" else ())
     missing = [f for f in need if f not in row]
     if missing:
@@ -414,12 +525,13 @@ def check(rows: list[dict], out=print) -> int:
 
 # --------------------------------------------------------------------- the runs
 def arm_name(arm: dict) -> str:
-    return f"{arm['pattern']}, thinking {arm['thinking'] or 'default (low)'}, desk {arm['desk']}"
+    return (f"{arm['pattern']}, thinking {arm['thinking'] or 'default (low)'}, desk {arm['desk']}"
+            + (f", executor {arm['executor']}" if arm.get("executor") else ""))
 
 
 def short_names(a: dict, b: dict) -> tuple[str, str]:
     """Two arms named by what differs between them: low and high, loop and plan_execute."""
-    keys = [k for k in ("pattern", "thinking", "desk") if a.get(k) != b.get(k)] or ["pattern"]
+    keys = [k for k in ("pattern", "thinking", "desk", "executor") if a.get(k) != b.get(k)] or ["pattern"]
     name = (lambda arm: "/".join(str(arm.get(k) or "default") for k in keys))
     return (name(a), name(b)) if name(a) != name(b) else ("A", "B")
 
@@ -447,6 +559,7 @@ def run_rows(rows: list[dict], arms: list[dict], runs: int, offline: bool, log=N
     import agent_patterns as ap
     log = log or sys.stderr
     llm = None if offline else ap.gemini()
+    executors: dict = {}                 # live: one client for each executor model an arm names
     records = []
     with (ap.offline() if offline else contextlib.nullcontext()):
         for arm in arms:
@@ -455,13 +568,20 @@ def run_rows(rows: list[dict], arms: list[dict], runs: int, offline: bool, log=N
                 for r in range(runs):
                     model = (ap.scripted(row["question"], row["tenant"], run=r, task=row, slips_on=True,
                                          pattern=arm["pattern"]) if offline else llm)
+                    executor, named = None, arm.get("executor")
+                    if named:
+                        executor = (ap.scripted(row["question"], row["tenant"], run=r, task=row, slips_on=True,
+                                                pattern=arm["pattern"], model=named) if offline
+                                    else executors.get(named) or executors.setdefault(named, ap.gemini(named)))
                     try:
                         turn = ap.run(arm["pattern"], row["question"], llm=model, desk=desk, thinking=arm["thinking"],
-                                      tenant=row["tenant"])
+                                      tenant=row["tenant"], executor=executor)
                         turn.setdefault("error", None)
                     except Exception as e:                       # noqa: BLE001 - a failed run is scored, not fatal
                         turn = _failed_run(row, arm, desk, type(e).__name__)
                     turn.pop("trace", None)
+                    for attempt in turn.get("attempts") or ():          # verify's: each attempt's, too
+                        attempt.pop("trace", None)
                     records.append({"row": row["id"], "arm": dict(arm), "run": r, "offline": offline, **turn})
                     print(f"  [{i}/{len(rows)}] {row['id']} run {r + 1}: {turn['model_calls']} model calls, "
                           f"Rs {turn['inr']:.4f}" + (f", failed: {turn['error']}" if turn.get("error") else ""),
@@ -538,10 +658,14 @@ def report(rows: list[dict], records: list[dict], title: str, best: int | None =
                 parts.append(f"{what} pass@{k} {sum(pass_at_k(n, c, k) for n, c in counts) / len(counts):.3f}, "
                              f"pass^{k} {sum(pass_hat_k(n, c, k) for n, c in counts) / len(counts):.3f}")
             out.append(f"  {'; '.join(parts)}" + ("   (over each row's runs, averaged over rows)" if k == 1 else ""))
-    if best:
+    fewest = min(len(rs) for rs in got.values())
+    if best and fewest < best:
+        out.append(f"  best-of-{best}: not for this arm, which has {fewest} run{'' if fewest == 1 else 's'} a row")
+    elif best:
         chosen = [score(known[rid], best_of([rec for rec, _ in rs], best)) for rid, rs in got.items()]
         out.append(f"  best-of-{best}, chosen by the figure check alone: " + ", ".join(
             f"{what} {_rate(sum(passed(s, what) for s in chosen), len(chosen))}" for what in ("correct", "verified")))
+    out += attempt_lines(known, got)
     every = [rec for rs in got.values() for rec, _ in rs]
     mean = (lambda key: sum(rec.get(key) or 0 for rec in every) / len(every))
     note = " (the script's tokens at list price: nothing is billed)" if all(r.get("offline") for r in every) else ""
@@ -551,13 +675,146 @@ def report(rows: list[dict], records: list[dict], title: str, best: int | None =
             f"  in all: {sum(rec.get('model_calls') or 0 for rec in every)} model calls, Rs "
             f"{sum(rec.get('inr') or 0 for rec in every):.4f} for the model and Rs "
             f"{sum(rec.get('rag_inr') or 0 for rec in every):.4f} for rag-api"]
-    return "\n".join(out)
+    return "\n".join(out + by_role(every))
+
+
+def by_role(records: list[dict]) -> list[str]:
+    """A planning pattern's runs (lesson 10.2): a run's calls and rupees by role, each role with its model, and how its
+    plans went: runs replanned, plans refused before any tool ran, waves a run. Nothing for the other patterns."""
+    planned = [rec for rec in records if rec.get("roles")]
+    if not planned:
+        return []
+    totals: dict = {}
+    for rec in planned:
+        for role, r in rec["roles"].items():
+            t = totals.setdefault(role, {"model": r.get("model"), "calls": 0, "inr": 0.0})
+            t["calls"] += r.get("calls") or 0
+            t["inr"] += r.get("inr") or 0
+    n, order = len(planned), {r: i for i, r in enumerate(ROLES)}
+    out = ["  by role, a run: " + "; ".join(
+        f"{role} {t['calls'] / n:.1f} calls, Rs {t['inr'] / n:.4f} ({t['model']})"
+        for role, t in sorted(totals.items(), key=lambda kv: order.get(kv[0], len(ROLES))))]
+    plans, went = [rec.get("plan") or {} for rec in planned], []
+    if any("replans" in p for p in plans):
+        went.append(f"replanned in {sum(bool(p.get('replans')) for p in plans)} of {n} runs")
+    if any("waves" in p for p in plans):
+        went.append(f"refused before any tool ran in {sum(bool(p.get('refused')) for p in plans)} of {n} runs, "
+                    f"{sum(len(p.get('waves') or ()) for p in plans) / n:.1f} waves a run")
+    return out + ([f"  the plans: {'; '.join(went)}"] if went else [])
+
+
+def _attempt(rec: dict, a: dict) -> dict:
+    """One attempt of a verify run, as a run for score(): its own answer, calculations, passages and stop."""
+    return {**a, "question": a.get("question") or rec.get("question"), "error": None}
+
+
+def attempt_lines(known: dict, got: dict) -> list[str]:
+    """A verify arm's runs (lesson 10.3): on which attempt the figure check passed, the attempts, reflect calls and notes
+    a run, the notes that write a figure, and the ceiling, each row's first run counted correct (or verified) when any
+    of its attempts is. Nothing for the other patterns."""
+    runs = [rec for rs in got.values() for rec, _ in rs if rec.get("attempts")]
+    if not runs:
+        return []
+    cap, n = _ap().MAX_ATTEMPTS, len(runs)
+    passed_on = [rec["shipped"] if (rec.get("check") or {}).get("passed") else 0 for rec in runs]
+    notes = [a for rec in runs for a in rec["attempts"] if a.get("note")]
+    tries = sum(len(rec["attempts"]) for rec in runs)
+    reflects = sum(c.get("role") == "reflect" for rec in runs for c in rec.get("calls") or ())
+    figured = sum(bool(a.get("note_figures")) for a in notes)
+    out = ["  with notes: the figure check passed " + ", ".join(f"on attempt {k} in {passed_on.count(k)}"
+                                                               for k in range(1, cap + 1))
+           + f" and on none in {passed_on.count(0)} of {n} run{'' if n == 1 else 's'} (at most {cap} attempts a run); "
+           f"{tries / n:.1f} "
+           f"attempts, {reflects / n:.1f} reflect calls and {len(notes) / n:.1f} notes a run; {figured} of "
+           f"{len(notes)} notes write a figure, which no check takes from a note"]
+    ceiling = {what: [] for what in ("correct", "verified")}
+    for rid, rs in got.items():
+        rec = rs[0][0]
+        if rec.get("attempts"):
+            tried = [score(known[rid], _attempt(rec, a)) for a in rec["attempts"]]
+            for what in ceiling:
+                ceiling[what].append(any(passed(s, what) for s in tried))
+    out.append("  any attempt (the ceiling, each row's first run): " + ", ".join(
+        f"{what} {_rate(sum(v), len(v))}" for what, v in ceiling.items()))
+    return out
+
+
+def critic(rows: list[dict], groups: dict, best: int | None) -> list[str]:
+    """Lesson 10.3's three ways side by side, when the records hold a verify arm and another: the other arm's pass@1
+    (its first run), pass@k re-rolls (any of its first k runs correct: the ceiling a perfect chooser reaches) and
+    best-of-k (the run the figure check chooses, best_of()), k being --best-of or its runs a row, and verify's pass@3
+    with notes (the answer its first run ships: up to three attempts, a note before each retry), each with its calls
+    and rupees a row (model and rag-api); then the figure check's precision, the share of the runs and attempts it
+    passes that are correct. Rs 0: the records, rescored. Nothing without both arms."""
+    arms, checked = list(groups.values()), {n for n, p in _ap().PATTERNS.items() if p.checked}
+    notes = next((recs for recs in arms if recs[0]["arm"]["pattern"] in checked), None)
+    base = next((recs for recs in arms if recs[0]["arm"]["pattern"] not in checked), None)
+    if notes is None or base is None:
+        return []
+    known = {r["id"]: r for r in rows}
+    a, v = scored(rows, base), scored(rows, notes)
+    ids = [rid for rid in a if rid in v]
+    if not ids:
+        return []
+    k = min(min(best or len(a[rid]), len(a[rid])) for rid in ids)
+    first_k = {rid: a[rid][:k] for rid in ids}
+    name, other = base[0]["arm"]["pattern"], notes[0]["arm"]["pattern"]
+    hit = (lambda s: {"correct": s["correct"], "verified": passed(s, "verified")})
+    spent = (lambda recs: (sum(r.get("model_calls") or 0 for r in recs),
+                           sum((r.get("inr") or 0) + (r.get("rag_inr") or 0) for r in recs)))
+
+    def line(label: str, hits: list[dict], costs: list[tuple]) -> str:
+        """One way: correct and verified over the rows, then its calls and rupees a row."""
+        rates = ", ".join(f"{w} {_rate(sum(h[w] for h in hits), len(hits))}" for w in ("correct", "verified"))
+        calls, inr = sum(c for c, _ in costs) / len(costs), sum(i for _, i in costs) / len(costs)
+        return f"  {label}: {rates}; {calls:.1f} calls and Rs {inr:.4f} a row"
+
+    out = [f"== check, retry or choose (lesson 10.3): {name} against {other}, on the {len(ids)} rows both ran",
+           line(f"pass@1, {name}'s first run", [hit(a[rid][0][1]) for rid in ids],
+                [spent([a[rid][0][0]]) for rid in ids])]
+    if k > 1:
+        k_costs = [spent([rec for rec, _ in first_k[rid]]) for rid in ids]
+        out += [line(f"pass@{k} re-rolls, any of its first {k} runs (the ceiling a perfect chooser reaches)",
+                     [{w: any(hit(s)[w] for _, s in first_k[rid]) for w in ("correct", "verified")} for rid in ids],
+                     k_costs),
+                line(f"best-of-{k}, the run the figure check chooses (code, no model)",
+                     [hit(score(known[rid], best_of([rec for rec, _ in first_k[rid]], k))) for rid in ids], k_costs)]
+    cap = _ap().MAX_ATTEMPTS
+    out.append(line(f"pass@{cap} with notes, {other}'s answer that ships (up to {cap} attempts, a note before each "
+                    "retry)", [hit(v[rid][0][1]) for rid in ids], [spent([v[rid][0][0]]) for rid in ids]))
+    runs = [hit(s) for rid in ids for rec, s in first_k[rid] if passes(rec)]
+    tried = [(rid, _attempt(v[rid][0][0], at)) for rid in ids for at in v[rid][0][0].get("attempts") or ()]
+    tries = [hit(score(known[rid], at)) for rid, at in tried if (at.get("check") or {}).get("passed")]
+    share = (lambda hits: f"{sum(h['correct'] for h in hits)} correct"
+             + (f" ({100 * sum(h['correct'] for h in hits) / len(hits):.0f}%)" if hits else "")
+             + f" and {sum(h['verified'] for h in hits)} verified")
+    out.append(f"  the figure check's precision: of the {len(runs)} of {name}'s {len(ids) * k} runs it passes, "
+               f"{share(runs)}; of the {len(tries)} of {other}'s {len(tried)} attempts it passes, {share(tries)}")
+    return out
 
 
 def compared(rows: list[dict], a: list[dict], b: list[dict]) -> str:
     name_a, name_b = short_names(a[0]["arm"], b[0]["arm"])
     return "\n".join(paired.report(first_runs(rows, a, what), first_runs(rows, b, what), name_a, name_b, what)
                      for what in ("correct", "verified"))
+
+
+def executor_arms(arms: list[dict], exec_model: str | None, ap) -> list[dict]:
+    """--exec-model: each arm of a pattern with an executor (plan_execute, rewoo) once for every model named, default
+    being the planner's own; the other patterns' arms as they are."""
+    if not exec_model:
+        return arms
+    models = list(dict.fromkeys(None if m.strip() in ("", "default") else m.strip() for m in exec_model.split(",")))
+    for m in models:
+        if m is not None and m not in ap.EXEC_MODELS:
+            raise ValueError(f"--exec-model {m!r} is not one of {', '.join(ap.EXEC_MODELS)}, default")
+    if models == [None]:
+        return arms
+    if not any(ap.pattern(arm["pattern"]).executor for arm in arms):
+        raise ValueError(f"--exec-model is for {', '.join(n for n, p in ap.PATTERNS.items() if p.executor)}, and "
+                         f"--patterns names neither")
+    return [dict(arm, **({"executor": m} if m else {})) for arm in arms
+            for m in (models if ap.pattern(arm["pattern"]).executor else [None])]
 
 
 def _one_arm(records: list[dict], path: str) -> list[dict]:
@@ -574,7 +831,7 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument("--check", action="store_true", help="Rs 0: every figure recomputed, every question gated")
     mode.add_argument("--offline", action="store_true", help="the scripted model and the kit's corpus: Rs 0")
     mode.add_argument("--live", action="store_true", help="Gemini and your lane's rag-api: make agent-eval")
-    mode.add_argument("--replay", metavar="FILE", help="rescore saved runs: Rs 0")
+    mode.add_argument("--replay", nargs="+", metavar="FILE", help="rescore saved runs, from one file or more: Rs 0")
     mode.add_argument("--compare", nargs=2, metavar=("A", "B"), help="two saved arms, paired: Rs 0")
     p.add_argument("--inproc", action="store_true", default=True,
                    help="run the patterns in this process: the default, and so far the only way")
@@ -585,6 +842,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--slice", help="kinds, tags, ids or id prefixes, comma-separated")
     p.add_argument("--best-of", type=int, help="one of each row's first N runs, chosen by the figure check")
     p.add_argument("--save", metavar="FILE", help="keep every run, one JSON line each")
+    p.add_argument("--exec-model", help="comma-separated: plan_execute's and rewoo's executor (default, the planner's "
+                                        "own; or gemini-3.1-flash-lite)")
     p.add_argument("--tasks", default=str(TASKS), help=argparse.SUPPRESS)
     a = p.parse_args(argv)
     rows = select(load_tasks(a.tasks), a.slice)
@@ -597,15 +856,18 @@ def main(argv: list[str] | None = None) -> int:
         print(compared(rows, sets[0], sets[1]))
         return 0
     if a.replay:
-        records = _jsonl(a.replay)
+        records = [rec for path in a.replay for rec in _jsonl(path)]
         cost = sum(rec.get("inr") or 0 for rec in records) + sum(rec.get("rag_inr") or 0 for rec in records)
-        print(f"replayed {len(records)} saved runs of {a.replay}: rescored at Rs 0, no model call (they cost Rs "
-              f"{cost:.4f} when they ran{'; offline, the script' if all(r.get('offline') for r in records) else ''})")
+        script = "; offline, the script" if all(r.get("offline") for r in records) else ""
+        print(f"replayed {len(records)} saved runs of {', '.join(a.replay)}: rescored at Rs 0, no model call (they cost "
+              f"Rs {cost:.4f} when they ran{script})")
         groups = by_arm(records)
         for recs in groups.values():
             print(report(rows, recs, arm_name(recs[0]["arm"]), a.best_of))
         if len(groups) == 2:
             print(compared(rows, *groups.values()))
+        for line in critic(rows, groups, a.best_of):
+            print(line)
         return 0
     if a.runs < 1 or (a.best_of and a.best_of > a.runs):
         print("ERROR: --runs is 1 or more, and --best-of N needs N runs or more", file=sys.stderr)
@@ -619,6 +881,7 @@ def main(argv: list[str] | None = None) -> int:
             ap.pattern(arm["pattern"])
             if arm["thinking"] is not None and arm["thinking"] not in ap.THINKING_LEVELS:
                 raise ValueError(f"thinking {arm['thinking']!r} is not one of {', '.join(ap.THINKING_LEVELS)}, default")
+        arms = executor_arms(arms, a.exec_model, ap)
     except ValueError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 2
@@ -628,8 +891,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ERROR: --live needs {', '.join(missing)}: make agent-eval PROJECT=<id> sets them "
                   f"(commands/agent-turn.sh)", file=sys.stderr)
             return 2
+    named = sorted({arm["executor"] for arm in arms if arm.get("executor")})
     print(("OFFLINE: the scripted model and the kit's corpus, no credential, no cost; every count is the script's"
            if a.offline else "LIVE: gemini-3.6-flash on location global, and your lane's rag-api") +
+          (f"; an executor on {', '.join(named)}" if named else "") +
           f" | {len(rows)} rows, {len(arms)} arm{'' if len(arms) == 1 else 's'}, {a.runs} run{'' if a.runs == 1 else 's'}"
           " each, in this process (--inproc)", flush=True)
     records = run_rows(rows, arms, a.runs, a.offline)
@@ -641,6 +906,8 @@ def main(argv: list[str] | None = None) -> int:
         print(report(rows, recs, arm_name(recs[0]["arm"]), a.best_of))
     if len(groups) == 2:
         print(compared(rows, *groups.values()))
+    for line in critic(rows, groups, a.best_of):
+        print(line)
     return 0
 
 

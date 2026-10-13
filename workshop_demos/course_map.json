@@ -1,11 +1,11 @@
 {
   "modules": 14,
-  "lessons_expected": 71,
+  "lessons_expected": 95,
   "lessons": [
     {
       "lesson": "B.1",
       "title": "Run Python the way the kit does: venvs, JSON and HTTP calls",
-      "source_sha": "de6124e80529374df060e703fc310467a749d82c",
+      "source_sha": "fe81b0793d7a3a26d687b7526e59381abd9fd90b",
       "source_kind": "main_html",
       "demos": 5
     },
@@ -33,7 +33,7 @@
     {
       "lesson": "B.5",
       "title": "Generate with GPT-style models: decoding and run-to-run variance",
-      "source_sha": "456244a622c02be64d37a8550d556e129277b6ae",
+      "source_sha": "77d7dca417a3c1975ede40797118ccfe48266564",
       "source_kind": "main_html",
       "demos": 5
     },
@@ -47,7 +47,7 @@
     {
       "lesson": "0.2",
       "title": "Reproduce the local environment, read the master diagram and prove a first success",
-      "source_sha": "246abc9c9644425b0ac4a6b68ec7779e18266482",
+      "source_sha": "2ad4c3d7d7f1dae3774e516ca68d63c5245db383",
       "source_kind": "main_html",
       "demos": 4
     },
@@ -96,7 +96,7 @@
     {
       "lesson": "1.5",
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
-      "source_sha": "b5b29878d6f78d5862acedd06fe8cace4972e7ab",
+      "source_sha": "4bbdae1a635b605b50d6d0445d501cad4b7beee0",
       "source_kind": "main_html",
       "demos": 10
     },
@@ -164,6 +164,27 @@
       "demos": 8
     },
     {
+      "lesson": "3.1",
+      "title": "See run-to-run variance and thinking levels in the same prompt",
+      "source_sha": "d207fd216fcf175508eb192e0e046d077f4693c9",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "3.2",
+      "title": "Prompt with chain of thought and few-shot exemplars",
+      "source_sha": "09f62e59c8f6369e3eced7b47a7ddadd090aaeff",
+      "source_kind": "main_html",
+      "demos": 11
+    },
+    {
+      "lesson": "3.3",
+      "title": "Recognise prompt failure modes and fix them in the prompt",
+      "source_sha": "cc7d3c6f2a0e46668fd82a37d85e6fba1029a22d",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
       "source_sha": "3cd6df0de649ad7d6598cd5da10c3fa8c9c27220",
@@ -173,7 +194,14 @@
     {
       "lesson": "3.5",
       "title": "Generate structured answers, citations and refusals",
-      "source_sha": "69535362b4304805040783944ce7ce885ffb98ac",
+      "source_sha": "cd06f6da0ee9cdd6b203bddc208daadf3494490b",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "3.6",
+      "title": "Check quotes and version prompts",
+      "source_sha": "f50d48f5099cec6ba6b7c768985d63d5fed77df4",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -227,6 +255,13 @@
       "demos": 8
     },
     {
+      "lesson": "4.5",
+      "title": "Check the LLM judge against people",
+      "source_sha": "7e8b44daf16b794b654f1785a85dbb416d542676",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
       "lesson": "4.6",
       "title": "Trace authenticated identity into tenant membership",
       "source_sha": "68df6795d0127a075315d621003ac5db51aa9805",
@@ -248,16 +283,23 @@
       "demos": 10
     },
     {
+      "lesson": "4.9",
+      "title": "Read the failures first, then attack your own pipeline",
+      "source_sha": "e61ba25bd35ef7b0073b8c75696ae736247c0b41",
+      "source_kind": "main_html",
+      "demos": 13
+    },
+    {
       "lesson": "5.1",
       "title": "Understand tool contracts and the direct agent loop",
-      "source_sha": "95a50fda25e996ce7c223e579e4c5a7596c02941",
+      "source_sha": "f6e5d55800d0afe3bf267a756bde730e42504301",
       "source_kind": "main_html",
-      "demos": 9
+      "demos": 10
     },
     {
       "lesson": "5.2",
       "title": "Expose, discover and invoke MCP tools",
-      "source_sha": "3d3bcb639cec27a1d6e8a8182559d7ce705e358a",
+      "source_sha": "5bd9a8170b319741b49686069aaeee93daf89d9e",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -278,7 +320,7 @@
     {
       "lesson": "5.5",
       "title": "Diagnose tool arguments, access failures and timeouts",
-      "source_sha": "780a103bb4f0ddb0633a2c104547c46fa01b58c3",
+      "source_sha": "6dcbc2f14c5d37accbe4c294fd7ae86442435553",
       "source_kind": "main_html",
       "demos": 7
     },
@@ -297,9 +339,23 @@
       "demos": 7
     },
     {
+      "lesson": "5.8",
+      "title": "Pause, approve, clarify and escalate: human in the loop",
+      "source_sha": "422a193e3eb710d0d2a72b9f3587e3f30eb0a19a",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
+      "lesson": "6.1",
+      "title": "Assemble the context: what rides every model call",
+      "source_sha": "594be6f52056d8b61fa8c4a62edc9f9f1c7ac99a",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
       "lesson": "6.2",
       "title": "Compare context caching and answer caching",
-      "source_sha": "9863ad496e4fb405ef06d3ff2257a01666b35f6a",
+      "source_sha": "284b3d1a5e06fb05d95f4041b98fddba477df25b",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -337,6 +393,20 @@
       "source_sha": "7220ffa4bff89e61f6a508a13b032fb08f8673ac",
       "source_kind": "main_html",
       "demos": 7
+    },
+    {
+      "lesson": "6.8",
+      "title": "Resume a paused or cut-off turn: checkpoint and resume",
+      "source_sha": "a6931d53fb81f98c504e620596d41eae646ecd37",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "6.9",
+      "title": "Budget working memory: windowing, compaction and write rules",
+      "source_sha": "1d587064f7681dd27c53e803d5f79ed25bfb31c0",
+      "source_kind": "main_html",
+      "demos": 8
     },
     {
       "lesson": "7.1",
@@ -381,11 +451,32 @@
       "demos": 7
     },
     {
+      "lesson": "8.1",
+      "title": "Run the ingest events through Pub/Sub, mapped to Kafka",
+      "source_sha": "68574285615aa236a1f361df759f8a2b6a9d97fd",
+      "source_kind": "main_html",
+      "demos": 8
+    },
+    {
+      "lesson": "8.2",
+      "title": "Change a chunker, re-embed and reconcile",
+      "source_sha": "13e76208470bc6126020b2e958f6edcaec801e57",
+      "source_kind": "main_html",
+      "demos": 10
+    },
+    {
       "lesson": "8.3",
       "title": "Size RAG for ten million documents",
-      "source_sha": "6265f86b792bfa61209bf92a4258fd52b330d20c",
+      "source_sha": "76957b542253a733755bf0dc407b4615ef96ec9b",
       "source_kind": "main_html",
       "demos": 7
+    },
+    {
+      "lesson": "8.4",
+      "title": "System design: a self-updating documentation platform",
+      "source_sha": "4b0f37c6fcb49fcc770a10b14ceba99c59bf1fb2",
+      "source_kind": "main_html",
+      "demos": 9
     },
     {
       "lesson": "9.1",
@@ -416,6 +507,27 @@
       "demos": 7
     },
     {
+      "lesson": "10.1",
+      "title": "Choose where the agent reasons: observe-think-act and ReAct",
+      "source_sha": "42d0d48399a2cd1f55aa582686b0c124eb954290",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "10.2",
+      "title": "Plan first or decide each step: plan-and-execute",
+      "source_sha": "1c221ad642224a52fe8a4855dbdb4d9cd200c9eb",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "10.3",
+      "title": "Check, retry or choose: the critic and refiner pattern",
+      "source_sha": "e1ff4a2dcd168c9b3c61e4c8e08a04973b3224c2",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
       "lesson": "10.4",
       "title": "Route each question to one specialist agent",
       "source_sha": "03242e524bd39dd3ceff5c2e0518c22d2e49a24c",
@@ -423,32 +535,74 @@
       "demos": 14
     },
     {
+      "lesson": "10.5",
+      "title": "Run a desk as an agent with checked calculator arguments",
+      "source_sha": "1e34ae2bd0baeb594eedc9489841cfdd33907d27",
+      "source_kind": "main_html",
+      "demos": 10
+    },
+    {
       "lesson": "10.6",
       "title": "Trace the implemented A2A peer and its permissions",
-      "source_sha": "6f13d04435a34279510124166f441b32d6337022",
+      "source_sha": "fb1b77e9f4b5d7d5197b4771bebf070688ac2ab4",
       "source_kind": "main_html",
       "demos": 7
     },
     {
+      "lesson": "10.7",
+      "title": "Hand one question to the A2A peer, and stop loops and deadlocks",
+      "source_sha": "bbc7b0feac324ae6df0cfc4fca05ac6b7578314a",
+      "source_kind": "main_html",
+      "demos": 11
+    },
+    {
+      "lesson": "10.8",
+      "title": "Defend agents against injected documents and poisoned tools",
+      "source_sha": "c4404c15474ecb279d03853b2427247bc4d373e6",
+      "source_kind": "main_html",
+      "demos": 10
+    },
+    {
+      "lesson": "10.9",
+      "title": "Run the peer on Google's managed agent platform",
+      "source_sha": "a30d39f86a43c481a7a8c96a15d0f90c2d992469",
+      "source_kind": "main_html",
+      "demos": 9
+    },
+    {
+      "lesson": "10.10",
+      "title": "Coding agents: a Ralph loop, an AI code reviewer and paper-to-code",
+      "source_sha": "417e6f409fc5d8e1f9abd00c6d6d9649a087de75",
+      "source_kind": "main_html",
+      "demos": 11
+    },
+    {
+      "lesson": "10.11",
+      "title": "System design: incident auto-remediation",
+      "source_sha": "03140ad39ae7045b92d7099e198148ed5e019940",
+      "source_kind": "main_html",
+      "demos": 10
+    },
+    {
       "lesson": "11.1",
       "title": "Build and deploy using keyless identity",
-      "source_sha": "58d251f00151cd1ca2e612acac5edcce36dfe0c10fd3c032da84f17e7f974c00",
-      "source_kind": "course_plan_and_kit",
-      "demos": 3
+      "source_sha": "a5c38ec0f6f77200e77afe4d20b1253726a5665c",
+      "source_kind": "main_html",
+      "demos": 9
     },
     {
       "lesson": "11.2",
       "title": "Evaluate and gate the exact candidate revision",
-      "source_sha": "c98b898702dbf50c3f7bbf3ebbf171ad3b5dd8fd22ab7b79c1b07076b904366b",
-      "source_kind": "course_plan_and_kit",
-      "demos": 2
+      "source_sha": "e601d99d9d0ad431f4f5e8ba6f1a24939cb8cefd",
+      "source_kind": "main_html",
+      "demos": 8
     },
     {
       "lesson": "11.3",
       "title": "Promote, roll back and repair a controlled failure",
-      "source_sha": "be762de262d333e397305acdfe5863572cea217dbfed765061b826c4540b6987",
-      "source_kind": "course_plan_and_kit",
-      "demos": 2
+      "source_sha": "94904773068b4304a98737b11cbb33d8abc23340",
+      "source_kind": "main_html",
+      "demos": 7
     },
     {
       "lesson": "11.4",
@@ -472,16 +626,23 @@
       "demos": 7
     },
     {
+      "lesson": "11.7",
+      "title": "Reproduce the agent failures production shows and no eval row does",
+      "source_sha": "d773e65a64c007e202b5b3b1d99e9a6d3c1ef352",
+      "source_kind": "main_html",
+      "demos": 10
+    },
+    {
       "lesson": "11.8",
       "title": "Complete the independent capstone and operational handover",
-      "source_sha": "8ec9a206c5d0330a3a3a66e1756d5afbf5c38738e2b99e986a815ce0a5068be0",
-      "source_kind": "course_plan_and_kit",
-      "demos": 2
+      "source_sha": "311d6f3959f0a3a28a0a7ee5182a081bbef52e56",
+      "source_kind": "main_html",
+      "demos": 8
     },
     {
       "lesson": "12.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "4216f323523c313cfdc094eda0e1d3fb5cd570ac",
+      "source_sha": "e30d0fa19a2e1b07b5cd5d59ae35b55a8d11f3fc",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -495,9 +656,16 @@
     {
       "lesson": "12.3",
       "title": "Compare the tuned candidate with an uncontaminated baseline",
-      "source_sha": "b2fefa0d8707ac518698fb9851e542583dd1762a",
+      "source_sha": "e3769dadf077866b253e3d7b0882e1ca651d1069",
       "source_kind": "main_html",
       "demos": 10
+    },
+    {
+      "lesson": "12.4",
+      "title": "Improve the agent safely: eval-gated self-improvement",
+      "source_sha": "c2200db64f3720f98ed624ad9834a1b277f4a142",
+      "source_kind": "main_html",
+      "demos": 12
     }
   ]
 }

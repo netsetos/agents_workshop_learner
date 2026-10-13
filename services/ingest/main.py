@@ -314,9 +314,10 @@ async def push(request: Request):
         raw = base64.b64decode(envelope["message"]["data"])
         msg = IngestMessage.model_validate_json(raw)
     except (KeyError, ValueError, ValidationError) as e:
-        # 400, NOT 500. A message this worker can never parse must not be
-        # retried five times before reaching the DLQ - it will fail the same
-        # way every time. Ack the poison and let the DLQ hold it.
+        # 400, NOT 500: a message this worker can never parse fails the same way on every
+        # delivery, and the log line names the field. On a push subscription any non-2xx is a
+        # nack, so Pub/Sub retries it on eventarc.tf's backoff, twelve deliveries, then parks it
+        # on the DLQ (13 October 2026: this comment once said it was acked). make dlq reads it there.
         log.warning(json.dumps({"event": "ingest_poison", "error": str(e)[:200]}))
         raise HTTPException(400, "unparseable message")
 

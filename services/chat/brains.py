@@ -38,6 +38,7 @@ from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import ToolException
 
 import limits
+import peer
 from shared import documind_tools
 from shared.profile import LOCAL_MODEL, PROFILE, build_llm
 from tools import BLOCKED, REQUEST, TOOLS, for_adk
@@ -265,6 +266,8 @@ class AdkBrain:
                         after_tool_callback=mark_error,
                         before_model_callback=limits.adk_before_model, after_model_callback=limits.adk_after_model,
                         on_model_error_callback=limits.adk_model_error)
+        if peer.PEER_URL:                   # the A2A hand-off (workshop lesson 10.7): one more tool, this brain's only
+            root.tools.append(peer.tool())
         self.svc = self._sessions()
         self.runner = Runner(app=App(name="documind", root_agent=root), session_service=self.svc)
         # ADK's own cap stays, as the backstop: the Meter refuses the call after the last one first.
@@ -292,6 +295,8 @@ class AdkBrain:
         meter = limits.meter_of(ctx)
         token = REQUEST.set(ctx)       # asyncio.run() copies it into the task, and ADK into each tool call
         out = {"answer": "", "tool_calls": [], "refusals": []}      # filled as the events arrive
+        if peer.PEER_URL:                   # this turn's hand-offs (peer.py): in the response, never in the chat row
+            out["handoffs"] = ctx["handoffs"] = []
         try:
             asyncio.run(self._run(question, user_id, session_id, out))
         except LlmCallsLimitExceededError:      # the backstop; the Meter's cap is checked before ADK counts

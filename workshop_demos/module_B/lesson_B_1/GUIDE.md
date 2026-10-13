@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `de6124e80529374df060e703fc310467a749d82c`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `fe81b0793d7a3a26d687b7526e59381abd9fd90b`. Learners read that page on the course site; this guide keeps its prose.
 
 The DocuMind kit is 11 services and the Python that builds, tests and feeds them, and three habits run through all of it. Every service runs in an environment of its own with pinned libraries; data moves as JSON; and the parts talk to each other over HTTP. This page practises each habit on your laptop, with Python's standard library and the venv the setup block makes, and then shows you the kit's own lines doing the same. You will make a venv and delete it, write and read a file shaped like the kit's golden set, start a small web server and call it, make two calls at once, and give a call the timeout, the retry and the check the kit gives its own.
 
@@ -32,7 +32,7 @@ You will learn the three habits under every DocuMind service: an environment of 
 
 An environment of its own, JSON in and out, HTTP between the parts, and what async adds to the third.
 
-An environment of its own. Each of the kit's 11 services has a folder under `services/`, and in it a `requirements.txt` that names the libraries the service needs, each with `==` and one exact version: 127 lines across the 11 files, and not one of them without a version. 8 of the services build their image from `python:3.12-slim` and install their file into it; the other 3 start from a vendor's image (vLLM, LiteLLM and Ollama). Where two services use the same library they pin the same version, and the kit's dry run fails if they do not. On your laptop a virtual environment, a venv, does the image's job: a folder with its own Python and its own libraries, so that what one project installs cannot break another.
+An environment of its own. Each of the kit's 11 services has a folder under `services/`, and in it a `requirements.txt` that names the libraries the service needs, each with `==` and one exact version: 128 lines across the 11 files, and not one of them without a version. 8 of the services build their image from `python:3.12-slim` and install their file into it; the other 3 start from a vendor's image (vLLM, LiteLLM and Ollama). Where two services use the same library they pin the same version, and the kit's dry run fails if they do not. On your laptop a virtual environment, a venv, does the image's job: a folder with its own Python and its own libraries, so that what one project installs cannot break another.
 
 JSON in and out. A question to the DocuMind API is a JSON object, and so is its answer. The golden set the eval gate runs is a file of JSON objects, one per line, and every usage row the API writes to its log is a JSON object that Cloud Logging turns into fields. Python's `json` module does both directions: `json.dumps()` turns a dict into text, and `json.loads()` turns the text back into a dict.
 
@@ -50,7 +50,7 @@ Steps 3 to 7 below are these moves on your laptop: the environment (step 3), the
 
 The explorer below holds every `requirements.txt` in the kit as it stood when this page was built: the 11 services' files, and the one under `shared/` for the tool layer in `shared/documind_tools.py`. Pick a file to see what it pins. Then change the chosen library's version, or tick the box to drop its version altogether, and read what the kit's dry run would say: its two checks are ported here rule for rule.
 
-A teal pin is pinned by at least one other file, and the number after it counts the files that pin that library. The page opens on rag-api's `google-genai==2.22.0`, the version the setup block installs on your laptop. Type `2.20.0` in the version box and the pins check fails the way `validate.py` does, naming every file and its version. Tick the box instead and the requirements check warns. The requirements check reads the 11 service files; the pins check reads those and `shared/requirements.txt`, 12 files. The port was compared with `validate.py` itself on all 258 one-pin changes (every pin given another version, then none) when this page was built.
+A teal pin is pinned by at least one other file, and the number after it counts the files that pin that library. The page opens on rag-api's `google-genai==2.22.0`, the version the setup block installs on your laptop. Type `2.20.0` in the version box and the pins check fails the way `validate.py` does, naming every file and its version. Tick the box instead and the requirements check warns. The requirements check reads the 11 service files; the pins check reads those and `shared/requirements.txt`, 12 files. The port was compared with `validate.py` itself on all 260 one-pin changes (every pin given another version, then none) when this page was built.
 
 It reads the files and applies the two checks; it is not pip. It cannot tell you whether a version exists, or whether a set of versions can be installed together. pip answers those when an image is built, and the dry run builds every Python image with Docker when it runs in CI.
 
@@ -108,7 +108,7 @@ A path as an object, JSON's kinds of value and their Python twins, and a JSONL f
 
 pathlib makes a path an object. `Path.home()` is your home folder on any operating system, and `/` joins parts, so `Path.home() / "basics-b1"` needs no slash or backslash typed by hand. The path itself can make the folder, open the file, read it whole and report its size. JSON is text with a few kinds of value, and the `json` module turns each into a Python type and back:
 
-A JSONL file, JSON Lines, is one JSON value per line: UTF-8, a newline after each value, no blank lines. The shape suits datasets. Rows are written and read one at a time, a new row is one more line at the end, and each line can be checked on its own. The kit keeps 6 of its datasets this way, 966 lines in all, the golden set among them.
+A JSONL file, JSON Lines, is one JSON value per line: UTF-8, a newline after each value, no blank lines. The shape suits datasets. Rows are written and read one at a time, a new row is one more line at the end, and each line can be checked on its own. The kit keeps 9 of its datasets this way, 1,006 lines in all, the golden set among them.
 
 #### Write four golden rows, read them back
 

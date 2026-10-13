@@ -25,3 +25,31 @@ bench: guard-project
 # credential, Rs 0.
 prompt-version:
 	$(PY) commands/prompt_pin.py
+
+# Eval-gated self-improvement (lesson 12.4), beside prompt-version because it changes the generator's prompt by version.
+# A production answer that went wrong becomes a proposed rule, a person accepts it as the next prompt version, and the
+# gate judges that version on a candidate before any traffic moves. ROW= is the production row, a JSON file (the shape is
+# in evals/improve.py's docstring): the question in your own words, the lane's answer, and what a right answer holds.
+# make improve ROW=... asks gemini-3.1-pro-preview, on the global endpoint and under a JSON schema, for one rule (about
+# Rs 2, printed), checks it with services/rag-api/prompt_rules.py and writes evals/reports/proposal.json;
+# IMPROVE_ARGS="--rule '...'" proposes your own rule with no model call, and IMPROVE_ARGS=--prompt-only prints what the
+# proposer is sent. make improve REVIEWER=you@example.com accepts the proposal: the next version in
+# services/rag-api/prompt_rules.json, and the R(...) row to paste into evals/build_golden.py (lesson 4.1). improve.py
+# never writes run_eval.py, required.json or the golden set. No guard-project: accepting is offline, and a model's
+# proposal stops without PROJECT.
+improve:
+	$(PY) evals/improve.py $(if $(REVIEWER),accept --reviewer "$(REVIEWER)",propose --row "$(ROW)" --project "$(PROJECT)") $(IMPROVE_ARGS)
+
+# The accepted version on a candidate: make release-candidate's update of documind-api (the image make build pushed for
+# this commit, no traffic, tagged candidate, recorded by name for make promote) with PROMPT_VERSION set on it, so
+# config.py's default stays v3 and the new version answers only where the variable is set. make gate judges it; make
+# promote-gated moves traffic to it. The variable stays in the service's template, promoted or not: make
+# release-candidate and make candidate carry it to their revisions (an update merges the environment) until make
+# deploy-services sets the environment whole (lesson 12.2's script) or make prompt-candidate PROMPT_VERSION=v3 puts the
+# default back. A version prompt_rules.json does not list stops here, before gcloud; an image without it does not start.
+prompt-candidate: guard-project
+	@$(PY) evals/improve.py version "$(PROMPT_VERSION)"
+	gcloud run services update documind-api --region $(REGION) --project $(PROJECT) --image $(IMAGE_REPO)/api:$(GIT_SHA) --no-traffic --tag candidate --update-env-vars GIT_SHA=$(GIT_SHA),PROMPT_VERSION=$(PROMPT_VERSION) --quiet
+	@$(MAKE) --no-print-directory record-candidate PROJECT=$(PROJECT) REGION=$(REGION)
+	@NUMBER=$$(gcloud projects describe $(PROJECT) --format='value(projectNumber)'); \
+	echo ">> candidate: https://candidate---documind-api-$$NUMBER.$(REGION).run.app answers as $(PROMPT_VERSION) (make gate, then make promote-gated)"

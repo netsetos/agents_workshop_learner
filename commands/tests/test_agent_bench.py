@@ -145,10 +145,13 @@ class Records(unittest.TestCase):
         self.assertTrue(0.1 < sum(calc) / len(calc) < 0.3)                      # about one run in five
 
     def test_the_planned_patterns_are_errors_that_say_so(self):
-        self.assertEqual(list(ap.PATTERNS), ["loop", "react_text", "plan_first"])   # 10.1's: test_agent_patterns.py
-        self.assertEqual(sorted(ap.PLANNED), ["plan_execute", "rewoo", "verify"])
-        with self.assertRaisesRegex(ValueError, "planned for lesson 10.2's pull request"):
-            ap.pattern("plan_execute")
+        """A pattern still to come is an error naming its lesson until its pull request moves it into PATTERNS (10.1's
+        in test_agent_patterns.py, 10.2's in test_agent_plans.py)."""
+        self.assertEqual(list(ap.PATTERNS)[0], "loop")
+        self.assertFalse(set(ap.PATTERNS) & set(ap.PLANNED))
+        for name, lesson in ap.PLANNED.items():
+            with self.assertRaisesRegex(ValueError, f"planned for lesson {re.escape(lesson)}'s pull request"):
+                ap.pattern(name)
         with self.assertRaisesRegex(ValueError, "no pattern 'chain'"):
             ap.pattern("chain")
 
@@ -361,8 +364,8 @@ class Loop(unittest.TestCase):
             self.assertEqual(agent_turn.main(["--live"]), 2)
         self.assertIn("--live needs", err.getvalue())
         with redirect_stderr(io.StringIO()) as err:
-            self.assertEqual(agent_turn.main(["--offline", "--pattern", "rewoo"]), 2)
-        self.assertIn("planned for lesson 10.2", err.getvalue())
+            self.assertEqual(agent_turn.main(["--offline", "--pattern", "chain"]), 2)
+        self.assertIn("no pattern 'chain'", err.getvalue())
 
     def test_agent_eval_offline_end_to_end(self):
         spec = importlib.util.spec_from_file_location("agent_eval_for_bench", KIT / "evals" / "agent_eval.py")

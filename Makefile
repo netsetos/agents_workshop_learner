@@ -194,7 +194,7 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
         release-candidate record-candidate promote rollback smoke-all usage ingest-one poison dlq down-services \
         reindex retire restore reconcile reconcile-job backfill-current sources purge smoke-reindex \
         batch queued batch-job graph managed-status rag-corpus rag-engine-enable tenant-policy tenant-backend \
-        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat decide bench exemplars label-sheet judge-agree judge-frozen prompt-version agent-turn agent-eval agent-tests approval-check thread replay ci-vars keys-check
+        managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat decide bench exemplars label-sheet judge-agree judge-frozen prompt-version agent-turn agent-eval agent-tests approval-check thread replay ci-vars keys-check triage attack-offline attack-eval context-sources window-check gate promote-gated smoke-deployed incident gotchas gotcha-drill gotcha-detect remediate incident-drill managed-peer-up managed-peer-ask managed-peer-trace managed-peer-smoke managed-peer-sessions managed-peer-down ralph-image ralph ralph-workspace ralph-check ralph-probe review-diff review-eval improve prompt-candidate route-compare arms-combine capstone-check handover agent-drill handoff smoke-handoff check-callers pin-tools evil-mcp
 
 # ---------- the module files (22 September 2026): one .mk per lane; the Makefile keeps the variables and the core ----------
 # mk/ingestion.mk  the roster and the tenant pins, the vector tier's status and repair, the ingest drills (the v5 course's Module 1)
@@ -808,7 +808,7 @@ rollback: guard-project
 	@PREV=$$(cat .previous-revision); \
 	gcloud run services update-traffic documind-api --region $(REGION) --project $(PROJECT) --to-revisions $$PREV=100 --quiet && echo ">> traffic on $$PREV"
 
-# 12.8's full smoke: the seven smokes in one run, with the exports smoke.py reads. A refusal line is a PASS - a system
+# 12.8's full smoke: the eight smokes in one run, with the exports smoke.py reads. A refusal line is a PASS - a system
 # that answers everybody passes a smoke made only of "does it work?".
 # The smoke's OWN exit status decides (12 September 2026): a pipeline's status is grep's, and grep is satisfied by a
 # FAIL line, so a failing smoke left this target at exit 0 and the release day green. /bin/sh is dash on the runners

@@ -116,9 +116,10 @@ class Parser(unittest.TestCase):
 
 class Registry(unittest.TestCase):
     def test_both_patterns_are_built(self):
-        self.assertEqual(list(ap.PATTERNS), ["loop", "react_text", "plan_first"])
-        self.assertEqual(sorted(ap.PLANNED), ["plan_execute", "rewoo", "verify"])
-        self.assertEqual({n: (p.lessons, p.text) for n, p in ap.PATTERNS.items()},
+        """10.1's two after the loop; the later lessons' patterns follow them (test_agent_plans.py has 10.2's)."""
+        self.assertEqual(list(ap.PATTERNS)[:3], ["loop", "react_text", "plan_first"])
+        self.assertFalse({"react_text", "plan_first"} & set(ap.PLANNED))
+        self.assertEqual({n: (p.lessons, p.text) for n, p in list(ap.PATTERNS.items())[:3]},
                          {"loop": ("10.1-10.3, 10.5", False), "react_text": ("10.1", True),
                           "plan_first": ("10.1", False)})
         self.assertTrue(ap.PLAN_FIRST.startswith("Plan first. Before your first tool call, write your plan"))

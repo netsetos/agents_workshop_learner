@@ -65,14 +65,16 @@ class TaskSet(unittest.TestCase):
     def test_the_set_is_sound(self):
         lines = []
         self.assertEqual(ae.check(ROWS, out=lines.append), 0, "\n".join(lines))
-        self.assertTrue(lines[-1].startswith("18 rows (11 calc, 5 lookup, 1 trap, 1 refuse): every figure recomputed"))
+        self.assertTrue(lines[-1].startswith("21 rows (11 calc, 5 lookup, 1 trap, 1 refuse, 3 chained): every figure "
+                                             "recomputed"))
         self.assertEqual([line.split(":")[0] for line in lines[:-1]], [f"ok    {r['id']}" for r in ROWS])
 
     def test_every_row_has_its_figure_and_its_clause(self):
         for r in ROWS:
-            self.assertEqual(sorted(set(ae.FIELDS) - set(r)), [], r["id"])
-            self.assertTrue(r["clause"], r["id"])
-            self.assertEqual(r["expected"] is None, r["kind"] == "refuse", r["id"])
+            for part in (r["parts"] if r["kind"] == "chained" else [r]):     # a chained row's figures are its parts'
+                self.assertEqual(sorted(set(ae.FIELDS if part is r else ae.PART_FIELDS) - set(part)), [], r["id"])
+                self.assertTrue(part["clause"], r["id"])
+                self.assertEqual(part["expected"] is None, r["kind"] == "refuse", r["id"])
             self.assertIsNone(desk_rules.gate(r["question"]), r["id"])
 
     def test_the_rows_the_lessons_name(self):
@@ -196,6 +198,76 @@ class Scoring(unittest.TestCase):
                         .startswith("failed: ReadTimeout"))
 
 
+class Chained(unittest.TestCase):
+    """Lesson 10.2's chained rows: several figures in one question, each part checked and scored as a calc row."""
+    FIGURES = "Notice ends on 4 December 2026 [1]. 45 days are encashed [6]. Gratuity, about Rs 2,40,000 [12]."
+
+    def calcs(self, *skip):
+        done = [calc("notice_end", ack_date="2026-10-05", days=60), calc("encashable_days", balance=50, cap=45),
+                calc("gratuity_estimate", monthly_wage=52000, years=7, months=8)]
+        return [c for c in done if c["calculator"] not in skip]
+
+    def test_the_rows(self):
+        chained = [r for r in ROWS if r["kind"] == "chained"]
+        self.assertEqual([r["id"] for r in chained], ["chained-exit-e3", "chained-exit-saturday",
+                                                      "chained-exit-stated-cap"])
+        for r in chained:
+            self.assertEqual(sorted(r), sorted(ae.CHAINED_FIELDS))
+            self.assertEqual(r["desk"], "astar")
+            self.assertEqual([p["calcs"][0]["calculator"] for p in r["parts"]],
+                             ["notice_end", "encashable_days", "gratuity_estimate"])
+        self.assertEqual([[p["expected"] for p in r["parts"]] for r in chained],
+                         [["2026-12-04", 45, 240000], ["2026-12-05", 45, 210000], ["2026-12-04", 45, 240000]])
+        self.assertEqual(ROW["chained-exit-stated-cap"]["parts"][1]["stated"], {"cap": 100})
+        self.assertEqual([r["id"] for r in ae.select(ROWS, "chained")], [r["id"] for r in chained])
+        code, out = main_out("--check", "--slice", "chained-exit-stated-cap")
+        self.assertEqual(code, 0)
+        self.assertIn("encashable_days(balance=80, cap=45) = 45 days (LV-07); the stated cap = 100 is refused by "
+                      "check_args; gratuity_estimate(", out)
+
+    def failures(self, rid="chained-exit-stated-cap", part=None, question=None, **change):
+        row = copy.deepcopy(ROW[rid])
+        if part is None:
+            row.update(change)
+        else:
+            row["parts"][part].update(change)
+        row["question"] = question or row["question"]
+        lines = []
+        self.assertEqual(ae.check([row], out=lines.append), 1, lines)
+        return lines[0]
+
+    def test_what_check_refuses(self):
+        says_45 = ROW["chained-exit-stated-cap"]["question"].replace("cap is 100 days", "cap is 45 days")
+        self.assertIn("part 2: check_args takes the stated cap = 45",
+                      self.failures(part=1, stated={"cap": 45}, question=says_45))
+        self.assertIn("part 2: the stated cap = 90 is not written in the question", self.failures(part=1, stated={"cap": 90}))
+        self.assertIn("part 1: desk_calc says 2026-12-04, the row 2026-12-05",
+                      self.failures(part=0, expected="2026-12-05", wrong=[]))
+        self.assertIn("part 3: the wrong figure 52000 is written in the question", self.failures(part=2, wrong=[52000]))
+        self.assertIn("desk 'handbook': a chained row's figures are both desks'", self.failures(desk="handbook"))
+        self.assertIn("a chained row has two figures or more", self.failures(parts=ROW["chained-exit-e3"]["parts"][:1]))
+        row = copy.deepcopy(ROW["chained-exit-e3"])
+        del row["parts"][1]["search"]
+        lines = []
+        ae.check([row], out=lines.append)
+        self.assertIn("missing part 2 search", lines[0])
+
+    def test_every_figure_by_its_calculator(self):
+        r = ROW["chained-exit-e3"]
+        s = ae.score(r, run("chained-exit-e3", self.FIGURES, self.calcs()))
+        self.assertEqual((s["correct"], s["provenance"], s["unsupported"], s["why"]), (True, True, [], ""))
+        two = ae.score(r, run("chained-exit-e3", "Notice ends on 4 December 2026 [1]. Gratuity, about Rs 2,40,000 [12].",
+                              self.calcs("encashable_days")))
+        self.assertEqual((two["correct"], two["provenance"]), (False, False))
+        self.assertEqual(two["why"], "no encashable_days call returned it; encashable_days: the figure is not stated")
+        head = ae.score(r, run("chained-exit-e3", self.FIGURES, self.calcs("gratuity_estimate")))
+        self.assertEqual((head["correct"], head["provenance"], head["unsupported"]), (True, False, ["2,40,000"]))
+        self.assertIn("no gratuity_estimate call returned it", head["why"])
+        wrong = ae.score(r, run("chained-exit-e3", self.FIGURES + " At 7 years it would be Rs 2,10,000.", self.calcs()))
+        self.assertFalse(wrong["correct"])
+        self.assertIn("gratuity_estimate: states 210000", wrong["why"])
+
+
 class Runs(unittest.TestCase):
     def test_pass_at_k_and_pass_hat_k(self):
         self.assertAlmostEqual(ae.pass_at_k(3, 1, 1), 1 / 3)
@@ -260,6 +332,114 @@ class Runs(unittest.TestCase):
         self.assertEqual(len(ae.select(ROWS, "calc-gratuity")), 3)
         self.assertEqual(len(ae.select(ROWS, "zeta")), 1)
         self.assertEqual(ae.select(ROWS, None), ROWS)
+
+
+class CheckRetryChoose(unittest.TestCase):
+    """Lesson 10.3: best-of by the figure check verify retries on, and the three ways side by side, on saved records
+    written by hand."""
+    S53 = statute("the fifteen days' wages shall be calculated by dividing the monthly rate of wages last drawn by "
+                  "twenty-six and multiplying the quotient by fifteen.")
+
+    def g(self):
+        return [calc("gratuity_estimate", monthly_wage=52000, years=7, months=8)]
+
+    def test_best_of_takes_the_figure_checks_verdict(self):
+        """The check of commands/agent_patterns.py: a cited passage the run never read fails it, so does a stop and so
+        does a failed run; the expected figure is never read."""
+        far = run("calc-gratuity-7y8m", "Rs 2,40,000 [4].", self.g(), [self.S53], r=0)
+        near = run("calc-gratuity-7y8m", "Rs 2,40,000 [1].", self.g(), [self.S53], r=1)
+        self.assertEqual((ae.passes(far), ae.passes(near)), (False, True))
+        self.assertIs(ae.best_of([far, near], 2), near)
+        stopped = run("calc-gratuity-7y8m", "I stopped this turn at one of its limits.", r=0, stopped_by="model_calls")
+        failed = run("calc-gratuity-7y8m", "", r=0, error="ReadTimeout")
+        self.assertEqual((ae.passes(stopped), ae.passes(failed)), (False, False))
+        self.assertIs(ae.best_of([failed, dict(near, run=1)], 2)["run"], 1)
+        verdict = ae._ap().figure_check("Rs 2,40,000 [4].", self.g(), ROW["calc-gratuity-7y8m"]["question"], [self.S53])
+        self.assertEqual(verdict, {"passed": False, "unsupported": [], "uncited": [4], "stopped_by": None})
+
+    def write(self, records) -> str:
+        fd, path = tempfile.mkstemp(suffix=".jsonl")
+        os.close(fd)
+        self.addCleanup(os.remove, path)
+        ae.save(records, path)
+        return path
+
+    def attempt(self, rid, n, answer, calcs=(), passages=(), note=None):
+        q = ROW[rid]["question"]
+        return {"n": n, "note": note, "note_figures": desk_calc.unsupported(note) if note else [], "question": q,
+                "answer": answer, "calculations": list(calcs), "passages": list(passages), "stopped_by": None,
+                "check": ae._ap().figure_check(answer, list(calcs), q, list(passages)), "model_calls": 2, "inr": 0.4}
+
+    def verified_run(self, rid, attempts, calls):
+        shipped = attempts[-1]
+        return run(rid, shipped["answer"], shipped["calculations"], shipped["passages"],
+                   arm={"pattern": "verify", "thinking": None, "desk": "astar"}, attempts=attempts,
+                   shipped=len(attempts), check=shipped["check"], notes=[a["note"] for a in attempts if a["note"]],
+                   calls=[{"role": role} for role in calls], model_calls=len(calls), inr=0.25 * len(calls))
+
+    def records(self):
+        g, acc = self.g(), [calc("accrued_leave", months=8, per_month=1.75)]
+        plain = [run("calc-gratuity-7y8m", "About Rs 2,40,000.", r=0),
+                 run("calc-gratuity-7y8m", "Rs 2,40,000 [1].", g, [self.S53], r=1),
+                 run("calc-gratuity-7y8m", "Rs 2,40,000 [1].", g, [self.S53], r=2)]
+        plain += [run("calc-accrued", "14 days.", acc, r=n) for n in range(3)]
+        note = "My answer stated a figure no calculator returned. Next time call gratuity_estimate."
+        checked = [self.verified_run("calc-gratuity-7y8m", [
+            self.attempt("calc-gratuity-7y8m", 1, "About Rs 2,40,000."),
+            self.attempt("calc-gratuity-7y8m", 2, "Rs 2,40,000 [1].", g, [self.S53], note=note)],
+            ["answer", "answer", "reflect", "answer", "answer", "answer"]),
+            self.verified_run("calc-accrued", [self.attempt("calc-accrued", 1, "14 days.", acc)], ["answer"] * 3)]
+        return plain, checked
+
+    def test_the_three_ways_side_by_side(self):
+        plain, checked = self.records()
+        code, out = main_out("--replay", self.write(plain), self.write(checked), "--best-of", "3")
+        self.assertEqual(code, 0)
+        self.assertIn("replayed 8 saved runs of ", out)
+        self.assertIn("== verify, thinking default (low), desk astar: 2 rows x 1 run", out)
+        self.assertIn("  best-of-3: not for this arm, which has 1 run a row", out)
+        self.assertIn("  with notes: the figure check passed on attempt 1 in 1, on attempt 2 in 1, on attempt 3 in 0 "
+                      "and on none in 0 of 2 runs (at most 3 attempts a run); 1.5 attempts, 0.5 reflect calls and 0.5 "
+                      "notes a run; 0 of 1 notes write a figure, which no check takes from a note", out)
+        self.assertIn("  any attempt (the ceiling, each row's first run): correct 2/2 = 100.0%", out)
+        block = out[out.index("== check, retry or choose"):].splitlines()
+        self.assertEqual(block[0], "== check, retry or choose (lesson 10.3): loop against verify, on the 2 rows both "
+                                   "ran")
+        self.assertTrue(block[1].startswith("  pass@1, loop's first run: correct 2/2 = 100.0% [34.2%, 100.0%], "
+                                            "verified 1/2 = 50.0% "), block[1])
+        self.assertTrue(block[1].endswith("; 3.0 calls and Rs 0.5000 a row"), block[1])
+        self.assertTrue(block[2].startswith("  pass@3 re-rolls, any of its first 3 runs (the ceiling a perfect "
+                                            "chooser reaches): correct 2/2"), block[2])
+        self.assertIn("verified 2/2 = 100.0%", block[2])
+        self.assertTrue(block[2].endswith("; 9.0 calls and Rs 1.5000 a row"), block[2])
+        self.assertTrue(block[3].startswith("  best-of-3, the run the figure check chooses (code, no model): correct "
+                                            "2/2"), block[3])
+        self.assertIn("verified 2/2 = 100.0%", block[3])
+        self.assertTrue(block[4].startswith("  pass@3 with notes, verify's answer that ships (up to 3 attempts, a note "
+                                            "before each retry): correct 2/2"), block[4])
+        self.assertTrue(block[4].endswith("; 4.5 calls and Rs 1.1250 a row"), block[4])
+        self.assertEqual(block[5], "  the figure check's precision: of the 5 of loop's 6 runs it passes, 5 correct "
+                                   "(100%) and 5 verified; of the 2 of verify's 3 attempts it passes, 2 correct (100%) "
+                                   "and 2 verified")
+        _, alone = main_out("--replay", self.write(plain), "--best-of", "3")
+        self.assertNotIn("check, retry or choose", alone)                       # nothing without verify beside it
+        self.assertNotIn("with notes", alone)
+
+    def test_a_verify_run_that_failed(self):
+        """A verify run that raised is saved with no attempts (_failed_run()): it is scored, and counted, as failed."""
+        plain, checked = self.records()
+        broken = run("calc-accrued", "", arm=checked[1]["arm"], error="ReadTimeout", model_calls=0, inr=0.0)
+        _, out = main_out("--replay", self.write(plain), self.write([checked[0], broken]), "--best-of", "3")
+        self.assertIn("on none in 0 of 1 run (at most 3 attempts a run)", out)  # the attempts of the run that has them
+        self.assertIn("pass@3 with notes, verify's answer that ships (up to 3 attempts, a note before each retry): "
+                      "correct 1/2", out)
+        self.assertIn("of the 1 of verify's 2 attempts it passes", out)
+
+    def test_best_of_needs_its_runs(self):
+        g = [calc("gratuity_estimate", monthly_wage=52000, years=7, months=8)]
+        _, out = main_out("--replay", self.write([run("calc-gratuity-7y8m", "Rs 2,40,000.", g)]), "--best-of", "2")
+        self.assertIn("  best-of-2: not for this arm, which has 1 run a row", out)
+        self.assertNotIn("chosen by the figure check alone", out)
 
 
 if __name__ == "__main__":

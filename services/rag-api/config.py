@@ -73,7 +73,7 @@ class Settings(BaseSettings):
     # ONE declared embedding (12 September 2026): EMBEDDING_MODEL and EMBEDDING_VERSION are variables.tf's
     # embedding_model / embedding_version, set on this service AND on the ingest worker by make deploy-services,
     # so the query vector and the document vectors come from one model by construction. The worker stamps the
-    # pair on every chunk row; a bump is a planned migration (make reembed, deploy/INDEXING.md), never a silent
+    # pair on every chunk row; a bump is a planned migration (not yet a target: INDEXING.md), never a silent
     # mismatch. /version reports it beside the model and the prompt.
     embed_model: str = Field("text-embedding-005", alias="EMBEDDING_MODEL")
     embedding_version: str = Field("1", alias="EMBEDDING_VERSION")

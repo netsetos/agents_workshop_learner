@@ -202,12 +202,14 @@ class RunTest(unittest.TestCase):
 
 
 class WiringTest(unittest.TestCase):
-    def test_the_make_target_is_the_last_in_agents_mk(self):
+    def test_the_make_target_is_in_agents_mk(self):
+        # Present, not last (13 October 2026): agents.mk is append-only, and later kits append below it (10.7-A's
+        # agent-drill first), so a check that it ends the file breaks on the next one.
         mk = (KIT / "mk" / "agents.mk").read_text(encoding="utf-8")
-        self.assertEqual(re.findall(r"^([a-z][a-z0-9-]*):", mk, re.M)[-1], "exemplars")
-        self.assertTrue(mk.endswith("\nexemplars: $(if $(LOCAL),,guard-project)\n\t$(PY) evals/route_eval.py $(if $(LOCAL),"
-                                    "--local,--live-l1 --project $(PROJECT)) --exemplars $(or $(EXEMPLARS),kit) "
-                                    "$(if $(RUNS),--runs $(RUNS),)\n"))
+        self.assertIn("exemplars", re.findall(r"^([a-z][a-z0-9-]*):", mk, re.M))
+        self.assertIn("\nexemplars: $(if $(LOCAL),,guard-project)\n\t$(PY) evals/route_eval.py $(if $(LOCAL),"
+                      "--local,--live-l1 --project $(PROJECT)) --exemplars $(or $(EXEMPLARS),kit) "
+                      "$(if $(RUNS),--runs $(RUNS),)\n", mk)
         lines = mk.splitlines()                                           # lesson 10.4's build reads route-eval by line
         self.assertIn("evals/route_eval.py --live", lines[lines.index("route-eval: guard-project") + 3])
         makefile = (KIT / "Makefile").read_text(encoding="utf-8")

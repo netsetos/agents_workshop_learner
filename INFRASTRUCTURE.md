@@ -113,23 +113,29 @@ trust, saves confirmed inputs, validates Terraform and creates/checks a new plan
 python commands/infrastructure.py plan --project "$PROJECT" --region "$REGION"
 ```
 
-For a genuinely new CI deployment only, select the repository that will run your
-deployment workflow. This example authorizes the main repository's course branch
-even if the source was downloaded anonymously from the learners repository:
+For a genuinely new CI deployment only, name the repository whose GitHub Actions
+will deploy your lane. That is your own fork of the public kit (lesson 0.3): the
+workflows in `.github/workflows/` run from the fork, under the fork's own secrets
+and `production` environment, and `wif.tf` trusts exactly that repository, by
+its immutable numeric id, on `main`. Downloading the code anonymously from
+`netsetos/agents_workshop_learner` does not make the upstream repository your
+CI; nothing you push there runs, and it is never the trusted repository.
 
 ```bash
+FORK="your-github-user/agents_workshop_learner"          # your fork, not the upstream
 python commands/infrastructure.py prepare --project "$PROJECT" --region "$REGION" \
-  --github-repository netsetos/agentic-ai-weekend-gcp \
-  --github-repository-id 1358872052 \
-  --deploy-ref refs/heads/claude/rag-production-hardening
+  --github-repository "$FORK" \
+  --github-repository-id "$(gh api "repos/$FORK" --jq .id)" \
+  --deploy-ref refs/heads/main
 python commands/infrastructure.py plan --project "$PROJECT" --region "$REGION"
 ```
 
-If learners GitHub Actions are intentionally the deployment authority on a new
-project, use the learners repository, ID `1367035480`, and
-`refs/heads/rag-production-hardening` as the three explicit values. This is not
-required for a public clone. Existing deployments preserve their current trust;
-the helper refuses a conflicting selection instead of performing a CI migration.
+The id is read with `gh` so it is the fork's, never typed from a page; a wrong
+name fails closed because the id must match it. Existing deployments preserve
+their current trust; the helper refuses a conflicting selection instead of
+performing a CI migration (13 October 2026: this section once named the
+upstream repository and a `rag-production-hardening` branch, which no lane
+should trust).
 
 Keep all your other intended Terraform feature inputs. Existing `.tfvars` and
 `TF_VAR_` values still supply noncritical settings. The confirmed critical values

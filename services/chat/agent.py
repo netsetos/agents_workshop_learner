@@ -58,7 +58,7 @@ from pydantic import BaseModel, Field
 
 import limits
 from brains import BRAINS, DEFAULT_BRAIN, MODEL, build as build_brain
-from shared import iap
+from shared import iap, spotlight
 from shared.profile import LOCAL_MODEL, PROFILE
 from shared.tenancy import tenant_for
 
@@ -207,6 +207,12 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
         context={"tenant_id": tenant_id, "user_id": user["email"],
                  "assertion": user["assertion"] or "", "brain": name, "meter": meter},
     )
+    if spotlight.SCRUB:
+        # AGENT_SCRUB=on (workshop lesson 10.8): the answer leaves with no image, HTML tag or off-list link a reader's
+        # browser would fetch, each replaced by a visible marker, and the count is in the response. The row below
+        # stays as lessons 5.1, 5.5, 5.7 and 11.5 parse it.
+        answer, scrubbed = spotlight.scrub(out.get("answer") or "")
+        out = {**out, "answer": answer, "scrubbed": scrubbed}
     latency_ms = int((time.monotonic() - t0) * 1000)
     used = meter.row()
     # One row per turn, in the shape 12.3's sink collects: WHICH brain answered is the field

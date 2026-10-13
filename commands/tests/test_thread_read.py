@@ -182,10 +182,11 @@ class TheReaderAlone(unittest.TestCase):
 
     def test_the_new_files_have_their_unowned_rows(self):
         # An UNOWNED.md row until lesson 6.8's page quotes the file; from then on INDEX.md names the lesson.
-        unowned = read("UNOWNED.md")
+        unowned, index = read("UNOWNED.md"), read("INDEX.md")
+        quoted = set(re.findall(r"^\| `([^`]+)` \| \w+ \| (?!- \|)[^|]+ \|", index, re.M))
         for f in ("commands/thread_read.py", "commands/thread_replay.py", "commands/graph-venv.sh", "mk/memory.mk",
                   "evals/threads/cut_off_turn.json", "commands/tests/test_thread_read.py"):
-            self.assertIn(f"| `{f}` | **6.8**", unowned, f)
+            self.assertTrue(f"| `{f}` | **6.8**" in unowned or f in quoted, f)
             self.assertTrue((KIT / f).exists(), f)
 
     def test_every_statement_is_a_select(self):
