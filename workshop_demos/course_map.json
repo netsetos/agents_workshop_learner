@@ -1,6 +1,6 @@
 {
   "modules": 14,
-  "lessons_expected": 95,
+  "lessons_expected": 96,
   "lessons": [
     {
       "lesson": "B.1",
@@ -64,6 +64,13 @@
       "source_sha": "c28fb9ec41954f3fe7442eecddca55e7e2879d87",
       "source_kind": "main_html",
       "demos": 14
+    },
+    {
+      "lesson": "0.5",
+      "title": "Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI",
+      "source_sha": "ca5a2f56ef25ac0a2ddc9e2939fa2d260dc7da44",
+      "source_kind": "main_html",
+      "demos": 12
     },
     {
       "lesson": "1.1",

@@ -11,6 +11,7 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [0.2: Reproduce the local environment, read the master diagram and prove a first success](module_00/lesson_0_2/README.md) — 4 files; main_html
 - [0.3: Understand the project, identities and resource map, and deploy the lane](module_00/lesson_0_3/README.md) — 6 files; main_html
 - [0.4: Prove the lane, break it once, and switch it off](module_00/lesson_0_4/README.md) — 14 files; main_html
+- [0.5: Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI](module_00/lesson_0_5/README.md) — 12 files; main_html
 - [1.1: Understand source, tenant, page and chunk contracts](module_01/lesson_1_1/README.md) — 8 files; main_html
 - [1.2: Parse documents and compare chunk boundaries](module_01/lesson_1_2/README.md) — 8 files; main_html
 - [1.3: Create and validate compatible embeddings](module_01/lesson_1_3/README.md) — 9 files; main_html
