@@ -67,6 +67,18 @@ def _as_source(c: dict) -> dict:
             "start": c.get("start"), "end": c.get("end")}
 
 
+def _scrubbed_line(body: dict) -> str:
+    """The chat service's exit scrub, said under the answer (workshop lesson 10.8). With AGENT_SCRUB=on documind-chat
+    replaces each image, HTML tag and off-list link in an answer with a visible marker ([image removed], [html removed],
+    [link removed]) and returns how many as `scrubbed`; one marker in a long answer is easy to miss. Empty when nothing
+    was replaced, or when the switch is off and the reply has no `scrubbed`, so the page shows what it always showed."""
+    n = body.get("scrubbed")
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        return ""
+    what, by = ("image, tag or link was", "a marker") if n == 1 else ("images, tags or links were", "markers")
+    return f"scrubbed: {n} {what} replaced by {by} before the answer left the chat service (AGENT_SCRUB)"
+
+
 def stream_answer(query: str, tenant_id: str):
     """Yield (event_name, payload) from rag-api's SSE: citation -> token -> done."""
     with requests.post(
@@ -173,6 +185,9 @@ def chat_page(user):
                        + f" · {body.get('latency_ms', 0)} ms"
                        + (f" · Rs {lim['cost_inr']:.2f}" if lim.get("cost_inr") is not None else "")
                        + (f" · stopped: {lim['stopped_by']}" if lim.get("stopped_by") else ""))
+            scrubbed = _scrubbed_line(body)          # AGENT_SCRUB on documind-chat (workshop lesson 10.8)
+            if scrubbed:
+                st.caption(scrubbed)
         st.session_state.messages.append({"role": "assistant", "content": answer})
         return
 

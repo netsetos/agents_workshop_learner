@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.10_Coding_Agents_WIX.html`, reviewed at blob `417e6f409fc5d8e1f9abd00c6d6d9649a087de75`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.10_Coding_Agents_WIX.html`, reviewed at blob `a1bd16fe4703dea8f9eed3f91673c0ae26b724c2`. Learners read that page on the course site; this guide keeps its prose.
 
 A coding agent is a model that reads files, edits them and runs commands. Left to itself, it stops when it believes the work is done. A Ralph loop does not take its word for it. The loop starts the agent fresh on the same prompt for each iteration, and an oracle the agent cannot see or edit decides when the work is done. The kit's task is one function, `statutory_deadline`, cut out of a copy of `shared/desk_calc.py`, and the answer key is the kit's own function. You play one iteration by hand. Then you run the loop offline at Rs 0 under a strong oracle and a weak one, and watch the weak one let a wrong function through. You read what the loop undoes, what it only flags and what it never does. Then you score an AI code reviewer on six planted defects and run the same loop from the statute's text alone. Last, you read the author's live run: Gemini CLI headless in a container, on a key that can call the model and nothing else.
 
@@ -250,6 +250,12 @@ Live, each iteration is one `docker run` of the ralph image: Gemini CLI at the v
 
 `DRY_RUN=1` prints the two `docker run` lines an iteration would run, and starts nothing: no Docker, image or key is needed.
 
+#### Do it: the egress proxy, printed
+
+By default the agent's container can reach whatever the machine it runs on can reach. `RALPH_EGRESS=proxy` holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: `commands/ralph/egress.py`, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with `HTTPS_PROXY` naming the proxy. The proxy opens a tunnel to `aiplatform.googleapis.com:443` and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's `iterations/`. The agent's line is the one above with two flags added, `--network` and `HTTPS_PROXY`.
+
+The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. `make ralph-probe RALPH_EGRESS=proxy` needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's.
+
 #### Do it: the live loop on your lane
 
 Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials.
@@ -312,7 +318,7 @@ The design choices, from the kit's own code and comments, then the bill and the 
 
 Each point is read from the kit's code, and this page's build runs the offline ones, so this box changes when they do.
 
-- No egress proxy. The agent's container can reach the network: the proxy that would hold it to the model endpoint is not built. Gemini CLI's web tools are excluded in its read-only system settings, and an iteration whose output names the kit's public copy is undone. A fetch that the agent never prints is not caught.
+- The egress proxy is a switch, off unless you set it. Off, the agent's container can reach the network. Gemini CLI's web tools are excluded in its read-only system settings, and an iteration whose output names the kit's public copy is undone, but a fetch that the agent never prints is not caught. On (`RALPH_EGRESS=proxy`, step 8), the container reaches `aiplatform.googleapis.com:443` alone. The proxy holds the host, not the requests: what goes through a tunnel is TLS, and the key inside the container could call the model outside Gemini CLI's stats, which the rupee cap reads.
 
 - The rupee cap is a soft cap. The first iteration always runs, and an iteration under way always finishes. One that costs more than the dearest so far can take the total past the cap. A live iteration cut at 900 seconds, or one whose agent printed no stats, stops the loop with its cost uncounted: read it in your lane's billing.
 
@@ -320,13 +326,13 @@ Each point is read from the kit's code, and this page's build runs the offline o
 
 - Offline, the oracle's guards are Python's. `make ralph-check` runs a change's code on your machine with the network and new processes refused inside Python. That is not a sandbox, as the kit itself prints, so judge only a change you have read.
 
-- The live facts wait for the probe. Gemini CLI's flags, its settings keys, its stats' field names and its sign-in, the image build, and the commands that create the key are confirmed by the author's batch-1 probe, not by the kit's tests.
+- The live facts wait for the probe. Gemini CLI's flags, its settings keys, its stats' field names, its sign-in and whether it sends its calls through the egress proxy, the image build, and the commands that create the key are confirmed by the author's batch-1 probe, not by the kit's tests.
 
 - A rate, not a recall. Each defect class has one planted instance, so the reviewer's numbers are rates per rule over its runs, and the linter flags s.17(3) on every diff.
 
 ### Verify it yourself: the checklist
 
-Fourteen checks, each one step above, each with the value that proves it.
+Fifteen checks, each one step above, each with the value that proves it.
 
 Nothing on your lane is configured. The offline runs wrote run directories under `/tmp`, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
 

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.5_Video_Clip_WIX.html`, reviewed at blob `139fc0392978c735a000f0aed33bb4a541f5ad5a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.5_Video_Clip_WIX.html`, reviewed at blob `fd822b039e6b007712aa443f07198bd895fc3374`. Learners read that page on the course site; this guide keeps its prose.
 
 A video has no text for the kit to parse. So the ingest worker has Gemini describe it: segments of at most a minute, each with a start, an end and a summary that quotes every number said. The summary is what the kit retrieves and the model reads. A citation of it carries the video's path and the seconds, and the UI opens the video at the second the segment starts.
 

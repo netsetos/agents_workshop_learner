@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html",
-  "source_sha": "4bbdae1a635b605b50d6d0445d501cad4b7beee0",
+  "source_sha": "a5ee48f2f82139bc413b1ee30bf237ab416fbd18",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 40,
+  "source_window_count": 42,
   "persist_variables": [
     "API",
     "API_URL",
@@ -277,11 +277,11 @@
       ],
       "section_number": 4,
       "windows": [
-        16
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        559
+        570
       ],
       "offline": false,
       "live_verified": false,
@@ -294,10 +294,10 @@
           "label": "bash — run in the operator shell (both read-only)",
           "expected": "TIMESTAMP                 REQUEST_METHOD  STATUS  LATENCY\n2026-09-22T12:06:41.118Z  POST            200     7.412s\n2026-09-22T11:58:07.902Z  POST            200     0.611s\nTIMESTAMP                 EVENT             DOC_KEY                 CHUNKS  LANE\n2026-09-22T12:06:41.001Z  ingest_ok         acme_9c41d0e2b7f5...    3       push\n2026-09-22T11:58:07.844Z  ingest_duplicate  acme_111510fcf0a6...",
           "adaptations": [],
-          "id": "source_16",
+          "id": "source_17",
           "function": "step_01_read_the_two_records_your_1_4_upload_left",
-          "window": 16,
-          "source_line": 559,
+          "window": 17,
+          "source_line": 570,
           "manual_checkpoint": null
         }
       ],
@@ -319,13 +319,13 @@
       ],
       "section_number": 5,
       "windows": [
-        19,
-        21
+        20,
+        22
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        604,
-        613
+        615,
+        624
       ],
       "offline": false,
       "live_verified": false,
@@ -337,13 +337,11 @@
           "purpose": "The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0)",
           "expected": ">> zero-byte object in: poison-1758542871.pdf\n>> the worker refused it (400): 1 validation error for IngestMessage\nsize\n  Input should be greater than or equal to 1 [type=greater_than_equal, input_value='0', input_type=str]\n>> Pub/Sub retries a non-2xx with backoff (10 s to 600 s, twelve attempts: eventarc.tf), then ingest-dlq: make dlq about an hour after this line",
-          "adaptations": [
-            "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object."
-          ],
-          "id": "source_19",
+          "adaptations": [],
+          "id": "source_20",
           "function": "step_01_start_the_drill_then_watch_the_first_retri",
-          "window": 19,
-          "source_line": 604,
+          "window": 20,
+          "source_line": 615,
           "manual_checkpoint": null
         },
         {
@@ -355,10 +353,10 @@
           "adaptations": [
             "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
           ],
-          "id": "source_21",
+          "id": "source_22",
           "function": "step_02_start_the_drill_then_watch_the_first_retri",
-          "window": 21,
-          "source_line": 613,
+          "window": 22,
+          "source_line": 624,
           "manual_checkpoint": "The poison retries are asynchronous. Wait a few minutes after the drill, then type done to read its retry records. This does not prove a dead letter has arrived."
         }
       ],
@@ -380,11 +378,11 @@
       ],
       "section_number": 6,
       "windows": [
-        27
+        28
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        705
+        716
       ],
       "offline": false,
       "live_verified": false,
@@ -397,10 +395,10 @@
           "label": "bash — run in the operator shell, in $DEMO_ROOT (read-only)",
           "expected": "0 queued document(s)\nno batch job on this lane: a queued claim waits until make batch-job declares it (BATCH_JOB=true, a Terraform plan and apply)",
           "adaptations": [],
-          "id": "source_27",
+          "id": "source_28",
           "function": "step_01_read_the_lane_rs_0",
-          "window": 27,
-          "source_line": 705,
+          "window": 28,
+          "source_line": 716,
           "manual_checkpoint": null
         }
       ],
@@ -422,11 +420,11 @@
       ],
       "section_number": 6,
       "windows": [
-        30
+        31
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        736
+        747
       ],
       "offline": false,
       "live_verified": false,
@@ -439,10 +437,10 @@
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the join is free; the upload starts the paid parse if the job is declared)",
           "expected": "bundle pages: 270\n>> queued: pages, consumer: 270\tdocumind-ingest-batch started (run requested); the hourly schedule backstops it\n1 queued document(s)\n  acme_3ff3f2ac3237...  gs://documind-ai-YOUR-ID-uploads/acme/cgst_it_bundle.pdf  pages=270  generation=1758543112345678",
           "adaptations": [],
-          "id": "source_30",
+          "id": "source_31",
           "function": "step_01_read_the_lane_rs_0",
-          "window": 30,
-          "source_line": 736,
+          "window": 31,
+          "source_line": 747,
           "manual_checkpoint": null
         }
       ],
@@ -464,15 +462,15 @@
       ],
       "section_number": 7,
       "windows": [
-        34
+        35
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        788
+        799
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "native_python",
+      "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
           "heading": "Dead letters: reading the queue, deciding, cleaning up",
@@ -481,13 +479,12 @@
           "label": "bash — run in the operator shell, about an hour after step 5 (both peek; nothing is acknowledged)",
           "expected": "MESSAGE_ID         OBJECT_ID                    EVENT_TIME                DELIVERY_ATTEMPT\n12345678901234567  acme/poison-1758542871.pdf   2026-09-22T12:17:52.318Z  1\n{'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}",
           "adaptations": [
-            "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.",
             "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
           ],
-          "id": "source_34",
+          "id": "source_35",
           "function": "step_01_when_it_has_landed",
-          "window": 34,
-          "source_line": 788,
+          "window": 35,
+          "source_line": 799,
           "manual_checkpoint": "Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again."
         }
       ],
@@ -507,15 +504,15 @@
       ],
       "section_number": 7,
       "windows": [
-        36
+        37
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
       "source_lines": [
-        799
+        810
       ],
       "offline": false,
       "live_verified": false,
-      "implementation": "native_python",
+      "implementation": "mixed_python_and_kit_cli",
       "steps": [
         {
           "heading": "Dead letters: reading the queue, deciding, cleaning up",
@@ -523,13 +520,11 @@
           "purpose": "This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 1.8 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.",
           "label": "bash — run in the operator shell (removes the dead letter and the empty object; nothing else)",
           "expected": "acme/poison-1758542871.pdf\nRemoving gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...",
-          "adaptations": [
-            "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object."
-          ],
-          "id": "source_36",
+          "adaptations": [],
+          "id": "source_37",
           "function": "step_01_decide_then_clean_up",
-          "window": 36,
-          "source_line": 799,
+          "window": 37,
+          "source_line": 810,
           "manual_checkpoint": null
         }
       ],
@@ -650,150 +645,164 @@
     },
     {
       "window": 13,
-      "label": "services/ingest/main.py - push(): the acknowledged verdicts after a lost claim",
+      "label": "services/ingest/main.py - push(): a processing claim, asked for its lease",
       "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
       "anchor": "s4",
       "line": 515
     },
     {
       "window": 14,
-      "label": "services/ingest/main.py - push(): the only 500",
+      "label": "services/ingest/main.py - push(): the acknowledged verdicts after a lost claim",
       "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
       "anchor": "s4",
-      "line": 525
+      "line": 526
     },
     {
       "window": 15,
+      "label": "services/ingest/main.py - push(): the only 500",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 536
+    },
+    {
+      "window": 16,
       "label": "services/ingest/contracts.py - IngestMessage: the fields, and what makes a message poison",
       "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
       "anchor": "s4",
-      "line": 530
-    },
-    {
-      "window": 17,
-      "label": "expected (your times and keys differ; widen the window if 1.4 was longer ago)",
-      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
-      "anchor": "s4",
-      "line": 565
+      "line": 541
     },
     {
       "window": 18,
+      "label": "expected (your times and keys differ; widen the window if 1.4 was longer ago)",
+      "heading": "The verdicts: the HTTP-code rule, and your last upload's request log",
+      "anchor": "s4",
+      "line": 576
+    },
+    {
+      "window": 19,
       "label": "commands/poison.sh - what make poison runs",
       "heading": "Poison: a message that can never succeed, and the retries you can watch",
       "anchor": "s5",
-      "line": 582
+      "line": 593
     },
     {
-      "window": 20,
+      "window": 21,
       "label": "expected",
-      "heading": "Poison: a message that can never succeed, and the retries you can watch",
-      "anchor": "s5",
-      "line": 607
-    },
-    {
-      "window": 22,
-      "label": "expected, about five minutes in (newest first; your seconds differ)",
       "heading": "Poison: a message that can never succeed, and the retries you can watch",
       "anchor": "s5",
       "line": 618
     },
     {
       "window": 23,
-      "label": "services/ingest/main.py - index_document(): the decision, before Document AI",
-      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
-      "anchor": "s6",
-      "line": 638
+      "label": "expected, about five minutes in (newest first; your seconds differ)",
+      "heading": "Poison: a message that can never succeed, and the retries you can watch",
+      "anchor": "s5",
+      "line": 629
     },
     {
       "window": 24,
-      "label": "services/ingest/main.py - _enqueue_batch(): the two records and the hand-off",
+      "label": "services/ingest/main.py - index_document(): the decision, before Document AI",
       "heading": "The batch lane: the 250-page decision, the queued claim, the job",
       "anchor": "s6",
-      "line": 648
+      "line": 649
     },
     {
       "window": 25,
-      "label": "services/ingest/idempotency.py - take_batch(): the job takes a queued claim in a transaction",
+      "label": "services/ingest/main.py - _enqueue_batch(): the two records and the hand-off",
       "heading": "The batch lane: the 250-page decision, the queued claim, the job",
       "anchor": "s6",
-      "line": 665
+      "line": 659
     },
     {
       "window": 26,
+      "label": "services/ingest/idempotency.py - take_batch(): the job takes a queued claim in a transaction",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 676
+    },
+    {
+      "window": 27,
       "label": "terraform/batch.tf - the job: the ingest image, a different command, no platform retries",
       "heading": "The batch lane: the 250-page decision, the queued claim, the job",
       "anchor": "s6",
-      "line": 687
-    },
-    {
-      "window": 28,
-      "label": "expected on a lane without the job (the default; a Firestore UserWarning line may precede the count)",
-      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
-      "anchor": "s6",
-      "line": 723
+      "line": 698
     },
     {
       "window": 29,
+      "label": "expected on a lane without the job (the default; a Firestore UserWarning line may precede the count)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 734
+    },
+    {
+      "window": 30,
       "label": "expected on a lane where make batch-job has run",
       "heading": "The batch lane: the 250-page decision, the queued claim, the job",
       "anchor": "s6",
-      "line": 726
-    },
-    {
-      "window": 31,
-      "label": "expected (the consumer line depends on BATCH_JOB)",
-      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
-      "anchor": "s6",
-      "line": 755
+      "line": 737
     },
     {
       "window": 32,
-      "label": "mk/ingestion.mk - dlq: a peek, not a pull",
-      "heading": "Dead letters: reading the queue, deciding, cleaning up",
-      "anchor": "s7",
-      "line": 772
+      "label": "expected (the consumer line depends on BATCH_JOB)",
+      "heading": "The batch lane: the 250-page decision, the queued claim, the job",
+      "anchor": "s6",
+      "line": 766
     },
     {
       "window": 33,
+      "label": "mk/ingestion.mk - dlq: a peek, not a pull",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 783
+    },
+    {
+      "window": 34,
       "label": "terraform/eventarc.tf - where the dead letters are read from",
       "heading": "Dead letters: reading the queue, deciding, cleaning up",
       "anchor": "s7",
-      "line": 775
+      "line": 786
     },
     {
-      "window": 35,
+      "window": 36,
       "label": "expected (your ids and times differ; the last column is this subscription's own count, not the twelve)",
       "heading": "Dead letters: reading the queue, deciding, cleaning up",
       "anchor": "s7",
-      "line": 793
-    },
-    {
-      "window": 37,
-      "label": "expected",
-      "heading": "Dead letters: reading the queue, deciding, cleaning up",
-      "anchor": "s7",
-      "line": 802
+      "line": 804
     },
     {
       "window": 38,
-      "label": "services/ingest/idempotency.py - claim(): why a transaction",
-      "heading": "At-least-once, and what it costs",
-      "anchor": "s8",
-      "line": 819
+      "label": "expected",
+      "heading": "Dead letters: reading the queue, deciding, cleaning up",
+      "anchor": "s7",
+      "line": 813
     },
     {
       "window": 39,
-      "label": "commands/lesson-12.5.sh - the worker's own limits: one request per instance, 600 seconds, thirty instances",
+      "label": "services/ingest/idempotency.py - claim(): why a transaction",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 829
+      "line": 830
     },
     {
       "window": 40,
+      "label": "commands/lesson-12.5.sh - the worker's own limits: one request per instance, 600 seconds, thirty instances",
+      "heading": "At-least-once, and what it costs",
+      "anchor": "s8",
+      "line": 840
+    },
+    {
+      "window": 41,
+      "label": "services/ingest/idempotency.py - the claim's lease: the ack deadline and a minute (13 October 2026)",
+      "heading": "At-least-once, and what it costs",
+      "anchor": "s8",
+      "line": 853
+    },
+    {
+      "window": 42,
       "label": "terraform/batch.tf - two hours, and the claim carries the retry",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 842
+      "line": 865
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

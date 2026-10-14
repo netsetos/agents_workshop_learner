@@ -27,7 +27,7 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_with_the_window.
-COMMANDS_01 = """make window-check            # the window in front of the kit's LangChain brain: offline, Rs 0, a few minutes
+COMMANDS_01 = """make window-check            # the window in front of the kit's LangChain brain: offline, Rs 0
 
 """
 

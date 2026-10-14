@@ -80,7 +80,7 @@ def step_02_offline_the_bench_s_and_the_swap_s_own_tes(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: Ran 18 tests
+    Observe: Ran 21 tests
     OK
     Ran 9 tests
     OK

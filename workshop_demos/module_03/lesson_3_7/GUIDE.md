@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.7_Streaming_WIX.html`, reviewed at blob `bd95ee4c0aed5d6c7ad2ac5b6edccc2149fef824`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.7_Streaming_WIX.html`, reviewed at blob `bdb5f025e89e2860ccd41b780630ffe74e263b4b`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 3.5 returned one JSON. This lesson returns the same answer as it is written. `/v1/stream` keeps one connection open and sends Server-Sent Events down it: the citations first, because the packed set is known before a single token exists, then each piece of text as the model produces it, then one `done` event with the envelope, or an `error` when the guard refuses the finished answer. The stream takes the same roads as the query and keeps the same clocks; a cache hit and an empty pool each arrive as a single token; and when something on the way fails, the retriever's index, the ranker, the classifier, the cache, the month's counter, the tracing, the answer is still served and one line in the log says what stood in. You will read a stream in curl with a clock on each event, see why its citations differ from the query's, stream the empty pool, read the guard's two doors, force a failure on a candidate that takes no traffic and watch the stream continue, and read the table of everything that degrades and what it degrades to.
 

@@ -3,8 +3,8 @@
 Without PROJECT= every section gives the checkout's half and says the lane was not given. The canned fork is a copy of the kit, so its checkout half is the kit's: the policies, the night job, the floors, the budget and the state bucket as the Makefile and Terraform declare them, plus the canned records under Revisions. In your fork, with PROJECT and REGION. Reads only. The file lands in the fork's root; the recording is the author's lane.
 
 Run order inside this file:
-1. Do it: the handover, offline, on the canned fork (source window 35)
-2. Do it: the handover of your lane (source window 37)
+1. Do it: the handover, offline, on the canned fork (source window 37)
+2. Do it: the handover of your lane (source window 39)
 
 Prerequisites: demo_07_your_lane_read_with_the_two_tokens.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -44,14 +44,13 @@ def step_01_the_handover_offline_on_the_canned_fork(session):
     Observe: >> handover: /tmp/sahyadri/HANDOVER.md, from this checkout only (PROJECT= adds the lane)
     # Handover: DocuMind, this checkout
 
-    Written by `make handover` (commands/capstone_check.py handover) at YYYY-MM-DDTHH:MM:SSZ, from this checkout; PROJECT= adds what the lane shows. It read, and changed nothing. Each section gives what the checkout states, then what the lane shows; where the two differ, the lane is what runs. make handover writes the file whole each time: notes of your own belong in RUNBOOK.md.
+    Written by `make handover` (commands/capstone_check.py handover) at YYYY-MM-DDTHH:MM:SSZ, from this checkout; PROJECT= adds what the lane shows. It read, and changed nothing. Each section gives what the checkout states, then what the lane shows; where the two differ, the lane is what runs. make handover writes the file whole each time: notes of your own belong in RUNBOOK.md, whose template is capstone/templates/RUNBOOK.md.
 
     ## Alert policies
 
-    16 policies declared in terraform/*.tf, each with what ops/runbooks.json says to do when it pages.
+    17 policies declared in terraform/*.tf, each with what ops/runbooks.json says to do when it pages.
 
-    | Policy | Declared in | Applied | When it pages | On the lane |
-    |---|---|--
+    | Policy | Declared in | Ap
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
@@ -84,8 +83,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_35', step_01_the_handover_offline_on_the_canned_fork),
-        ('source_37', step_02_the_handover_of_your_lane),
+        ('source_37', step_01_the_handover_offline_on_the_canned_fork),
+        ('source_39', step_02_the_handover_of_your_lane),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.7_A2A_Handoff_WIX.html`, reviewed at blob `bbc7b0feac324ae6df0cfc4fca05ac6b7578314a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.7_A2A_Handoff_WIX.html`, reviewed at blob `687e6663142d3602ab105d211e0fa11b3981a1f8`. Learners read that page on the course site; this guide keeps its prose.
 
 The ADK brain answers from the documents with two tools. The A2A peer that lesson 10.6 traced holds the inventory tools: which documents the corpus holds, and how many. This lesson gives the ADK brain a third tool, `documind_peer`, that hands one question to the peer. It is off unless `PEER_URL` is set. Only the question crosses. Before anything is sent, a gate refuses a third hand-off in a turn, and a confused deputy: a peer that would answer from another tenant's documents. A hand-off waits at most 75 s, and the peer stops each task at 12 model calls. Then loops and deadlocks. A cycle among the lane's own services is refused by construction, when you check the caller graph. A loop through an agent the lane does not run is refused at run time, before the peer makes a single model call.
 
@@ -232,7 +232,7 @@ Both tasks came back `rejected`, the A2A 0.3 wire's name for `TASK_STATE_REJECTE
 
 ### Why it is built this way, what it costs, and what the kit does not do yet
 
-The design choices, every guard as a constant you can find, then the bill and the gaps.
+The design choices, every guard as a constant you can find, a ping-pong ended by a cap, then the bill and the gaps.
 
 - Only the question crosses. The peer has its own account and its own roster, so it needs nothing about the asker, and nothing personal goes into the message or its metadata.
 
@@ -245,6 +245,14 @@ The design choices, every guard as a constant you can find, then the bill and th
 - Two kinds of loop, two guards. The lane's own services are checked from the deploy scripts before anything runs. An agent the lane does not run can only be met at run time, so the request carries the evidence.
 
 #### Every guard, and where it lives
+
+#### A ping-pong, and the cap that ends it
+
+Every guard above sits on the lane. One more loop needs neither a hand-off nor a second service: two agents that may each hand the turn to the other, where neither owns the answer. In ADK it is one setting away. An agent under a parent is offered `transfer_to_agent`, whose `agent_name` is an enum of the agents it may reach: its parent, and its peers unless `disallow_transfer_to_peers` is set. `commands/agent_shapes.py` builds two such desks under a root, scripts each to want the other desk to answer, and puts one plugin on the run, `TransferCap`. It counts the agents a turn starts in a `temp:` key, which ADK keeps for one turn and never stores, and once 3 transfers have been made it answers in place of the next agent, before that agent's model is called.
+
+Run it offline, at Rs 0. It runs the same turn twice, with the peer edges and without them:
+
+Three things to read in it. The enum is the graph of allowed hand-offs, and the desks only follow it. The cap, not the desks, ends each turn: the fourth transfer is refused before the agent it names runs, so a turn makes 4 model calls and no more. And taking the peer edges away does not end the loop: each desk is offered only the root, the question goes round through the root, and the same cap ends it. Fewer edges still left a cycle; only the count stopped it. This cap lives in a command, not on the lane: no agent the kit deploys transfers to another.
 
 #### What it costs
 
@@ -268,9 +276,11 @@ Each point is read from the kit's code, and the page's build asserts it, so this
 
 - The response keeps the question's words. `handoffs[].request` holds what crossed; only the log line is reduced to a length.
 
+- The transfer cap is offline only. `agent_shapes.py` runs on scripted models, `OFFLINE=1` being its only mode, and no agent the kit deploys transfers to another, so nothing on the lane carries the cap. Whether Gemini itself would pass a question back and forth is not shown.
+
 ### Verify it yourself: the checklist
 
-Eleven checks, each one block above, each with the value that proves it on your lane.
+Twelve checks, each one block above, each with the value that proves it on your lane.
 
 The peer and the chat run this lesson's kit, and the peer's cap of 12 stays: it is the kit's default now. The hand-off was on from step 3 to step 7; if you skipped step 7, it stays on until `make handoff OFF=1` or the chat's next deploy. The peer runs with `PEER_CHAIN=on` until its next deploy. The drill and the deputy cell put back what they changed. Lesson 10.8 attacks these agents with an injected document and a poisoned tool, and measures what holds.
 

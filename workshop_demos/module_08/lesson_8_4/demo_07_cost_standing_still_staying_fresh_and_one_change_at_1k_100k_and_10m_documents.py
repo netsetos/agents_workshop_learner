@@ -3,7 +3,7 @@
 This is component 6's COST-MODEL.md as something a reviewer can rerun. It measures the kit's corpus with the kit's own chunker, carries lesson 8.3's prices as dated constants, and uses the edit's counts from this page: its characters, its datapoints, and the Firestore writes and reads the kit's functions made.
 
 Run order inside this file:
-1. Do it: the cost model as a script (source window 44)
+1. Do it: the cost model as a script (source window 46)
 
 Prerequisites: demo_06_failure_modes_what_pages_what_does_not_and_what_the_design_does_about_it.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -104,7 +104,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_44', step_01_the_cost_model_as_a_script),
+        ('source_46', step_01_the_cost_model_as_a_script),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

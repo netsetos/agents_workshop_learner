@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.1_Billing_Project_WIX.html`, reviewed at blob `e5942beb5af237a1bae016533190895a266f26a6`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.1_Billing_Project_WIX.html`, reviewed at blob `c6a33964dd6af4f84535f1f0e94d05b167dea941`. Learners read that page on the course site; this guide keeps its prose.
 
 Before the kit builds anything, someone has to pay for it, and someone has to be told when it costs more than planned. This lesson sets up the three things every later lesson stands on: a billing account, on the free trial or paid; a project of its own for the lane, linked to that account, with the 40 APIs the kit uses switched on; and a budget that emails at the kit's own thresholds. Then it prices what the lane will cost per day just for existing, from the kit's Terraform, so you know the number before lesson 0.3 starts the meter.
 

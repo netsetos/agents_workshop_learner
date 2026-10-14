@@ -37,7 +37,11 @@ evals/reports/gate.json (gitignored), names the revision, its digest and GIT_SHA
 scores, the time, and the sha256 of each file the verdict was judged by. A red gate writes its record too. A gate
 refused before its rows start leaves the earlier record as it was; one that stops once they have started writes none,
 and the earlier record is gone with it, deleted as the rows start. It writes nothing to Google Cloud, so the target is
-its own switch: a lane that never runs it behaves as before.
+its own switch: a lane that never runs it behaves as before. GATE_PROMPT=1 (off by default: it can refuse a release)
+also holds the candidate's prompt to lesson 3.6's registry where the rows would start: the label GET /version answers
+under, against generator.py, config.py, prompt_versions.json and prompt_rules.json as the commit its GIT_SHA names
+holds them (git show, in this checkout). A prompt that is not a registered version at that commit (prompt_reasons()
+says why) stops the gate before any row is asked, and leaves no record.
 
 gate-check decides whether make promote may move traffic: only to the revision a green record names, while
 deploy/.candidate-revision still names it and the candidate tag is not on another, with the record's digest and
@@ -579,7 +583,11 @@ def get_version(url: str, token: str) -> dict:
 def live_gate(url: str, report: Path, member: str, outsider: str) -> int:
     """evals/run_eval.py's live half against url, as make eval-live runs it: every golden row asked as the member, the
     isolation rows as the outsider too, every verdict into report. Its output streams to this terminal; its exit code
-    comes back (0 every threshold met, 1 blocked, 2 a leak, or a refusal to start)."""
+    comes back (0 every threshold met, 1 blocked, 2 a leak, or a refusal to start). With GATE_PROMPT=1 the candidate's
+    prompt is held to lesson 3.6's registry first (prompt_gate()), and one that is not a registered version stops here,
+    before any row is asked."""
+    if os.environ.get("GATE_PROMPT") == "1":
+        prompt_gate(url, member)
     env = dict(os.environ, DOCUMIND_ID_TOKEN=member, DOCUMIND_OUTSIDER_TOKEN=outsider)
     sys.stdout.flush()
     try:
@@ -587,6 +595,99 @@ def live_gate(url: str, report: Path, member: str, outsider: str) -> int:
                                str(report)], cwd=KIT, env=env, stdin=subprocess.DEVNULL).returncode
     except OSError as e:
         raise Stop(f"evals/run_eval.py could not run: {e}") from e
+
+
+# The candidate's prompt, held to lesson 3.6's registry (13 October 2026). Off unless GATE_PROMPT=1 is in the
+# environment (make gate ... GATE_PROMPT=1 exports it to the recipe), because it can refuse a release. It runs where
+# the rows would start, so the earlier record is already gone when it refuses, as for a gate stopped mid-rows.
+PROMPT_RULES = "services/rag-api/prompt_rules.json"      # lesson 12.4's versions: rules appended to SYSTEM
+
+
+def _prompt_pin():
+    """commands/prompt_pin.py, loaded by path when GATE_PROMPT=1 asks for it: make prompt-version's own readers of
+    SYSTEM + DATED_RULE, config.py's label and the registry."""
+    spec = importlib.util.spec_from_file_location("prompt_pin_gate", HERE / "prompt_pin.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _git(kit: Path, *args: str) -> subprocess.CompletedProcess:
+    """One read-only git command in the kit's directory, its output captured."""
+    try:
+        return subprocess.run(["git", "--no-pager", *args], cwd=kit, capture_output=True, text=True, encoding="utf-8",
+                              errors="replace", stdin=subprocess.DEVNULL, timeout=60)
+    except (OSError, subprocess.SubprocessError) as e:
+        raise Stop(f"git could not run in {kit}: {e}") from e
+
+
+def prompt_reasons(sha: str, served: str, kit: Path | None = None) -> list[str]:
+    """Why the prompt a candidate answers under is not a registered version, read from the commit its GIT_SHA names
+    (git show, in this checkout): [] when it is. `served` is GET /version's "prompt", prompt_id@version. That commit's
+    files decide what the label serves, as prompt_rules.py decides it at import: a version prompt_rules.json lists with
+    rules of its own (lesson 12.4) serves SYSTEM and those rules, so SYSTEM + DATED_RULE must be the text config.py's
+    label is registered to, make prompt-version's verdict at that commit; any other version serves SYSTEM +
+    DATED_RULE as they stand, so its own label must be registered to their sha256. The image is the commit's only as
+    far as make build's upload was: commit a prompt before you build it."""
+    pp, kit = _prompt_pin(), KIT if kit is None else kit
+    if not served:
+        return ["GET /version names no prompt"]
+    if not re.fullmatch(r"[0-9a-f]{7,40}", sha):
+        return [f"GIT_SHA {sha!r} names no commit"]
+    if _git(kit, "rev-parse", "--verify", "--quiet", f"{sha}^{{commit}}").returncode:
+        return [f"this checkout holds no commit {sha}: fetch it, or gate from the clone that built the image"]
+    texts = {}
+    for rel in (pp.GENERATOR, pp.CONFIG, pp.REGISTRY, PROMPT_RULES):
+        shown_file = _git(kit, "show", f"{sha}:./{rel}")
+        texts[rel] = shown_file.stdout if shown_file.returncode == 0 else None
+    missing = [rel for rel in (pp.GENERATOR, pp.CONFIG, pp.REGISTRY) if texts[rel] is None]
+    if missing:
+        return [f"commit {sha} has no {', '.join(missing)}"]
+    try:
+        text, label = pp.prompt_text(texts[pp.GENERATOR]), pp.label(texts[pp.CONFIG])
+        versions = pp.registry(texts[pp.REGISTRY])
+        rules = json.loads(texts[PROMPT_RULES]).get("versions") if texts[PROMPT_RULES] is not None else {}
+    except pp.Unreadable as e:
+        return [f"at {sha}, {e}"]
+    except (ValueError, AttributeError):
+        return [f"at {sha}, {PROMPT_RULES} is not a rules file prompt_rules.py reads"]
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    prompt_id = label.split("@", 1)[0]
+    version = served.split("@", 1)[1] if served.startswith(f"{prompt_id}@") else ""
+    entry = rules.get(version) if isinstance(rules, dict) else None
+    added = entry.get("rules") if isinstance(entry, dict) else None
+    if added:
+        why = []
+        if served in versions:
+            why.append(f"{served} is a rules version in {PROMPT_RULES} and registered in {pp.REGISTRY} as well: "
+                       "one label, two texts")
+        if versions.get(label) != digest:
+            why.append(f"{served} serves SYSTEM and {count(len(added), 'rule')} of {PROMPT_RULES}, and SYSTEM + "
+                       f"DATED_RULE (sha256 {digest[:12]}...) is not the text {label} is registered to: make "
+                       "prompt-version at that commit says why")
+        return why
+    if served not in versions:
+        return [f"{served} is not registered in {pp.REGISTRY}, and SYSTEM + DATED_RULE hash to {digest[:12]}...: "
+                "register the label, or answer under the one that text is registered to"]
+    if versions[served] != digest:
+        return [f"{served} is registered to sha256 {versions[served][:12]}..., and SYSTEM + DATED_RULE hash to "
+                f"{digest[:12]}...: the text changed and the version did not"]
+    return []
+
+
+def prompt_gate(url: str, member: str, kit: Path | None = None) -> None:
+    """GATE_PROMPT=1's check, where the rows would start: the prompt the tag URL answers under (GET /version, as the
+    member) held to the registry of the commit its GIT_SHA names (prompt_reasons()). Stops the gate when it is not a
+    registered version; prints the label it passed otherwise."""
+    answers = get_version(url, member)
+    sha, served = str(answers.get("git_sha") or ""), str(answers.get("prompt") or "")
+    why = prompt_reasons(sha, served, kit)
+    if why:
+        raise Stop(f"GATE_PROMPT=1: the candidate answers as {served or 'no prompt'} at GIT_SHA {sha or '?'}, which is "
+                   f"not a registered prompt version: {'; '.join(why)}. No row was asked and there is no gate record "
+                   "(lesson 3.6: a changed prompt is a new version, registered in services/rag-api/prompt_versions.json)")
+    print(f">> prompt: {served} at GIT_SHA {sha} is a registered version (GATE_PROMPT=1, "
+          "services/rag-api/prompt_versions.json at that commit)")
 
 
 def report_blocked(report) -> list[str]:

@@ -3,8 +3,8 @@
 The kit's three test files, twelve checks each one block above, then make retire and the switches off. First, the kit's own tests for the three pieces. They run offline. Two of the files hold tests that need the chat image's or the peer image's libraries and skip without them, saying so (6 of test_spotlight.py's 21, "needs the chat image's pins: pip install -r services/chat/requirements.txt"; 3 of test_pins.py's 16, "needs google-adk (the peer image's pins)"); the kit's dry-run workflow installs those pins and runs every one with DOCUMIND_REQUIRE_LIBS=1. In step 10's venv, $PY -m unittest commands/tests/test_pins.py runs all 16. make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
 
 Run order inside this file:
-1. Verify it yourself, and withdraw the note (source window 78)
-2. Clean up: the note withdrawn, the switches off (source window 80)
+1. Verify it yourself, and withdraw the note (source window 81)
+2. Clean up: the note withdrawn, the switches off (source window 83)
 
 Prerequisites: demo_10_poisoned_tools_on_your_machine_the_pins.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -87,8 +87,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_78', step_01_verify_it_yourself_and_withdraw_the_note),
-        ('source_80', step_02_clean_up_the_note_withdrawn_the_switches_o),
+        ('source_81', step_01_verify_it_yourself_and_withdraw_the_note),
+        ('source_83', step_02_clean_up_the_note_withdrawn_the_switches_o),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -3,7 +3,7 @@
 Do it
 
 Run order inside this file:
-1. Do it (source window 40)
+1. Do it (source window 41)
 
 Prerequisites: demo_07_the_attack_set_six_rows_on_three_surfaces_judged_offline.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -87,7 +87,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_40', step_01_the_doors_by_hand_two_brains_the_router_th),
+        ('source_41', step_01_the_doors_by_hand_two_brains_the_router_th),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -15,6 +15,7 @@ import io
 import json
 import re
 import shutil
+import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -192,6 +193,31 @@ class ThePath(OnAKitCopy):
         self.assertEqual(v5["rules"], [RULE, RULE2])
         self.assertEqual(v5["golden_row"], f"lk-{max(LOOKUPS) + 2:02d}")  # v4's row is printed, not pasted yet
         self.assertEqual(pr.problems_in(self.rules()), [])
+
+    def test_a_label_the_registry_once_held_is_never_offered_again(self):
+        # Lesson 3.6's v4 candidate was taken down, so its label is in the kit's git history and names that candidate's
+        # text on every row it wrote: improve offers v5 for the first accepted rule (prompt_pin.spent, 14 October 2026).
+        pin = Path(self.kit) / "commands/prompt_pin.py"
+        pin.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(KIT / "commands/prompt_pin.py", pin)
+
+        def git(*args):
+            subprocess.run(["git", "-C", str(self.kit), "-c", "user.name=t", "-c", "user.email=t@example.com", *args],
+                           check=True, capture_output=True)
+        registry = Path(self.kit) / "services/rag-api/prompt_versions.json"
+        kept = registry.read_text(encoding="utf-8")
+        git("init", "-q")
+        git("add", "-A")
+        git("commit", "-q", "-m", "the kit")
+        registry.write_text(kept.rstrip().rstrip("}").rstrip() + ',\n  "documind-rag@v4": "0000"\n}\n', encoding="utf-8")
+        git("commit", "-q", "-am", "v4 registered")
+        registry.write_text(kept, encoding="utf-8")
+        git("commit", "-q", "-am", "v4 taken down")
+        self.assertEqual(self.propose("--rule", RULE)[0], 0)
+        self.assertEqual(run("--kit", self.kit, "accept", "--reviewer", "you@example.com")[0], 0)
+        versions = self.rules()["versions"]
+        self.assertIn("v5", versions)
+        self.assertNotIn("v4", versions)
 
     def test_a_proposal_made_before_the_last_acceptance_is_refused(self):
         a, b = self.kit / "evals" / "reports" / "a.json", self.kit / "evals" / "reports" / "b.json"

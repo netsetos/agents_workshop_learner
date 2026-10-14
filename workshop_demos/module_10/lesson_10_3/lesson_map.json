@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.3_Critic_Refiner_WIX.html",
-  "source_sha": "e1ff4a2dcd168c9b3c61e4c8e08a04973b3224c2",
+  "source_sha": "7dea9d7ffd5ff9269e2969481d0cd7d3175ff4e8",
   "shared_setup_windows": [
     1
   ],
@@ -16,7 +16,6 @@
     "HOME",
     "ME",
     "NUMBER",
-    "OFFLINE",
     "PROJECT",
     "REGION",
     "TENANT",

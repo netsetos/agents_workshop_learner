@@ -35,14 +35,14 @@ def step_01_the_alerts_the_kit_declares_against_the_on(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: alerts.tf declares api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth
+    Observe: alerts.tf declares api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth, ingest_backlog
     desk_alerts.tf declares desk_fallback_share, desk_l2_share, desk_clarify_oos_trend, case_overdue, doc_type_pin_miss, desk_delegation_refused, desk_gate_error_share, desk_check_tenants_unread
     quota.tf names unanswerable_rate declared in alerts.tf
     quota.tf names dlq_depth         declared in alerts.tf
     quota.tf names guardrail_blocks  declared by nothing
     quota.tf names cache_hit_low     declared by nothing
     quota.tf names burn_rate         declared by nothing
-    the unanswerable rate counts: resource.type="cloud_run_revision" resource.labels.service_name="documind-api" (json
+    the unanswerable rate counts: resource.type="cloud_run_revision" resource.labels.service_name="doc
     """
     import re, warnings
     from pathlib import Path

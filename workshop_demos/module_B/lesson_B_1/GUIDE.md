@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `fe81b0793d7a3a26d687b7526e59381abd9fd90b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `2964048d379f1d911bd36318b2cf1e1611552e38`. Learners read that page on the course site; this guide keeps its prose.
 
 The DocuMind kit is 11 services and the Python that builds, tests and feeds them, and three habits run through all of it. Every service runs in an environment of its own with pinned libraries; data moves as JSON; and the parts talk to each other over HTTP. This page practises each habit on your laptop, with Python's standard library and the venv the setup block makes, and then shows you the kit's own lines doing the same. You will make a venv and delete it, write and read a file shaped like the kit's golden set, start a small web server and call it, make two calls at once, and give a call the timeout, the retry and the check the kit gives its own.
 

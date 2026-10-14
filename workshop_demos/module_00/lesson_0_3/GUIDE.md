@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `60e083f2ea735e186506e72b5401ae25d0327111`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `bed26f223483fe13e7029ce8eb7cac21110a90df`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 0.2 left you with an operator shell and a lane that runs on your laptop for nothing. This lesson builds the real one in your Google Cloud project, and reads it before it exists: the accounts the kit creates and what each of them may touch, the stores it declares, the switches that would add more, and the items that bill by the hour whether anyone uses them or not. Then you run one `make plan`, read it, let the kit's guard check it, and run one `make up` from a blank project: images built, every service deployed as its own account, the UI behind Google's sign-in, and your address on the roster.
 
@@ -42,7 +42,7 @@ A lane is one complete copy of DocuMind in one Google Cloud project: yours, made
 
 Identities are the part that is easy to skip and expensive to get wrong. A program on Google Cloud never acts as "the system". It acts as a service account, an identity with roles but no password, and every call it makes is allowed or refused by what that account holds. The kit gives each of the seven services its own account, and grants each one what its code uses and nothing it does not: the UI's account cannot read the warehouse, the ingest worker's cannot read a secret, the A2A peer's cannot touch Firestore at all. The same thinking guards the doors. IAM decides which accounts may call a service. IAP, Google's sign-in in front of the UI, decides which people may reach it. The roster, a few documents in Firestore, decides which tenant each signed-in person may read.
 
-The resource map is the whole list: 234 resource instances for a blank project, by the kit's own files, and a small part of it that bills by the hour while it exists, used or idle. Knowing which part that is turns "I deployed something" into "I know what I am paying for", which is what lesson 0.4 needs when it switches the lane off.
+The resource map is the whole list: 235 resource instances for a blank project, by the kit's own files, and a small part of it that bills by the hour while it exists, used or idle. Knowing which part that is turns "I deployed something" into "I know what I am paying for", which is what lesson 0.4 needs when it switches the lane off.
 
 A new office building. The project is the building, on one lease and one electricity meter (the billing account). The service accounts are the staff ID cards: the cleaner's card opens the store rooms, the accountant's opens the finance office, and nobody's card opens every door. The Terraform plan is the architect's drawing, signed before any wall goes up; the kit's guard refuses any drawing that would knock a wall down. `make up` is the construction crew: it builds exactly the signed drawing, moves the staff in, each with their own card, and hands reception the guest list.
 
@@ -214,7 +214,7 @@ A new index takes minutes to build, and a vector query against an index still bu
 
 One line in `terraform/vector.tf` deserves a second look before step 10 prices it. The deployed index runs on a machine chosen by the index's shard size. The index declares SMALL, so a new lane's index deploys on `e2-standard-2`, and the declaration is ignored once the index exists, because changing a shard size replaces the index. An index created before the kit named the size keeps the one the service picked: the kit's own comment records one whose size was MEDIUM, which deploys on `e2-standard-16`. Step 8 reads which one your lane has.
 
-#### 234 resource instances, file by file
+#### 235 resource instances, file by file
 
 Counting every resource block, with each `count` and `for_each` worked out for the values `make plan` passes, gives the number a blank project's plan should add. One variable moves it: each address in `ADMIN_EMAILS` adds one e-mail channel for the alerts.
 
@@ -236,13 +236,13 @@ The check reads Terraform's machine-readable plan, not the text you scroll throu
 
 Run it now. Terraform prints the whole plan, one block per resource, so the block keeps a copy in `~/plan.log` and then prints only the lines that summarize it.
 
-The kit's files declare 234 resource instances for this lane (step 5, with one address in `ADMIN_EMAILS`), so Terraform's summary should be `Plan: 234 to add, 0 to change, 0 to destroy.` It sits between the two `PASS` lines `infrastructure.py` prints: the saved inputs before the plan, the passed check after it.
+The kit's files declare 235 resource instances for this lane (step 5, with one address in `ADMIN_EMAILS`), so Terraform's summary should be `Plan: 235 to add, 0 to change, 0 to destroy.` It sits between the two `PASS` lines `infrastructure.py` prints: the saved inputs before the plan, the passed check after it.
 
 #### Every resource, counted from the saved plan
 
 The plan file is binary; Terraform turns it into JSON on request. The cell below counts what the plan would create, by type, in the same format as the count this page made from the kit's files, so the two can be read side by side. Run it before `make up`: the apply consumes the selection record that names the file.
 
-Every line of the two should match: 55 resource types, 234 instances, and only `create` among the actions. A count that differs means the plan read a file or a variable differently from the way this page assumed; find which before the apply, not after it. To read the plan itself, `terraform -chdir=terraform show "$PLAN" | less` prints it as text; on a later plan, the words to search for are must be replaced and will be destroyed.
+Every line of the two should match: 55 resource types, 235 instances, and only `create` among the actions. A count that differs means the plan read a file or a variable differently from the way this page assumed; find which before the apply, not after it. To read the plan itself, `terraform -chdir=terraform show "$PLAN" | less` prints it as text; on a later plan, the words to search for are must be replaced and will be destroyed.
 
 ### make up: apply that plan, then build, deploy and seed
 
@@ -310,7 +310,7 @@ What is not in the table matters as much. The seven Cloud Run services cost noth
 
 Twelve checks, each one block above, each with the value that proves it on your lane.
 
-Everything: the project went from blank to a running lane. 40 APIs are on. The state bucket you made yourself holds Terraform's record of 234 resources: 19 accounts with their roles, five buckets, Firestore with 17 indexes and four TTL fields, Vector Search with its deployed index, two Cloud SQL instances, Spanner, `rag_data` and `documind_observability` in BigQuery, a GKE cluster, the network, the alerts and the budget. Artifact Registry holds seven images; Cloud Run runs seven services and two jobs. Firestore holds the roster's 11 memberships and three data-region policies; RAG Engine holds empty corpora for acme and zeta. On your machine, `terraform/` is connected to the state and holds the saved inputs and the applied plan file. From the end of the apply, the rows of step 10 bill every hour. Lesson 0.4 proves the lane end to end, breaks it once on purpose, and switches it off.
+Everything: the project went from blank to a running lane. 40 APIs are on. The state bucket you made yourself holds Terraform's record of 235 resources: 19 accounts with their roles, five buckets, Firestore with 17 indexes and four TTL fields, Vector Search with its deployed index, two Cloud SQL instances, Spanner, `rag_data` and `documind_observability` in BigQuery, a GKE cluster, the network, the alerts and the budget. Artifact Registry holds seven images; Cloud Run runs seven services and two jobs. Firestore holds the roster's 11 memberships and three data-region policies; RAG Engine holds empty corpora for acme and zeta. On your machine, `terraform/` is connected to the state and holds the saved inputs and the applied plan file. From the end of the apply, the rows of step 10 bill every hour. Lesson 0.4 proves the lane end to end, breaks it once on purpose, and switches it off.
 
 Netsetos GenAI on GCP · Module 0 Setup · Lesson 0.3 Understand the project, identities and resource map, and deploy the lane · v5.0
 

@@ -60,11 +60,11 @@ acme: retrieval_backend=vector
 
 ### demo_04_the_lines_the_check_rests_on.py
 
-The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane.
+The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
 
 **`step_01_the_rules_on_hand_made_input(session)` — The lines the check rests on / Do it: the rules on hand-made input**
 
-The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane.
+The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
 
 Operation: bash — run in the operator shell, in the kit (the rules on hand-made input; no fork, no lane, Rs 0).
 
@@ -76,7 +76,7 @@ capstone_check selftest: ARCHITECTURE.md's rejected options (list, table, sub-se
 
 ### demo_05_the_check_offline_the_kit_as_it_ships_a_canned_capstone_your_fork.py
 
-Run it in your kit checkout. If your checkout holds lesson 11.3's records, components 1, 4 and 8 read them and your output differs from the one below, which was run on a copy of the kit with no records at all. commands/tests/capstone_fork/ is Sahyadri Freight, a made-up logistics company whose corpus is a fleet safety manual and a driver handbook, 32 pages between them, with the four documents and the records lesson 11.3's controlled failure leaves: a mistyped model promoted by force, rolled back and repaired, with a smoke run around each step and the repair's gate report. The kit's tests lay it over a copy of the kit, so you do the same: a local clone of your checkout, the canned files over it, its two golden rows appended, then the check. The clone holds none of your records, so the output is the canned fork's alone. The check's rules are functions you can call. The cell loads the module, points a Fork at the canned fork and prints what the rules see: the smoke runs in order, the rollback they show, each report with its isolation rows, the tenant's pages, and how each FAILURE-MODES command resolves. In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, make ingest-corpus, make roster, golden rows, make gate, lesson 11.3's rollback with a smoke run before and after, and the four documents.
+Run it in your kit checkout. If your checkout holds lesson 11.3's records, components 1, 4 and 8 read them and your output differs from the one below, which was run on a copy of the kit with no records at all. commands/tests/capstone_fork/ is Sahyadri Freight, a made-up logistics company whose corpus is a fleet safety manual and a driver handbook, 32 pages between them, with the four documents and the records lesson 11.3's controlled failure leaves: a mistyped model promoted by force, rolled back and repaired, with a smoke run around each step and the repair's gate report. The kit's tests lay it over a copy of the kit, so you do the same: a local clone of your checkout, the canned files over it, its two golden rows appended, then the check. The clone holds none of your records, so the output is the canned fork's alone. The check's rules are functions you can call. The cell loads the module, points a Fork at the canned fork and prints what the rules see: the smoke runs in order, the rollback they show, each report with its isolation rows, the tenant's pages, and how each FAILURE-MODES command resolves. Your four documents start from the kit's templates in capstone/templates/. Each is the canned fork's document emptied: the same headings, a {{...}} placeholder in every slot, 66 across the four, and a comment at the top saying what the check reads in it and what the defence reads. In your fork you copy them to its root, cp capstone/templates/*.md ., and replace every placeholder, braces included. Here the cell lays them as they ship over the canned fork's four, runs the check, counts the lines that still hold a placeholder, and puts the canned four back. In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, make ingest-corpus, make roster, golden rows, make gate, lesson 11.3's rollback with a smoke run before and after, and the four documents, written from the templates.
 
 **`step_01_the_kit_as_it_ships(session)` — The check, offline: the kit as it ships, a canned capstone, your fork / Do it: the kit as it ships**
 
@@ -106,13 +106,17 @@ Expected shape, not a promised result:
           - no make smoke-deployed run in evals/reports/smoke-deployed.jsonl: make smoke-deployed PROJECT=<id> (lesson
             11.3) records one
    5  FAIL  ARCHITECTURE.md, with the alternatives you rejected
-          - ARCHITECTURE.md is missing from the fork's root
+          - ARCHITECTURE.md is missing from the fork's root: copy capstone/templates/ARCHITECTURE.md there from the
+            kit, and replace each {{...}} placeholder in it
    6  FAIL  COST-MODEL.md at 1k, 10k and 100k queries a month
-          - COST-MODEL.md is missing from the fork's root
+          - COST-MODEL.md is missing from the fork's root: copy capstone/templates/COST-MODEL.md there from the kit,
+            and replace each {{...}} placeholder in it
    7  FAIL  FAILURE-MODES.md, four entries, each proved by a script
-          - FAILURE-MODES.md is missing from the fork's root
+          - FAILURE-MODES.md is missing from the fork's root: copy capstone/templates/FAILURE-MODES.md there from the
+            kit, and replace each {{...}} placeholder in it
    8  FAIL  RUNBOOK.md and one recorded rollback
-          - RUNBOOK.md is missing from the fork's root
+          - RUNBOOK.md is missing from the fork's root: copy capstone/templates/RUNBOOK.md there from the kit, and
+            replace each {{...}} placeholder in it
           - no make smoke-deployed run in evals/reports/smoke-deployed.jsonl: make smoke-deployed PROJECT=<id> (lesson
             11.3) records one
 >> incomplete: components 1, 2, 4, 5, 6, 7 and 8 FAIL. A missing component is an incomplete submission, and the
@@ -194,9 +198,72 @@ FAILURE-MODES.md: 'A poison upload pages an hour later': Symptom yes; `make pois
 FAILURE-MODES.md: 'A mistyped model answers 500': Symptom yes; `FAULT=model HOLD=1 PROJECT=documind-ai-YOUR-ID bash commands/incident-drill.sh` runs in the fork
 ```
 
-**`step_04_your_fork(session)` — The check, offline: the kit as it ships, a canned capstone, your fork / Do it: your fork**
+**`step_04_your_four_documents_from_the_templates(session)` — The check, offline: the kit as it ships, a canned capstone, your fork / Do it: your four documents, from the templates**
 
-In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, make ingest-corpus, make roster, golden rows, make gate, lesson 11.3's rollback with a smoke run before and after, and the four documents.
+Your four documents start from the kit's templates in capstone/templates/. Each is the canned fork's document emptied: the same headings, a {{...}} placeholder in every slot, 66 across the four, and a comment at the top saying what the check reads in it and what the defence reads. In your fork you copy them to its root, cp capstone/templates/*.md ., and replace every placeholder, braces included. Here the cell lays them as they ship over the canned fork's four, runs the check, counts the lines that still hold a placeholder, and puts the canned four back.
+
+Operation: bash — run in the operator shell, in the kit (the templates over the canned fork's copy, then its four back; Rs 0).
+
+Expected shape, not a promised result:
+
+```text
+>> capstone-check: the fork at /tmp/sahyadri, offline: its files and records, and make eval. PROJECT= adds the lane's
+   reads
+   1  PASS  A live URL behind IAP
+            the fork deploys documind-ui behind IAP: --iap and --no-allow-unauthenticated (commands/lesson-12.4.sh)
+            a member was answered: GET /version said git_sha abc1234, gemini-3.6-flash, documind-rag@v3 (make
+            smoke-deployed, 2026-11-17T10:30:00Z)
+            a non-member was refused: every isolation row (11) answered 403 to the outsider
+            (evals/reports/gate-documind-api-00043-fix.json)
+   2  PASS  Your own corpus, 30 pages or more, ingested
+            sahyadri's corpus: 2 documents, 32 pages as the ingest worker counts them
+            a query cites one: sh-01 cited fleet_safety_manual_2026.md and passed
+            (evals/reports/gate-documind-api-00043-fix.json)
+   3  PASS  An eval suite, 30 golden rows or more, with tenant isolation
+            evals/golden.jsonl: 67 golden rows, 11 of them isolation rows
+            make eval: evals/run_eval.py offline exits 0 (the golden set can go red, and still holds the rows that
+            would)
+   4  PASS  One lane on top of the core: chat, media, SLM or graph
+            chat: make smoke-chat passed in the last make smoke-deployed run (2026-11-17T10:30:00Z)
+            media: make smoke-media passed in the last make smoke-deployed run (2026-11-17T10:30:00Z)
+   5  FAIL  ARCHITECTURE.md, with the alternatives you rejected
+          - ARCHITECTURE.md names 0 rejected options with a reason (and 3 without one: {{OPTION 1}}; {{OPTION 2}};
+            {{OPTION 3}}): 3 or more, each with why (6 words or more)
+   6  FAIL  COST-MODEL.md at 1k, 10k and 100k queries a month
+            COST-MODEL.md names the three volumes, 1k, 10k and 100k queries a month
+            at 85 rupees to the dollar
+          - COST-MODEL.md gives 0 amounts in rupees (Rs, INR or ₹ and a figure) and 0 amounts in dollars ($ or USD and
+            a figure): 3 or more of each, a pair for each volume
+          - COST-MODEL.md carries no date (2026-11-20, or 20 Nov 2026): prices move
+   7  FAIL  FAILURE-MODES.md, four entries, each proved by a script
+          - 0 entries proved, 4 or more: an entry is a heading with a Symptom: line and a command in backticks that
+            the fork can run
+          - "{{FAILURE 1}}": `make gotcha-drill ID={{GOTCHA-ID}}`: ID={{GOTCHA-ID}} is not in ops/gotchas.json, lesson
+            11.7's registry
+          - "{{FAILURE 2}}": `make gotcha-drill ID={{GOTCHA-ID}} LIVE=1`: ID={{GOTCHA-ID}} is not in ops/gotchas.json,
+            lesson 11.7's registry
+          - "{{FAILURE 3}}": `make {{TARGET}}`: the fork's Makefile and mk/*.mk define no {{TARGET}} target
+          - "{{FAILURE 4}}": `bash commands/{{SCRIPT}}.sh`: the fork holds no commands/{{SCRIPT}}.sh
+   8  FAIL  RUNBOOK.md and one recorded rollback
+            a recorded rollback, the traffic left the revision the candidate tag names: documind-api-00042-typ ->
+            documind-api-00041-kel, between the make smoke-deployed runs of 2026-11-17T09:20:00Z and
+            2026-11-17T09:35:00Z; /version before: git_sha abc1234, gemini-3.6-flsh, documind-rag@v3; after: git_sha
+            abc1234, gemini-3.6-flash, documind-rag@v3
+          - RUNBOOK.md does not say how to roll back: make rollback (lesson 11.3), or gcloud run services
+            update-traffic
+>> incomplete: components 5, 6, 7 and 8 FAIL. A missing component is an incomplete submission, and the defence does
+   not run
+exit 1
+/tmp/sahyadri/ARCHITECTURE.md:8
+/tmp/sahyadri/COST-MODEL.md:7
+/tmp/sahyadri/FAILURE-MODES.md:18
+/tmp/sahyadri/RUNBOOK.md:5
+exit 0
+```
+
+**`step_05_your_fork(session)` — The check, offline: the kit as it ships, a canned capstone, your fork / Do it: your fork**
+
+In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, make ingest-corpus, make roster, golden rows, make gate, lesson 11.3's rollback with a smoke run before and after, and the four documents, written from the templates.
 
 Operation: bash — run in the operator shell, in your fork (offline; Rs 0).
 
@@ -309,11 +376,11 @@ Expected shape, not a promised result:
 >> handover: /tmp/sahyadri/HANDOVER.md, from this checkout only (PROJECT= adds the lane)
 # Handover: DocuMind, this checkout
 
-Written by `make handover` (commands/capstone_check.py handover) at YYYY-MM-DDTHH:MM:SSZ, from this checkout; PROJECT= adds what the lane shows. It read, and changed nothing. Each section gives what the checkout states, then what the lane shows; where the two differ, the lane is what runs. make handover writes the file whole each time: notes of your own belong in RUNBOOK.md.
+Written by `make handover` (commands/capstone_check.py handover) at YYYY-MM-DDTHH:MM:SSZ, from this checkout; PROJECT= adds what the lane shows. It read, and changed nothing. Each section gives what the checkout states, then what the lane shows; where the two differ, the lane is what runs. make handover writes the file whole each time: notes of your own belong in RUNBOOK.md, whose template is capstone/templates/RUNBOOK.md.
 
 ## Alert policies
 
-16 policies declared in terraform/*.tf, each with what ops/runbooks.json says to do when it pages.
+17 policies declared in terraform/*.tf, each with what ops/runbooks.json says to do when it pages.
 
 | Policy | Declared in | Applied | When it pages | On the lane |
 |---|---|---|---|---|
@@ -325,6 +392,7 @@ Written by `make handover` (commands/capstone_check.py handover) at YYYY-MM-DDTH
 | Ledger drift above zero for two nights | alerts.tf | when RECONCILE_JOB=true | a person: the ledger against the uploads bucket, not a revision: make reconcile prints the plan, and a person applies it | - |
 | Nightly reconcile failed | alerts.tf | when RECONCILE_JOB=true | a person: a job's run, not a service's revision: a person reads the execution's logs and runs it again | - |
 | Ingest dead-letter queue holds messages | alerts.tf | always | a person: an upload the worker refused twelve times: a person reads it, fixes or removes the object, then acknowledges it | - |
+| Ingest subscription backlog: oldest message over 30 minutes | alerts.tf | always | a person: a queue, not a revision: a person reads what the worker logs and whether it answers, and a busy worker drains on its own | - |
 | Desk router: fallback share above 1% for a tenant | desk_alerts.tf | when DESK_ROUTER_ALERTS=true | make remediate proposes a rollback | - |
 | Desk router: L2 share above its 15% cap for a tenant | desk_alerts.tf | when DESK_ROUTER_ALERTS=true | a person: the router's thresholds decide it, and a change to TAU_OOS or ACCEPT_VOTES is a reviewed commit | - |
 | Desk router: clarify or out_of_scope up more than 5 points week on week | desk_alerts.tf | when DESK_ROUTER_ALERTS=true | a person: a change in what people ask, over two weeks: the router's examples or a desk's switches, a person's call | - |
@@ -396,6 +464,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `311d6f3959f0a3a28a0a7ee5182a081bbef52e56`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`. All 41 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `63db39769430dcf168f0eba43639cdcf3b51484b`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

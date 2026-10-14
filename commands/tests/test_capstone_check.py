@@ -519,7 +519,7 @@ class HandoverTests(LaneCase):
         self.assertIn(f">> handover: {self.fork / 'HANDOVER.md'}, from this checkout only", out)
         self.assertNotIn("\r", text)
         self.assertTrue(text.startswith("# Handover: DocuMind, this checkout\n") and text.endswith("\n"))
-        for line in ("## Alert policies", "16 policies declared in terraform/*.tf",
+        for line in ("## Alert policies", "17 policies declared in terraform/*.tf",     # ingest_backlog: 13 October 2026
                      "| API p95 latency > 3s | alerts.tf | always | make remediate proposes a rollback | - |",
                      "| Nightly reconcile failed | alerts.tf | when RECONCILE_JOB=true | a person: ",
                      "## The night job", "the Cloud Scheduler job `documind-off-nightly`: `0 23 * * *` in "
@@ -539,7 +539,7 @@ class HandoverTests(LaneCase):
         self.lane_files()
         code, out, text = self.handover("--project", PROJECT, "--region", REGION)
         self.assertEqual(code, 0, out)
-        for line in (f"# Handover: DocuMind on {PROJECT}", "16 policies declared in terraform/*.tf, each with what "
+        for line in (f"# Handover: DocuMind on {PROJECT}", "17 policies declared in terraform/*.tf, each with what "
                      "ops/runbooks.json says to do when it pages; 2 of them on the lane.",
                      "| make remediate proposes a rollback | enabled, 1 channel |",
                      "| Ingest failed | alerts.tf | always | make remediate proposes a rollback | enabled, no channel: it "

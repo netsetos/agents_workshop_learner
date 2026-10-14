@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.9_Managed_Agents_WIX.html`, reviewed at blob `a30d39f86a43c481a7a8c96a15d0f90c2d992469`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.9_Managed_Agents_WIX.html`, reviewed at blob `b1e042febecc4ac43357ffb2c6605c2c20722e94`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 10.6's peer runs on Cloud Run, and two accounts may call it. This lesson runs the same peer on Vertex AI Agent Engine, Google's managed runtime for agents. The kit copies `services/agent/agent.py` byte for byte and changes one setting outside it: where the model is called. The peer still runs as `documind-agent-sa`, on acme's roster alone, so it reads what it read before. Two things change. Another agent asks it through the platform's query API, not A2A, and every account that holds Vertex AI User on your project may ask. You stage the package and print every call for Rs 0. Then you deploy it, ask it on both hosts, read what the asks left, run the proof, and tear it down.
 

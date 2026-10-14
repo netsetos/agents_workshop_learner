@@ -26,7 +26,7 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_with_the_kit_s_examples_then_with_none.
-COMMANDS_01 = """# make exemplars PROJECT=$PROJECT runs this line, without --report
+COMMANDS_01 = """# make exemplars PROJECT=$PROJECT REPORT="$HOME/exemplars_kit.json" runs this line
 python evals/route_eval.py --live-l1 --project "$PROJECT" --exemplars kit --report "$HOME/exemplars_kit.json"
 
 """
@@ -48,7 +48,7 @@ def step_01_with_the_kit_s_examples_then_with_none(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_with_the_kit_s_examples_then_with_none.
-COMMANDS_02 = """# make exemplars PROJECT=$PROJECT EXEMPLARS=none runs this line, without --report
+COMMANDS_02 = """# make exemplars PROJECT=$PROJECT EXEMPLARS=none REPORT="$HOME/exemplars_none.json" runs this line
 python evals/route_eval.py --live-l1 --project "$PROJECT" --exemplars none --report "$HOME/exemplars_none.json"
 
 """

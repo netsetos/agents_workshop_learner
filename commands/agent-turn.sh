@@ -5,9 +5,11 @@
 # /v1/passages with an ID token minted as documind-ui-sa (DOCUMIND_IMPERSONATE_SA, shared/documind_tools.py), which
 # every tenant's roster holds. PROJECT and REGION name the lane; PATTERN, THINKING, DESK, TENANT and Q the turn, ROW
 # a row of evals/agent_tasks.jsonl in Q's place, and EXEC_MODEL the executor's model of plan_execute and rewoo
-# (lesson 10.2).
+# (lesson 10.2). INVENT and LAUNDER, offline, are agent_turn.py's --invent and --launder (lessons 10.1 and 10.3): 1
+# passes the flag with its own figure, anything else is the figure (13 October 2026).
 # With arguments it runs those instead, in the same venv and the same environment: make agent-eval passes
-# evals/agent_eval.py and its flags, make agent-tests the bench's chat-pins tests.
+# evals/agent_eval.py and its flags, make agent-tests the bench's chat-pins tests, and make agent-shapes (lesson
+# 10.7) commands/agent_shapes.py.
 # It runs in ~/graph-venv (workshop lesson 5.4's), made here if it is missing, with the chat image's pins installed
 # into it, as commands/limits-check.sh does.
 # The same without make:  OFFLINE=1 bash commands/agent-turn.sh        (from deploy/)
@@ -34,4 +36,6 @@ if [ -n "${THINKING:-}" ]; then ARGS+=(--thinking "$THINKING"); fi
 if [ -n "${Q:-}" ]; then ARGS+=(--question "$Q"); fi
 if [ -n "${ROW:-}" ]; then ARGS+=(--row "$ROW"); fi
 if [ -n "${EXEC_MODEL:-}" ]; then ARGS+=(--exec-model "$EXEC_MODEL"); fi
+if [ -n "${INVENT:-}" ]; then ARGS+=(--invent); [ "$INVENT" = 1 ] || ARGS+=("$INVENT"); fi
+if [ -n "${LAUNDER:-}" ]; then ARGS+=(--launder); [ "$LAUNDER" = 1 ] || ARGS+=("$LAUNDER"); fi
 exec "$VENV/bin/python" commands/agent_turn.py "$MODE" "${ARGS[@]}"

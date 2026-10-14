@@ -3,9 +3,9 @@
 Do it: one row, laid out Offline, the runner stands in for rag-api's doors with the kit's own door functions, and that part has not changed: the set still judges itself, every row holds with every control on, and every structural row opens with its control off. The agents' surfaces have no stand-in, because a chat brain or a Desk agent is a model with tools, not a door function to lift; ask for them offline and the runner says so and exits 2.
 
 Run order inside this file:
-1. Do it: one row, laid out (source window 28)
-2. Do it: the api set, as lesson 4.9 runs it (source window 34)
-3. Do it: the api set, as lesson 4.9 runs it (source window 36)
+1. Do it: one row, laid out (source window 29)
+2. Do it: the api set, as lesson 4.9 runs it (source window 35)
+3. Do it: the api set, as lesson 4.9 runs it (source window 37)
 
 Prerequisites: demo_05_the_fence_and_the_scrub_in_the_code_and_on_the_note_itself.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -123,9 +123,9 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_28', step_01_one_row_laid_out),
-        ('source_34', step_02_the_api_set_as_lesson_4_9_runs_it),
-        ('source_36', step_03_the_api_set_as_lesson_4_9_runs_it),
+        ('source_29', step_01_one_row_laid_out),
+        ('source_35', step_02_the_api_set_as_lesson_4_9_runs_it),
+        ('source_37', step_03_the_api_set_as_lesson_4_9_runs_it),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

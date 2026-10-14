@@ -4,9 +4,10 @@ works on one function in a copy of a kit file, and an oracle it cannot see or ed
 
     python commands/ralph.py loop --offline [--task deadline|statute] [--oracle strong|weak]   # a script, Rs 0
     python commands/ralph.py loop --budget-inr 30 [--max-iters 8] [--model gemini-3.6-flash]  # Gemini CLI, live
+    python commands/ralph.py loop --budget-inr 30 --egress proxy    # live, the agent held to the model endpoint
     python commands/ralph.py workspace [--task deadline|statute]    # the starting workspace, for an iteration by hand
     python commands/ralph.py check [--patch FILE | --workspace DIR] # the oracles' verdicts, offline, Rs 0
-    python commands/ralph.py probe [--yes]                          # the batch-1 probe: Docker and Gemini CLI headless
+    python commands/ralph.py probe [--yes] [--egress proxy]         # the batch-1 probe: Docker and Gemini CLI headless
     make ralph | ralph-workspace | ralph-check | ralph-image | ralph-probe                      (mk/coding.mk)
 
 THE TASK. shared/desk_calc.py's statutory_deadline (the Code on Wages, 2019, s.17(2): wages due two working days after
@@ -59,9 +60,20 @@ from your shell, written for the iteration into a 0600 --env-file beside the wor
 GOOGLE_API_KEY with GOOGLE_GENAI_USE_VERTEXAI, plus GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global when --project
 is given (the batch-1 probe says whether the key needs them). Never your gcloud config, never ADC, never the docker
 socket. The credential is one the author creates for the run, able to call the model and nothing else, and deletes
-after it (the cohort plan's decision 12). The agent's container can reach the network: the egress proxy that would
-hold it to the model endpoint is not built (13 October 2026: the cohort plan cuts it first), hence the public-copy
-rule above.
+after it (the cohort plan's decision 12). By default the agent's container can reach the network, hence the public-copy
+rule above; RALPH_EGRESS=proxy holds it to the model endpoint.
+
+THE EGRESS PROXY (RALPH_EGRESS=proxy, or --egress proxy; off unless given, and off the loop runs as before). Added on
+13 October 2026, the day of work the cohort plan had cut first. Each iteration's agent container joins an internal
+network of its own (docker network create --internal: no route out), with HTTPS_PROXY naming the one other container
+on it, as egress: the proxy, commands/ralph/egress.py in a container of the ralph image, which also sits on docker's
+default bridge. It opens a tunnel to EGRESS_ALLOW, the model endpoint, and refuses every other host, port and plain
+request; a tool in the agent's container that ignores HTTPS_PROXY has no route at all, as the network has none. The
+network and the proxy are made before the iteration and removed after it, whatever happens; the proxy's log, a line a
+request, is iterations/NN-egress.txt, and the iteration's line counts it. It holds the host, not the requests: what
+goes through a tunnel is TLS, and the key in the agent's container could call the model outside Gemini CLI's stats,
+which the rupee cap reads. Whether a name lookup still leaves the internal network is docker's to say (its embedded
+DNS): make ralph-probe RALPH_EGRESS=proxy prints it, with the rest of the isolation, on a live docker.
 
 WHAT IT NEVER DOES. Write inside the kit (a run directory there is refused), apply a patch to your clone, or run git
 push: its git refuses push, pull, fetch, clone and remote, and runs only on the run directory.
@@ -71,8 +83,8 @@ rupees, and any flag or undo; then why it stopped. In the run directory: ralph.p
 to its end: what make review-diff reads), kit.patch (its statutory_deadline against the kit's own: git apply it in your
 clone, run python shared/desk_calc.py --selftest and the kit's tests, then git apply -R; empty when the agent wrote the
 kit's function byte for byte),
-summary.json, and iterations/ with each agent's output and each verdict. Exit 0 when the oracle passed, 1 when the loop
-stopped without it, 2 when it could not start.
+summary.json, and iterations/ with each agent's output, each verdict and, with RALPH_EGRESS=proxy, each proxy's log.
+Exit 0 when the oracle passed, 1 when the loop stopped without it, 2 when it could not start.
 """
 from __future__ import annotations
 
@@ -499,6 +511,7 @@ class AgentRun:
     seconds: float = 0.0
     timed_out: bool = False
     models: dict = field(default_factory=dict)
+    egress: dict | None = None            # RALPH_EGRESS=proxy: the proxy's log, counted (egress_seen())
 
 
 def tick_first(plan: str) -> tuple[str, str | None]:
@@ -712,6 +725,175 @@ class GeminiCliAgent:
         return self.call(run.ws, run.dir / "agent.env", f"ralph-{run.dir.name[-8:]}-{i:02d}".lower())
 
 
+# ----------------------------------------------------------------------------- the egress proxy (RALPH_EGRESS=proxy)
+# The one host:port the agent's container reaches with RALPH_EGRESS=proxy: Vertex AI's global endpoint. Gemini 3.x is
+# served only from location global, and the agent's credential is a Vertex AI key (settings.json selects vertex-ai,
+# env_values() sets GOOGLE_GENAI_USE_VERTEXAI), so the SDK's base URL is https://aiplatform.googleapis.com/ with
+# RALPH_PROJECT and without it. Whatever else Gemini CLI asks for is refused and named in the proxy's log, which make
+# ralph-probe RALPH_EGRESS=proxy YES=1 prints for its two calls.
+EGRESS_ALLOW = ("aiplatform.googleapis.com:443",)
+EGRESS_MODES = ("off", "proxy")
+EGRESS_ALIAS, EGRESS_PORT = "egress", 3128   # its name on the agent's network: a valid hostname, unlike mkdtemp's _
+EGRESS_PY = ASSETS / "egress.py"
+EGRESS_WAIT_S = 30.0                     # how long the proxy may take to listen before its iteration stops the loop
+
+
+def egress_mode(given: str | None = None) -> str:
+    """--egress, else RALPH_EGRESS, else off; Refused for any other word."""
+    mode = (given or os.environ.get("RALPH_EGRESS", "")).strip() or "off"
+    if mode not in EGRESS_MODES:
+        raise Refused(f"RALPH_EGRESS is off or proxy, not {mode!r}")
+    return mode
+
+
+def egress_seen(log: str) -> dict:
+    """The proxy's log counted: what it allowed, refused and could not open, each {what: times}, first seen first."""
+    seen = {"allowed": {}, "refused": {}, "failed": {}}
+    for line in log.splitlines():
+        verdict, _, rest = line.partition(" ")
+        if verdict in seen and rest:
+            what = rest.split(": ", 1)[0]
+            seen[verdict][what] = seen[verdict].get(what, 0) + 1
+    return seen
+
+
+def egress_words(seen: dict) -> str:
+    """egress_seen() in one line."""
+    def each(counted: dict) -> str:
+        return ", ".join(f"{what} ({n})" for what, n in counted.items())
+    words = [f"allowed {each(seen['allowed'])}" if seen.get("allowed") else "allowed nothing",
+             f"refused {each(seen['refused'])}" if seen.get("refused") else "refused nothing"]
+    if seen.get("failed"):
+        words.append(f"could not open {each(seen['failed'])}")
+    if seen.get("error"):
+        words.append(seen["error"])
+    return "; ".join(words)
+
+
+def _docker(cmd: list[str], timeout: float = 120) -> subprocess.CompletedProcess:
+    return subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
+
+
+def _tail(r: subprocess.CompletedProcess) -> str:
+    return " | ".join((r.stderr or r.stdout or "").strip().splitlines()[-2:])[:300]
+
+
+class Egress:
+    """RALPH_EGRESS=proxy around one agent container, `tag` its name: the internal network <tag>-net, with no route out,
+    and the proxy <tag>-egress (commands/ralph/egress.py, read-only, in a container of the ralph image) on docker's
+    default bridge and on that network, where the agent finds it as `egress`: the agent's one way out, to EGRESS_ALLOW
+    alone. up() makes both, or nothing; down() keeps the proxy's log, removes both, and never raises."""
+
+    def __init__(self, docker: str, image: str, tag: str):
+        self.docker, self.image = docker, image
+        self.net, self.proxy = f"{tag}-net", f"{tag}-egress"
+        self.log, self.made = "", []
+
+    def agent_flags(self) -> list[str]:
+        """What the agent's docker run line gains: the internal network, and the proxy as Gemini CLI's way out (it reads
+        HTTPS_PROXY when its --proxy flag is not given)."""
+        return ["--network", self.net, "--env", f"HTTPS_PROXY=http://{EGRESS_ALIAS}:{EGRESS_PORT}"]
+
+    def up_commands(self) -> list[list[str]]:
+        """The network, then the proxy on docker's default bridge, then the proxy joined to the network as `egress`."""
+        allow = [word for host in EGRESS_ALLOW for word in ("--allow", host)]
+        return [[self.docker, "network", "create", "--internal", self.net],
+                [self.docker, "run", "-d", "--name", self.proxy, "--network", "bridge", "--read-only",
+                 "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--memory", "256m", "--pids-limit", "128",
+                 *user_flags(), "--mount", f"type=bind,source={EGRESS_PY},target=/egress/egress.py,readonly",
+                 self.image, "python3", "-I", "-B", "-u", "/egress/egress.py", "--listen", f"0.0.0.0:{EGRESS_PORT}",
+                 *allow],
+                [self.docker, "network", "connect", "--alias", EGRESS_ALIAS, self.net, self.proxy]]
+
+    def down_commands(self) -> list[list[str]]:
+        """After the agent, whatever happened: the proxy's log read, then the proxy and the network removed."""
+        return [[self.docker, "logs", self.proxy], [self.docker, "rm", "-f", self.proxy],
+                [self.docker, "network", "rm", self.net]]
+
+    def up(self, wait_s: float | None = None) -> "Egress":
+        """The network and the proxy, listening; a RuntimeError, with nothing left behind, when they cannot be."""
+        wait_s = EGRESS_WAIT_S if wait_s is None else wait_s
+        try:
+            net, proxy, join = self.up_commands()
+            for cmd, made in ((net, "net"), (proxy, "proxy"), (join, None)):
+                if made:
+                    self.made.append(made)              # before the call: a proxy that failed to start may exist
+                r = _docker(cmd)
+                if r.returncode:
+                    raise RuntimeError(f"the egress proxy did not start: docker {' '.join(cmd[1:3])}: {_tail(r)}")
+            deadline = time.monotonic() + wait_s
+            while True:
+                r = _docker([self.docker, "logs", self.proxy])
+                if "egress: listening on" in r.stdout:
+                    return self
+                if time.monotonic() > deadline:
+                    raise RuntimeError(f"the egress proxy did not listen within {wait_s:g} s: {_tail(r) or 'no log'}")
+                time.sleep(0.2)
+        except BaseException:
+            self.down()
+            raise
+
+    def down(self) -> dict:
+        """The proxy's log kept, then the proxy and the network removed: egress_seen() of the log, with an error when
+        the network could not be removed (docker network rm it by hand)."""
+        error = None
+        logs, rm, net_rm = self.down_commands()
+        try:
+            if "proxy" in self.made:
+                r = _docker(logs, timeout=60)
+                if r.returncode == 0:
+                    self.log = r.stdout + r.stderr
+                _docker(rm, timeout=60)
+            if "net" in self.made:
+                r = _docker(net_rm, timeout=60)
+                if r.returncode:
+                    error = f"docker network rm {self.net} failed: {_tail(r)}"
+        except (OSError, subprocess.SubprocessError) as e:
+            error = f"the egress proxy was not removed: {type(e).__name__}: {e}"
+        self.made = []
+        seen = egress_seen(self.log)
+        if error:
+            seen["error"] = error
+        return seen
+
+    def __enter__(self) -> "Egress":
+        return self.up()
+
+    def __exit__(self, *exc) -> None:
+        self.down()
+
+
+def held_to(line: list[str], egress: Egress) -> list[str]:
+    """An agent's docker run line held to the egress proxy: its --network and HTTPS_PROXY after the line's --name."""
+    at = line.index("--name") + 2
+    return line[:at] + egress.agent_flags() + line[at:]
+
+
+class EgressAgent(GeminiCliAgent):
+    """GeminiCliAgent behind the egress proxy (RALPH_EGRESS=proxy): GeminiCliAgent's own docker run line, held to an
+    internal network, with a proxy made for each call and removed after it, and its log kept in the run."""
+
+    egress = "proxy"
+
+    def command(self, workspace: Path, env_file: Path, name: str, prompt: Path = ASSETS / "PROMPT.md",
+                run: tuple = ("ralph-iteration",)) -> list[str]:
+        return held_to(super().command(workspace, env_file, name, prompt, run), Egress(self.docker, self.image, name))
+
+    def call(self, workspace: Path, env_file: Path, name: str, prompt: Path = ASSETS / "PROMPT.md") -> AgentRun:
+        proxy = Egress(self.docker, self.image, name).up()      # a RuntimeError stops the loop with its words
+        try:
+            ran = super().call(workspace, env_file, name, prompt)
+        finally:
+            seen = proxy.down()
+        ran.egress = {**seen, "log": proxy.log}
+        return ran
+
+    def run(self, run: Run, i: int) -> AgentRun:
+        ran = super().run(run, i)
+        _write(run.dir / "iterations" / f"{i:02d}-egress.txt", ran.egress.pop("log", ""))
+        return ran
+
+
 # ----------------------------------------------------------------------------- one iteration, inspected
 @dataclass
 class Inspection:
@@ -776,6 +958,9 @@ def run_loop(task: Task, agent, oracle: Oracle, *, max_iters: int = MAX_ITERS, b
     if agent.name == "scripted":
         say("  OFFLINE: a scripted agent (commands/ralph.py, Task.script), no model, no network; its tokens are the "
             "script's, priced at list price, and nothing is billed")
+    if getattr(agent, "egress", None) == "proxy":
+        say(f"  egress: RALPH_EGRESS=proxy, each iteration's agent on an internal network of its own; its proxy "
+            f"opens a tunnel to {', '.join(EGRESS_ALLOW)} and refuses everything else")
     records, spent, dearest, stopped = [], 0.0, 0.0, None
     try:
         for i in range(1, max_iters + 1):
@@ -797,6 +982,8 @@ def run_loop(task: Task, agent, oracle: Oracle, *, max_iters: int = MAX_ITERS, b
                    "tokens": ran.tokens, "inr": None if ran.inr is None else round(ran.inr, 6),
                    "seconds": round(ran.seconds, 1), "claimed_done": ran.claimed_done, "undone": look.undo,
                    "flags": list(look.flags), "added": look.added, "error": ran.error, "oracle": None, "failed": []}
+            if ran.egress is not None:
+                rec["egress"] = ran.egress
             if look.undo:
                 run.reset()
                 rec["flags"].append(f"undone: it {look.undo}")
@@ -850,6 +1037,8 @@ def _say_iteration(say, rec: dict, spent: float, verdict: dict | None) -> None:
         say(f"    flag: {f}")
     if rec["error"]:
         say(f"    the agent: {rec['error']}")
+    if rec.get("egress") is not None:
+        say(f"    egress: {egress_words(rec['egress'])}")
 
 
 def finish(run: Run, task: Task, agent, oracle: Oracle, records: list, stopped: tuple, spent: float,
@@ -879,6 +1068,8 @@ def finish(run: Run, task: Task, agent, oracle: Oracle, records: list, stopped: 
                "git": f"git --git-dir={run.git_dir} --work-tree={run.ws} log --oneline",
                "ralph_patch": "ralph.patch", "kit_patch": "kit.patch" if kit_patch is not None else None,
                "against_kit": against_kit, "other_oracle_on_the_same_code": other}
+    if getattr(agent, "egress", None) == "proxy":
+        summary["egress"] = {"mode": "proxy", "allow": list(EGRESS_ALLOW), "logs": "iterations/NN-egress.txt"}
     _write(run.dir / "summary.json", json.dumps(summary, indent=1, ensure_ascii=False) + "\n")
     say(f"stopped: {stopped[1]}")
     say(f"  spent: Rs {spent:.4f} at list price" + (" for the script's tokens (nothing is billed)"
@@ -1052,6 +1243,11 @@ def cmd_loop(a, say=print) -> int:
             say(f"ERROR: {e}")
             return 2
     else:
+        try:
+            egress = egress_mode(a.egress)
+        except Refused as e:
+            say(f"ERROR: {e}")
+            return 2
         image = a.image or os.environ.get("RALPH_IMAGE") or IMAGE
         timeout = _setting(None, "RALPH_ITERATION_TIMEOUT_S", ITERATION_TIMEOUT_S, float)
         docker = shutil.which("docker") or "docker"
@@ -1067,18 +1263,33 @@ def cmd_loop(a, say=print) -> int:
             if problem:
                 say(f"ERROR: {problem}")
                 return 2
+        kind = EgressAgent if egress == "proxy" else GeminiCliAgent
         try:
-            agent = GeminiCliAgent(docker, image, model, os.environ.get("RALPH_API_KEY", ""), a.project, timeout)
+            agent = kind(docker, image, model, os.environ.get("RALPH_API_KEY", ""), a.project, timeout)
         except Refused as e:
             say(f"ERROR: {e}")
             return 2
         oracle = Oracle(a.oracle, image=image, docker=docker)
         if a.dry_run:
-            where = Path("<run>")
-            say("ralph --dry-run: the two containers an iteration runs, and nothing else; nothing is started")
-            say("  the agent: " + " ".join(agent.command(where / "workspace", where / "agent.env", "ralph-<run>-01")))
+            where, name = Path("<run>"), "ralph-<run>-01"
+            proxy = Egress(docker, image, name) if egress == "proxy" else None
+            if proxy:
+                say("ralph --dry-run: an iteration's network and three containers, the proxy, the agent and the "
+                    "oracle, and nothing else; nothing is started")
+                say(f"  first, RALPH_EGRESS=proxy: the agent's internal network, and the proxy that opens a tunnel to "
+                    f"{', '.join(EGRESS_ALLOW)} alone:")
+                for cmd in proxy.up_commands():
+                    say("    " + " ".join(cmd))
+            else:
+                say("ralph --dry-run: the two containers an iteration runs, and nothing else; nothing is started")
+            say("  the agent: " + " ".join(agent.command(where / "workspace", where / "agent.env", name)))
             say("    its --env-file, 0600, deleted when the iteration ends: " + ", ".join(agent.env_values()) +
                 " (values never printed)")
+            if proxy:
+                say("  then, whatever happened: the proxy's log, kept as iterations/01-egress.txt, and the proxy and "
+                    "the network removed:")
+                for cmd in proxy.down_commands():
+                    say("    " + " ".join(cmd))
             say("  the oracle: " + " ".join(oracle.command(where / "oracle" / "01")[0]))
             return 0
     try:
@@ -1111,12 +1322,79 @@ def _probe_line(n: int, what: str, status: str, detail: str = "", say=print) -> 
     say(f"{n}. {what}: {status}" + (f" - {detail}" if detail else ""))
 
 
+# What the probe runs inside the agent's container with RALPH_EGRESS=proxy, as the agent itself could: whether
+# example.com's name resolves there, two connections straight out (example.com, and 169.254.169.254, where a cloud VM's
+# metadata server answers), then two CONNECTs through HTTPS_PROXY, to example.com and to the model endpoint. Nothing is
+# sent through a tunnel it opens. Docker gets it as one line, exec() of the source, so no wrapper splits it.
+REACH_SOURCE = f"""import os, socket
+def resolves(host):
+    try:
+        socket.getaddrinfo(host, 443)
+        return "resolved"
+    except OSError:
+        return "did not resolve"
+def direct(host, port):
+    try:
+        socket.create_connection((host, port), 5).close()
+        return "CONNECTED"
+    except OSError as e:
+        return type(e).__name__ + ": " + str(e)
+def via(target):
+    try:
+        host, port = os.environ["HTTPS_PROXY"].split("//")[-1].rstrip("/").rsplit(":", 1)
+        with socket.create_connection((host, int(port)), 10) as s:
+            s.sendall(("CONNECT " + target + " HTTP/1.1" + chr(13) + chr(10) + chr(13) + chr(10)).encode())
+            return s.recv(256).decode("latin-1").split(chr(13))[0]
+    except (OSError, KeyError, ValueError) as e:
+        return type(e).__name__ + ": " + str(e)
+print("NAME example.com", resolves("example.com"))
+print("DIRECT example.com:443", direct("example.com", 443))
+print("DIRECT 169.254.169.254:80", direct("169.254.169.254", 80))
+print("PROXY example.com:443", via("example.com:443"))
+print("PROXY {EGRESS_ALLOW[0]}", via("{EGRESS_ALLOW[0]}"))
+"""
+REACH = f"exec({REACH_SOURCE!r})"
+
+
+def _probe_reach(reach: subprocess.CompletedProcess, seen: dict, say=print) -> None:
+    """Checks 5 to 7 with RALPH_EGRESS=proxy, from REACH's lines and the proxy's log."""
+    got = {}
+    for line in (reach.stdout or "").splitlines():
+        kind, _, rest = line.partition(" ")
+        what, _, result = rest.partition(" ")
+        if kind in ("NAME", "DIRECT", "PROXY"):
+            got[(kind, what)] = result
+    if not got:
+        _probe_line(5, "what the agent's container reaches", "not tested", _tail(reach) or f"exit {reach.returncode}",
+                    say)
+        return
+    straight = ("example.com:443", "169.254.169.254:80")
+    reached = [t for t in straight if got.get(("DIRECT", t)) == "CONNECTED"]
+    _probe_line(5, "the agent's container reaches example.com and 169.254.169.254 directly",
+                f"REACHED {', '.join(reached)}, so it is not isolated" if reached else "refused, as it must be",
+                f"example.com {got.get(('NAME', 'example.com'), '?')}; " +
+                "; ".join(f"{t}: {got.get(('DIRECT', t), '?')}" for t in straight), say)
+    status = got.get(("PROXY", "example.com:443"), "")
+    _probe_line(6, "the egress proxy opens a tunnel to example.com:443", "OPENED, so the allowlist does not hold"
+                if " 200 " in status else "refused, as it must be" if " 403 " in status else "not tested", status, say)
+    status = got.get(("PROXY", EGRESS_ALLOW[0]), "")
+    _probe_line(7, f"the egress proxy opens a tunnel to {EGRESS_ALLOW[0]}", "observed" if " 200 " in status
+                else "refused", f"{status} (nothing sent through it, Rs 0)" if " 200 " in status else status, say)
+    say(f"   the proxy's log: {egress_words(seen)}")
+
+
 def cmd_probe(a, say=print) -> int:
     """The batch-1 probe (lesson 10.10's live facts), each fact observed, refused or not tested."""
     docker = shutil.which("docker")
     image = a.image or os.environ.get("RALPH_IMAGE") or IMAGE
     model = a.model or os.environ.get("RALPH_MODEL") or DEFAULT_MODEL
-    say(f"ralph-probe: Docker and Gemini CLI headless for the Ralph loop, image {image}, model {model}")
+    try:
+        egress = egress_mode(a.egress)
+    except Refused as e:
+        say(f"ERROR: {e}")
+        return 2
+    say(f"ralph-probe: Docker and Gemini CLI headless for the Ralph loop, image {image}, model {model}" +
+        (", RALPH_EGRESS=proxy" if egress == "proxy" else ""))
     if not docker:
         _probe_line(1, "docker", "not tested", "docker is not on PATH", say)
         return 0
@@ -1136,6 +1414,7 @@ def cmd_probe(a, say=print) -> int:
     _probe_line(3, "the oracle's container (--network none) reaches example.com", "REACHED, so it is not isolated"
                 if reached else "refused, as it must be", (iso.stderr.strip().splitlines() or [""])[-1][:200], say)
     key = os.environ.get("RALPH_API_KEY")
+    proxy = Egress(docker, image, "ralph-probe") if egress == "proxy" else None
     with tempfile.TemporaryDirectory(prefix="ralph-probe-") as tmp:
         t = Path(tmp)
         (t / "ws").mkdir()
@@ -1143,12 +1422,30 @@ def cmd_probe(a, say=print) -> int:
         # points, on the loop's own docker run line with a dummy key in the env file. No model call, Rs 0.
         held = GeminiCliAgent(docker, image, model, "probe-dummy-not-a-key", a.project)
         write_env_file(t / "agent.env", held.env_values())
+
+        def line(name: str, run: tuple) -> list[str]:
+            """The loop's own agent line for one probe container, held to the proxy when RALPH_EGRESS=proxy."""
+            cmd = held.command(t / "ws", t / "agent.env", name, run=run)
+            return held_to(cmd, proxy) if proxy else cmd
+
+        seen = reach = None
         try:
-            h = subprocess.run(held.command(t / "ws", t / "agent.env", "ralph-probe-holds", run=(
+            if proxy:
+                try:
+                    proxy.up()
+                except (RuntimeError, OSError, subprocess.SubprocessError) as e:
+                    _probe_line(4, "the egress proxy and its network", "refused", str(e)[:300], say)
+                    return 0
+            h = subprocess.run(line("ralph-probe-holds", (
                 "sh", "-c", "env | cut -d= -f1 | sort; echo ---; cut -d' ' -f2 /proc/mounts | sort")),
                 capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
+            if proxy:                       # checks 5 to 7: free, no key, no model call
+                reach = subprocess.run(line("ralph-probe-reach", ("python3", "-I", "-c", REACH)), capture_output=True,
+                                       text=True, encoding="utf-8", errors="replace", timeout=120)
         finally:
             (t / "agent.env").unlink(missing_ok=True)
+            if proxy:
+                seen = proxy.down()
         names, _, mounts = h.stdout.partition("---")
         names, mounts = names.split(), mounts.split()
         bad = [n for n in names if n in ("GOOGLE_APPLICATION_CREDENTIALS", "CLOUDSDK_CONFIG", "GOOGLE_CLOUD_QUOTA_PROJECT")]
@@ -1156,31 +1453,41 @@ def cmd_probe(a, say=print) -> int:
         _probe_line(4, "what the agent's container holds", ("REFUSED: it holds " + ", ".join(bad)) if bad else
                     "observed" if h.returncode == 0 else "not tested", f"env names {names}; mounts {mounts}"
                     if h.returncode == 0 else (h.stderr.strip().splitlines() or [""])[-1][:200], say)
+        if proxy:
+            _probe_reach(reach, seen, say)
+        first = 8 if proxy else 5           # the two calls' numbers: after the proxy's checks when it is on
         if not a.yes:
-            _probe_line(5, "one headless call", "not tested", "add YES=1 (two model calls, a few rupees)", say)
+            _probe_line(first, "one headless call", "not tested", "add YES=1 (two model calls, a few rupees)", say)
             return 0
         if key_problem(key):
-            _probe_line(5, "one headless call", "not tested", key_problem(key), say)
+            _probe_line(first, "one headless call", "not tested", key_problem(key), say)
             return 0
-        agent = GeminiCliAgent(docker, image, model, key, a.project, timeout_s=300)
-        for n, words in ((5, "Reply with the single word OK. Use no tools."),
-                         (6, "Fetch https://example.com with a web tool and give its title. If you have no web tool, "
-                             "reply with the single word NO-WEB-TOOL and nothing else.")):
+        agent = (EgressAgent if proxy else GeminiCliAgent)(docker, image, model, key, a.project, timeout_s=300)
+        for n, words in ((first, "Reply with the single word OK. Use no tools."),
+                         (first + 1, "Fetch https://example.com with a web tool and give its title. If you have no "
+                                     "web tool, reply with the single word NO-WEB-TOOL and nothing else.")):
             _write(t / f"prompt{n}.md", words)
             (t / f"ws{n}").mkdir()
-            r = agent.call(t / f"ws{n}", t / "agent.env", f"ralph-probe-{n}", prompt=t / f"prompt{n}.md")
+            try:
+                r = agent.call(t / f"ws{n}", t / "agent.env", f"ralph-probe-{n}", prompt=t / f"prompt{n}.md")
+            except RuntimeError as e:                   # the egress proxy did not start for this call
+                _probe_line(n, "one headless call" if n == first else "the web tools excluded", "not tested", str(e),
+                            say)
+                continue
             out = parse_cli_json(r.log.split("\n--- stderr ---\n")[0]) or {}
             stats = out.get("stats") or {}
-            if n == 5:
-                _probe_line(5, "one headless call", "observed" if r.inr is not None else "refused",
+            if n == first:
+                _probe_line(n, "one headless call", "observed" if r.inr is not None else "refused",
                             f"response {str(out.get('response'))[:80]!r}; models {sorted((stats.get('models') or {}))}; "
                             f"tokens {r.tokens}; {_rs(r.inr)}; error {r.error}", say)
                 say("   its stats, as Gemini CLI printed them: " + json.dumps(stats)[:2000])
             else:
                 tools = ((stats.get("tools") or {}).get("byName") or {})
                 web = [k for k in tools if "web" in k.lower() or "fetch" in k.lower()]
-                _probe_line(6, "the web tools excluded", "observed" if not web else "REFUSED: a web tool ran",
+                _probe_line(n, "the web tools excluded", "observed" if not web else "REFUSED: a web tool ran",
                             f"response {str(out.get('response'))[:80]!r}; tool calls {sorted(tools)}", say)
+            if r.egress is not None:
+                say(f"   the egress proxy on this call: {egress_words(r.egress)}")
     return 0
 
 
@@ -1199,6 +1506,8 @@ def main(argv=None, say=print) -> int:
         p.add_argument("--model", help=f"RALPH_MODEL, {DEFAULT_MODEL} unset")
         p.add_argument("--image", help=f"RALPH_IMAGE, {IMAGE} unset")
         p.add_argument("--project", help="adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's env")
+        p.add_argument("--egress", choices=EGRESS_MODES, help="RALPH_EGRESS: proxy holds the agent's container to the "
+                                                               "model endpoint; off, the default, leaves it as it was")
     loop.add_argument("--offline", action="store_true", help="the scripted agent: no model, no network, Rs 0")
     loop.add_argument("--dry-run", action="store_true", help="live: print the docker run lines, start nothing")
     loop.add_argument("--oracle", choices=("strong", "weak"), default="strong")

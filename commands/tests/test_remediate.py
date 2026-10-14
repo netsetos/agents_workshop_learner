@@ -9,7 +9,7 @@ that keeps a small Cloud Run service in a file (revisions, traffic, a template's
 writes the request and chat lines a smoke would, so the drill and remediate are tried on the same lane. Without a bash
 (Windows outside Git Bash) the drill's class is skipped and says so.
 
-Covered: every policy the kit's Terraform declares (sixteen on 12 October 2026), each with exactly one catalog row whose
+Covered: every policy the kit's Terraform declares (seventeen on 13 October 2026), each with exactly one catalog row whose
 evidence reads what its policy's own metric counts, and its runbook printed from its own documentation block; every
 rule's diagnosis on a fixture or a state built from one (bad_revision for both drill faults, rolled_back, pinned_clean,
 pinned_new, split_traffic, no_change three ways, no_failure, person_only for every person's policy, unknown_policy),
@@ -103,10 +103,12 @@ def flat(text: str) -> str:
     return " ".join(text.split())
 
 
-# The sixteen policies the kit declared on 12 October 2026, by resource: a later policy adds its own row beside them.
+# The seventeen policies the kit declared on 13 October 2026, by resource: a later policy adds its own row beside them.
+# ingest_backlog joined the sixteen of 12 October that day (lesson 8.4's review: nothing read documind-ingest-push).
 DECLARED = {"api_latency": None, "unanswerable_rate": None, 'gpu_left_warm["documind-slm"]': None,
             'gpu_left_warm["documind-vllm"]': None, "ingest_failed": None, "reconcile_drift": "reconcile_job",
-            "reconcile_failed": "reconcile_job", "dlq_depth": None, "desk_fallback_share": "desk_router_alerts",
+            "reconcile_failed": "reconcile_job", "dlq_depth": None, "ingest_backlog": None,
+            "desk_fallback_share": "desk_router_alerts",
             "desk_l2_share": "desk_router_alerts", "desk_clarify_oos_trend": "desk_router_alerts", "case_overdue": None,
             "doc_type_pin_miss": None, "desk_delegation_refused": None, "desk_gate_error_share": "desk_gate_alerts",
             "desk_check_tenants_unread": None}
@@ -744,6 +746,18 @@ class LiveReadTests(unittest.TestCase):
             self.assertEqual(rc, 2)
             self.assertIn("not saved: the state still holds what looks like a lane's identifier", err)
             self.assertFalse((Path(tmp) / "x.json").exists())
+
+    def test_a_plan_that_stops_saves_nothing(self):
+        """13 October 2026: main() saved the state before it rendered the plan, so a state whose plan stopped was still
+        written as a fixture, and only an identifier leak stopped a save. The plan is rendered and checked first."""
+        state = fixture("held_model")
+        state["revisions"][1]["env"]["RAG_TIMEOUT_S"] = "60,@;:#~^|"      # the good revision's: no delimiter left for it
+        with tempfile.TemporaryDirectory() as tmp:
+            saved = Path(tmp) / "x.json"
+            _, (rc, out, err) = live(state, "--save", str(saved))
+            self.assertEqual((rc, out), (2, ""))
+            self.assertIn("STOP: the values of RAG_TIMEOUT_S use every delimiter gcloud accepts", err)
+            self.assertFalse(saved.exists())
 
     def test_save_makes_the_reports_folder_a_fresh_clone_lacks(self):
         """13 October 2026: SAVE=evals/reports/x.json on a fresh clone stopped after the three reads - evals/reports/ is

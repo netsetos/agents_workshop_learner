@@ -20,6 +20,12 @@ already there stay: a registered version never changes its sha256. commands/test
 and holds evals/make_trainset.py's copy of SYSTEM equal to the generator's, so a tuned model is served behind the
 prompt it was trained behind (lesson 12.1).
 
+The version it offers is never one the registry has held (13 October 2026). Lesson 3.6's v4 candidate registers v4 on
+a branch of its own and is taken down; its rows say v4 for as long as Cloud Logging keeps them, and main's registry
+never held the line. So next_version() counts every label the registry holds in any commit the clone's git keeps: every
+branch, tag and remote-tracking branch, the reflog (a branch deleted since) and the stash. Outside a git work tree, or
+without git, the registry's own lines are all it has.
+
 Standard library only. The rag-api is read as text and by AST, never imported: its modules need google-genai,
 fastapi and pydantic-settings, config.py's settings need GOOGLE_CLOUD_PROJECT, and generator.py builds a Gemini
 client at import. So this runs offline, with no credential, at Rs 0. It checks the code, not a deployed service: a
@@ -36,6 +42,7 @@ import ast
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -54,11 +61,19 @@ class Unreadable(Exception):
     """A file the check reads is missing, or not in the shape it reads: exit 2, never a guess."""
 
 
+# The kit whose registry read() read last. check() passes next_version() the registry's lines alone, in lines lesson
+# 3.6 quotes, so next_version() finds here the kit whose git history it reads (13 October 2026).
+_REGISTRY_READ: dict[str, Path] = {}
+
+
 def read(kit: Path, rel: str) -> str:
     try:
-        return (kit / rel).read_text(encoding="utf-8")
+        text = (kit / rel).read_text(encoding="utf-8")
     except OSError as e:
         raise Unreadable(f"{rel}: cannot read it ({e.strerror or e})") from None
+    if rel == REGISTRY:
+        _REGISTRY_READ["kit"] = kit
+    return text
 
 
 def parse(source: str, rel: str) -> ast.Module:
@@ -138,11 +153,32 @@ def registry(text: str) -> dict[str, str]:
     return versions
 
 
-def next_version(name: str, versions: dict) -> str:
-    """The version after the highest vN of this prompt_id, registered or in use: documind-rag@v3 gives v4."""
+def spent(kit: Path, prompt_id: str) -> set[str]:
+    """Every prompt_id@vN label the registry has held in the kit's git history: an added or removed line of
+    services/rag-api/prompt_versions.json in any commit git keeps (every ref, the reflog and the stash; a merge against
+    each parent). Empty outside a git work tree, without git, or when git cannot read the history."""
+    try:
+        log = subprocess.run(["git", "--no-pager", "log", "--all", "--reflog", "--full-history", "-m", "-p", "-U0",
+                              "--format=", "--no-color", "--no-ext-diff", "--no-textconv", "--", REGISTRY],
+                             cwd=kit, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return set()
+    if log.returncode:
+        return set()
+    key = re.compile(r'"(' + re.escape(prompt_id) + r'@v\d+)"\s*:')        # a label, as the registry's keys write it
+    return {m.group(1) for line in log.stdout.splitlines()
+            if line.startswith(("+", "-")) and not line.startswith(("+++", "---")) for m in key.finditer(line)}
+
+
+def next_version(name: str, versions: dict, kit: Path | None = None) -> str:
+    """The version after the highest vN of this prompt_id, registered, in use or held by the registry in the kit's git
+    history (spent()): documind-rag@v3 gives v4, or v5 once any commit git keeps registered v4. A label a candidate went
+    out under names that candidate's text in every row it wrote, so it is never offered to another text. Without
+    `kit`, the kit read() last read the registry from: the one check() is checking."""
     prompt_id = name.split("@", 1)[0]
+    kit = kit if kit is not None else _REGISTRY_READ.get("kit")
     numbers = []
-    for key in [*versions, name]:
+    for key in [*versions, name, *(spent(kit, prompt_id) if kit is not None else ())]:
         m = re.fullmatch(re.escape(prompt_id) + r"@v(\d+)", key)
         if m:
             numbers.append(int(m.group(1)))

@@ -207,9 +207,10 @@ class WiringTest(unittest.TestCase):
         # agent-drill first), so a check that it ends the file breaks on the next one.
         mk = (KIT / "mk" / "agents.mk").read_text(encoding="utf-8")
         self.assertIn("exemplars", re.findall(r"^([a-z][a-z0-9-]*):", mk, re.M))
+        # REPORT= since 13 October 2026, as the other eval targets take it: lesson 3.2's step 10 reads two reports.
         self.assertIn("\nexemplars: $(if $(LOCAL),,guard-project)\n\t$(PY) evals/route_eval.py $(if $(LOCAL),"
                       "--local,--live-l1 --project $(PROJECT)) --exemplars $(or $(EXEMPLARS),kit) "
-                      "$(if $(RUNS),--runs $(RUNS),)\n", mk)
+                      "$(if $(RUNS),--runs $(RUNS),) $(if $(REPORT),--report \"$(REPORT)\",)\n", mk)
         lines = mk.splitlines()                                           # lesson 10.4's build reads route-eval by line
         self.assertIn("evals/route_eval.py --live", lines[lines.index("route-eval: guard-project") + 3])
         makefile = (KIT / "Makefile").read_text(encoding="utf-8")

@@ -3,13 +3,13 @@
 Listing the kit's server in process imports it, so the venv takes the server's requirements (fastmcp 3.4.7 and the mcp client) and the peer's (google-adk 2.8.0), which pin the same side of the mcp 1.x line. make pin-tools rewrites tool_pins.json byte for byte when nothing changed; CHECK=1 says so and exits 0. Do it: the poisoned server, and the pins against it Do it: the rug pull The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved. Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
 
 Run order inside this file:
-1. Do it: a venv with both services' pins, then the pins against the kit's own server (source window 60)
-2. Do it: a venv with both services' pins, then the pins against the kit's own server (source window 61)
-3. Do it: the poisoned server, and the pins against it (source window 63)
-4. Do it: the poisoned server, and the pins against it (source window 67)
-5. Do it: the rug pull (source window 69)
-6. Do it: the peer against the poisoned server (source window 72)
-7. Change it: one description, edited (source window 74)
+1. Do it: a venv with both services' pins, then the pins against the kit's own server (source window 63)
+2. Do it: a venv with both services' pins, then the pins against the kit's own server (source window 64)
+3. Do it: the poisoned server, and the pins against it (source window 66)
+4. Do it: the poisoned server, and the pins against it (source window 70)
+5. Do it: the rug pull (source window 72)
+6. Do it: the peer against the poisoned server (source window 75)
+7. Change it: one description, edited (source window 77)
 
 Prerequisites: demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -224,13 +224,13 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_60', step_01_a_venv_with_both_services_pins_then_the_pi),
-        ('source_61', step_02_a_venv_with_both_services_pins_then_the_pi),
-        ('source_63', step_03_the_poisoned_server_and_the_pins_against_i),
-        ('source_67', step_04_the_poisoned_server_and_the_pins_against_i),
-        ('source_69', step_05_the_rug_pull),
-        ('source_72', step_06_the_peer_against_the_poisoned_server),
-        ('source_74', step_07_change_it_one_description_edited),
+        ('source_63', step_01_a_venv_with_both_services_pins_then_the_pi),
+        ('source_64', step_02_a_venv_with_both_services_pins_then_the_pi),
+        ('source_66', step_03_the_poisoned_server_and_the_pins_against_i),
+        ('source_70', step_04_the_poisoned_server_and_the_pins_against_i),
+        ('source_72', step_05_the_rug_pull),
+        ('source_75', step_06_the_peer_against_the_poisoned_server),
+        ('source_77', step_07_change_it_one_description_edited),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

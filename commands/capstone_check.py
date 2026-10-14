@@ -15,7 +15,9 @@ the four documents, the corpus and golden rows, and the records make leaves in e
 checkout that ran make holds them); and it runs the fork's own evals/run_eval.py offline, as make eval runs it. With
 --project it also reads the lane and changes nothing: gcloud's describe and list calls (gcloud_json() refuses any other
 command), ID tokens minted as make eval-live mints them, and GETs on documind-api, none of which calls a model. The
-records it reads are then that lane's only.
+records it reads are then that lane's only. The four documents have templates in capstone/templates/, which a missing
+document's line names; copied as it ships, a template still fails its component until its {{...}} placeholders are
+replaced.
 
   1  A live URL behind IAP. commands/lesson-12.4.sh deploys documind-ui with --iap and --no-allow-unauthenticated; the
      last make smoke-deployed run (lesson 11.3) recorded GET /version answering a member; the newest live eval report
@@ -127,6 +129,7 @@ LANES = (("chat", "smoke-chat"), ("media", "smoke-media"), ("SLM", "smoke-slm"))
 GRAPH_ON = ("on", "auto")                           # /version's retrieval_graph when the graph answers (off | on | auto)
 ONE_PAGE = (".png", ".jpg", ".jpeg", ".mp4", ".mp3")  # the worker's media: a page each (ingest main.py, MEDIA_TYPES)
 GOTCHA_TARGETS = ("gotcha-drill", "gotcha-detect", "gotchas")
+TEMPLATES = "capstone/templates"                    # the four documents' templates (13 October 2026)
 
 
 def plural(n: int, one: str, many: str = "") -> str:
@@ -820,6 +823,13 @@ def no_runs(fork: Fork) -> str:
             "records one")
 
 
+def no_document(name: str) -> str:
+    """A document missing from the fork's root, and its template: copied as it ships, the template still fails the
+    component, until its {{...}} placeholders are replaced."""
+    return (f"{name} is missing from the fork's root: copy {TEMPLATES}/{name} there from the kit, and replace each "
+            "{{...}} placeholder in it")
+
+
 def component_1(fork: Fork, lane: Lane | None) -> tuple[list, list]:
     held, missing = [], []
     script = fork.text(UI_SCRIPT)
@@ -998,7 +1008,7 @@ def component_4(fork: Fork, lane: Lane | None) -> tuple[list, list]:
 def component_5(fork: Fork, lane: Lane | None) -> tuple[list, list]:
     text = fork.text("ARCHITECTURE.md")
     if text is None:
-        return [], ["ARCHITECTURE.md is missing from the fork's root"]
+        return [], [no_document("ARCHITECTURE.md")]
     options = rejected_options(text)
     if options is None:
         return [], ["ARCHITECTURE.md has no section on the alternatives you rejected: a heading that says Rejected (or "
@@ -1015,14 +1025,14 @@ def component_5(fork: Fork, lane: Lane | None) -> tuple[list, list]:
 def component_6(fork: Fork, lane: Lane | None) -> tuple[list, list]:
     text = fork.text("COST-MODEL.md")
     if text is None:
-        return [], ["COST-MODEL.md is missing from the fork's root"]
+        return [], [no_document("COST-MODEL.md")]
     return cost_model(text)
 
 
 def component_7(fork: Fork, lane: Lane | None) -> tuple[list, list]:
     text = fork.text("FAILURE-MODES.md")
     if text is None:
-        return [], ["FAILURE-MODES.md is missing from the fork's root"]
+        return [], [no_document("FAILURE-MODES.md")]
     held, missing, proved = [], [], 0
     for title, symptom, commands in failure_modes(text):
         why = {c: unresolved(c, fork.targets, fork.has_file, fork.registry) for c in commands}
@@ -1047,7 +1057,7 @@ def component_8(fork: Fork, lane: Lane | None) -> tuple[list, list]:
     held, missing = [], []
     text = fork.text("RUNBOOK.md")
     if text is None:
-        missing.append("RUNBOOK.md is missing from the fork's root")
+        missing.append(no_document("RUNBOOK.md"))
     elif re.search(r"\bmake rollback\b|\bupdate-traffic\b", text):
         held.append("RUNBOOK.md says how to roll back")
     else:
@@ -1395,7 +1405,8 @@ class Handover:
                 + (f" and the lane `{lane.project}` in {lane.region} (the GPU services in {lane.slm_region})" if lane
                    else "; PROJECT= adds what the lane shows") + ". It read, and changed nothing. Each section gives "
                 "what the checkout states, then what the lane shows; where the two differ, the lane is what runs. "
-                "make handover writes the file whole each time: notes of your own belong in RUNBOOK.md.", ""]
+                "make handover writes the file whole each time: notes of your own belong in RUNBOOK.md, whose "
+                f"template is {TEMPLATES}/RUNBOOK.md.", ""]
         tail = ["## Not read", ""] + ([f"- {line}" for line in self.unread] or
                                       ["- nothing" if lane else "- the lane: no PROJECT was given"])
         return "\n".join(head + [line for section in body for line in section] + tail) + "\n"

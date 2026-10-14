@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_9.2_Ollama_SLM_WIX.html`, reviewed at blob `ef4d07a96774afec01f7a333d643d470b90ee1c3`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_9.2_Ollama_SLM_WIX.html`, reviewed at blob `4de49ae3c5f77833a3e1fae36b44334b4ce3272a`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 9.1's sensitive route has nowhere to go until a model runs behind it. The kit serves one with Ollama on a Cloud Run L4 GPU, always under one name, `documind-slm`. That model is either supplied (a GGUF and the Modelfile generated from its tokenizer) or a stock model from Ollama's library, which stands in until a supplied one exists. The model is built into the image, the service scales to zero, and the GPU bills for every minute an instance lives.
 

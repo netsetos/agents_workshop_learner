@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html`, reviewed at blob `f50d48f5099cec6ba6b7c768985d63d5fed77df4`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html`, reviewed at blob `af6ebe96dfa40ecb8375d62953ce2d347032a3e7`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 3.5 resolved the model's citations and checked one answer's quotes against their rows. This lesson checks a whole source's quotes the way the eval gate can: each quote looked for in the one passage it cites, read back from the same retrieval the answer drew on, with five verdicts. It also treats the prompt that asks for those quotes as a release. Its text has a sha256, its version is a label every answer carries, and a changed text under the old label fails a check that runs offline for Rs 0 and on every push. You will run both quote measures offline, check a source's quotes on your lane, weaken rule 5 in memory and then on a branch, ship it to a candidate that answers as `documind-rag@v4`, compare its quotes with v3's, find its rows, and take it down again.
 
@@ -52,7 +52,7 @@ The six passages stand in for the pool `/v1/passages` returns for lk-06's questi
 
 #### The version strip: prompt_pin's rule, live, and where the label goes
 
-The strip holds what `make prompt-version` reads: `SYSTEM` and `DATED_RULE` as `generator.py` sets them, `prompt_version` as `config.py` sets it, and the registry. It hashes the text with the same sha256, prints what `prompt_pin.py` would print, and follows the label to the places the service writes it. The first five cases are the states step 7 walks through; three more are cases the kit's own test checks, and the last is one space.
+The strip holds what `make prompt-version` reads: `SYSTEM` and `DATED_RULE` as `generator.py` sets them, `prompt_version` as `config.py` sets it, and the registry. It does not hold the registry's history in git, which `make prompt-version` also reads for the version it offers next (step 8). It hashes the text with the same sha256, prints what `prompt_pin.py` would print, and follows the label to the places the service writes it. The first five cases are the states step 7 walks through; three more are cases the kit's own test checks, and the last is one space.
 
 The sha256 is a JavaScript port, checked against Python's `hashlib` when this page was built, and the verdict lines are `prompt_pin.check()`'s, checked against the script itself on every case. The cache scope is `semantic_cache.scope_of()` for the UI's request, no filters and a top_k of 5. The strip reads nothing of your clone; `make prompt-version` does.
 
@@ -226,7 +226,7 @@ Removing the tag ends the candidate's URL. Deleting `.candidate-revision` means 
 
 #### v4 is spent
 
-The candidate is gone, and its rows are not: they say v4, for as long as Cloud Logging keeps them. So on this lane v4 names the summary rule, for good. Back on `main` the registry holds v3 alone, and `make prompt-version` would offer v4 again to the next change: a second text under a label that already names one. The kit's own test covers the case. v3 serving with v4's line kept passes the check, and the next change is then offered v5. On a team's repository that is why a candidate's registry line is merged even when the candidate is not; on your clone, the branch you kept holds it. The version strip's sixth case shows both: the next change, with v4's line and without it.
+The candidate is gone, and its rows are not: they say v4, for as long as Cloud Logging keeps them. So on this lane v4 names the summary rule, for good. Back on `main` the registry holds v3 alone, but `make prompt-version` never offers a label the registry has held in any commit your clone's git keeps: on any branch, in the reflog or in the stash. The branch you kept holds v4's line, so the next change on `main` is offered v5; this page's build made that change on `main` of its copy and was offered v5. The kit's own test covers the rest: v5 again once the branch is deleted, because the reflog still holds its commit, and v4 only where nothing git keeps has v4's line, as in a copy outside git. A candidate's branch on one laptop is not in a teammate's clone, so on a team's repository a candidate's registry line is still merged even when the candidate is not. The version strip reads the file alone, as a copy outside git would: its sixth case shows the next change with v4's line and without it.
 
 #### What it costs
 

@@ -5,63 +5,63 @@
     {
       "lesson": "B.1",
       "title": "Run Python the way the kit does: venvs, JSON and HTTP calls",
-      "source_sha": "fe81b0793d7a3a26d687b7526e59381abd9fd90b",
+      "source_sha": "2964048d379f1d911bd36318b2cf1e1611552e38",
       "source_kind": "main_html",
       "demos": 5
     },
     {
       "lesson": "B.2",
       "title": "Turn text into tokens and embeddings",
-      "source_sha": "1395591d92dec2c9a56f1342d31a0d356441f8a6",
+      "source_sha": "d39a03fcaf60336b4630bbb10cf49763b2c2c47d",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "B.3",
       "title": "Read a transformer block, with layer normalization",
-      "source_sha": "8a7a005243dfd1f5be3db61c27dc263c3c01451f",
+      "source_sha": "56dcf35da6845bea8b04332ae803fdc70522f633",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "B.4",
       "title": "Encode with BERT-style models: embeddings and rankers",
-      "source_sha": "f74e018047caf9355b8dfb815924ad262624bc98",
+      "source_sha": "183ac279f9bf8ecd6e63246bba00999bb29a4de8",
       "source_kind": "main_html",
       "demos": 4
     },
     {
       "lesson": "B.5",
       "title": "Generate with GPT-style models: decoding and run-to-run variance",
-      "source_sha": "77d7dca417a3c1975ede40797118ccfe48266564",
+      "source_sha": "2772b14ece742c5d88e2edbbee55631b86886009",
       "source_kind": "main_html",
       "demos": 5
     },
     {
       "lesson": "0.1",
       "title": "Set up the Google Cloud billing account, budget and project",
-      "source_sha": "e5942beb5af237a1bae016533190895a266f26a6",
+      "source_sha": "c6a33964dd6af4f84535f1f0e94d05b167dea941",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "0.2",
       "title": "Reproduce the local environment, read the master diagram and prove a first success",
-      "source_sha": "2ad4c3d7d7f1dae3774e516ca68d63c5245db383",
+      "source_sha": "0073164967439b3e40a6f6955a23aea7128aa104",
       "source_kind": "main_html",
       "demos": 4
     },
     {
       "lesson": "0.3",
       "title": "Understand the project, identities and resource map, and deploy the lane",
-      "source_sha": "60e083f2ea735e186506e72b5401ae25d0327111",
+      "source_sha": "bed26f223483fe13e7029ce8eb7cac21110a90df",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "0.4",
       "title": "Prove the lane, break it once, and switch it off",
-      "source_sha": "291b440e580eb85652476a3e6cb256323635d340",
+      "source_sha": "c28fb9ec41954f3fe7442eecddca55e7e2879d87",
       "source_kind": "main_html",
       "demos": 14
     },
@@ -75,595 +75,595 @@
     {
       "lesson": "1.2",
       "title": "Parse documents and compare chunk boundaries",
-      "source_sha": "b099dbefa1a1ac6ed8c033e6e86ca49edce9f313",
+      "source_sha": "81377701a6c00ffd961946301ab13592d0df1175",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "1.3",
       "title": "Create and validate compatible embeddings",
-      "source_sha": "1ebec17a6951bbbf35c78118b7308c52817d7c5a",
+      "source_sha": "331d4265a5226c685ed912284b8c7d6c03da65df",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "1.4",
       "title": "Write, inspect and verify indexed records",
-      "source_sha": "25ca420f96d82cacd1aeaffd37bdfde92039ecbe",
+      "source_sha": "35d1ef6100104783e218b88c6bfee2bd2d24772a",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "1.5",
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
-      "source_sha": "4bbdae1a635b605b50d6d0445d501cad4b7beee0",
+      "source_sha": "a5ee48f2f82139bc413b1ee30bf237ab416fbd18",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "1.6",
       "title": "Reindex a changed section and measure embedding reuse",
-      "source_sha": "a687d81609b23483c7d84b8575ae6615b57d9f0c",
+      "source_sha": "ef37aacb077a5f65a22e00add4f5966dda56c163",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "1.7",
       "title": "Publish versions, retire documents and reject stale events",
-      "source_sha": "3fc7051907aad57df30bf22596ebd56a662a00ac",
+      "source_sha": "9d9079026f91a68b0b2e43907d5109b3a5aaf36e",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "1.8",
       "title": "Restore documents and reconcile index differences",
-      "source_sha": "8889e75f35fcc52db957363e2e142eb5b523f6d8",
+      "source_sha": "d7611c7142d85f09b46976f186e320a40d9eb8f4",
       "source_kind": "main_html",
       "demos": 14
     },
     {
       "lesson": "2.1",
       "title": "Apply query embeddings and authorized filters",
-      "source_sha": "d87702c772274382d96c92309e4db9d8679c638a",
+      "source_sha": "dd8de670cec9841b93e3e81812fe3f30d9d32a51",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.2",
       "title": "Compare dense and hybrid retrieval",
-      "source_sha": "fce7ebd0e25935eb19ecf351a873a457e6fee3cc",
+      "source_sha": "32d9480609fc98d218f514f9ccb9f2cb09b076b6",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.3",
       "title": "Rerank and inspect retrieved candidates",
-      "source_sha": "070a1c9acdbcf7e274747a69a8bb2b86c96fbc82",
+      "source_sha": "8a84797a1c88a0c31e8991f49d2ca6bd8fa4a3af",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.4",
       "title": "Test fallback without losing tenant or metadata filters",
-      "source_sha": "fc9115e7693b7a3af4ab9f5c5711b8b67aea351b",
+      "source_sha": "0af2e5b2b8878df30d9e340f23624b318199fe41",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.5",
       "title": "Rewrite the query before retrieval, and measure it",
-      "source_sha": "e834ec75151063cb0e865fed7a4c47e9fa8b0f28",
+      "source_sha": "55dbd64e0bb1f0dea650430df968280eb5b457f8",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.6",
       "title": "Decide answer-or-refuse with a System One model (Jev)",
-      "source_sha": "1a8b4569c0efebe86e7910d26e538ef2914bd3b5",
+      "source_sha": "6f80e3408ee4fb35964a833eae1de1849ec8d13c",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.1",
       "title": "See run-to-run variance and thinking levels in the same prompt",
-      "source_sha": "d207fd216fcf175508eb192e0e046d077f4693c9",
+      "source_sha": "a05b177935767e6d4412a41782001c53c305ff58",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.2",
       "title": "Prompt with chain of thought and few-shot exemplars",
-      "source_sha": "09f62e59c8f6369e3eced7b47a7ddadd090aaeff",
+      "source_sha": "d44e0ec621b36bfc022c8547e695ede9968b6382",
       "source_kind": "main_html",
       "demos": 11
     },
     {
       "lesson": "3.3",
       "title": "Recognise prompt failure modes and fix them in the prompt",
-      "source_sha": "cc7d3c6f2a0e46668fd82a37d85e6fba1029a22d",
+      "source_sha": "523eb4aabab7176b822bdbb3e076fa4145b54e9e",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
-      "source_sha": "3cd6df0de649ad7d6598cd5da10c3fa8c9c27220",
+      "source_sha": "141455183347be8ca6a2dd9008ba15857f52eb67",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.5",
       "title": "Generate structured answers, citations and refusals",
-      "source_sha": "cd06f6da0ee9cdd6b203bddc208daadf3494490b",
+      "source_sha": "596350478947bf3dadebf0550651b8ee6c217c31",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.6",
       "title": "Check quotes and version prompts",
-      "source_sha": "f50d48f5099cec6ba6b7c768985d63d5fed77df4",
+      "source_sha": "af6ebe96dfa40ecb8375d62953ce2d347032a3e7",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.7",
       "title": "Stream answers and handle failures",
-      "source_sha": "bd95ee4c0aed5d6c7ad2ac5b6edccc2149fef824",
+      "source_sha": "bdb5f025e89e2860ccd41b780630ffe74e263b4b",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.8",
       "title": "Complete the Streamlit upload-to-answer journey",
-      "source_sha": "04eff0d81a73201035219835076b61b7ee3ddb9f",
+      "source_sha": "933380e91692fd3b2c828ff24db7e4aa19b1b192",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "3.9",
       "title": "System design: a fact-checking system built from DocuMind's parts",
-      "source_sha": "4f90969f4077fb364fe35e4f7ac870458fcb4021",
+      "source_sha": "8de19e87acd8749661dd854cc4882ed967b5bbb7",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "4.1",
       "title": "Build a useful evaluation dataset",
-      "source_sha": "1842ef7a3c0ff2277b8154be660b88709080a151",
+      "source_sha": "fc581066160f6487d37a0babaa96bafe1edc34fb",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "d4f2908a19ad29e2f5d01c93d24c9fd39ffe5e7b",
+      "source_sha": "c26b42747346c206dc04138c93891585f612ae8f",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.3",
       "title": "Place evals in the pipeline: CI, the candidate gate and live traffic",
-      "source_sha": "fa065738aa8c1e457005a690533c8e0446fc39d7",
+      "source_sha": "58bef69de2d9e0f81fd613bc4b4801ccfb346ae7",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.4",
       "title": "Compare one controlled change against a baseline",
-      "source_sha": "97d97638098f6e3f140aba7bc44e9edda7bc2aa0",
+      "source_sha": "1d96e75612c048af34839c14cbc590f8a5bcbf8c",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.5",
       "title": "Check the LLM judge against people",
-      "source_sha": "7e8b44daf16b794b654f1785a85dbb416d542676",
+      "source_sha": "8dc666fbda93dd549d36b34d5c666c603e8a9e7a",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.6",
       "title": "Trace authenticated identity into tenant membership",
-      "source_sha": "68df6795d0127a075315d621003ac5db51aa9805",
+      "source_sha": "1fce1a69cd74bb353d3fd5c51f51f4f589f58dcb",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.7",
       "title": "Test valid access, denied access and cross-tenant requests",
-      "source_sha": "af7968ba7b37b06283c139e316adcd2049e9156c",
+      "source_sha": "5f76286d02fc0558964b62f82d2c5ba29a1318c7",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "4.8",
       "title": "Exercise DLP, guardrails and audit behavior",
-      "source_sha": "af30f5270404da072508dd4f82451437005d803a",
+      "source_sha": "b2f5cb46737991055dc2c816ed3298c1fde06029",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "4.9",
       "title": "Read the failures first, then attack your own pipeline",
-      "source_sha": "e61ba25bd35ef7b0073b8c75696ae736247c0b41",
+      "source_sha": "fa8e5603553bd88010d7fc386e767f9d1c48d7cf",
       "source_kind": "main_html",
       "demos": 13
     },
     {
       "lesson": "5.1",
       "title": "Understand tool contracts and the direct agent loop",
-      "source_sha": "f6e5d55800d0afe3bf267a756bde730e42504301",
+      "source_sha": "d4307be0cfde46bad14dd67a0a07dc509fa1c8d0",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "5.2",
       "title": "Expose, discover and invoke MCP tools",
-      "source_sha": "5bd9a8170b319741b49686069aaeee93daf89d9e",
+      "source_sha": "c8d94db34e2bd24045e0c60768c637d37f426c68",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "5.3",
       "title": "Deploy MCP and verify authorized access",
-      "source_sha": "84a7e098461d32a587731e9d8ffc358d0dd77573",
+      "source_sha": "b31eaecfb0c4d3b1fcb106f6f3bdfa471a08a5dc",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "5.4",
       "title": "Implement the main LangGraph workflow",
-      "source_sha": "0f0a7699c5f7e6eb5b1785fcdc570c29b0198022",
+      "source_sha": "05b921c513d13f730d0c0a5e6e6d3edc1cd05705",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "5.5",
       "title": "Diagnose tool arguments, access failures and timeouts",
-      "source_sha": "6dcbc2f14c5d37accbe4c294fd7ae86442435553",
+      "source_sha": "231353ae70fcc3a72fa7234c1a540311a4f88b3e",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "5.6",
       "title": "Hand a question to the person the law names",
-      "source_sha": "ffa6d70e006958e3f835fa26f78e425518dd3f27",
+      "source_sha": "d41b06026831d76b5b450c3369ea00f4f4c42666",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "5.7",
       "title": "Compare the LangChain and ADK adapters",
-      "source_sha": "38fb9d89de6f76a3929d154aa4d2e3b39a759159",
+      "source_sha": "7b788e47fb381194f1e5727a02e66f3807706416",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "5.8",
       "title": "Pause, approve, clarify and escalate: human in the loop",
-      "source_sha": "422a193e3eb710d0d2a72b9f3587e3f30eb0a19a",
+      "source_sha": "e4f5251946e9173b1c0555451a11ffdeaa9dec61",
       "source_kind": "main_html",
-      "demos": 8
+      "demos": 9
     },
     {
       "lesson": "6.1",
       "title": "Assemble the context: what rides every model call",
-      "source_sha": "594be6f52056d8b61fa8c4a62edc9f9f1c7ac99a",
+      "source_sha": "c0806f267e1ee0a96894843654d25b90b5c7fe8b",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "6.2",
       "title": "Compare context caching and answer caching",
-      "source_sha": "284b3d1a5e06fb05d95f4041b98fddba477df25b",
+      "source_sha": "f6e45963618ac1bbc22713ae43454621e0c2cc89",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "6.3",
       "title": "Test cache scope, configuration changes and freshness",
-      "source_sha": "42a67f4e01b8e91ddac46f96e60590b66df457d6",
+      "source_sha": "167e07d4c13a49cc781f0cc1d94fa46731f34b7f",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "6.4",
       "title": "Measure latency, avoided calls and false cache hits",
-      "source_sha": "afcbff09c9738c4e6b84e3080c2c49c6941152f9",
+      "source_sha": "a112d661471b3f2686dec1dff812130d94369f00",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "6.5",
       "title": "Distinguish agent state, conversation history and knowledge",
-      "source_sha": "a4df41e28a582704ba318ce387bc1df09b3dfddb",
+      "source_sha": "3d699c928bafbead2e60d2b52e59eb316dee14bc",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "6.6",
       "title": "Configure and inspect durable conversation storage",
-      "source_sha": "3f82eb1abf6a809f82f7d6b46288248b73c26c3e",
+      "source_sha": "25c4d53dc6bc01bd5c65dfbd52cecc2c98cf3b11",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "6.7",
       "title": "Verify restart recovery and session isolation",
-      "source_sha": "7220ffa4bff89e61f6a508a13b032fb08f8673ac",
+      "source_sha": "3cdf1fcd8add63eee20286da738477cc27fc56d5",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "6.8",
       "title": "Resume a paused or cut-off turn: checkpoint and resume",
-      "source_sha": "a6931d53fb81f98c504e620596d41eae646ecd37",
+      "source_sha": "348f42b5d8a0f3bd6fa7cd9413e7e42fd83d5a0f",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "6.9",
       "title": "Budget working memory: windowing, compaction and write rules",
-      "source_sha": "1d587064f7681dd27c53e803d5f79ed25bfb31c0",
+      "source_sha": "56fa31879a33efc1fa05ce81582f42396eff58e2",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "7.1",
       "title": "Build graph evidence from source documents",
-      "source_sha": "ce68fb1aaf2d3f04172a25e69ed3b5880f13a267",
+      "source_sha": "81611d9527aceb1f3116e7a0b7d65b46cd1bdffc",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "7.2",
       "title": "Compare Firestore and Spanner graph paths",
-      "source_sha": "1a20d1bb8fa54cb05200972a3aeeeb45d4c3e58d",
+      "source_sha": "46eda3522cc7af03de4e438c5717720fff223156",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "7.3",
       "title": "Configure and query managed retrieval mirrors",
-      "source_sha": "66ef89e9ce840a9eff905ec94d08298a7c546b81",
+      "source_sha": "94c366ffad95324f024faeaeaadc06861d9997e2",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "7.4",
       "title": "Compare quality and test update/withdrawal freshness",
-      "source_sha": "52a2208d70780892bee65299e6a93e78318165ff",
+      "source_sha": "7e30ad1308612c121cb24f9d7194951403f114d4",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "7.5",
       "title": "Query a video clip and validate media citations",
-      "source_sha": "139fc0392978c735a000f0aed33bb4a541f5ad5a",
+      "source_sha": "fd822b039e6b007712aa443f07198bd895fc3374",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "7.6",
       "title": "Exercise implemented Studio and voice features",
-      "source_sha": "fbbf9c146875e365f93128d312d1b7bed2f13340",
+      "source_sha": "79983d36f03a09338b8d50d215e0b0219ae40a1a",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "8.1",
       "title": "Run the ingest events through Pub/Sub, mapped to Kafka",
-      "source_sha": "68574285615aa236a1f361df759f8a2b6a9d97fd",
+      "source_sha": "1e9a96b64334dbc3d0d7d57f73ef634d3ecaaa83",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "8.2",
       "title": "Change a chunker, re-embed and reconcile",
-      "source_sha": "13e76208470bc6126020b2e958f6edcaec801e57",
+      "source_sha": "5111868eecf916b3400fd9d5899661c81313622a",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "8.3",
       "title": "Size RAG for ten million documents",
-      "source_sha": "76957b542253a733755bf0dc407b4615ef96ec9b",
+      "source_sha": "1c3caa585c3e732c014c8b0ab3a1df7a2f200cb0",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "8.4",
       "title": "System design: a self-updating documentation platform",
-      "source_sha": "4b0f37c6fcb49fcc770a10b14ceba99c59bf1fb2",
+      "source_sha": "84d0e937ed8f263a6f0838649ecb9372dcec6dd5",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "9.1",
       "title": "Trace and authorize gateway routes",
-      "source_sha": "30740fa186a22ed90c835763dc109fdeb2bf0409",
+      "source_sha": "11a84368378696ddb45d169da2cdabbf7a8e42b6",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "9.2",
       "title": "Serve a supplied or stock model using Ollama",
-      "source_sha": "ef4d07a96774afec01f7a333d643d470b90ee1c3",
+      "source_sha": "4de49ae3c5f77833a3e1fae36b44334b4ce3272a",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "9.3",
       "title": "Inspect the vLLM service and the GKE alternative",
-      "source_sha": "383d76df919ed8e9e3c09d023f05584889c7ce6d",
+      "source_sha": "33e28b650787200d6026d4727919e647b2e608ca",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "9.4",
       "title": "Compare actual backends and verify shutdown behavior",
-      "source_sha": "6279d8ef22f2b880414191dd9de3f5b9b4db124f",
+      "source_sha": "1ea91312fa91d3a1ea242c8c3708b51d41943a03",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "10.1",
       "title": "Choose where the agent reasons: observe-think-act and ReAct",
-      "source_sha": "42d0d48399a2cd1f55aa582686b0c124eb954290",
+      "source_sha": "222da83d6de50d7502063423e3eae648e7011723",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.2",
       "title": "Plan first or decide each step: plan-and-execute",
-      "source_sha": "1c221ad642224a52fe8a4855dbdb4d9cd200c9eb",
+      "source_sha": "218b8f84affa0cedb42850bbd399dbcadf64f97d",
       "source_kind": "main_html",
-      "demos": 9
+      "demos": 11
     },
     {
       "lesson": "10.3",
       "title": "Check, retry or choose: the critic and refiner pattern",
-      "source_sha": "e1ff4a2dcd168c9b3c61e4c8e08a04973b3224c2",
+      "source_sha": "7dea9d7ffd5ff9269e2969481d0cd7d3175ff4e8",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.4",
       "title": "Route each question to one specialist agent",
-      "source_sha": "03242e524bd39dd3ceff5c2e0518c22d2e49a24c",
+      "source_sha": "fb0fdd1cf3b45733960ccf5b38e7363318a69ca4",
       "source_kind": "main_html",
       "demos": 14
     },
     {
       "lesson": "10.5",
       "title": "Run a desk as an agent with checked calculator arguments",
-      "source_sha": "1e34ae2bd0baeb594eedc9489841cfdd33907d27",
+      "source_sha": "c28dde874c47f9fe22a3fa07eca871da38a48b53",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "10.6",
       "title": "Trace the implemented A2A peer and its permissions",
-      "source_sha": "fb1b77e9f4b5d7d5197b4771bebf070688ac2ab4",
+      "source_sha": "198a39c4324f3bc579cba2d462e705ee3292516e",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "10.7",
       "title": "Hand one question to the A2A peer, and stop loops and deadlocks",
-      "source_sha": "bbc7b0feac324ae6df0cfc4fca05ac6b7578314a",
+      "source_sha": "687e6663142d3602ab105d211e0fa11b3981a1f8",
       "source_kind": "main_html",
-      "demos": 11
+      "demos": 12
     },
     {
       "lesson": "10.8",
       "title": "Defend agents against injected documents and poisoned tools",
-      "source_sha": "c4404c15474ecb279d03853b2427247bc4d373e6",
+      "source_sha": "9dda413a7d859711b54c6c98302b7353f3f08b27",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "10.9",
       "title": "Run the peer on Google's managed agent platform",
-      "source_sha": "a30d39f86a43c481a7a8c96a15d0f90c2d992469",
+      "source_sha": "b1e042febecc4ac43357ffb2c6605c2c20722e94",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "10.10",
       "title": "Coding agents: a Ralph loop, an AI code reviewer and paper-to-code",
-      "source_sha": "417e6f409fc5d8e1f9abd00c6d6d9649a087de75",
+      "source_sha": "a1bd16fe4703dea8f9eed3f91673c0ae26b724c2",
       "source_kind": "main_html",
       "demos": 11
     },
     {
       "lesson": "10.11",
       "title": "System design: incident auto-remediation",
-      "source_sha": "03140ad39ae7045b92d7099e198148ed5e019940",
+      "source_sha": "05a7640fa25b236c78e6696879fc67de8b6e8121",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "11.1",
       "title": "Build and deploy using keyless identity",
-      "source_sha": "a5c38ec0f6f77200e77afe4d20b1253726a5665c",
+      "source_sha": "0a16fdda4d80228bb8a9aa267df47270f00664a7",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "11.2",
       "title": "Evaluate and gate the exact candidate revision",
-      "source_sha": "e601d99d9d0ad431f4f5e8ba6f1a24939cb8cefd",
+      "source_sha": "152ac804748a58d0a5778fb46d9f0e5cff934ba5",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "11.3",
       "title": "Promote, roll back and repair a controlled failure",
-      "source_sha": "94904773068b4304a98737b11cbb33d8abc23340",
+      "source_sha": "2acaf24d3e3c8c6c2055b23e813d1010af7a06ae",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.4",
       "title": "Debug a wrong answer through the complete pipeline",
-      "source_sha": "7449ad397b6297eacbbdc4e2f9efd8e24b0f6a5d",
+      "source_sha": "db37cce668e8bbbb0c8fab353b899ca540d5e0b2",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.5",
       "title": "Reconcile usage events, reports and alerts",
-      "source_sha": "f7064bb5d693cc1baf873d3389be6b6a2b2e3ab5",
+      "source_sha": "654b691b5244f7911ed115be66903ad6c203ce7c",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.6",
       "title": "Exercise model routing, budgets and shutdown controls",
-      "source_sha": "7d2d39676abfdd32aca8e43689880c544e1b0219",
+      "source_sha": "55c0b175d5563a305151ab5269454da9db8dba49",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.7",
       "title": "Reproduce the agent failures production shows and no eval row does",
-      "source_sha": "d773e65a64c007e202b5b3b1d99e9a6d3c1ef352",
+      "source_sha": "aab33582d3f9c2a9bac670f28f7b6bf765026bf4",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "11.8",
       "title": "Complete the independent capstone and operational handover",
-      "source_sha": "311d6f3959f0a3a28a0a7ee5182a081bbef52e56",
+      "source_sha": "63db39769430dcf168f0eba43639cdcf3b51484b",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "12.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "e30d0fa19a2e1b07b5cd5d59ae35b55a8d11f3fc",
+      "source_sha": "32d9b972ba8f5516cabc6503cf2ac37a9af23e34",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "12.2",
       "title": "Validate sanitized datasets and run managed tuning",
-      "source_sha": "8d2fab91ee14935e4fdd422af3798cf76a95b6f7",
+      "source_sha": "4b401eb32244b247df4be8c41d13ce757ac85c97",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "12.3",
       "title": "Compare the tuned candidate with an uncontaminated baseline",
-      "source_sha": "e3769dadf077866b253e3d7b0882e1ca651d1069",
+      "source_sha": "c49db8249599749712b6018dfa45f61686eef074",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "12.4",
       "title": "Improve the agent safely: eval-gated self-improvement",
-      "source_sha": "c2200db64f3720f98ed624ad9834a1b277f4a142",
+      "source_sha": "44e9604ac1d956bad95a45a31b9fb03d6504a13a",
       "source_kind": "main_html",
       "demos": 12
     }

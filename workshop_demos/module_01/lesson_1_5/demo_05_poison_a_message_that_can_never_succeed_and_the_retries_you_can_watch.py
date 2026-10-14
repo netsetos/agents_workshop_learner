@@ -3,8 +3,8 @@
 The first block uploads the empty PDF and waits for the worker's first refusal; it prints the validation error the worker logged. Leave a few minutes, then the second block lists every POST the subscription made and every refusal the worker logged since. Note the gaps between the timestamps.
 
 Run order inside this file:
-1. Do it: start the drill, then watch the first retries (source window 19)
-2. Do it: start the drill, then watch the first retries (source window 21)
+1. Do it: start the drill, then watch the first retries (source window 20)
+2. Do it: start the drill, then watch the first retries (source window 22)
 
 Prerequisites: demo_04_the_verdicts_the_http_code_rule_and_your_last_upload_s_request_log.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -25,6 +25,12 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
+# Original CLI workflow for step_01_start_the_drill_then_watch_the_first_retri.
+COMMANDS_01 = """export POISON_SINCE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+make poison PROJECT=$PROJECT TENANT=acme
+
+"""
+
 def step_01_start_the_drill_then_watch_the_first_retri(session):
     """Run Do it: start the drill, then watch the first retries at this checkpoint.
 
@@ -42,8 +48,8 @@ def step_01_start_the_drill_then_watch_the_first_retri(session):
       Input should be greater than or equal to 1 [type=greater_than_equal, input_value='0', input_type=str]
     >> Pub/Sub retries a non-2xx with backoff (10 s to 600 s, twelve attempts: eventarc.tf), then ingest-dlq: make dlq about an hour after this line
     """
-    from workshop_helpers.poison import create_drill
-    create_drill(session)
+    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_start_the_drill_then_watch_the_first_retri.
 COMMANDS_02 = """gcloud logging read "resource.type=\\"cloud_run_revision\\" AND resource.labels.service_name=\\"documind-ingest\\" AND logName=\\"projects/$PROJECT/logs/run.googleapis.com%2Frequests\\" AND httpRequest.status=400 AND timestamp>=\\"$POISON_SINCE\\"" \\
@@ -77,8 +83,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_19', step_01_start_the_drill_then_watch_the_first_retri),
-        ('source_21', step_02_start_the_drill_then_watch_the_first_retri),
+        ('source_20', step_01_start_the_drill_then_watch_the_first_retri),
+        ('source_22', step_02_start_the_drill_then_watch_the_first_retri),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -1,6 +1,6 @@
 """Lesson 8.1: Verify it yourself: the checklist
 
-Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
+Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
 
 Run order inside this file:
 1. Verify it yourself: the checklist (source window 41)
@@ -32,7 +32,7 @@ COMMANDS_01 = """make retire PROJECT=$PROJECT SOURCE=acme/pubsub_trace_note.md
 def step_01_verify_it_yourself_the_checklist(session):
     """Run Verify it yourself: the checklist at this checkpoint.
 
-    Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
+    Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit, when the lesson is done (withdraws the note; reversible with make restore).

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_8.2_Rechunk_Reembed_WIX.html`, reviewed at blob `13e76208470bc6126020b2e958f6edcaec801e57`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_8.2_Rechunk_Reembed_WIX.html`, reviewed at blob `5111868eecf916b3400fd9d5899661c81313622a`. Learners read that page on the course site; this guide keeps its prose.
 
 The kit cuts every text document into chunks of up to 2,000 characters, and it says so in two places: once in the ingest worker, which cuts what the lane indexes, and once in the module the notebooks, the Rs 0 lane and the offline checks share. This lesson changes the chunk size and its overlap to 400/50 in both places, with a test that fails if only one is changed, and follows the change through a real deploy: a worker built under its own image tag, the handbook re-issued so the new rule cuts it, the counts of what was reused and what was embedded, the ledger walked against the bucket, the handbook's golden questions asked again, and the original image put back.
 
@@ -202,9 +202,9 @@ The lane's rows carry the embedding model and its version, but no field names th
 
 The ledger row is a summary. The rows are the evidence: the cell counts the handbook's rows by version and state, finds the longest current row, and checks whether two current rows hold version 1's vectors: `NP-03`, which the new rule left whole, and `GEN-003`, which it cut. Then it counts every tenant's current rows in Firestore and reads the Vector Search index's own count.
 
-Expect the new version current with 555 rows and version 1 retired with 283, beside any older version whose 30 days have not run out; the longest current row at 368 characters; `NP-03`'s current hash equal to version 1's and `same vector: True`, because the worker copied it; `GEN-003`'s different, `same vector: False`. The index's count should equal Firestore's current rows once the stream has caught up, which takes a few minutes after an ingest. It can be higher by the chunks of a source withdrawn by hand, or retired by the walk when its object left the bucket: both retire the rows and tell the managed stores, but neither removes the datapoints from the index, as the kit's code shows. Only the worker's swap and undo remove them. If you ran lesson 8.1's last step, expect the note's chunks in the difference.
+Expect the new version current with 555 rows and version 1 retired with 283, beside any older version whose 30 days have not run out; the longest current row at 368 characters; `NP-03`'s current hash equal to version 1's and `same vector: True`, because the worker copied it; `GEN-003`'s different, `same vector: False`. The index's count should equal Firestore's current rows once the stream has caught up, which takes a few minutes after an ingest. A source withdrawn by hand, or retired by the walk when its object left the bucket, leaves the index too since 13 October 2026: the rows are retired, the managed stores told, and the retired ids removed with the worker's own `remove_datapoints()`, as the kit's code shows. Before that date only the worker's swap and undo removed them, so on a lane that withdrew or retired a source on an older kit, lesson 8.1's note among them, the count can still be higher by that source's chunks.
 
-The retriever drops such a datapoint after the search, because its row is no longer current, so answers stay right; but the count is not the ledger's, and the walk does not look.
+The retriever drops such a leftover datapoint after the search, because its row is no longer current, so answers stay right; but the count is not the ledger's, and the walk does not compare the two.
 
 #### The gate: the handbook's golden rows, asked again
 

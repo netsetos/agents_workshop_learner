@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html",
-  "source_sha": "f50d48f5099cec6ba6b7c768985d63d5fed77df4",
+  "source_sha": "af6ebe96dfa40ecb8375d62953ce2d347032a3e7",
   "shared_setup_windows": [
     1
   ],
@@ -520,7 +520,7 @@
           "subheading": "Do it: name it v4, register it, and check again",
           "purpose": "The cell sets the version and adds the line, taking the sha256 from prompt_pin's own reader of the two strings, so the registry gets exactly what the check will compute. Then the check, and the unit test the dry run runs on every push of the learner repository.",
           "label": "bash — run in the operator shell, in the kit (two more files edited; then the check and the unit test the dry run runs)",
-          "expected": "services/rag-api/config.py: prompt_version v4\nservices/rag-api/prompt_versions.json: \"documind-rag@v4\": \"269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\"\npython commands/prompt_pin.py\nprompt:   documind-rag@v4 (services/rag-api/config.py: prompt_id@prompt_version, as /version reports it)\ntext:     SYSTEM + DATED_RULE, 601 characters, as generate() joins them (services/rag-api/generator.py)\nsha256:   269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\nregistry: documind-rag@v4 has this sha256 (services/rag-api/prompt_versions.json): the text is the one its version names\nexit 0\n......\n----------------------------------------------------------------------\nRan 6 tests in 0.xxxs\n\nOK",
+          "expected": "services/rag-api/config.py: prompt_version v4\nservices/rag-api/prompt_versions.json: \"documind-rag@v4\": \"269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\"\npython commands/prompt_pin.py\nprompt:   documind-rag@v4 (services/rag-api/config.py: prompt_id@prompt_version, as /version reports it)\ntext:     SYSTEM + DATED_RULE, 601 characters, as generate() joins them (services/rag-api/generator.py)\nsha256:   269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\nregistry: documind-rag@v4 has this sha256 (services/rag-api/prompt_versions.json): the text is the one its version names\nexit 0\n.......\n----------------------------------------------------------------------\nRan 7 tests in 0.xxxs\n\nOK",
           "adaptations": [],
           "id": "source_43",
           "function": "step_03_name_it_v4_register_it_and_check_again",

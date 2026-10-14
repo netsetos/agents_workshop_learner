@@ -362,6 +362,15 @@ def shape(messages: list) -> dict:
 
 def compare(recorded: list, replayed: list) -> str:
     a, b = shape(recorded), shape(replayed)
+    n = len(a["steps"])
+    if a["answer"] is None and b["answer"] is not None and b["steps"][:n] == a["steps"] and n < len(b["steps"]) \
+            and b["sources"][:len(a["sources"])] == a["sources"]:
+        # A recording cut off mid-turn, matched step for step and then finished: nothing the recording holds differs
+        # (13 October 2026: this printed "differs", for the steps, sources and answer it never reached).
+        found = sum(map(len, b["sources"]))
+        return (f"the replay matches the recorded turn as far as the recording goes: the same steps "
+                f"({', '.join(a['steps'])}), then it finished the turn ({', '.join(b['steps'][n:])}), with {found} "
+                f"citation{'s' if found != 1 else ''} and an answer")
     same = {k: a[k] == b[k] for k in a}
     found = sum(map(len, b["sources"]))
     parts = [f"{'the same' if same['steps'] else 'different'} steps ({', '.join(b['steps'])})",

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_1.3_Embeddings_WIX.html`, reviewed at blob `1ebec17a6951bbbf35c78118b7308c52817d7c5a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_1.3_Embeddings_WIX.html`, reviewed at blob `331d4265a5226c685ed912284b8c7d6c03da65df`. Learners read that page on the course site; this guide keeps its prose.
 
 A chunk becomes searchable the moment it has its 768 numbers. This lesson opens the step that makes them in DocuMind: which model, under which task profile, how many texts per request, what is stamped on the row so the lane can tell its own vectors from anyone else's, and how a re-issued document keeps the vectors of every clause that did not change. You will read the stamp off a real row, validate every row of a tenant with the kit's own function, re-issue the handbook and watch 281 vectors carry over while 2 are made, then undo it for nothing.
 

@@ -1,10 +1,11 @@
-"""Offline checks for workshop lesson 5.8's person in the loop: services/chat/approval.py, which the chat service does
-not import (no route, brain or switch reaches it).
+"""Offline checks for workshop lesson 5.8's person in the loop: services/chat/approval.py, which the chat service reaches
+through one module, services/chat/approval_routes.py, behind tenant_settings.agent_actions = approval (off until an
+operator sets it; commands/tests/test_approval_wired.py covers that side).
 
     python -m unittest commands/tests/test_approvals.py -v          # from deploy/
     make approval-check                                              # the same, in ~/graph-venv with the pins
 
-The first class needs only the standard library: nothing in the service imports the module, it writes no audit
+The first class needs only the standard library: one module in the service imports approval.py, it writes no audit
 event (workshop lesson 4.8 counts every emitter), and make, its script and both CI chat-pins steps run this file. The
 second runs the module on scripted models, a stand-in rag-api and a fake Firestore that records any write: the pause;
 a second process resuming the turn from the same SqliteSaver file; the requester's own approval refused; a rejection
@@ -179,12 +180,15 @@ class Wiring(unittest.TestCase):
     def read(self, *parts) -> str:
         return KIT.joinpath(*parts).read_text(encoding="utf-8")
 
-    def test_nothing_in_the_service_imports_the_module(self):
+    def test_one_module_in_the_service_imports_it_behind_the_switch(self):
+        """Since 13 October 2026 (workshop lesson 5.8's wired approval) approval_routes.py imports the module, and
+        agent.py reaches it through that module alone, behind tenant_settings.agent_actions = approval."""
         importers = [p.relative_to(KIT).as_posix() for p in (KIT / "services").rglob("*.py")
                      if p.name != "approval.py" and "__pycache__" not in p.parts
                      and re.search(r"^\s*(?:from approval import|import approval\b)", p.read_text(encoding="utf-8"), re.M)]
-        self.assertEqual(importers, [])
-        self.assertIn("NOTHING IN THE SERVICE IMPORTS THIS MODULE.", SRC)
+        self.assertEqual(importers, ["services/chat/approval_routes.py"])
+        self.assertIn("THE SERVICE REACHES THIS MODULE THROUGH ONE SWITCH, OFF UNTIL AN OPERATOR SETS IT.", SRC)
+        self.assertIn('SWITCH, ON = "agent_actions", "approval"', self.read("services", "chat", "approval_routes.py"))
 
     def test_it_writes_no_audit_event(self):
         """Workshop lesson 4.8 lists every audit action the kit writes, from the emit literals in its runtime files
@@ -363,7 +367,7 @@ class Approvals(unittest.TestCase):
         self.assertEqual(out["__interrupt__"][0].value["refused"],
                          ["the person who asked cannot approve their own request: a second person must"])
         self.assertEqual(a.paused(g, cfg("own")), waiting)
-        with self.assertRaises(PermissionError):                         # may_approve: who else may (a role, later)
+        with self.assertRaises(PermissionError):                         # may_approve: who else may; roster_rule below
             a.decide(g, cfg("own"), [{"type": "approve"}], by=OTHER, context={"withdraw": withdraw},
                      may_approve=lambda tenant, email: (tenant, email) == (TENANT, SECOND))
         with self.assertRaises(PermissionError):                         # nobody named
@@ -372,6 +376,44 @@ class Approvals(unittest.TestCase):
         a.decide(g, cfg("own"), [{"type": "approve"}], by=SECOND, context={"withdraw": withdraw},
                  may_approve=lambda tenant, email: (tenant, email) == (TENANT, SECOND))
         self.assertEqual([c["approved_by"] for c in calls], [SECOND])
+
+    def test_who_may_approve_is_read_from_the_tenants_roster(self):
+        # roster_rule(db, role), the kit's may_approve (13 October 2026): a second person on the roster of the
+        # conversation's own tenant who holds the role. Each refusal says why, before anything runs.
+        a = self.approval
+        calls, withdraw = withdrawer()
+        zoe, nobody = "zoe@example.com", "nobody@example.com"           # zoe is on globex's roster; nobody on none
+        db = roster({ASKER: None, SECOND: ["employee", "people_ops"], OTHER: None})
+        db.docs.update({f"tenants/globex/members/{zoe}": {"email": zoe}, f"tenants/globex/roles/{zoe}": {"roles": ["people_ops"]}})
+        rule = a.roster_rule(db, "people_ops")
+        g = self.graph(self.withdraw_turn())
+        self.ask(g, "roster", {"withdraw": withdraw})
+        waiting = a.paused(g, cfg("roster"))
+        for who, kind, why in ((zoe, "approve", f"{zoe} is not on acme's roster: only a person in this company may "
+                                                "decide its requests"),
+                               (nobody, "reject", f"{nobody} is not on acme's roster"),
+                               (OTHER, "approve", f"{OTHER} does not hold people_ops in acme, the role that may approve or "
+                                                  "reject these requests (make roles grants it)")):
+            with self.subTest(who=who, kind=kind):
+                with self.assertRaises(PermissionError) as refused:
+                    a.decide(g, cfg("roster"), [{"type": kind}], by=who, context={"withdraw": withdraw}, may_approve=rule)
+                self.assertIn(why, str(refused.exception))
+                self.assertEqual(a.paused(g, cfg("roster")), waiting)    # refused before anything ran
+
+        class Unwell:                                                   # a roster that cannot be read
+            def collection(self, name):
+                raise RuntimeError("Firestore is unwell")
+        with self.assertRaises(PermissionError) as refused:
+            a.decide(g, cfg("roster"), [{"type": "approve"}], by=SECOND, context={"withdraw": withdraw},
+                     may_approve=a.roster_rule(Unwell(), "people_ops"))
+        self.assertIn("acme's roster could not be read, so no decision can be checked", str(refused.exception))
+        with self.assertRaises(ValueError):                             # not a role make roles grants
+            a.roster_rule(db, "approver")
+        self.assertTrue(callable(a.roster_rule(db, "doc_approver")))     # the role the service's routes pass (5.8-B)
+        self.assertEqual((calls, a.paused(g, cfg("roster"))), ([], waiting))
+        a.decide(g, cfg("roster"), [{"type": "approve"}], by=SECOND, context={"withdraw": withdraw}, may_approve=rule)
+        self.assertEqual([(c["requested_by"], c["approved_by"]) for c in calls], [(ASKER, SECOND)])
+        self.assertEqual((a.paused(g, cfg("roster")), db.writes), ([], []))    # resumed; the roster only read
 
     def test_a_rejection_errors_that_call_only(self):
         a = self.approval

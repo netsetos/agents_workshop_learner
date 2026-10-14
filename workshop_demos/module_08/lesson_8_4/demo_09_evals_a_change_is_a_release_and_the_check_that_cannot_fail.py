@@ -3,7 +3,7 @@
 Do it: the gate offline, and what moves with a document
 
 Run order inside this file:
-1. Do it: the gate offline, and what moves with a document (source window 49)
+1. Do it: the gate offline, and what moves with a document (source window 51)
 
 Prerequisites: demo_07_cost_standing_still_staying_fresh_and_one_change_at_1k_100k_and_10m_documents.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -80,7 +80,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_49', step_01_the_gate_offline_and_what_moves_with_a_doc),
+        ('source_51', step_01_the_gate_offline_and_what_moves_with_a_doc),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

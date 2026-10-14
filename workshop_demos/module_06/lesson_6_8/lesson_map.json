@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_6.8_Checkpoint_Resume_WIX.html",
-  "source_sha": "a6931d53fb81f98c504e620596d41eae646ecd37",
+  "source_sha": "348f42b5d8a0f3bd6fa7cd9413e7e42fd83d5a0f",
   "shared_setup_windows": [
     1
   ],
@@ -285,7 +285,7 @@
         "demo_03_your_conversation_read_back_step_by_step"
       ],
       "heading": "A turn cut off mid-flight, resumed from its checkpoint",
-      "purpose": "Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.",
+      "purpose": "Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.",
       "anchor": "s4",
       "anchors": [
         "s4"
@@ -298,7 +298,7 @@
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
       "source_lines": [
         569,
-        645
+        654
       ],
       "offline": true,
       "live_verified": false,
@@ -320,14 +320,14 @@
         {
           "heading": "A turn cut off mid-flight, resumed from its checkpoint",
           "subheading": "Do it: a finished turn, replayed",
-          "purpose": "At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.",
+          "purpose": "At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.",
           "label": "bash — run in the operator shell, in the kit (a finished turn replayed from step 0; no network, Rs 0)",
           "expected": "thread acme:documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com:lesson68\n  from evals/threads/cut_off_turn.json: 8 checkpoints, steps -1 to 6, 2 turns\noffline: the model is a script (the thread's own model messages played back, then a rule), a search the thread\n  recorded is answered as recorded and any other by the kit's Rs 0 lane over evals/corpus; no network, Rs 0\n\n1. the copy: 8 checkpoints in a local InMemorySaver, one update_state() each; every step's number, next and messages are the file's\n\n2. replay from step 0 (next agent): graph.invoke(None, the config at step 0), through the kit's LangGraph brain\n   the turn's question: 'After how many years of continuous service is gratuity payable?'\n     + ai     asks retrieve(query='After how many years of continuous service is gratuity payable?')\n     + tool   retrieve: 5 citations [1]-[5]\n     + ai     (offline, scripted) The first passage says: \"Payment of Gratuity.- (1) Gratuity shall be paya...\n   the replay matches the recorded turn: the same steps (ai asks retrieve, tool, ai), the same sources (5 citations), the same answer\n\n3. fork from step -1, the turn's input: graph.update_state(the config at step -1, a new question), then graph.invoke(None, the fork)\n   the fork's question: 'After how many years of continuous service is gratuity payable? Answer in one sentence.'\n     + human  After how many years of continuous service is gratuity payable? Answer in one sentence.\n     + ai     asks retrieve(query='After how many years of continuous service is gratuity payable? A...\n     + tool   retrieve: 5 citations [1]-[5]\n     + ai     (offline, scripted) The first passage says: \"Payment of Gratuity.- (1) Gratuity shall be paya...\n\n4. graph.get_state_history(thread): 15 checkpoints, in 3 branches\n     branch     step  source  next        msgs  from  the newest message\n     copy         -1  input   __start__      0     -  -\n     copy          0  update  agent          1    -1  human  After how many years of continuous service is gratuit...\n     copy          1  update  tools          2     0  ai     asks retrieve(query='After how many years of c...\n     copy          2  update  agent          3     1  tool   retrieve: 5 citations [1]-[5]\n     copy          3  update  -              4     2  ai     (offline, scripted) The first passage says: \"Payment...\n     copy          4  input   __start__      4     3  ai     (offline, scripted) The first passage says: \"Payment...\n     copy          5  update  agent          5     4  human  Is gratuity payable to a contract employee?\n     copy          6  update  tools          6     5  ai     asks retrieve(query='Is gratuity payable to a...\n     replay        1  loop    tools          2     0  ai     asks retrieve(query='After how many years of c...\n     replay        2  loop    agent          3     1  tool   retrieve: 5 citations [1]-[5]\n     replay        3  loop    -              4     2  ai     (offline, scripted) The first passage says: \"Payment...\n     fork          0  update  agent          1    -1  human  After how many years of continuous service is gratuit...\n     fork          1  loop    tools          2     0  ai     asks retrieve(query='After how many years of c...\n     fork          2  loop    agent          3     1  tool   retrieve: 5 citations [1]-[5]\n     fork          3  loop    -              4     2  ai     (offline, scripted) The first passage says: \"Payment...\n\nonly the local copy was written; the lane never is. Model calls: the replay 2, the fork 2; Rs 0 (a script, not a model)",
           "adaptations": [],
           "id": "source_20",
           "function": "step_02_a_finished_turn_replayed",
           "window": 20,
-          "source_line": 645,
+          "source_line": 654,
           "manual_checkpoint": null
         }
       ],
@@ -354,8 +354,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
       "source_lines": [
-        726,
-        783
+        735,
+        792
       ],
       "offline": false,
       "live_verified": false,
@@ -371,7 +371,7 @@
           "id": "source_24",
           "function": "step_01_the_next_question_offline",
           "window": 24,
-          "source_line": 726,
+          "source_line": 735,
           "manual_checkpoint": null
         },
         {
@@ -384,7 +384,7 @@
           "id": "source_26",
           "function": "step_02_the_next_question_with_gemini",
           "window": 26,
-          "source_line": 783,
+          "source_line": 792,
           "manual_checkpoint": null
         }
       ],
@@ -410,7 +410,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
       "source_lines": [
-        881
+        890
       ],
       "offline": false,
       "live_verified": false,
@@ -426,7 +426,7 @@
           "id": "source_31",
           "function": "step_01_one_step_read_back_and_the_thread_exported",
           "window": 31,
-          "source_line": 881,
+          "source_line": 890,
           "manual_checkpoint": null
         }
       ],
@@ -455,10 +455,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
       "source_lines": [
-        912,
-        922,
-        927,
-        931
+        921,
+        931,
+        936,
+        940
       ],
       "offline": false,
       "live_verified": false,
@@ -474,7 +474,7 @@
           "id": "source_35",
           "function": "step_01_your_thread_replayed_and_forked_on_your_ma",
           "window": 35,
-          "source_line": 912,
+          "source_line": 921,
           "manual_checkpoint": null
         },
         {
@@ -487,7 +487,7 @@
           "id": "source_37",
           "function": "step_02_change_it_the_prompt_s_rule_for_follow_ups",
           "window": 37,
-          "source_line": 922,
+          "source_line": 931,
           "manual_checkpoint": null
         },
         {
@@ -500,7 +500,7 @@
           "id": "source_39",
           "function": "step_03_change_it_the_prompt_s_rule_for_follow_ups",
           "window": 39,
-          "source_line": 927,
+          "source_line": 936,
           "manual_checkpoint": null
         },
         {
@@ -513,7 +513,7 @@
           "id": "source_41",
           "function": "step_04_change_it_the_prompt_s_rule_for_follow_ups",
           "window": 41,
-          "source_line": 931,
+          "source_line": 940,
           "manual_checkpoint": null
         }
       ],
@@ -539,7 +539,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_8/GUIDE.md",
       "source_lines": [
-        947
+        956
       ],
       "offline": false,
       "live_verified": false,
@@ -555,7 +555,7 @@
           "id": "source_43",
           "function": "step_01_the_table_read_directly",
           "window": 43,
-          "source_line": 947,
+          "source_line": 956,
           "manual_checkpoint": null
         }
       ],
@@ -721,112 +721,112 @@
       "label": "expected (the kit's own output, produced when this page was built)",
       "heading": "A turn cut off mid-flight, resumed from its checkpoint",
       "anchor": "s4",
-      "line": 647
+      "line": 656
     },
     {
       "window": 22,
       "label": "services/chat/brains.py - LangGraphBrain.answer(): every turn is graph.invoke() with a new question; a repair only after a recursion error",
       "heading": "What the chat service does instead: a new question, and the repair",
       "anchor": "s5",
-      "line": 699
+      "line": 708
     },
     {
       "window": 23,
       "label": "services/chat/limits.py - repair_thread(): every open call answered with an error, then the stop answer",
       "heading": "What the chat service does instead: a new question, and the repair",
       "anchor": "s5",
-      "line": 712
+      "line": 721
     },
     {
       "window": 25,
       "label": "expected (this cell run on the kit's brains.py, limits.py and thread_replay.py when this page was built)",
       "heading": "What the chat service does instead: a new question, and the repair",
       "anchor": "s5",
-      "line": 759
+      "line": 768
     },
     {
       "window": 27,
       "label": "expected (the author's lane: Gemini's answer, or its error, is the point; the call ids are the fixture's)",
       "heading": "What the chat service does instead: a new question, and the repair",
       "anchor": "s5",
-      "line": 811
+      "line": 820
     },
     {
       "window": 28,
       "label": "commands/thread_read.py - decode(): a checkpoint's values are its inline values plus each channel's blob at its version",
       "heading": "One step read back, and the thread exported",
       "anchor": "s6",
-      "line": 823
+      "line": 832
     },
     {
       "window": 29,
       "label": "commands/thread_read.py - serializer(): strict, so a blob revives only langgraph's safe types",
       "heading": "One step read back, and the thread exported",
       "anchor": "s6",
-      "line": 856
+      "line": 865
     },
     {
       "window": 30,
       "label": "commands/thread_read.py - snapshots(): each checkpoint read through the graph of the brain that wrote it",
       "heading": "One step read back, and the thread exported",
       "anchor": "s6",
-      "line": 861
+      "line": 870
     },
     {
       "window": 32,
       "label": "expected (the author's lane: your session, times, words and rupees are yours)",
       "heading": "One step read back, and the thread exported",
       "anchor": "s6",
-      "line": 884
+      "line": 893
     },
     {
       "window": 33,
       "label": "mk/memory.mk - make replay: no project with OFFLINE=1; otherwise Gemini, your rag-api and documind-ui-sa",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 897
+      "line": 906
     },
     {
       "window": 34,
       "label": "commands/thread_replay.py - replay(): the fork, a new question written onto the turn's input checkpoint",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 904
+      "line": 913
     },
     {
       "window": 36,
       "label": "expected (the author's lane: your session, times, words and rupees are yours)",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 914
+      "line": 923
     },
     {
       "window": 38,
       "label": "expected (the cell's own output, produced when this page was built on a copy of brains.py)",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 925
+      "line": 934
     },
     {
       "window": 40,
       "label": "expected (the author's lane: your session, times, words and rupees are yours)",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 929
+      "line": 938
     },
     {
       "window": 42,
       "label": "expected (the kit's own output after the checkout, produced when this page was built)",
       "heading": "Your thread replayed and forked on your machine",
       "anchor": "s7",
-      "line": 934
+      "line": 943
     },
     {
       "window": 44,
       "label": "expected (the author's lane: your session, times, words and rupees are yours)",
       "heading": "The table, read directly",
       "anchor": "s8",
-      "line": 992
+      "line": 1001
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

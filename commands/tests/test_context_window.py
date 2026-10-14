@@ -6,7 +6,9 @@ No network, no credential, no model. The first class needs only the standard lib
 target, the Makefile's 885 lines and the target's name in .PHONY, both CI lines and the new files' UNOWNED.md rows;
 nothing under services/ imports the module; the rule's arithmetic, plan(), on token counts, at its edges and on random
 sizes; turns() on stand-in messages, a result whose call sits in an earlier turn joining the turns between; the write
-rules on an earlier question - masked, then cut to the Desk's own 300 characters.
+rules on an earlier question - masked, then cut to the Desk's own 300 characters; the Rs 0 lane's ranking, its counts
+cached, equal to the textbook one (shared/documind_tools.py, which imports requests); a row that names the limit that
+stopped its turn.
 
 The second runs on LangChain's messages and the kit's brains, and needs the chat image's pins (pip install -r
 services/chat/requirements.txt). window() on generated threads of every shape - tool rounds of parallel calls,
@@ -26,6 +28,7 @@ import importlib.util
 import io
 import json
 import logging
+import math
 import os
 from pathlib import Path
 import random
@@ -195,6 +198,62 @@ class TheRuleAlone(unittest.TestCase):
         self.assertEqual([i for i, q in enumerate(wc.QUESTIONS, 1) if desk_rules.mask(q)[1]], [6])     # one card
         self.assertEqual([i for i, q in enumerate(wc.QUESTIONS, 1) if len(q) > 300], [9])
         self.assertEqual([q for q in wc.QUESTIONS if desk_rules.gate(q)], [])  # none the Desk's door would take
+
+    def test_the_rs0_lanes_ranking_tokenises_each_chunk_once_and_ranks_as_before(self):
+        """13 October 2026: documind_tools._lexical_rank tokenised every chunk on every search and matched each word
+        against every token - 1.5 s a search over acme's chunks, so window-check's searches took minutes and, on a busy
+        machine, could pass retrieve's budget. Each chunk's counts are now cached and each word matched over the
+        vocabulary: the ranking must be the textbook one, to the last float, for every question the check asks."""
+        import window_check as wc
+        from shared import documind_tools as dt
+        from shared import local_corpus as lc
+
+        keep = ("hr_policy_2026.md", "payment_of_gratuity_act_1972.md", "dpdp_act_2023.md")
+        rows = [(c["text"], {"chunk_id": c["chunk_id"]}) for c in lc.chunks_for("acme") if c["source_uri"].endswith(keep)]
+
+        def textbook(query):                # _lexical_rank's body as it was until 13 October 2026: the reference
+            words = dt._words(query)
+            if not rows or not words:
+                return [], {}
+            toks = [re.findall(r"[a-z0-9]+", text.lower()) for text, _ in rows]
+            n, avgdl = len(toks), sum(map(len, toks)) / max(1, len(toks))
+            tf = [{w: sum(1 for t in doc if dt._match(w, t)) for w in words} for doc in toks]
+            df = {w: sum(1 for d in tf if d[w]) for w in words}
+            if n >= 8:
+                words = [w for w in words if df[w] / n <= 0.5]
+            if not words:
+                return [], {}
+            idf = {w: math.log(1 + (n - df[w] + 0.5) / (df[w] + 0.5)) for w in words}
+            k1, b = 1.5, 0.75
+            ranked = []
+            for (text, meta), doc, f in zip(rows, toks, tf):
+                hit = [w for w in words if f[w]]
+                if not hit:
+                    continue
+                s = sum(idf[w] * f[w] * (k1 + 1) / (f[w] + k1 * (1 - b + b * len(doc) / avgdl)) for w in hit)
+                ranked.append((s, hit, text, meta))
+            ranked.sort(key=lambda r: (-r[0], -len(r[1]), len(r[2])))
+            return ranked, idf
+
+        dt._counted.cache_clear()
+        for q in wc.QUESTIONS + ("What is the notice period?", "sabbatical"):
+            self.assertEqual(dt._lexical_rank(q, rows), textbook(q), q)
+        self.assertEqual(dt._counted.cache_info().misses, len({text for text, _ in rows}))   # once each, 22 searches
+
+    def test_a_row_says_when_a_limit_stopped_its_turn(self):
+        """13 October 2026: a LIVE=1 row printed no stopped_by, so a turn a limit ended read like any other."""
+        import window_check as wc
+        usage = {"tokens_in": 900, "cached_tokens": 0, "tokens_out": 40, "model_calls": 12, "stopped_by": "model_calls"}
+        row = {"usage": usage, "largest": None, "estimate": 880, "rupees": 0.25, "citations": [],
+               "answer": "I stopped this turn at one of its limits before I could finish."}
+        self.assertIn("  calls 12  Rs 0.25; stopped by model_calls\n", wc._live_row(row, "full", False))
+        self.assertNotIn("stopped by", wc._live_row({**row, "usage": {**usage, "stopped_by": None}}, "full", False))
+        largest = {"context_tokens": 900, "ceiling": 2500, "kept": 1, "brought_forward": 0, "cleared": 0, "masked": 0,
+                   "cut": 0, "unanswered": 0}
+        table = {**row, "turn": 3, "thread_messages": 12, "thread_tokens": 1500, "largest": largest}
+        for mode in ("full", "windowed"):
+            self.assertTrue(wc._offline_row(table, mode).endswith("  (stopped by model_calls)"), mode)
+            self.assertNotIn("stopped", wc._offline_row({**table, "usage": {**usage, "stopped_by": None}}, mode))
 
 
 # ----------------------------------------------------------------------------- the library half

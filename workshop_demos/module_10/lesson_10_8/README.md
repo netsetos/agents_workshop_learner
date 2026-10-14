@@ -222,7 +222,7 @@ Expected shape, not a promised result:
 
 Do it: the agents' surfaces, switches on
 
-Operation: bash — run in the operator shell, in the kit (five rows to documind-chat with the switches on).
+Operation: bash — run in the operator shell, in the kit (five rows to documind-chat with the switches on; make mints the token).
 
 Expected shape, not a promised result:
 
@@ -258,7 +258,7 @@ Expected shape, not a promised result:
 
 The peer row, at a local peer
 
-Operation: bash — the author's shell, with the peer served locally over a local-profile MCP server (RUN_LIST.md).
+Operation: bash — the author's shell (the MCP server in the local profile, the kit's peer beside it, then the peer's row: RUN_LIST.md).
 
 Expected shape, not a promised result:
 
@@ -432,6 +432,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.8_Injection_WIX.html`. All 81 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c4404c15474ecb279d03853b2427247bc4d373e6`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.8_Injection_WIX.html`. All 84 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9dda413a7d859711b54c6c98302b7353f3f08b27`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

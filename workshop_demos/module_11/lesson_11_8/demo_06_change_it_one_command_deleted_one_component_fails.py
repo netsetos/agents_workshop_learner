@@ -3,7 +3,7 @@
 An entry of FAILURE-MODES.md without a command is a symptom nobody can reproduce. The canned fork's first entry, "Pinned traffic hides a change", is proved by make gotcha-drill ID=pinned-traffic, lesson 11.7's offline drill. The cell deletes that one line with sed, runs the check, then copies the kit's canned file back and runs it once more, printing only the exit code.
 
 Run order inside this file:
-1. Definition (source window 26)
+1. Definition (source window 28)
 
 Prerequisites: demo_05_the_check_offline_the_kit_as_it_ships_a_canned_capstone_your_fork.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -64,7 +64,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_26', step_01_definition),
+        ('source_28', step_01_definition),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

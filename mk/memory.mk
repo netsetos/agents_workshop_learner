@@ -30,23 +30,23 @@ replay: $(if $(OFFLINE),,guard-project)
 	  PY=$(PY) bash commands/graph-venv.sh commands/thread_replay.py $(if $(OFFLINE),--offline,) $(if $(FILE),--file "$(FILE)",) \
 	  $(if $(AT),--at="$(AT)",) $(if $(FORK),--fork "$(FORK)",) $(if $(DB),--db "$(DB)",)
 
-# One turn's context by source (workshop lesson 6.1): what rides each model call of a turn - the system prompt, the tool
-# declarations as the brain's adapter serialises them, the thread so far, the question, the model's own calls and the
-# tool results - each source's tokens and its rupees at list price (shared/prices.py), read where every brain's call
-# meets google-genai. BRAIN: langchain (the default), langgraph, adk, direct or desk, with DESK= statute (the default),
-# handbook or astar; TURNS=2 or 3 asks earlier questions on the same local thread first; TOP_K= sends that top_k with
-# every search (the Change-it); Q= another question; TENANT the tenant. OFFLINE=1: a scripted model and the Rs 0 lane's
-# retrieve over evals/corpus, every count an estimate, no network, no credential, Rs 0. Without it, one real turn on
-# your lane: Gemini on location global and rag-api as documind-ui-sa under the chat service's limits, a few rupees, then
-# each source counted in context by count_tokens on location global (not billed) and the probe printed: does it honour
-# the declarations and the system instruction, and how far is its count from the bill. See commands/context_sources.py.
+# One turn's context by source (workshop lesson 6.1): what rides each model call of a turn - the system prompt, the
+# tool declarations as the brain's adapter serialises them, the thread so far, the question, the model's own calls and
+# the tool results - each source's tokens and its rupees at list price (shared/prices.py), read where every brain's
+# call meets google-genai. BRAIN: langchain (the default), langgraph, adk, direct or desk, with DESK= statute (the
+# default), handbook or astar; TURNS=2 or 3 asks earlier questions on one local thread first; TOP_K= sends that top_k
+# with every search (the Change-it); Q= another question; TENANT the tenant; JSON=1 prints the turn as one JSON record.
+# OFFLINE=1: a scripted model and the Rs 0 lane's retrieve over evals/corpus, every count an estimate, no network, no
+# credential, Rs 0. Without it, one real turn on your lane: Gemini on global and rag-api as documind-ui-sa under the
+# chat service's limits, a few rupees, then each source counted by count_tokens on global (not billed) and the probe
+# printed: does it honour the declarations and the system instruction, and how far is its count from the bill.
 context-sources: $(if $(OFFLINE),,guard-project)
 	@if [ -z "$(OFFLINE)" ]; then NUMBER=$$(gcloud projects describe $(PROJECT) --format='value(projectNumber)') || exit 1; \
 	  export GOOGLE_CLOUD_PROJECT=$(PROJECT) RAG_API_URL=https://documind-api-$$NUMBER.$(REGION).run.app \
 	    DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$(PROJECT).iam.gserviceaccount.com; fi; \
 	  Q="$(Q)"; PY=$(PY) bash commands/graph-venv.sh commands/context_sources.py $(if $(OFFLINE),--offline,) \
 	  $(if $(BRAIN),--brain "$(BRAIN)",) $(if $(DESK),--desk "$(DESK)",) $(if $(TURNS),--turns "$(TURNS)",) \
-	  $(if $(TOP_K),--top-k "$(TOP_K)",) $${Q:+--question "$$Q"} --tenant "$(TENANT)"
+	  $(if $(TOP_K),--top-k "$(TOP_K)",) $${Q:+--question "$$Q"} --tenant "$(TENANT)" $(if $(JSON),--json,)
 
 # A conversation's model calls beside its thread (workshop lesson 6.9): twenty scripted questions in one conversation of
 # the kit's LangChain brain (BRAIN=langgraph: its LangGraph brain), and after each turn the thread's size, the context

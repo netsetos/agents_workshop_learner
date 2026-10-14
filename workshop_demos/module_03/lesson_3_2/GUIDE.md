@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`, reviewed at blob `09f62e59c8f6369e3eced7b47a7ddadd090aaeff`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`, reviewed at blob `d44e0ec621b36bfc022c8547e695ede9968b6382`. Learners read that page on the course site; this guide keeps its prose.
 
 Two ways to get a better answer from the same model. Chain of thought gives the model room to work before it answers. A Gemini 3 model does that natively: it writes thought tokens before its reply, which the kit never asks to see and pays for at the output rate, and the generator asks for little of it, thinking level LOW. A prompt can also ask for the working in writing, and under DocuMind's answer schema the working has one place to go: the answer the person reads. Few-shot puts solved examples in the prompt: the router's first classifier, `gemini-3.1-flash-lite` with a thinking budget of 0, reads eight questions, each labelled with its desk. You will take a join apart in the page, see what the Chat page shows of the thinking and what it bills, read where each technique lives in the kit, then measure both on your lane: the 11 join rows at LOW, MEDIUM and HIGH, one prompted-reasoning rule against native thinking, and the router's examples taken out and put back over 187 scored questions, every rate with its interval.
 
@@ -234,7 +234,7 @@ The same 187 rows with the real classifier, first with the kit's examples, then 
 
 #### Definition
 
-`--live-l1` runs `decide()` in your shell with the real models on your project: `gemini-3.1-flash-lite` for L1, `gemini-3.6-flash` for the arbiter at thinking level LOW, and `text-embedding-005` for the vote, after embedding the 198-row exemplar index once. It needs google-genai in the shell, which Module 0's venv has, and no deployed Desk: a Module 3 lane is enough. `make exemplars PROJECT=$PROJECT` runs exactly the first cell's line without `--report`. The cells add it, because step 10 reads every turn's decision from the two reports. Run the kit arm first, then none: the first run is the prompt as it ships, the second the examples taken out, and the shipped prompt never stopped serving.
+`--live-l1` runs `decide()` in your shell with the real models on your project: `gemini-3.1-flash-lite` for L1, `gemini-3.6-flash` for the arbiter at thinking level LOW, and `text-embedding-005` for the vote, after embedding the 198-row exemplar index once. It needs google-genai in the shell, which Module 0's venv has, and no deployed Desk: a Module 3 lane is enough. `make exemplars PROJECT=$PROJECT REPORT="$HOME/exemplars_kit.json"` runs exactly the first cell's line. Each arm keeps its report, because step 10 reads every turn's decision from the two. Run the kit arm first, then none: the first run is the prompt as it ships, the second the examples taken out, and the shipped prompt never stopped serving.
 
 - L1 alone: the examples' direct effect, on the 126 turns L1 is asked.
 

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.11_Incident_Remediation_WIX.html",
-  "source_sha": "03140ad39ae7045b92d7099e198148ed5e019940",
+  "source_sha": "05a7640fa25b236c78e6696879fc67de8b6e8121",
   "shared_setup_windows": [
     1
   ],
@@ -404,7 +404,7 @@
         "demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand"
       ],
       "heading": "Architecture: the path an incident takes, read by read and rule by rule",
-      "purpose": "The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.",
+      "purpose": "The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.",
       "anchor": "s4",
       "anchors": [
         "s4"
@@ -421,7 +421,7 @@
         835,
         852,
         888,
-        922
+        923
       ],
       "offline": false,
       "live_verified": false,
@@ -458,7 +458,7 @@
           "subheading": "Do it: the catalog",
           "purpose": "RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches:",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: it reads the kit's files and calls nothing)",
-          "expected": "16 alert policies the kit declares (terraform/alerts.tf: 8, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.\nSilent: what remediate reads that no policy watches\n  5xx answers: requests a service answered with a 5xx status, from Cloud Run's request log. no alert policy the kit\n  declares counts a service's 5xx answers.\n  chat turns stopped by a limit: documind-chat turns ended by one of their limits (limits.stopped_by on the chat row,\n  workshop lesson 5.5). every chat row carries stopped_by and no policy counts it yet: an agent alert policy is\n  designed for after 6 December.",
+          "expected": "17 alert policies the kit declares (terraform/alerts.tf: 9, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.\nSilent: what remediate reads that no policy watches\n  5xx answers: requests a service answered with a 5xx status, from Cloud Run's request log. no alert policy the kit\n  declares counts a service's 5xx answers.\n  chat turns stopped by a limit: documind-chat turns ended by one of their limits (limits.stopped_by on the chat row,\n  workshop lesson 5.5). every chat row carries stopped_by and no policy counts it yet: an agent alert policy is\n  designed for after 6 December.",
           "adaptations": [],
           "id": "source_40",
           "function": "step_03_the_catalog",
@@ -469,14 +469,14 @@
         {
           "heading": "Architecture: the path an incident takes, read by read and rule by rule",
           "subheading": "Read it on your lane: the policies your lane holds",
-          "purpose": "One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.",
+          "purpose": "One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (one GET on the Monitoring API; changes nothing)",
           "expected": "[awaiting the author's run: data/lane_policies.txt]",
           "adaptations": [],
           "id": "source_42",
           "function": "step_04_on_your_lane_the_policies_your_lane_holds",
           "window": 42,
-          "source_line": 922,
+          "source_line": 923,
           "manual_checkpoint": null
         }
       ],
@@ -502,7 +502,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
-        1059
+        1060
       ],
       "offline": false,
       "live_verified": false,
@@ -518,7 +518,7 @@
           "id": "source_49",
           "function": "step_01_plant_an_instruction",
           "window": 49,
-          "source_line": 1059,
+          "source_line": 1060,
           "manual_checkpoint": null
         }
       ],
@@ -544,7 +544,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
-        1183
+        1184
       ],
       "offline": true,
       "live_verified": false,
@@ -560,7 +560,7 @@
           "id": "source_55",
           "function": "step_01_the_failure_modes_offline",
           "window": 55,
-          "source_line": 1183,
+          "source_line": 1184,
           "manual_checkpoint": null
         }
       ],
@@ -586,7 +586,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
-        1264
+        1265
       ],
       "offline": true,
       "live_verified": false,
@@ -597,12 +597,12 @@
           "subheading": "Do it: the cost model as a script",
           "purpose": "Component 6's COST-MODEL.md starts from this. The cell reads the rates and the rupee rate from the kit, builds a model's prompt from the kit's own catalog and docstring, prints the plan remediate gives the drill's recording as the model's answer, and fills an hour's window with the recording's own lines at each scale.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing)",
-          "expected": "the rules: 3 reads at Rs 0 and 0 model calls, at every scale\na model: 3,122 tokens of rules and runbooks, then the lines; 614 tokens of plan out\n    1,000 turns a month:     3 lines an hour,     3 read |  3,897 tokens in | flash Rs  0.89 ($0.0105), flash-lite Rs 0.16 ($0.0019) an incident\n   10,000 turns a month:    28 lines an hour,    28 read |  4,445 tokens in | flash Rs  0.96 ($0.0113), flash-lite Rs 0.17 ($0.0020) an incident\n  100,000 turns a month:   274 lines an hour,   274 read |  9,826 tokens in | flash Rs  1.64 ($0.0193), flash-lite Rs 0.29 ($0.0034) an incident\n1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,582 tokens in | flash Rs  6.46 ($0.0760), flash-lite Rs 1.09 ($0.0128) an incident",
+          "expected": "the rules: 3 reads at Rs 0 and 0 model calls, at every scale\na model: 3,241 tokens of rules and runbooks, then the lines; 614 tokens of plan out\n    1,000 turns a month:     3 lines an hour,     3 read |  4,016 tokens in | flash Rs  0.90 ($0.0106), flash-lite Rs 0.16 ($0.0019) an incident\n   10,000 turns a month:    28 lines an hour,    28 read |  4,564 tokens in | flash Rs  0.97 ($0.0115), flash-lite Rs 0.18 ($0.0021) an incident\n  100,000 turns a month:   274 lines an hour,   274 read |  9,945 tokens in | flash Rs  1.66 ($0.0195), flash-lite Rs 0.29 ($0.0034) an incident\n1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,701 tokens in | flash Rs  6.47 ($0.0762), flash-lite Rs 1.09 ($0.0128) an incident",
           "adaptations": [],
           "id": "source_57",
           "function": "step_01_the_cost_model_as_a_script",
           "window": 57,
-          "source_line": 1264,
+          "source_line": 1265,
           "manual_checkpoint": null
         }
       ],
@@ -628,7 +628,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
-        1321
+        1322
       ],
       "offline": true,
       "live_verified": false,
@@ -644,7 +644,7 @@
           "id": "source_59",
           "function": "step_01_the_limits_from_the_kit_s_files",
           "window": 59,
-          "source_line": 1321,
+          "source_line": 1322,
           "manual_checkpoint": null
         }
       ],
@@ -670,7 +670,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
-        1401
+        1402
       ],
       "offline": true,
       "live_verified": false,
@@ -681,12 +681,12 @@
           "subheading": "Do it: the kit's tests, offline",
           "purpose": "The cell loads the kit's test module and runs its four classes that need no bash and no make, one test at a time, printing each by its name.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: the kit's tests stand gcloud in)",
-          "expected": "PolicyTests (7)\n  ok   a policy without a row or a row without a policy stops\n  ok   a runbook is the policys own documentation\n  ok   each rows evidence reads what its policy counts\n  ok   every command the catalog names is one remediate may print\n  ok   every policy the kit declares has one row\n  ok   the denylist reads a commands words and flags never its values\n  ok   the runbooks listing\nRuleTests (15)\n  ok   a candidate is kept out of the incident\n  ok   a failure no change explains is no rule\n  ok   an unknown policy is no rule\n  ok   documind api rolls back with make rollback\n  ok   every policy named offline\n  ok   held model calls names the cap\n  ok   held model chooses the rollback\n  ok   person only prints the policys runbook\n  ok   pinned states after the rollback\n  ok   restored reads no failure\n  ok   rolled back prints the verify and the restore not another rollback\n  ok   split traffic is no rule\n  ok   the latency and people only signals\n  ok   the restore quotes values and keeps secrets\n  ok   the thresholds a failure needs\nSafetyTests (8)\n  ok   a line keeps no person\n  ok   a planted instruction changes nothing\n  ok   every command it runs is one of three reads\n  ok   gcloud json refuses anything but a read\n  ok   no model client and no connection of its own\n  ok   no printed command could delete deploy or grant\n  ok   the fixtures carry placeholders only\n  ok   the live path reads three times and runs none of the plan\nLiveReadTests (8)\n  ok   a service named by the policy\n  ok   save finds the number in the services urls without a namespace\n  ok   save makes the reports folder a fresh clone lacks\n  ok   save refuses an identifier it cannot replace\n  ok   save then offline prints the same plan\n  ok   the inputs it refuses\n  ok   the log filter reads the requests and the policies events\n  ok   the reads shape the state a fixture holds",
+          "expected": "PolicyTests (7)\n  ok   a policy without a row or a row without a policy stops\n  ok   a runbook is the policys own documentation\n  ok   each rows evidence reads what its policy counts\n  ok   every command the catalog names is one remediate may print\n  ok   every policy the kit declares has one row\n  ok   the denylist reads a commands words and flags never its values\n  ok   the runbooks listing\nRuleTests (15)\n  ok   a candidate is kept out of the incident\n  ok   a failure no change explains is no rule\n  ok   an unknown policy is no rule\n  ok   documind api rolls back with make rollback\n  ok   every policy named offline\n  ok   held model calls names the cap\n  ok   held model chooses the rollback\n  ok   person only prints the policys runbook\n  ok   pinned states after the rollback\n  ok   restored reads no failure\n  ok   rolled back prints the verify and the restore not another rollback\n  ok   split traffic is no rule\n  ok   the latency and people only signals\n  ok   the restore quotes values and keeps secrets\n  ok   the thresholds a failure needs\nSafetyTests (8)\n  ok   a line keeps no person\n  ok   a planted instruction changes nothing\n  ok   every command it runs is one of three reads\n  ok   gcloud json refuses anything but a read\n  ok   no model client and no connection of its own\n  ok   no printed command could delete deploy or grant\n  ok   the fixtures carry placeholders only\n  ok   the live path reads three times and runs none of the plan\nLiveReadTests (9)\n  ok   a plan that stops saves nothing\n  ok   a service named by the policy\n  ok   save finds the number in the services urls without a namespace\n  ok   save makes the reports folder a fresh clone lacks\n  ok   save refuses an identifier it cannot replace\n  ok   save then offline prints the same plan\n  ok   the inputs it refuses\n  ok   the log filter reads the requests and the policies events\n  ok   the reads shape the state a fixture holds",
           "adaptations": [],
           "id": "source_63",
           "function": "step_01_the_kit_s_tests_offline",
           "window": 63,
-          "source_line": 1401,
+          "source_line": 1402,
           "manual_checkpoint": null
         }
       ],
@@ -905,7 +905,7 @@
     },
     {
       "window": 33,
-      "label": "ops/runbooks.json - the two signals no policy counts, the verify per service, and two of the 16 rows",
+      "label": "ops/runbooks.json - the two signals no policy counts, the verify per service, and two of the 17 rows",
       "heading": "Architecture: the path an incident takes, read by read and rule by rule",
       "anchor": "s4",
       "line": 766
@@ -950,119 +950,119 @@
       "label": "expected (the author's lane, recorded once; your revision names, times and counts are your own)",
       "heading": "Architecture: the path an incident takes, read by read and rule by rule",
       "anchor": "s4",
-      "line": 942
+      "line": 943
     },
     {
       "window": 44,
       "label": "commands/tests/test_remediate.py - a planted instruction changes nothing",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 970
+      "line": 971
     },
     {
       "window": 45,
       "label": "commands/tests/test_remediate.py - a recording replays the plan it was read for",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 987
+      "line": 988
     },
     {
       "window": 46,
       "label": "commands/remediate.py - save_state(): a recording with the lane's identifiers replaced",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 1005
+      "line": 1006
     },
     {
       "window": 47,
       "label": "terraform/off.tf - the grants a job needs to change a service, as the nightly off job has them",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 1026
+      "line": 1027
     },
     {
       "window": 48,
       "label": "Makefile - make rollback: documind-api back to the revision make promote recorded",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 1048
+      "line": 1049
     },
     {
       "window": 50,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Architecture: why rules and not a model, and two more designs rejected",
       "anchor": "s5",
-      "line": 1095
+      "line": 1096
     },
     {
       "window": 51,
       "label": "services/chat/agent.py - the chat row: every turn's limits, and stopped_by",
       "heading": "Failure modes: four the kit reproduces, and what pages for them",
       "anchor": "s6",
-      "line": 1127
+      "line": 1128
     },
     {
       "window": 52,
       "label": "services/chat/limits.py - a turn's three limits, and what a tripped one answers",
       "heading": "Failure modes: four the kit reproduces, and what pages for them",
       "anchor": "s6",
-      "line": 1139
+      "line": 1140
     },
     {
       "window": 53,
       "label": "commands/incident-drill.sh - the two faults, and nothing without HOLD=1 or RESTORE=1",
       "heading": "Failure modes: four the kit reproduces, and what pages for them",
       "anchor": "s6",
-      "line": 1147
+      "line": 1148
     },
     {
       "window": 54,
       "label": "commands/incident-drill.sh - RESTORE=1: the variable back, then the latest revision takes all the traffic",
       "heading": "Failure modes: four the kit reproduces, and what pages for them",
       "anchor": "s6",
-      "line": 1160
+      "line": 1161
     },
     {
       "window": 56,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Failure modes: four the kit reproduces, and what pages for them",
       "anchor": "s6",
-      "line": 1226
+      "line": 1227
     },
     {
       "window": 58,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Cost: an incident priced, and a model priced at three scales",
       "anchor": "s7",
-      "line": 1293
+      "line": 1294
     },
     {
       "window": 60,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Cost at 10×: what breaks first is the read",
       "anchor": "s8",
-      "line": 1342
+      "line": 1343
     },
     {
       "window": 61,
       "label": "commands/tests/test_remediate.py - the thresholds a failure needs",
       "heading": "Evals: what the kit's tests hold, and the checks that cannot fail",
       "anchor": "s9",
-      "line": 1367
+      "line": 1368
     },
     {
       "window": 62,
       "label": "commands/remediate.py - render(): no failure, said with what it rests on",
       "heading": "Evals: what the kit's tests hold, and the checks that cannot fail",
       "anchor": "s9",
-      "line": 1385
+      "line": 1386
     },
     {
       "window": 64,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Evals: what the kit's tests hold, and the checks that cannot fail",
       "anchor": "s9",
-      "line": 1416
+      "line": 1417
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

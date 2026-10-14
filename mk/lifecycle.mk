@@ -13,10 +13,12 @@ reindex: guard-project
 # the bucket, the nightly reconcile leaves it there ("withdrawn, object kept"), the same bytes again are acked
 # (ingest_withdrawn) and never reactivated, the corpus fingerprint moves so the caches follow. Before this the row
 # said retired, and the next night's walk read "retired but back in the bucket" and resurrected what a person had
-# just taken down. make restore is the way back.
+# just taken down. make restore is the way back. The retired ids leave the Vector Search index too (13 October 2026):
+# VECTOR_INDEX_NAME from terraform output, as the worker has it; without one the index is left as it was.
 retire: guard-project
 	@test -n "$(SOURCE)" || (echo "SOURCE=<tenant/name or gs://...> is required"; exit 2); \
 	PYTHONPATH=. MANAGED_MIRROR=$(MANAGED_MIRROR) RAG_LOCATION=$(RAG_LOCATION) AUDIT_BUCKET=$(PROJECT)-audit GOOGLE_CLOUD_PROJECT=$(PROJECT) \
+	  VECTOR_INDEX_NAME=$${VECTOR_INDEX_NAME:-$$(cd $(TF_DIR) && terraform output -raw vector_index_name 2>/dev/null)} \
 	  $(PY) services/ingest/reconcile.py --project $(PROJECT) --retire "$(SOURCE)" --apply
 
 # bring a withdrawn source back (SOURCE= as for retire): the tombstone is cleared and the object rewritten onto
@@ -30,6 +32,7 @@ restore: guard-project
 # the full reconciliation: the bucket's current generations against sources/. Prints the plan; APPLY=1 acts.
 reconcile: guard-project
 	PYTHONPATH=. MANAGED_MIRROR=$(MANAGED_MIRROR) RAG_LOCATION=$(RAG_LOCATION) AUDIT_BUCKET=$(PROJECT)-audit GOOGLE_CLOUD_PROJECT=$(PROJECT) \
+	  VECTOR_INDEX_NAME=$${VECTOR_INDEX_NAME:-$$(cd $(TF_DIR) && terraform output -raw vector_index_name 2>/dev/null)} \
 	  $(PY) services/ingest/reconcile.py --project $(PROJECT) $(if $(TENANT_ONLY),--tenant $(TENANT_ONLY),) $(if $(APPLY),--apply,)
 
 # once, after the ledger ships onto a lane that predates it: chunks and documents get current=true, a doc_key and

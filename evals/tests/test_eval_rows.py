@@ -12,6 +12,7 @@ from __future__ import annotations
 import contextlib
 import copy
 import functools
+import gc
 import hashlib
 import importlib.util
 import io
@@ -24,6 +25,7 @@ import tempfile
 import unittest
 import urllib.error
 from unittest.mock import patch
+import warnings
 
 EVALS = Path(__file__).resolve().parents[1]
 KIT = EVALS.parent
@@ -629,6 +631,20 @@ class KitAssumptionsTest(unittest.TestCase):
                       'timeout=RAG_TIMEOUT_S)', tools)
         self.assertIn('return await _json(send, 200, {"passages": [], "answer": text, "answerable": False, '
                       '"usage": usage})', door)
+
+
+# ------------------------------------------------------------------ the corpus files, read and closed
+class CorpusFilesTest(unittest.TestCase):
+    def test_the_corpus_and_the_demo_are_read_with_every_file_closed(self):
+        """13 October 2026: load_corpus() and load_demo() left each file they read to the garbage collector, a
+        ResourceWarning per file; lesson 3.1's test cell ran with -W ignore::ResourceWarning to hide them."""
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            corpus, demo = rv.load_corpus(), rv.load_demo()
+            gc.collect()
+        self.assertEqual([str(w.message) for w in caught if issubclass(w.category, ResourceWarning)], [])
+        self.assertEqual(corpus, CORPUS)                                   # the same texts, read the same way
+        self.assertIn("gratuity", demo)
 
 
 if __name__ == "__main__":

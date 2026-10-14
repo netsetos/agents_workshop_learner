@@ -3,9 +3,9 @@
 Do it: the record The loop's last word is kit.patch: its function against the kit's own. Applying it is yours to decide. You apply it in your clone, run the fast test, put the file back, and ask the strong oracle about the same patch. The cell does this with the weak run's kit.patch from step 5.
 
 Run order inside this file:
-1. Do it: the record (source window 70)
-2. Do it: the record (source window 72)
-3. Do it: the human step (source window 75)
+1. Do it: the record (source window 74)
+2. Do it: the record (source window 76)
+3. Do it: the human step (source window 79)
 
 Prerequisites: demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -141,9 +141,9 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_70', step_01_the_record),
-        ('source_72', step_02_the_record),
-        ('source_75', step_03_the_human_step),
+        ('source_74', step_01_the_record),
+        ('source_76', step_02_the_record),
+        ('source_79', step_03_the_human_step),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

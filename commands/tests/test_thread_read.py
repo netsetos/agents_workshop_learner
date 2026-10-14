@@ -15,8 +15,9 @@ and the pinned library's own _dump_blobs() and _dump_writes() through the pinned
 serves them to thread_read. Decoding gives back every step's messages, metadata and next, for a langgraph thread, a
 thread both brains wrote, a recursion-limit repair and a turn cut off mid-flight; the strict serializer revives no type
 outside langgraph's safe list; the export round-trips. The offline replay opens no connection and needs no project; it
-copies the thread step for step, matches a recorded turn, and finishes a cut-off one; the fork is a new branch from the
-turn's input with a new question, and get_state_history lists the copy, the replay and the fork. The shipped fixture,
+copies the thread step for step, matches a recorded turn, and finishes a cut-off one, matched as far as its recording
+goes; the fork is a new branch from the turn's input with a new question, and get_state_history lists the copy, the
+replay and the fork. The shipped fixture,
 evals/threads/cut_off_turn.json, is what thread_replay.py --write-fixture writes today. Without the pins that class is
 skipped and says so; with DOCUMIND_REQUIRE_LIBS=1, as CI's chat-pins step sets it, a missing pin is an error instead.
 """
@@ -188,6 +189,29 @@ class TheReaderAlone(unittest.TestCase):
                   "evals/threads/cut_off_turn.json", "commands/tests/test_thread_read.py"):
             self.assertTrue(f"| `{f}` | **6.8**" in unowned or f in quoted, f)
             self.assertTrue((KIT / f).exists(), f)
+
+    def test_compare_reads_a_cut_off_recording_as_far_as_it_goes(self):
+        """13 October 2026: a recording that stops mid-turn, replayed and finished, read "differs" - for the steps, the
+        sources and the answer it never reached. Only what the recording holds is compared."""
+        import thread_replay as rp
+        m = types.SimpleNamespace
+        human, answer = m(type="human", tool_calls=None, content="q"), m(type="ai", tool_calls=[], content="Yes [1].")
+        ask = m(type="ai", tool_calls=[{"name": "retrieve", "args": {"query": "q"}, "id": "c1"}], content="")
+        found = m(type="tool", tool_calls=None, content=json.dumps({"citations": [{"chunk_id": "a"}, {"chunk_id": "b"}]}))
+        self.assertEqual(rp.compare([human, ask], [human, ask, found, answer]),
+                         "the replay matches the recorded turn as far as the recording goes: the same steps (human, ai "
+                         "asks retrieve), then it finished the turn (tool, ai), with 2 citations and an answer")
+        self.assertIn("as far as the recording goes: the same steps (human, ai asks retrieve, tool), then it finished the "
+                      "turn (ai)", rp.compare([human, ask, found], [human, ask, found, answer]))
+        self.assertEqual(rp.compare([human, ask, found, answer], [human, ask, found, answer]),      # a finished turn,
+                         "the replay matches the recorded turn: the same steps (human, ai asks retrieve, tool, ai), the "
+                         "same sources (2 citations), the same answer")                                # compared whole
+        other = m(type="ai", tool_calls=[{"name": "calculate_processing_cost", "args": {}, "id": "c2"}], content="")
+        moved = m(type="tool", tool_calls=None, content=json.dumps({"citations": [{"chunk_id": "z"}]}))
+        for recorded, replayed in (([human, ask], [human, other, found, answer]),           # another step
+                                   ([human, ask, found], [human, ask, moved, answer]),       # other sources
+                                   ([human, ask], [human, ask, found])):                     # no answer either
+            self.assertTrue(rp.compare(recorded, replayed).startswith("the replay differs"), (recorded, replayed))
 
     def test_every_statement_is_a_select(self):
         self.assertEqual(tr.READ_ONLY, "SET default_transaction_read_only = on")
@@ -543,6 +567,16 @@ class ThreadsOfTheKitsBrains(unittest.TestCase):
         self.assertEqual(got["recorded"], [])
         self.assertIn("nothing was recorded after step 6: the replay finished the turn: 2 messages, 1 model call", out)
         self.assertEqual(got["model_calls"], 3)                          # the replay's one, the fork's two
+
+    def test_a_cut_off_turn_replayed_from_its_input_matches_as_far_as_it_was_recorded(self):
+        doc = self.rp.load(Path(self.cut) / "cut_off_turn.json")
+        got, out = self.replay(doc, at="4")                              # the cut-off turn, from its input
+        self.assertEqual([m.type for m in got["recorded"]], ["human", "ai"])
+        self.assertEqual([m.type for m in got["replayed"]], ["human", "ai", "tool", "ai"])
+        self.assertRegex(out, r"the replay matches the recorded turn as far as the recording goes: the same steps \(human, "
+                              r"ai asks retrieve\), then it finished the turn \(tool, ai\), with [1-9]\d* citations? and an "
+                              r"answer\n")
+        self.assertNotIn("differs", out)
 
     def test_the_fork_is_a_new_branch_and_the_history_lists_every_branch(self):
         doc = self.export_of("graph")

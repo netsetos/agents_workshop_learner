@@ -15,6 +15,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | 7 | [demo_07_the_3_chained_rows_offline_and_a_cheaper_executor.py](demo_07_the_3_chained_rows_offline_and_a_cheaper_executor.py) | The 3 chained rows offline, and a cheaper executor |
 | 8 | [demo_08_your_lane_plan_and_execute_rewoo_and_a_flash_lite_executor.py](demo_08_your_lane_plan_and_execute_rewoo_and_a_flash_lite_executor.py) | Your lane: plan-and-execute, ReWOO and a flash-lite executor |
 | 9 | [demo_09_the_3_rows_on_your_lane_and_the_plans_they_saved.py](demo_09_the_3_rows_on_your_lane_and_the_plans_they_saved.py) | The 3 rows on your lane, and the plans they saved |
+| 10 | [demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py](demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py) | When a plan pays, what each costs, the libraries' forms, and what the kit does not do yet |
 
 ## Before starting
 
@@ -32,6 +33,10 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
+## Optional extensions
+
+- [optional/demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py](optional/demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py) — Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer. On your lane the switch needs the chat service's image to carry this kit, so the run starts with a redeploy (Cloud Build, no model call). It then asks the ADK brain the same question with the switch off and on, and takes the switch off again whatever happens. It is optional for you, at most Rs 10 (two turns, each stopped at the chat service's Rs 5); the author's run is below. It shows what the script cannot: whether Gemini still calls retrieve as a function when the instruction asks for tool code under /*ACTION*/, and what a written plan adds to a turn's calls and rupees.
+
 ## Finish and restore
 
 - [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
@@ -43,7 +48,7 @@ The numbered functions below correspond to the source examples. Numerical sample
 
 ### setup/prepare.py
 
-DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The shell, in the kit, with PROJECT, REGION, NUMBER, API and tok from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first make agent-turn or make agent-eval builds ~/graph-venv with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call gemini-3.6-flash and gemini-3.1-flash-lite on location global, and rag-api's /v1/passages as documind-ui-sa. The bench's desk searches by class and drops every passage that has none (services/chat/desk_agent.py, _search()). Lesson 10.1's setup line gave acme's stored rows their classes. If you have not run it, run this now: every chained row is acme's. A second run finds nothing to change. An exit status of 3 means BigQuery deferred a statement, and its last line says to run it again later.
+DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The shell, in the kit, with PROJECT, REGION, NUMBER, API and tok from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first make agent-turn or make agent-eval builds ~/graph-venv with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call gemini-3.6-flash and gemini-3.1-flash-lite on location global, and rag-api's /v1/passages as documind-ui-sa. Step 10's ADK planner runs offline in the same venv, and once, optionally, on the chat service after a redeploy. The bench's desk searches by class and drops every passage that has none (services/chat/desk_agent.py, _search()). Lesson 10.1's setup line gave acme's stored rows their classes. If you have not run it, run this now: every chained row is acme's. A second run finds nothing to change. An exit status of 3 means BigQuery deferred a statement, and its last line says to run it again later.
 
 **`step_01_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
@@ -61,7 +66,7 @@ acme: retrieval_backend=vector
 
 **`step_02_which_store_answers_acme_pin_it_to_the_kit(session)` — Before you run anything: set up the shell / Which store answers acme? Pin it to the kit's own index for this lesson**
 
-The shell, in the kit, with PROJECT, REGION, NUMBER, API and tok from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first make agent-turn or make agent-eval builds ~/graph-venv with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call gemini-3.6-flash and gemini-3.1-flash-lite on location global, and rag-api's /v1/passages as documind-ui-sa. The bench's desk searches by class and drops every passage that has none (services/chat/desk_agent.py, _search()). Lesson 10.1's setup line gave acme's stored rows their classes. If you have not run it, run this now: every chained row is acme's. A second run finds nothing to change. An exit status of 3 means BigQuery deferred a statement, and its last line says to run it again later.
+The shell, in the kit, with PROJECT, REGION, NUMBER, API and tok from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first make agent-turn or make agent-eval builds ~/graph-venv with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call gemini-3.6-flash and gemini-3.1-flash-lite on location global, and rag-api's /v1/passages as documind-ui-sa. Step 10's ADK planner runs offline in the same venv, and once, optionally, on the chat service after a redeploy. The bench's desk searches by class and drops every passage that has none (services/chat/desk_agent.py, _search()). Lesson 10.1's setup line gave acme's stored rows their classes. If you have not run it, run this now: every chained row is acme's. A second run finds nothing to change. An exit status of 3 means BigQuery deferred a statement, and its last line says to run it again later.
 
 Operation: bash — run in the operator shell, in the kit (once, if lesson 10.1's setup line has not run: acme's stored rows get their classes).
 
@@ -621,6 +626,49 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/plans_read.txt]
 ```
 
+### demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py
+
+The planner is set on the agent after it is built, so the constructor lessons 5.7 and 6.1 show is unchanged: ADK's flow reads root.planner on every model request, and LlmAgent's pydantic config lets the field be assigned (commands/tests/test_adk_planner.py checks both on the pinned ADK). The other half is the answer, which is the text not marked thought: a plan or a line of reasoning never reaches it, and a reply that was all plan says so instead of answering nothing. Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer.
+
+**`step_01_adk_s_form_on_the_adk_brain_behind_a_switc(session)` — When a plan pays, what each costs, the libraries' forms, and what the kit does not do yet / ADK's form, on the ADK brain behind a switch**
+
+The planner is set on the agent after it is built, so the constructor lessons 5.7 and 6.1 show is unchanged: ADK's flow reads root.planner on every model request, and LlmAgent's pydantic config lets the field be assigned (commands/tests/test_adk_planner.py checks both on the pinned ADK). The other half is the answer, which is the text not marked thought: a plan or a line of reasoning never reaches it, and a reply that was all plan says so instead of answering nothing. Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer.
+
+Operation: bash — run in the operator shell, in the kit (a Python cell in ~/graph-venv; Rs 0: the kit's ADK brain with ADK_PLANNER on, on a scripted model).
+
+Expected shape, not a promised result:
+
+```text
+ADK_PLANNER: plan_react | the agent's planner: PlanReActPlanner
+call 1 is told to plan: True
+  stored, thought=True: '1. Search the handbook for the notice period.\n2. Answer with the figure and its source.'
+  stored, a tool call: retrieve({'query': 'notice period confirmed employee'})
+  stored, thought=True: 'The handbook says 60 days.'
+  stored, thought=None: 'Sixty days of notice [1].'
+call 2 is sent the plan back, thought = [None]
+the answer: 'Sixty days of notice [1].' | tool calls: ['retrieve'] | citations: 1
+a reply that is all plan answers:
+The model wrote a plan but no final answer. Its plan:
+1. Search the handbook for the notice period.
+2. Answer with the figure and its source.
+```
+
+### optional/demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py
+
+Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer. On your lane the switch needs the chat service's image to carry this kit, so the run starts with a redeploy (Cloud Build, no model call). It then asks the ADK brain the same question with the switch off and on, and takes the switch off again whatever happens. It is optional for you, at most Rs 10 (two turns, each stopped at the chat service's Rs 5); the author's run is below. It shows what the script cannot: whether Gemini still calls retrieve as a function when the instruction asks for tool code under /*ACTION*/, and what a written plan adds to a turn's calls and rupees.
+
+**`step_01_adk_s_form_on_the_adk_brain_behind_a_switc(session)` — When a plan pays, what each costs, the libraries' forms, and what the kit does not do yet / ADK's form, on the ADK brain behind a switch**
+
+Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer. On your lane the switch needs the chat service's image to carry this kit, so the run starts with a redeploy (Cloud Build, no model call). It then asks the ADK brain the same question with the switch off and on, and takes the switch off again whatever happens. It is optional for you, at most Rs 10 (two turns, each stopped at the chat service's Rs 5); the author's run is below. It shows what the script cannot: whether Gemini still calls retrieve as a function when the instruction asks for tool code under /*ACTION*/, and what a written plan adds to a turn's calls and rupees.
+
+Operation: bash — run in the operator shell, in the kit (optional: a chat redeploy, then two ADK turns, the switch off and on; at most Rs 10).
+
+Expected shape, not a promised result:
+
+```text
+[awaiting the author's run: data/adk_planner.txt]
+```
+
 ### setup/restore_settings.py
 
 At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
@@ -639,6 +687,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.2_Plan_Execute_WIX.html`. All 58 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1c221ad642224a52fe8a4855dbdb4d9cd200c9eb`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.2_Plan_Execute_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `218b8f84affa0cedb42850bbd399dbcadf64f97d`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

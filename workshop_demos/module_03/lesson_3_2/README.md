@@ -111,7 +111,7 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (the kit's own test
 Expected shape, not a promised result:
 
 ```text
-Ran 18 tests
+Ran 21 tests
 OK
 Ran 9 tests
 OK
@@ -331,6 +331,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`. All 52 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `09f62e59c8f6369e3eced7b47a7ddadd090aaeff`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`. All 52 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d44e0ec621b36bfc022c8547e695ede9968b6382`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

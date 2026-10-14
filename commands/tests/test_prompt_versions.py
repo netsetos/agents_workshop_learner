@@ -11,6 +11,8 @@ import importlib.util
 import io
 import json
 import re
+import shutil
+import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -143,6 +145,55 @@ class PromptVersionTests(unittest.TestCase):
         self.assertIn('Set prompt_version to "v5"', out)
         code, out, err = self.pin(self.copy(versions=both))              # the candidate removed: v3, v4's line kept
         self.assertEqual((code, err), (0, ""), out)
+
+    def test_a_label_the_registry_ever_held_is_never_offered_again(self):
+        # Lesson 3.6's candidate (13 October 2026): v4 registered on a branch of its own, then main checked out again,
+        # where the registry holds v3 alone. The candidate's rows say v4, so the next change on main is offered v5,
+        # with the branch kept and once it is deleted (the reflog keeps its commit). With the reflog expired, or in a
+        # copy outside git, the registry's own lines are all there is, and v4 is offered.
+        if shutil.which("git") is None:
+            self.skipTest("needs git")
+        kit, v4_text = self.copy(), extended("Never paraphrase a quote.")
+        branch = self.copy(system=v4_text, version="v4")
+        both = {"documind-rag@v3": BASE, "documind-rag@v4": sha(branch / GEN)}
+        branch = self.copy(system=v4_text, version="v4", versions=both)          # the branch's commit: v4 registered
+        later = self.copy(system=extended("Prefer the newest source."))          # the next change, made on main
+        git = ["git", "-c", "user.name=test", "-c", "user.email=test@localhost", "-c", "core.autocrlf=false",
+               "-c", "commit.gpgsign=false", "-c", "init.defaultBranch=main"]
+
+        def run(*args):
+            r = subprocess.run([*git, *args], cwd=kit, capture_output=True, text=True, encoding="utf-8")
+            self.assertEqual(r.returncode, 0, (args, r.stderr))
+
+        def take(src: Path):
+            for rel in (GEN, CFG, REG):
+                (kit / rel).write_bytes((src / rel).read_bytes())
+
+        run("init", "-q")
+        run("add", "-A")
+        run("commit", "-q", "-m", "the kit: v3")
+        run("switch", "-q", "-c", "prompt-v4")
+        take(branch)
+        run("commit", "-q", "-a", "-m", "v4: rule 4 gains a sentence")
+        run("switch", "-q", "main")
+        self.assertEqual(json.loads((kit / REG).read_text(encoding="utf-8"))["versions"], {"documind-rag@v3": BASE})
+        self.assertEqual(prompt_pin.spent(kit, "documind-rag"), {"documind-rag@v3", "documind-rag@v4"})
+        self.assertEqual(prompt_pin.next_version("documind-rag@v3", {"documind-rag@v3": BASE}, kit), "v5")
+        (kit / GEN).write_bytes((later / GEN).read_bytes())
+        for step in ("the branch kept", "the branch deleted"):
+            if step == "the branch deleted":
+                run("branch", "-D", "prompt-v4")
+            with self.subTest(step):
+                code, out, err = self.pin(kit)
+                self.assertEqual((code, err), (1, ""), out)
+                self.assertIn(f'Set prompt_version to "v5" in {CFG}, then add\n    "documind-rag@v5": ', out)
+        run("reflog", "expire", "--expire=now", "--expire-unreachable=now", "--all")
+        self.assertEqual(prompt_pin.spent(kit, "documind-rag"), {"documind-rag@v3"})
+        code, out, _ = self.pin(kit)
+        self.assertIn('Set prompt_version to "v4"', out)                      # nothing left that held v4's line
+        self.assertEqual(prompt_pin.spent(later, "documind-rag"), set())      # a copy outside git
+        code, out, _ = self.pin(later)
+        self.assertIn('Set prompt_version to "v4"', out)
 
     def test_what_it_cannot_read_is_refused(self):
         twice = '{"versions": {"documind-rag@v3": "%s", "documind-rag@v3": "%s"}}' % (BASE, "0" * 64)

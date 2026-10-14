@@ -278,8 +278,8 @@ def _call(prompt: str, packed: list[dict], tenant_id: str | None, max_tokens: in
             max_output_tokens=max_tokens,
             # NO temperature / top_p / top_k: gemini-3.6-flash ignores all
             # three, and passing them reads like a knob that does something.
-            # thinking_level, not thinking_budget=0 - Gemini 3.x thinking
-            # cannot be switched off, and budget=0 is a 2.5-era setting.
+            # thinking_level, Gemini 3's own setting, at LOW: an answer is given a little thinking. The Desk router's L1
+            # sends the older thinking_budget 0, for the least (evals/route_probe.py measures whether that is none).
             thinking_config=types.ThinkingConfig(thinking_level="LOW"),
             **_cache_kwargs(tenant_id, model),
         ),

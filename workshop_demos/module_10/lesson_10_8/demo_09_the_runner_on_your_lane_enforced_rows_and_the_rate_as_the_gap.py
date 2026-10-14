@@ -3,11 +3,11 @@
 Do it: the proof's run Do it: the agents' surfaces, switches on The gcloud update makes another documind-chat revision, with neither switch set; the runner then sends the same five rows. The enforced rows cannot move: the tenant pin, the class filter and check_args know nothing of the switches. The measured rows can. Do it: the two runs side by side The peer row, at a local peer
 
 Run order inside this file:
-1. Do it: the proof's run (source window 42)
-2. Do it: the agents' surfaces, switches on (source window 44)
-3. Change it: the switches off, the same rows (source window 46)
-4. Do it: the two runs side by side (source window 48)
-5. The peer row, at a local peer (source window 50)
+1. Do it: the proof's run (source window 45)
+2. Do it: the agents' surfaces, switches on (source window 47)
+3. Change it: the switches off, the same rows (source window 49)
+4. Do it: the two runs side by side (source window 51)
+5. The peer row, at a local peer (source window 53)
 
 Prerequisites: demo_08_the_doors_by_hand_two_brains_the_router_the_lane_s_peer.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -50,8 +50,7 @@ def step_01_the_proof_s_run(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_the_agents_surfaces_switches_on.
-COMMANDS_02 = """DOCUMIND_ID_TOKEN="$(tok "$CHAT")" python evals/run_attacks.py --chat-url "$CHAT" --desk --surfaces chat,desk \\
-  --report evals/reports/attacks108_agents_on.json --label "fence and scrub on"
+COMMANDS_02 = """make attack-agents PROJECT="$PROJECT" REPORT=evals/reports/attacks108_agents_on.json LABEL="fence and scrub on"
 
 """
 
@@ -61,7 +60,7 @@ def step_02_the_agents_surfaces_switches_on(session):
     Do it: the agents' surfaces, switches on
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in the kit (five rows to documind-chat with the switches on).
+    Operations: bash — run in the operator shell, in the kit (five rows to documind-chat with the switches on; make mints the token).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
@@ -74,8 +73,7 @@ def step_02_the_agents_surfaces_switches_on(session):
 # Original CLI workflow for step_03_change_it_the_switches_off_the_same_rows.
 COMMANDS_03 = """gcloud run services update documind-chat --region "$REGION" --project "$PROJECT" --quiet \\
   --remove-env-vars AGENT_FENCE,AGENT_SCRUB
-DOCUMIND_ID_TOKEN="$(tok "$CHAT")" python evals/run_attacks.py --chat-url "$CHAT" --desk --surfaces chat,desk \\
-  --report evals/reports/attacks108_agents_off.json --label "fence and scrub off"
+make attack-agents PROJECT="$PROJECT" REPORT=evals/reports/attacks108_agents_off.json LABEL="fence and scrub off"
 
 """
 
@@ -117,7 +115,15 @@ def step_04_the_two_runs_side_by_side(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_the_peer_row_at_a_local_peer.
-COMMANDS_05 = """DOCUMIND_PEER_URL=http://127.0.0.1:8080 python evals/run_attacks.py --peer-local --surfaces peer --report evals/reports/attacks108_peer.json
+COMMANDS_05 = """python3 -m venv ~/mcp-venv           # once: the MCP server's pins and the local store's
+~/mcp-venv/bin/pip install -q -r services/mcp/requirements.txt \\
+  $(grep -E '^(langchain-chroma|chromadb)==' services/chat/requirements-local.txt)
+make mcp-local PY=~/mcp-venv/bin/python     # a second tab: acme's corpus, then the server on 127.0.0.1:8000
+# a third tab: the kit's peer against it, in step 10's venv, Gemini through your own credentials
+cd services/agent && MCP_URL=http://127.0.0.1:8000 MCP_AUTH=none SELF_URL= PORT=8080 \\
+  GOOGLE_CLOUD_PROJECT="$PROJECT" GOOGLE_GENAI_USE_VERTEXAI=1 GOOGLE_CLOUD_LOCATION=global ~/pins-venv/bin/python agent.py
+# back in the first tab: the peer's row, with no token and no gcloud
+make attack-agents SURFACES=peer REPORT=evals/reports/attacks108_peer.json LABEL="the local peer"
 
 """
 
@@ -127,7 +133,7 @@ def step_05_the_peer_row_at_a_local_peer(session):
     The peer row, at a local peer
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — the author's shell, with the peer served locally over a local-profile MCP server (RUN_LIST.md).
+    Operations: bash — the author's shell (the MCP server in the local profile, the kit's peer beside it, then the peer's row: RUN_LIST.md).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
@@ -144,11 +150,11 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_42', step_01_the_proof_s_run),
-        ('source_44', step_02_the_agents_surfaces_switches_on),
-        ('source_46', step_03_change_it_the_switches_off_the_same_rows),
-        ('source_48', step_04_the_two_runs_side_by_side),
-        ('source_50', step_05_the_peer_row_at_a_local_peer),
+        ('source_45', step_01_the_proof_s_run),
+        ('source_47', step_02_the_agents_surfaces_switches_on),
+        ('source_49', step_03_change_it_the_switches_off_the_same_rows),
+        ('source_51', step_04_the_two_runs_side_by_side),
+        ('source_53', step_05_the_peer_row_at_a_local_peer),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

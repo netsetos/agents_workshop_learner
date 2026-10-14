@@ -3,8 +3,8 @@
 Three GETs and one describe, as you. The last line greps documind-ui's description for its IAP annotation; step 9 says why it is greped rather than named. Every offline line again, and a lane: line under components 1, 2, 4 and 8. Reads only; Rs 0.
 
 Run order inside this file:
-1. Do it: the reads by hand (source window 28)
-2. Do it: the check with your lane (source window 30)
+1. Do it: the reads by hand (source window 30)
+2. Do it: the check with your lane (source window 32)
 
 Prerequisites: demo_06_change_it_one_command_deleted_one_component_fails.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -78,8 +78,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_28', step_01_the_reads_by_hand),
-        ('source_30', step_02_the_check_with_your_lane),
+        ('source_30', step_01_the_reads_by_hand),
+        ('source_32', step_02_the_check_with_your_lane),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

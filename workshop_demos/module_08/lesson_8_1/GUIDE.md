@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_8.1_PubSub_Kafka_WIX.html`, reviewed at blob `68574285615aa236a1f361df759f8a2b6a9d97fd`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_8.1_PubSub_Kafka_WIX.html`, reviewed at blob `1e9a96b64334dbc3d0d7d57f73ef634d3ecaaa83`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 1.4 followed a document to its records and lesson 1.5 followed a message through its retries. This lesson follows the bus between them as a part you could replace. One upload is traced from the object's generation through the notice, the push and the acknowledgement to the records and an answer that cites it. The subscription's settings are read off the platform: the five the kit declares and the five it leaves to Google. The kit's thirty-one corpus objects are pushed at a worker squeezed from thirty instances to five. And every setting is set beside its Kafka counterpart, with the gap between them.
 
@@ -184,9 +184,9 @@ Now note the time and upload the corpus. Keep this shell open: the next three ce
 
 Give it two minutes, then read every request Cloud Run received for the worker since `BURST_SINCE`, by status and by ten-second slice, with the worker's verdicts for the same window:
 
-Three things to check in your output. First, every object was taken in the end: the 200s add up to 31, and the verdicts say `ingest_duplicate` as many times. One more of each is a redelivery, which at-least-once allows and the claim makes harmless. Second, each 429, if you have any, is a delivery Cloud Run refused before the worker saw it, so it has no worker line beside it. The retry policy holds that message back for at least the 10-second minimum before delivering it again (best effort, in Google's words), which is why the 200s spread into later slices. Third, the duplicates are invisible to the kit's lifecycle metric, which counts only five of the worker's verdicts:
+Three things to check in your output. First, every object was taken in the end: the 200s add up to 31, and the verdicts say `ingest_duplicate` as many times. One more of each is a redelivery, which at-least-once allows and the claim makes harmless. Second, each 429, if you have any, is a delivery Cloud Run refused before the worker saw it, so it has no worker line beside it. The retry policy holds that message back for at least the 10-second minimum before delivering it again (best effort, in Google's words), which is why the 200s spread into later slices. Third, the duplicates are invisible to the kit's lifecycle metric, which counts only ten of the worker's verdicts:
 
-The metric counts `ingest_ok`, `ingest_superseded`, `ingest_reactivated`, `ingest_stale_event`, `ingest_failed`. `ingest_duplicate` is not among them, so a burst of 31 deliveries moves `documind/ingest_events` by nothing at all. To count deliveries you need the request log, as above, or Pub/Sub's own metrics, next.
+The metric counts `ingest_ok`, `ingest_superseded`, `ingest_reactivated`, `ingest_stale_event`, `ingest_failed`, `ingest_queued_batch`, `ingest_poison`, `ingest_withdrawn`, `ingest_already_current`, `ingest_claim_retaken`. `ingest_duplicate` is not among them, so a burst of 31 deliveries moves `documind/ingest_events` by nothing at all. To count deliveries you need the request log, as above, or Pub/Sub's own metrics, next.
 
 #### What Pub/Sub saw
 
@@ -194,7 +194,7 @@ Pub/Sub keeps its own counts for each subscription: the backlog (messages not ye
 
 The backlog column is the queue's version of what Kafka calls consumer lag: messages published and not yet dealt with. The age of the oldest one is the number an operator pages on, because it grows when the reader is stuck however small the backlog is. The push columns are Pub/Sub's side of the request log: `ack` for every 2xx, `4xx` for every 429 that Cloud Run sent back. The instance column should stay at 5 or under, though Google notes that a spike can take a service past its ceiling for a brief period, so one minute at a little over 5 is not a failure of the squeeze. The last two lines are the proof that the burst did no harm: nothing was forwarded to `documind-ingest-dlq`, and `ingest-dlq-sub` holds nothing, because no message came near 12 refusals.
 
-Notice what the kit itself would have told you about this burst: nothing. Its one alert on this path watches `ingest-dlq-sub`. There is none on `documind-ingest-push`'s backlog or on its oldest message, so a worker stuck at its ceiling, or down, shows up only when messages start reaching the dead-letter topic, after their twelfth refusal: about an hour after the first, by lesson 1.5's clock. Lesson 8.4 counts that among the failures nothing pages on.
+Notice what the kit itself would have told you about this burst: nothing, and rightly. It has two alerts on this path. One watches `ingest-dlq-sub`. The other, since 13 October 2026, watches `documind-ingest-push`'s oldest unacknowledged message and pages when it stays over 30 minutes for five minutes, so a worker stuck at its ceiling, or down, shows up there about half an hour in, rather than when messages start reaching the dead-letter topic after their twelfth refusal, about an hour after the first by lesson 1.5's clock. A burst that clears in a few minutes, like this one, pages neither. Lesson 8.4 sets that threshold against the slowest turn one document can honestly take.
 
 #### Put the ceiling back
 
@@ -234,7 +234,7 @@ Before any of those, look at what Pub/Sub can do without Kafka. Topic retention 
 
 Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away.
 
-When the checks are done, withdraw the note. `make retire` flags its rows as retired, with an `expire_at` 30 days out, marks its ledger row `withdrawn`, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and `make restore` would bring it back (lesson 1.7):
+When the checks are done, withdraw the note. `make retire` flags its rows as retired, with an `expire_at` 30 days out, marks its ledger row `withdrawn`, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and `make restore` would bring it back (lesson 1.7):
 
 Then put acme's pin back with the setup section's second window.
 

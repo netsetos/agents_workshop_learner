@@ -196,7 +196,7 @@ Expected shape, not a promised result:
 
 ### demo_04_architecture_the_path_an_incident_takes_read_by_read_and_rule_by_rule.py
 
-The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
+The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
 
 **`step_01_every_recording_offline(session)` — Architecture: the path an incident takes, read by read and rule by rule / Do it: every recording, offline**
 
@@ -246,7 +246,7 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0: it reads the
 Expected shape, not a promised result:
 
 ```text
-16 alert policies the kit declares (terraform/alerts.tf: 8, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.
+17 alert policies the kit declares (terraform/alerts.tf: 9, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.
 Silent: what remediate reads that no policy watches
   5xx answers: requests a service answered with a 5xx status, from Cloud Run's request log. no alert policy the kit
   declares counts a service's 5xx answers.
@@ -257,7 +257,7 @@ Silent: what remediate reads that no policy watches
 
 **`step_04_on_your_lane_the_policies_your_lane_holds(session)` — Architecture: the path an incident takes, read by read and rule by rule / Read it on your lane: the policies your lane holds**
 
-One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
+One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (one GET on the Monitoring API; changes nothing).
 
@@ -324,11 +324,11 @@ Expected shape, not a promised result:
 
 ```text
 the rules: 3 reads at Rs 0 and 0 model calls, at every scale
-a model: 3,122 tokens of rules and runbooks, then the lines; 614 tokens of plan out
-    1,000 turns a month:     3 lines an hour,     3 read |  3,897 tokens in | flash Rs  0.89 ($0.0105), flash-lite Rs 0.16 ($0.0019) an incident
-   10,000 turns a month:    28 lines an hour,    28 read |  4,445 tokens in | flash Rs  0.96 ($0.0113), flash-lite Rs 0.17 ($0.0020) an incident
-  100,000 turns a month:   274 lines an hour,   274 read |  9,826 tokens in | flash Rs  1.64 ($0.0193), flash-lite Rs 0.29 ($0.0034) an incident
-1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,582 tokens in | flash Rs  6.46 ($0.0760), flash-lite Rs 1.09 ($0.0128) an incident
+a model: 3,241 tokens of rules and runbooks, then the lines; 614 tokens of plan out
+    1,000 turns a month:     3 lines an hour,     3 read |  4,016 tokens in | flash Rs  0.90 ($0.0106), flash-lite Rs 0.16 ($0.0019) an incident
+   10,000 turns a month:    28 lines an hour,    28 read |  4,564 tokens in | flash Rs  0.97 ($0.0115), flash-lite Rs 0.18 ($0.0021) an incident
+  100,000 turns a month:   274 lines an hour,   274 read |  9,945 tokens in | flash Rs  1.66 ($0.0195), flash-lite Rs 0.29 ($0.0034) an incident
+1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,701 tokens in | flash Rs  6.47 ($0.0762), flash-lite Rs 1.09 ($0.0128) an incident
 ```
 
 ### demo_08_cost_at_10_what_breaks_first_is_the_read.py
@@ -398,7 +398,8 @@ SafetyTests (8)
   ok   no printed command could delete deploy or grant
   ok   the fixtures carry placeholders only
   ok   the live path reads three times and runs none of the plan
-LiveReadTests (8)
+LiveReadTests (9)
+  ok   a plan that stops saves nothing
   ok   a service named by the policy
   ok   save finds the number in the services urls without a namespace
   ok   save makes the reports folder a fresh clone lacks
@@ -427,6 +428,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.11_Incident_Remediation_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `03140ad39ae7045b92d7099e198148ed5e019940`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.11_Incident_Remediation_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `05a7640fa25b236c78e6696879fc67de8b6e8121`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

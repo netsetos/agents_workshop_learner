@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.5_Query_Rewrite_WIX.html`, reviewed at blob `e834ec75151063cb0e865fed7a4c47e9fa8b0f28`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.5_Query_Rewrite_WIX.html`, reviewed at blob `55dbd64e0bb1f0dea650430df968280eb5b457f8`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.4 kept the tenant and the filters on every rung a pool can come from. This lesson changes what every rung is searched with. A person asks "How much can I claim per trip for domestic travel?"; the handbook's clause says "Domestic travel is reimbursed against original receipts, capped at Rs 40,000 per trip." The kit's rewrite stage asks `gemini-3.1-flash-lite` for the question as a search query in the documents' words, searches the index with that, and hands the reranker and the model the person's question unchanged. A literal guard refuses any rewrite that drops or changes a code, a grade or a figure, and every refusal and every failure searches the question as asked. The stage ships off. You will try the guard in the page, ask the Chat page a paraphrase with the stage off, read the stage in the kit, call the rewrite directly, turn it on for a candidate revision that takes no traffic and make it fail, then measure the rewrite arm against the lane's own retrieval on 47 golden rows and 24 paraphrases: a measurement written to read right when the rewrite earns nothing.
 

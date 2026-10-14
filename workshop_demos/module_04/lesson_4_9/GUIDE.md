@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.9_Error_Analysis_WIX.html`, reviewed at blob `e61ba25bd35ef7b0073b8c75696ae736247c0b41`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.9_Error_Analysis_WIX.html`, reviewed at blob `fa8e5603553bd88010d7fc386e767f9d1c48d7cf`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 4.1 to 4.4 built a gate that says pass or fail, and lessons 4.6 to 4.8 put controls on rag-api's doors. This lesson reads what failed, then tests what holds. You ask the live revision and a weaker candidate every golden row, keeping the pool each answer was drawn from, and read the failing rows as the gate saw them. You write a note on ten of them before the kit names a single cause. Then you read the kit's eight causes, label your rows, and count them beside the kit's own readings. The second half turns lesson 4.8's four probes into a set of 15 attacks on `/v1/query`, `/v1/stream` and `/v1/passages`. Offline, each control is switched off in turn to prove it holds the rows it claims. On your lane, the set runs once with the guard off and once on a candidate with Model Armor on.
 

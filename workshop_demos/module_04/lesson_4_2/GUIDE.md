@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`, reviewed at blob `d4f2908a19ad29e2f5d01c93d24c9fd39ffe5e7b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.2_Live_Judge_WIX.html`, reviewed at blob `c26b42747346c206dc04138c93891585f612ae8f`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 4.1 made the golden set sound. This lesson runs the three instruments that use it, and keeps them apart on purpose. The offline gate checks the set on every push, with no credentials. The live gate sends every row to the deployed API, as a roster member and again as an outsider, and blocks a release on 9 thresholds and 15 required rows. The judge has Gemini read the lane's answers with the context they cite, and it never blocks anything. You will read CI's verdict on the kit you run, run the live gate and take its report apart, and run the judge beside it.
 

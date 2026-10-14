@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html`, reviewed at blob `fa065738aa8c1e457005a690533c8e0446fc39d7`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html`, reviewed at blob `58bef69de2d9e0f81fd613bc4b4801ccfb346ae7`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 4.2 ran three instruments, one at a time. This lesson puts each where it runs. The offline gate runs in CI on every push, and both release paths of the delivery workflow need it to pass first. The live gate runs on a candidate, a revision of the API that takes no traffic, and holds the release on 9 thresholds and 15 required rows. After the release nothing gates: each answer leaves a usage row, and two alert policies read rates from the rows. You will break a golden row and watch the offline check refuse it, gate a candidate and remove it, find the gate's own rows in the live log, and read one refusal the alert can never count.
 

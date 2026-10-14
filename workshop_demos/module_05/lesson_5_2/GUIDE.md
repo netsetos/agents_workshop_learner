@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_5.2_MCP_Tools_WIX.html`, reviewed at blob `5bd9a8170b319741b49686069aaeee93daf89d9e`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.2_MCP_Tools_WIX.html`, reviewed at blob `c8d94db34e2bd24045e0c60768c637d37f426c68`. Learners read that page on the course site; this guide keeps its prose.
 
 The UI is how a person reaches your lane. MCP is how an agent does: Claude Desktop, Cursor, another team's ADK app, any agent you did not build. The kit's MCP server exposes four of the lane's own operations as tools. A client discovers them with one JSON-RPC method, `tools/list`, and invokes one with another, `tools/call`. You import the server and read what it declares. You start it on your machine with your lane behind it, send `tools/list` over plain HTTP, and call `retrieve` from fastmcp's client, the same client the smoke test and ADK use. Three calls that fail show where the server checks what.
 

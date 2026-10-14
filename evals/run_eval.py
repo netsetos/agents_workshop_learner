@@ -119,6 +119,13 @@ STAGES = ("retrieve_ms", "rerank_ms", "generate_ms")
 TEXT_FILES = (".md", ".txt")
 
 
+def _text(path: str) -> str:
+    """A text file's contents, the file closed again: open().read() left each one to the garbage collector, a
+    ResourceWarning per corpus file wherever warnings show (13 October 2026)."""
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
 def load_corpus() -> dict[str, dict[str, str]]:
     """{tenant: {path_relative_to_corpus: text}}. Text is lower-cased once.
 
@@ -136,7 +143,7 @@ def load_corpus() -> dict[str, dict[str, str]]:
         for fn in sorted(os.listdir(d)):
             p = os.path.join(d, fn)
             if os.path.isfile(p) and fn.endswith(TEXT_FILES):
-                out[tenant][fn] = open(p, encoding="utf-8").read()
+                out[tenant][fn] = _text(p)
     return out
 
 
@@ -145,8 +152,7 @@ def load_demo() -> str:
     must_not_contain must live in, or the row asserts a staleness nothing could produce."""
     if not os.path.isdir(DEMO):
         return ""
-    return "\n".join(open(os.path.join(DEMO, fn), encoding="utf-8").read()
-                     for fn in sorted(os.listdir(DEMO)) if fn.endswith(TEXT_FILES)).lower()
+    return "\n".join(_text(os.path.join(DEMO, fn)) for fn in sorted(os.listdir(DEMO)) if fn.endswith(TEXT_FILES)).lower()
 
 
 def load_golden() -> list[dict]:

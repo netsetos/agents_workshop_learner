@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_7/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.7_A2A_Handoff_WIX.html",
-  "source_sha": "bbc7b0feac324ae6df0cfc4fca05ac6b7578314a",
+  "source_sha": "687e6663142d3602ab105d211e0fa11b3981a1f8",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 49,
+  "source_window_count": 53,
   "persist_variables": [
     "AGENT",
     "AGENT_TOKEN",
@@ -204,6 +204,10 @@
     {
       "level": 4,
       "heading": "Every guard, and where it lives"
+    },
+    {
+      "level": 4,
+      "heading": "A ping-pong, and the cap that ends it"
     },
     {
       "level": 4,
@@ -664,6 +668,48 @@
           "manual_checkpoint": null
         }
       ],
+      "next": "demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py"
+    },
+    {
+      "id": "demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet",
+      "lesson": "10.7",
+      "file": "demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py",
+      "category": "required",
+      "requires": [
+        "demo_09_a_loop_through_someone_else_s_agent_refused_at_run_time"
+      ],
+      "heading": "Why it is built this way, what it costs, and what the kit does not do yet",
+      "purpose": "Every guard above sits on the lane. One more loop needs neither a hand-off nor a second service: two agents that may each hand the turn to the other, where neither owns the answer. In ADK it is one setting away. An agent under a parent is offered transfer_to_agent, whose agent_name is an enum of the agents it may reach: its parent, and its peers unless disallow_transfer_to_peers is set. commands/agent_shapes.py builds two such desks under a root, scripts each to want the other desk to answer, and puts one plugin on the run, TransferCap. It counts the agents a turn starts in a temp: key, which ADK keeps for one turn and never stores, and once 3 transfers have been made it answers in place of the next agent, before that agent's model is called. Run it offline, at Rs 0. It runs the same turn twice, with the peer edges and without them:",
+      "anchor": "s10",
+      "anchors": [
+        "s10"
+      ],
+      "section_number": 10,
+      "windows": [
+        52
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_7/GUIDE.md",
+      "source_lines": [
+        1048
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "Why it is built this way, what it costs, and what the kit does not do yet",
+          "subheading": "A ping-pong, and the cap that ends it",
+          "purpose": "Every guard above sits on the lane. One more loop needs neither a hand-off nor a second service: two agents that may each hand the turn to the other, where neither owns the answer. In ADK it is one setting away. An agent under a parent is offered transfer_to_agent, whose agent_name is an enum of the agents it may reach: its parent, and its peers unless disallow_transfer_to_peers is set. commands/agent_shapes.py builds two such desks under a root, scripts each to want the other desk to answer, and puts one plugin on the run, TransferCap. It counts the agents a turn starts in a temp: key, which ADK keeps for one turn and never stores, and once 3 transfers have been made it answers in place of the next agent, before that agent's model is called. Run it offline, at Rs 0. It runs the same turn twice, with the peer edges and without them:",
+          "label": "bash — run in the operator shell, in the kit (two ADK desks in a ping-pong, and the cap that ends it; offline, Rs 0; the first run builds ~/graph-venv)",
+          "expected": "swarm_adk, offline: scripted models, no credential, Rs 0. TransferCap ends a turn after 3 transfers.\nQ: What notice period does a confirmed E3 employee at ACME serve?\n\n== transfers between the desks allowed (ADK's default)\nwho each agent may transfer to (transfer_to_agent's enum, as its model was offered it):\n  desk_root      handbook_desk, statute_desk\n  handbook_desk  desk_root, statute_desk\n  statute_desk   desk_root, handbook_desk\ntransfer 1: desk_root -> handbook_desk\ntransfer 2: handbook_desk -> statute_desk\ntransfer 3: statute_desk -> handbook_desk\ntransfer 4: handbook_desk -> statute_desk   refused: TransferCap answered before statute_desk ran\nanswer, written by TransferCap, in statute_desk's place: Stopped after 3 transfers in one turn.\nmodel calls: 4 | transfers made: 3 | session state stored after the turn: {}\n\n== disallow_transfer_to_peers=True on both desks\nwho each agent may transfer to (transfer_to_agent's enum, as its model was offered it):\n  desk_root      handbook_desk, statute_desk\n  handbook_desk  desk_root\n  statute_desk   desk_root\ntransfer 1: desk_root -> handbook_desk\ntransfer 2: handbook_desk -> desk_root\ntransfer 3: desk_root -> statute_desk\ntransfer 4: statute_desk -> desk_root   refused: TransferCap answered before desk_root ran\nanswer, written by TransferCap, in desk_root's place: Stopped after 3 transfers in one turn.\nmodel calls: 4 | transfers made: 3 | session state stored after the turn: {}\n\nWith the peer edges gone the loop ran through the root; the cap ended it both times.",
+          "adaptations": [],
+          "id": "source_52",
+          "function": "step_01_a_ping_pong_and_the_cap_that_ends_it",
+          "window": 52,
+          "source_line": 1048,
+          "manual_checkpoint": null
+        }
+      ],
       "next": "See README: optional choices, then setup/finish.py if listed."
     },
     {
@@ -960,6 +1006,27 @@
       "heading": "A loop through someone else's agent: refused at run time",
       "anchor": "s9",
       "line": 982
+    },
+    {
+      "window": 50,
+      "label": "commands/agent_shapes.py - TransferCap: the agents a turn starts, counted in a temp: key, and the start after the third transfer answered in that agent's place",
+      "heading": "Why it is built this way, what it costs, and what the kit does not do yet",
+      "anchor": "s10",
+      "line": 1013
+    },
+    {
+      "window": 51,
+      "label": "commands/agent_shapes.py - swarm_adk(): two desks that may transfer to each other and to their root, the cap on the App",
+      "heading": "Why it is built this way, what it costs, and what the kit does not do yet",
+      "anchor": "s10",
+      "line": 1039
+    },
+    {
+      "window": 53,
+      "label": "expected (the kit's agent_shapes.py on its own scripted models, with the chat image's pins; yours should match it)",
+      "heading": "Why it is built this way, what it costs, and what the kit does not do yet",
+      "anchor": "s10",
+      "line": 1050
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -1,9 +1,9 @@
 """Lesson 10.10: Verify it yourself: the checklist
 
-Fourteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
+Fifteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
 
 Run order inside this file:
-1. Verify it yourself: the checklist (source window 78)
+1. Verify it yourself: the checklist (source window 82)
 
 Prerequisites: demo_09_direct_reads_and_the_human_step.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -32,7 +32,7 @@ COMMANDS_01 = """rm -rf /tmp/ralph-hand /tmp/ralph-strong /tmp/ralph-weak /tmp/r
 def step_01_verify_it_yourself_the_checklist(session):
     """Run Verify it yourself: the checklist at this checkpoint.
 
-    Fourteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
+    Fifteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell (optional: the run directories this page made).
@@ -52,7 +52,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_78', step_01_verify_it_yourself_the_checklist),
+        ('source_82', step_01_verify_it_yourself_the_checklist),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

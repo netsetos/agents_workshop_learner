@@ -243,5 +243,51 @@ class SubscriptionsNeverExpire(unittest.TestCase):
             self.assertRegex(body, r'(?m)^  expiration_policy \{\n    ttl = ""\n  \}$', name)
 
 
+class IngestBacklogAlert(unittest.TestCase):
+    """The main ingest subscription's backlog pages (13 October 2026, lesson 8.4's review). dlq_depth read the dead
+    letters and no policy read documind-ingest-push, so a worker that stopped answering showed only when messages
+    reached the DLQ after their twelfth attempt, about an hour in. ingest_backlog reads the subscription's oldest
+    unacknowledged message, on every lane, and its threshold clears one document's slowest honest turn."""
+
+    TERRAFORM = Path(__file__).resolve().parents[2] / "terraform"
+    INGEST = Path(__file__).resolve().parents[2] / "services" / "ingest"
+
+    def block(self, kind: str, name: str, text: str) -> str:
+        m = re.search(rf'^resource "{kind}" "{name}" \{{\n(.*?)^\}}', text, re.M | re.S)
+        self.assertIsNotNone(m, name)
+        return m.group(1)
+
+    def policy(self) -> str:
+        return self.block("google_monitoring_alert_policy", "ingest_backlog",
+                          (self.TERRAFORM / "alerts.tf").read_text(encoding="utf-8"))
+
+    def test_the_push_subscription_has_a_backlog_policy(self):
+        body = self.policy()
+        self.assertIn(r'resource.labels.subscription_id=\"${google_pubsub_subscription.ingest_push.name}\"', body)
+        self.assertIn(r'metric.type=\"pubsub.googleapis.com/subscription/oldest_unacked_message_age\"', body)
+        self.assertRegex(body, r'(?m)^      comparison      = "COMPARISON_GT"$')
+        self.assertIn("notification_channels = local.alert_channel_ids", body)
+        self.assertNotRegex(body, r"(?m)^  count\s*=")                  # declared on every lane, as dlq_depth is
+        self.assertRegex(body, r'\n  documentation \{\n    content\s*=\s*"[^"\n]*documind-ingest-push')
+
+    def test_the_threshold_clears_one_documents_slowest_turn(self):
+        # The slowest honest turn of one message: its holder cut off just after claiming, every delivery inside the
+        # claim's lease nacked, the delivery that retakes it at most one maximum backoff after the lease runs out,
+        # and then one attempt of up to an ack deadline. Threshold plus duration must outlast it, or one document
+        # would page as a backlog.
+        body = self.policy()
+        threshold = int(re.search(r"(?m)^      threshold_value = (\d+)$", body).group(1))
+        duration = int(re.search(r'(?m)^      duration        = "(\d+)s"$', body).group(1))
+        sub = self.block("google_pubsub_subscription", "ingest_push",
+                         (self.TERRAFORM / "eventarc.tf").read_text(encoding="utf-8"))
+        ack = int(re.search(r"(?m)^  ack_deadline_seconds = (\d+)$", sub).group(1))
+        backoff = int(re.search(r'(?m)^    maximum_backoff = "(\d+)s"$', sub).group(1))
+        lease = sum(int(n) for n in re.search(r"(?m)^LEASE_SECONDS = ([\d +]+)$", (
+            self.INGEST / "idempotency.py").read_text(encoding="utf-8")).group(1).split("+"))
+        self.assertGreater(lease, ack, "a claim's lease outlasts the deadline its request is cut at")
+        self.assertGreater(threshold + duration, lease + backoff + ack)
+        self.assertLess(threshold, 3600, "the backlog pages before the dead-letter queue would, about an hour in")
+
+
 if __name__ == "__main__":
     unittest.main()

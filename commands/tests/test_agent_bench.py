@@ -23,6 +23,8 @@ import json
 import logging
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -87,6 +89,44 @@ class Wiring(unittest.TestCase):
         self.assertLess(sh.index('if [ "${OFFLINE:-}" = 1 ]; then'), sh.index("gcloud projects describe"))   # OFFLINE: no gcloud
         self.assertIn('exec "$VENV/bin/python" commands/agent_turn.py "$MODE" "${ARGS[@]}"', sh)
         self.assertIn("set -euo pipefail", sh)
+
+    def test_invent_and_launder_are_make_variables(self):
+        """13 October 2026: make agent-turn passed neither of agent_turn.py's offline flags, so lessons 10.1 and 10.3 ran
+        the script through agent-turn.sh by hand. INVENT and LAUNDER: 1 for the flag's own figure, else the figure."""
+        agents, sh = read("mk", "agents.mk"), read("commands", "agent-turn.sh")
+        recipe = agents.split("\nagent-turn: $(if $(OFFLINE),,guard-project)\n", 1)[1].split("\n", 1)[0]
+        self.assertIn(' INVENT="$(INVENT)" LAUNDER="$(LAUNDER)" ', recipe)
+        for flag in ("INVENT", "LAUNDER"):
+            self.assertIn(f'if [ -n "${{{flag}:-}}" ]; then ARGS+=(--{flag.lower()}); [ "${flag}" = 1 ] || '
+                          f'ARGS+=("${flag}"); fi', sh)
+
+    @unittest.skipIf(sys.platform == "win32" or not shutil.which("bash"), "a POSIX bash")
+    def test_agent_turn_sh_hands_them_to_agent_turn_py(self):
+        with tempfile.TemporaryDirectory() as venv:
+            (Path(venv) / "bin").mkdir()
+            for tool, body in (("pip", "exit 0"), ("python", 'printf "%s\\n" "$@"')):     # python prints its argv
+                (Path(venv) / "bin" / tool).write_text(f"#!/usr/bin/env bash\n{body}\n", encoding="utf-8")
+                (Path(venv) / "bin" / tool).chmod(0o755)
+
+            def argv(**env):
+                keep = {k: v for k, v in os.environ.items() if k not in ("INVENT", "LAUNDER", "PATTERN", "TENANT", "DESK")}
+                r = subprocess.run(["bash", "commands/agent-turn.sh"], cwd=str(KIT), capture_output=True, text=True,
+                                   timeout=60, env={**keep, "GRAPH_VENV": venv, "OFFLINE": "1", **env})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                return r.stdout.splitlines()
+
+            head = ["commands/agent_turn.py", "--offline", "--pattern", "react_text", "--desk", "astar", "--tenant", "acme"]
+            self.assertEqual(argv(PATTERN="react_text"), head)
+            self.assertEqual(argv(PATTERN="react_text", INVENT="1"), head + ["--invent"])
+            self.assertEqual(argv(PATTERN="react_text", INVENT="Rs 3,00,000", LAUNDER="1"),
+                             head + ["--invent", "Rs 3,00,000", "--launder"])
+
+    @unittest.skipUnless(shutil.which("make"), "no make here")
+    def test_make_agent_turn_passes_them_to_the_script(self):
+        r = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(KIT), "agent-turn", "OFFLINE=1", "PATTERN=verify",
+                            "LAUNDER=Rs 2,40,000"], capture_output=True, text=True, timeout=60)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn(' OFFLINE=1 INVENT="" LAUNDER="Rs 2,40,000" PY=', r.stdout)
 
     def test_ci_runs_the_chat_pins_half(self):
         line = "DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_agent_bench.py -v"

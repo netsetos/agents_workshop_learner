@@ -6,10 +6,10 @@
 # clone and never runs git push; the live agent's one credential is RALPH_API_KEY, a model-only key the author creates
 # for the run and deletes after it, read from your shell and never a make variable.
 
-# The image the live loop runs its two containers from, the agent and the oracle (commands/ralph/Dockerfile): Gemini CLI
-# at GEMINI_CLI_VERSION, which the batch-1 probe pins (there is no default), and Python 3.12; no gcloud, no credential.
-# Built from commands/ralph/ alone, so no other kit file enters it. Cloud Shell's docker storage does not outlive the
-# session: build it again in each one.
+# The image the live loop runs its containers from, the agent, the oracle and, with RALPH_EGRESS=proxy, the proxy
+# (commands/ralph/Dockerfile): Gemini CLI at GEMINI_CLI_VERSION, which the batch-1 probe pins (there is no default), and
+# Python 3.12; no gcloud, no credential. Built from commands/ralph/ alone, so no other kit file enters it. Cloud
+# Shell's docker storage does not outlive the session: build it again in each one.
 RALPH_IMAGE ?= documind-ralph
 
 ralph-image:
@@ -28,7 +28,7 @@ ralph-image:
 # probe says the key needs them. DRY_RUN=1 prints the two docker run lines and starts nothing. It prints each
 # iteration's item, verdict, lines, tokens and rupees, and leaves ralph.patch, kit.patch and summary.json in the run.
 ralph:
-	@$(PY) commands/ralph.py loop $(if $(OFFLINE),--offline,) $(if $(DRY_RUN),--dry-run,) --task $(or $(TASK),deadline) --oracle $(or $(ORACLE),strong) $(if $(RALPH_MAX_ITERS),--max-iters $(RALPH_MAX_ITERS),) $(if $(RALPH_BUDGET_INR),--budget-inr $(RALPH_BUDGET_INR),) $(if $(RALPH_MAX_DIFF_LINES),--max-diff-lines $(RALPH_MAX_DIFF_LINES),) $(if $(RALPH_MODEL),--model $(RALPH_MODEL),) --image $(RALPH_IMAGE) $(if $(RALPH_PROJECT),--project $(RALPH_PROJECT),) $(if $(OUT),--out "$(OUT)",)
+	@$(PY) commands/ralph.py loop $(if $(OFFLINE),--offline,) $(if $(DRY_RUN),--dry-run,) --task $(or $(TASK),deadline) --oracle $(or $(ORACLE),strong) $(if $(RALPH_MAX_ITERS),--max-iters $(RALPH_MAX_ITERS),) $(if $(RALPH_BUDGET_INR),--budget-inr $(RALPH_BUDGET_INR),) $(if $(RALPH_MAX_DIFF_LINES),--max-diff-lines $(RALPH_MAX_DIFF_LINES),) $(if $(RALPH_MODEL),--model $(RALPH_MODEL),) --image $(RALPH_IMAGE) $(if $(RALPH_PROJECT),--project $(RALPH_PROJECT),) $(if $(OUT),--out "$(OUT)",) $(if $(RALPH_EGRESS),--egress $(RALPH_EGRESS),)
 
 # The workspace a loop starts from, and nothing else (TASK=, OUT=): the cut shared/desk_calc.py, PROMPT.md, spec.md,
 # fix_plan.md, GEMINI.md and oracle.md, with its git repository beside it and no remote. For one iteration by hand: run
@@ -50,8 +50,14 @@ ralph-check:
 # and RALPH_API_KEY in your shell, two headless calls in the agent's container: one prints Gemini CLI's JSON stats as
 # the loop prices them, one asks for a web fetch, which the excluded web tools must refuse. A few rupees: Gemini CLI
 # sends its own long system prompt with every request.
+# RALPH_EGRESS=proxy, here and on make ralph (off unless given; off, nothing changes): each agent container joins an
+# internal network of its own, with no route out, and reaches only aiplatform.googleapis.com:443, through a proxy the
+# loop starts beside it for the iteration and removes after it (commands/ralph/egress.py, in a third container of
+# RALPH_IMAGE), keeping its log in the run. The probe then adds three free checks from inside the agent's container:
+# example.com and the metadata server's address unreachable directly, the proxy refusing example.com and opening a
+# tunnel to the model endpoint; with YES=1 its two calls go through the proxy, whose log names each host they asked for.
 ralph-probe:
-	@$(PY) commands/ralph.py probe --image $(RALPH_IMAGE) $(if $(RALPH_MODEL),--model $(RALPH_MODEL),) $(if $(RALPH_PROJECT),--project $(RALPH_PROJECT),) $(if $(YES),--yes,)
+	@$(PY) commands/ralph.py probe --image $(RALPH_IMAGE) $(if $(RALPH_MODEL),--model $(RALPH_MODEL),) $(if $(RALPH_PROJECT),--project $(RALPH_PROJECT),) $(if $(YES),--yes,) $(if $(RALPH_EGRESS),--egress $(RALPH_EGRESS),)
 
 # An AI code reviewer on one diff of shared/desk_calc.py (commands/review_diff.py): DIFF= a run's ralph.patch, or the
 # by-hand.patch make ralph-check WORKSPACE= wrote. Its findings, each a rule of the reviewer's rubric with a line and a

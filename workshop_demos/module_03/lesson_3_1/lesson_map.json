@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.1_Stochastic_WIX.html",
-  "source_sha": "d207fd216fcf175508eb192e0e046d077f4693c9",
+  "source_sha": "a05b177935767e6d4412a41782001c53c305ff58",
   "shared_setup_windows": [
     1
   ],
@@ -233,7 +233,7 @@
         "demo_03_one_question_five_times_in_the_chat_page"
       ],
       "heading": "The bench for Rs 0: its tests, and a scripted model",
-      "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 18 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Before you spend a rupee, run the bench where nothing can be billed. First its tests, 18 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Then the bench itself. The cell below runs prompt_bench.main(), the function make bench runs, over generator.py imported in your shell, with two things stood in. /v1/passages returns the handbook's first six clauses, cut by the kit's own chunker as the kit's tests cut them, so NP-03 is [Source 1] and LV-07 is [Source 4]. The model is a script behind generator._client. It writes five wordings of an answer to jn-03 in turn, the same five at every level and temperature, and \"thinks\" 120 tokens at LOW and 900 at HIGH, the numbers the kit's tests script. Its fifth wording has all 50 days encashed, so that you can see a failure printed. It also counts the thinking level and the temperature each call was sent with. The cell runs the bench twice: the two levels with --show, then a temperature of 2.0.",
+      "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 21 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Before you spend a rupee, run the bench where nothing can be billed. First its tests, 21 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Then the bench itself. The cell below runs prompt_bench.main(), the function make bench runs, over generator.py imported in your shell, with two things stood in. /v1/passages returns the handbook's first six clauses, cut by the kit's own chunker as the kit's tests cut them, so NP-03 is [Source 1] and LV-07 is [Source 4]. The model is a script behind generator._client. It writes five wordings of an answer to jn-03 in turn, the same five at every level and temperature, and \"thinks\" 120 tokens at LOW and 900 at HIGH, the numbers the kit's tests script. Its fifth wording has all 50 days encashed, so that you can see a failure printed. It also counts the thinking level and the temperature each call was sent with. The cell runs the bench twice: the two levels with --show, then a temperature of 2.0.",
       "anchor": "s5",
       "anchors": [
         "s5"
@@ -246,7 +246,7 @@
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
         791,
-        819
+        822
       ],
       "offline": true,
       "live_verified": false,
@@ -255,9 +255,9 @@
         {
           "heading": "The bench for Rs 0: its tests, and a scripted model",
           "subheading": "Definition",
-          "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 18 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv.",
+          "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 21 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: the kit's tests of the bench, no network)",
-          "expected": "test_the_level_and_the_temperature_are_sent_and_nothing_else_changes (test_prompt_bench.RecorderTests.test_the_level_and_the_temperature_are_sent_and_nothing_else_changes) ... ok\ntest_the_recorder_on_google_genais_own_types (test_prompt_bench.RecorderTests.test_the_recorder_on_google_genais_own_types) ... ok\ntest_a_row_with_no_pool_is_not_benched (test_prompt_bench.RetrievalTests.test_a_row_with_no_pool_is_not_benched) ... ok\ntest_each_rows_pool_is_read_once_before_anything_is_asked_and_held_fixed (test_prompt_bench.RetrievalTests.test_each_rows_pool_is_read_once_before_anything_is_asked_and_held_fixed) ... ok\ntest_the_prompt_is_what_generate_builds_from_the_pool (test_prompt_bench.RetrievalTests.test_the_prompt_is_what_generate_builds_from_the_pool) ... ok\ntest_failing_picks_a_reports_failing_rows (test_prompt_bench.RowTests.test_failing_picks_a_reports_failing_rows) ... ok\ntest_rows_are_refused_when_they_cannot_be_read (test_prompt_bench.RowTests.test_rows_are_refused_when_they_cannot_be_read) ... ok\ntest_the_generator_needs_the_lanes_project (test_prompt_bench.RowTests.test_the_generator_needs_the_lanes_project) ... ok\ntest_a_429_on_the_model_asked_falls_back_to_the_default_and_says_so (test_prompt_bench.ScoringTests.test_a_429_on_the_model_asked_falls_back_to_the_default_and_says_so) ... ok\ntest_a_wrong_answer_a_breach_and_a_stale_version_fail_as_the_gate_fails_them (test_prompt_bench.ScoringTests.test_a_wrong_answer_a_breach_and_a_stale_version_fail_as_the_gate_fails_them) ... ok\ntest_an_answer_cut_off_twice_is_an_error_with_both_calls_billed (test_prompt_bench.ScoringTests.test_an_answer_cut_off_twice_is_an_error_with_both_calls_billed) ... ok\ntest_every_answer_is_judged_by_the_gates_rule (test_prompt_bench.ScoringTests.test_every_answer_is_judged_by_the_gates_rule) ... ok\ntest_distinct_answers_and_citation_sets_per_row_across_runs (test_prompt_bench.SummaryTests.test_distinct_answers_and_citation_sets_per_row_across_runs) ... ok\ntest_the_rupees_are_list_price (test_prompt_bench.SummaryTests.test_the_rupees_are_list_price) ... ok\ntest_edit_system (test_prompt_bench.SystemTests.test_edit_system) ... ok\ntest_rules_edited_in_memory_and_generator_py_untouched (test_prompt_bench.SystemTests.test_rules_edited_in_memory_and_generator_py_untouched) ... ok\ntest_the_kit_system_and_client_come_back_whatever_happens (test_prompt_bench.SystemTests.test_the_kit_system_and_client_come_back_whatever_happens) ... ok\ntest_the_make_target_and_its_listings (test_prompt_bench.WiringTests.test_the_make_target_and_its_listings) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in N.NNNs\n\nOK",
+          "expected": "test_bench_redact_0_prints_them_as_they_are (test_prompt_bench.IdentifierTests.test_bench_redact_0_prints_them_as_they_are) ... ok\ntest_the_lanes_project_id_and_number_are_printed_and_reported_as_the_pages_print_them (test_prompt_bench.IdentifierTests.test_the_lanes_project_id_and_number_are_printed_and_reported_as_the_pages_print_them) ... ok\ntest_what_the_redactor_replaces (test_prompt_bench.IdentifierTests.test_what_the_redactor_replaces) ... ok\ntest_the_level_and_the_temperature_are_sent_and_nothing_else_changes (test_prompt_bench.RecorderTests.test_the_level_and_the_temperature_are_sent_and_nothing_else_changes) ... ok\ntest_the_recorder_on_google_genais_own_types (test_prompt_bench.RecorderTests.test_the_recorder_on_google_genais_own_types) ... ok\ntest_a_row_with_no_pool_is_not_benched (test_prompt_bench.RetrievalTests.test_a_row_with_no_pool_is_not_benched) ... ok\ntest_each_rows_pool_is_read_once_before_anything_is_asked_and_held_fixed (test_prompt_bench.RetrievalTests.test_each_rows_pool_is_read_once_before_anything_is_asked_and_held_fixed) ... ok\ntest_the_prompt_is_what_generate_builds_from_the_pool (test_prompt_bench.RetrievalTests.test_the_prompt_is_what_generate_builds_from_the_pool) ... ok\ntest_failing_picks_a_reports_failing_rows (test_prompt_bench.RowTests.test_failing_picks_a_reports_failing_rows) ... ok\ntest_rows_are_refused_when_they_cannot_be_read (test_prompt_bench.RowTests.test_rows_are_refused_when_they_cannot_be_read) ... ok\ntest_the_generator_needs_the_lanes_project (test_prompt_bench.RowTests.test_the_generator_needs_the_lanes_project) ... ok\ntest_a_429_on_the_model_asked_falls_back_to_the_default_and_says_so (test_prompt_bench.ScoringTests.test_a_429_on_the_model_asked_falls_back_to_the_default_and_says_so) ... ok\ntest_a_wrong_answer_a_breach_and_a_stale_version_fail_as_the_gate_fails_them (test_prompt_bench.ScoringTests.test_a_wrong_answer_a_breach_and_a_stale_version_fail_as_the_gate_fails_them) ... ok\ntest_an_answer_cut_off_twice_is_an_error_with_both_calls_billed (test_prompt_bench.ScoringTests.test_an_answer_cut_off_twice_is_an_error_with_both_calls_billed) ... ok\ntest_every_answer_is_judged_by_the_gates_rule (test_prompt_bench.ScoringTests.test_every_answer_is_judged_by_the_gates_rule) ... ok\ntest_distinct_answers_and_citation_sets_per_row_across_runs (test_prompt_bench.SummaryTests.test_distinct_answers_and_citation_sets_per_row_across_runs) ... ok\ntest_the_rupees_are_list_price (test_prompt_bench.SummaryTests.test_the_rupees_are_list_price) ... ok\ntest_edit_system (test_prompt_bench.SystemTests.test_edit_system) ... ok\ntest_rules_edited_in_memory_and_generator_py_untouched (test_prompt_bench.SystemTests.test_rules_edited_in_memory_and_generator_py_untouched) ... ok\ntest_the_kit_system_and_client_come_back_whatever_happens (test_prompt_bench.SystemTests.test_the_kit_system_and_client_come_back_whatever_happens) ... ok\ntest_the_make_target_and_its_listings (test_prompt_bench.WiringTests.test_the_make_target_and_its_listings) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in N.NNNs\n\nOK",
           "adaptations": [],
           "id": "source_22",
           "function": "step_01_definition",
@@ -268,14 +268,14 @@
         {
           "heading": "The bench for Rs 0: its tests, and a scripted model",
           "subheading": "Definition",
-          "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 18 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Then the bench itself. The cell below runs prompt_bench.main(), the function make bench runs, over generator.py imported in your shell, with two things stood in. /v1/passages returns the handbook's first six clauses, cut by the kit's own chunker as the kit's tests cut them, so NP-03 is [Source 1] and LV-07 is [Source 4]. The model is a script behind generator._client. It writes five wordings of an answer to jn-03 in turn, the same five at every level and temperature, and \"thinks\" 120 tokens at LOW and 900 at HIGH, the numbers the kit's tests script. Its fifth wording has all 50 days encashed, so that you can see a failure printed. It also counts the thinking level and the temperature each call was sent with. The cell runs the bench twice: the two levels with --show, then a temperature of 2.0.",
+          "purpose": "Before you spend a rupee, run the bench where nothing can be billed. First its tests, 21 of them in evals/tests/test_prompt_bench.py. They answer with the kit's own generate() over a scripted model and stand-ins for the lane, and they check what step 4 claimed: each row's pool is read once and held fixed, the level and the temperature are sent and nothing else changes, generator.py is never written, every answer is judged by the gate's rule, and the rupees are list price. The one test that runs the recorder on google-genai's own types needs that library, which Module 0 installed in your venv. Then the bench itself. The cell below runs prompt_bench.main(), the function make bench runs, over generator.py imported in your shell, with two things stood in. /v1/passages returns the handbook's first six clauses, cut by the kit's own chunker as the kit's tests cut them, so NP-03 is [Source 1] and LV-07 is [Source 4]. The model is a script behind generator._client. It writes five wordings of an answer to jn-03 in turn, the same five at every level and temperature, and \"thinks\" 120 tokens at LOW and 900 at HIGH, the numbers the kit's tests script. Its fifth wording has all 50 days encashed, so that you can see a failure printed. It also counts the thinking level and the temperature each call was sent with. The cell runs the bench twice: the two levels with --show, then a temperature of 2.0.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: the kit's generate() over a scripted model, nothing leaves the machine)",
           "expected": "== prompt bench: gemini-3.6-flash, against http://stand-in.invalid ==\n  1 row(s) x 1 arm(s) x 2 level(s) x 5 run(s): up to 10 answers, one generate() each\n  pools: POST /v1/passages once a row (top_k 6), held fixed for every arm, level and run\n    jn-03   join      acme    6 passages: hr_policy_2026.md x6\n  arms (prompt sha256: SYSTEM followed by DATED_RULE, the text every prompt starts with)\n    kit   generator.py's SYSTEM - 5 rules; no temperature\n          prompt sha256 543ed8060f1b177cc26159b1af609d16dabeeafa88097945f5a74e884aca4e1e\n    (the kit arm at LOW is the API's own request: generator.py's SYSTEM, thinking_level LOW, no temperature)\n\n  answers\n    jn-03   kit   LOW     run 1  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   kit   HIGH    run 1  pass  thought    900  visible    69  Rs 0.6835\n    jn-03   kit   LOW     run 2  pass  thought    120  visible    74  Rs 0.1895\n    jn-03   kit   HIGH    run 2  pass  thought    900  visible    74  Rs 0.6867\n    jn-03   kit   LOW     run 3  pass  thought    120  visible    62  Rs 0.1818\n    jn-03   kit   HIGH    run 3  pass  thought    900  visible    62  Rs 0.6791\n    jn-03   kit   LOW     run 4  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   kit   HIGH    run 4  pass  thought    900  visible    69  Rs 0.6835\n    jn-03   kit   LOW     run 5  FAIL  thought    120  visible    68  Rs 0.1856  answered without ['45', '60']\n    jn-03   kit   HIGH    run 5  FAIL  thought    900  visible    68  Rs 0.6829  answered without ['45', '60']\n\n  arm   level   pass                              distinct  cite sets  thought  visible  Rs/answer\n  kit   LOW     4/5 = 80.0% [37.6%, 96.4%]          4 of 5     1 of 5      120       68     0.1859\n  kit   HIGH    4/5 = 80.0% [37.6%, 96.4%]          4 of 5     1 of 5      900       68     0.6831\n  distinct: answer texts that differ within a row across its runs, summed over the rows; cite sets: the same for the passages cited; thought and visible: output tokens an answer, every call of it counted\n  quotes kit LOW: 10 of 10 in the passage they cite\n  quotes kit HIGH: 10 of 10 in the passage they cite\n\n  jn-03 (join, acme): I am an E3 leaving with 50 days of earned leave. How much is encashed and what notice do I serve?\n    [1] hr_policy_2026.md p.1: 'NP-03 — Notice period A confirmed employee at grade E3 or above serves a notice period of 60 days. Notice runs'\n    [2] hr_policy_2026.md p.1: 'PB-02 — Probation New joiners serve six months on probation at grade E2. During probation the notice period is'\n    [3] hr_policy_2026.md p.1: 'LV-01 — Earned leave Earned leave accrues at 1.75 days per completed month. A maximum of 30 days may be carrie'\n    [4] hr_policy_2026.md p.1: 'LV-07 — Leave on exit Earned leave is encashed on exit at basic pay, capped at 45 days. Leave cannot be encash'\n    [5] hr_policy_2026.md p.1: 'EXP-12 — Travel reimbursement Domestic travel is reimbursed against original receipts, capped at Rs 40,000 per'\n    [6] hr_policy_2026.md p.1: 'PR-05 — Payroll and Form 16 Salary is credited on the last working day of each month. Form 16 is issued by 15 '\n    kit LOW: 4 distinct of 5\n      2x  'You can encash 45 of your 50 days, the cap on exit, and you serve a notice period of 60 days [4, 1].'\n      1x  \"Encashment is capped at 45 days, so 45 days are paid at basic pay [4]. As a confirmed E3 you serve 60 days' notice [1].\"\n      1x  'Forty-five days are encashed and the notice period is sixty days [4, 1].'\n      1x  'All 50 days of earned leave are encashed at basic pay, and the notice period is 60 days [4, 1].'\n    kit HIGH: 4 distinct of 5\n      2x  'You can encash 45 of your 50 days, the cap on exit, and you serve a notice period of 60 days [4, 1].'\n      1x  \"Encashment is capped at 45 days, so 45 days are paid at basic pay [4]. As a confirmed E3 you serve 60 days' notice [1].\"\n      1x  'Forty-five days are encashed and the notice period is sixty days [4, 1].'\n      1x  'All 50 days of earned leave are encashed at basic pay, and the notice period is 60 days [4, 1].'\n\n  Rs 4.3452 in all: 10 answers, 10 model calls on gemini-3.6-flash, priced at list (shared/prices.py)\n  generator.py unchanged on disk; SYSTEM is the kit's again\n  the script was sent: thinking_level HIGH, temperature None: 5 calls; thinking_level LOW, temperature None: 5 calls\n\n== prompt bench: gemini-3.6-flash, against http://stand-in.invalid ==\n  1 row(s) x 2 arm(s) x 1 level(s) x 5 run(s): up to 10 answers, one generate() each\n  pools: POST /v1/passages once a row (top_k 6), held fixed for every arm, level and run\n    jn-03   join      acme    6 passages: hr_policy_2026.md x6\n  arms (prompt sha256: SYSTEM followed by DATED_RULE, the text every prompt starts with)\n    kit   generator.py's SYSTEM - 5 rules; no temperature\n          prompt sha256 543ed8060f1b177cc26159b1af609d16dabeeafa88097945f5a74e884aca4e1e\n    edit  generator.py's SYSTEM - 5 rules; temperature 2\n          prompt sha256 543ed8060f1b177cc26159b1af609d16dabeeafa88097945f5a74e884aca4e1e\n    (the kit arm at LOW is the API's own request: generator.py's SYSTEM, thinking_level LOW, no temperature)\n\n  answers\n    jn-03   kit   LOW     run 1  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   edit  LOW     run 1  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   kit   LOW     run 2  pass  thought    120  visible    74  Rs 0.1895\n    jn-03   edit  LOW     run 2  pass  thought    120  visible    74  Rs 0.1895\n    jn-03   kit   LOW     run 3  pass  thought    120  visible    62  Rs 0.1818\n    jn-03   edit  LOW     run 3  pass  thought    120  visible    62  Rs 0.1818\n    jn-03   kit   LOW     run 4  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   edit  LOW     run 4  pass  thought    120  visible    69  Rs 0.1863\n    jn-03   kit   LOW     run 5  FAIL  thought    120  visible    68  Rs 0.1856  answered without ['45', '60']\n    jn-03   edit  LOW     run 5  FAIL  thought    120  visible    68  Rs 0.1856  answered without ['45', '60']\n\n  arm   level   pass                              distinct  cite sets  thought  visible  Rs/answer\n  kit   LOW     4/5 = 80.0% [37.6%, 96.4%]          4 of 5     1 of 5      120       68     0.1859\n  edit  LOW     4/5 = 80.0% [37.6%, 96.4%]          4 of 5     1 of 5      120       68     0.1859\n  distinct: answer texts that differ within a row across its runs, summed over the rows; cite sets: the same for the passages cited; thought and visible: output tokens an answer, every call of it counted\n  quotes kit LOW: 10 of 10 in the passage they cite\n  quotes edit LOW: 10 of 10 in the passage they cite\n\n  Rs 1.8589 in all: 10 answers, 10 model calls on gemini-3.6-flash, priced at list (shared/prices.py)\n  generator.py unchanged on disk; SYSTEM is the kit's again\n  the script was sent: thinking_level LOW, temperature 2.0: 5 calls; thinking_level LOW, temperature None: 5 calls",
           "adaptations": [],
           "id": "source_24",
           "function": "step_02_definition",
           "window": 24,
-          "source_line": 819,
+          "source_line": 822,
           "manual_checkpoint": null
         }
       ],
@@ -301,7 +301,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
-        986
+        989
       ],
       "offline": false,
       "live_verified": false,
@@ -317,7 +317,7 @@
           "id": "source_26",
           "function": "step_01_definition",
           "window": 26,
-          "source_line": 986,
+          "source_line": 989,
           "manual_checkpoint": null
         }
       ],
@@ -343,7 +343,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
-        1040
+        1043
       ],
       "offline": false,
       "live_verified": false,
@@ -359,7 +359,7 @@
           "id": "source_28",
           "function": "step_01_definition",
           "window": 28,
-          "source_line": 1040,
+          "source_line": 1043,
           "manual_checkpoint": null
         }
       ],
@@ -386,8 +386,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
-        1056,
-        1063
+        1059,
+        1066
       ],
       "offline": false,
       "live_verified": false,
@@ -403,7 +403,7 @@
           "id": "source_30",
           "function": "step_01_definition",
           "window": 30,
-          "source_line": 1056,
+          "source_line": 1059,
           "manual_checkpoint": null
         },
         {
@@ -416,7 +416,7 @@
           "id": "source_32",
           "function": "step_02_read_what_went_out",
           "window": 32,
-          "source_line": 1063,
+          "source_line": 1066,
           "manual_checkpoint": null
         }
       ],
@@ -442,7 +442,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_1/GUIDE.md",
       "source_lines": [
-        1088
+        1091
       ],
       "offline": false,
       "live_verified": false,
@@ -458,7 +458,7 @@
           "id": "source_34",
           "function": "step_01_definition",
           "window": 34,
-          "source_line": 1088,
+          "source_line": 1091,
           "manual_checkpoint": null
         }
       ],
@@ -659,42 +659,42 @@
       "label": "expected (the kit's own bench over the stand-ins, run when this page was built: yours prints the same)",
       "heading": "The bench for Rs 0: its tests, and a scripted model",
       "anchor": "s5",
-      "line": 892
+      "line": 895
     },
     {
       "window": 27,
       "label": "expected (the author's lane, recorded: your words, tokens, times and rupees are your own)",
       "heading": "Five calls to /v1/query, judged by the gate's rule",
       "anchor": "s6",
-      "line": 1028
+      "line": 1031
     },
     {
       "window": 29,
       "label": "expected (the author's lane, recorded: your answers, tokens and rupees are your own)",
       "heading": "make bench: five runs at LOW and five at HIGH",
       "anchor": "s7",
-      "line": 1042
+      "line": 1045
     },
     {
       "window": 31,
       "label": "expected (the author's lane, recorded)",
       "heading": "Change it: send a temperature of 2.0, and read what went out",
       "anchor": "s8",
-      "line": 1058
+      "line": 1061
     },
     {
       "window": 33,
       "label": "expected (this cell over the author's recorded report)",
       "heading": "Change it: send a temperature of 2.0, and read what went out",
       "anchor": "s8",
-      "line": 1075
+      "line": 1078
     },
     {
       "window": 35,
       "label": "expected (the author's lane, recorded: your counts depend on what you asked since T0)",
       "heading": "What your lane logged, and what the bench did not",
       "anchor": "s9",
-      "line": 1107
+      "line": 1110
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

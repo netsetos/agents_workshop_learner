@@ -1,6 +1,6 @@
 """Lesson 10.11: Architecture: the path an incident takes, read by read and rule by rule
 
-The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
+The loop runs make remediate OFFLINE=1 on each of the kit's seven recordings and prints, for each, the rule that decided, how many commands the plan printed, and its last line. The cell loads remediate.py, prints the only commands it may run, the events it reads on each service, the exact filter of its one logging read for the drill's window, and holds five commands against the denylist. RUNBOOKS=1 lists every policy the kit declares with its runbook and what remediate may do. Its first line, and the two signals no policy watches: One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
 
 Run order inside this file:
 1. Do it: every recording, offline (source window 36)
@@ -110,7 +110,7 @@ def step_03_the_catalog(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: 16 alert policies the kit declares (terraform/alerts.tf: 8, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.
+    Observe: 17 alert policies the kit declares (terraform/alerts.tf: 9, terraform/desk_alerts.tf: 8); 6 behind a switch. remediate may propose a rollback for 5; the rest are a person's.
     Silent: what remediate reads that no policy watches
       5xx answers: requests a service answered with a 5xx status, from Cloud Run's request log. no alert policy the kit
       declares counts a service's 5xx answers.
@@ -124,7 +124,7 @@ def step_03_the_catalog(session):
 def step_04_on_your_lane_the_policies_your_lane_holds(session):
     """Run Read it on your lane: the policies your lane holds at this checkpoint.
 
-    One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect ten: three that remediate may roll back for and seven that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
+    One GET on the Monitoring API lists every alert policy on your lane by its display name, and the cell holds each against ops/runbooks.json. On a lane deployed with the defaults, expect eleven: three that remediate may roll back for and eight that are a person's, with the other six behind their switches. A no row line would be a policy that pages with no runbook remediate knows.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in $DEMO_ROOT (one GET on the Monitoring API; changes nothing).

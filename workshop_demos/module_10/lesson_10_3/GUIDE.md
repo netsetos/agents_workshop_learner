@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.3_Critic_Refiner_WIX.html`, reviewed at blob `e1ff4a2dcd168c9b3c61e4c8e08a04973b3224c2`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.3_Critic_Refiner_WIX.html`, reviewed at blob `7dea9d7ffd5ff9269e2969481d0cd7d3175ff4e8`. Learners read that page on the course site; this guide keeps its prose.
 
 An agent's answer can be wrong in a way code can see: a figure no calculator returned, a passage the turn never read. A critic judges the answer and a refiner improves it, and there are three ways to put them to work. Re-roll: run the agent several times and count a question right when any run is, the ceiling a perfect chooser could reach. Choose: run it several times and ship the run the critic picks. Retry: run it once, and only when the critic fails the answer, let one reflect call write a note and run it again, at most 3 times. On the agent bench the critic is code, not a model: `figure_check()` reads every figure and every [n], so one answer always gets one verdict. You run the three ways on the task set's 12 calculator rows, offline and on your lane, with correct, verified, calls and rupees for each, and the critic's own precision beside them. You watch a note try to carry a figure into the next attempt and fail, then change one line so that it gets through.
 
@@ -152,7 +152,7 @@ verify on the gratuity row three ways, at Rs 0: as the prompt stands, with a fig
 
 #### The code
 
-The cells run the scripted model, which plays the loop on each attempt and writes a note on the reflect call, telling the two apart by `REFLECTOR` in its system prompt. A single turn never slips. `--invent` makes its first attempt write a figure of its own; `--launder` makes every note carry a figure, which each later attempt writes as its own, with no calculator, and makes its first attempt write the row's figure itself so that a note is written at all. `make agent-turn` passes neither flag, so those two cells run `commands/agent_turn.py` through the same `commands/agent-turn.sh`, in `~/graph-venv`. The filter drops the passage lists and code's "Worked out in code" lines.
+The cells run the scripted model, which plays the loop on each attempt and writes a note on the reflect call, telling the two apart by `REFLECTOR` in its system prompt. A single turn never slips. `--invent` makes its first attempt write a figure of its own; `--launder` makes every note carry a figure, which each later attempt writes as its own, with no calculator, and makes its first attempt write the row's figure itself so that a note is written at all. `make agent-turn` takes them as `INVENT=1` and `LAUNDER=1`; a figure in place of the 1 writes that figure instead. The filter drops the passage lists and code's "Worked out in code" lines.
 
 #### Do it: as the prompt stands
 

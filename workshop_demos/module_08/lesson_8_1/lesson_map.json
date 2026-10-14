@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_8.1_PubSub_Kafka_WIX.html",
-  "source_sha": "68574285615aa236a1f361df759f8a2b6a9d97fd",
+  "source_sha": "1e9a96b64334dbc3d0d7d57f73ef634d3ecaaa83",
   "shared_setup_windows": [
     1
   ],
@@ -452,7 +452,7 @@
         "demo_07_the_burst_thirty_one_objects_against_five_instances"
       ],
       "heading": "Verify it yourself: the checklist",
-      "purpose": "Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):",
+      "purpose": "Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):",
       "anchor": "s9",
       "anchors": [
         "s9"
@@ -472,7 +472,7 @@
         {
           "heading": "Verify it yourself: the checklist",
           "subheading": "Verify it yourself: the checklist",
-          "purpose": "Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):",
+          "purpose": "Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):",
           "label": "bash — run in the operator shell, in the kit, when the lesson is done (withdraws the note; reversible with make restore)",
           "expected": "[awaiting the author's run: data/trace_retire.txt]",
           "adaptations": [],
@@ -705,7 +705,7 @@
     },
     {
       "window": 35,
-      "label": "terraform/alerts.tf - documind/ingest_events: five of the worker's verdicts, and not the duplicate",
+      "label": "terraform/alerts.tf - documind/ingest_events: the worker's verdicts, and not the duplicate",
       "heading": "The burst: thirty-one objects against five instances",
       "anchor": "s7",
       "line": 957

@@ -120,7 +120,7 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 
 Expected shape, not a promised result:
 
 ```text
-alerts.tf declares api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth
+alerts.tf declares api_latency, unanswerable_rate, gpu_left_warm, ingest_failed, reconcile_drift, reconcile_failed, dlq_depth, ingest_backlog
 desk_alerts.tf declares desk_fallback_share, desk_l2_share, desk_clarify_oos_trend, case_overdue, doc_type_pin_miss, desk_delegation_refused, desk_gate_error_share, desk_check_tenants_unread
 quota.tf names unanswerable_rate declared in alerts.tf
 quota.tf names dlq_depth         declared in alerts.tf
@@ -250,6 +250,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`. All 48 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4f90969f4077fb364fe35e4f7ac870458fcb4021`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.9_Design_Fact_Checking_WIX.html`. All 48 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `8de19e87acd8749661dd854cc4882ed967b5bbb7`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

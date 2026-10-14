@@ -3,8 +3,8 @@
 The cell runs on your machine, in the kit, with no credential: it cuts the note the way the ingest worker cuts an upload, hands its passages through desk_agent._search()'s last line, and hands a chunk that quotes the vendor's image through agent.py's exit lines. With both switches off, which is the default, nothing changes: the model would read the passages bare, and the image would leave. Do it: the same cell, switches on
 
 Run order inside this file:
-1. Do it: the two functions on the note, switches off (source window 18)
-2. Do it: the same cell, switches on (source window 20)
+1. Do it: the two functions on the note, switches off (source window 19)
+2. Do it: the same cell, switches on (source window 21)
 
 Prerequisites: demo_03_your_lane_the_note_goes_in_and_the_switches.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -126,8 +126,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_18', step_01_the_two_functions_on_the_note_switches_off),
-        ('source_20', step_02_the_same_cell_switches_on),
+        ('source_19', step_01_the_two_functions_on_the_note_switches_off),
+        ('source_21', step_02_the_same_cell_switches_on),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -354,6 +354,27 @@ class ScoreTest(unittest.TestCase):
         self.assertEqual(len(pairs), 7)
         self.assertAlmostEqual(decide.kappa(pairs), 2 / 23)
 
+    def test_kappa_is_lesson_4_5s(self):
+        # One Cohen's kappa in the kit (13 October 2026): decide.kappa() is evals/agreement.py's cohen_kappa() over the
+        # two arms' verdicts, so lesson 2.6's kappa and lesson 4.5's are one function. Every table of up to 6 rows
+        # gives what the textbook formula over the share of "answer" gives, and None exactly where chance is 1.
+        import itertools
+        import agreement
+        self.assertIs(decide.cohen_kappa, agreement.cohen_kappa)
+        a, r = "answer", "refuse"
+        for n in range(7):
+            for verdicts in itertools.product((a, r), repeat=2 * n):
+                pairs = list(zip(verdicts[::2], verdicts[1::2]))
+                got = decide.kappa(pairs)
+                pa = sum(x == a for x, _ in pairs) / n if n else 0.0
+                pb = sum(y == a for _, y in pairs) / n if n else 0.0
+                pe = pa * pb + (1 - pa) * (1 - pb)
+                if not n or pe == 1:
+                    self.assertIsNone(got, pairs)
+                else:
+                    po = sum(x == y for x, y in pairs) / n
+                    self.assertAlmostEqual(got, (po - pe) / (1 - pe), places=12, msg=pairs)
+
     def test_brier_and_the_reliability_bins(self):
         rows = [rec("a", True, jev=("answer", {"score": 0.9})), rec("b", False, jev=("refuse", {"score": 0.1})),
                 rec("c", False, jev=("answer", {"score": 0.6})), rec("d", True, jev=("answer", {"score": 1.0})),

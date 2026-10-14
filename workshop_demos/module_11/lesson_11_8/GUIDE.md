@@ -4,15 +4,15 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`, reviewed at blob `311d6f3959f0a3a28a0a7ee5182a081bbef52e56`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`, reviewed at blob `63db39769430dcf168f0eba43639cdcf3b51484b`. Learners read that page on the course site; this guide keeps its prose.
 
 The capstone is not a feature. It is a fork of this kit that a stranger can verify in under ten minutes: a live URL behind IAP, your own corpus, an eval suite that can go red, one lane on top of the core, and four documents that say what you rejected, what it costs, how it fails and how it rolls back. The rubric names those 8 components, and the kit's `make capstone-check` says PASS or FAIL for each one, offline and at Rs 0, and never a score. The score is the defence's: 5 dimensions, 0 to 3 each, 9 of 15 to pass and no dimension at 0.
 
-In this lesson you read the rubric as the kit reads it, run the check on a canned capstone that passes and on a copy with one command deleted, read your own lane with the same two tokens the check mints, and write the operational handover, `HANDOVER.md`, from your checkout and your lane. Nothing on the lane changes.
+In this lesson you read the rubric as the kit reads it, run the check on a canned capstone that passes, on the same with its four documents swapped for the kit's templates, and on a copy with one command deleted, read your own lane with the same two tokens the check mints, and write the operational handover, `HANDOVER.md`, from your checkout and your lane. Nothing on the lane changes.
 
 - What a stranger can check, and what only a defence can score
 
-- The words: component, dimension, the pass rule, incomplete, the fork, the records, the canned fork, the lane reads, the handover
+- The words: component, dimension, the pass rule, incomplete, the fork, the records, the canned fork, the templates, the lane reads, the handover
 
 - Before you run anything: set up the shell
 
@@ -32,17 +32,17 @@ In this lesson you read the rubric as the kit reads it, run the check on a canne
 
 - Verify it yourself: the checklist
 
-You will learn what the capstone rubric asks for, why its 8 components are checked and never scored, and how `make capstone-check` reads a fork and a lane without changing either. Then you will prove it: a canned capstone passes every component, a copy with one command deleted fails exactly one, and `make handover` writes the operational handover of your lane.
+You will learn what the capstone rubric asks for, why its 8 components are checked and never scored, and how `make capstone-check` reads a fork and a lane without changing either. Then you will prove it: a canned capstone passes every component, the kit's templates in its place fail until they are filled, a copy with one command deleted fails exactly one, and `make handover` writes the operational handover of your lane.
 
 ### What a stranger can check, and what only a defence can score
 
 The rubric has two halves. The components exist or they do not; the dimensions are how well you can speak to what you built.
 
-Eight components, each a thing in your fork. The rubric, `plan/capstone-rubric.md`, says every component must exist in the learner's fork and be checkable by a stranger in under ten minutes, because a component nobody can verify is a claim. A live URL behind IAP, a corpus of 30 pages or more that is yours, an eval suite of 30 golden rows or more with tenant isolation, one lane on top of the core, and four documents: `ARCHITECTURE.md` with the alternatives you rejected, `COST-MODEL.md` at 1k, 10k and 100k queries a month, `FAILURE-MODES.md` with four entries each proved by a script, and `RUNBOOK.md` with one recorded rollback. A component is PASS or FAIL. One FAIL is an incomplete submission, and the defence does not run.
+Eight components, each a thing in your fork. The capstone rubric, published on this page (the interactive below, and step 9), says every component must exist in the learner's fork and be checkable by a stranger in under ten minutes, because a component nobody can verify is a claim. A live URL behind IAP, your own corpus of 30 pages or more, in a tenant other than acme, globex and zeta, an eval suite of 30 golden rows or more with tenant isolation, one lane on top of the core, and four documents: `ARCHITECTURE.md` with the alternatives you rejected, `COST-MODEL.md` at 1k, 10k and 100k queries a month, `FAILURE-MODES.md` with four entries each proved by a script, and `RUNBOOK.md` with one recorded rollback. Each document starts from the kit's template in `capstone/templates/`. A component is PASS or FAIL. One FAIL is an incomplete submission, and the defence does not run.
 
 Five dimensions, scored only in the room. Architecture, failure modes, cost at 10×, evals, and what you would do next month: 0 to 3 each, 15 points, 9 to pass, and no dimension at 0. The no-zero rule matters more than the total: a learner who cannot speak to failure modes at all has not built a production system, however good the architecture is. Two assessors score independently, and a split of more than 3 points goes to a third. Nothing in the kit scores a dimension. It cannot: a dimension is what you say when asked why.
 
-The kit checks the first half. `make capstone-check` runs `commands/capstone_check.py` on a fork: by default the checkout you are in (`FORK=.`), or any directory you name. Offline it reads the fork's files at Rs 0 with no credential: the four documents, the corpus and the golden rows, the records `make smoke-deployed` and `make gate` leave in `evals/reports/` (lessons 11.2 and 11.3), and it runs the fork's own `evals/run_eval.py` offline, as `make eval` runs it. With `PROJECT=` it also reads the lane and changes nothing: `gcloud` describe and list calls from an allow-list of 11, two ID tokens minted as `make eval-live` mints them, and GETs on documind-api. It prints PASS or FAIL for each component with the evidence, or with what is missing and which lesson's command supplies it, and exits 1 when any component fails.
+The kit checks the first half. `make capstone-check` runs `commands/capstone_check.py` on a fork: by default the checkout you are in (`FORK=.`), or any directory you name. Offline it reads the fork's files at Rs 0 with no credential: the four documents, the corpus and the golden rows, the records `make smoke-deployed` and `make gate` leave in `evals/reports/` (lessons 11.2 and 11.3), and it runs the fork's own `evals/run_eval.py` offline, as `make eval` runs it. With `PROJECT=` it also reads the lane and changes nothing: `gcloud` describe and list calls from an allow-list of 11, two ID tokens minted as `make eval-live` mints them, and GETs on documind-api. It prints PASS or FAIL for each component with the evidence, or with what is missing and which lesson's command supplies it (for a missing document, its template), and exits 1 when any component fails.
 
 An occupancy inspection, then a handover pack. Before a new office building opens, an inspector walks it with a checklist: the fire exits open, the sprinklers hold pressure, the lift has its certificate, the earthing reads under the limit. Each item is there or it is not. The inspector does not grade the architecture; a building with a locked fire exit does not open, however elegant its atrium. Only once every item passes does the owner sit down with the architect and the contractor and ask the hard questions: why this structure, what would fail first, what does it cost to run, what would you do differently. And on the day the building changes hands, the contractor leaves a pack: where the mains are, what the alarms watch, when the night systems switch off, who to call.
 
@@ -56,15 +56,15 @@ Untick a component to see what one FAIL does. Then score the five dimensions by 
 
 2. The dimensions: 0 to 3 each, as the assessors would score your defence
 
-Generated from `plan/capstone-rubric.md` when this page was built: the eight rows of its component table, the five dimensions with the 0 to 3 rows of each, and the pass line. The line under each component says what `make capstone-check` reads for it, taken from the check's own rules in `commands/capstone_check.py`. The verdict's rule was run in Node on all 1024 score combinations, with and without a failed component, and compared with the same rule in Python: 192 of the 1024 pass.
+Generated from the rubric itself when this page was built: the eight rows of its component table, the five dimensions with the 0 to 3 rows of each, and the pass line. The line under each component says what `make capstone-check` reads for it, taken from the check's own rules in `commands/capstone_check.py`. The verdict's rule was run in Node on all 1024 score combinations, with and without a failed component, and compared with the same rule in Python: 192 of the 1024 pass.
 
 It is your reading of the rubric against your own defence, before the day. The assessors' reading is the one that counts, and the rubric is the only thing they score against. The defence is 90 minutes, two assessors, the live system on screen; the 60-minute peer mock the week before is practice, unscored, and the two are different events.
 
 `make capstone-check` says that a component exists and a stranger could verify it. It does not say the component is good. Three rejected options with six words of reason each pass component 5; whether those reasons are specific to your workload is dimension 1, and only the room scores it. Read a PASS as "the defence can run", not as "this is done".
 
-### The words: component, dimension, the pass rule, incomplete, the fork, the records, the canned fork, the lane reads, the handover
+### The words: component, dimension, the pass rule, incomplete, the fork, the records, the canned fork, the templates, the lane reads, the handover
 
-Thirteen rows, each with the value it takes in your fork or on your lane.
+Fourteen rows, each with the value it takes in your fork or on your lane.
 
 One distinction to hold through the lesson: the check reads records, not the lane's history. A rollback counts when two successive `make smoke-deployed` runs in your log show the traffic leaving the revision the candidate tag names, with `/version` answered before and after. If you rolled back and never ran the smoke, the rollback happened and the check cannot see it.
 
@@ -128,7 +128,7 @@ Two things about it matter for component 2. First, `status` is what the check re
 
 - A `.md` beside its `.pdf` or `.mp4` twin stays home when `make ingest-corpus` uploads (`evals/upload.sh`), so it is not a document and not counted twice.
 
-The check takes the tenant folder under `evals/corpus/` with the most pages that is not acme, globex or zeta. Adding your documents to acme's folder adds nothing to the capstone: component 2 reads `evals/corpus/ holds no tenant of your own`. Make a folder of your own, `make ingest-corpus` uploads it under that tenant, `make roster TENANT=... MEMBERS=...` puts documind-ui-sa on its roster so the Documents page and the check can read it, and lesson 4.1's golden rows ask it questions.
+Your own corpus is a tenant other than acme, globex and zeta, the kit's own three. The check takes the tenant folder under `evals/corpus/` with the most pages among the others. Adding your documents to acme's folder adds nothing to the capstone: component 2 reads `evals/corpus/ holds no tenant of your own`. Make a folder of your own, `make ingest-corpus` uploads it under that tenant, `make roster TENANT=... MEMBERS=...` puts documind-ui-sa on its roster so the Documents page and the check can read it, and lesson 4.1's golden rows ask it questions.
 
 ### The lines the check rests on
 
@@ -162,11 +162,11 @@ With `PROJECT=`, every gcloud command goes through `gcloud_json()`, which refuse
 
 #### Do it: the rules on hand-made input
 
-The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. `commands/tests/test_capstone_check.py` holds 30 more tests, on the canned fork and on a stand-in lane.
+The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. `commands/tests/test_capstone_check.py` holds 30 more tests, on the canned fork and on a stand-in lane, and `commands/tests/test_capstone_templates.py` 13 on the templates of step 5.
 
 ### The check, offline: the kit as it ships, a canned capstone, your fork
 
-Three runs of the same command: the to-do list a bare kit prints, eight PASSes on Sahyadri Freight, and the records read with the kit's own rules.
+The to-do list a bare kit prints, eight PASSes on Sahyadri Freight, the records read with the kit's own rules, and the four templates your documents start from, which fail until you fill them.
 
 #### Definition
 
@@ -182,7 +182,7 @@ The kit as it ships is no capstone, by design, and the check says exactly what i
 
 - Component 1 holds half. The fork deploys documind-ui behind IAP: the flags are in the script. What is missing is evidence a member was answered and a non-member refused, which only records can give: `make smoke-deployed` (lesson 11.3) and `make gate` (lesson 11.2).
 
-- Components 2, 5, 6, 7 and 8 each name the file or folder that does not exist: a tenant of your own, the four documents, a rollback in the smoke log.
+- Components 2, 5, 6, 7 and 8 each name the file or folder that does not exist: a tenant of your own, the four documents, each with its template in `capstone/templates/`, and a rollback in the smoke log.
 
 - The last line names the failing components and says what a FAIL is: an incomplete submission, for which the defence does not run.
 
@@ -216,9 +216,31 @@ The check's rules are functions you can call. The cell loads the module, points 
 
 - Every command resolves. Two `make gotcha-drill` ids with offline drills, `make poison`, a target the Makefile defines, and `commands/incident-drill.sh`, a script the fork holds.
 
+#### Do it: your four documents, from the templates
+
+Your four documents start from the kit's templates in `capstone/templates/`. Each is the canned fork's document emptied: the same headings, a `{{...}}` placeholder in every slot, 66 across the four, and a comment at the top saying what the check reads in it and what the defence reads. In your fork you copy them to its root, `cp capstone/templates/*.md .`, and replace every placeholder, braces included. Here the cell lays them as they ship over the canned fork's four, runs the check, counts the lines that still hold a placeholder, and puts the canned four back.
+
+A template copied as it ships is not yet a document. Each of the four components it stands in for FAILs, on the slots the check reads that still hold a placeholder.
+
+- 1 to 4 still PASS. The canned fork's records, corpus and golden rows were not touched.
+
+- 5: three rejected options named and none argued. `{{OPTION 1}}: {{WHY NOT}}` is 4 words, and the check counts an option as argued at 6 or more.
+
+- 6: the three volumes and the rate are the template's own, so they hold. The amounts are `Rs {{AMOUNT}}` and `USD {{AMOUNT}}`, which carry no figure, and the date is `{{YYYY-MM-DD}}`.
+
+- 7: four entries, each with a `Symptom:` line and a command in one of the four shapes that resolve: a gotcha drill offline, a drill live, a make target and a script. None resolves until its placeholder is a real id, target or script, and the check says why for each.
+
+- 8: the recorded rollback still holds, from the canned smoke log. The runbook does not say how to roll back until its command slot holds `make rollback` with your project and region, as lesson 11.3 ran it.
+
+- The grep counts the lines that still hold a placeholder, 38 across the four. The check reads only some of them and the defence reads all of them, so run the grep in your fork before the check, and expect 0 for each file.
+
+- The canned four back, exit 0. `commands/tests/capstone_fork/` holds the four filled in, for a made-up company: read each beside its template.
+
+The kit's own test, `commands/tests/test_capstone_templates.py`, holds the same line from both sides: as they ship, components 5 to 8 FAIL on their documents; with every placeholder filled, the four PASS.
+
 #### Do it: your fork
 
-In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, `make ingest-corpus`, `make roster`, golden rows, `make gate`, lesson 11.3's rollback with a smoke run before and after, and the four documents.
+In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, `make ingest-corpus`, `make roster`, golden rows, `make gate`, lesson 11.3's rollback with a smoke run before and after, and the four documents, written from the templates.
 
 Expect the same shape as the canned fork's output with your tenant, your documents, your revision names and your dates. A FAIL here is work, not a verdict: its line names the lesson. The reference fork took the author about a day to make from a working lane; budget the same.
 
@@ -290,13 +312,13 @@ The pack the next operator reads: 7 sections, each the checkout's statement and 
 
 #### Definition
 
-`make handover` writes `HANDOVER.md` into the fork (`--out` puts it elsewhere). Each section gives what the checkout states, from the Makefile, `terraform/*.tf`, `ops/runbooks.json` and the revision files, then what the lane shows, from the same allow-list of reads plus the Monitoring API's alert policies; where the two differ, the lane is what runs. A lane read that fails is listed under `Not read`, the rest is still written, and the exit is 1. The file is written whole each time, so notes of your own belong in `RUNBOOK.md`.
+`make handover` writes `HANDOVER.md` into the fork (`--out` puts it elsewhere). Each section gives what the checkout states, from the Makefile, `terraform/*.tf`, `ops/runbooks.json` and the revision files, then what the lane shows, from the same allow-list of reads plus the Monitoring API's alert policies; where the two differ, the lane is what runs. A lane read that fails is listed under `Not read`, the rest is still written, and the exit is 1. The file is written whole each time, so notes of your own belong in `RUNBOOK.md`, and its head says so, naming the runbook's template.
 
 #### The seven sections, and where each comes from
 
 #### The policies, as the checkout declares them
 
-This is the first section's table without the lane column, generated from the same join the handover makes: `remediate.runbooks()`, which stops if `ops/runbooks.json` and `terraform/*.tf` disagree. Of the 16, 8 are in `alerts.tf`, from 7 resource blocks, one of them a `for_each` over the two GPU services.
+This is the first section's table without the lane column, generated from the same join the handover makes: `remediate.runbooks()`, which stops if `ops/runbooks.json` and `terraform/*.tf` disagree. Of the 17, 9 are in `alerts.tf`, from 8 resource blocks, one of them a `for_each` over the two GPU services.
 
 #### The two lines behind the night job and the budget
 
@@ -304,9 +326,9 @@ This is the first section's table without the lane column, generated from the sa
 
 Without `PROJECT=` every section gives the checkout's half and says the lane was not given. The canned fork is a copy of the kit, so its checkout half is the kit's: the policies, the night job, the floors, the budget and the state bucket as the Makefile and Terraform declare them, plus the canned records under Revisions.
 
-- 57 lines, 7 sections and the tail. The head says who wrote it and when, that it read and changed nothing, and that the lane is what runs where the two halves differ.
+- 58 lines, 7 sections and the tail. The head says who wrote it and when, that it read and changed nothing, and that the lane is what runs where the two halves differ.
 
-- Alert policies: 16 rows, each with its file, when it applies and what to do, and `-` in the lane column, since no lane was given.
+- Alert policies: 17 rows, each with its file, when it applies and what to do, and `-` in the lane column, since no lane was given.
 
 - Revisions is the canned fork's: no revision files (a clone has none), the gate record of the repair `documind-api-00043-fix`, PASS, and the last smoke run serving it.
 
@@ -338,7 +360,7 @@ The pack describes a lane that still runs. When it stops, `make down` removes wh
 
 ### The defence, what the author still decides, and what the kit does not do yet
 
-The 90 minutes, the five dimensions row by row, the decisions open on this page, and the lane reads no lane has answered yet.
+The 90 minutes, the five dimensions row by row with the rubric's notes, the decisions made and those still open, and the lane reads no lane has answered yet.
 
 #### The defence
 
@@ -346,21 +368,39 @@ The rubric's notes for the assessor are worth reading as a learner. Score the sy
 
 #### The five dimensions, row by row
 
-Three of the 3s are where the kit's own lessons point. Dimension 1's 3 is a falsifiable statement: a threshold that would change your mind, not a feeling, and the canned fork's `ARCHITECTURE.md` shows the shape (a duty cycle above which GKE wins). Dimension 2's 3 is lesson 11.7's table: which failures the monitoring catches, which it does not, and what you did about the second group. Dimension 4's 3 is lesson 4.7's: the `must_not_contain` isolation rows pass by construction, because the retriever filters by tenant before generation; a learner who finds the vacuous assertion in their own suite has understood something most teams never do.
+Three of the 3s are where the kit's own lessons point. Dimension 1's threshold has the shape of the canned fork's `ARCHITECTURE.md` (a duty cycle above which GKE wins), and the template's last section asks for yours. Dimension 2's 3 is lesson 11.7's table: which failures the monitoring catches, which it does not, and what you did about the second group, which the template's `Caught by:` lines hold. Dimension 4's 3 is lessons 4.1 and 4.7's: the isolation rows that pass by construction, and the outsider's 403 the gate asks beside them.
 
-The components come from lessons 0.3, 1.5, 3.8, 4.1, 4.2, 4.7, 5.4, 7.1, 7.2, 7.5, 8.3, 9.2, 11.3, 11.5, 11.6, 11.7, 11.8, and this one. The rubric's "where it comes from" column gives 11.8 three shares: the decision record (component 5), the choice of lane (component 4), and the corpus of your own (component 2, with lessons 1.5 and 3.8). Deliberately not on the list: a novel feature, test coverage percentage, uptime.
+The components come from lessons 0.3, 1.5, 3.8, 4.1, 4.2, 4.7, 5.4, 7.1, 7.2, 7.5, 8.3, 9.2, 11.3, 11.5, 11.6, 11.7, and this one. The rubric's "where it comes from" column gives 11.8 three shares: the decision record (component 5), the choice of lane (component 4), and the corpus of your own (component 2, with lessons 1.5 and 3.8).
 
-#### What the author still decides
+#### The rubric's notes, in its own words
 
-Each point below is open on this page by the kit's own account, and the page changes when it is decided.
+- Component 5 is the one people under-build and the one the defence leans on hardest. An architecture document that lists what you built is a description. One that lists what you did not build, and why, is a decision record — and the interview is sixty minutes of asking why.
 
-- Templates for the four documents. None exist yet. Until they do, the check's expectations are the template: `ARCHITECTURE.md` a section whose heading says Rejected or Alternatives with 3 or more options argued in 6 words or more; `COST-MODEL.md` the three volumes, 3 or more amounts in rupees and in dollars, a date, and `USD_INR = 85` on one line; `FAILURE-MODES.md` 4 or more headed entries each with a `Symptom:` line and a backticked command the fork can run; `RUNBOOK.md` naming `make rollback` or `update-traffic`. The canned fork's four are the worked example.
+- Dimension 1, Architecture. The 3 is not eloquence. It is a falsifiable statement: "we chose Cloud Run because our duty cycle is 4%; above roughly 74% GKE is cheaper and we would move."
 
-- "Your own corpus" as a tenant. The check reads it as a tenant under `evals/corpus/` that is not acme, globex or zeta, with the most pages. The author confirms that reading.
+- Dimension 3, Cost at 10×. The commonest 2-instead-of-3: the learner scales the bill by ten and stops. At 10× something stops being linear — a quota, a Vector Search replica, a cold-start rate, a per-tenant cache that no longer fits. Naming it is the difference.
 
-- The rubric's renumbering. `plan/capstone-rubric.md` was renumbered on 13 October 2026 from the notebook course's lessons to this course's, and two references to a file that does not exist were removed. The author confirms the mapping.
+- Dimension 4, Evals. Dimension 4's 3 is the hardest point in the rubric and it is deliberately the lesson of 4.1 and 4.7: DocuMind's own `must_not_contain` isolation rows pass by construction, because the retriever filters by tenant before generation. A learner who finds that in their own suite has understood something most teams never do.
 
-- Publishing the rubric before 6 December. The rubric says it of itself: published means published, and a rubric a learner has not seen is an exam. The learner copy is the author's to publish; this page quotes the authoring copy.
+- Not on the list: a novel feature. The lane is one of four, chosen not invented. This credential is about shipping and defending, not about ideas.
+
+- Not on the list: test coverage percentage. Component 3 asks for evals of the thing the product does. A coverage number for a RAG service measures the wrong layer.
+
+- Not on the list: uptime. You will have run it for days, not months. Claiming an SLO you have not observed is exactly the kind of answer the rubric penalises under Evals.
+
+#### What the author decided, and what is still open
+
+Four points this page left open were decided on 13 October 2026, and the kit and the page changed with them.
+
+- Templates for the four documents: `capstone/templates/`, step 5. The check's line for a missing document names its template, and `HANDOVER.md`'s head names the runbook's.
+
+- "Your own corpus" is a tenant other than acme, globex and zeta, as the check reads it, and the rubric says so in those words.
+
+- The rubric's lesson numbers and files. Its 17 lesson numbers are all this course's, and the 9 files it cites are all in the kit or the course. This page's build checks both, so a stale number or a missing file stops it.
+
+- Publishing the rubric before 6 December: this page is where learners read it. Step 1 shows its components and dimensions, and this step its defence, its dimensions row by row and its notes, all generated from the rubric itself.
+
+Still open, by the kit's own account, and the page changes when each is decided:
 
 - Three readings the check makes because the kit gives it nothing better: pages counted offline by the worker's rules, since `/v1/sources` returns no page counts; a rollback read from the smoke log, since `make incident` writes no record; and the alert policies and the night job in the handover only, since no rubric check names them.
 
@@ -372,7 +412,7 @@ Each point is read from the kit or its pull request, and the build asserts each 
 
 - It scores nothing, by design. The five dimensions are the defence's. There is no `make` target that grades a document, and there will not be one.
 
-- No templates for the four documents. The check's expectations and the canned fork stand in.
+- It reads only the slots it checks. A template's placeholders outside them, the request path, the cost of one answer, the symptoms, survive the check; the grep in step 5 finds them, and the defence reads them.
 
 - Five lane reads no lane has answered yet, by the kit's own account: the IAP annotation's key on a described service (`run.googleapis.com/iap-enabled`, or an `iapEnabled` field, both of which `iap_on()` accepts, which is why step 7 greps for it); the Monitoring API's `alertPolicies` GET with gcloud's access token; `gcloud billing budgets list`, which may need a quota project; the JSON keys `gcloud storage buckets describe` prints; and the scheduler describe's fields. A read that fails lands under `Not read` and nothing else is lost. The author's run settles them.
 
@@ -382,15 +422,15 @@ Each point is read from the kit or its pull request, and the build asserts each 
 
 ### Verify it yourself: the checklist
 
-Ten checks, each in a step above, each with the value that proves it in your fork or on your lane.
+Eleven checks, each in a step above, each with the value that proves it in your fork or on your lane.
 
 Nothing. Here is what this lesson left, and where:
 
 - On the lane, nothing. Every command only read: describe and list calls, two token mints, GETs on documind-api, the Monitoring API's alert-policy list. No revision was made, no traffic moved, no setting changed.
 
-- In your fork, one file: `HANDOVER.md` in its root, written whole by `make handover`. Commit it with the four documents; it is part of the pack.
+- In your fork, one file: `HANDOVER.md` in its root, written whole by `make handover`. Commit it with the four documents you wrote from the templates; it is part of the pack.
 
-- On your machine, a copy of the kit under `/tmp/sahyadri`, with Sahyadri Freight's files over it. Delete it when you are done; your checkout is as it was.
+- On your machine, a copy of the kit under `/tmp/sahyadri`, with Sahyadri Freight's files over it; step 5 put the canned four back after the templates. Delete it when you are done; your checkout is as it was.
 
 - In `evals/reports/`, nothing new. The check reads the records; only `make smoke-deployed`, `make gate` and `make eval-live REPORT=` write them.
 

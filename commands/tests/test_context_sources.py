@@ -27,7 +27,9 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import socket
+import subprocess
 import sys
 import unittest
 from unittest.mock import patch
@@ -102,13 +104,25 @@ class TheSourcesAlone(unittest.TestCase):
         recipe = memory[memory.index("context-sources:"):]
         for flag in ("commands/graph-venv.sh commands/context_sources.py", "$(if $(OFFLINE),--offline,)",
                      '--brain "$(BRAIN)"', '--desk "$(DESK)"', '--turns "$(TURNS)"', '--top-k "$(TOP_K)"',
-                     '$${Q:+--question "$$Q"}', '--tenant "$(TENANT)"',
+                     '$${Q:+--question "$$Q"}', '--tenant "$(TENANT)"', "$(if $(JSON),--json,)",
                      "DOCUMIND_IMPERSONATE_SA=documind-ui-sa@$(PROJECT).iam.gserviceaccount.com",
                      "RAG_API_URL=https://documind-api-$$NUMBER.$(REGION).run.app"):
             self.assertIn(flag, recipe, flag)
         self.assertIn('Q="$(Q)";', recipe)                              # set before ${Q:+...} expands, comma and all
         self.assertIn("`context-sources`", readme)
         self.assertIn("`commands/context_sources.py`", readme)
+
+    @unittest.skipUnless(shutil.which("make"), "no make here")
+    def test_json_1_prints_the_record_through_make(self):
+        """13 October 2026: the target had no JSON=, so lesson 6.1's cells ran the command through graph-venv.sh by hand
+        to write a turn's record; JSON=1 is --json."""
+        def dry(*args):
+            r = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(KIT), "context-sources", *args],
+                               capture_output=True, text=True, timeout=60)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            return r.stdout
+        self.assertIn('--tenant "acme" --json', dry("OFFLINE=1", "BRAIN=langgraph", "TOP_K=3", "TENANT=acme", "JSON=1"))
+        self.assertNotIn("--json", dry("OFFLINE=1", "BRAIN=langgraph"))
 
     def test_both_chat_pin_steps_run_this_file(self):
         line = "DOCUMIND_REQUIRE_LIBS=1 /tmp/chat-venv/bin/python -m unittest commands/tests/test_context_sources.py -v"

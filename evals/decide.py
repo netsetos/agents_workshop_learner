@@ -61,6 +61,7 @@ for _p in (str(KIT), str(HERE)):
         sys.path.insert(0, _p)
 from route_eval import TOKEN_MAX_AGE_S, mint, rate, wilson  # noqa: E402 - one Wilson interval, the route eval's
 from run_eval import ask, load_golden, pct, validate_body  # noqa: E402 - one /v1/query client, the eval gate's
+from agreement import cohen_kappa  # noqa: E402 - one Cohen's kappa, lesson 4.5's (13 October 2026)
 
 from shared import prices, system_one  # noqa: E402
 from shared.prices import USD_INR  # noqa: E402
@@ -376,15 +377,10 @@ def summarise(records: list[dict], arm: str) -> dict:
 
 
 def kappa(pairs: list[tuple[str, str]]) -> float | None:
-    """Cohen's kappa of two arms' verdicts (answer / refuse) on the rows both decided. None with no rows, or when the
-    agreement expected by chance is 1 (both arms gave one verdict throughout): undefined there, not perfect."""
-    n = len(pairs)
-    if not n:
-        return None
-    po = sum(x == y for x, y in pairs) / n
-    pa, pb = sum(x == "answer" for x, _ in pairs) / n, sum(y == "answer" for _, y in pairs) / n
-    pe = pa * pb + (1 - pa) * (1 - pb)
-    return None if pe >= 1 else (po - pe) / (1 - pe)
+    """Cohen's kappa of two arms' verdicts (answer / refuse) on the rows both decided: evals/agreement.py's
+    cohen_kappa(), the kit's one kappa (lesson 4.5), counted in whole rows. None with no rows, or when the agreement
+    expected by chance is 1 (both arms gave one and the same verdict throughout): undefined there, not perfect."""
+    return cohen_kappa([x for x, _ in pairs], [y for _, y in pairs])
 
 
 def pairs_of(records: list[dict], a: str, b: str) -> list[tuple[str, str]]:

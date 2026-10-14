@@ -1,6 +1,6 @@
 """Lesson 6.8: A turn cut off mid-flight, resumed from its checkpoint
 
-Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.
+Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.
 
 Run order inside this file:
 1. Do it: the cut-off turn, resumed (source window 17)
@@ -63,7 +63,7 @@ COMMANDS_02 = """make replay OFFLINE=1 AT=0
 def step_02_a_finished_turn_replayed(session):
     """Run Do it: a finished turn, replayed at this checkpoint.
 
-    At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.
+    At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (a finished turn replayed from step 0; no network, Rs 0).

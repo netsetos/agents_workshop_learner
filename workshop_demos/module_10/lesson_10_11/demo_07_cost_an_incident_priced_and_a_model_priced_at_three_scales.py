@@ -36,11 +36,11 @@ def step_01_the_cost_model_as_a_script(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: the rules: 3 reads at Rs 0 and 0 model calls, at every scale
-    a model: 3,122 tokens of rules and runbooks, then the lines; 614 tokens of plan out
-        1,000 turns a month:     3 lines an hour,     3 read |  3,897 tokens in | flash Rs  0.89 ($0.0105), flash-lite Rs 0.16 ($0.0019) an incident
-       10,000 turns a month:    28 lines an hour,    28 read |  4,445 tokens in | flash Rs  0.96 ($0.0113), flash-lite Rs 0.17 ($0.0020) an incident
-      100,000 turns a month:   274 lines an hour,   274 read |  9,826 tokens in | flash Rs  1.64 ($0.0193), flash-lite Rs 0.29 ($0.0034) an incident
-    1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,582 tokens in | flash Rs  6.46 ($0.0760), flash-lite Rs 1.
+    a model: 3,241 tokens of rules and runbooks, then the lines; 614 tokens of plan out
+        1,000 turns a month:     3 lines an hour,     3 read |  4,016 tokens in | flash Rs  0.90 ($0.0106), flash-lite Rs 0.16 ($0.0019) an incident
+       10,000 turns a month:    28 lines an hour,    28 read |  4,564 tokens in | flash Rs  0.97 ($0.0115), flash-lite Rs 0.18 ($0.0021) an incident
+      100,000 turns a month:   274 lines an hour,   274 read |  9,945 tokens in | flash Rs  1.66 ($0.0195), flash-lite Rs 0.29 ($0.0034) an incident
+    1,000,000 turns a month: 2,740 lines an hour, 2,000 read | 47,701 tokens in | flash Rs  6.47 ($0.0762), flash-lite Rs 1.
     """
     import importlib.util, json, math, sys, warnings
     warnings.filterwarnings("ignore", category=UserWarning)

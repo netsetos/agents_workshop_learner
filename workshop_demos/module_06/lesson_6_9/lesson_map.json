@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_9/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_6.9_Working_Memory_WIX.html",
-  "source_sha": "1d587064f7681dd27c53e803d5f79ed25bfb31c0",
+  "source_sha": "56fa31879a33efc1fa05ce81582f42396eff58e2",
   "shared_setup_windows": [
     1
   ],
@@ -612,7 +612,7 @@
     },
     {
       "window": 21,
-      "label": "expected (computed when this page was built, by the kit's own window_check.py; most of the minutes are the 20 searches)",
+      "label": "expected (computed when this page was built, by the kit's own window_check.py)",
       "heading": "Twenty turns, with the window and without it",
       "anchor": "s5",
       "line": 658

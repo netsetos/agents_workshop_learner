@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`, reviewed at blob `291b440e580eb85652476a3e6cb256323635d340`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`, reviewed at blob `c28fb9ec41954f3fe7442eecddca55e7e2879d87`. Learners read that page on the course site; this guide keeps its prose.
 
 Your lane has been up since lesson 0.3. This lesson proves it works from the outside, the way a caller meets it: the kit's preflight, its smoke test, and the three URLs the API answers without a question. Then you break the smoke once, on purpose, and follow the failure to the line of code that printed it and the line that refused. You save the session so the next one starts with one command, switch the lane off, and prove it is off from the instance count Google keeps.
 

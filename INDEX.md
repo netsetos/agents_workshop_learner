@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1608 files; 231 quoted by a lesson, 332 shown or named by one.
+1630 files; 235 quoted by a lesson, 345 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -14,25 +14,31 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `.github/workflows/documind-cd.yml` | config | 4.2, 4.3, 11.1, 11.2 | 11.7 |
 | `.github/workflows/documind-dryrun.yml` | config | 4.2 | 4.3 |
 | `.gitignore` | config | - | 2.6, 3.1 |
-| `INDEX.md` | doc | - | 0.4 |
+| `INDEX.md` | doc | - | 0.4, 9.3 |
 | `INDEXING.md` | doc | - | 4.4, 8.2, 8.4 |
 | `INFRASTRUCTURE.md` | doc | - | 0.3 |
 | `Makefile` | code | 0.3, 1.3, 11.1 | 0.1, 0.2, 0.4, 1.2, 1.6, 2.2, 2.3, 2.5, 3.3, 3.6, 3.9, 4.1, 4.2, 4.3, 4.4, 4.8, 4.9, 7.3, 7.4, 8.2, 8.4, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.9, 10.11, 11.2, 11.3, 11.6, 11.7, 11.8, 12.1, 12.2, 12.3 |
 | `README.md` | doc | 0.3 | 0.1 |
 | `UNOWNED.md` | doc | - | 9.3, 10.11 |
+| `capstone/templates/ARCHITECTURE.md` | doc | - | 11.8 |
+| `capstone/templates/COST-MODEL.md` | doc | - | 11.8 |
+| `capstone/templates/FAILURE-MODES.md` | doc | - | 11.8 |
+| `capstone/templates/RUNBOOK.md` | doc | - | 11.8 |
 | `cloudbuild.yaml` | config | 0.3, 11.1 | B.1, 3.6, 5.3, 9.3 |
 | `commands/agent-drill.sh` | code | 10.7 | - |
 | `commands/agent-turn.sh` | code | - | 10.1, 10.2, 10.3, 10.5 |
 | `commands/agent_patterns.py` | code | 10.1, 10.2, 10.3 | - |
-| `commands/agent_turn.py` | code | 10.2, 10.3 | 10.1 |
+| `commands/agent_shapes.py` | code | 10.7 | - |
+| `commands/agent_turn.py` | code | 10.2, 10.3 | - |
 | `commands/approval-check.sh` | code | 5.8 | - |
+| `commands/attack-agents.sh` | code | 10.8 | - |
 | `commands/capstone_check.py` | code | 11.8 | - |
 | `commands/check-firestore-fallback.py` | code | 2.4, 11.4 | 1.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
 | `commands/check_callers.py` | code | 10.7 | - |
 | `commands/context_sources.py` | code | 6.1 | - |
 | `commands/desk-check.sh` | code | - | - |
-| `commands/desk_ops.py` | code | 3.9 | 5.6, 10.4 |
+| `commands/desk_ops.py` | code | 3.9 | 5.6, 5.8, 10.4 |
 | `commands/gchat.sh` | code | 10.4 | - |
 | `commands/git-source.sh` | code | 0.4 | - |
 | `commands/gotchas.py` | code | 11.7 | - |
@@ -47,7 +53,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/lesson-12.3.sh` | code | - | 0.3, 11.7 |
 | `commands/lesson-12.4.sh` | code | 0.3, 3.8, 11.8 | 5.6, 10.4, 11.7 |
 | `commands/lesson-12.5.sh` | code | 1.5, 8.1, 8.2, 8.3 | 0.3, 8.4, 11.7 |
-| `commands/lesson-12.8.sh` | code | 10.7, 11.7 | 0.3, 5.1, 5.4, 5.5, 5.6, 6.5, 10.4 |
+| `commands/lesson-12.8.sh` | code | 10.7, 11.7 | 0.3, 5.1, 5.4, 5.5, 5.6, 6.5, 10.2, 10.4 |
 | `commands/lesson-7.2.sh` | code | 5.3 | 0.3, 10.6, 11.7 |
 | `commands/lesson-8.4.sh` | code | 10.6 | 0.3, 10.7, 10.9, 11.7 |
 | `commands/limits-check.sh` | code | - | 5.5 |
@@ -62,6 +68,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/ralph/Dockerfile` | code | 10.10 | - |
 | `commands/ralph/PROMPT.md` | doc | 10.10 | - |
 | `commands/ralph/context.md` | doc | - | - |
+| `commands/ralph/egress.py` | code | - | 10.10 |
 | `commands/ralph/fix_plan.md` | doc | - | - |
 | `commands/ralph/iteration.sh` | code | 10.10 | - |
 | `commands/ralph/oracle.py` | code | 10.10 | - |
@@ -86,13 +93,18 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/capstone_fork/evals/reports/smoke-deployed.jsonl` | data | - | - |
 | `commands/tests/terraform_reapply.tftest.hcl` | code | - | - |
 | `commands/tests/test_a2a_peer.py` | code | - | - |
+| `commands/tests/test_adk_planner.py` | code | - | 10.2 |
 | `commands/tests/test_agent_bench.py` | code | - | - |
 | `commands/tests/test_agent_drill.py` | code | - | - |
 | `commands/tests/test_agent_patterns.py` | code | - | 10.1 |
 | `commands/tests/test_agent_plans.py` | code | 10.2 | - |
+| `commands/tests/test_agent_shapes.py` | code | - | - |
 | `commands/tests/test_agent_verify.py` | code | 10.3 | - |
+| `commands/tests/test_approval_wired.py` | code | - | 5.8 |
 | `commands/tests/test_approvals.py` | code | - | 5.8 |
+| `commands/tests/test_attack_agents.py` | code | - | - |
 | `commands/tests/test_capstone_check.py` | code | - | 11.8 |
+| `commands/tests/test_capstone_templates.py` | code | - | 11.8 |
 | `commands/tests/test_cases.py` | code | - | 5.6 |
 | `commands/tests/test_chat_brains.py` | code | - | 5.4, 5.7 |
 | `commands/tests/test_chat_limits.py` | code | - | 5.5 |
@@ -106,6 +118,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_desk_rules.py` | code | - | 5.6, 5.8 |
 | `commands/tests/test_doc_types.py` | code | - | - |
 | `commands/tests/test_document_embeddings.py` | code | - | 1.3 |
+| `commands/tests/test_gate_prompt.py` | code | - | - |
 | `commands/tests/test_gchat.py` | code | - | 10.4 |
 | `commands/tests/test_git_source.py` | code | - | - |
 | `commands/tests/test_gotchas.py` | code | - | 11.7 |
@@ -113,12 +126,14 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_handoff.py` | code | - | - |
 | `commands/tests/test_hybrid_plumbing.py` | code | - | - |
 | `commands/tests/test_infrastructure.py` | code | - | - |
+| `commands/tests/test_ingest_reliability.py` | code | - | - |
 | `commands/tests/test_lane.py` | code | - | - |
 | `commands/tests/test_local_lane.py` | code | - | - |
 | `commands/tests/test_managed_peer.py` | code | - | - |
 | `commands/tests/test_pins.py` | code | - | 10.8 |
 | `commands/tests/test_prompt_versions.py` | code | 3.3, 3.6 | 12.1 |
 | `commands/tests/test_ralph.py` | code | - | 10.10 |
+| `commands/tests/test_ralph_egress.py` | code | - | - |
 | `commands/tests/test_release.py` | code | - | - |
 | `commands/tests/test_release_gate.py` | code | - | 11.2 |
 | `commands/tests/test_release_repair.py` | code | - | 11.3 |
@@ -231,7 +246,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/required.json` | config | 4.1 | 0.2, 4.3, 11.2, 11.3, 12.4 |
 | `evals/route_arms.jsonl` | data | - | 10.5 |
 | `evals/route_eval.py` | code | 3.2, 10.5 | 10.4 |
-| `evals/route_probe.py` | code | - | 10.4 |
+| `evals/route_probe.py` | code | - | B.5, 3.1, 3.2, 3.5, 6.2, 10.4 |
 | `evals/route_threshold.py` | code | - | 10.4 |
 | `evals/routes.jsonl` | data | - | 3.2, 5.6, 10.4, 10.5 |
 | `evals/run_attacks.py` | code | 4.9, 10.8 | - |
@@ -310,9 +325,10 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/agent/requirements.txt` | config | - | B.1, 10.6, 10.8, 10.9 |
 | `services/agent/tool_pins.json` | config | 10.8 | 10.9 |
 | `services/chat/Dockerfile` | code | - | - |
-| `services/chat/agent.py` | code | 0.2, 5.1, 5.4, 5.5, 5.6, 5.7, 6.5, 6.6, 6.7, 10.8, 10.11 | 4.6, 11.7 |
+| `services/chat/agent.py` | code | 0.2, 5.1, 5.4, 5.5, 5.6, 5.7, 5.8, 6.5, 6.6, 6.7, 10.8, 10.11 | 4.6, 11.7 |
 | `services/chat/approval.py` | code | 5.8 | - |
-| `services/chat/brains.py` | code | 0.2, 5.1, 5.4, 5.5, 5.7, 5.8, 6.1, 6.5, 6.6, 6.8, 6.9, 10.7 | 10.1, 12.4 |
+| `services/chat/approval_routes.py` | code | 5.8 | - |
+| `services/chat/brains.py` | code | 0.2, 5.1, 5.4, 5.5, 5.7, 5.8, 6.1, 6.5, 6.6, 6.8, 6.9, 10.2, 10.7 | 10.1, 12.4 |
 | `services/chat/context_window.py` | code | 6.9 | - |
 | `services/chat/delegation.py` | code | 10.4 | - |
 | `services/chat/desk.py` | code | B.1, 5.6, 6.9, 10.4, 10.5 | - |
@@ -324,7 +340,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/chat/limits.py` | code | 5.1, 5.5, 5.7, 6.1, 6.8, 10.11, 11.7 | 10.2, 10.7 |
 | `services/chat/migrate.py` | code | 6.6 | - |
 | `services/chat/peer.py` | code | 10.7 | - |
-| `services/chat/requirements-local.txt` | config | - | 0.2, 5.8 |
+| `services/chat/requirements-local.txt` | config | - | 0.2, 5.8, 10.8 |
 | `services/chat/requirements.txt` | config | B.1 | 0.2, 5.8, 6.1, 10.4, 10.8 |
 | `services/chat/tools.py` | code | 5.1, 5.4, 5.5, 5.7, 6.1, 10.8 | 10.1, 10.2, 10.3, 10.7 |
 | `services/frontend/.streamlit/config.toml` | config | - | - |
@@ -365,7 +381,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/ingest/main.py` | code | B.3, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 4.8, 7.4, 7.5, 8.1, 8.2, 8.3, 8.4 | 1.1, 10.4, 10.8, 11.7, 11.8 |
 | `services/ingest/managed.py` | code | 7.3, 7.4 | - |
 | `services/ingest/parser.py` | code | 1.2 | - |
-| `services/ingest/reconcile.py` | code | 1.7, 1.8, 2.4, 7.4, 8.1, 8.2, 8.3, 8.4 | 1.3 |
+| `services/ingest/reconcile.py` | code | 1.7, 1.8, 2.4, 5.8, 7.4, 8.1, 8.2, 8.3, 8.4 | 1.3 |
 | `services/ingest/relabel.py` | code | 10.4 | - |
 | `services/ingest/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.1, 8.2, 8.3, 8.4, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 10.11, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 12.1, 12.2, 12.3, 12.4 |
 | `services/litellm/Dockerfile` | code | - | - |
@@ -411,7 +427,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `services/slm/gpu_quota.py` | code | - | 11.6 |
 | `services/slm/make_modelfile.py` | code | 9.2 | - |
 | `services/slm/requirements.txt` | config | - | B.1, 9.2 |
-| `shared/audit_log.py` | code | 1.4, 4.8 | - |
+| `shared/approvals.py` | code | 5.8 | - |
+| `shared/audit_log.py` | code | 1.4, 4.8, 5.8 | - |
 | `shared/cases.py` | code | 5.6 | 10.10 |
 | `shared/desk_calc.py` | code | 10.1, 10.3, 10.5, 10.8, 10.10 | 10.2, 10.4 |
 | `shared/desk_law.py` | code | 5.6, 10.4 | - |
@@ -430,7 +447,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/profile.py` | code | 0.2, 10.8 | B.2, B.5, 5.1, 6.1, 10.1 |
 | `shared/query_rewrite.py` | code | 2.5 | - |
 | `shared/requirements.txt` | config | - | B.1, 0.2, 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.1, 8.2, 8.3, 8.4, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 10.11, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 12.1, 12.2, 12.3, 12.4 |
-| `shared/roles.py` | code | 5.6 | 5.8 |
+| `shared/roles.py` | code | 5.6, 5.8 | - |
 | `shared/sparse_encoder.py` | code | 1.3 | 2.2 |
 | `shared/spotlight.py` | code | 10.8 | - |
 | `shared/system_one.py` | code | 2.6 | - |
@@ -438,6 +455,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `smoke/preflight.sh` | code | 0.1, 0.4 | 0.3 |
 | `smoke/smoke.py` | code | B.1, 0.4, 2.3, 2.4, 4.7 | - |
 | `smoke/smoke_agent.py` | code | - | 10.9 |
+| `smoke/smoke_approval.py` | code | - | 5.8 |
 | `smoke/smoke_cases.py` | code | - | 5.6, 10.4 |
 | `smoke/smoke_chat.py` | code | 4.7 | 10.4 |
 | `smoke/smoke_desk.py` | code | - | 10.4, 10.5 |
@@ -1006,6 +1024,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_05/lesson_5_8/demo_05_pause_refuse_approve_and_resume_on_your_machine.py` | code | - | - |
 | `workshop_demos/module_05/lesson_5_8/demo_06_escalate_and_clarify_over_rest_on_your_lane.py` | code | - | - |
 | `workshop_demos/module_05/lesson_5_8/demo_07_the_rows_the_case_and_your_role_read_directly.py` | code | - | - |
+| `workshop_demos/module_05/lesson_5_8/demo_08_the_approval_wired_in_a_withdrawal_paused_on_your_lane_decided_over_rest_run_by.py` | code | - | - |
 | `workshop_demos/module_05/lesson_5_8/lesson_map.json` | config | - | - |
 | `workshop_demos/module_05/lesson_5_8/setup/finish.py` | code | - | - |
 | `workshop_demos/module_05/lesson_5_8/setup/prepare.py` | code | - | - |
@@ -1309,7 +1328,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_2/demo_07_the_3_chained_rows_offline_and_a_cheaper_executor.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/demo_08_your_lane_plan_and_execute_rewoo_and_a_flash_lite_executor.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/demo_09_the_3_rows_on_your_lane_and_the_plans_they_saved.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_2/demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/lesson_map.json` | config | - | - |
+| `workshop_demos/module_10/lesson_10_2/optional/demo_10_when_a_plan_pays_what_each_costs_the_libraries_forms_and_what_the_kit_does_not_d.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_2/setup/restore_settings.py` | code | - | - |
@@ -1374,6 +1395,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_7/demo_07_what_the_lane_logs_the_hand_off_line_beside_the_chat_row.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_7/demo_08_a_loop_among_the_lane_s_own_services_refused_by_construction.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_7/demo_09_a_loop_through_someone_else_s_agent_refused_at_run_time.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_7/demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_7/lesson_map.json` | config | - | - |
 | `workshop_demos/module_10/lesson_10_7/recovery/setup_before_you_run_anything_set_up_the_shell.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_7/setup/finish.py` | code | - | - |

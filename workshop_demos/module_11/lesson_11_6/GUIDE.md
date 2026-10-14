@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.6_Cost_Controls_WIX.html`, reviewed at blob `7d2d39676abfdd32aca8e43689880c544e1b0219`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.6_Cost_Controls_WIX.html`, reviewed at blob `55c0b175d5563a305151ab5269454da9db8dba49`. Learners read that page on the course site; this guide keeps its prose.
 
 DocuMind spends money on three clocks. Every answer costs a model call, the month adds up the whole project's bill, and every hour an instance stays up it is billed. Each clock has its own control. The router sends each question to the cheapest model that can answer it, and a breaker reads the month's spend and stops choosing Pro at 80 percent. The billing budget emails the billing admins as the month's bill passes its lines. The off switch floors the GPU services, the gateway and the UI to zero instances every night at 23:00, and `make off` does the same by hand.
 

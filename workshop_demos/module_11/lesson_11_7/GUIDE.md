@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`, reviewed at blob `d773e65a64c007e202b5b3b1d99e9a6d3c1ef352`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`, reviewed at blob `aab33582d3f9c2a9bac670f28f7b6bf765026bf4`. Learners read that page on the course site; this guide keeps its prose.
 
 An eval row asks one question of whichever revision answers, and judges the answer. It cannot see the lane around the answer: which revision is answering, which settings it was made with, what the next routine deploy will put back, what the month's reports leave out, and what no alert reads. The kit keeps 13 such failures in one registry, `ops/gotchas.json`. Each comes with its symptom, why no eval row catches it, a drill that reproduces it, a detector that finds it on a lane, and the lever that fixes it.
 

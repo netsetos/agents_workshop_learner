@@ -948,9 +948,12 @@ def main(argv: list[str] | None = None) -> int:
             raise Stop(f"{a.policy!r} watches {', '.join(row['watches'])}, not {service}")
         if a.offline is None:
             state = read_state(a.project, a.region, service, a.policy or None, rows, a.since)
-            if a.save:
-                save_state(state, Path(a.save))
-        print("\n".join(render(state, diagnose(state, rows, catalog), rows, catalog)))
+        # The plan is rendered, and every command in it checked, before anything is saved: a state whose plan stops
+        # is not written as a fixture (13 October 2026: it was saved first, and only an identifier leak stopped a save).
+        plan = render(state, diagnose(state, rows, catalog), rows, catalog)
+        if a.save and a.offline is None:
+            save_state(state, Path(a.save))
+        print("\n".join(plan))
         if a.save and a.offline is None:
             print(f"saved: {a.save} (make remediate OFFLINE=1 FIXTURE={a.save} prints this plan again)")
         return 0

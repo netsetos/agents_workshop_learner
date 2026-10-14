@@ -257,11 +257,11 @@ Expected shape, not a promised result:
 
 ### demo_09_verify_it_yourself_the_checklist.py
 
-Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
+Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
 
 **`step_01_verify_it_yourself_the_checklist(session)` — Verify it yourself: the checklist / Verify it yourself: the checklist**
 
-Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
+Eight checks, each one step above, each with what a pass looks like on your lane; then the one command that puts the note away. When the checks are done, withdraw the note. make retire flags its rows as retired, with an expire_at 30 days out, marks its ledger row withdrawn, removes it from the managed stores, takes its ids out of the Vector Search index (since 13 October 2026) and moves acme's fingerprint. The object stays in the bucket, and make restore would bring it back (lesson 1.7):
 
 Operation: bash — run in the operator shell, in the kit, when the lesson is done (withdraws the note; reversible with make restore).
 
@@ -289,6 +289,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.1_PubSub_Kafka_WIX.html`. All 42 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `68574285615aa236a1f361df759f8a2b6a9d97fd`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.1_PubSub_Kafka_WIX.html`. All 42 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1e9a96b64334dbc3d0d7d57f73ef634d3ecaaa83`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

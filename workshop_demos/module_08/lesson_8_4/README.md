@@ -141,7 +141,7 @@ Expected shape, not a promised result:
 
 ### demo_06_failure_modes_what_pages_what_does_not_and_what_the_design_does_about_it.py
 
-The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.
+The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.
 
 **`step_01_the_policies_the_kit_declares_read_from_it(session)` — Failure modes: what pages, what does not, and what the design does about it / Do it: the policies the kit declares, read from its files**
 
@@ -156,14 +156,15 @@ ingest_failed      reads ingest_events
 reconcile_drift    reads reconcile_drift - declared only when reconcile_job is true
 reconcile_failed   reads completed_task_attempt_count on documind-reconcile - declared only when reconcile_job is true
 dlq_depth          reads num_undelivered_messages on ingest-dlq-sub
+ingest_backlog     reads oldest_unacked_message_age on documind-ingest-push
 doc_type_pin_miss  reads doc_type_pin_miss
-policies that read documind-ingest-push: 0; that read oldest_unacked_message_age: 0; that count cache_stale: 0
+policies that read documind-ingest-push: 1; that read oldest_unacked_message_age: 1; that count cache_stale: 0
 the walk: RECONCILE_JOB   ?= false | the batch job: BATCH_JOB       ?= false
 ```
 
 **`step_02_the_walk_on_three_stuck_states(session)` — Failure modes: what pages, what does not, and what the design does about it / Do it: the walk on three stuck states**
 
-The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane.
+The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find.
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing).
 
@@ -173,7 +174,8 @@ Expected shape, not a promised result:
 acme/cut_off.md    reingest  (not in the ledger)
 acme/poison.pdf    reingest  (not in the ledger)
 acme/big.pdf       queued    (handed to the batch lane; the batch job indexes it, the claim says queued)
-drift 2 of 3 objects; the next night plans the same
+drift 2 of 3 objects
+acme/cut_off.md's claim at the walk: 23,100 s old, its lease 660 s, so the rewrite's delivery takes the claim back and indexes the bytes
 ```
 
 **`step_03_on_your_lane_the_policies_that_exist(session)` — Failure modes: what pages, what does not, and what the design does about it / Read it on your lane: the policies that exist**
@@ -185,7 +187,7 @@ Operation: bash — run in the operator shell (one GET on the Monitoring API; ch
 Expected shape, not a promised result:
 
 ```text
-10 alert policies on the lane
+11 alert policies on the lane
   A registered document arrived at a version nobody reviewed
   API p95 latency > 3s
   Desk case queue: a case due within 24 hours and unacknowledged, or breached
@@ -193,12 +195,13 @@ Expected shape, not a promised result:
   Desk: a delegation was refused
   Ingest dead-letter queue holds messages
   Ingest failed
+  Ingest subscription backlog: oldest message over 30 minutes
   Unanswerable rate > 20% for a tenant
   documind-slm left warm: instances > 0 for 2 hours
   documind-vllm left warm: instances > 0 for 2 hours
-reads documind-ingest-push: False | reads the dead-letter subscription: True
+reads documind-ingest-push: True | reads the dead-letter subscription: True
 
-12 alert policies on the lane
+13 alert policies on the lane
   A registered document arrived at a version nobody reviewed
   API p95 latency > 3s
   Desk case queue: a case due within 24 hours and unacknowledged, or breached
@@ -206,12 +209,13 @@ reads documind-ingest-push: False | reads the dead-letter subscription: True
   Desk: a delegation was refused
   Ingest dead-letter queue holds messages
   Ingest failed
+  Ingest subscription backlog: oldest message over 30 minutes
   Ledger drift above zero for two nights
   Nightly reconcile failed
   Unanswerable rate > 20% for a tenant
   documind-slm left warm: instances > 0 for 2 hours
   documind-vllm left warm: instances > 0 for 2 hours
-reads documind-ingest-push: False | reads the dead-letter subscription: True
+reads documind-ingest-push: True | reads the dead-letter subscription: True
 ```
 
 ### demo_07_cost_standing_still_staying_fresh_and_one_change_at_1k_100k_and_10m_documents.py
@@ -278,6 +282,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.4_Design_Self_Updating_Docs_WIX.html`. All 52 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4b0f37c6fcb49fcc770a10b14ceba99c59bf1fb2`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_8.4_Design_Self_Updating_Docs_WIX.html`. All 54 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `84d0e937ed8f263a6f0838649ecb9372dcec6dd5`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

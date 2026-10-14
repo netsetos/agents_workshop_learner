@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.3_Rerank_WIX.html`, reviewed at blob `070a1c9acdbcf7e274747a69a8bb2b86c96fbc82`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.3_Rerank_WIX.html`, reviewed at blob `8a84797a1c88a0c31e8991f49d2ca6bd8fa4a3af`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.2 measured the pool. This lesson follows it the rest of the way: to the ranking model that reads the question beside each of the twenty candidates and orders them, to the cut at the request's `top_k`, to the packer that fits what is left into the prompt, and to the citations, each carrying the ranker's score. You will read one answer end to end, send the API's own pool to the Ranking API with the API's own request and match its order, force the fallback on a candidate revision that takes no traffic, run `make usage` for p95 per stage, and find where `found_by` lives and how far it travels.
 

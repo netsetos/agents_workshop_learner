@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_6.9_Working_Memory_WIX.html`, reviewed at blob `1d587064f7681dd27c53e803d5f79ed25bfb31c0`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.9_Working_Memory_WIX.html`, reviewed at blob `56fa31879a33efc1fa05ce81582f42396eff58e2`. Learners read that page on the course site; this guide keeps its prose.
 
 A conversation's thread grows with every turn, and today every model call the chat brains make sends all of it again: every question, every answer, every search result. The kit's new window decides what one call is sent instead. The system prompt and the newest turn always go whole. Earlier turns go whole too, newest first, while they fit in 2,000 tokens, with their search results cleared. The rest are brought forward in one line that code writes. Every earlier question is masked and cut to the Desk's 300 characters. The chat service does not use the window yet. You watch a thread grow on your lane, run twenty scripted turns with and without the window at Rs 0, open one call message by message, and read the author's run of the same twenty questions against Gemini.
 
@@ -160,7 +160,7 @@ make window-check three ways: the window, the whole thread, and a quarter of the
 
 The thread grew from 659 tokens to 15,657, 80 messages: the checkpoint keeps every one. Every call stayed within its ceiling, and the last sent 2,862 tokens of 2,880. Up to turn 13 every earlier turn fitted in 2,000 tokens once its results were cleared, so nothing was brought forward. From turn 14 the oldest turns left the call, and the context stopped growing with the thread: by turn 20 it keeps turns 9 to 19 whole and brings turns 1 to 8 forward, listing 7 of their questions, turns 2 to 8. Turn 20 asks "What was the first question I asked you in this conversation?", and that call does not carry turn 1's question; the line's numbers tell the model so. The masked column turns 1 at turn 6, the card number, and the cut column at turn 10, when turn 9's question of 395 characters became an earlier turn.
 
-Each search runs on your machine, and a long question takes the longest: turn 9's has 395 characters. On a busy machine a search can pass `retrieve`'s budget of 25 seconds (`RAG_TIMEOUT_S` plus 5, lesson 5.5). The model then reads a failed search, the script answers that the search found nothing, and that turn's row and every thread size after it come out smaller. A `retrieve took ... (budget 25s)` warning in the output names the search. The window still holds every call within its ceiling; run it again when the machine is quieter for the page's figures.
+Each search runs on your machine. The Rs 0 lane counts each chunk's words once and keeps the counts, so a search takes a fraction of a second, turn 9's question of 395 characters included. A search that passed `retrieve`'s budget of 25 seconds (`RAG_TIMEOUT_S` plus 5, lesson 5.5) would be cut: the model would read a failed search, the script would answer that the search found nothing, and that turn's row and every thread size after it would come out smaller, with a `retrieve took ... (budget 25s)` warning naming the search. The window would still hold every call within its ceiling.
 
 #### Do it: without the window
 

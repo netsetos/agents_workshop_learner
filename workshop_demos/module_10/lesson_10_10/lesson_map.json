@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_10/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.10_Coding_Agents_WIX.html",
-  "source_sha": "417e6f409fc5d8e1f9abd00c6d6d9649a087de75",
+  "source_sha": "a1bd16fe4703dea8f9eed3f91673c0ae26b724c2",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 78,
+  "source_window_count": 82,
   "persist_variables": [
     "API",
     "API_URL",
@@ -187,6 +187,10 @@
     {
       "level": 4,
       "heading": "Do it: the two containers, printed"
+    },
+    {
+      "level": 4,
+      "heading": "Do it: the egress proxy, printed"
     },
     {
       "level": 4,
@@ -607,7 +611,7 @@
         "demo_07_the_reviewer_a_linter_first_then_gemini_on_your_lane"
       ],
       "heading": "The live loop: Gemini CLI in a container, on a model-only key",
-      "purpose": "DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:",
+      "purpose": "DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:",
       "anchor": "s8",
       "anchors": [
         "s8"
@@ -617,14 +621,18 @@
         62,
         64,
         66,
-        68
+        68,
+        70,
+        72
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_10/GUIDE.md",
       "source_lines": [
         1208,
         1218,
-        1238,
-        1245
+        1234,
+        1242,
+        1262,
+        1269
       ],
       "offline": false,
       "live_verified": false,
@@ -645,15 +653,41 @@
         },
         {
           "heading": "The live loop: Gemini CLI in a container, on a model-only key",
+          "subheading": "Do it: the egress proxy, printed",
+          "purpose": "By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY.",
+          "label": "bash — run in the operator shell, in the kit (the same, behind the egress proxy; nothing starts)",
+          "expected": "ralph --dry-run: an iteration's network and three containers, the proxy, the agent and the oracle, and nothing else; nothing is started\n  first, RALPH_EGRESS=proxy: the agent's internal network, and the proxy that opens a tunnel to aiplatform.googleapis.com:443 alone:\n    docker network create --internal ralph-<run>-01-net\n    docker run -d --name ralph-<run>-01-egress --network bridge --read-only --cap-drop ALL --security-opt no-new-privileges --memory 256m --pids-limit 128 --user UID:GID --mount type=bind,source=/home/you/deploy_module_rag/commands/ralph/egress.py,target=/egress/egress.py,readonly documind-ralph python3 -I -B -u /egress/egress.py --listen 0.0.0.0:3128 --allow aiplatform.googleapis.com:443\n    docker network connect --alias egress ralph-<run>-01-net ralph-<run>-01-egress\n  the agent: docker run --rm --init --name ralph-<run>-01 --network ralph-<run>-01-net --env HTTPS_PROXY=http://egress:3128 --cap-drop ALL --security-opt no-new-privileges --read-only --tmpfs /tmp --memory 2g --pids-limit 256 --cpus 2 --user UID:GID --env-file <run>/agent.env --env RALPH_MODEL=gemini-3.6-flash --env HOME=/tmp --mount type=bind,source=<run>/workspace,target=/work --mount type=bind,source=/home/you/deploy_module_rag/commands/ralph/PROMPT.md,target=/ralph/PROMPT.md,readonly --mount type=bind,source=/home/you/deploy_module_rag/commands/ralph/settings.json,target=/etc/gemini-cli/settings.json,readonly --workdir /work documind-ralph ralph-iteration\n    its --env-file, 0600, deleted when the iteration ends: GOOGLE_API_KEY, GOOGLE_GENAI_USE_VERTEXAI (values never printed)\n  then, whatever happened: the proxy's log, kept as iterations/01-egress.txt, and the proxy and the network removed:\n    docker logs ralph-<run>-01-egress\n    docker rm -f ralph-<run>-01-egress\n    docker network rm ralph-<run>-01-net\n  the oracle: docker run --rm --network none --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges --pids-limit 64 --memory 512m --user UID:GID --mount type=bind,source=<run>/oracle/01,target=/oracle/kit,readonly --mount type=bind,source=/home/you/deploy_module_rag/commands/ralph,target=/oracle/check,readonly documind-ralph python3 -I -B -X utf8 /oracle/check/oracle.py --kit /oracle/kit --mode strong --json",
+          "adaptations": [],
+          "id": "source_64",
+          "function": "step_02_the_egress_proxy_printed",
+          "window": 64,
+          "source_line": 1218,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The live loop: Gemini CLI in a container, on a model-only key",
+          "subheading": "Do it: the egress proxy, printed",
+          "purpose": "By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's.",
+          "label": "bash — the author's run, in Cloud Shell (batch 4): the egress proxy on a live docker",
+          "expected": "[awaiting the author's run: data/isolation.txt]",
+          "adaptations": [],
+          "id": "source_66",
+          "function": "step_03_the_egress_proxy_printed",
+          "window": 66,
+          "source_line": 1234,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "The live loop: Gemini CLI in a container, on a model-only key",
           "subheading": "Do it: the live loop on your lane",
           "purpose": "Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials.",
           "label": "bash — run in the operator shell, in the kit (the live loop without the author's cap or key)",
           "expected": "ERROR: the live loop has no default spend: give it RALPH_BUDGET_INR=<cap>, set from a dry run (make ralph RALPH_MAX_ITERS=1 RALPH_BUDGET_INR=<a small cap> reads one iteration's rupees)\nmake: *** [mk/coding.mk:31: ralph] Error 2\nERROR: RALPH_API_KEY is not set: the live loop runs only on a model-only credential the author creates for the run and deletes after it, never on your gcloud login or ADC\nmake: *** [mk/coding.mk:31: ralph] Error 2",
           "adaptations": [],
-          "id": "source_64",
-          "function": "step_02_the_live_loop_on_your_lane",
-          "window": 64,
-          "source_line": 1218,
+          "id": "source_68",
+          "function": "step_04_the_live_loop_on_your_lane",
+          "window": 68,
+          "source_line": 1242,
           "manual_checkpoint": null
         },
         {
@@ -663,10 +697,10 @@
           "label": "bash — the author's run, on the author's lane, in Cloud Shell (batch 4): yours refuses, as above",
           "expected": "[awaiting the author's run: data/ralph_loop.txt]",
           "adaptations": [],
-          "id": "source_66",
-          "function": "step_03_the_author_s_run",
-          "window": 66,
-          "source_line": 1238,
+          "id": "source_70",
+          "function": "step_05_the_author_s_run",
+          "window": 70,
+          "source_line": 1262,
           "manual_checkpoint": null
         },
         {
@@ -676,10 +710,10 @@
           "label": "bash — the author's run (batch 4): the reviewer on the live loop's work",
           "expected": "[awaiting the author's run: data/review_diff.txt]",
           "adaptations": [],
-          "id": "source_68",
-          "function": "step_04_the_author_s_run",
-          "window": 68,
-          "source_line": 1245,
+          "id": "source_72",
+          "function": "step_06_the_author_s_run",
+          "window": 72,
+          "source_line": 1269,
           "manual_checkpoint": null
         }
       ],
@@ -701,15 +735,15 @@
       ],
       "section_number": 9,
       "windows": [
-        70,
-        72,
-        75
+        74,
+        76,
+        79
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_10/GUIDE.md",
       "source_lines": [
-        1261,
-        1305,
-        1336
+        1285,
+        1329,
+        1360
       ],
       "offline": false,
       "live_verified": false,
@@ -722,10 +756,10 @@
           "label": "bash — run in the operator shell, in the kit (the strong run's record, read straight from its files)",
           "expected": "the task: statutory_deadline written to an engineer's spec\niteration 1: strong oracle FAIL (1 failed)\niteration 2: strong oracle FAIL (3 failed)\niteration 3: strong oracle PASS\n# Fix plan\n\nOne item an iteration: take the first unticked item, do it, then tick it ([x]). When oracle.md lists a failed check\nthat no item covers, add an unticked item for it at the end.\n\n- [x] Write statutory_deadline's body, as spec.md says\n- [x] Count the two working days from any last working day: the sweep over 2026 failed\n- [x] Skip Saturdays and Sundays: the due date fell on a weekend\n## Learned\n- python3 shared/desk_calc.py --selftest: the fast test; it stops at statutory_deadline until the body is written\ndiff --git a/shared/desk_calc.py b/shared/desk_calc.py\nindex 4eebbfb..2da7e42 100644\n--- a/shared/desk_calc.py\n+++ b/shared/desk_calc.py\n@@ -353,7 +353,17 @@ def statutory_deadline(event: str, last_working_day) -> dict:\n     \"\"\"Code on Wages, 2019, s.17(2): wages are paid within two working days of a removal, dismissal, retrenchment or\n     resignation. Counted from the person's last working day, as the case queue's exit clock counts it\n     (cases.exit_flags), on working days Monday to Friday until a holiday calendar exists (cases.working_days_after).\"\"\"\n-    raise NotImplementedError(\"statutory_deadline has no body yet: spec.md says what it does\")\n+    ev = str(event or \"\").strip().lower()\n+    if ev not in EXIT_EVENTS:\n+        raise CalcError(f\"event is one of {', '.join(EXIT_EVENTS)}: the events section 17(2) counts from\")\n+    start = day_of(last_working_day, \"last_working_day\")\n+    due = cases.working_days_after(start, WAGE_DAYS)\n+    return _result(\"statutory_deadline\", due.isoformat(), \"date\",\n+                   f\"last working day {start.isoformat()} ({start:%A}), after the {ev}, + {WAGE_DAYS} working days = \"\n+                   f\"{due.isoformat()} ({due:%A})\", [\"wages_s17_2\", \"wages_s17_3\"],\n+                   notes=[NO_HOLIDAYS, \"Counted from the last working day, the desk's reading of s.17(2), as its case \"\n+                                       \"queue counts it.\",\n+                          \"The appropriate Government may set another time limit (s.17(3)).\"])\n \n \n def threshold_check(headcount, rule: str = \"grc\") -> dict:",
           "adaptations": [],
-          "id": "source_70",
+          "id": "source_74",
           "function": "step_01_the_record",
-          "window": 70,
-          "source_line": 1261,
+          "window": 74,
+          "source_line": 1285,
           "manual_checkpoint": null
         },
         {
@@ -735,10 +769,10 @@
           "label": "bash — run in the operator shell, in the kit (summary.json, the same run)",
           "expected": "task deadline, agent scripted, strong oracle: stopped by oracle_passed; Rs 6.3227, billed False\n  1. FAIL   12 lines, 1 failed | in 14,737, cached 0, out 302, thinking 64 | Write statutory_deadline's body, as spec.md says\n  2. FAIL    2 lines, 3 failed | in 14,613, cached 0, out 306, thinking 64 | Count the two working days from any last working day: the sweep over 2026 failed\n  3. PASS    2 lines, 0 failed | in 14,695, cached 0, out 309, thinking 64 | Skip Saturdays and Sundays: the due date fell on a weekend\nthe other oracle on the same code: PASS\nkit.patch: identical to the kit's own, byte for byte",
           "adaptations": [],
-          "id": "source_72",
+          "id": "source_76",
           "function": "step_02_the_record",
-          "window": 72,
-          "source_line": 1305,
+          "window": 76,
+          "source_line": 1329,
           "manual_checkpoint": null
         },
         {
@@ -748,10 +782,10 @@
           "label": "bash — run in the operator shell, in the kit (the human step, on the weak run's kit.patch)",
           "expected": "--- a/shared/desk_calc.py\n+++ b/shared/desk_calc.py\n@@ -357,7 +357,7 @@\n     if ev not in EXIT_EVENTS:\n         raise CalcError(f\"event is one of {', '.join(EXIT_EVENTS)}: the events section 17(2) counts from\")\n     start = day_of(last_working_day, \"last_working_day\")\n-    due = cases.working_days_after(start, WAGE_DAYS)\n+    due = date(2026, 10, 6)\n     return _result(\"statutory_deadline\", due.isoformat(), \"date\",\n                    f\"last working day {start.isoformat()} ({start:%A}), after the {ev}, + {WAGE_DAYS} working days = \"\n                    f\"{due.isoformat()} ({due:%A})\", [\"wages_s17_2\", \"wages_s17_3\"],\nevery rule says what its corpus line says, and the figures hold\nralph-check: the oracles on statutory_deadline in a change of shared/desk_calc.py (offline, Rs 0)\n  the oracle runs the change's code on this machine, with the network and new processes refused inside Python: that is not a sandbox, so judge only a change you have read\n  kit.patch applies to the kit's own file\n  weak oracle (desk_calc's own selftest): PASS\n  strong oracle: FAIL\n    FAIL  every day of 2026, for each event: the second working day after the last working day, Monday to Friday (1,448 of 1,460 wrong; the first: removal on 2026-01-01 (Thursday): 2026-01-05 due, '2026-10-06' given)\nmake: *** [mk/coding.mk:45: ralph-check] Error 1",
           "adaptations": [],
-          "id": "source_75",
+          "id": "source_79",
           "function": "step_03_the_human_step",
-          "window": 75,
-          "source_line": 1336,
+          "window": 79,
+          "source_line": 1360,
           "manual_checkpoint": null
         }
       ],
@@ -766,18 +800,18 @@
         "demo_09_direct_reads_and_the_human_step"
       ],
       "heading": "Verify it yourself: the checklist",
-      "purpose": "Fourteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.",
+      "purpose": "Fifteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.",
       "anchor": "s11",
       "anchors": [
         "s11"
       ],
       "section_number": 11,
       "windows": [
-        78
+        82
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_10/GUIDE.md",
       "source_lines": [
-        1428
+        1453
       ],
       "offline": false,
       "live_verified": false,
@@ -786,14 +820,14 @@
         {
           "heading": "Verify it yourself: the checklist",
           "subheading": "Verify it yourself: the checklist",
-          "purpose": "Fourteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.",
+          "purpose": "Fifteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.",
           "label": "bash — run in the operator shell (optional: the run directories this page made)",
           "expected": "",
           "adaptations": [],
-          "id": "source_78",
+          "id": "source_82",
           "function": "step_01_verify_it_yourself_the_checklist",
-          "window": 78,
-          "source_line": 1428,
+          "window": 82,
+          "source_line": 1453,
           "manual_checkpoint": null
         }
       ],
@@ -1187,59 +1221,73 @@
     },
     {
       "window": 65,
-      "label": "expected (the kit's own code: both refusals come before docker is looked for)",
+      "label": "expected (the kit's own code; on your shell docker's full path may lead each line, and UID:GID is your uid and gid)",
       "heading": "The live loop: Gemini CLI in a container, on a model-only key",
       "anchor": "s8",
-      "line": 1221
+      "line": 1220
     },
     {
       "window": 67,
-      "label": "expected on the author's lane (batch 4): the live loop, Gemini CLI headless in the ralph image",
+      "label": "expected in the author's Cloud Shell (batch 4): make ralph-probe RALPH_EGRESS=proxy, no key and no model call",
       "heading": "The live loop: Gemini CLI in a container, on a model-only key",
       "anchor": "s8",
-      "line": 1242
+      "line": 1237
     },
     {
       "window": 69,
-      "label": "expected on the author's lane (batch 4): the reviewer on the live loop's ralph.patch",
+      "label": "expected (the kit's own code: both refusals come before docker is looked for)",
       "heading": "The live loop: Gemini CLI in a container, on a model-only key",
       "anchor": "s8",
-      "line": 1248
+      "line": 1245
     },
     {
       "window": 71,
-      "label": "expected (the kit's own code, run offline when this page was built; run directories and stamps are placeholders)",
-      "heading": "Direct reads, and the human step",
-      "anchor": "s9",
-      "line": 1267
+      "label": "expected on the author's lane (batch 4): the live loop, Gemini CLI headless in the ralph image",
+      "heading": "The live loop: Gemini CLI in a container, on a model-only key",
+      "anchor": "s8",
+      "line": 1266
     },
     {
       "window": 73,
+      "label": "expected on the author's lane (batch 4): the reviewer on the live loop's ralph.patch",
+      "heading": "The live loop: Gemini CLI in a container, on a model-only key",
+      "anchor": "s8",
+      "line": 1272
+    },
+    {
+      "window": 75,
       "label": "expected (the kit's own code, run offline when this page was built; run directories and stamps are placeholders)",
       "heading": "Direct reads, and the human step",
       "anchor": "s9",
-      "line": 1321
-    },
-    {
-      "window": 74,
-      "label": "expected on the author's lane (batch 4): the two cells above, with RUN set to the live run",
-      "heading": "Direct reads, and the human step",
-      "anchor": "s9",
-      "line": 1328
-    },
-    {
-      "window": 76,
-      "label": "expected (the cell's steps run on a scratch clone of the kit's files when this page was built)",
-      "heading": "Direct reads, and the human step",
-      "anchor": "s9",
-      "line": 1342
+      "line": 1291
     },
     {
       "window": 77,
+      "label": "expected (the kit's own code, run offline when this page was built; run directories and stamps are placeholders)",
+      "heading": "Direct reads, and the human step",
+      "anchor": "s9",
+      "line": 1345
+    },
+    {
+      "window": 78,
+      "label": "expected on the author's lane (batch 4): the two cells above, with RUN set to the live run",
+      "heading": "Direct reads, and the human step",
+      "anchor": "s9",
+      "line": 1352
+    },
+    {
+      "window": 80,
+      "label": "expected (the cell's steps run on a scratch clone of the kit's files when this page was built)",
+      "heading": "Direct reads, and the human step",
+      "anchor": "s9",
+      "line": 1366
+    },
+    {
+      "window": 81,
       "label": "expected on the author's lane (batch 4): the human step, on the live run's kit.patch",
       "heading": "Direct reads, and the human step",
       "anchor": "s9",
-      "line": 1362
+      "line": 1386
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

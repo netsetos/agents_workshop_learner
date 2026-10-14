@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_8.2_Rechunk_Reembed_WIX.html",
-  "source_sha": "13e76208470bc6126020b2e958f6edcaec801e57",
+  "source_sha": "5111868eecf916b3400fd9d5899661c81313622a",
   "shared_setup_windows": [
     1
   ],
@@ -471,7 +471,7 @@
         754,
         783,
         804,
-        845
+        846
       ],
       "offline": false,
       "live_verified": false,
@@ -526,7 +526,7 @@
           "id": "source_41",
           "function": "step_04_the_gate_the_handbook_s_golden_rows_asked",
           "window": 41,
-          "source_line": 845,
+          "source_line": 846,
           "manual_checkpoint": null
         }
       ],
@@ -553,8 +553,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_2/GUIDE.md",
       "source_lines": [
-        869,
-        879
+        870,
+        880
       ],
       "offline": false,
       "live_verified": false,
@@ -570,7 +570,7 @@
           "id": "source_43",
           "function": "step_01_definition",
           "window": 43,
-          "source_line": 869,
+          "source_line": 870,
           "manual_checkpoint": null
         },
         {
@@ -583,7 +583,7 @@
           "id": "source_45",
           "function": "step_02_definition",
           "window": 45,
-          "source_line": 879,
+          "source_line": 880,
           "manual_checkpoint": null
         }
       ],
@@ -830,7 +830,7 @@
     },
     {
       "window": 40,
-      "label": "services/ingest/reconcile.py - a hand withdrawal: rows retired, the mirror told, no datapoint removed",
+      "label": "services/ingest/reconcile.py - a hand withdrawal: rows retired, the mirror told, the tombstone, the ids out of the index",
       "heading": "Reconcile: the ledger against the bucket, the index against the rows, the golden rows",
       "anchor": "s8",
       "line": 834
@@ -840,21 +840,21 @@
       "label": "expected (recorded on the author's lane)",
       "heading": "Reconcile: the ledger against the bucket, the index against the rows, the golden rows",
       "anchor": "s8",
-      "line": 846
+      "line": 847
     },
     {
       "window": 44,
       "label": "expected (recorded on the author's lane)",
       "heading": "Put it back: the original tag, version 1, the checkout",
       "anchor": "s9",
-      "line": 874
+      "line": 875
     },
     {
       "window": 46,
       "label": "expected (the time differs)",
       "heading": "Put it back: the original tag, version 1, the checkout",
       "anchor": "s9",
-      "line": 883
+      "line": 884
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

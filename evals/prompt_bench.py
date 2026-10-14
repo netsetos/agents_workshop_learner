@@ -57,12 +57,21 @@ sets (within each row, across its runs, summed), the quote checks, thought and v
 list price from shared/prices.py (rag-api's cost.py prices from BigQuery, which the bench needs no role on). --show
 prints each row's pool and its distinct answers; --report writes every answer, config, usage and verdict as JSON.
 
+IDENTIFIERS, AS THE PAGES PRINT THEM. Everything the bench prints, and its --report, carries your lane's project id and
+project number as the lesson pages print them: documind-ai-YOUR-ID and NUMBER (redactor()). The id is
+GOOGLE_CLOUD_PROJECT, as a whole name or the start of one (gs://documind-ai-YOUR-ID-uploads/...); the number is the one
+in the API's address, and any in a Cloud Run address or a projects/NUMBER/ path. Only the printing changes: every
+request still goes to the address given, and make bench's own ">> URL" line, printed before the bench starts, names it.
+On by default, because the output is made to be pasted (the pages record it) and nothing on the lane differs;
+BENCH_REDACT=0 prints the identifiers as they are. A whole identifier is replaced: one an error text cut short is not.
+
 Cost: one generate() a row, arm, level and run - one call, two when an answer is cut off at max_output_tokens and asked
 again - plus one /v1/passages a row. Nothing is written but --report.
 """
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import os
@@ -417,6 +426,66 @@ def show_lines(rows: list[dict], pools: dict, answers: list[dict], arm_names: li
     return lines
 
 
+# --------------------------------------------------------------------- the lane's identifiers, as the pages print them
+PLACEHOLDER_PROJECT, PLACEHOLDER_NUMBER = "documind-ai-YOUR-ID", "NUMBER"     # the lesson pages' placeholders
+PROJECT_ID = re.compile(r"[a-z][a-z0-9-]{4,28}[a-z0-9]")                       # a project id's shape
+RUN_APP_NUMBER = re.compile(r"(?<=-)\d{6,}(?=\.[a-z0-9-]+\.run\.app)")         # Cloud Run's <service>-NUMBER.REGION.run.app
+PATH_NUMBER = re.compile(r"(?<=projects/)\d{6,}(?=/)")                         # a resource path's projects/NUMBER/
+
+
+def redactor(project: str | None, api_url: str | None, on: bool = True):
+    """A function of one text: the text with the lane's project id and project number as the pages print them. The id
+    (GOOGLE_CLOUD_PROJECT) is replaced as a whole name, or where it starts one; the number read from the API's address
+    wherever it stands as a whole number, and any number in a Cloud Run address or a resource path. Off: the text as
+    it is."""
+    if not on:
+        return lambda text: text
+    pid = project if project and PROJECT_ID.fullmatch(project) else None
+    found = RUN_APP_NUMBER.search(api_url or "")
+    patterns = ([(re.compile(rf"(?<![a-z0-9]){re.escape(pid)}(?![a-z0-9])"), PLACEHOLDER_PROJECT)] if pid else []) + \
+        ([(re.compile(rf"(?<!\d){found.group(0)}(?!\d)"), PLACEHOLDER_NUMBER)] if found else []) + \
+        [(RUN_APP_NUMBER, PLACEHOLDER_NUMBER), (PATH_NUMBER, PLACEHOLDER_NUMBER)]
+
+    def hide(text: str) -> str:
+        for pattern, placeholder in patterns:
+            text = pattern.sub(placeholder, text)
+        return text
+    return hide
+
+
+def redacted(value, hide):
+    """A report's value with hide() applied to every string in it: its numbers stay numbers."""
+    if isinstance(value, str):
+        return hide(value)
+    if isinstance(value, dict):
+        return {k: redacted(v, hide) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [redacted(v, hide) for v in value]
+    return value
+
+
+def report_to(record: dict, f, hide) -> None:
+    """--report's file: the run's record as JSON, every string in it through hide()."""
+    json.dump(redacted(record, hide), f, indent=1)
+
+
+class Redacted:
+    """A text stream written through hide(): what the bench prints, as the pages print it. Each print() writes its text
+    in one piece, so an identifier is never split between two writes."""
+
+    def __init__(self, stream, hide):
+        self.stream, self.hide = stream, hide
+
+    def write(self, text: str) -> int:
+        return self.stream.write(self.hide(text))
+
+    def flush(self) -> None:
+        self.stream.flush()
+
+    def __getattr__(self, name):
+        return getattr(self.stream, name)
+
+
 # --------------------------------------------------------------------- the generator, from your shell
 def load_generator():
     """services/rag-api/generator.py, imported as the service imports it: rag-api's own directory before site-packages
@@ -478,7 +547,15 @@ def main(argv: list[str] | None = None, generator=None, passages=None, sources=N
     ap.add_argument("--show", action="store_true", help="print each row's pool and its distinct answers")
     ap.add_argument("--report", metavar="FILE", help="write every answer, its config, usage and verdict here as JSON")
     a = ap.parse_args(argv)
+    # The lane's identifiers as the pages print them (IDENTIFIERS, above): stdout and stderr are written through the
+    # redactor while the bench runs, and run_bench() writes the report through it (13 October 2026).
+    hide = redactor(os.environ.get("GOOGLE_CLOUD_PROJECT"), a.api_url, os.environ.get("BENCH_REDACT", "1") != "0")
+    with contextlib.redirect_stdout(Redacted(sys.stdout, hide)), contextlib.redirect_stderr(Redacted(sys.stderr, hide)):
+        return run_bench(ap, a, hide, generator, passages, sources)
 
+
+def run_bench(ap, a, hide, generator=None, passages=None, sources=None) -> int:
+    """The bench, its arguments read by main(): the rows and their pools, every answer, the summary and the report."""
     levels = parse_levels(a.levels)
     if a.runs < 1:
         ap.error("--runs is 1 or more")
@@ -581,7 +658,7 @@ def main(argv: list[str] | None = None, generator=None, passages=None, sources=N
     if a.report:
         os.makedirs(os.path.dirname(os.path.abspath(a.report)), exist_ok=True)
         with open(a.report, "w", encoding="utf-8") as f:
-            json.dump({"api_url": a.api_url, "model": model, "levels": levels, "runs": a.runs,
+            report_to({"api_url": a.api_url, "model": model, "levels": levels, "runs": a.runs,
                        "arms": [{"name": arm["name"], "changes": arm["changes"], "temperature": arm["temperature"],
                                  "prompt_sha256": prompt_sha(arm["system"], dated), "system": arm["system"]}
                                 for arm in arm_list],
@@ -594,7 +671,7 @@ def main(argv: list[str] | None = None, generator=None, passages=None, sources=N
                                     if reported and r["id"] in reported else {})} for r in rows],
                        "answers": answers, "summary": summary,
                        "version_check_skipped": skipped, "cost_inr": sum(x["cost_inr"] for x in answers),
-                       "generator_unchanged": (before == after) if before and after else None}, f, indent=1)
+                       "generator_unchanged": (before == after) if before and after else None}, f, hide)
         print(f"  report: {a.report}")
     if before and after and before != after:
         return 1

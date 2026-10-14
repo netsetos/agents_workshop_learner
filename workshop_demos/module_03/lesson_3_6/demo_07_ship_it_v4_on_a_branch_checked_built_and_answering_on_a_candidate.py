@@ -138,9 +138,9 @@ def step_03_name_it_v4_register_it_and_check_again(session):
     sha256:   269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8
     registry: documind-rag@v4 has this sha256 (services/rag-api/prompt_versions.json): the text is the one its version names
     exit 0
-    ......
+    .......
     ----------------------------------------------------------------------
-    Ran 6 tes
+    Ran 7 te
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_03)

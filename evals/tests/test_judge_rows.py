@@ -224,6 +224,17 @@ class SaveRowsTest(Tmp):
         self.assertEqual(len(asked), 1)                                               # without it, the store is read
         self.assertIn(" cited chunks read in full from the store - the judge reads the quotes only\n", out)
 
+    def test_the_frozen_rows_are_kept_and_never_offered_for_deletion(self):
+        # make judge-frozen reuses the set people labelled, evals/judge_set.json: judge.py says the rows are kept and
+        # names another --reuse file to collect afresh, never "delete it" (lesson 4.5's review, 13 October 2026).
+        before = self.set.read_bytes()
+        code, out = run_judge(frozen_args(self.set, self.tmp / "rows.jsonl"))
+        self.assertEqual(code, 0, out)
+        self.assertIn(f"  {len(self.frozen)} rows reused from {self.set} (under make judge-frozen these are the frozen "
+                      "rows, kept; to collect afresh, name another --reuse file)\n", out)
+        self.assertNotIn("delete", out.lower())
+        self.assertEqual(self.set.read_bytes(), before)                     # read, never written
+
     def test_without_save_rows_nothing_is_written_and_nothing_else_changes(self):
         _, with_rows = run_judge(frozen_args(self.set, self.tmp / "rows.jsonl"))
         args = frozen_args(self.set, self.tmp / "none.jsonl")

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.6_System_One_WIX.html",
-  "source_sha": "1a8b4569c0efebe86e7910d26e538ef2914bd3b5",
+  "source_sha": "6f80e3408ee4fb35964a833eae1de1849ec8d13c",
   "shared_setup_windows": [
     1
   ],
@@ -278,7 +278,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        675
+        683
       ],
       "offline": true,
       "live_verified": false,
@@ -294,7 +294,7 @@
           "id": "source_16",
           "function": "step_01_the_rule_s_arithmetic_on_three_rows",
           "window": 16,
-          "source_line": 675,
+          "source_line": 683,
           "manual_checkpoint": null
         }
       ],
@@ -323,10 +323,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        790,
-        852,
-        1006,
-        1052
+        798,
+        860,
+        1014,
+        1060
       ],
       "offline": false,
       "live_verified": false,
@@ -342,7 +342,7 @@
           "id": "source_20",
           "function": "step_01_all_65_rows_rs_0",
           "window": 20,
-          "source_line": 790,
+          "source_line": 798,
           "manual_checkpoint": null
         },
         {
@@ -355,7 +355,7 @@
           "id": "source_22",
           "function": "step_02_change_it_a_higher_floor",
           "window": 22,
-          "source_line": 852,
+          "source_line": 860,
           "manual_checkpoint": null
         },
         {
@@ -368,7 +368,7 @@
           "id": "source_29",
           "function": "step_03_jev_s_switch_called_by_hand",
           "window": 29,
-          "source_line": 1006,
+          "source_line": 1014,
           "manual_checkpoint": null
         },
         {
@@ -381,7 +381,7 @@
           "id": "source_31",
           "function": "step_04_jev_s_switch_called_by_hand",
           "window": 31,
-          "source_line": 1052,
+          "source_line": 1060,
           "manual_checkpoint": null
         }
       ],
@@ -407,7 +407,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1156
+        1164
       ],
       "offline": false,
       "live_verified": false,
@@ -423,7 +423,7 @@
           "id": "source_35",
           "function": "step_01_zeta_s_rows_on_your_lane",
           "window": 35,
-          "source_line": 1156,
+          "source_line": 1164,
           "manual_checkpoint": null
         }
       ],
@@ -449,7 +449,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1168
+        1176
       ],
       "offline": false,
       "live_verified": false,
@@ -465,7 +465,7 @@
           "id": "source_37",
           "function": "step_01_against_the_gate_refusal_recall_false_answ",
           "window": 37,
-          "source_line": 1168,
+          "source_line": 1176,
           "manual_checkpoint": null
         }
       ],
@@ -603,133 +603,133 @@
       "label": "evals/decide.py - evidence_share() and rule_arm(): the rule, on any pool",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 647
+      "line": 655
     },
     {
       "window": 17,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it)",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 705
+      "line": 713
     },
     {
       "window": 18,
       "label": "evals/decide.py - decide_row(): every arm on one row's pool; an empty pool asks no model",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 733
+      "line": 741
     },
     {
       "window": 19,
       "label": "evals/decide.py - summarise(): the confusion matrix, the three rates, errors and skips apart",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 757
+      "line": 765
     },
     {
       "window": 21,
       "label": "expected (the kit's own output, produced when this page was built; the rule's two latency figures are your machine's)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 792
+      "line": 800
     },
     {
       "window": 23,
       "label": "expected (the kit's own output at 0.70, produced when this page was built)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 854
+      "line": 862
     },
     {
       "window": 24,
       "label": "shared/system_one.py - the three modes, from the module's docstring",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 913
+      "line": 921
     },
     {
       "window": 25,
       "label": "shared/system_one.py - decide(): the one entry point, which never raises",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 917
+      "line": 925
     },
     {
       "window": 26,
       "label": "shared/system_one.py - _live(): the tenant's policy first, then the masked payload, then the transport",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 938
+      "line": 946
     },
     {
       "window": 27,
       "label": "shared/system_one.py - the adapter seam PR 2.6-C fills: headers, request, parse",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 961
+      "line": 969
     },
     {
       "window": 28,
       "label": "shared/system_one.py - _payload() and _policy(): what may leave, and for whom",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 983
+      "line": 991
     },
     {
       "window": 30,
       "label": "expected (the kit's own output, produced when this page was built)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 1008
+      "line": 1016
     },
     {
       "window": 32,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 1080
+      "line": 1088
     },
     {
       "window": 33,
       "label": "mk/retrieval.mk - JEV_MODE and make decide",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1104
+      "line": 1112
     },
     {
       "window": 34,
       "label": "evals/decide.py - list_usd() and generator_live(): /v1/query's own answerable, and its price",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1119
+      "line": 1127
     },
     {
       "window": 36,
       "label": "expected (the author's lane, with make's echo of the recipe: your ids, times and verdicts are yours)",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1158
+      "line": 1166
     },
     {
       "window": 38,
       "label": "expected (the author's full run, 65 rows: the figures below are computed from its saved file)",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1170
+      "line": 1178
     },
     {
       "window": 39,
       "label": "evals/run_eval.py - THRESHOLDS: the gate's refusal rate",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1175
+      "line": 1183
     },
     {
       "window": 40,
       "label": "evals/decide.py - calibration() and rupees()",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1201
+      "line": 1209
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.2_Plan_Execute_WIX.html`, reviewed at blob `1c221ad642224a52fe8a4855dbdb4d9cd200c9eb`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.2_Plan_Execute_WIX.html`, reviewed at blob `218b8f84affa0cedb42850bbd399dbcadf64f97d`. Learners read that page on the course site; this guide keeps its prose.
 
 An exit's full and final settlement asks three figures at once: when the notice ends, how many leave days are encashed, and the gratuity. Each is a search for its clause, then a calculator. Lesson 10.1's loop decides each call after reading the last result. Plan-and-execute writes the whole plan first, lets code carry it out a step at a time, and replans once when a step is refused. ReWOO writes every step at once, with placeholders for results not yet known, and code runs them in waves with no model call between the tools. You run all three on the agent bench's 3 chained rows, offline and on your lane, with correctness, calls and rupees by role for each. You watch a manager's cap that is not the handbook's force a replan, you put the executor on a model a sixth of the input price, and you switch the replan off to see what it was worth.
 
@@ -28,7 +28,7 @@ An exit's full and final settlement asks three figures at once: when the notice 
 
 - The 3 rows on your lane, and the plans they saved
 
-- When a plan pays, what each costs, the library's form, and what the kit does not do yet
+- When a plan pays, what each costs, the libraries' forms, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
@@ -92,7 +92,7 @@ How to tell which store answered any call: read `stages.retrieval_backend` on th
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok` from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first `make agent-turn` or `make agent-eval` builds `~/graph-venv` with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call `gemini-3.6-flash` and `gemini-3.1-flash-lite` on location `global`, and rag-api's `/v1/passages` as `documind-ui-sa`.
+The shell, in the kit, with `PROJECT`, `REGION`, `NUMBER`, `API` and `tok` from the block above. Steps 4 to 7 run offline at Rs 0 and need no project: the first `make agent-turn` or `make agent-eval` builds `~/graph-venv` with the chat image's pins (lessons 5.4 and 10.1 may have made it already), which takes a few minutes once. Step 3 uses the chat service on your lane; steps 8 and 9 call `gemini-3.6-flash` and `gemini-3.1-flash-lite` on location `global`, and rag-api's `/v1/passages` as `documind-ui-sa`. Step 10's ADK planner runs offline in the same venv, and once, optionally, on the chat service after a redeploy.
 
 The bench's desk searches by class and drops every passage that has none (`services/chat/desk_agent.py`, `_search()`). Lesson 10.1's setup line gave acme's stored rows their classes. If you have not run it, run this now: every chained row is acme's. A second run finds nothing to change. An exit status of 3 means BigQuery deferred a statement, and its last line says to run it again later.
 
@@ -244,9 +244,9 @@ The same cell as step 7, on your lane's saved runs.
 
 A `replanned after:` line names the step Gemini's plan got wrong and why. Waves other than the script's mean the planner ordered its steps another way; a `refused before any tool ran:` line means its plan never ran at all.
 
-### When a plan pays, what each costs, the library's form, and what the kit does not do yet
+### When a plan pays, what each costs, the libraries' forms, and what the kit does not do yet
 
-Choosing between the three, the bill for each run, LangChain's to-do list, and the gaps.
+Choosing between the three, the bill for each run, LangChain's to-do list, ADK's planner on the ADK brain, and the gaps.
 
 #### When a plan pays
 
@@ -266,9 +266,19 @@ Choosing between the three, the bill for each run, LangChain's to-do list, and t
 
 "Before thinking" is the input and visible tokens the kit's script counts for these very turns, plus the tool declarations Gemini receives with every loop and act call, about 1,131 tokens, each call priced at its own model's rates (USD 1.50 and 7.50 a million on flash, 0.25 and 1.50 on flash-lite) at Rs 85 to the dollar. Thinking is billed as output, Rs 0.6375 for every 1,000 tokens on flash and Rs 0.1275 on flash-lite, and only your lane knows how much a call spends. One more limit to know: a plan-and-execute turn on a chained row reaches Rs 5 before its last call when its calls think about 398 tokens each, and a loop turn at about 406; the Meter then stops it, and the turn prints `stopped by turn_budget`. Lesson 10.1's four thinking levels tell you your model's figure first.
 
-#### The library's form
+#### LangChain's form
 
 LangChain, at the chat image's pin (langchain 1.4.0), ships `TodoListMiddleware`. It gives an agent a `write_todos` tool and a `todos` list in its state, each item `pending`, `in_progress` or `completed`; the model writes the whole list and rewrites it as it works, and the middleware refuses two `write_todos` calls in one reply. It is a plan the model keeps, between lesson 10.1's `plan_first` and this lesson's patterns: kept in state rather than in the prompt, and still never run by code, since the loop decides every call. The kit uses it nowhere. Both of this lesson's patterns are built from LangGraph's own parts, `StateGraph` and `ToolNode` (langgraph 1.2.12).
+
+#### ADK's form, on the ADK brain behind a switch
+
+ADK, at the chat image's pin (google-adk 2.8.0), has a plan-first form of its own, `PlanReActPlanner`. Set on an agent, it adds an instruction to every model request, about 768 tokens (Rs 0.10 a call at flash's input rate): write a numbered plan under `/*PLANNING*/`, reason between tool calls under `/*REASONING*/`, revise the plan under `/*REPLANNING*/`, and answer under `/*FINAL_ANSWER*/`. The model's tool calls stay function calls, everything before the final answer comes back marked as thought, and ADK sends the plan back as plain text with every later call of the turn. It sits beside this lesson's patterns, not among them: the plan is written down and kept, but no code runs it, and the model still decides each call, as the loop does. The kit's ADK brain takes it behind one switch, `ADK_PLANNER`, off unless it says `plan_react`:
+
+The planner is set on the agent after it is built, so the constructor lessons 5.7 and 6.1 show is unchanged: ADK's flow reads `root.planner` on every model request, and `LlmAgent`'s pydantic config lets the field be assigned (`commands/tests/test_adk_planner.py` checks both on the pinned ADK). The other half is the answer, which is the text not marked thought: a plan or a line of reasoning never reaches it, and a reply that was all plan says so instead of answering nothing.
+
+Offline, at Rs 0: the kit's own ADK brain with the switch on, on a scripted model, with the search stood in. The plan is stored marked as thought, goes back to the model as plain text with the next call, and stays out of the answer.
+
+On your lane the switch needs the chat service's image to carry this kit, so the run starts with a redeploy (Cloud Build, no model call). It then asks the ADK brain the same question with the switch off and on, and takes the switch off again whatever happens. It is optional for you, at most Rs 10 (two turns, each stopped at the chat service's Rs 5); the author's run is below. It shows what the script cannot: whether Gemini still calls `retrieve` as a function when the instruction asks for tool code under `/*ACTION*/`, and what a written plan adds to a turn's calls and rupees.
 
 Each point is checked in the kit's code or the pinned library, and the build asserts it, so this box changes when they do.
 
@@ -286,11 +296,13 @@ Each point is checked in the kit's code or the pinned library, and the build ass
 
 - No to-do pattern. `TodoListMiddleware` is not wired into the bench.
 
+- One of ADK's two planners, on one brain. `ADK_PLANNER` sets `PlanReActPlanner` on the chat's ADK brain alone; the bench's patterns and the other brains have no planner, and `BuiltInPlanner` has no switch. The next deploy of the chat service clears it, since `lesson-12.8.sh` sets the service's variables whole.
+
 ### Verify it yourself: the checklist
 
-Eleven checks, each one block above, each with the value that proves it.
+Twelve checks, each one block above, each with the value that proves it.
 
-Nothing was deployed. acme's stored rows carry their classes, if this lesson's setup line ran them. `~/graph-venv` holds the chat image's pins. Your home directory holds the saved runs, `plans-offline.jsonl`, `plans-lite-offline.jsonl`, `plans.jsonl` and `plans_lite.jsonl`, and `commands/agent_patterns.py` is the kit's again. Lesson 10.3 takes the next question: once an agent has an answer, check it, retry it, or choose the best of several.
+Nothing was deployed. acme's stored rows carry their classes, if this lesson's setup line ran them. `~/graph-venv` holds the chat image's pins. Your home directory holds the saved runs, `plans-offline.jsonl`, `plans-lite-offline.jsonl`, `plans.jsonl` and `plans_lite.jsonl`, and `commands/agent_patterns.py` is the kit's again. If you ran step 10's lane cell, `documind-chat` runs this kit's image and `ADK_PLANNER` is off again. Lesson 10.3 takes the next question: once an agent has an answer, check it, retry it, or choose the best of several.
 
 Netsetos GenAI on GCP · Module 10 Agent patterns · Lesson 10.2 Plan first or decide each step: plan-and-execute · v5.0
 

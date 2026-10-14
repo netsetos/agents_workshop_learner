@@ -3,7 +3,7 @@
 The poison message from step 5 reaches the queue about an hour after its first refusal. Run the first line then; an empty listing earlier is the retries still running, not a fault. The second read decodes the message's own record, the same JSON the worker refused, to see the size of zero with your own eyes.
 
 Run order inside this file:
-1. Read it, when it has landed (source window 34)
+1. Read it, when it has landed (source window 35)
 
 Prerequisites: demo_06_the_batch_lane_the_250_page_decision_the_queued_claim_the_job.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -24,6 +24,14 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
+# Original CLI workflow for step_01_when_it_has_landed.
+COMMANDS_01 = """make dlq PROJECT=$PROJECT
+
+gcloud pubsub subscriptions pull ingest-dlq-sub --project "$PROJECT" --limit 1 --format='value(message.data)' \\
+  | base64 -d | python -c "import json,sys; r=json.load(sys.stdin); print({k: r.get(k) for k in ('name','size','contentType','generation','timeCreated')})"
+
+"""
+
 def step_01_when_it_has_landed(session):
     """Run Read it, when it has landed at this checkpoint.
 
@@ -40,8 +48,8 @@ def step_01_when_it_has_landed(session):
     {'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
     """
     manual_checkpoint("Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.")
-    from workshop_helpers.poison import inspect_dead_letter
-    inspect_dead_letter(session)
+    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.shell(COMMANDS_01)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -50,7 +58,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_34', step_01_when_it_has_landed),
+        ('source_35', step_01_when_it_has_landed),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

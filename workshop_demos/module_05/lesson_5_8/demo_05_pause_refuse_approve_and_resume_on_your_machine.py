@@ -1,6 +1,6 @@
 """Lesson 5.8: Pause, refuse, approve and resume on your machine
 
-The cell builds the kit's approval graph on a scripted model that asks for withdraw_document, with an in-memory checkpointer and an executor that only prints. It streams the turn to its pause and lists what waits. Then it tries Asha's own approval, and Ravi's. The pause is data in the checkpointer, not a request waiting in memory. The first process pauses the turn into a SQLite file, ~/lesson108_threads.db, through SqliteSaver, the local lane's checkpointer, and ends. The second process is a new interpreter: it builds a new graph on the same file, finds the waiting call, and resumes it with Ravi's approval. The same graph, now with a scripted model that asks Asha which rule applies to her. The handbook's NP-03 gives a confirmed employee at grade E3 or above 60 days' notice, and its PB-02 gives 15 days during probation. Ravi tries to answer for her, Asha tries to approve, then Asha answers. A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 332 to line 329, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
+The cell builds the kit's approval graph on a scripted model that asks for withdraw_document, with an in-memory checkpointer and an executor that only prints. It streams the turn to its pause and lists what waits. Then it tries Asha's own approval, and Ravi's. The pause is data in the checkpointer, not a request waiting in memory. The first process pauses the turn into a SQLite file, ~/lesson108_threads.db, through SqliteSaver, the local lane's checkpointer, and ends. The second process is a new interpreter: it builds a new graph on the same file, finds the waiting call, and resumes it with Ravi's approval. The same graph, now with a scripted model that asks Asha which rule applies to her. The handbook's NP-03 gives a confirmed employee at grade E3 or above 60 days' notice, and its PB-02 gives 15 days during probation. Ravi tries to answer for her, Asha tries to approve, then Asha answers. A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 364 to line 361, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
 
 Run order inside this file:
 1. Do it: a withdrawal, paused and approved (source window 25)
@@ -282,7 +282,7 @@ twice108
 def step_04_change_it_the_approval_line_above_interrup(session):
     """Run Change it: the approval line above interrupt() at this checkpoint.
 
-    A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 332 to line 329, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
+    A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 364 to line 361, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (defines twice108, then runs it on the kit as it is).
@@ -317,7 +317,7 @@ git checkout -- services/chat/approval.py && git diff --quiet -- services/chat/a
 def step_05_change_it_the_approval_line_above_interrup(session):
     """Run Change it: the approval line above interrupt() at this checkpoint.
 
-    A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 332 to line 329, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
+    A resumed node runs again from its first line. The kit writes its "approval asked" line below interrupt(), so it is written once, at the resume. The first cell defines twice108, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above interrupt(), from line 364 to line 361, and runs twice108 again. Then it puts the kit's file back with git, so the setup section's git pull next time is not refused.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (the Change-it: one line moved, twice108 again, then the kit restored).
@@ -325,7 +325,7 @@ def step_05_change_it_the_approval_line_above_interrup(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: moved line 332 up to line 329, just above: answer = interrupt(request)
+    Observe: moved line 364 up to line 361, just above: answer = interrupt(request)
       at the pause:      1 approval line(s)
       after the resume:  2 approval line(s), 1 withdrawal(s)
     approval.py is the kit's again

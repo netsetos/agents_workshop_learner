@@ -27,7 +27,7 @@ RETRY_FAILED_STEP = False
 
 # Original CLI workflow for step_01_the_notes_in_the_question.
 COMMANDS_01 = """sed -i 's/asked = question  # THE QUESTION.*/asked = " ".join([question] + kept["notes"])/' commands/agent_patterns.py && git diff --stat
-OFFLINE=1 bash commands/agent-turn.sh commands/agent_turn.py --offline --pattern verify --launder 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
+make agent-turn OFFLINE=1 PATTERN=verify LAUNDER=1 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
 
 """
 

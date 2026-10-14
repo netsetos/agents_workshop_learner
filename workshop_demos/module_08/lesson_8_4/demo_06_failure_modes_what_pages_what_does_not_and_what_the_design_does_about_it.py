@@ -1,11 +1,11 @@
 """Lesson 8.4: Failure modes: what pages, what does not, and what the design does about it
 
-The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.
+The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.
 
 Run order inside this file:
-1. Do it: the policies the kit declares, read from its files (source window 37)
-2. Do it: the walk on three stuck states (source window 39)
-3. Read it on your lane: the policies that exist (source window 41)
+1. Do it: the policies the kit declares, read from its files (source window 39)
+2. Do it: the walk on three stuck states (source window 41)
+3. Read it on your lane: the policies that exist (source window 43)
 
 Prerequisites: demo_05_architecture_three_designs_the_kit_rejected_and_the_number_that_would_change_eac.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -41,8 +41,9 @@ def step_01_the_policies_the_kit_declares_read_from_it(session):
     reconcile_drift    reads reconcile_drift - declared only when reconcile_job is true
     reconcile_failed   reads completed_task_attempt_count on documind-reconcile - declared only when reconcile_job is true
     dlq_depth          reads num_undelivered_messages on ingest-dlq-sub
+    ingest_backlog     reads oldest_unacked_message_age on documind-ingest-push
     doc_type_pin_miss  reads doc_type_pin_miss
-    policies that read documind-ingest-push: 0; that read oldest_unacked_message_age: 0; that count cache_stale: 0
+    policies that read documind-ingest-push: 1; that read oldest_unacked_message_age: 1; that count cache_stale: 0
     the walk: RECONCILE_JOB   ?= false | the batch job: BATCH_JOB       ?= false
     """
     import re, warnings
@@ -71,7 +72,7 @@ def step_01_the_policies_the_kit_declares_read_from_it(session):
 def step_02_the_walk_on_three_stuck_states(session):
     """Run Do it: the walk on three stuck states at this checkpoint.
 
-    The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane.
+    The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing).
@@ -82,12 +83,14 @@ def step_02_the_walk_on_three_stuck_states(session):
     Observe: acme/cut_off.md    reingest  (not in the ledger)
     acme/poison.pdf    reingest  (not in the ledger)
     acme/big.pdf       queued    (handed to the batch lane; the batch job indexes it, the claim says queued)
-    drift 2 of 3 objects; the next night plans the same
+    drift 2 of 3 objects
+    acme/cut_off.md's claim at the walk: 23,100 s old, its lease 660 s, so the rewrite's delivery takes the claim back and indexes the bytes
     """
     import sys, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
     sys.path[:0] = ["services/ingest"]
     from reconcile import decide_bytes, drift_of, plan     # the walk's planner: pure, no cloud client
+    from idempotency import lease_of                       # the claim's lease (13 October 2026)
     docs = {"acme_aaa": {"status": "processing", "gcs_uri": "gs://b/acme/cut_off.md"},     # a worker cut off between claim and finish
             "acme_qqq": {"status": "queued", "gcs_uri": "gs://b/acme/big.pdf", "generation": "7"}}
     objects = [{"name": "acme/cut_off.md", "generation": "5", "tenant_id": "acme"},
@@ -100,7 +103,10 @@ def step_02_the_walk_on_three_stuck_states(session):
             act["action"] = decide_bytes(sha[act["name"]], "acme", None, docs)
         summary[act["action"]] = summary.get(act["action"], 0) + 1
         print(f"{act['name']:18} {act['action']:9} ({act.get('why', '')})")
-    print(f"drift {drift_of(summary)} of {len(objects)} objects; the next night plans the same")
+    print(f"drift {drift_of(summary)} of {len(objects)} objects")
+    age = 6 * 3600 + 25 * 60                                # claimed at 17:05 and cut off; the walk runs at 23:30
+    verdict = "is nacked: the lease is live" if age < lease_of(docs["acme_aaa"]) else "takes the claim back and indexes the bytes"
+    print(f"acme/cut_off.md's claim at the walk: {age:,} s old, its lease {lease_of(docs['acme_aaa']):,} s, so the rewrite's delivery {verdict}")
 
 def step_03_on_your_lane_the_policies_that_exist(session):
     """Run Read it on your lane: the policies that exist at this checkpoint.
@@ -113,7 +119,7 @@ def step_03_on_your_lane_the_policies_that_exist(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: 10 alert policies on the lane
+    Observe: 11 alert policies on the lane
       A registered document arrived at a version nobody reviewed
       API p95 latency > 3s
       Desk case queue: a case due within 24 hours and unacknowledged, or breached
@@ -121,15 +127,14 @@ def step_03_on_your_lane_the_policies_that_exist(session):
       Desk: a delegation was refused
       Ingest dead-letter queue holds messages
       Ingest failed
+      Ingest subscription backlog: oldest message over 30 minutes
       Unanswerable rate > 20% for a tenant
       documind-slm left warm: instances > 0 for 2 hours
       documind-vllm left warm: instances > 0 for 2 hours
-    reads documind-ingest-push: False | reads the dead-letter subscription: True
+    reads documind-ingest-push: True | reads the dead-letter subscription: True
 
-    12 alert policies on the lane
-      A registered document arrived at a version nobody reviewed
-      API p95 latency > 3s
-      Desk case queue: 
+    13 alert policies on the lane
+      A registered document arrived at a versi
     """
     import json, os, re, subprocess, urllib.request, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -150,9 +155,9 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_37', step_01_the_policies_the_kit_declares_read_from_it),
-        ('source_39', step_02_the_walk_on_three_stuck_states),
-        ('source_41', step_03_on_your_lane_the_policies_that_exist),
+        ('source_39', step_01_the_policies_the_kit_declares_read_from_it),
+        ('source_41', step_02_the_walk_on_three_stuck_states),
+        ('source_43', step_03_on_your_lane_the_policies_that_exist),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

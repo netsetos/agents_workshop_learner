@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_8.3_Size_Ten_Million_WIX.html`, reviewed at blob `76957b542253a733755bf0dc407b4615ef96ec9b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_8.3_Size_Ten_Million_WIX.html`, reviewed at blob `1c3caa585c3e732c014c8b0ab3a1df7a2f200cb0`. Learners read that page on the course site; this guide keeps its prose.
 
 Your lane holds the kit's 27 text documents. This lesson asks what the same kit would need for 10,000,000: how many vectors, how many gibibytes of index, how many embedding requests, how many rupees and how many days. Every answer is arithmetic on three kinds of number: the kit's constants, the kit's corpus as the kit's own chunker counts it, and the prices and limits Google publishes. None of them is a guess, and every number on this page is computed from those three when the page is built.
 
@@ -102,7 +102,7 @@ The same rows come from the shell. `make sources` reads the ledger in Firestore 
 
 The last line is the ledger's summary for the tenant: its fingerprint and its count of current versions. Then the index itself. `make vector-status` asks gcloud to describe the Vector Search index and its deployment:
 
-`vectorsCount` is every current chunk of all three tenants, text and media, because the worker upserts each chunk it makes current and removes the ones a re-issue retires. One case runs ahead: a source withdrawn by hand (`reconcile.py --retire`, lesson 1.8) retires its rows in Firestore and nothing calls `remove_datapoints()` for them, so after a withdrawal the count exceeds the current rows by that document's chunks until the index is rebuilt. `shardsCount` is how many slices the index is cut into, and on your lane it is one. Hold both numbers: step 6 reads the same index over REST and asks how full that one shard is.
+`vectorsCount` is every current chunk of all three tenants, text and media, because the worker upserts each chunk it makes current and removes the ones a re-issue retires, and since 13 October 2026 a source withdrawn by hand (`reconcile.py --retire`, lesson 1.8) or retired by the walk has its datapoints removed the same way. One case still runs ahead: a source withdrawn on an older kit, whose datapoints nothing removed, so the count exceeds the current rows by that document's chunks until the index is rebuilt. `shardsCount` is how many slices the index is cut into, and on your lane it is one. Hold both numbers: step 6 reads the same index over REST and asks how full that one shard is.
 
 ### The kit's numbers: the chunk, the request, the vector, the shard, the row
 

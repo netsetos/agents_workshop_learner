@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.4_Fallback_WIX.html`, reviewed at blob `fc9115e7693b7a3af4ab9f5c5711b8b67aea351b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.4_Fallback_WIX.html`, reviewed at blob `0af2e5b2b8878df30d9e340f23624b318199fe41`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.3 followed the pool through the ranker. This lesson takes the pool's other source. Firestore holds every embedding the worker wrote, as a field on the row, and its own vector index can answer a question when the kit's index will not, or when a tenant is pinned beneath it. What must not change on the way down is the three predicates: the tenant from the roster, the ledger's current, and the caller's filters. On Firestore each combination of them needs a composite vector index the kit declares, 8 of them, and without one Firestore refuses rather than degrades. Every chunk the rung returns is stamped `found_by: firestore`, the answer counts `vector_chunks 0`, and the smoke fails a vector deployment that answers from beneath, because that failure is the one a working demo hides. You will read the rung by hand with the API's predicates, move one tenant onto it and back, break the index for a candidate revision and watch the chaos rung answer with a line in the log, run the kit's own read-only probe of the combined filters, see the tier rebuilt from the rows, and price the rung.
 

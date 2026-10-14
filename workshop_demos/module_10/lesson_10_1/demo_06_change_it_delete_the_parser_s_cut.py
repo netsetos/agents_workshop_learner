@@ -27,7 +27,7 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_first_with_the_cut.
-COMMANDS_01 = """OFFLINE=1 bash commands/agent-turn.sh commands/agent_turn.py --offline --pattern react_text --invent
+COMMANDS_01 = """make agent-turn OFFLINE=1 PATTERN=react_text INVENT=1
 
 """
 
@@ -53,7 +53,7 @@ def step_01_first_with_the_cut(session):
 
 # Original CLI workflow for step_02_delete_the_cut_and_run_it_again.
 COMMANDS_02 = """sed -i '/THE CUT/d' commands/agent_patterns.py && git diff --stat
-OFFLINE=1 bash commands/agent-turn.sh commands/agent_turn.py --offline --pattern react_text --invent
+make agent-turn OFFLINE=1 PATTERN=react_text INVENT=1
 
 """
 

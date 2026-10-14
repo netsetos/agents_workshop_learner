@@ -5,11 +5,11 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_8.4_Design_Self_Updating_Docs_WIX.html",
-  "source_sha": "4b0f37c6fcb49fcc770a10b14ceba99c59bf1fb2",
+  "source_sha": "84d0e937ed8f263a6f0838649ecb9372dcec6dd5",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 52,
+  "source_window_count": 54,
   "persist_variables": [
     "API",
     "API_URL",
@@ -377,22 +377,22 @@
         "demo_05_architecture_three_designs_the_kit_rejected_and_the_number_that_would_change_eac"
       ],
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
-      "purpose": "The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.",
+      "purpose": "The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale. The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find. The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.",
       "anchor": "s6",
       "anchors": [
         "s6"
       ],
       "section_number": 6,
       "windows": [
-        37,
         39,
-        41
+        41,
+        43
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_4/GUIDE.md",
       "source_lines": [
-        857,
-        893,
-        921
+        896,
+        933,
+        966
       ],
       "offline": false,
       "live_verified": false,
@@ -403,25 +403,25 @@
           "subheading": "Do it: the policies the kit declares, read from its files",
           "purpose": "The cell reads every Terraform file, lists the alert policies that watch the document lifecycle with what each one reads and when it exists, and counts the policies that read the main subscription, its oldest unacknowledged age, and cache_stale.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing)",
-          "expected": "ingest_failed      reads ingest_events\nreconcile_drift    reads reconcile_drift - declared only when reconcile_job is true\nreconcile_failed   reads completed_task_attempt_count on documind-reconcile - declared only when reconcile_job is true\ndlq_depth          reads num_undelivered_messages on ingest-dlq-sub\ndoc_type_pin_miss  reads doc_type_pin_miss\npolicies that read documind-ingest-push: 0; that read oldest_unacked_message_age: 0; that count cache_stale: 0\nthe walk: RECONCILE_JOB   ?= false | the batch job: BATCH_JOB       ?= false",
+          "expected": "ingest_failed      reads ingest_events\nreconcile_drift    reads reconcile_drift - declared only when reconcile_job is true\nreconcile_failed   reads completed_task_attempt_count on documind-reconcile - declared only when reconcile_job is true\ndlq_depth          reads num_undelivered_messages on ingest-dlq-sub\ningest_backlog     reads oldest_unacked_message_age on documind-ingest-push\ndoc_type_pin_miss  reads doc_type_pin_miss\npolicies that read documind-ingest-push: 1; that read oldest_unacked_message_age: 1; that count cache_stale: 0\nthe walk: RECONCILE_JOB   ?= false | the batch job: BATCH_JOB       ?= false",
           "adaptations": [],
-          "id": "source_37",
+          "id": "source_39",
           "function": "step_01_the_policies_the_kit_declares_read_from_it",
-          "window": 37,
-          "source_line": 857,
+          "window": 39,
+          "source_line": 896,
           "manual_checkpoint": null
         },
         {
           "heading": "Failure modes: what pages, what does not, and what the design does about it",
           "subheading": "Do it: the walk on three stuck states",
-          "purpose": "The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane.",
+          "purpose": "The walk's planner is pure Python. The cell hands it three objects nobody indexed: one whose claim was cut off in processing, one zero-byte object, and one PDF the worker queued for the batch lane. Then it asks the claim's lease what the night's rewrite of the first will find.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing)",
-          "expected": "acme/cut_off.md    reingest  (not in the ledger)\nacme/poison.pdf    reingest  (not in the ledger)\nacme/big.pdf       queued    (handed to the batch lane; the batch job indexes it, the claim says queued)\ndrift 2 of 3 objects; the next night plans the same",
+          "expected": "acme/cut_off.md    reingest  (not in the ledger)\nacme/poison.pdf    reingest  (not in the ledger)\nacme/big.pdf       queued    (handed to the batch lane; the batch job indexes it, the claim says queued)\ndrift 2 of 3 objects\nacme/cut_off.md's claim at the walk: 23,100 s old, its lease 660 s, so the rewrite's delivery takes the claim back and indexes the bytes",
           "adaptations": [],
-          "id": "source_39",
+          "id": "source_41",
           "function": "step_02_the_walk_on_three_stuck_states",
-          "window": 39,
-          "source_line": 893,
+          "window": 41,
+          "source_line": 933,
           "manual_checkpoint": null
         },
         {
@@ -429,12 +429,12 @@
           "subheading": "Read it on your lane: the policies that exist",
           "purpose": "The same list from the Monitoring API: every policy on your lane by name, and whether any of them reads the main subscription or the dead-letter one.",
           "label": "bash — run in the operator shell (one GET on the Monitoring API; changes nothing)",
-          "expected": "10 alert policies on the lane\n  A registered document arrived at a version nobody reviewed\n  API p95 latency > 3s\n  Desk case queue: a case due within 24 hours and unacknowledged, or breached\n  Desk gate check: a door could not read which tenants are on\n  Desk: a delegation was refused\n  Ingest dead-letter queue holds messages\n  Ingest failed\n  Unanswerable rate > 20% for a tenant\n  documind-slm left warm: instances > 0 for 2 hours\n  documind-vllm left warm: instances > 0 for 2 hours\nreads documind-ingest-push: False | reads the dead-letter subscription: True\n\n12 alert policies on the lane\n  A registered document arrived at a version nobody reviewed\n  API p95 latency > 3s\n  Desk case queue: a case due within 24 hours and unacknowledged, or breached\n  Desk gate check: a door could not read which tenants are on\n  Desk: a delegation was refused\n  Ingest dead-letter queue holds messages\n  Ingest failed\n  Ledger drift above zero for two nights\n  Nightly reconcile failed\n  Unanswerable rate > 20% for a tenant\n  documind-slm left warm: instances > 0 for 2 hours\n  documind-vllm left warm: instances > 0 for 2 hours\nreads documind-ingest-push: False | reads the dead-letter subscription: True",
+          "expected": "11 alert policies on the lane\n  A registered document arrived at a version nobody reviewed\n  API p95 latency > 3s\n  Desk case queue: a case due within 24 hours and unacknowledged, or breached\n  Desk gate check: a door could not read which tenants are on\n  Desk: a delegation was refused\n  Ingest dead-letter queue holds messages\n  Ingest failed\n  Ingest subscription backlog: oldest message over 30 minutes\n  Unanswerable rate > 20% for a tenant\n  documind-slm left warm: instances > 0 for 2 hours\n  documind-vllm left warm: instances > 0 for 2 hours\nreads documind-ingest-push: True | reads the dead-letter subscription: True\n\n13 alert policies on the lane\n  A registered document arrived at a version nobody reviewed\n  API p95 latency > 3s\n  Desk case queue: a case due within 24 hours and unacknowledged, or breached\n  Desk gate check: a door could not read which tenants are on\n  Desk: a delegation was refused\n  Ingest dead-letter queue holds messages\n  Ingest failed\n  Ingest subscription backlog: oldest message over 30 minutes\n  Ledger drift above zero for two nights\n  Nightly reconcile failed\n  Unanswerable rate > 20% for a tenant\n  documind-slm left warm: instances > 0 for 2 hours\n  documind-vllm left warm: instances > 0 for 2 hours\nreads documind-ingest-push: True | reads the dead-letter subscription: True",
           "adaptations": [],
-          "id": "source_41",
+          "id": "source_43",
           "function": "step_03_on_your_lane_the_policies_that_exist",
-          "window": 41,
-          "source_line": 921,
+          "window": 43,
+          "source_line": 966,
           "manual_checkpoint": null
         }
       ],
@@ -456,11 +456,11 @@
       ],
       "section_number": 7,
       "windows": [
-        44
+        46
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_4/GUIDE.md",
       "source_lines": [
-        1012
+        1059
       ],
       "offline": true,
       "live_verified": false,
@@ -473,10 +473,10 @@
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: it reads the kit's files and calls nothing)",
           "expected": "the kit's corpus: 27 documents, 102.11 chunks and 128,589 characters each; one edit like the handbook's Rs 0.14 before the fingerprint\n     1,000 documents: Rs 7,488 a month standing, Rs 273 to embed once, Rs 0.17 an edit; 43,769 edits a month cost as much as standing still\n   100,000 documents: Rs 1.25 lakh a month standing, Rs 27,325 to embed once, Rs 3.12 an edit; 40,150 edits a month cost as much as standing still\n10,000,000 documents: Rs 94.18 lakh a month standing, Rs 27.33 lakh to embed once, Rs 297.64 an edit; 31,643 edits a month cost as much as standing still",
           "adaptations": [],
-          "id": "source_44",
+          "id": "source_46",
           "function": "step_01_the_cost_model_as_a_script",
-          "window": 44,
-          "source_line": 1012,
+          "window": 46,
+          "source_line": 1059,
           "manual_checkpoint": null
         }
       ],
@@ -498,11 +498,11 @@
       ],
       "section_number": 9,
       "windows": [
-        49
+        51
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_08/lesson_8_4/GUIDE.md",
       "source_lines": [
-        1136
+        1183
       ],
       "offline": false,
       "live_verified": false,
@@ -515,10 +515,10 @@
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the offline gate, then a Python cell; Rs 0: no credential, no call)",
           "expected": "== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [PASS] falsifiable\n  [PASS] anchors\n  [PASS] coverage\n\n  The golden set is sound. It can go red, and it still contains the rows that would.\nmake eval-live SOURCE=hr_policy_2026.md sends 10 of 65 rows: lk-01, lk-02, lk-03, lk-04, lk-05, lk-06, lk-07, lk-08, lk-09, vr-01\nvr-01 (required): must not say ['90 days'], which only revision 2 holds (True); re-issue the handbook and this row moves with it, in one commit\nanchors over whole documents: 0 problems - it reads files and never a chunk, so no chunker change and no carry-over bug can turn it red\nwhat blocks live: 9 thresholds and 15 required rows; must_retrieve recall is printed as [info]",
           "adaptations": [],
-          "id": "source_49",
+          "id": "source_51",
           "function": "step_01_the_gate_offline_and_what_moves_with_a_doc",
-          "window": 49,
-          "source_line": 1136,
+          "window": 51,
+          "source_line": 1183,
           "manual_checkpoint": null
         }
       ],
@@ -744,7 +744,7 @@
     },
     {
       "window": 31,
-      "label": "terraform/alerts.tf - the five events the lifecycle metric counts",
+      "label": "terraform/alerts.tf - the verdicts the lifecycle metric counts, and not a refused delivery",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
       "line": 785
@@ -758,108 +758,122 @@
     },
     {
       "window": 33,
-      "label": "Makefile - the walk's switch; terraform/alerts.tf - the two policies that exist only with it",
+      "label": "terraform/alerts.tf - the main subscription's backlog, watched since 13 October 2026",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
       "line": 810
     },
     {
       "window": 34,
-      "label": "services/rag-api/cache_manager.py - generate_config_kwargs(): a stale pack is a log line",
+      "label": "Makefile - the walk's switch; terraform/alerts.tf - the two policies that exist only with it",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 823
+      "line": 837
     },
     {
       "window": 35,
-      "label": "services/ingest/idempotency.py - release(): the claim given back, on an exception",
+      "label": "services/rag-api/cache_manager.py - generate_config_kwargs(): a stale pack is a log line",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 829
+      "line": 850
     },
     {
       "window": 36,
-      "label": "services/ingest/reconcile.py - decide_bytes(): what the walk does with an object's bytes",
+      "label": "services/ingest/idempotency.py - release(): the claim given back, on an exception",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 841
+      "line": 856
+    },
+    {
+      "window": 37,
+      "label": "services/ingest/idempotency.py - the claim's lease: the deadline and a minute (13 October 2026)",
+      "heading": "Failure modes: what pages, what does not, and what the design does about it",
+      "anchor": "s6",
+      "line": 868
     },
     {
       "window": 38,
-      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "label": "services/ingest/reconcile.py - decide_bytes(): what the walk does with an object's bytes",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 882
+      "line": 880
     },
     {
       "window": 40,
       "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 913
+      "line": 921
     },
     {
       "window": 42,
+      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "heading": "Failure modes: what pages, what does not, and what the design does about it",
+      "anchor": "s6",
+      "line": 957
+    },
+    {
+      "window": 44,
       "label": "expected on a lane deployed with the defaults, then on one where make reconcile-job has run (your lane shows one of the two)",
       "heading": "Failure modes: what pages, what does not, and what the design does about it",
       "anchor": "s6",
-      "line": 935
-    },
-    {
-      "window": 43,
-      "label": "services/ingest/contracts.py - chunk_id(): the id names the version, so every row and datapoint is new",
-      "heading": "Cost: standing still, staying fresh, and one change, at 1k, 100k and 10M documents",
-      "anchor": "s7",
-      "line": 984
+      "line": 980
     },
     {
       "window": 45,
-      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "label": "services/ingest/contracts.py - chunk_id(): the id names the version, so every row and datapoint is new",
       "heading": "Cost: standing still, staying fresh, and one change, at 1k, 100k and 10M documents",
       "anchor": "s7",
-      "line": 1065
-    },
-    {
-      "window": 46,
-      "label": "commands/reindex.sh - a reindex is a release: the gate first",
-      "heading": "Evals: a change is a release, and the check that cannot fail",
-      "anchor": "s9",
-      "line": 1102
+      "line": 1031
     },
     {
       "window": 47,
-      "label": "evals/run_eval.py - the version row's offline check: the rows move with the document",
-      "heading": "Evals: a change is a release, and the check that cannot fail",
-      "anchor": "s9",
-      "line": 1104
+      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "heading": "Cost: standing still, staying fresh, and one change, at 1k, 100k and 10M documents",
+      "anchor": "s7",
+      "line": 1112
     },
     {
       "window": 48,
-      "label": "evals/run_eval.py - check_anchors(): files and whole texts, never a chunk",
+      "label": "commands/reindex.sh - a reindex is a release: the gate first",
       "heading": "Evals: a change is a release, and the check that cannot fail",
       "anchor": "s9",
-      "line": 1123
+      "line": 1149
+    },
+    {
+      "window": 49,
+      "label": "evals/run_eval.py - the version row's offline check: the rows move with the document",
+      "heading": "Evals: a change is a release, and the check that cannot fail",
+      "anchor": "s9",
+      "line": 1151
     },
     {
       "window": 50,
-      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "label": "evals/run_eval.py - check_anchors(): files and whole texts, never a chunk",
       "heading": "Evals: a change is a release, and the check that cannot fail",
       "anchor": "s9",
-      "line": 1155
-    },
-    {
-      "window": 51,
-      "label": "services/ingest/idempotency.py - reactivate(): what the first undo did, 12 September 2026",
-      "heading": "Next month: what the kit's own operating record moved to the top",
-      "anchor": "s10",
-      "line": 1188
+      "line": 1170
     },
     {
       "window": 52,
+      "label": "expected (the kit's own output, produced when this page was built; yours matches it line for line)",
+      "heading": "Evals: a change is a release, and the check that cannot fail",
+      "anchor": "s9",
+      "line": 1202
+    },
+    {
+      "window": 53,
+      "label": "services/ingest/idempotency.py - reactivate(): what the first undo did, 12 September 2026",
+      "heading": "Next month: what the kit's own operating record moved to the top",
+      "anchor": "s10",
+      "line": 1235
+    },
+    {
+      "window": 54,
       "label": "services/ingest/reconcile.py - what the first planner did, 12 September 2026",
       "heading": "Next month: what the kit's own operating record moved to the top",
       "anchor": "s10",
-      "line": 1196
+      "line": 1243
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

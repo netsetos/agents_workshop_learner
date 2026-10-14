@@ -244,9 +244,9 @@ text:     SYSTEM + DATED_RULE, 601 characters, as generate() joins them (service
 sha256:   269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8
 registry: documind-rag@v4 has this sha256 (services/rag-api/prompt_versions.json): the text is the one its version names
 exit 0
-......
+.......
 ----------------------------------------------------------------------
-Ran 6 tests in 0.xxxs
+Ran 7 tests in 0.xxxs
 
 OK
 ```
@@ -373,6 +373,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html`. All 58 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f50d48f5099cec6ba6b7c768985d63d5fed77df4`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html`. All 58 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `af6ebe96dfa40ecb8375d62953ce2d347032a3e7`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

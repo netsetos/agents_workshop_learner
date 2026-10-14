@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.1_ReAct_WIX.html`, reviewed at blob `42d0d48399a2cd1f55aa582686b0c124eb954290`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.1_ReAct_WIX.html`, reviewed at blob `222da83d6de50d7502063423e3eae648e7011723`. Learners read that page on the course site; this guide keeps its prose.
 
 Every agent runs one loop. It observes the question, its tools and every result so far; it thinks; it acts, by calling a tool or answering. Where the thinking happens is a choice, and the choice has a bill. Gemini thinks natively, in thinking tokens you pay for at the output price and never see, then calls a tool by function calling. Prompted ReAct, made for models with no function calling, has the model write its reasoning as text, `Thought:` and `Action:`, stops it at `Observation:`, and lets code read the Action, run it and write the result. A plan-first prompt asks for a numbered plan before the first call. You run all three on the agent bench, with the Desk agent's tools and its 7 calculators: one turn offline and on your lane, then the 11 calculator rows, with correct answers, thinking and visible tokens, and rupees for each. Then you delete the one line of code that keeps a model's own Observation out, and watch an invented figure become the answer.
 
@@ -158,7 +158,7 @@ A model that writes its own Observation, once with the cut and once without.
 
 #### Definition
 
-A stop sequence is a request to the endpoint, and an endpoint that does not honour it lets the model run on. The kit's scripted text model can play one. With `--invent`, it writes past its calculator's Action: `Observation: Rs 2,50,000`, then a Thought and a Final Answer built on its own observation. `make agent-turn` has no switch for `--invent`, so you run the script the target runs, in the same venv, through `commands/agent-turn.sh`, which runs whatever arguments it is given.
+A stop sequence is a request to the endpoint, and an endpoint that does not honour it lets the model run on. The kit's scripted text model can play one. With `--invent`, it writes past its calculator's Action: `Observation: Rs 2,50,000`, then a Thought and a Final Answer built on its own observation. `make agent-turn` takes it as `INVENT=1`; `INVENT=` with a figure of your own writes that figure instead.
 
 #### Do it: first, with the cut
 
@@ -258,7 +258,7 @@ When to reason where, the bill for each, ADK's two planners, and the gaps.
 
 #### The library's forms
 
-ADK, at the chat image's pin (google-adk 2.8.0), offers two of the three as planners. `BuiltInPlanner` sets the model's own `thinking_config` on each request: native thinking. `PlanReActPlanner` tells the model to write a plan under `/*PLANNING*/`, its reasoning under `/*REASONING*/`, its tool code under `/*ACTION*/` and its answer under `/*FINAL_ANSWER*/`, and to revise the plan under `/*REPLANNING*/`. It keeps the model's tool calls as native function calls and marks the written reasoning as thought: a plan first, with ReAct's written reasoning, on a model that still calls functions. The kit's ADK brain uses neither. Text ReAct, an Action that code parses, is not among ADK's planners; `react_text` is the kit's own.
+ADK, at the chat image's pin (google-adk 2.8.0), offers two of the three as planners. `BuiltInPlanner` sets the model's own `thinking_config` on each request: native thinking. `PlanReActPlanner` tells the model to write a plan under `/*PLANNING*/`, its reasoning under `/*REASONING*/`, its tool code under `/*ACTION*/` and its answer under `/*FINAL_ANSWER*/`, and to revise the plan under `/*REPLANNING*/`. It keeps the model's tool calls as native function calls and marks the written reasoning as thought: a plan first, with ReAct's written reasoning, on a model that still calls functions. The kit's ADK brain uses neither unless it is switched: lesson 10.2's `ADK_PLANNER=plan_react` gives it the second. Text ReAct, an Action that code parses, is not among ADK's planners; `react_text` is the kit's own.
 
 #### What it costs
 
@@ -276,7 +276,7 @@ Each point is checked in the kit's code, or in the pinned ADK, and the build ass
 
 - The stop sequence is your lane's fact. The scripted model honours it unless told not to; whether Gemini does on location `global` is what step 8's ReAct turn shows. The cut is there either way.
 
-- No planner in the kit's ADK brain. It builds its `LlmAgent` with neither of ADK's planners, and nothing in the kit switches one on.
+- No planner in the kit's ADK brain by default, and never `BuiltInPlanner`. It builds its `LlmAgent` with neither of ADK's planners; `ADK_PLANNER=plan_react`, off unless set, gives it `PlanReActPlanner` afterwards (lesson 10.2), and nothing in the kit sets `BuiltInPlanner`.
 
 ### Verify it yourself: the checklist
 

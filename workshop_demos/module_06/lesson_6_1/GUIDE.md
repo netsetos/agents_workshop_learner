@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`, reviewed at blob `594be6f52056d8b61fa8c4a62edc9f9f1c7ac99a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`, reviewed at blob `c0806f267e1ee0a96894843654d25b90b5c7fe8b`. Learners read that page on the course site; this guide keeps its prose.
 
 A model keeps nothing between calls. Each time a chat brain calls Gemini it sends the whole context again: the system prompt, the tool declarations, the thread so far and the question, and from the second call on the model's own calls and what the tools gave back. This lesson takes one turn apart, source by source, on each of DocuMind's five brains, and prices every source in rupees. Then it moves one setting, TOP_K, to see which part of the bill moves with it. You run it offline first, for Rs 0, then on your lane, where the model's own counter counts each source.
 
@@ -148,7 +148,7 @@ The header names what rides every call: a system prompt of 426 characters, the b
 
 Model call 2 is 1,143 tokens: the same three sources again, the model's call (21) and the tool results (761). The residual is 0 on both calls, because offline the script's input is the sum of its parts. Then comes the turn by source: each source's tokens over both calls, its rupees, and how it rode, `106 in each of 2 calls` for the system prompt and `from call 2 on` for the results. The model calls cost Rs 0.2370, and the line says the turn's Meter charged the same: the command prices each call as `limits.py` does. rag-api's answer adds Rs 0.2648, estimated. The turn is Rs 0.5018 at list price, and offline nothing is billed.
 
-The kit holds this for every brain. Its test reads every captured call and checks that each content has one source and that the sources add up to what the call was sent. CI's chat-pins step runs the file on every push, and the file has 24 tests in all.
+The kit holds this for every brain. Its test reads every captured call and checks that each content has one source and that the sources add up to what the call was sent. CI's chat-pins step runs the file on every push, and the file has 25 tests in all.
 
 ### On your lane: the model's own counter, and the probe
 
@@ -208,7 +208,7 @@ On your lane, a chat brain's search is rag-api's `/v1/query`. rag-api packs top_
 
 #### Do it: offline, the two records side by side
 
-`make context-sources` prints its breakdown; the command it runs can also print the turn as a record, with `--json`. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
+`make context-sources` prints its breakdown; with `JSON=1` it prints the turn as one record instead, the command's `--json`. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
 
 Offline, exactly the two lines the kit's test pins moved: the tool results, from 761 tokens to 435, and rag-api's own prompt. The search's citations went from 2,004 characters to 1,087. The turn went from Rs 0.5018 to Rs 0.3504: Rs 0.2370 to Rs 0.1955 for the model calls, and Rs 0.2648 to Rs 0.1549 for rag-api.
 

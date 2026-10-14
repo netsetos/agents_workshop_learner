@@ -148,8 +148,6 @@ The first block uploads the empty PDF and waits for the worker's first refusal; 
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0).
 
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.
-
 Expected shape, not a promised result:
 
 ```text
@@ -218,7 +216,7 @@ Operation: bash — run in the operator shell, about an hour after step 5 (both 
 
 Manual action: Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.
 
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object. Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -237,8 +235,6 @@ At lesson end: This dead letter deserves the second choice: the object was never
 This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 1.8 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
 
 Operation: bash — run in the operator shell (removes the dead letter and the empty object; nothing else).
-
-IDE adaptation: Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object.
 
 Expected shape, not a promised result:
 
@@ -265,6 +261,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4bbdae1a635b605b50d6d0445d501cad4b7beee0`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html`. All 42 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a5ee48f2f82139bc413b1ee30bf237ab416fbd18`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

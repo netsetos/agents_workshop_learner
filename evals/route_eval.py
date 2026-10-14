@@ -959,6 +959,7 @@ def run_router(a) -> int:
         flips = sorted({x["id"] for run in runs for x in run} - set(stable))
         print(f"  {f'pass^{len(runs)}':<30}{rate(len(stable), len(by_id))}; failing in some run: {', '.join(flips[:20]) or 'none'}")
     if a.report:
+        os.makedirs(os.path.dirname(a.report) or ".", exist_ok=True)       # a fresh clone has no evals/reports/
         with open(a.report, "w", encoding="utf-8") as f:
             json.dump({"arm": "B", "split": a.split, "tally": result["tally"], "confusion": result["confusion"],
                        **({"exemplars": {"spec": spec, "examples": [list(e) for e in examples]},
@@ -1156,6 +1157,7 @@ def run_live(a, minter=mint, poster=post) -> int:
             for p in preds.values():
                 f.write(json.dumps(p, ensure_ascii=False) + "\n")
     if a.report:
+        os.makedirs(os.path.dirname(a.report) or ".", exist_ok=True)       # a fresh clone has no evals/reports/
         with open(a.report, "w", encoding="utf-8") as f:
             json.dump({"arm": arm, "split": a.split, "tally": result["tally"], "confusion": result["confusion"],
                        "rows": report_rows(result["verdicts"], preds)}, f, indent=1)
@@ -1334,6 +1336,7 @@ def main(argv: list[str] | None = None) -> int:
     result = score(rows, preds, classes)
     report(result, arm, a.split)
     if a.report:
+        os.makedirs(os.path.dirname(a.report) or ".", exist_ok=True)       # a fresh clone has no evals/reports/
         with open(a.report, "w", encoding="utf-8") as f:
             json.dump({"arm": arm, "split": a.split, "tally": result["tally"], "confusion": result["confusion"],
                        "rows": report_rows(result["verdicts"], preds)}, f, indent=1)

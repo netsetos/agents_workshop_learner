@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html",
-  "source_sha": "60e083f2ea735e186506e72b5401ae25d0327111",
+  "source_sha": "bed26f223483fe13e7029ce8eb7cac21110a90df",
   "shared_setup_windows": [
     1
   ],
@@ -120,7 +120,7 @@
     },
     {
       "level": 4,
-      "heading": "234 resource instances, file by file"
+      "heading": "235 resource instances, file by file"
     },
     {
       "level": 4,

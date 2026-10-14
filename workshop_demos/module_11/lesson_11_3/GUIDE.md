@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `94904773068b4304a98737b11cbb33d8abc23340`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `2acaf24d3e3c8c6c2055b23e813d1010af7a06ae`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.2 left one green verdict, bound to one revision. This lesson moves traffic with it, then breaks the API on purpose and brings it back. `make promote-gated` promotes lesson 11.2's candidate. A candidate with a mistyped model name is judged red by `make gate` and refused, and plain `make promote`, which reads no record, moves traffic to it anyway. `make smoke-deployed` runs the smokes of the services your lane has deployed, and they go red; `make incident` reads the lane and your records, and names the way back. `time make rollback` returns the traffic in seconds, because the old revision never went away. But a rollback moves traffic and nothing else: the service's template still holds the mistyped name, and the next release would start from it. The repair is a new candidate made with what serves, judged by `make gate` and promoted by `make promote-gated`, until `make incident` exits 0.
 

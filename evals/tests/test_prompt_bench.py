@@ -1,6 +1,7 @@
 """Offline tests for evals/prompt_bench.py (W2-B, workshop lessons 3.1, 3.2 and 3.3): each row's pool read once and held
 fixed, the recorder's thinking level and temperature, SYSTEM edited in memory with generator.py untouched, a report's
-failing rows, the gate's own scoring of every answer, and the rupees.
+failing rows, the gate's own scoring of every answer, the rupees, and the lane's identifiers printed as the pages
+print them.
 
 Run with ``python -m unittest discover -s evals/tests -p test_prompt_bench.py`` from deploy/. CI's shared interpreter has
 pydantic and none of rag-api's pins, so services/rag-api/generator.py is lifted as tools/check_retrieval.py lifts it: its
@@ -223,7 +224,7 @@ class Lane:
         return None if self.current is None else set(self.current)
 
 
-def run(argv, model=None, lane=None, report=True, **settings):
+def run(argv, model=None, lane=None, report=True, api_url=API_URL, env=None, **settings):
     """prompt_bench.main() over the lifted generator: (exit code, what it printed, the module, the lane, the report)."""
     model = model or Gemini()
     gen = lifted_generator(model, **settings)
@@ -232,9 +233,9 @@ def run(argv, model=None, lane=None, report=True, **settings):
     with tempfile.TemporaryDirectory() as d:
         path = os.path.join(d, "bench.json")
         extra = ["--report", path] if report else []
-        with patch.dict(os.environ, {"DOCUMIND_ID_TOKEN": "token-abc", "DOCUMIND_USER_EMAIL": "eval@documind.in"}), \
-                contextlib.redirect_stdout(out):
-            code = pb.main(list(argv) + ["--api-url", API_URL] + extra, generator=gen, passages=lane.passages,
+        with patch.dict(os.environ, {"DOCUMIND_ID_TOKEN": "token-abc", "DOCUMIND_USER_EMAIL": "eval@documind.in",
+                                     **(env or {})}), contextlib.redirect_stdout(out):
+            code = pb.main(list(argv) + ["--api-url", api_url] + extra, generator=gen, passages=lane.passages,
                            sources=lane.sources)
         data = json.loads(Path(path).read_text(encoding="utf-8")) if report and os.path.exists(path) else None
     return code, out.getvalue(), gen, lane, data
@@ -566,6 +567,67 @@ class SummaryTests(unittest.TestCase):
             mine = [a for a in data["answers"] if a["level"] == s["level"]]
             self.assertAlmostEqual(s["cost_inr"], sum(a["cost_inr"] for a in mine))
             self.assertIn(f"{s['cost_inr'] / s['answers']:10.4f}", out)
+
+
+class IdentifierTests(unittest.TestCase):
+    """13 October 2026: the bench printed the lane's project id and number, and its output is pasted into the pages.
+    It now prints them as the pages do, unless BENCH_REDACT=0; every request still goes to the lane's own address."""
+
+    PROJECT, NUMBER = "documind-ai-" + "abc123", "1234" + "56789012"   # split: the file must not look like a real id or number to tools/leakscan.py
+    LANE_URL = f"https://documind-api-{NUMBER}.asia-south1.run.app"
+    BUCKET_URI = f"gs://{PROJECT}-uploads/acme/hr_policy_2026.md"
+    DENIED = f"on {PROJECT}, projects/{NUMBER}/x"                 # short enough to stay in the answer line's 70 characters
+
+    def bench(self, redact: str | None):
+        def denied(req):
+            raise APIError(403, self.DENIED)
+
+        lane = Lane(pools={Q["lk-06"]: [dict(p, source_uri=self.BUCKET_URI) for p in pool(1, 2, 3, 4, 5, 6)]})
+        env = {"GOOGLE_CLOUD_PROJECT": self.PROJECT, **({"BENCH_REDACT": redact} if redact is not None else {})}
+        with patch.dict(os.environ, {}):
+            os.environ.pop("BENCH_REDACT", None)
+            return run(["--rows", "lk-06", "--show"], model=Gemini(denied), lane=lane, api_url=self.LANE_URL, env=env)
+
+    def test_the_lanes_project_id_and_number_are_printed_and_reported_as_the_pages_print_them(self):
+        code, out, gen, lane, data = self.bench(None)
+        self.assertIn("== prompt bench: gemini-3.6-flash, against https://documind-api-NUMBER.asia-south1.run.app ==", out)
+        self.assertIn("HTTP 403 APIError: on documind-ai-YOUR-ID, projects/NUMBER/x", out)
+        report = json.dumps(data)
+        for text in (out, report):
+            self.assertNotIn(self.PROJECT, text)
+            self.assertNotIn(self.NUMBER, text)
+        self.assertEqual(data["api_url"], "https://documind-api-NUMBER.asia-south1.run.app")
+        self.assertEqual({p["source_uri"] for p in data["rows"][0]["pool"]},
+                         {"gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md"})
+        self.assertEqual(data["answers"][0]["error"], "APIError: on documind-ai-YOUR-ID, projects/NUMBER/x")
+        self.assertEqual(data["answers"][0]["status"], 403)                       # a number stays a number
+        self.assertEqual({c["api_url"] for c in lane.calls}, {self.LANE_URL})    # the requests went to the lane itself
+        self.assertEqual(code, 1, "no answer came back")
+
+    def test_bench_redact_0_prints_them_as_they_are(self):
+        _, out, _, lane, data = self.bench("0")
+        self.assertIn(f"== prompt bench: gemini-3.6-flash, against {self.LANE_URL} ==", out)
+        self.assertIn(f"HTTP 403 APIError: {self.DENIED}", out)
+        self.assertEqual(data["api_url"], self.LANE_URL)
+        self.assertEqual({p["source_uri"] for p in data["rows"][0]["pool"]}, {self.BUCKET_URI})
+
+    def test_what_the_redactor_replaces(self):
+        hide = pb.redactor(self.PROJECT, self.LANE_URL)
+        for text, want in ((f"gs://{self.PROJECT}-uploads/a.md", "gs://documind-ai-YOUR-ID-uploads/a.md"),
+                           (f"documind-ui-sa@{self.PROJECT}.iam.gserviceaccount.com",
+                            "documind-ui-sa@documind-ai-YOUR-ID.iam.gserviceaccount.com"),
+                           (f"{self.PROJECT}4 and x{self.PROJECT}", f"{self.PROJECT}4 and x{self.PROJECT}"),  # other names
+                           (f"project {self.NUMBER} is", "project NUMBER is"),
+                           (f"{self.NUMBER}3", f"{self.NUMBER}3"),                                    # another number
+                           ("https://documind-chat-" + "9876" + "54321098" + ".us-central1.run.app",
+                            "https://documind-chat-NUMBER.us-central1.run.app"),                     # any Cloud Run address
+                           ("projects/" + "9876" + "54321098" + "/locations/global", "projects/NUMBER/locations/global")):
+            self.assertEqual(hide(text), want, text)
+        self.assertEqual(pb.redactor(self.PROJECT, self.LANE_URL, on=False)(self.BUCKET_URI), self.BUCKET_URI)
+        self.assertEqual(pb.redactor("x", None)("x marks it"), "x marks it")     # not a project id's shape: left alone
+        stand_in = pb.redactor("documind-ai-YOUR-ID", "http://stand-in.invalid")   # the pages' own scripted run
+        page = "== prompt bench: gemini-3.6-flash, against http://stand-in.invalid ==\n  gs://documind-ai-YOUR-ID-uploads"
+        self.assertEqual(stand_in(page), page)
 
 
 class WiringTests(unittest.TestCase):

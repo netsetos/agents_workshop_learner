@@ -192,6 +192,9 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
 
     name = req.brain or DEFAULT_BRAIN
     brain = brain_for(request.app, name)
+    # A company whose agent_actions is approval (workshop lesson 5.8): the LangGraph brain with the approve node in
+    # the refuse node's place, and a 409 while the conversation waits for a person. Any other company, or brain: the brain above.
+    brain = approval_routes.wired(request.app, name, brain, tenant_id, user["email"], req.session_id)
     # The turn's limits (workshop lesson 5.5): model calls, rupees and a deadline, counted from here, after the
     # brain is built, so a cold import is not the turn's time. A tripped limit is still a 200, with stopped_by.
     meter = limits.Meter(model=LOCAL_MODEL if PROFILE == "local" else MODEL)
@@ -241,3 +244,9 @@ def chat(req: ChatRequest, request: Request, user=Depends(caller)) -> dict:
 # a question the law hands to a person before any brain runs. desk.py holds both; this is their one install line.
 import desk  # noqa: E402
 desk.install(app, caller=caller, tenant_for=tenant_for, thread_config=thread_config)
+
+# A person in the loop (workshop lesson 5.8): the /v1/approvals routes, and the brain and the hold chat() asks
+# approval_routes.wired() for above, all behind tenant_settings.agent_actions = approval (make agent-actions). For a
+# company that has not set it, and on the local profile, the service is what it was.
+import approval_routes  # noqa: E402
+approval_routes.install(app, caller=caller, tenant_for=tenant_for, thread_config=thread_config)

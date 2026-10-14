@@ -4,9 +4,9 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_5.8_Human_In_Loop_WIX.html`, reviewed at blob `422a193e3eb710d0d2a72b9f3587e3f30eb0a19a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.8_Human_In_Loop_WIX.html`, reviewed at blob `e4f5251946e9173b1c0555451a11ffdeaa9dec61`. Learners read that page on the course site; this guide keeps its prose.
 
-Some steps in an agent's turn belong to a person. Withdrawing a company document needs a second person's approval, and the person who asked can never be that second person. A question that lacks one fact needs the asker's answer, and nobody else's. A request for a person needs a person. The kit's `services/chat/approval.py` pauses a LangGraph turn for each of these: the turn stops inside a node, the checkpointer keeps it, and a decision resumes it, even from another process. You run it offline, because the chat service does not import it yet. On your lane you use the hand-off lesson 5.6 built: you give yourself the People team's role, ask for a person on the Desk page and over REST, and read the case in the People team's inbox. Then you watch a question that lacks a fact get its answer on the same thread.
+Some steps in an agent's turn belong to a person. Withdrawing a company document needs a second person's approval, and the person who asked can never be that second person. A question that lacks one fact needs the asker's answer, and nobody else's. A request for a person needs a person. The kit's `services/chat/approval.py` pauses a LangGraph turn for each of these: the turn stops inside a node, the checkpointer keeps it, and a decision resumes it, even from another process. You run it offline first, at Rs 0. On your lane you use the hand-off lesson 5.6 built: you give yourself the People team's role, ask for a person on the Desk page and over REST, and read the case in the People team's inbox. Then you watch a question that lacks a fact get its answer on the same thread. Last, behind a company switch that is off until you set it, the same pause runs on your lane: a withdrawal waits as an approval record, a second person holding `doc_approver` decides it over REST, and you run the approved withdrawal from your shell.
 
 - Four ways a person comes into a turn
 
@@ -24,11 +24,13 @@ Some steps in an agent's turn belong to a person. Withdrawing a company document
 
 - The rows, the case and your role, read directly
 
+- The approval wired in: a withdrawal paused on your lane, decided over REST, run by you
+
 - Why it is shaped this way, what it costs, and what the kit does not do yet
 
 - Verify it yourself: the checklist
 
-You will learn how a LangGraph turn waits for a person: `interrupt()` in an approve node, the checkpointer keeping the paused turn, and a decision that resumes it, with three locks that stop the person who asked from approving their own withdrawal. Then you will prove it. Offline, a withdrawal is paused, refused to the person who asked, approved by a second person and resumed by another process, and a clarifying question is answered by the person who asked. On your lane, a request for a person reaches the People team's inbox.
+You will learn how a LangGraph turn waits for a person: `interrupt()` in an approve node, the checkpointer keeping the paused turn, and a decision that resumes it, with three locks that stop the person who asked from approving their own withdrawal. Then you will prove it. Offline, a withdrawal is paused, refused to the person who asked, approved by a second person and resumed by another process, and a clarifying question is answered by the person who asked. On your lane, a request for a person reaches the People team's inbox. Then, behind a company switch that is off until you set it, the same pause runs on your lane: a withdrawal paused as an approval record, held, refused to the person who asked, approved by a second person over REST, run by you from the shell, and undone.
 
 ### Four ways a person comes into a turn
 
@@ -38,11 +40,11 @@ A turn can wait. Until now, every turn on the chat service ran from question to 
 
 Approve: four eyes. `approval.py` gives the model a tool with a side effect. `withdraw_document` takes one of the company's documents out of search, so that no answer cites it. Withdrawn is not deleted: `make restore` brings the document back. The approve node pauses the turn before the tool can run, and waits for a second person in the company. The person who asked may reject their own request, which cancels it, but cannot approve it. Who asked is read from the thread id, `tenant:user:session`, which `agent.py` builds from the verified caller, never from the model, a request body or the resume. Three locks check this. `decide()` checks it before anything runs. The approve node checks it again on the value the resume brings. The tool checks it last: it runs only when the resumed turn names a second person's approval of this exact call.
 
-Clarify: a question only the asker answers. `ask_user` pauses the turn too, but for the person who asked, and only for them. Their answer comes back as the tool's result, a "respond" decision, so the model reads it within the same turn. Your lane has no such tool. The brains hold `retrieve` and `calculate_processing_cost`, so a model that lacks a fact can only put its question in its answer and end the turn. Your reply is then a new turn, and only the thread connects it to the question.
+Clarify: a question only the asker answers. `ask_user` pauses the turn too, but for the person who asked, and only for them. Their answer comes back as the tool's result, a "respond" decision, so the model reads it within the same turn. Until a company's switch is on (step 8), your lane has no such tool. The brains hold `retrieve` and `calculate_processing_cost`, so a model that lacks a fact can only put its question in its answer and end the turn. Your reply is then a new turn, and only the thread connects it to the question.
 
-Escalate: hand it to the person the law names. Lesson 5.6's chat door already does this on your lane, by rule, before any brain runs. A request for a person gets a fixed reply and `case_offer`, and the person presses the button and confirms. The case then waits in the People team's queue, for whoever holds `people_ops`. `offer_case` lets a model make the same offer when the rules miss. It checks the person's roles and the company's queue, and writes nothing: the person still raises the case. It runs offline, like the rest of `approval.py`.
+Escalate: hand it to the person the law names. Lesson 5.6's chat door already does this on your lane, by rule, before any brain runs. A request for a person gets a fixed reply and `case_offer`, and the person presses the button and confirms. The case then waits in the People team's queue, for whoever holds `people_ops`. `offer_case` lets a model make the same offer when the rules miss. It checks the person's roles and the company's queue, and writes nothing: the person still raises the case. It runs offline, like the rest of `approval.py`, and on your lane once a company's switch is on.
 
-Offline, on purpose. Nothing in the chat service imports `approval.py`: no route, brain or switch reaches it. The chat service on your lane is what it was, and `tools.BLOCKED` and the LangGraph brain's refuse node stay as lessons 5.4, 5.5 and 5.7 show them. The module is the piece a later change would wire in behind a company's switch. Until then, its proof is `make approval-check` and the cells in step 5, on a scripted model, at Rs 0.
+Offline first, wired in behind a switch. One module in the chat service imports `approval.py`: `approval_routes.py`, and it does something only for a company whose `tenant_settings.agent_actions` is `approval`. No company's is until an operator writes it, with `make agent-actions`. For every other company, and for the LangChain, ADK and direct brains, the chat service on your lane is what it was: `tools.BLOCKED` and the LangGraph brain's refuse node stay as lessons 5.4, 5.5 and 5.7 show them. For a company that is on, the LangGraph brain is the graph with the approve node, the pause is a record in Firestore (`shared/approvals.py`), a paused conversation takes no new question, and three routes under `/v1/approvals` list, read and decide the records. Steps 4 and 5 prove the pause offline, on a scripted model, at Rs 0. Step 8 switches acme on, runs the whole flow on your lane, and switches it off again.
 
 The government file again, with a checker. Lesson 5.4's file moved from officer to officer. Some notings cannot be signed by the officer who wrote them: maker and checker are two people. A clerk who drafts an order to weed out a record cannot approve it. The file waits in the checker's in-tray, flagged at the page. Nobody re-types it: next morning the checker opens it at the flag, signs it or returns it with a reason, and it moves on from exactly there. A noting that needs a fact from the applicant goes back to them as a query, and only the applicant's reply is filed against it. A matter the rules give to a committee is referred to it with a note on the file, and the desk does not decide it. The in-tray is the checkpointer, and the flag is `interrupt()`. Maker and checker are four eyes. The query is `ask_user`, and the referral is the case.
 
@@ -54,9 +56,9 @@ The build ran each scenario to its pause with `build_approval_graph()` from your
 
 The model's messages are scripted, and its last answer is not shown, only what the kit did. The executor that would withdraw records the call and withdraws nothing, and the search is a stand-in. On your lane no turn pauses. Step 6 does the escalation and the clarification for real.
 
-### The words: interrupt, resume, paused turn, decision, four eyes, requester, ask_user, offer_case, case_offer, people_ops
+### The words: interrupt, resume, paused turn, decision, four eyes, requester, ask_user, offer_case, case_offer, people_ops, agent_actions, approval record, doc_approver
 
-Seventeen rows, each with where it lives in the kit, or on your lane.
+Twenty-two rows, each with where it lives in the kit, or on your lane.
 
 One distinction to hold: approve and respond both resume a paused turn, but they come from different people. A withdrawal waits for anyone except the person who asked. A question waits for that person alone.
 
@@ -86,7 +88,7 @@ How to tell which store answered any call: read `stages.retrieval_backend` on th
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-You need the shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER` and `ME`, and the chat service lesson 5.1 deployed. You also need what lesson 5.6 left on your lane: acme's queues, the eval accounts on their rosters, and your four roles. Step 3 changes your lane: it adds `people_ops` to your roles, and you raise one case on the Desk page. Steps 4 and 5 make or complete `~/graph-venv` with the chat image's pins and the SQLite checkpointer, and touch nothing on your lane. Step 6 asks the chat service five questions as `documind-evalacme-sa`, and raises and withdraws one case. Run steps 3, 6 and 7 in the same shell, in order: step 3 defines `CHAT`, `SINCE108`, `sa` and `etok`, and the later steps use them.
+You need the shell, in the kit's folder, with `PROJECT`, `REGION`, `NUMBER` and `ME`, and the chat service lesson 5.1 deployed. You also need what lesson 5.6 left on your lane: acme's queues, the eval accounts on their rosters, and your four roles. Step 3 changes your lane: it adds `people_ops` to your roles, and you raise one case on the Desk page. Steps 4 and 5 make or complete `~/graph-venv` with the chat image's pins and the SQLite checkpointer, and touch nothing on your lane. Step 6 asks the chat service five questions as `documind-evalacme-sa`, and raises and withdraws one case. Step 8 changes your lane more, and undoes most of it: it switches acme's `agent_actions` to `approval`, gives `documind-evalacme-sa` the `doc_approver` role, withdraws one small document and brings it back, then switches acme off again; the approval records and their audit events stay. Run steps 3, 6, 7 and 8 in the same shell, in order: step 3 defines `CHAT`, `SINCE108`, `sa` and `etok`, and the later steps use them.
 
 ### Your lane: the People team's reader, and a request for a person on the Desk page
 
@@ -116,7 +118,7 @@ Three tools that bring a person into a turn, who may decide what, the approve no
 
 #### Definition
 
-`services/chat/approval.py` is 368 lines. Its docstring opens with the fact the rest depends on: nothing in the service imports it. The build checks that too: no file under `services/` imports it, `tools.BLOCKED` still holds its three names, and the LangGraph brain still has its refuse node.
+`services/chat/approval.py` is 400 lines. Its docstring opens with the fact the rest depends on: one module in the service imports it, `approval_routes.py`, behind a company's switch that is off until an operator sets it. The build checks that too: no other file under `services/` imports it, `tools.BLOCKED` still holds its three names, and the LangGraph brain still has its refuse node.
 
 #### The three tools
 
@@ -126,7 +128,7 @@ The person who asked is never a tool argument. `owner()` reads them from the thr
 
 `withdraw_document` takes its tenant and the person who asked from the thread. It accepts a bare file name, `tenant/name` or the upload URI, and refuses another tenant's document or a path. Then comes the last lock: the resumed turn's context must name someone other than the person who asked as the approver of this call's id. What withdraws is injected, and the result names the undo.
 
-`ask_user`'s body runs only where nobody was asked, and it tells the model to put the question in its answer. That is exactly what happens on your lane, where the tool does not exist.
+`ask_user`'s body runs only where nobody was asked, and it tells the model to put the question in its answer. That is what happens on your lane while a company's switch is off, where the brain has no such tool.
 
 `offer_case` checks that the person's roles open the case desk and that the company has a queue for the kind of case, as `GET /v1/cases/offer` decides it. It takes no reason, so nothing a person disclosed reaches its result, and it writes nothing: its `case_offer` has the chat door's key and shape.
 
@@ -152,7 +154,7 @@ The graph is the LangGraph brain's, with `approve` where `refuse` is. It has sev
 
 `make approval-check` is `commands/approval-check.sh`. It makes `~/graph-venv` if it is missing (lesson 5.4 made it), installs the chat image's pins and the SQLite checkpointer, `langgraph-checkpoint-sqlite` 3.1.1, the version `services/chat/requirements-local.txt` pins, and runs `commands/tests/test_approvals.py`. CI's chat-pins step runs the same file. It needs no credential, no network after the install, and costs nothing.
 
-All 14 tests passed: four in the `Wiring` class and ten in the `Approvals` class. The `Wiring` tests need only the standard library. They check that nothing in the service imports the module, and that it writes no audit event, so the list of actions lesson 4.8 counts is unchanged. They check that it was verified against the image's own pins: LangChain 1.4.0, LangGraph 1.2.12 and the SQLite checkpointer 3.1.1. And they check that the make target, its script and CI's chat-pins step all run this file. The `Approvals` tests drive the module on scripted models, a stand-in rag-api and a fake Firestore that records any write. Each is a claim this page makes, and step 5 runs four of them by hand.
+All 15 tests passed: four in the `Wiring` class and eleven in the `Approvals` class. The `Wiring` tests need only the standard library. They check that nothing in the service imports the module, and that it writes no audit event, so the list of actions lesson 4.8 counts is unchanged. They check that it was verified against the image's own pins: LangChain 1.4.0, LangGraph 1.2.12 and the SQLite checkpointer 3.1.1. And they check that the make target, its script and CI's chat-pins step all run this file. The `Approvals` tests drive the module on scripted models, a stand-in rag-api and a fake Firestore that records any write. Each is a claim this page makes, and step 5 runs four of them by hand.
 
 ### Pause, refuse, approve and resume on your machine
 
@@ -178,7 +180,7 @@ The same graph, now with a scripted model that asks Asha which rule applies to h
 
 #### Change it: the approval line above interrupt()
 
-A resumed node runs again from its first line. The kit writes its "approval asked" line below `interrupt()`, so it is written once, at the resume. The first cell defines `twice108`, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above `interrupt()`, from line 332 to line 329, and runs `twice108` again. Then it puts the kit's file back with git, so the setup section's `git pull` next time is not refused.
+A resumed node runs again from its first line. The kit writes its "approval asked" line below `interrupt()`, so it is written once, at the resume. The first cell defines `twice108`, which pauses one withdrawal, approves it, and counts that line at each point. The second cell moves the line above `interrupt()`, from line 364 to line 361, and runs `twice108` again. Then it puts the kit's file back with git, so the setup section's `git pull` next time is not refused.
 
 Above `interrupt()`, the line was written at the pause and again at the resume, twice for one approval, while the tool still ran once. A log line written twice does no harm. An email to the approver, a ticket or a payment made there would go out twice, once each time the node runs. So in any node that pauses, everything above `interrupt()` must be safe to run again.
 
@@ -194,13 +196,13 @@ Both cells call the chat service as `documind-evalacme-sa`, lesson 5.6's acme em
 
 The cell sends the gate's own request for a person on one session, then one of its near misses, "How do I contact HR about payroll?", which `gate()` reads as a question about a process and lets through. Then it raises the case the first reply offered and sends it with a token. Last, it withdraws the case as the person who raised it. It keeps the case's id in `~/lesson108_case.txt` for step 7.
 
-The request for a person never reached the graph: brain `desk_gate`, no tool call, no model call, Rs 0, the fixed reply, and `case_offer` naming `human_requested`. The near miss did reach it. The LangGraph brain searched and answered from the documents, with its own model calls and rupees and no `case_offer`. Nothing on your lane lets a model offer a case when the rules miss: `offer_case` runs only offline. The case went to the `people` queue, the People team, as a draft that would expire after 30 minutes. Once sent, it was due 5 days after it opened: the company's own target, from acme's queues file. `desk_law` names no legal clock for a request for a person, so that date is the company's alone. The person who raised it then withdrew it. It stays on record as withdrawn, no longer one of the People team's open cases, with a `case.close` event that says the requester withdrew it.
+The request for a person never reached the graph: brain `desk_gate`, no tool call, no model call, Rs 0, the fixed reply, and `case_offer` naming `human_requested`. The near miss did reach it. The LangGraph brain searched and answered from the documents, with its own model calls and rupees and no `case_offer`. With acme's switch off, nothing on your lane lets a model offer a case when the rules miss: `offer_case` is bound only behind it (step 8). The case went to the `people` queue, the People team, as a draft that would expire after 30 minutes. Once sent, it was due 5 days after it opened: the company's own target, from acme's queues file. `desk_law` names no legal clock for a request for a person, so that date is the company's alone. The person who raised it then withdrew it. It stays on record as withdrawn, no longer one of the People team's open cases, with a `case.close` event that says the requester withdrew it.
 
 #### Do it: clarify
 
 Three turns. The handbook answers "What is my notice period?" two ways: 60 days for a confirmed employee at grade E3 or above (NP-03), and 15 days during probation (PB-02). The second turn gives, on the same session, the fact the first lacked. The third sends the same reply in a new session.
 
-No turn paused, because your lane has no `ask_user`: the model could only answer. Read the first answer. Either the model asked which rule applies to you, or it gave both, each with its citation. Either way the turn ended, and nothing marks it as waiting. The second turn ran on the same thread, so the model read its first question and answer before your reply, and could answer for probation. The third turn sent the same words with no thread behind them: the model had only "I am still on probation." to go on. That is clarification on your lane: a question in an answer, and a reply that only the thread connects to it. Step 5's `ask_user` makes the same exchange one turn that waits for the person who asked.
+No turn paused, because with acme's switch off your lane has no `ask_user`: the model could only answer. Read the first answer. Either the model asked which rule applies to you, or it gave both, each with its citation. Either way the turn ended, and nothing marks it as waiting. The second turn ran on the same thread, so the model read its first question and answer before your reply, and could answer for probation. The third turn sent the same words with no thread behind them: the model had only "I am still on probation." to go on. That is clarification on your lane: a question in an answer, and a reply that only the thread connects to it. Step 5's `ask_user` makes the same exchange one turn that waits for the person who asked.
 
 ### The rows, the case and your role, read directly
 
@@ -217,6 +219,54 @@ There are two `desk_gate` rows: the Desk page's turn, as you, and step 6's, as `
 `make cases` lists acme's open cases, soonest due first. Then the cell reads step 6's case and your role document from Firestore.
 
 `make cases` lists the request you sent on the Desk page, acknowledged, in `people`, beside any of lesson 5.6's cases still open, which it shows as `sensitive`. Step 6's case is not in the list, because it is withdrawn. Its record keeps the words the cell sent, with source `button` and via `direct`, like any case raised from the button, and no audit event left pending. The token is kept only as its hash. Your role document holds the five roles, set by you.
+
+### The approval wired in: a withdrawal paused on your lane, decided over REST, run by you
+
+One company's switch, the LangGraph brain with the approve node, the pause as a record, the hold, who decides, and your run of the approved withdrawal. Then the switch back off.
+
+#### Definition
+
+Step 4's pause reaches your lane through one module, `services/chat/approval_routes.py`, and one call in `chat()`. The call gives back the brain it was given unless the company's `tenant_settings.agent_actions` is `approval` and the turn asked for the LangGraph brain. Then the brain is `build_approval_graph()` on the service's own checkpointer and model, and three things follow from the pause being data. The pause becomes a record, `approvals/{id}`, whose id is the thread and the checkpoint the pause is kept in, so the same pause read twice is one record. The conversation is held: a new question on a paused thread would drop the pause, so `POST /v1/chat` answers 409 until someone decides. And the decision is a route, `POST /v1/approvals/{id}/decide`, which checks the record before `decide()` runs: 404 unless the reader may read it, 410 once `expire_at` has passed (24 hours after the pause, checked in code), 409 once decided, 403 for the person who asked approving their own request, and for a second person who is not on this company's roster or does not hold `doc_approver`, which the route passes as `may_approve`. The approval withdraws nothing by itself. The tool's injected executor writes the approved withdrawal on the record, and you run it from your shell with `make withdraw-run`, which re-checks the record and writes the tombstone `make retire` writes, then marks the record withdrawn with one `doc.withdraw` event.
+
+The records are `shared/approvals.py`'s, laid out like the case queue's, with the database client passed in. Its docstring lists what each function does; the record's statuses are `pending`, `approved`, `rejected`, `cancelled`, `answered`, `failed`, `expired`, `lost`, `withdrawn`.
+
+The decision route, in full. `decide()` runs for the person who asked, with a Meter of its own, and the record then says what the decisions amounted to: `approved` when the tool ran, `rejected` or `cancelled` for a reject, `answered` for a question, `failed` when an approved tool refused. The resumed turn logs a `chat` row of the same shape as `chat()`'s, with surface `approval`.
+
+The operator's half. `reconcile.py --approved` re-reads the record and checks it again, then runs `--retire`'s own branch through `main()`, so the tombstone is written by the one path lessons 1.7 and 7.4 show; the two `mirror` calls lesson 7.3 counts are still two. `make retire` from the shell writes no audit event; this run writes `doc.withdraw`.
+
+Two lines elsewhere complete it: `doc_approver` joined `ROLES` in `shared/roles.py`, and the four actions joined `AUDIT_ACTIONS` in `shared/audit_log.py`, which lesson 4.8 counts.
+
+#### Do it: the kit's own tests, offline
+
+The whole flow runs on the kit's own chat service with a fake Firestore and a scripted model, at Rs 0: the switch off, then on; the pause and its record; the hold; the requester's own approval refused; another company's approver and a colleague without the role seeing nothing; the second person's approval; a rejection beside a search; a question only the asker answers; an expired record, and the hold ending its pause; a lost pause; and `--approved` on the record. 18 tests, in `~/graph-venv` from step 4.
+
+#### Do it: switch acme on, and name the second person
+
+`make agent-actions` writes `agent_actions` into acme's `tenant_settings`, beside the Desk's switches, and prints them; the chat service reads it within a minute. `make roles` gives `documind-evalacme-sa` the `doc_approver` role beside `employee`: the eval account stands in for a colleague who may approve, as it stood in for an acme employee in lesson 5.6. The requester will be `documind-ui-sa`, on acme's roster since lesson 5.1's smoke.
+
+#### Do it: the flow, live
+
+`make smoke-approval` runs the flow once against your chat service, printing each step. As `documind-ui-sa` it asks the LangGraph brain to withdraw `townhall_2026_q1.md`, a small acme document: the turn pauses, and the reply carries the record. The same session's next question is held. The requester's own approval is refused. `documind-evalzeta-sa`, on zeta's roster, cannot tell the record exists. The approver's list shows it. `documind-evalacme-sa` approves it, and the turn resumes: the tool runs, records the approved withdrawal, and the model answers that the operator will run it. A second decision is refused. Then a second withdrawal on a new session, which the approver rejects with a reason: the call errors alone and the model says nothing was withdrawn. The smoke withdraws nothing; it ends by printing your next two commands.
+
+Every status came from the record's checks, not from the model: 200 with `pending` from the pause, 409 from the hold, 403 from four eyes, 404 from a reader who may not read, 200 with `approved` from the second person, 409 once decided, 200 with `rejected` from the reason. The two turns that paused cost one model call each, and each resume one more; the refusals cost nothing. The smoke depends on the model choosing `withdraw_document` for a question that names the file; if it answers in words instead, the smoke says so and stops, and nothing on your lane has changed.
+
+#### Do it: run the approved withdrawal
+
+The approval queued the work; you run it. The cell reads the approved record's id as the requester, runs `make withdraw-run` for it, and lists acme's sources, where the document's ledger row now says `withdrawn`.
+
+`reconcile.py --approved` read the record, checked it again (approved, not yet run, by a second person who still holds `doc_approver` in acme, for an acme document), then ran `--retire`'s own branch: the `reconcile_withdrawn` line is `make retire`'s, with every retired chunk id, and the `reconcile_approved` line after it names the record, who asked, who approved and who ran it, and the way back. The record is `withdrawn`, and the bucket has its `doc.withdraw` event. Until this run, the document was still in search: the approval is a decision, the run is the deed.
+
+#### Do it: the records and the events, read directly
+
+Acme's approval records from Firestore, oldest first, and today's approval events in the audit bucket, read without the chat service.
+
+Two records: the first `withdrawn`, with its withdrawal naming `documind-evalacme-sa` as the approver and you as the one who ran it; the second `rejected`. Neither carries a question or a reason beyond its results, and `audit_pending` is empty on both: every event reached the bucket. The bucket holds `approval.request` twice, `approval.approve` and `approval.reject` once each, and one `doc.withdraw`, each with the account that acted as its actor, as `role.grant` names the operator. A case event names a case reference instead (lesson 5.6): an approval is a decision about a document, and who made it is its point.
+
+#### Do it: bring the document back, and switch acme off
+
+`make restore` lifts the tombstone, as lesson 1.7 showed, and the worker returns the document. Then `make agent-actions` writes `off`, and acme's LangGraph brain is again the one lessons 5.4, 5.5 and 5.7 show, within a minute.
+
+The restore's line is lesson 1.7's: the tombstone to `retired`, the object rewritten onto itself, the worker's `ingest_reactivated` inside the undo window. The switch's line prints acme's switches with `agent_actions` `off`. Your lane's chat service is what it was; the records and the events stay, as a decision's trail should.
 
 ### Why it is shaped this way, what it costs, and what the kit does not do yet
 
@@ -236,29 +286,35 @@ The design choices, from the kit's own comments and tests, then the bill and the
 
 - Offer, never raise. `offer_case` and the chat door's `case_offer` offer a case. Only the person raises one, by pressing the button and confirming. Neither offer writes a record.
 
-- Two forms, one record. The approve node serves a hand-built graph, and `HumanInTheLoopMiddleware` serves `create_agent`. `paused()` reads both the same way, so one route could serve either brain.
+- Two forms, one record. The approve node serves a hand-built graph, and `HumanInTheLoopMiddleware` serves `create_agent`. `paused()` reads both the same way, so one route could serve either brain; the routes serve the graph.
+
+- One switch, per company, off by default. `agent_actions` lives in `tenant_settings` beside the Desk's switches and is read the same way, once a minute. A company that never wrote it has the brain it had, and so does every other brain. The build checks that `approval_routes.py` is the one importer and that the call in `chat()` gives the brain back unchanged when the switch is off.
+
+- The record is the truth, and it expires. The pause lives in the checkpointer, but what a route may do with it is read from the record: 404, 410, 409 and 403 are the record's answers, checked in code before `decide()` runs. A pause nobody decided within 24 hours is `expired`; the next question ends it as the asker's own cancel, a reject with the reason through `decide()` and the approve node, so the model is told and answers that turn, and then the question runs. Nothing writes the thread's state from outside the graph: `limits.repair_thread` stays the kit's one such writer (lesson 6.8).
+
+- The approval is a decision; the run is the deed. The service never withdraws. The executor writes the approved withdrawal on the record, and the operator's `make withdraw-run` re-checks it and writes the tombstone, through `--retire`'s own branch. A record the operator never runs stays `approved` and withdraws nothing.
 
 #### What it costs
 
 Each point is checked in the kit's code, and the build asserts it, so this box changes when the kit does.
 
-- No turn pauses on your lane. Nothing imports `approval.py`. There is no route that resumes a turn, no brain built with the approve node, and no company switch. On your lane `BLOCKED` and the refuse node are as lessons 5.4, 5.5 and 5.7 show them, and no model can ask to withdraw a document.
+- One brain, behind the switch. Only the LangGraph brain pauses, and only for a company whose `agent_actions` is `approval`. The LangChain brain keeps lesson 5.4's guard, although `hitl_middleware()` is its form; the ADK brain has no form at all, and the direct brain has no loop. A company that never set the switch has no pause, no record and no route that does anything.
 
-- Who else may approve is left to the caller. `decide()` refuses the person who asked and accepts anyone else, unless its caller passes `may_approve`. It does not check that the second person is in the same company: in step 1's panel, Meena's approval resumes the turn. `shared/roles.py` holds no approver role, and no route exists to pass one.
+- The approval withdraws nothing. An approved record waits for the operator's `make withdraw-run`; there is no job that runs it, and nobody is told that a record waits except by `GET /v1/approvals`. A record that expires at 24 hours is marked so when it is next read or decided, by code: no TTL policy touches the collection, and nothing wakes a paused conversation on its own.
 
-- A pause never expires. A paused turn waits in the checkpointer until someone decides. Nothing lists what is waiting across conversations, and nobody is told that something waits.
+- The Chat page shows no waiting card. The pause reaches a person as the turn's answer and the `approval` field of the response; deciding is a REST call. The Chat page shows the answer and offers no button, and no inbox shows a `doc_approver` what waits.
 
-- Clarification on your lane is words. The brains hold `retrieve` and `calculate_processing_cost`, so a model that lacks a fact asks in its answer and the turn ends. Nothing records that it asked.
+- Clarification on your lane is words, until the switch is on. With it off, the brains hold `retrieve` and `calculate_processing_cost`, so a model that lacks a fact asks in its answer and the turn ends, and nothing records that it asked. With it on, `ask_user` pauses the turn as a record of kind `answer`, which the person who asked alone can read and answer.
 
-- Escalation on your lane is by rule. A request for a person in words the gate does not know reaches a brain, which cannot offer a case: `offer_case` runs only offline. The gate reads words, not meaning (lesson 5.6).
+- Escalation on your lane is by rule, until the switch is on. The gate reads words, not meaning (lesson 5.6). With the switch on, a model may offer a case where the rules missed, and the reply carries `case_offer` as the door's does; nothing is raised until the person presses the button.
 
 - The ADK brain has no pause. `approval.py` pauses a LangGraph graph and LangChain's `create_agent`. It has no form for the ADK brain lesson 5.7 compares.
 
 ### Verify it yourself: the checklist
 
-Fifteen checks, each one block above, each with the value that proves it.
+Twenty-two checks, each one block above, each with the value that proves it.
 
-Your role document holds `people_ops` beside lesson 5.6's four roles, set by you, with one `role.grant` event in the audit bucket. acme has one more open case, the request you sent on the Desk page, acknowledged, in the People team's queue. Step 6's case is withdrawn. Both left case events in the audit bucket. The LangGraph brain keeps three new threads: `lesson108-esc` with the near miss, `lesson108` with two turns and `lesson108-new` with one. The chat service's log has this lesson's two `desk_gate` rows and four `chat` rows. Your home folder has `~/lesson108_case.txt` and `~/lesson108_threads.db`, and `~/graph-venv` has the SQLite checkpointer. `approval.py` is the kit's again: the Change-it put it back. Nothing that answers a turn changed, and no turn pauses on your lane. Module 6 opens with what rides every model call, and lesson 6.8 resumes a paused or cut-off turn from its checkpoint.
+Your role document holds `people_ops` beside lesson 5.6's four roles, set by you, with one `role.grant` event in the audit bucket. acme has one more open case, the request you sent on the Desk page, acknowledged, in the People team's queue. Step 6's case is withdrawn. Both left case events in the audit bucket. The LangGraph brain keeps three new threads: `lesson108-esc` with the near miss, `lesson108` with two turns and `lesson108-new` with one. The chat service's log has this lesson's two `desk_gate` rows and four `chat` rows. Your home folder has `~/lesson108_case.txt` and `~/lesson108_threads.db`, and `~/graph-venv` has the SQLite checkpointer. `approval.py` is the kit's again: the Change-it put it back. Step 8 left `documind-evalacme-sa` holding `doc_approver`, two approval records under `approvals/` (one `withdrawn`, one `rejected`) with their five audit events, two more threads in the checkpointer, and `townhall_2026_q1.md` restored to acme's index; acme's `agent_actions` is `off` again, so nothing that answers a turn is changed and no turn pauses on your lane. Module 6 opens with what rides every model call, and lesson 6.8 resumes a paused or cut-off turn from its checkpoint.
 
 Netsetos GenAI on GCP · Module 5 MCP and agents · Lesson 5.8 Pause, approve, clarify and escalate: human in the loop · v5.0
 

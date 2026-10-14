@@ -3,7 +3,8 @@
 # directory as the whole build context, so no other kit file can enter it:
 #     make ralph-image GEMINI_CLI_VERSION=<x.y.z>      the version the batch-1 probe pinned (npm view @google/gemini-cli version)
 # commands/ralph.py runs two containers from it: the agent (the workspace mounted, a model-only credential in an
-# --env-file) and the oracle (no network at all, everything mounted read-only).
+# --env-file) and the oracle (no network at all, everything mounted read-only); with RALPH_EGRESS=proxy a third, the
+# proxy (commands/ralph/egress.py, mounted read-only), the agent's one way out, to the model endpoint alone.
 FROM node:22-bookworm-slim AS node
 
 FROM python:3.12-slim-bookworm

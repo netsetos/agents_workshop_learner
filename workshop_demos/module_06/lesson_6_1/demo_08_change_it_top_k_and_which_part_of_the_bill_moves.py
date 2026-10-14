@@ -1,6 +1,6 @@
 """Lesson 6.1: Change it: TOP_K, and which part of the bill moves
 
-make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source. Compare this one with step 7's langgraph output: Compare this one with step 7's langgraph output: And this one with step 7's desk output:
+make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source. Compare this one with step 7's langgraph output: Compare this one with step 7's langgraph output: And this one with step 7's desk output:
 
 Run order inside this file:
 1. Do it: offline, the two records side by side (source window 37)
@@ -28,15 +28,15 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_offline_the_two_records_side_by_side.
-COMMANDS_01 = """bash commands/graph-venv.sh commands/context_sources.py --offline --brain langgraph --json > ~/cs_default.json
-bash commands/graph-venv.sh commands/context_sources.py --offline --brain langgraph --top-k 3 --json > ~/cs_top3.json
+COMMANDS_01 = """make context-sources OFFLINE=1 BRAIN=langgraph JSON=1 > ~/cs_default.json
+make context-sources OFFLINE=1 BRAIN=langgraph TOP_K=3 JSON=1 > ~/cs_top3.json
 
 """
 
 def step_01_offline_the_two_records_side_by_side(session):
     """Run Do it: offline, the two records side by side at this checkpoint.
 
-    make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
+    make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (two offline turns, written as records: Rs 0).
@@ -52,7 +52,7 @@ def step_01_offline_the_two_records_side_by_side(session):
 def step_02_offline_the_two_records_side_by_side(session):
     """Run Do it: offline, the two records side by side at this checkpoint.
 
-    make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
+    make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit (reads the two records; no network).

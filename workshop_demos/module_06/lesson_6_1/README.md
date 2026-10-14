@@ -157,17 +157,17 @@ Expected shape, not a promised result:
 
 ### demo_08_change_it_top_k_and_which_part_of_the_bill_moves.py
 
-make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source. Compare this one with step 7's langgraph output: Compare this one with step 7's langgraph output: And this one with step 7's desk output:
+make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source. Compare this one with step 7's langgraph output: Compare this one with step 7's langgraph output: And this one with step 7's desk output:
 
 **`step_01_offline_the_two_records_side_by_side(session)` — Change it: TOP_K, and which part of the bill moves / Do it: offline, the two records side by side**
 
-make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
+make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
 
 Operation: bash — run in the operator shell, in the kit (two offline turns, written as records: Rs 0).
 
 **`step_02_offline_the_two_records_side_by_side(session)` — Change it: TOP_K, and which part of the bill moves / Do it: offline, the two records side by side**
 
-make context-sources prints its breakdown; the command it runs can also print the turn as a record, with --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
+make context-sources prints its breakdown; with JSON=1 it prints the turn as one record instead, the command's --json. Write one record with TOP_K unset and one with TOP_K 3, then compare them source by source.
 
 Operation: bash — run in the operator shell, in the kit (reads the two records; no network).
 
@@ -304,6 +304,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`. All 49 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `594be6f52056d8b61fa8c4a62edc9f9f1c7ac99a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`. All 49 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c0806f267e1ee0a96894843654d25b90b5c7fe8b`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

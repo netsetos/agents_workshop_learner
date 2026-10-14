@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`, reviewed at blob `52a2208d70780892bee65299e6a93e78318165ff`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`, reviewed at blob `7e30ad1308612c121cb24f9d7194951403f114d4`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 7.3 put a copy of acme's and zeta's documents into two Google-managed stores and read answers back from them. A copy raises two questions. Is it as good: does the store find the clause the kit's own index finds? Is it current: when the ledger changes, does every store change with it?
 

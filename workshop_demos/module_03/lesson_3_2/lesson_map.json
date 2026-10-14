@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html",
-  "source_sha": "09f62e59c8f6369e3eced7b47a7ddadd090aaeff",
+  "source_sha": "d44e0ec621b36bfc022c8547e695ede9968b6382",
   "shared_setup_windows": [
     1
   ],
@@ -326,7 +326,7 @@
           "subheading": "Do it, offline: the bench's and the swap's own tests",
           "purpose": "The two test files run the bench on a scripted model and a stand-in lane, and the router's example swap on its scripted classifier. They check the level and the temperature sent, the rule edited in memory with generator.py untouched, the gate's verdict on every answer, the rupees, and the swap put back whatever happens. The pipe keeps the summary lines.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the kit's own tests: a scripted model and a stand-in lane; Rs 0)",
-          "expected": "Ran 18 tests\nOK\nRan 9 tests\nOK",
+          "expected": "Ran 21 tests\nOK\nRan 9 tests\nOK",
           "adaptations": [],
           "id": "source_20",
           "function": "step_02_offline_the_bench_s_and_the_swap_s_own_tes",

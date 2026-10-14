@@ -51,7 +51,7 @@ def step_01_as_the_prompt_stands(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_a_figure_of_its_own_corrected_in_one_round.
-COMMANDS_02 = """OFFLINE=1 bash commands/agent-turn.sh commands/agent_turn.py --offline --pattern verify --invent 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
+COMMANDS_02 = """make agent-turn OFFLINE=1 PATTERN=verify INVENT=1 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
 
 """
 
@@ -75,7 +75,7 @@ def step_02_a_figure_of_its_own_corrected_in_one_round(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_notes_that_carry_a_figure.
-COMMANDS_03 = """OFFLINE=1 bash commands/agent-turn.sh commands/agent_turn.py --offline --pattern verify --launder 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
+COMMANDS_03 = """make agent-turn OFFLINE=1 PATTERN=verify LAUNDER=1 2>&1 | grep -vE '^(         \\[|  - |  Worked out in code:)'
 
 """
 

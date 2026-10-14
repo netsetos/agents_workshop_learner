@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`, reviewed at blob `f6e5d55800d0afe3bf267a756bde730e42504301`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`, reviewed at blob `d4307be0cfde46bad14dd67a0a07dc509fa1c8d0`. Learners read that page on the course site; this guide keeps its prose.
 
 An agent is a model that is allowed to call functions. What it may call, with which arguments, and what comes back is a contract, and the kit writes that contract once. Every brain shares one `retrieve()`. The tenant reaches a tool through the runtime, never through an argument the model fills. A failure comes back as data. You deploy the chat service in your lane's region and read the contract the model sees. Then you call the one `retrieve()` from your shell, and ask the same questions of two brains: the direct brain, which has no loop at all, and the LangChain loop, which decides for itself.
 

@@ -16,6 +16,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | 7 | [demo_07_what_the_lane_logs_the_hand_off_line_beside_the_chat_row.py](demo_07_what_the_lane_logs_the_hand_off_line_beside_the_chat_row.py) | What the lane logs: the hand-off line beside the chat row |
 | 8 | [demo_08_a_loop_among_the_lane_s_own_services_refused_by_construction.py](demo_08_a_loop_among_the_lane_s_own_services_refused_by_construction.py) | A loop among the lane's own services: refused by construction |
 | 9 | [demo_09_a_loop_through_someone_else_s_agent_refused_at_run_time.py](demo_09_a_loop_through_someone_else_s_agent_refused_at_run_time.py) | A loop through someone else's agent: refused at run time |
+| 10 | [demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py](demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py) | Why it is built this way, what it costs, and what the kit does not do yet |
 
 ## Before starting
 
@@ -300,6 +301,49 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/chain_reject.txt]
 ```
 
+### demo_10_why_it_is_built_this_way_what_it_costs_and_what_the_kit_does_not_do_yet.py
+
+Every guard above sits on the lane. One more loop needs neither a hand-off nor a second service: two agents that may each hand the turn to the other, where neither owns the answer. In ADK it is one setting away. An agent under a parent is offered transfer_to_agent, whose agent_name is an enum of the agents it may reach: its parent, and its peers unless disallow_transfer_to_peers is set. commands/agent_shapes.py builds two such desks under a root, scripts each to want the other desk to answer, and puts one plugin on the run, TransferCap. It counts the agents a turn starts in a temp: key, which ADK keeps for one turn and never stores, and once 3 transfers have been made it answers in place of the next agent, before that agent's model is called. Run it offline, at Rs 0. It runs the same turn twice, with the peer edges and without them:
+
+**`step_01_a_ping_pong_and_the_cap_that_ends_it(session)` — Why it is built this way, what it costs, and what the kit does not do yet / A ping-pong, and the cap that ends it**
+
+Every guard above sits on the lane. One more loop needs neither a hand-off nor a second service: two agents that may each hand the turn to the other, where neither owns the answer. In ADK it is one setting away. An agent under a parent is offered transfer_to_agent, whose agent_name is an enum of the agents it may reach: its parent, and its peers unless disallow_transfer_to_peers is set. commands/agent_shapes.py builds two such desks under a root, scripts each to want the other desk to answer, and puts one plugin on the run, TransferCap. It counts the agents a turn starts in a temp: key, which ADK keeps for one turn and never stores, and once 3 transfers have been made it answers in place of the next agent, before that agent's model is called. Run it offline, at Rs 0. It runs the same turn twice, with the peer edges and without them:
+
+Operation: bash — run in the operator shell, in the kit (two ADK desks in a ping-pong, and the cap that ends it; offline, Rs 0; the first run builds ~/graph-venv).
+
+Expected shape, not a promised result:
+
+```text
+swarm_adk, offline: scripted models, no credential, Rs 0. TransferCap ends a turn after 3 transfers.
+Q: What notice period does a confirmed E3 employee at ACME serve?
+
+== transfers between the desks allowed (ADK's default)
+who each agent may transfer to (transfer_to_agent's enum, as its model was offered it):
+  desk_root      handbook_desk, statute_desk
+  handbook_desk  desk_root, statute_desk
+  statute_desk   desk_root, handbook_desk
+transfer 1: desk_root -> handbook_desk
+transfer 2: handbook_desk -> statute_desk
+transfer 3: statute_desk -> handbook_desk
+transfer 4: handbook_desk -> statute_desk   refused: TransferCap answered before statute_desk ran
+answer, written by TransferCap, in statute_desk's place: Stopped after 3 transfers in one turn.
+model calls: 4 | transfers made: 3 | session state stored after the turn: {}
+
+== disallow_transfer_to_peers=True on both desks
+who each agent may transfer to (transfer_to_agent's enum, as its model was offered it):
+  desk_root      handbook_desk, statute_desk
+  handbook_desk  desk_root
+  statute_desk   desk_root
+transfer 1: desk_root -> handbook_desk
+transfer 2: handbook_desk -> desk_root
+transfer 3: desk_root -> statute_desk
+transfer 4: statute_desk -> desk_root   refused: TransferCap answered before desk_root ran
+answer, written by TransferCap, in desk_root's place: Stopped after 3 transfers in one turn.
+model calls: 4 | transfers made: 3 | session state stored after the turn: {}
+
+With the peer edges gone the loop ran through the root; the cap ended it both times.
+```
+
 ### setup/restore_settings.py
 
 At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
@@ -318,6 +362,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.7_A2A_Handoff_WIX.html`. All 49 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `bbc7b0feac324ae6df0cfc4fca05ac6b7578314a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.7_A2A_Handoff_WIX.html`. All 53 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `687e6663142d3602ab105d211e0fa11b3981a1f8`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

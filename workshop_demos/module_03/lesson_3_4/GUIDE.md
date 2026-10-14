@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`, reviewed at blob `3cd6df0de649ad7d6598cd5da10c3fa8c9c27220`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`, reviewed at blob `141455183347be8ca6a2dd9008ba15857f52eb67`. Learners read that page on the course site; this guide keeps its prose.
 
 Module 2 ended with a ranked pool. This lesson is about the space it has to fit into. A prompt is a sum of lines, the system rules, the question, the evidence, and a reserve for the answer, and the kit gives the evidence whatever is left of a total after the fixed parts are counted. `pack_chunks()` fills that room most relevant first, one `[Source N]` header per chunk carrying the file, the page and the date the document declares, drops what does not fit and logs the drop, and the citations resolve against what was packed. The count behind all of it is an estimate, four characters a token, and a real counter can be injected where the estimate misleads. You will read the budget's lines from the kit, pack real chunks offline with the kit's own functions, put the model's counter beside the estimate for English and for Hindi, read one answer's `tokens_in` against the estimate of its packed set and price it in rupees, watch a dated document put its date on the header and the dated rule in the prompt, and shrink the budget on a candidate revision to see the drop line appear.
 

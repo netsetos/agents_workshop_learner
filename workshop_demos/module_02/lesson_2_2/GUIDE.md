@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.2_Hybrid_WIX.html`, reviewed at blob `fce7ebd0e25935eb19ecf351a873a457e6fee3cc`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.2_Hybrid_WIX.html`, reviewed at blob `32d9480609fc98d218f514f9ccb9f2cb09b076b6`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.1 reproduced the API's pool by hand: one vector, one index, the tenant restrict. This lesson adds the second leg. Every datapoint already carries a sparse vector (lesson 1.3); the index can search by it, fuse the two lists by rank rather than by score, and hand back one pool; a deployment setting turns that on; and a harness measures each choice on the golden set with no model in the loop. You will rank acme's own rows with two sparse rulers and see one find the right clause first while the other buries it, fetch the same question three ways from the index, fuse two of the lists yourself with the kit's function and match the server's order, run the ablation and read recall, MRR and p95 per arm, then turn hybrid on for a candidate revision that takes no traffic and compare its answers with the live dense ones.
 

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`, reviewed at blob `e3769dadf077866b253e3d7b0882e1ca651d1069`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`, reviewed at blob `c49db8249599749712b6018dfa45f61686eef074`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 12.2 left a tuned endpoint. This lesson puts it behind the API on a candidate revision that takes no traffic, and compares that revision with the live one on the same questions, in the same hour. The method is lesson 4.4's. What is new is what can contaminate the comparison when the candidate is a tuned model, and how the price of its answers is counted.
 

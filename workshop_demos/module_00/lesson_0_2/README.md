@@ -136,7 +136,7 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
   DocuMind AI — Tier-A offline dry run
   ------------------------------------------------------------
   [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)
-  [PASS] py_compile    147 python files parse  (Ns)
+  [PASS] py_compile    150 python files parse  (Ns)
   [PASS] imports       all local imports resolve  (Ns)
   [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)
   [PASS] requirements  11 files, all deps pinned  (Ns)
@@ -208,7 +208,7 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
   DocuMind AI — Tier-A offline dry run
   ------------------------------------------------------------
   [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)
-  [PASS] py_compile    147 python files parse  (Ns)
+  [PASS] py_compile    150 python files parse  (Ns)
   [PASS] imports       all local imports resolve  (Ns)
   [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)
   [PASS] requirements  11 files, all deps pinned  (Ns)
@@ -253,6 +253,6 @@ Expected shape, not a promised result:
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2ad4c3d7d7f1dae3774e516ca68d63c5245db383`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0073164967439b3e40a6f6955a23aea7128aa104`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

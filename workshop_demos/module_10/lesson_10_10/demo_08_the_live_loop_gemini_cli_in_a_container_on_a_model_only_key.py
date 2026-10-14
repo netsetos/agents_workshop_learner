@@ -1,12 +1,14 @@
 """Lesson 10.10: The live loop: Gemini CLI in a container, on a model-only key
 
-DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:
+DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:
 
 Run order inside this file:
 1. Do it: the two containers, printed (source window 62)
-2. Do it: the live loop on your lane (source window 64)
-3. The author's run (source window 66)
-4. The author's run (source window 68)
+2. Do it: the egress proxy, printed (source window 64)
+3. Do it: the egress proxy, printed (source window 66)
+4. Do it: the live loop on your lane (source window 68)
+5. The author's run (source window 70)
+6. The author's run (source window 72)
 
 Prerequisites: demo_07_the_reviewer_a_linter_first_then_gemini_on_your_lane.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -50,13 +52,59 @@ def step_01_the_two_containers_printed(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 
-# Original CLI workflow for step_02_the_live_loop_on_your_lane.
-COMMANDS_02 = """make ralph                        # live, with no cap
+# Original CLI workflow for step_02_the_egress_proxy_printed.
+COMMANDS_02 = """make ralph DRY_RUN=1 RALPH_EGRESS=proxy
+
+"""
+
+def step_02_the_egress_proxy_printed(session):
+    """Run Do it: the egress proxy, printed at this checkpoint.
+
+    By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY.
+
+    Args: session is the active lesson run, with validated settings and saved prerequisites.
+    Operations: bash — run in the operator shell, in the kit (the same, behind the egress proxy; nothing starts).
+    Returns: None; observations are printed or saved by the lesson code.
+    Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe: ralph --dry-run: an iteration's network and three containers, the proxy, the agent and the oracle, and nothing else; nothing is started
+      first, RALPH_EGRESS=proxy: the agent's internal network, and the proxy that opens a tunnel to aiplatform.googleapis.com:443 alone:
+        docker network create --internal ralph-<run>-01-net
+        docker run -d --name ralph-<run>-01-egress --network bridge --read-only --cap-drop ALL --security-opt no-new-privileges --memory 256m --pids-limit 128 --user UID:GID --mount type=bind,source=/home/you/deploy_module_rag/commands/ralph/egress.py,target=/egress/egress.py,readonly documind-ralph python3 -I -B -u /egress/egress.py --listen 0.0.0.0:3128 --allow aiplatform.go
+    """
+    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.shell(COMMANDS_02)
+
+# Original CLI workflow for step_03_the_egress_proxy_printed.
+COMMANDS_03 = """make ralph-image GEMINI_CLI_VERSION=PIN     # PIN: the batch-1 probe's; once a Cloud Shell session
+make ralph-probe RALPH_EGRESS=proxy         # no key, no model call: Rs 0
+
+"""
+
+def step_03_the_egress_proxy_printed(session):
+    """Run Do it: the egress proxy, printed at this checkpoint.
+
+    By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's.
+
+    Args: session is the active lesson run, with validated settings and saved prerequisites.
+    Operations: bash — the author's run, in Cloud Shell (batch 4): the egress proxy on a live docker.
+    Returns: None; observations are printed or saved by the lesson code.
+    Failures propagate to the session; inspect its failed attempt before continuing.
+
+    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
+    Observe: [awaiting the author's run: data/isolation.txt]
+    """
+    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.shell(COMMANDS_03)
+
+# Original CLI workflow for step_04_the_live_loop_on_your_lane.
+COMMANDS_04 = """make ralph                        # live, with no cap
 make ralph RALPH_BUDGET_INR=30    # live, with a cap and no key
 
 """
 
-def step_02_the_live_loop_on_your_lane(session):
+def step_04_the_live_loop_on_your_lane(session):
     """Run Do it: the live loop on your lane at this checkpoint.
 
     Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials.
@@ -73,16 +121,16 @@ def step_02_the_live_loop_on_your_lane(session):
     make: *** [mk/coding.mk:31: ralph] Error 2
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
+    session.shell(COMMANDS_04)
 
-# Original CLI workflow for step_03_the_author_s_run.
-COMMANDS_03 = """make ralph-image GEMINI_CLI_VERSION=PIN            # PIN: the version the batch-1 probe pinned; once a session
+# Original CLI workflow for step_05_the_author_s_run.
+COMMANDS_05 = """make ralph-image GEMINI_CLI_VERSION=PIN            # PIN: the version the batch-1 probe pinned; once a session
 read -rs RALPH_API_KEY && export RALPH_API_KEY     # the model-only key, typed: never echoed, never in history
 make ralph RALPH_MAX_ITERS=8 RALPH_BUDGET_INR=CAP OUT="$HOME/ralph-live"   # CAP: from the batch-1 dry run
 
 """
 
-def step_03_the_author_s_run(session):
+def step_05_the_author_s_run(session):
     """Run The author's run at this checkpoint.
 
     The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment.
@@ -96,15 +144,15 @@ def step_03_the_author_s_run(session):
     Observe: [awaiting the author's run: data/ralph_loop.txt]
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_03)
+    session.shell(COMMANDS_05)
 
-# Original CLI workflow for step_04_the_author_s_run.
-COMMANDS_04 = """export RUN="$(ls -dt "$HOME"/ralph-live/ralph-* | head -n 1)"
+# Original CLI workflow for step_06_the_author_s_run.
+COMMANDS_06 = """export RUN="$(ls -dt "$HOME"/ralph-live/ralph-* | head -n 1)"
 make review-diff PROJECT="$PROJECT" DIFF="$RUN/ralph.patch"
 
 """
 
-def step_04_the_author_s_run(session):
+def step_06_the_author_s_run(session):
     """Run The author's run at this checkpoint.
 
     The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:
@@ -118,7 +166,7 @@ def step_04_the_author_s_run(session):
     Observe: [awaiting the author's run: data/review_diff.txt]
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_04)
+    session.shell(COMMANDS_06)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -128,9 +176,11 @@ def demonstrate(session):
     """
     run_steps(session, [
         ('source_62', step_01_the_two_containers_printed),
-        ('source_64', step_02_the_live_loop_on_your_lane),
-        ('source_66', step_03_the_author_s_run),
-        ('source_68', step_04_the_author_s_run),
+        ('source_64', step_02_the_egress_proxy_printed),
+        ('source_66', step_03_the_egress_proxy_printed),
+        ('source_68', step_04_the_live_loop_on_your_lane),
+        ('source_70', step_05_the_author_s_run),
+        ('source_72', step_06_the_author_s_run),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -1,9 +1,11 @@
 """DocuMind chat service - a person in the loop: pause, approve, clarify, offer a case (workshop lesson 5.8).
 
-NOTHING IN THE SERVICE IMPORTS THIS MODULE. No route, brain or switch reaches it, so the chat service on a lane is
-what it was; tools.BLOCKED and the LangGraph brain's refuse node stay as workshop lessons 5.4, 5.5 and 5.7 show them.
-It runs offline (commands/tests/test_approvals.py, make approval-check), and it is the piece a later change would
-wire in behind a tenant switch (agent_actions=approval). Three tools bring a person into a turn:
+THE SERVICE REACHES THIS MODULE THROUGH ONE SWITCH, OFF UNTIL AN OPERATOR SETS IT. approval_routes.py imports it: for a
+company whose tenant_settings.agent_actions is approval (make agent-actions), the LangGraph brain is
+build_approval_graph() below, the pause is a record (shared/approvals.py) and the /v1/approvals routes end it. For
+every other company, and for the other brains, the chat service is what it was: tools.BLOCKED and the LangGraph
+brain's refuse node stay as workshop lessons 5.4, 5.5 and 5.7 show them. Offline it runs on scripted models
+(commands/tests/test_approvals.py, make approval-check). Three tools bring a person into a turn:
 
     withdraw_document   an action with a side effect. The turn waits for a SECOND person in the company to approve
                         it, and the person who asked cannot approve their own request (four eyes). Withdrawn is not
@@ -29,8 +31,8 @@ paused() reads what a paused turn waits for, in one shape from both forms. decid
 checks who may decide before anything runs, then resumes the turn with Command(resume=...). Its rules, which the
 approve node and withdraw_document check again:
 
-    approve   a second person, never the person who asked; when may_approve is given, it says who else may (uplift
-              D1's doc_approver role, which shared/roles.py does not hold)
+    approve   a second person, never the person who asked; when may_approve is given, it says who else may.
+              roster_rule(db, role) is the kit's: on the roster of the conversation's own tenant, holding the role
     reject    the person who asked (their cancel), or a second person who may approve
     respond   the person who asked, and no one else
 
@@ -43,7 +45,7 @@ the resume (workshop lesson 5.8's Change-it), as an email or a ticket sent there
 
 Verified offline on 8 October 2026 against langchain 1.4.0, langgraph 1.2.12 and langgraph-checkpoint-sqlite 3.1.1
 (the local lane's pin, services/chat/requirements-local.txt): a second process sharing a SqliteSaver file resumes a
-paused turn.
+paused turn. Wired into the service behind the switch on 13 October 2026 (approval_routes.py, shared/approvals.py).
 """
 from __future__ import annotations
 
@@ -242,6 +244,36 @@ def _refusals(asks: list[dict], answer) -> list[str]:
     if not isinstance(decisions, list) or len(decisions) != len(asks):
         return [f"{len(asks)} decision(s) are needed, one for each waiting call, in order"]
     return [refused[1] for ask, d in zip(asks, decisions) if (refused := _check(ask, d, answer.get("by")))]
+
+
+def roster_rule(db, role: str):
+    """A may_approve for decide(), read from the tenant's roster (13 October 2026): who besides the person who asked may
+    approve or reject a call. They must be on the roster of the conversation's own tenant, the same company (a person
+    on another tenant's roster, or on none, is refused), and hold `role` there, a role make roles grants
+    (shared/roles.valid(), read by roles_for(), the one reader). Each refusal raises PermissionError with its reason, so
+    decide() refuses before anything runs and the turn stays paused. A roster that cannot be read refuses everyone.
+
+        decide(agent, config, decisions, by=caller_email, may_approve=roster_rule(db, "people_ops"))
+
+    The service's routes pass roster_rule(db, "doc_approver"), the role shared/roles.py holds for it (approval_routes.py,
+    13 October 2026); a caller may name any role make roles grants, and "employee" lets every member without a role
+    document decide."""
+    if not isinstance(role, str) or not roles.valid(role):
+        raise ValueError(f"{role!r} is not a role make roles grants: one of {list(roles.ROLES + roles.RESERVED)} or "
+                         "ic_member:<unit>")
+
+    def may_approve(tenant: str, email: str) -> bool:
+        held = roles.roles_for(db, tenant, email)
+        if roles.UNREAD in held:
+            raise PermissionError(f"{tenant}'s roster could not be read, so no decision can be checked: try again")
+        if not held:
+            raise PermissionError(f"{email} is not on {tenant}'s roster: only a person in this company may decide its "
+                                  "requests")
+        if role not in held:
+            raise PermissionError(f"{email} does not hold {role} in {tenant}, the role that may approve or reject these "
+                                  "requests (make roles grants it)")
+        return True
+    return may_approve
 
 
 def paused(agent, config: dict) -> list[dict]:

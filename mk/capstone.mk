@@ -12,7 +12,8 @@
 # make gate leave in evals/reports/ - and runs the fork's evals/run_eval.py offline, as make eval does. PROJECT= adds
 # the lane's reads, still Rs 0: GET /version as documind-ui-sa, GET /v1/sources as documind-ui-sa and as the outsider
 # (a 403), documind-ui's IAP, the services deployed and documind-api's revisions. Exit 1 when a component fails: an
-# incomplete submission, which the defence does not run.
+# incomplete submission, which the defence does not run. The four documents start from capstone/templates/ (13 October
+# 2026): copied as they ship they still fail, until their {{...}} placeholders are replaced.
 capstone-check:
 	@$(PY) commands/capstone_check.py check --fork "$(or $(FORK),.)" $(if $(PROJECT),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)
 

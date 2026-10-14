@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_6.8_Checkpoint_Resume_WIX.html`, reviewed at blob `a6931d53fb81f98c504e620596d41eae646ecd37`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.8_Checkpoint_Resume_WIX.html`, reviewed at blob `348f42b5d8a0f3bd6fa7cd9413e7e42fd83d5a0f`. Learners read that page on the course site; this guide keeps its prose.
 
 A turn is not one call. It is a run of steps, and LangGraph saves a checkpoint after every one: the question, the model's request for a tool, the tool's result, the answer. So a turn that stops halfway is not lost. Its last checkpoint says what was due next, and `graph.invoke(None, config)` runs exactly that, without repeating a step. You read your own conversation back from your lane, step by step. You finish the kit's cut-off turn from its checkpoint, then watch what the chat service does instead when the next question arrives. Last, you export your thread, replay and fork it on your machine with Gemini, and check that the lane's rows never moved.
 
@@ -42,7 +42,7 @@ A turn is a chain of checkpoints. The LangGraph brain runs a turn as steps. The 
 
 Resuming is `invoke(None)`. Calling the graph with no input on that checkpoint resumes it. LangGraph runs only what is due, the tool and then the model, and nothing before them again: the model's first call is not repeated, the search runs once, and no rupee is spent twice. Calling the graph with a new question is a different thing. LangGraph treats new input as a new run, and discards the tasks the last checkpoint left unfinished. The model's request stays in the thread with no answer, and every later turn sends it again.
 
-A paused turn is the same checkpoint, stopped on purpose. Lesson 5.8's approval graph calls `interrupt()` where a person must decide, the checkpointer keeps the turn waiting there, and the decision resumes it with `Command(resume=...)`. That is also input that continues a checkpoint rather than starting a run. The chat service on your lane does not use it yet. This lesson resumes turns that were cut off.
+A paused turn is the same checkpoint, stopped on purpose. Lesson 5.8's approval graph calls `interrupt()` where a person must decide, the checkpointer keeps the turn waiting there, and the decision resumes it with `Command(resume=...)`. That is also input that continues a checkpoint rather than starting a run. The chat service uses it only for a company whose `agent_actions` switch an operator set to `approval` (lesson 5.8's step 8); for every other company, and by default, no turn on your lane pauses. This lesson resumes turns that were cut off.
 
 Replay and fork, on a copy. `invoke(None)` from an earlier checkpoint replays the turn from there, as a new branch beside the old line. `update_state()` on an earlier checkpoint with a different question, then `invoke(None)`, is a fork. The thread keeps every branch, and `get_state_history()` lists them all. The kit does neither on the lane. `make thread` reads your thread in a database session that cannot write, and `make replay` copies it into a saver on your machine and replays and forks the copy.
 
@@ -140,7 +140,7 @@ The resumed turn went on from step 6, so it extends the copied line. The fork we
 
 #### Do it: a finished turn, replayed
 
-At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.
+At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.
 
 The replay matches: the same steps, the same 5 sources, the same answer. It is a new branch from step 0, and the recorded one is still there beside it. Offline, the script plays the recorded model messages back, so a match is exact. In step 7 the model is Gemini, and an answer's words can change from one run to the next, so read the steps and the sources first.
 

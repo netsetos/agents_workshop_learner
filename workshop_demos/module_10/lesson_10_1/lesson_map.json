@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_10.1_ReAct_WIX.html",
-  "source_sha": "42d0d48399a2cd1f55aa582686b0c124eb954290",
+  "source_sha": "222da83d6de50d7502063423e3eae648e7011723",
   "shared_setup_windows": [
     1
   ],
@@ -16,7 +16,6 @@
     "HOME",
     "ME",
     "NUMBER",
-    "OFFLINE",
     "PROJECT",
     "REGION",
     "SAVED",

@@ -89,7 +89,7 @@ Expected shape, not a promised result:
 
 ### demo_04_a_turn_cut_off_mid_flight_resumed_from_its_checkpoint.py
 
-Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.
+Do it: the cut-off turn, resumed At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.
 
 **`step_01_the_cut_off_turn_resumed(session)` — A turn cut off mid-flight, resumed from its checkpoint / Do it: the cut-off turn, resumed**
 
@@ -143,7 +143,7 @@ only the local copy was written; the lane never is. Model calls: the replay 1, t
 
 **`step_02_a_finished_turn_replayed(session)` — A turn cut off mid-flight, resumed from its checkpoint / Do it: a finished turn, replayed**
 
-At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer.
+At step 0 the first turn had not yet called the model, and the file recorded everything after it, so there is something to compare. The replay re-runs the turn from there and compares what it produced with what the file recorded: each message's kind and the tools it asked for, the sources each search returned, and the answer. A recording that stops mid-turn, like this thread's second turn, is compared as far as it goes, and the rest is what the replay added.
 
 Operation: bash — run in the operator shell, in the kit (a finished turn replayed from step 0; no network, Rs 0).
 
@@ -337,6 +337,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.8_Checkpoint_Resume_WIX.html`. All 44 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a6931d53fb81f98c504e620596d41eae646ecd37`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_6.8_Checkpoint_Resume_WIX.html`. All 44 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `348f42b5d8a0f3bd6fa7cd9413e7e42fd83d5a0f`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

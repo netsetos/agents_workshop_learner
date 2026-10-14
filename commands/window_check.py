@@ -25,7 +25,8 @@ lane: the same questions, each asked in two fresh conversations of the same brai
 window, with Gemini (shared/profile.build_llm(): CHAT_MODEL, location global, the project in GOOGLE_CLOUD_PROJECT). The
 searches are still the Rs 0 lane's, so both conversations read the same passages and only Gemini is billed, priced at
 list price by each turn's limits.Meter. Per turn and per conversation: Gemini's own input, cached and output tokens, the
-window's estimate of the same calls, the rupees, and the answer with the sources it cites. A turn that fails stops the
+window's estimate of the same calls, the rupees, the limit that stopped the turn if one did (stopped_by, in the offline
+table too), and the answer with the sources it cites. A turn that fails stops the
 run there, with the turn, the conversation and the error named; the turns before it are printed.
 
 SAVE=<file> writes every turn as JSON: the question, the answer and its citations, the thread's size, every call's
@@ -181,12 +182,13 @@ def _offline_row(row: dict, mode: str) -> str:
     r = row["largest"]
     head = (f"  {row['turn']:>4}  {row['thread_messages']:>6}  {row['thread_tokens']:>7,}   {r['context_tokens']:>9,}"
             f"  {r['ceiling']:>8,}")
+    stopped = f"  (stopped by {row['usage']['stopped_by']})" if row["usage"].get("stopped_by") else ""
     if mode == "full":
         over = r["context_tokens"] - r["ceiling"]
-        return head + (f"     {over:>+8,}" if over > 0 else "            -")
+        return head + (f"     {over:>+8,}" if over > 0 else "            -") + stopped
     open_calls = f"  ({r['unanswered']} call{'s' if r['unanswered'] != 1 else ''} left open)" if r["unanswered"] else ""
     return (head + f"     {r['kept']:>10}  {r['brought_forward']:>15}  {r['cleared']:>7}  {r['masked']:>6}  {r['cut']:>3}"
-            + open_calls)
+            + open_calls + stopped)
 
 
 def _offline_tail(out, mode: str, rows: list[dict]) -> None:
@@ -312,10 +314,12 @@ def _live_row(row: dict, mode: str, same: bool) -> str:
     window = (f"; the largest call {r['context_tokens']:,} of a {r['ceiling']:,} ceiling, {r['kept']} earlier turn"
               f"{'s' if r['kept'] != 1 else ''} whole, {r['brought_forward']} brought forward"
               if mode == "windowed" and r else "")
+    # A turn a limit ended says so (13 October 2026: the row printed no stopped_by, so it read like any other).
+    stopped = f"; stopped by {u['stopped_by']}" if u.get("stopped_by") else ""
     text = rp.tr.short(rp.tr.text_of(row["answer"]), 100)
     sources = "the same as full" if mode == "windowed" and same else _short_sources(row["citations"])
     return (f"  {mode:9} in {u['tokens_in']:>7,} (estimate {row['estimate']:>7,})  cached {u['cached_tokens']:>6,}  out "
-            f"{u['tokens_out']:>5,}  calls {u['model_calls']}  Rs {row['rupees']:.2f}{window}\n"
+            f"{u['tokens_out']:>5,}  calls {u['model_calls']}  Rs {row['rupees']:.2f}{window}{stopped}\n"
             f"            {text!r}\n            sources: {sources}")
 
 

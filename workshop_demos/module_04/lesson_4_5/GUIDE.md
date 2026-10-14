@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`, reviewed at blob `7e8b44daf16b794b654f1785a85dbb416d542676`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`, reviewed at blob `8dc666fbda93dd549d36b34d5c666c603e8a9e7a`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 4.2 ran the judge and ended on its own advice: where the gate and the judge disagree, read the row. This lesson measures how often the judge reads a row the way people do. About 20 of a lane's answers are frozen with the full text of the chunks they cite. You label every row on two questions, grounded and answers the question, yes or no. Then the kit sets your labels beside a second reader's and beside the judge's ratings of the same rows: the 2x2, raw agreement, Cohen's kappa, and the bad answers the judge would let through. Once you have labelled, everything runs on files, at Rs 0.
 

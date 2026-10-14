@@ -50,7 +50,7 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [5.5: Diagnose tool arguments, access failures and timeouts](module_05/lesson_5_5/README.md) — 7 files; main_html
 - [5.6: Hand a question to the person the law names](module_05/lesson_5_6/README.md) — 9 files; main_html
 - [5.7: Compare the LangChain and ADK adapters](module_05/lesson_5_7/README.md) — 7 files; main_html
-- [5.8: Pause, approve, clarify and escalate: human in the loop](module_05/lesson_5_8/README.md) — 8 files; main_html
+- [5.8: Pause, approve, clarify and escalate: human in the loop](module_05/lesson_5_8/README.md) — 9 files; main_html
 - [6.1: Assemble the context: what rides every model call](module_06/lesson_6_1/README.md) — 8 files; main_html
 - [6.2: Compare context caching and answer caching](module_06/lesson_6_2/README.md) — 9 files; main_html
 - [6.3: Test cache scope, configuration changes and freshness](module_06/lesson_6_3/README.md) — 9 files; main_html
@@ -75,12 +75,12 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [9.3: Inspect the vLLM service and the GKE alternative](module_09/lesson_9_3/README.md) — 7 files; main_html
 - [9.4: Compare actual backends and verify shutdown behavior](module_09/lesson_9_4/README.md) — 7 files; main_html
 - [10.1: Choose where the agent reasons: observe-think-act and ReAct](module_10/lesson_10_1/README.md) — 9 files; main_html
-- [10.2: Plan first or decide each step: plan-and-execute](module_10/lesson_10_2/README.md) — 9 files; main_html
+- [10.2: Plan first or decide each step: plan-and-execute](module_10/lesson_10_2/README.md) — 11 files; main_html
 - [10.3: Check, retry or choose: the critic and refiner pattern](module_10/lesson_10_3/README.md) — 9 files; main_html
 - [10.4: Route each question to one specialist agent](module_10/lesson_10_4/README.md) — 14 files; main_html
 - [10.5: Run a desk as an agent with checked calculator arguments](module_10/lesson_10_5/README.md) — 10 files; main_html
 - [10.6: Trace the implemented A2A peer and its permissions](module_10/lesson_10_6/README.md) — 7 files; main_html
-- [10.7: Hand one question to the A2A peer, and stop loops and deadlocks](module_10/lesson_10_7/README.md) — 11 files; main_html
+- [10.7: Hand one question to the A2A peer, and stop loops and deadlocks](module_10/lesson_10_7/README.md) — 12 files; main_html
 - [10.8: Defend agents against injected documents and poisoned tools](module_10/lesson_10_8/README.md) — 10 files; main_html
 - [10.9: Run the peer on Google's managed agent platform](module_10/lesson_10_9/README.md) — 9 files; main_html
 - [10.10: Coding agents: a Ralph loop, an AI code reviewer and paper-to-code](module_10/lesson_10_10/README.md) — 11 files; main_html

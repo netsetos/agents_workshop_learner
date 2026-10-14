@@ -404,6 +404,9 @@ def accept(kit: Path, reviewer: str, proposal_path: str | None = None, today: dt
     defaults = config_defaults(kit)
     try:
         labels = pr.registered(kit / REGISTRY)
+        if (kit / "commands/prompt_pin.py").is_file():         # lesson 3.6's registry tool: every label the registry
+            labels |= module(kit, "commands/prompt_pin.py", "prompt_pin_improve").spent(kit, defaults["prompt_id"])
+                                                            # held in any commit git keeps (a spent v4; 14 October 2026)
     except pr.RulesError:
         labels = set()
     new = next_version(doc["versions"], labels, defaults["prompt_id"], defaults["prompt_version"])
