@@ -118,14 +118,14 @@ def step_02_s5_create_the_python_3_12_environment(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_s6_get_all_files_from_the_latest_main.
-COMMANDS_03 = """# Always the latest main of netsetostech/agentic-ai-workshop-learner.
-export RAG_REPO_URL='https://github.com/netsetostech/agentic-ai-workshop-learner.git'
+COMMANDS_03 = """# Always the latest main of netsetos/agents_workshop_learner.
+export RAG_REPO_URL='https://github.com/netsetos/agents_workshop_learner.git'
 export DEMO_ROOT="${DEMO_ROOT:-$HOME/deploy_module_rag}"
 (
   set -euo pipefail
   if [ -d "$DEMO_ROOT/.git" ]; then
     case "$(git -C "$DEMO_ROOT" remote get-url origin)" in
-      "$RAG_REPO_URL"|https://github.com/netsetostech/agentic-ai-workshop-learner|git@github.com:netsetostech/agentic-ai-workshop-learner.git) ;;
+      "$RAG_REPO_URL"|https://github.com/netsetos/agents_workshop_learner|git@github.com:netsetos/agents_workshop_learner.git) ;;
       *) echo "STOP: $DEMO_ROOT is a clone of a different repository. Move it aside first." >&2; exit 1 ;;
     esac
     git -C "$DEMO_ROOT" fetch origin main

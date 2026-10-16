@@ -55,6 +55,7 @@ def _headers(audience: str = RAG_API_URL) -> dict:
     assertion = (st.context.headers or {}).get("x-goog-iap-jwt-assertion")
     if assertion:
         h["x-goog-iap-jwt-assertion"] = assertion
+        h["x-documind-assertion"] = assertion    # Cloud Run drops the line above (shared/iap.FORWARD_HEADER)
     return h
 
 

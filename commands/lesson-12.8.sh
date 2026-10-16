@@ -60,8 +60,11 @@ gcloud run jobs create documind-checkpoint-setup \
   --command=python --args=migrate.py || echo "job exists - continuing"
 gcloud run jobs execute documind-checkpoint-setup --region=${REGION:-us-central1} --wait
 
-# 4. IAP in front of the human surface, AFTER the service exists (step 4 of the runbook above). The UI's brain radio
-#    and make smoke-chat still reach it: IAP_AUDIENCE above lists both surfaces, and the bearer leg (SELF_URL) is
-#    verified by shared/iap.identity when there is no assertion.
-gcloud beta run services update documind-chat --region=${REGION:-us-central1} --iap
+# 4. NO IAP in front of the chat service (16 October 2026). Every caller is a service: the UI's Chat and Desk pages
+#    call as ui-sa, the eval accounts and make smoke-chat with their own ID tokens. IAP in front of it refused
+#    ui-sa (no IAP access role) before the code ran, so the Desk page said it could not confirm who you are, and
+#    an IAP it let through would replace the forwarded assertion with one naming ui-sa. The service stays private:
+#    --no-allow-unauthenticated, the invoker list above, the assertion verified for IAP_AUDIENCE, and the roster.
+#    --no-iap also turns off an IAP an earlier version of this script switched on.
+gcloud beta run services update documind-chat --region=${REGION:-us-central1} --no-iap
 

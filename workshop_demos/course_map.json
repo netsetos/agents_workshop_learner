@@ -68,7 +68,7 @@
     {
       "lesson": "0.5",
       "title": "Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI",
-      "source_sha": "ca5a2f56ef25ac0a2ddc9e2939fa2d260dc7da44",
+      "source_sha": "24144d762d19e5e50315716f1089c7c9fd563e82",
       "source_kind": "main_html",
       "demos": 12
     },
@@ -222,7 +222,7 @@
     {
       "lesson": "3.8",
       "title": "Complete the Streamlit upload-to-answer journey",
-      "source_sha": "933380e91692fd3b2c828ff24db7e4aa19b1b192",
+      "source_sha": "134adede44a6fced0c0df061886485798dd577e0",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -271,7 +271,7 @@
     {
       "lesson": "4.6",
       "title": "Trace authenticated identity into tenant membership",
-      "source_sha": "1fce1a69cd74bb353d3fd5c51f51f4f589f58dcb",
+      "source_sha": "b6575c7c2b2e3d84ae6686d86e4c3073d9fd228e",
       "source_kind": "main_html",
       "demos": 8
     },

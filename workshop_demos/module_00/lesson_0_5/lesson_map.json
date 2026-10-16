@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html",
-  "source_sha": "ca5a2f56ef25ac0a2ddc9e2939fa2d260dc7da44",
+  "source_sha": "24144d762d19e5e50315716f1089c7c9fd563e82",
   "shared_setup_windows": [],
   "source_window_count": 58,
   "persist_variables": [
@@ -1077,9 +1077,9 @@
         1391,
         1411,
         1419,
-        1463,
-        1508,
-        1530
+        1461,
+        1506,
+        1528
       ],
       "offline": false,
       "live_verified": false,
@@ -1186,7 +1186,7 @@
           "id": "source_45",
           "function": "step_08_f7_deploy_the_ui",
           "window": 45,
-          "source_line": 1463,
+          "source_line": 1461,
           "manual_checkpoint": null
         },
         {
@@ -1199,7 +1199,7 @@
           "id": "source_46",
           "function": "step_09_f8_deploy_mcp_then_the_a2a_agent",
           "window": 46,
-          "source_line": 1508,
+          "source_line": 1506,
           "manual_checkpoint": null
         },
         {
@@ -1212,7 +1212,7 @@
           "id": "source_47",
           "function": "step_10_f8_deploy_mcp_then_the_a2a_agent",
           "window": 47,
-          "source_line": 1530,
+          "source_line": 1528,
           "manual_checkpoint": null
         }
       ],
@@ -1241,10 +1241,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_5/GUIDE.md",
       "source_lines": [
-        1597,
-        1615,
-        1626,
-        1640
+        1595,
+        1613,
+        1624,
+        1638
       ],
       "offline": false,
       "live_verified": false,
@@ -1260,7 +1260,7 @@
           "id": "source_50",
           "function": "step_01_tenants_put_people_and_services_on_the_ros",
           "window": 50,
-          "source_line": 1597,
+          "source_line": 1595,
           "manual_checkpoint": null
         },
         {
@@ -1273,7 +1273,7 @@
           "id": "source_52",
           "function": "step_02_tenants_put_people_and_services_on_the_ros",
           "window": 52,
-          "source_line": 1615,
+          "source_line": 1613,
           "manual_checkpoint": null
         },
         {
@@ -1286,7 +1286,7 @@
           "id": "source_53",
           "function": "step_03_tenants_put_people_and_services_on_the_ros",
           "window": 53,
-          "source_line": 1626,
+          "source_line": 1624,
           "manual_checkpoint": null
         },
         {
@@ -1299,7 +1299,7 @@
           "id": "source_54",
           "function": "step_04_tenants_put_people_and_services_on_the_ros",
           "window": 54,
-          "source_line": 1640,
+          "source_line": 1638,
           "manual_checkpoint": null
         }
       ],
@@ -1325,7 +1325,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_5/GUIDE.md",
       "source_lines": [
-        1667
+        1665
       ],
       "offline": false,
       "live_verified": false,
@@ -1341,7 +1341,7 @@
           "id": "source_56",
           "function": "step_01_finish_what_make_up_finishes_the_index_wai",
           "window": 56,
-          "source_line": 1667,
+          "source_line": 1665,
           "manual_checkpoint": null
         }
       ],
@@ -1367,7 +1367,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_5/GUIDE.md",
       "source_lines": [
-        1685
+        1683
       ],
       "offline": false,
       "live_verified": false,
@@ -1383,7 +1383,7 @@
           "id": "source_57",
           "function": "step_01_verify_all_seven_services",
           "window": 57,
-          "source_line": 1685,
+          "source_line": 1683,
           "manual_checkpoint": null
         }
       ],
@@ -1409,7 +1409,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_5/GUIDE.md",
       "source_lines": [
-        1713
+        1711
       ],
       "offline": false,
       "live_verified": false,
@@ -1425,7 +1425,7 @@
           "id": "source_58",
           "function": "step_01_open_the_ui_and_ask_a_first_question",
           "window": 58,
-          "source_line": 1713,
+          "source_line": 1711,
           "manual_checkpoint": null
         }
       ],
@@ -1438,28 +1438,28 @@
       "label": "deploy/mk/ingestion.mk - the roster target",
       "heading": "Tenants: put people and services on the rosters",
       "anchor": "s10",
-      "line": 1571
+      "line": 1569
     },
     {
       "window": 49,
       "label": "deploy/commands/lane.py - roster_plan, what the roster writes",
       "heading": "Tenants: put people and services on the rosters",
       "anchor": "s10",
-      "line": 1575
+      "line": 1573
     },
     {
       "window": 51,
       "label": "expected - the dry run, abbreviated",
       "heading": "Tenants: put people and services on the rosters",
       "anchor": "s10",
-      "line": 1602
+      "line": 1600
     },
     {
       "window": 55,
       "label": "deploy/Makefile - what make up runs after the apply",
       "heading": "Finish what make up finishes: the index wait, the managed stores and the BigQuery views",
       "anchor": "s11",
-      "line": 1660
+      "line": 1658
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`, reviewed at blob `ca5a2f56ef25ac0a2ddc9e2939fa2d260dc7da44`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`, reviewed at blob `24144d762d19e5e50315716f1089c7c9fd563e82`. Learners read that page on the course site; this guide keeps its prose.
 
 One runbook, in order, from an empty browser tab to a working DocuMind in your own Google Cloud project. Phase 1 prepares Cloud Shell: the project, the tools, Python 3.12 and the kit from `main`. Phase 2 creates the infrastructure with one reviewed Terraform plan. Phase 3 pins the commit you build from, builds 7 images, deploys every service and the UI behind Google sign-in, and puts you and the services on the tenant rosters so the UI answers.
 

@@ -163,7 +163,7 @@ def caller(request: Request) -> dict:
         # (7.1 taught the leg; 12.8 shipped it on every surface). One implementation: shared/iap.py.
         who = iap.identity(request.headers, bearer_audience=SELF_URL or None)
         return {"email": who["email"],
-                "assertion": request.headers.get(iap.ASSERTION_HEADER) if who["via"] == "iap" else None}
+                "assertion": iap.assertion_of(request.headers) if who["via"] == "iap" else None}
     except iap.IapError as e:
         # 401, not 403: we do not know who this is. 403 is for somebody we DO know and
         # will not serve, and the difference matters when you are reading logs at 3am.

@@ -150,6 +150,7 @@ def retrieve(query: str, tenant_id: str, top_k: int = 5,
     headers = {"Authorization": f"Bearer {_id_token(RAG_API_URL)}"}
     if assertion:
         headers[ASSERTION_HEADER] = assertion
+        headers["x-documind-assertion"] = assertion    # Cloud Run drops the line above (shared/iap.FORWARD_HEADER)
     if passages:
         return _passages(payload, headers)
 

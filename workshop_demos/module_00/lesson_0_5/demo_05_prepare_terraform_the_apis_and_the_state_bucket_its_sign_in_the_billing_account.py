@@ -224,8 +224,8 @@ COMMANDS_05 = """rag_configure_terraform_inputs() {
     return 1
   }
   export TF_VAR_project_id="$PROJECT"
-  export TF_VAR_github_repository='netsetostech/agentic-ai-workshop-learner'
-  export TF_VAR_github_repository_id='1410701091'
+  export TF_VAR_github_repository='netsetos/agents_workshop_learner'
+  export TF_VAR_github_repository_id='1381902596'
   export TF_VAR_billing_account_id="$BILLING_ACCOUNT_ID"
   export TF_VAR_pagerduty_key='unset-in-dryrun'
   export TF_VAR_region="$REGION"

@@ -283,12 +283,10 @@ for who in documind-ui-sa documind-outsider-sa \\
   echo "  invoker on documind-chat: $who"
 done
 
-# IAP in front of the chat surface too, after the service exists, as the kit's own deploy does. The UI's brain
-# selector still reaches it: IAP_AUDIENCE names both surfaces, and the bearer leg is verified when there is no assertion.
-gcloud beta run services update documind-chat --project="$PROJECT" --region="$REGION" --iap
-gcloud run services add-iam-policy-binding documind-chat --project="$PROJECT" --region="$REGION" \\
-  --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-iap.iam.gserviceaccount.com" \\
-  --role='roles/run.invoker' >/dev/null
+# No IAP in front of the chat service, as the kit's own deploy (commands/lesson-12.8.sh): every caller is a service
+# account, and IAP there refused the UI before the Desk could say who you are. --no-iap also turns off an IAP an
+# earlier version of this block switched on. The service stays private: the invoker list above and the roster.
+gcloud beta run services update documind-chat --project="$PROJECT" --region="$REGION" --no-iap
 echo 'PASS: documind-chat deployed.'
 )
 
