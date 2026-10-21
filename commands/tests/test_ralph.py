@@ -76,7 +76,7 @@ class Scratch(unittest.TestCase):
 class Wiring(unittest.TestCase):
     def test_the_make_targets(self):
         mk, coding, readme = read("Makefile"), read("mk", "coding.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                       # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                       # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in TARGETS:
             self.assertIn(target, phony)

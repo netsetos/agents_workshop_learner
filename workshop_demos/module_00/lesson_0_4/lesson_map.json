@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html",
-  "source_sha": "c28fb9ec41954f3fe7442eecddca55e7e2879d87",
+  "source_sha": "3c635a7db2a88324d23dc85d00df7abed31f8152",
   "shared_setup_windows": [
     1
   ],
@@ -679,7 +679,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_4/GUIDE.md",
       "source_lines": [
-        1347
+        1350
       ],
       "offline": false,
       "live_verified": false,
@@ -695,7 +695,7 @@
           "id": "source_75",
           "function": "step_01_make_down_and_what_only_deleting_the_proje",
           "window": 75,
-          "source_line": 1347,
+          "source_line": 1350,
           "manual_checkpoint": null
         }
       ],
@@ -1141,28 +1141,28 @@
       "label": "Makefile - down-services: what terraform destroy does not own",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1307
+      "line": 1310
     },
     {
       "window": 73,
       "label": "terraform/managed.tf - the two Vertex AI Search data stores: no guard against the destroy",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1330
+      "line": 1333
     },
     {
       "window": 74,
       "label": "Makefile - the switch that declares them, and the variable destroy passes",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1338
+      "line": 1341
     },
     {
       "window": 76,
       "label": "expected (the author's lane: your ids, times and counts are yours)",
       "heading": "make down, and what only deleting the project removes",
       "anchor": "s12",
-      "line": 1349
+      "line": 1352
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

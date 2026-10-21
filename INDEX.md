@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1645 files; 235 quoted by a lesson, 349 shown or named by one.
+1649 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -32,6 +32,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/agent_turn.py` | code | 10.2, 10.3 | - |
 | `commands/approval-check.sh` | code | 5.8 | - |
 | `commands/attack-agents.sh` | code | 10.8 | - |
+| `commands/bq-views-when-ready.sh` | code | - | - |
+| `commands/build-access.sh` | code | - | - |
 | `commands/capstone_check.py` | code | 11.8 | - |
 | `commands/check-firestore-fallback.py` | code | 2.4, 11.4 | 1.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
@@ -39,6 +41,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/context_sources.py` | code | 6.1 | - |
 | `commands/desk-check.sh` | code | - | - |
 | `commands/desk_ops.py` | code | 3.9 | 5.6, 5.8, 10.4 |
+| `commands/down-region.sh` | code | - | - |
 | `commands/gchat.sh` | code | 10.4 | - |
 | `commands/git-source.sh` | code | 0.4 | - |
 | `commands/gotchas.py` | code | 11.7 | - |
@@ -293,6 +296,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `mk/evaluation.mk` | code | 4.5, 4.9 | 10.8 |
 | `mk/generation.mk` | code | 3.1, 3.2, 3.3, 3.6, 12.4 | - |
 | `mk/ingestion.mk` | code | 0.3, 0.5, 1.3, 1.5, 2.4 | 0.4, 1.1, 1.2, 1.4, 1.6, 1.7, 1.8, 2.1, 2.2, 2.3, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.1, 8.2, 8.3, 8.4, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 10.11, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 12.1, 12.2, 12.3, 12.4 |
+| `mk/lane.mk` | code | - | - |
 | `mk/lifecycle.mk` | code | 1.7, 1.8 | 0.4, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 8.1, 8.2, 8.3, 8.4, 9.1, 9.2, 9.3, 9.4, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.9, 10.10, 10.11, 11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7, 11.8, 12.1, 12.2, 12.3, 12.4 |
 | `mk/managed.mk` | code | 10.9 | - |
 | `mk/memory.mk` | code | 6.1, 6.8, 6.9 | - |

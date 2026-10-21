@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Gated_Candidate_WIX.html`, reviewed at blob `152ac804748a58d0a5778fb46d9f0e5cff934ba5`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Gated_Candidate_WIX.html`, reviewed at blob `91a2b4ee6826abcde69482aa2e073e661f0c1f22`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.1's dispatch left a revision of `documind-api` that takes no traffic, and its live gate said green inside one GitHub run. Your lane does not remember that verdict, and `make promote` moves traffic to whichever revision a file names. This lesson ties the verdict to the revision. `make gate` judges exactly the revision `.candidate-revision` names, once the candidate tag routes to it and its tag URL answers as its own build, and writes a record: the revision, its image digest and `GIT_SHA`, the report's sha256, the verdict and the time. `make promote-gated` reads that record and stops any other revision, a red verdict, an edited report or an old record before `make promote` runs. You will name the candidate, see which token audience the API accepts, gate the candidate, read the record back against Cloud Run, and offer a record that names another revision.
 

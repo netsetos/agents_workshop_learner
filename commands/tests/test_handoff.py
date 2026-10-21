@@ -6,7 +6,7 @@ No network beyond 127.0.0.1, no credential. The first classes need the standard 
 layer's) and bash: services/chat/peer.py's gate, cap and deadline, read as it holds them; tenancy.tenants_of() on a
 fake Firestore; the hand-off's lines in brains.py, in the ADK brain alone and off unless PEER_URL is set; the pins
 (a2a-sdk at the peer's version, no extra, so no database layer in the chat image); validate.py's THIRD_PARTY; the
-targets, the 885 lines, both CI lines and the UNOWNED.md rows; smoke_handoff.py's verdict on the responses a lane can
+targets, the 888 lines, both CI lines and the UNOWNED.md rows; smoke_handoff.py's verdict on the responses a lane can
 give; and commands/handoff.sh against a stub gcloud that keeps the two services in a file.
 
 The second runs the kit's own ADK brain, scripted, and needs the chat image's pins with a2a-sdk (pip install -r
@@ -135,7 +135,7 @@ class TheHandoffAlone(unittest.TestCase):
 
     def test_the_targets_the_ci_lines_and_the_rows(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertTrue({"handoff", "smoke-handoff"} <= set(phony.split()), phony[-120:])    # later kits append after
         self.assertIn("@PROJECT=$(PROJECT) REGION=$(REGION) OFF=$(OFF) PY=$(PY) bash commands/handoff.sh",

@@ -7,6 +7,7 @@ here, one file per lane, pulled in by `include mk/*.mk`:
 
 | File | Targets | Course module |
 |---|---|---|
+| `lane.mk` | `build-access`, `bq-views-when-ready`, `down-region` | 0 Setup (the lane's own guards, found on a new organization lane on 20 October 2026: the build account's three grants before `make up` builds, `commands/build-access.sh`, lesson 0.3's recovery made a step; the BigQuery views deferred until the log sink's table exists, `commands/bq-views-when-ready.sh`; and `make down` refused when `REGION` is not the region the clone prepared the lane in, `commands/down-region.sh`, lesson 0.4) |
 | `ingestion.mk` | `roster`, `tenant-policy`, `tenant-backend`, `vector-status`, `wait-vectors`, `backfill-vectors`, `ingest-one`, `poison`, `dlq` | 3 Ingestion |
 | `lifecycle.mk` | `reindex`, `retire`, `restore`, `reconcile`, `backfill-current`, `reconcile-job`, `sources`, `purge`, `smoke-reindex`, `batch-job`, `batch`, `queued` | 4 Lifecycle |
 | `retrieval.mk` | `decide` | 2 Retrieval (the answer-or-refuse eval, lesson 2.6: `evals/decide.py`, with Jev behind `JEV_MODE`) |

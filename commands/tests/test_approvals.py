@@ -206,7 +206,7 @@ class Wiring(unittest.TestCase):
 
     def test_make_its_script_and_ci_run_this_file(self):
         mk, agents, readme = self.read("Makefile"), self.read("mk", "agents.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         self.assertIn("approval-check", phony)
         self.assertIn("\napproval-check:\n\t@PY=$(PY) bash commands/approval-check.sh\n", agents)  # not last

@@ -104,7 +104,7 @@
       "evidence": [
         ["Makefile", "@if echo \"$(SCRIPTS)\" | grep -q lesson-12.2.sh; then"],
         ["Makefile", "--to-revisions $$REV=100"],
-        ["Makefile", "$(MAKE) drift secrets build deploy-services"]
+        ["Makefile", "$(MAKE) drift secrets build-access build deploy-services"]
       ]
     },
     {

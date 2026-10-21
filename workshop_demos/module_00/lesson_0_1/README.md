@@ -78,6 +78,8 @@ Put your account ID from step 3 and your project ID in the first two lines, then
 
 Operation: bash — run in Cloud Shell, once (put your own account id and project id in the first two lines).
 
+IDE adaptation: The project id comes from settings.local.json and the billing account from your one open account (export BILLING first if you have several), instead of the page's two placeholders. A project that already exists is made the default and linked rather than created again, so the files after this one can run.
+
 Expected shape, not a promised result:
 
 ```text

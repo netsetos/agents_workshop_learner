@@ -374,7 +374,7 @@ class TheTargets(unittest.TestCase):
 
     def test_generation_mk_holds_the_two_targets_and_the_makefile_keeps_its_lines(self):
         mk, gen_mk, readme = self.read("Makefile"), self.read("mk", "generation.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         self.assertTrue({"improve", "prompt-candidate"} <= set(phony))   # later kits append after them
         self.assertIn('\nimprove:\n\t$(PY) evals/improve.py $(if $(REVIEWER),accept --reviewer "$(REVIEWER)",propose '

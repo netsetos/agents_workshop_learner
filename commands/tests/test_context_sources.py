@@ -3,7 +3,7 @@
     python -m unittest commands/tests/test_context_sources.py -v          # from deploy/
 
 No network, no credential, no cost. The first class needs only the standard library: mk/memory.mk's target, the
-Makefile's .PHONY line and its 885 lines, the CI lines that run this file and the new files' UNOWNED.md rows; the
+Makefile's .PHONY line and its 888 lines, the CI lines that run this file and the new files' UNOWNED.md rows; the
 estimator, which is rag-api's own; a hand-made request split into its sources, each part counted once; the counting
 chain on fake count_tokens functions - additive, refusing the declarations, ignoring the system instruction, refusing
 the contents, refusing a later content - and the probe it reports; rag-api's prompt read from its source; a call's
@@ -97,7 +97,7 @@ class TheSourcesAlone(unittest.TestCase):
 
     def test_the_target_its_phony_name_and_its_readme_row(self):
         mk, memory, readme = read("Makefile"), read("mk", "memory.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertIn("context-sources", phony.split())                 # later kits append after it
         self.assertRegex(memory, r"(?m)^context-sources: \$\(if \$\(OFFLINE\),,guard-project\)$")   # OFFLINE=1: no project

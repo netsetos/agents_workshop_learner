@@ -238,7 +238,9 @@
           "purpose": "Start it in the second terminal, so the first stays free for questions.",
           "label": "bash — run in the second terminal, and leave it running",
           "expected": "[awaiting the author's run: data/chat_local.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Start the lane as an owned background process with a health check (up to ten minutes: the first run seeds acme's corpus first), instead of a shell that never returns. PY names the lane's venv: the helpers export PY as the IDE interpreter, which lacks the lane's packages."
+          ],
           "id": "source_12",
           "function": "step_02_start_the_lane",
           "window": 12,
@@ -277,7 +279,9 @@
           "purpose": "Press Ctrl+C in the second terminal. The directory stays on disk, and a Python cell can open it the way the service does, with the same build_store() and the same retrieve():",
           "label": "bash — run in the first terminal after Ctrl+C has stopped the lane: read the store directly",
           "expected": "1628 chunks in the collection documind_dev\nNP-03: gs://documind-ai-YOUR-ID-uploads/acme/hr_policy_2026.md | page 1 | NP-03 — Notice period\nanswerable True | confidence high\n1.000  acme:hr_policy_2026#NP-03                 page 1\n0.601  acme:osh_code_2020#p36-0                  page 36\n0.586  acme:cgst_act_2017#p160-0                 page 160\n0.580  acme:maternity_benefit_act_1961#p6-1      page 6\n0.579  acme:cgst_act_2017#p159-0                 page 159\nNP-03 — Notice period\nA confirmed employee at grade E3 or above serves a notice period of 60 days. Notice runs\nfrom the date the resignation is acknowledged in writing. Unused earned leave may not be\nset off against the notice period.",
-          "adaptations": [],
+          "adaptations": [
+            "Stop this session's own lane process (the page's Ctrl+C) before reading the store directly."
+          ],
           "id": "source_21",
           "function": "step_05_stop_the_lane_then_read_the_store_directly",
           "window": 21,

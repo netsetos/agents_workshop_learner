@@ -57,7 +57,7 @@ def read(*parts) -> str:
 class Wiring(unittest.TestCase):
     def test_the_targets(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                             # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                             # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in TARGETS:
             self.assertIn(target, phony)

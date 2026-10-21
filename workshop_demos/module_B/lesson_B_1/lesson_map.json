@@ -286,7 +286,9 @@
           "purpose": "A call to the API, or to Gemini, is mostly waiting: the request goes out, the other side works, the answer comes back, and your program does nothing in between. Two calls made one after the other wait twice. asyncio lets one program wait on both at once. A function written async def is a coroutine; inside it, await marks each place where it waits; and the event loop that asyncio.run() starts runs another coroutine while one waits. asyncio.gather() runs several and returns their results as a list, in the order you passed them, not the order they finished. There is one catch, and the cell below is built to show it. The loop can switch only at an await, and urllib is synchronous: it never awaits, so while it waits it holds the whole thread, loop and all. asyncio.to_thread() is the way out. It runs an ordinary blocking function in a separate thread and gives the loop something to await, which is what Python's documentation says it is for. The cell's server takes half a second over every answer, a stand-in for a slow model, and notes whether a request arrived while another was still being served.",
           "label": "bash — run on your laptop: the same kind of server, slowed down on purpose",
           "expected": "one after the other            ['a', 'b']  about 2 waits, both in flight at once: False\ngather over blocking calls     ['a', 'b']  about 2 waits, both in flight at once: False\ngather over asyncio.to_thread  ['a', 'b']  about 1 wait, both in flight at once: True",
-          "adaptations": [],
+          "adaptations": [
+            "The counter `busy` is a local of this step function, not a module global, so the request handler declares it nonlocal. The page's cell runs at top level, where global is right."
+          ],
           "id": "source_24",
           "function": "step_01_two_calls_at_once_asyncio_gather_and_async",
           "window": 24,

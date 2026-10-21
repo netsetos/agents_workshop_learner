@@ -52,12 +52,6 @@ def step_01_install_the_lane_once(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 
-# Original CLI workflow for step_02_start_the_lane.
-COMMANDS_02 = """cd "${DEMO_ROOT:-$HOME/deploy_module_rag}" && source "$HOME/rag-local-venv/bin/activate"
-make chat-local                                       # seeds acme, then serves until Ctrl+C
-
-"""
-
 def step_02_start_the_lane(session):
     """Run Start the lane at this checkpoint.
 
@@ -71,8 +65,11 @@ def step_02_start_the_lane(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/chat_local.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
+    from pathlib import Path
+    lane_python = Path.home() / "rag-local-venv" / "bin" / "python"   # the venv step 1 made, not the IDE's
+    session.start_local_service(["make", "chat-local", f"PY={lane_python}"], "http://localhost:8081/health",
+                                timeout=600)   # a first run seeds the corpus before the server answers
+    print("Owned lane log:", session.state["local_service"]["log"])
 
 # Original CLI workflow for step_03_ask_it.
 COMMANDS_03 = """curl -s localhost:8081/health | python -m json.tool
@@ -169,7 +166,7 @@ def step_05_stop_the_lane_then_read_the_store_directly(session):
     from the date the resignation is acknowledged in writing. Unused earned leave may not be
     set off against the notice period.
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.stop_local_service()   # the page: Ctrl+C in the second terminal
     session.shell(COMMANDS_05)
 
 def demonstrate(session):

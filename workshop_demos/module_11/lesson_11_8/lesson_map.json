@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_8/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html",
-  "source_sha": "63db39769430dcf168f0eba43639cdcf3b51484b",
+  "source_sha": "6ed0a2ace12842f32da028404faaaa655da0d6a7",
   "shared_setup_windows": [
     1
   ],
@@ -799,7 +799,7 @@
       "label": "Makefile - make down: what it cannot remove, and only deleting the project does",
       "heading": "The handover: HANDOVER.md from the checkout and the lane",
       "anchor": "s8",
-      "line": 1183
+      "line": 1186
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

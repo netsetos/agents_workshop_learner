@@ -15,7 +15,7 @@ off, the member on no roster, a document not indexed, the lane's services gone, 
 lane's records, documind-api not deployed), and nothing asked but READS and the two tokens, a write refused before it
 runs; handover offline and with the lane, a failed read listed under Not read with exit 1, --out, the file whole and
 LF; the command line's exits; the selftest; the page counts of the kit's real PDFs against evals/real_sources.json;
-and the wiring: the targets, .PHONY, the Makefile's 885 lines, FORK never declared, mk/README.md, UNOWNED.md, and the
+and the wiring: the targets, .PHONY, the Makefile's 888 lines, FORK never declared, mk/README.md, UNOWNED.md, and the
 kit facts the check reads.
 """
 import contextlib
@@ -615,7 +615,7 @@ class WiringTests(unittest.TestCase):
 
     def test_the_make_targets(self):
         mk, capstone_mk, readme = self.read("Makefile"), self.read("mk", "capstone.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                       # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                       # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         lane = "$(if $(PROJECT),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)"
         for target, sub in (("capstone-check", "check"), ("handover", "handover")):

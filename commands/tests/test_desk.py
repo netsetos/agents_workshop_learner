@@ -1236,7 +1236,7 @@ class WiringTests(unittest.TestCase):
 
     def test_the_make_targets(self):
         mk, agents, readme = self.read("Makefile"), self.read("mk", "agents.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in ("route-index", "route-calibrate", "smoke-desk", "route-eval"):
             self.assertIn(target, phony)

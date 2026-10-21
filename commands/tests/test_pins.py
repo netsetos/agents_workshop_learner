@@ -5,7 +5,7 @@
 The first classes need the standard library alone: tool_pins.json's shape and the four pinned names; pins.py's
 fingerprint and its filter (off -> None; on -> keep the pinned and unchanged, drop and log the rest), driven with
 stand-in tools; agent.py's switches (TOOL_PINS read once, pins imported only when on, build_agent passing the filter,
-one log call, the /health keys) and the AGENT_FENCE sentence; the targets, the 885 lines, both CI lines and the
+one log call, the /health keys) and the AGENT_FENCE sentence; the targets, the 888 lines, both CI lines and the
 UNOWNED.md rows.
 
 The later classes need libraries. TheWiring builds the kit's own agent with google-adk and checks the McpToolset gets
@@ -184,7 +184,7 @@ class TheKitWiring(unittest.TestCase):
 
     def test_the_targets_the_ci_lines_and_the_rows(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertTrue({"pin-tools", "evil-mcp"} <= set(phony.split()), phony[-120:])    # later kits append after
         self.assertIn("$(PY) commands/pin_tools.py $(if $(CHECK),--check,) $(if $(URL),--url $(URL),--server-local)",

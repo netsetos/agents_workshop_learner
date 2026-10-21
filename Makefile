@@ -185,8 +185,8 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
              commands/lesson-12.4.sh commands/lesson-12.8.sh \
              commands/lesson-7.2.sh commands/lesson-8.4.sh
 
-.PHONY: dryrun extract check validate eval eval-live plan up secrets build deploy-services tf-backend \
-        wait-index roster ingest-corpus smoke down guard-project bq-views features make-evalset \
+.PHONY: dryrun extract check validate eval eval-live plan up secrets build-access build deploy-services tf-backend \
+        wait-index roster ingest-corpus smoke down guard-project bq-views bq-views-when-ready down-region features make-evalset \
         chat-local deploy-slm slm-off ablate smoke-mcp smoke-chat smoke-agent \
         trainset cache judge tune candidate \
         deploy-gateway gateway-off smoke-gateway smoke-slm build-vllm deploy-vllm vllm-off gke-up gke-down compare \
@@ -270,7 +270,7 @@ adopt-firestore: guard-project
 # BEFORE planning. Terraform rejects a saved plan if intervening work made it stale.
 up: guard-project
 	$(INFRA) apply $(INFRA_FLAGS) $(INFRA_PLAN)
-	$(MAKE) drift secrets build deploy-services wait-index roster managed-stores bq-views vector-status
+	$(MAKE) drift secrets build-access build deploy-services wait-index roster managed-stores bq-views-when-ready vector-status
 
 # After an apply, a plan should be EMPTY. A resource that is still "to be replaced" is one the
 # provider reads back differently from how it was written - which is how both vector indexes
@@ -585,7 +585,10 @@ down: guard-project down-services
 	echo ">>   buckets that hold objects: uploads, datasets, audit (force_destroy = false, storage.tf) - and with AUDIT_LOCK=true the audit bucket's LOCKED retention policy blocks even the project's deletion for five years, by design"; \
 	echo ">>   a tuned endpoint from make tune (evals/tune.py: Vertex AI, not Terraform)"; \
 	echo ">>   a RAG Engine corpus outside MANAGED_TENANTS (make rag-corpus TENANT= by hand; managed.py: Vertex AI, not Terraform) - it bills storage until deleted: managed-stores-down just removed MANAGED_TENANTS' corpora; gcloud ai rag-corpora ... or 4.3's cleanup cell for the rest"; \
-	echo ">>   the BigQuery views make bq-views applied (terraform/sql/*.sql, through bq, not Terraform)"; \
+	echo ">>   the BigQuery views make bq-views applied (terraform/sql/*.sql, through bq, not Terraform) - and so the documind_observability dataset that holds them and the log sink's tables (destroy reports it still in use)"; \
+	echo ">>   the Vertex AI Search data stores documind-<tenant> once they hold documents (destroy reports Active documents exists): they bill storage until the project goes"; \
+	echo ">>   Cloud Run jobs a deploy script made outside Terraform (documind-checkpoint-setup): gcloud run jobs list --region $(REGION)"; \
+	echo ">>   the billing account's DocuMind monthly budget for this project (budget.tf): make down leaves it when destroy stops early - remove it under Billing > Budgets & alerts"; \
 	echo ">> Delete the throwaway project to stop all billing:"; \
 	echo ">>   gcloud projects delete $(PROJECT)"; exit $$rc
 
@@ -598,7 +601,7 @@ down: guard-project down-services
 DOWN_SERVICES     = documind-ingest documind-api documind-admin documind-ui documind-chat documind-mcp documind-agent documind-gchat
 DOWN_SERVICES_M11 = documind-gateway
 DOWN_SERVICES_GPU = documind-slm documind-vllm
-down-services: guard-project
+down-services: guard-project down-region
 	@for t in acme zeta globex; do \
 	  (cd services/rag-api && GOOGLE_CLOUD_PROJECT=$(PROJECT) $(PY) cache_admin.py delete --project $(PROJECT) --tenant $$t 2>/dev/null) \
 	    || echo ">> cache $$t: nothing deleted (no cache, or no google-genai / credentials in this shell)"; done

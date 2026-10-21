@@ -65,6 +65,8 @@ Start it in the second terminal, so the first stays free for questions.
 
 Operation: bash — run in the second terminal, and leave it running.
 
+IDE adaptation: Start the lane as an owned background process with a health check (up to ten minutes: the first run seeds acme's corpus first), instead of a shell that never returns. PY names the lane's venv: the helpers export PY as the IDE interpreter, which lacks the lane's packages.
+
 Expected shape, not a promised result:
 
 ```text
@@ -100,6 +102,8 @@ Expected shape, not a promised result:
 Press Ctrl+C in the second terminal. The directory stays on disk, and a Python cell can open it the way the service does, with the same build_store() and the same retrieve():
 
 Operation: bash — run in the first terminal after Ctrl+C has stopped the lane: read the store directly.
+
+IDE adaptation: Stop this session's own lane process (the page's Ctrl+C) before reading the store directly.
 
 Expected shape, not a promised result:
 

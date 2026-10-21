@@ -4,7 +4,7 @@ lesson 10.7).
     python -m unittest commands/tests/test_agent_shapes.py -v          # from deploy/
 
 No network, no credential. The first class needs only the standard library: the cap's constants as the file holds them,
-the make target (OFFLINE=1 the only mode, through commands/agent-turn.sh's venv), the .PHONY entry and the 885 lines,
+the make target (OFFLINE=1 the only mode, through commands/agent-turn.sh's venv), the .PHONY entry and the 888 lines,
 mk/README.md's row, both CI lines and the UNOWNED.md row.
 
 The second runs the shape itself on its scripted models, and needs the chat image's pins (pip install -r
@@ -59,7 +59,7 @@ class TheShapeAsWritten(unittest.TestCase):
 
     def test_the_target_the_entries_and_the_rows(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertIn("agent-shapes", phony.split())                       # later kits append after it
         recipe = agents.split("\nagent-shapes:\n", 1)[1].split("\n\n", 1)[0]

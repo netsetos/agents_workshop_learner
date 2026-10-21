@@ -9,7 +9,7 @@ name (the authoring repository's tools/check_authz.py holds the same, through th
 documind-agent-sa added to lesson-12.8.sh's invoker loop, named as the cycle documind-chat -> documind-agent ->
 documind-chat with exit 1; a service whose own account may invoke it, a cycle of one; no --graph, exit 2; the
 parsing of a binding's member (a loop variable, braces, a Google service agent); the target, `.PHONY`,
-`mk/README.md`, the 885 lines and the UNOWNED.md rows.
+`mk/README.md`, the 888 lines and the UNOWNED.md rows.
 """
 import contextlib
 import io
@@ -148,7 +148,7 @@ class TheEntries(unittest.TestCase):
 
     def test_the_target_the_phony_line_the_readme_and_the_rows(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertIn("check-callers", phony.split())                         # later kits append after it
         recipe = agents.split("\ncheck-callers:\n", 1)[1].split("\n\n", 1)[0]

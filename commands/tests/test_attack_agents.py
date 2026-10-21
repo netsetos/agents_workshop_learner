@@ -3,7 +3,7 @@
 
     python -m unittest commands/tests/test_attack_agents.py -v          # from deploy/
 
-TheTargets reads the kit: both targets appended to mk/agents.mk, in .PHONY and in mk/README.md; the Makefile's 885
+TheTargets reads the kit: both targets appended to mk/agents.mk, in .PHONY and in mk/README.md; the Makefile's 888
 lines; attack-agents's guard and the variables it hands the script; the script's mint, the one make attack-eval makes;
 mk/evaluation.mk without them; both CI lines and the UNOWNED.md row.
 
@@ -160,7 +160,7 @@ class TheTargets(unittest.TestCase):
 
     def test_both_targets_are_appended_to_agents_mk_and_listed(self):
         mk, readme = read("Makefile"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                  # tests and lesson 9.3 count it
+        self.assertEqual(len(mk.splitlines()), 888)                  # tests and lesson 9.3 count it
         for t in ("mcp-local", "attack-agents"):
             self.assertRegex(self.agents, rf"(?m)^{t}:")
             # after the targets lesson 10.8's earlier PRs appended (append-only: lesson 10.4 reads route-eval by line)

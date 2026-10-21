@@ -6,7 +6,7 @@ No network, no credential, no Google library: the standard library and bash. The
 sets ADK_MAX_LLM_CALLS to 12 unless the environment already holds a value, and publishes it on /health as
 max_llm_calls; commands/lesson-8.4.sh deploys the same 12, and so does commands/managed_peer.py where it exists (lesson
 10.9's managed peer); smoke_agent.py keeps its five checks and the helpers the drill borrows; the target, its .PHONY
-entry and mk/README.md row; the Makefile's 885 lines; the UNOWNED.md rows.
+entry and mk/README.md row; the Makefile's 888 lines; the UNOWNED.md rows.
 
 The second runs commands/agent-drill.sh against a stub gcloud that keeps documind-agent's environment and traffic in a
 file and records every call, and a stand-in peer on 127.0.0.1 whose /health publishes the cap in that file and whose
@@ -88,7 +88,7 @@ class TheCapInTheKit(unittest.TestCase):
 
     def test_the_target_its_phony_entry_and_its_readme_row(self):
         mk, agents, readme = read("Makefile"), read("mk", "agents.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertIn("agent-drill", phony.split())     # later kits append after it
         recipe = agents.split("\nagent-drill: guard-project\n", 1)[1].split("\n\n", 1)[0]

@@ -637,7 +637,7 @@ class WiringTests(unittest.TestCase):
     def test_the_make_target_and_its_listings(self):
         mk, gen_mk, readme, unowned = self.read("Makefile"), self.read("mk", "generation.mk"), self.read("mk", "README.md"), \
             self.read("UNOWNED.md")
-        self.assertEqual(len(mk.splitlines()), 885)
+        self.assertEqual(len(mk.splitlines()), 888)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         self.assertIn("bench", phony)
         self.assertIn("\nbench: guard-project\n", gen_mk)

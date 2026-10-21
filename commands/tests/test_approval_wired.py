@@ -119,7 +119,7 @@ class Wiring(unittest.TestCase):
         for src in (ROUTES, RECONCILE, self.read("smoke", "smoke_approval.py"), Path(__file__).read_text(encoding="utf-8")):
             self.assertEqual(literal.findall(src), [])
         mk, agents, readme = self.read("Makefile"), self.read("mk", "agents.mk"), self.read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                            # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                            # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in ("agent-actions", "withdraw-run", "smoke-approval"):
             self.assertIn(target, phony)

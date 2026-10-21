@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`, reviewed at blob `63db39769430dcf168f0eba43639cdcf3b51484b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`, reviewed at blob `6ed0a2ace12842f32da028404faaaa655da0d6a7`. Learners read that page on the course site; this guide keeps its prose.
 
 The capstone is not a feature. It is a fork of this kit that a stranger can verify in under ten minutes: a live URL behind IAP, your own corpus, an eval suite that can go red, one lane on top of the core, and four documents that say what you rejected, what it costs, how it fails and how it rolls back. The rubric names those 8 components, and the kit's `make capstone-check` says PASS or FAIL for each one, offline and at Rs 0, and never a score. The score is the defence's: 5 dimensions, 0 to 3 each, 9 of 15 to pass and no dimension at 0.
 
@@ -356,7 +356,13 @@ The pack describes a lane that still runs. When it stops, `make down` removes wh
 
 - a RAG Engine corpus outside MANAGED_TENANTS (make rag-corpus TENANT= by hand; managed.py: Vertex AI, not Terraform) - it bills storage until deleted: managed-stores-down just removed MANAGED_TENANTS' corpora; gcloud ai rag-corpora ... or 4.3's cleanup cell for the rest
 
-- the BigQuery views make bq-views applied (terraform/sql/*.sql, through bq, not Terraform)
+- the BigQuery views make bq-views applied (terraform/sql/*.sql, through bq, not Terraform) - and so the documind_observability dataset that holds them and the log sink's tables (destroy reports it still in use)
+
+- the Vertex AI Search data stores documind-<tenant> once they hold documents (destroy reports Active documents exists): they bill storage until the project goes
+
+- Cloud Run jobs a deploy script made outside Terraform (documind-checkpoint-setup): gcloud run jobs list --region $(REGION)
+
+- the billing account's DocuMind monthly budget for this project (budget.tf): make down leaves it when destroy stops early - remove it under Billing > Budgets & alerts
 
 ### The defence, what the author still decides, and what the kit does not do yet
 

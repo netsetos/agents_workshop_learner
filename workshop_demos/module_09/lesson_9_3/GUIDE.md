@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_9.3_VLLM_GKE_WIX.html`, reviewed at blob `33e28b650787200d6026d4727919e647b2e608ca`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_9.3_VLLM_GKE_WIX.html`, reviewed at blob `c1c3a8488e65d2434527d5959991d2ca5a30bf91`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 9.2 served the small model with Ollama. The kit holds two more ways to serve it, both optional, and no lesson deploys either. One is vLLM, an engine built to answer many requests at once, on the same Cloud Run L4. The other runs vLLM on GKE Autopilot: a pod that stays up all month, billed every hour, and the only self-serve L4 in Mumbai.
 

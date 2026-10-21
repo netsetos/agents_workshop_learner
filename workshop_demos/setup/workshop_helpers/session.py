@@ -379,7 +379,7 @@ class DemoSession:
         self.state["pin_ready_after"] = time.time() + 65  # API tenant-settings TTL is 60s.
         self.save()
 
-    def start_local_service(self, args, health_url, *, expected_health=None):
+    def start_local_service(self, args, health_url, *, expected_health=None, timeout=90):
         """Start an owned local process without holding the lesson lock indefinitely.
         
         Logs are redirected before detaching, and the PID is saved before polling.
@@ -405,7 +405,7 @@ class DemoSession:
                                        stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
         self.state["local_service"] = {"pid": process.pid, "args": args, "cwd": str(self.config.kit_root), "log": str(log_path)}
         self.save()
-        deadline = time.monotonic() + 90
+        deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             if process.poll() is not None:
                 raise RuntimeError(f"Local service exited with {process.returncode}; inspect {log_path}.")

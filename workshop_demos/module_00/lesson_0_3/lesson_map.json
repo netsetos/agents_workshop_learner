@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html",
-  "source_sha": "bed26f223483fe13e7029ce8eb7cac21110a90df",
+  "source_sha": "252fb8c95b3bcba4e1a87341b65d24c85a48abb4",
   "shared_setup_windows": [
     1
   ],
@@ -356,7 +356,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1164
+        1165
       ],
       "offline": false,
       "live_verified": false,
@@ -372,7 +372,7 @@
           "id": "source_45",
           "function": "step_01_make_up_apply_that_plan_then_build_deploy",
           "window": 45,
-          "source_line": 1164,
+          "source_line": 1165,
           "manual_checkpoint": null
         }
       ],
@@ -385,7 +385,7 @@
       "category": "recovery",
       "requires": [],
       "heading": "make up: apply that plan, then build, deploy and seed",
-      "purpose": "Now run it. It takes a long time: Cloud SQL, the GKE cluster and the deployed index each take minutes to create, and the builds run one after another. Run it inside tmux if your shell has it, so that a closed browser tab or a dropped connection does not stop an apply halfway; an interrupted apply needs a new plan. time reports how long it took. A plan refused as stale (The saved plan is stale; create a new plan, or The selected plan is missing or changed): the state, the inputs or the file changed since make plan. Run step 6 again, read the new plan, then make up. An apply that failed halfway: keep the state as it is. Terraform has recorded everything it created, so the next make plan lists only what is still missing; read it, then make up. Never delete the state or terraform/.terraform to \"start clean\": the next apply would try to create everything again over resources that exist. A build that stops at storage.objects.get with a 403 naming the Compute Engine default account: Cloud Build runs as that account when the kit names none, and in an organization created on or after 3 May 2024 it is created without the broad role older projects gave it. Grant it exactly what a build needs (the block below), and wait a few minutes for IAM to apply the grants. The apply had already finished by then and its plan is used up, so run make plan (it reports no changes) and make up, which applies nothing and carries on from the build. A drift line after the apply means the plan after it is not empty: a resource the provider reads back differently from how it was written. It does not stop make up, but it is a definition to fix before the next apply repeats it. A bq-views failure naming a table or a field that does not exist: the view reads the log sink's table, and the kit's own comment ",
+      "purpose": "Now run it. It takes a long time: Cloud SQL, the GKE cluster and the deployed index each take minutes to create, and the builds run one after another. Run it inside tmux if your shell has it, so that a closed browser tab or a dropped connection does not stop an apply halfway; an interrupted apply needs a new plan. time reports how long it took. A plan refused as stale (The saved plan is stale; create a new plan, or The selected plan is missing or changed): the state, the inputs or the file changed since make plan. Run step 6 again, read the new plan, then make up. An apply that failed halfway: keep the state as it is. Terraform has recorded everything it created, so the next make plan lists only what is still missing; read it, then make up. Never delete the state or terraform/.terraform to \"start clean\": the next apply would try to create everything again over resources that exist. A build that stops at storage.objects.get with a 403 naming the Compute Engine default account: Cloud Build runs as that account when the kit names none, and in an organization created on or after 3 May 2024 it is created without the broad role older projects gave it. make up grants it exactly what a build needs before it builds (make build-access, the block below, each grant only if it is missing), so this 403 now means IAM took longer than the two minutes it waits. Run the block below, and wait a few minutes for IAM to apply the grants. The apply had already finished by then and its plan is used up, so run make plan (it reports no changes) and make up, which applies nothing and carries on from the build. A drift line after the apply means the plan after it is not empty: a resource the provider reads back differently from how it was written. It does not stop make up, but it is a definition t",
       "anchor": "s7",
       "anchors": [
         "s7"
@@ -396,7 +396,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1180
+        1181
       ],
       "offline": false,
       "live_verified": false,
@@ -405,14 +405,14 @@
         {
           "heading": "make up: apply that plan, then build, deploy and seed",
           "subheading": "make up: apply that plan, then build, deploy and seed",
-          "purpose": "Now run it. It takes a long time: Cloud SQL, the GKE cluster and the deployed index each take minutes to create, and the builds run one after another. Run it inside tmux if your shell has it, so that a closed browser tab or a dropped connection does not stop an apply halfway; an interrupted apply needs a new plan. time reports how long it took. A plan refused as stale (The saved plan is stale; create a new plan, or The selected plan is missing or changed): the state, the inputs or the file changed since make plan. Run step 6 again, read the new plan, then make up. An apply that failed halfway: keep the state as it is. Terraform has recorded everything it created, so the next make plan lists only what is still missing; read it, then make up. Never delete the state or terraform/.terraform to \"start clean\": the next apply would try to create everything again over resources that exist. A build that stops at storage.objects.get with a 403 naming the Compute Engine default account: Cloud Build runs as that account when the kit names none, and in an organization created on or after 3 May 2024 it is created without the broad role older projects gave it. Grant it exactly what a build needs (the block below), and wait a few minutes for IAM to apply the grants. The apply had already finished by then and its plan is used up, so run make plan (it reports no changes) and make up, which applies nothing and carries on from the build. A drift line after the apply means the plan after it is not empty: a resource the provider reads back differently from how it was written. It does not stop make up, but it is a definition to fix before the next apply repeats it. A bq-views failure naming a table or a field that does not exist: the view reads the log sink's table, and the kit's own comment ",
+          "purpose": "Now run it. It takes a long time: Cloud SQL, the GKE cluster and the deployed index each take minutes to create, and the builds run one after another. Run it inside tmux if your shell has it, so that a closed browser tab or a dropped connection does not stop an apply halfway; an interrupted apply needs a new plan. time reports how long it took. A plan refused as stale (The saved plan is stale; create a new plan, or The selected plan is missing or changed): the state, the inputs or the file changed since make plan. Run step 6 again, read the new plan, then make up. An apply that failed halfway: keep the state as it is. Terraform has recorded everything it created, so the next make plan lists only what is still missing; read it, then make up. Never delete the state or terraform/.terraform to \"start clean\": the next apply would try to create everything again over resources that exist. A build that stops at storage.objects.get with a 403 naming the Compute Engine default account: Cloud Build runs as that account when the kit names none, and in an organization created on or after 3 May 2024 it is created without the broad role older projects gave it. make up grants it exactly what a build needs before it builds (make build-access, the block below, each grant only if it is missing), so this 403 now means IAM took longer than the two minutes it waits. Run the block below, and wait a few minutes for IAM to apply the grants. The apply had already finished by then and its plan is used up, so run make plan (it reports no changes) and make up, which applies nothing and carries on from the build. A drift line after the apply means the plan after it is not empty: a resource the provider reads back differently from how it was written. It does not stop make up, but it is a definition t",
           "label": "bash — run in the operator shell, only if the build stopped on that 403",
           "expected": "",
           "adaptations": [],
           "id": "source_48",
           "function": "step_01_make_up_apply_that_plan_then_build_deploy",
           "window": 48,
-          "source_line": 1180,
+          "source_line": 1181,
           "manual_checkpoint": null
         }
       ],
@@ -439,8 +439,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1190,
-        1199
+        1191,
+        1200
       ],
       "offline": false,
       "live_verified": false,
@@ -456,7 +456,7 @@
           "id": "source_49",
           "function": "step_01_seven_services_and_the_account_each_runs_a",
           "window": 49,
-          "source_line": 1190,
+          "source_line": 1191,
           "manual_checkpoint": null
         },
         {
@@ -469,7 +469,7 @@
           "id": "source_51",
           "function": "step_02_the_shard_size_of_your_index",
           "window": 51,
-          "source_line": 1199,
+          "source_line": 1200,
           "manual_checkpoint": null
         }
       ],
@@ -497,9 +497,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1253,
-        1261,
-        1283
+        1254,
+        1262,
+        1284
       ],
       "offline": false,
       "live_verified": false,
@@ -515,7 +515,7 @@
           "id": "source_56",
           "function": "step_01_the_ui_behind_iap_and_the_roster_behind_th",
           "window": 56,
-          "source_line": 1253,
+          "source_line": 1254,
           "manual_checkpoint": null
         },
         {
@@ -528,7 +528,7 @@
           "id": "source_59",
           "function": "step_02_the_ui_behind_iap_and_the_roster_behind_th",
           "window": 59,
-          "source_line": 1261,
+          "source_line": 1262,
           "manual_checkpoint": null
         },
         {
@@ -541,7 +541,7 @@
           "id": "source_63",
           "function": "step_03_the_roster_make_up_wrote",
           "window": 63,
-          "source_line": 1283,
+          "source_line": 1284,
           "manual_checkpoint": null
         }
       ],
@@ -771,168 +771,168 @@
       "label": "the kit's Makefile - the build target",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1109
+      "line": 1110
     },
     {
       "window": 42,
       "label": "cloudbuild.yaml - one config, a Dockerfile named per service",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1126
+      "line": 1127
     },
     {
       "window": 43,
       "label": "the kit's Makefile - the seven services and the scripts that deploy them",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1140
+      "line": 1141
     },
     {
       "window": 44,
       "label": "the kit's Makefile - deploy-services: the DEPLOY block of each script, run as it is",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1151
+      "line": 1152
     },
     {
       "window": 46,
       "label": "output - the last lines of make up from a blank project, and how long it took (the author's run)",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1167
+      "line": 1168
     },
     {
       "window": 47,
       "label": "the kit's Makefile - the bq-views target",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1172
+      "line": 1173
     },
     {
       "window": 50,
       "label": "output - the services, and the account each runs as (the author's run)",
       "heading": "Seven services, and the account each runs as",
       "anchor": "s8",
-      "line": 1193
+      "line": 1194
     },
     {
       "window": 52,
       "label": "output - the index's shard size, and the machine it deployed (the author's run)",
       "heading": "Seven services, and the account each runs as",
       "anchor": "s8",
-      "line": 1203
+      "line": 1204
     },
     {
       "window": 53,
       "label": "commands/lesson-12.4.sh - the UI: IAP on the service itself",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1210
+      "line": 1211
     },
     {
       "window": 54,
       "label": "commands/lesson-12.4.sh - who invokes it, and who may sign in",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1217
+      "line": 1218
     },
     {
       "window": 55,
       "label": "services/frontend/chat.py - what the UI shows a signed-in person",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1241
+      "line": 1242
     },
     {
       "window": 57,
       "label": "output - the UI without a sign-in (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1255
+      "line": 1256
     },
     {
       "window": 58,
       "label": "output - who may pass IAP on documind-ui (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1257
+      "line": 1258
     },
     {
       "window": 60,
       "label": "output - what each kind of visitor saw in the browser (the author's notes)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1262
+      "line": 1263
     },
     {
       "window": 61,
       "label": "mk/ingestion.mk - the roster target",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1268
+      "line": 1269
     },
     {
       "window": 62,
       "label": "commands/lane.py - roster_plan(): the memberships and policies make roster writes",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1274
+      "line": 1275
     },
     {
       "window": 64,
       "label": "expected - the dry run, computed from commands/lane.py at build time",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1285
+      "line": 1286
     },
     {
       "window": 65,
       "label": "output - make roster on the new lane (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1300
+      "line": 1301
     },
     {
       "window": 66,
       "label": "README.md - the one shape, and what bills while it exists",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1307
+      "line": 1308
     },
     {
       "window": 67,
       "label": "terraform/spanner.tf - the Spanner instance: provisioned, and billed by the hour",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1311
+      "line": 1312
     },
     {
       "window": 68,
       "label": "terraform/cloudsql.tf - what the checkpointer's instance costs, by the kit's own account",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1326
+      "line": 1327
     },
     {
       "window": 69,
       "label": "terraform/gke.tf - the one node",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1332
+      "line": 1333
     },
     {
       "window": 70,
       "label": "terraform/network.tf - the connector",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1352
+      "line": 1353
     },
     {
       "window": 71,
       "label": "gke/README.md - the kit's own price table for the cluster fee",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1361
+      "line": 1362
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

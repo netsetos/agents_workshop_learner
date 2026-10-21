@@ -54,21 +54,21 @@
     {
       "lesson": "0.3",
       "title": "Understand the project, identities and resource map, and deploy the lane",
-      "source_sha": "bed26f223483fe13e7029ce8eb7cac21110a90df",
+      "source_sha": "252fb8c95b3bcba4e1a87341b65d24c85a48abb4",
       "source_kind": "main_html",
       "demos": 6
     },
     {
       "lesson": "0.4",
       "title": "Prove the lane, break it once, and switch it off",
-      "source_sha": "c28fb9ec41954f3fe7442eecddca55e7e2879d87",
+      "source_sha": "3c635a7db2a88324d23dc85d00df7abed31f8152",
       "source_kind": "main_html",
       "demos": 14
     },
     {
       "lesson": "0.5",
       "title": "Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI",
-      "source_sha": "24144d762d19e5e50315716f1089c7c9fd563e82",
+      "source_sha": "702f331617bdae6f99233b0a7c19d68b511271da",
       "source_kind": "main_html",
       "demos": 12
     },
@@ -502,7 +502,7 @@
     {
       "lesson": "9.3",
       "title": "Inspect the vLLM service and the GKE alternative",
-      "source_sha": "33e28b650787200d6026d4727919e647b2e608ca",
+      "source_sha": "c1c3a8488e65d2434527d5959991d2ca5a30bf91",
       "source_kind": "main_html",
       "demos": 7
     },
@@ -600,7 +600,7 @@
     {
       "lesson": "11.2",
       "title": "Evaluate and gate the exact candidate revision",
-      "source_sha": "152ac804748a58d0a5778fb46d9f0e5cff934ba5",
+      "source_sha": "91a2b4ee6826abcde69482aa2e073e661f0c1f22",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -635,14 +635,14 @@
     {
       "lesson": "11.7",
       "title": "Reproduce the agent failures production shows and no eval row does",
-      "source_sha": "aab33582d3f9c2a9bac670f28f7b6bf765026bf4",
+      "source_sha": "93c57360c0966bd6aba58437527621d025e9de31",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "11.8",
       "title": "Complete the independent capstone and operational handover",
-      "source_sha": "63db39769430dcf168f0eba43639cdcf3b51484b",
+      "source_sha": "6ed0a2ace12842f32da028404faaaa655da0d6a7",
       "source_kind": "main_html",
       "demos": 8
     },

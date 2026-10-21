@@ -11,7 +11,7 @@ Rs 0 drills in detail: the gcloud lines they run, the cap /health reports at eac
 detector, the chat put back, and put back after a failure in the middle; and a kit that stops doing what a drill
 rests on makes that drill exit 1. The deploy reader against the seven deploy scripts and the Makefile; the stand-in's
 Cloud Run rules; each detector on stand-in lanes; the live drills' own lines, preconditions and make deploy-services'
-argv; the make targets, .PHONY, mk/README.md, UNOWNED.md and the Makefile's 885 lines.
+argv; the make targets, .PHONY, mk/README.md, UNOWNED.md and the Makefile's 888 lines.
 """
 import contextlib
 import copy
@@ -847,7 +847,7 @@ class CliTests(unittest.TestCase):
 class WiringTests(unittest.TestCase):
     def test_the_make_targets(self):
         mk, ops, readme = read("Makefile"), read("mk", "operations.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                       # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                       # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in ("gotchas", "gotcha-drill", "gotcha-detect"):
             self.assertIn(target, phony)

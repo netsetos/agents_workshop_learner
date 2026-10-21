@@ -1053,7 +1053,7 @@ class DrillTests(unittest.TestCase):
 class WiringTests(unittest.TestCase):
     def test_the_make_targets(self):
         mk, ops, readme = read("Makefile"), read("mk", "operations.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         self.assertTrue({"remediate", "incident-drill"} <= set(phony))  # later kits append after them
         self.assertRegex(ops, r"(?m)^remediate: \$\(if \$\(or \$\(OFFLINE\),\$\(RUNBOOKS\)\),,guard-project\)$")

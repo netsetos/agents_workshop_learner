@@ -123,6 +123,8 @@ A call to the API, or to Gemini, is mostly waiting: the request goes out, the ot
 
 Operation: bash — run on your laptop: the same kind of server, slowed down on purpose.
 
+IDE adaptation: The counter `busy` is a local of this step function, not a module global, so the request handler declares it nonlocal. The page's cell runs at top level, where global is right.
+
 Expected shape, not a promised result:
 
 ```text

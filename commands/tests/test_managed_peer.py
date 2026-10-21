@@ -276,7 +276,7 @@ class TheWiring(unittest.TestCase):
 
     def test_the_targets_the_phony_line_and_the_readme(self):
         mk, managed, readme = read("Makefile"), read("mk", "managed.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                       # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                       # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         self.assertTrue(set(self.TARGETS) <= set(phony))                  # later kits append after them
         self.assertIn("| `managed.mk` |", readme)

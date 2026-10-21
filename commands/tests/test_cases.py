@@ -722,7 +722,7 @@ class WiringTests(unittest.TestCase):
 
     def test_the_makefile(self):
         mk = self.read("Makefile")
-        self.assertEqual(len(mk.splitlines()), 885)                             # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                             # workshop lesson 9.3 counts it
         self.assertIn("\n.DEFAULT_GOAL := dryrun\n", mk)
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         agents = self.read("mk", "agents.mk")

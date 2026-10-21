@@ -587,7 +587,7 @@ class WiringTest(unittest.TestCase):
         mk = (KIT / "Makefile").read_text(encoding="utf-8")
         ev = (KIT / "mk" / "evaluation.mk").read_text(encoding="utf-8")
         readme = (KIT / "mk" / "README.md").read_text(encoding="utf-8")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
         for target in ("label-sheet", "judge-agree", "judge-frozen"):
             self.assertIn(target, phony)

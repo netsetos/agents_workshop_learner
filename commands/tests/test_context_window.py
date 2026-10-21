@@ -3,7 +3,7 @@
     python -m unittest commands/tests/test_context_window.py -v          # from deploy/
 
 No network, no credential, no model. The first class needs only the standard library: mk/memory.mk's window-check
-target, the Makefile's 885 lines and the target's name in .PHONY, both CI lines and the new files' UNOWNED.md rows;
+target, the Makefile's 888 lines and the target's name in .PHONY, both CI lines and the new files' UNOWNED.md rows;
 nothing under services/ imports the module; the rule's arithmetic, plan(), on token counts, at its edges and on random
 sizes; turns() on stand-in messages, a result whose call sits in an earlier turn joining the turns between; the write
 rules on an earlier question - masked, then cut to the Desk's own 300 characters; the Rs 0 lane's ranking, its counts
@@ -70,7 +70,7 @@ class TheRuleAlone(unittest.TestCase):
 
     def test_memory_mk_holds_window_check_and_the_makefile_keeps_its_lines(self):
         mk, memory, readme = read("Makefile"), read("mk", "memory.mk"), read("mk", "README.md")
-        self.assertEqual(len(mk.splitlines()), 885)                     # workshop lesson 9.3 counts it
+        self.assertEqual(len(mk.splitlines()), 888)                     # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")]
         self.assertIn("window-check", phony.split())                    # present; later kits append after it
         self.assertRegex(memory, r"(?m)^window-check: \$\(if \$\(LIVE\),guard-project,\)$")   # offline needs no project
