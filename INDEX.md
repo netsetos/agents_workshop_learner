@@ -228,7 +228,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/corpus/zeta/osh_code_2020.pdf` | data | - | - |
 | `evals/decide.py` | code | 2.6 | - |
 | `evals/demo/README.md` | data | - | - |
-| `evals/demo/gratuity_amendment_2026.md` | data | - | 1.1 |
+| `evals/demo/gratuity_amendment_2026.md` | data | - | 1.1, 5.1 |
 | `evals/demo/hr_policy_2026_v2.md` | data | 6.3 | 1.3, 1.6, 4.1, 8.4, 11.4, 12.4 |
 | `evals/demo/smoke_note_v1.md` | data | - | 1.4, 1.7, 3.4 |
 | `evals/demo/smoke_note_v2.md` | data | - | 3.4 |

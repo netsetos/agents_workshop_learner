@@ -140,7 +140,7 @@ Operation: bash — run in the operator shell, in the kit (the one retrieve(), c
 Expected shape, not a promised result:
 
 ```text
-5 citations | answerable True | confidence high | 2.7 s
+1 citations | answerable True | confidence high | 2.7 s
   first: {'chunk_id': 'acme:aaaaaaaa#0', 'page': 3, 'score': 0.94}
   rag-api's own answer: Gratuity is payable on termination after not less than five years of continuous service [1
 ```
@@ -158,7 +158,7 @@ Operation: bash — run in the operator shell, in the kit (a small chat function
 Expected shape, not a promised result:
 
 ```text
-direct    tool_calls ['retrieve']  refusals []  citations 5  3180 ms
+direct    tool_calls ['retrieve']  refusals []  citations 1  3180 ms
       Gratuity is payable on termination after not less than five years of continuous service [1].
 ```
 
@@ -175,11 +175,11 @@ Operation: bash — run in the operator shell, in the kit (the LangChain loop on
 Expected shape, not a promised result:
 
 ```text
-langchain tool_calls ['retrieve']  refusals []  citations 5 n [1, 2, 3, 4, 5]  7240 ms
+langchain tool_calls ['retrieve']  refusals []  citations 1 n [1]  7240 ms
       After five years of continuous service, under the Payment of Gratuity Act, 1972 [1].
-  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 3 n [1, 2, 3]  11350 ms
+  langchain tool_calls ['retrieve', 'calculate_processing_cost']  refusals []  citations 1 n [1]  11350 ms
       The handbook has 283 pages [1]. At the priority tier (USD 0.12 a page) they cost USD 33.96, abou
-  direct    tool_calls ['retrieve']  refusals []  citations 3  3420 ms
+  direct    tool_calls ['retrieve']  refusals []  citations 1  3420 ms
       The documents give no per-page price for processing the handbook; the April invoice bills priori
 ```
 
@@ -275,6 +275,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`. All 33 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f11a226edbe5e25435493279fc5d0fa7fd5989fc`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`. All 33 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9abad409dcccc34daf6650ea28d882e0b674dc4a`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

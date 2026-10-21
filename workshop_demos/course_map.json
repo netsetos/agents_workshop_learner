@@ -299,7 +299,7 @@
     {
       "lesson": "5.1",
       "title": "Understand tool contracts and the direct agent loop",
-      "source_sha": "f11a226edbe5e25435493279fc5d0fa7fd5989fc",
+      "source_sha": "9abad409dcccc34daf6650ea28d882e0b674dc4a",
       "source_kind": "main_html",
       "demos": 10
     },
@@ -320,7 +320,7 @@
     {
       "lesson": "5.4",
       "title": "Implement the main LangGraph workflow",
-      "source_sha": "05b921c513d13f730d0c0a5e6e6d3edc1cd05705",
+      "source_sha": "1121e2c5893fb67f511df04c6ed9e2d261309687",
       "source_kind": "main_html",
       "demos": 6
     },

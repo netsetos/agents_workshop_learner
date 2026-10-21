@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`, reviewed at blob `f11a226edbe5e25435493279fc5d0fa7fd5989fc`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`, reviewed at blob `9abad409dcccc34daf6650ea28d882e0b674dc4a`. Learners read that page on the course site; this guide keeps its prose.
 
 An agent is a model that is allowed to call functions. What it may call, with which arguments, and what comes back is a contract, and the kit writes that contract once. Every brain shares one `retrieve()`. The tenant reaches a tool through the runtime, never through an argument the model fills. A failure comes back as data. You deploy the chat service in your lane's region and read the contract the model sees. Then you call the one `retrieve()` from your shell, and ask the same questions of two brains: the direct brain, which has no loop at all, and the LangChain loop, which decides for itself.
 
@@ -128,7 +128,7 @@ The function every brain calls, called directly, as a roster member.
 
 #### Do it
 
-Your shell ran the same function the chat service's brains run, and got the same contract back: five citations, a verdict, a confidence, and rag-api's own answer. That last field is the direct brain's whole job; the agent brains throw it away. A failure here prints `document retrieval is unavailable`, the tool layer's own words: a wrong `RAG_API_URL`, a missing role, or `adc NOT ok`. Those are the same words a model would read in a tool result, so it could tell you what went wrong.
+Your shell ran the same function the chat service's brains run, and got the same contract back: citations, a verdict, a confidence, and rag-api's own answer. That last field is the direct brain's whole job; the agent brains throw it away. The citations are the passages rag-api's answer cites, not the `top_k` it read, so their number changes from answer to answer. On a lane that kept lesson 1.1's rehearsal amendment current, the answer says six years and cites it: `evals/demo/gratuity_amendment_2026.md` substitutes six for five from 1 October 2026, and the dated rule (lesson 3.3) has the model follow the dated passage. That is your corpus answering, not a fault. A failure here prints `document retrieval is unavailable`, the tool layer's own words: a wrong `RAG_API_URL`, a missing role, or `adc NOT ok`. Those are the same words a model would read in a tool result, so it could tell you what went wrong.
 
 ### The direct brain: one retrieve(), no loop
 
@@ -142,7 +142,7 @@ A chat turn with no model in the chat service, and the tenant it was answered fo
 
 #### Do it
 
-A direct-brain answer with `retrieve` in `tool_calls`: this lesson's proof. The answer is rag-api's, with five citations, in about the time of one rag-api call. That is the floor. Every agent answer that follows has to justify its extra seconds against it. The turn was made for acme because the roster said so. Nothing in the request could have said otherwise.
+A direct-brain answer with `retrieve` in `tool_calls`: this lesson's proof. The answer is rag-api's, with the citations it used, in about the time of one rag-api call. That is the floor. Every agent answer that follows has to justify its extra seconds against it. The turn was made for acme because the roster said so. Nothing in the request could have said otherwise.
 
 ### The loop: the model chooses its tools
 
@@ -156,7 +156,7 @@ The LangChain brain is `create_agent` with the two tools, the system prompt and 
 
 #### Do it
 
-On the policy question, the model chose `retrieve` itself and wrote its own answer from the citations; it took longer than the direct brain for the same fact. Its citations are numbered 1 to 5, and its answer cites `[1]`. The cost question went to the same session, so the thread held the first turn too, and the list still names only this turn's two tools, with its citations numbered from 1 again. The second tool, `calculate_processing_cost`, priced 33.96 US dollars for 283 pages at the priority rate, Rs 2,886.60. The direct brain could only look the question up, and could only answer from what the documents say. The two brains may even give different numbers, because they consult different sources: the tool's price list, and whatever rate a document mentions. Your lists are the truth for your lane. A model that skipped the search, or searched twice, is still inside the contract.
+On the policy question, the model chose `retrieve` itself and wrote its own answer from the citations; it took longer than the direct brain for the same fact. Its citations are the passages rag-api's own answer cited, numbered from 1 for the turn, and its answer cites `[1]`: `retrieve` hands an agent what `/v1/query` returns, never the whole pool. The cost question went to the same session, so the thread held the first turn too, and the list still names only this turn's two tools, with its citations numbered from 1 again. The second tool, `calculate_processing_cost`, priced 33.96 US dollars for 283 pages at the priority rate, Rs 2,886.60. The direct brain could only look the question up, and could only answer from what the documents say. The two brains may even give different numbers, because they consult different sources: the tool's price list, and whatever rate a document mentions. Your lists are the truth for your lane. A model that skipped the search, or searched twice, is still inside the contract.
 
 #### Two searches in one message
 

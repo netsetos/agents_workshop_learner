@@ -91,7 +91,7 @@ def live_gate(session, *, report, source=None, expect_red=False, api=None):
     rows = value.get("records", [])
     if not rows:
         raise RuntimeError("The gate report has no evaluated rows.")
-    print("Gate exit:", status, "| report:", path, "| failed:", value.get("failed"))
+    print("make's exit:", status, "(run_eval's own: 0 green, 1 blocked, 2 a leak)" if status else "", "| report:", path, "| failed:", value.get("failed"))
     if expect_red:
         if status != 2 or any(r.get("outcome") != "ok" for r in rows) or not any(not r["pass"] for r in rows):
             raise RuntimeError("Expected evaluated answers failing the golden assertions. An HTTP/auth/schema error or a green gate does not prove this experiment.")
