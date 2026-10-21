@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html`, reviewed at blob `cce593fcc124d2a84e5a64db2f1576d32935ae14`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html`, reviewed at blob `c13c10b9db2e1fdf0b526e9a1ea8969bdb645a7e`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 1.1 to 1.4 followed a document from bytes to records and took for granted that the worker was called. This lesson is about the call. An object landing in the bucket becomes a message; the message reaches the worker carrying a token nobody else can mint; the worker answers with an HTTP status; and the platform does one of three things with that status: acknowledges it, tries again after a growing pause, or, after twelve refusals, parks the message where you can read it. Then the one document the push path must not attempt, and the lane that takes it instead.
 
@@ -169,6 +169,8 @@ The poison message from step 5 reaches the queue about an hour after its first r
 #### Decide, then clean up
 
 This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 1.8 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
+
+The read takes up to ten letters and acknowledges only the drill's, the one whose object is an `acme/poison-` file, so a busy queue's other letters are left for their own decision; they come back after the subscription's ack deadline.
 
 You read a message that had been refused twelve times, decoded the record inside it and found the zero that made it poison, and then took the operator's decision: drop it, and remove its cause. Notice what did not need doing: no worker was restarted, no subscription touched, no retry forced. The platform did the retrying, stopped at the ceiling, and kept the evidence for you. A dead letter you could not explain would be the other case, and the first read in step 4, the request log, is where that investigation starts.
 

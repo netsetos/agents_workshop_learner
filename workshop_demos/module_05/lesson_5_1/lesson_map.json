@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_05/lesson_5_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html",
-  "source_sha": "d4307be0cfde46bad14dd67a0a07dc509fa1c8d0",
+  "source_sha": "f11a226edbe5e25435493279fc5d0fa7fd5989fc",
   "shared_setup_windows": [
     1
   ],
@@ -244,7 +244,7 @@
           "subheading": "Do it: deploy",
           "purpose": "Do it: deploy",
           "label": "bash — run in the operator shell, in the kit (the chat service built and deployed in your region; several minutes)",
-          "expected": ">> commands/lesson-12.8.sh (DEPLOY block)\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT\nDeploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-chat-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,\n   documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,\n   documind-evalgrc-sa)\n>> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound\n... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)\nExecution [documind-checkpoint-setup-xxxxx] has successfully completed.\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
+          "expected": ">> commands/lesson-12.8.sh (DEPLOY block)\nCreating temporary archive of ... file(s) totalling ... MiB before compression.\n...\nDONE ... asia-south1-docker.pkg.dev/documind-ai-YOUR-ID/documind/chat:COMMIT\nDeploying container to Cloud Run service [documind-chat] in project [documind-ai-YOUR-ID] region [asia-south1]\n...\nService URL: https://documind-chat-NUMBER.asia-south1.run.app\nUpdated IAM policy for service [documind-chat].   (seven times, one per account: documind-ui-sa, documind-outsider-sa, documind-evalacme-sa,\n   documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,\n   documind-evalgrc-sa)\n>> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound\nJob [documind-checkpoint-setup] has successfully been deployed.\nExecution [documind-checkpoint-setup-xxxxx] has successfully completed.\n...\n>> you@example.com may mint tokens as documind-ui-sa\n>> you@example.com may mint tokens as documind-outsider-sa",
           "adaptations": [],
           "id": "source_6",
           "function": "step_01_deploy",

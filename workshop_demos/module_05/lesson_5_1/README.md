@@ -87,7 +87,7 @@ Updated IAM policy for service [documind-chat].   (seven times, one per account:
    documind-evalzeta-sa, documind-evalglobex-sa, documind-evalleaver-sa,
    documind-evalgrc-sa)
 >> documind-gchat-sa does not exist yet (terraform/desk.tf: make plan up; documind-gchat-sa only with GCHAT_DOOR=true) - not bound
-... job exists - continuing   (or: Job [documind-checkpoint-setup] has successfully been created.)
+Job [documind-checkpoint-setup] has successfully been deployed.
 Execution [documind-checkpoint-setup-xxxxx] has successfully completed.
 ...
 >> you@example.com may mint tokens as documind-ui-sa
@@ -275,6 +275,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`. All 33 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d4307be0cfde46bad14dd67a0a07dc509fa1c8d0`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_5.1_Agent_Loop_WIX.html`. All 33 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `f11a226edbe5e25435493279fc5d0fa7fd5989fc`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

@@ -30,12 +30,12 @@ def step_01_decide_then_clean_up(session):
     This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 1.8 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell (removes the dead letter and the empty object; nothing else).
+    Operations: bash — run in the operator shell (removes the drill's dead letter and the empty object; nothing else).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: acme/poison-1758542871.pdf
+    Observe: Acked the messages with the following ackIds: [...]
     Removing gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...
     """
     from workshop_helpers.poison import finish_drill

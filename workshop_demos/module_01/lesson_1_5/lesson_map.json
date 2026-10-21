@@ -5,12 +5,13 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_01/lesson_1_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_1.5_Upload_Events_WIX.html",
-  "source_sha": "cce593fcc124d2a84e5a64db2f1576d32935ae14",
+  "source_sha": "c13c10b9db2e1fdf0b526e9a1ea8969bdb645a7e",
   "shared_setup_windows": [
     1
   ],
   "source_window_count": 42,
   "persist_variables": [
+    "ACK",
     "API",
     "API_URL",
     "BATCH_JOB",
@@ -522,8 +523,8 @@
           "heading": "Dead letters: reading the queue, deciding, cleaning up",
           "subheading": "Decide, then clean up",
           "purpose": "This dead letter deserves the second choice: the object was never meant to be indexed. Acknowledge the message to remove it from the queue, and delete the empty object from the bucket, because an object with no ledger row is exactly what the nightly walk of lesson 1.8 looks for, and it would rewrite the object onto itself and send the same poison round again every night. Both commands change your lane; both act only on the drill's own artefacts.",
-          "label": "bash — run in the operator shell (removes the dead letter and the empty object; nothing else)",
-          "expected": "acme/poison-1758542871.pdf\nRemoving gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...",
+          "label": "bash — run in the operator shell (removes the drill's dead letter and the empty object; nothing else)",
+          "expected": "Acked the messages with the following ackIds: [...]\nRemoving gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...",
           "adaptations": [
             "Use a unique saved empty-object name and generation; inspect/acknowledge only its exact dead letter and delete only its owned object. Time-window retry logs alone cannot identify that object."
           ],
@@ -777,38 +778,38 @@
     },
     {
       "window": 38,
-      "label": "expected",
+      "label": "expected (your ack id differs)",
       "heading": "Dead letters: reading the queue, deciding, cleaning up",
       "anchor": "s7",
-      "line": 814
+      "line": 817
     },
     {
       "window": 39,
       "label": "services/ingest/idempotency.py - claim(): why a transaction",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 831
+      "line": 835
     },
     {
       "window": 40,
       "label": "commands/lesson-12.5.sh - the worker's own limits: one request per instance, 600 seconds, thirty instances",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 841
+      "line": 845
     },
     {
       "window": 41,
       "label": "services/ingest/idempotency.py - the claim's lease: the ack deadline and a minute (13 October 2026)",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 854
+      "line": 858
     },
     {
       "window": 42,
       "label": "terraform/batch.tf - two hours, and the claim carries the retry",
       "heading": "At-least-once, and what it costs",
       "anchor": "s8",
-      "line": 866
+      "line": 870
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
