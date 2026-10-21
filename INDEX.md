@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1653 files; 235 quoted by a lesson, 349 shown or named by one.
+1655 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -133,6 +133,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_lane.py` | code | - | - |
 | `commands/tests/test_local_lane.py` | code | - | - |
 | `commands/tests/test_managed_peer.py` | code | - | - |
+| `commands/tests/test_managed_sync.py` | code | - | - |
 | `commands/tests/test_model_quota.py` | code | - | - |
 | `commands/tests/test_pins.py` | code | - | 10.8 |
 | `commands/tests/test_prompt_versions.py` | code | 3.3, 3.6 | 12.1 |
@@ -265,6 +266,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/tests/judge_fixtures/labels.FX1.csv` | data | - | - |
 | `evals/tests/judge_fixtures/labels.FX2.csv` | data | - | - |
 | `evals/tests/judge_fixtures/ratings.ndjson` | other | - | - |
+| `evals/tests/test_ablate_search.py` | code | - | - |
 | `evals/tests/test_agent_eval.py` | code | - | - |
 | `evals/tests/test_agreement.py` | code | - | - |
 | `evals/tests/test_attacks.py` | code | - | - |

@@ -50,7 +50,7 @@ def step_01_your_thread_replayed_and_forked_on_your_ma(session):
 
 # Original CLI workflow for step_02_change_it_the_prompt_s_rule_for_follow_ups.
 COMMANDS_02 = """sed -i 's/document question, a follow-up too, and cite/document question, and cite/' services/chat/brains.py
-grep -c "a follow-up too" services/chat/brains.py         # 0: the clause is gone from your clone, and never was on the lane
+grep -c "a follow-up too" services/chat/brains.py || true         # 0: the clause is gone from your clone, and never was on the lane
 
 """
 

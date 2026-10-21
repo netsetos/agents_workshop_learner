@@ -54,6 +54,7 @@ latency; hybrid 20 -> rerank 5 identical to the lane's row at alpha 0.5 and (ACM
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -123,6 +124,7 @@ class Lane:
             project=project, location="global", ranking_config="default_ranking_config")
         self._tenant = {}
         self._rag_module, self._corpora, self._sources = None, {}, {}
+        self.segments_refused = False         # vertex_search(): a standard-edition store refuses extractive segments
 
     def embed_query(self, q: str) -> list:
         from google.genai import types
@@ -224,13 +226,22 @@ class Lane:
         serving = (f"projects/{self.project}/locations/global/collections/default_collection/dataStores/{store}"
                    f"/servingConfigs/default_search")
         spec = discoveryengine.SearchRequest.ContentSearchSpec(
-            snippet_spec=discoveryengine.SearchRequest.ContentSearchSpec.SnippetSpec(return_snippet=True),
-            extractive_content_spec=discoveryengine.SearchRequest.ContentSearchSpec.ExtractiveContentSpec(max_extractive_segment_count=3))
+            snippet_spec=discoveryengine.SearchRequest.ContentSearchSpec.SnippetSpec(return_snippet=True))
+        if not self.segments_refused:          # a standard-edition store refuses segments (400): snippets, as the API asks
+            spec.extractive_content_spec = discoveryengine.SearchRequest.ContentSearchSpec.ExtractiveContentSpec(max_extractive_segment_count=3)
+        try:
+            results = list(client.search(request=discoveryengine.SearchRequest(serving_config=serving, query=question,
+                                                                               page_size=k, content_search_spec=spec)))
+        except Exception as e:
+            if self.segments_refused or "enterprise edition" not in str(e):
+                raise
+            self.segments_refused = True
+            return self.vertex_search(question, tenant, k)
         out = []
-        for r in client.search(request=discoveryengine.SearchRequest(serving_config=serving, query=question, page_size=k, content_search_spec=spec)):
+        for r in results:
             dd = discoveryengine.Document.to_dict(r.document).get("derived_struct_data") or {}
             texts = [str(s.get("content") or "") for s in (dd.get("extractive_segments") or [])] or \
-                    [re.sub(r"<[^>]+>", "", str(s.get("snippet") or "")) for s in (dd.get("snippets") or [])]
+                    [html.unescape(re.sub(r"<[^>]+>", "", str(s.get("snippet") or ""))) for s in (dd.get("snippets") or [])]
             for i, text in enumerate(t for t in texts if t.strip()):
                 out.append({"chunk_id": f"{tenant}:{r.document.id}#vs-{len(out)}", "text": text,
                             "source_uri": self.source_of(tenant, r.document.id)})

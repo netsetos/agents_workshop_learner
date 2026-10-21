@@ -114,6 +114,8 @@ The edit is one sed line per file. Make it in the worker alone first and run the
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (one twin only, on purpose).
 
+IDE adaptation: Read the twin test's red as the cell's answer: with the worker alone edited it must fail, and its exit 1 under pipefail stopped the demo with services/ingest/main.py edited and the put-back step never run (22 October 2026). The step now fails only if the test passes.
+
 Expected shape, not a promised result:
 
 ```text

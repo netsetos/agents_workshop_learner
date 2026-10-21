@@ -67,6 +67,7 @@ def step_02_your_thread(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/ui_thread.txt]
     """
+    manual_checkpoint("In the deployed UI's Chat page, signed in as yourself, set Brain to langgraph and ask: After how many years of continuous service is gratuity payable? When the answer is in, ask: Is it payable to a contract employee? Type done to read your thread back from the checkpointer: without the two questions there is no thread, and every later step of this lesson has nothing to read.")
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)
 

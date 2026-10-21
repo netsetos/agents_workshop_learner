@@ -310,7 +310,9 @@
           "purpose": "The edit is one sed line per file. Make it in the worker alone first and run the test: this is the mistake the test exists for, and you should see what it says. Then make it in the twin and run the test again.",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (one twin only, on purpose)",
           "expected": "services/ingest/main.py:105:CHUNK_CHARS, CHUNK_OVERLAP = 400, 50\nshared/documind_corpus.py:38:CHUNK_CHARS, CHUNK_OVERLAP = 2000, 200                     # services/ingest/main.py\nFAIL: test_one_size_and_one_overlap (commands.tests.test_twin_chunker.TheTwinsAgree.test_one_size_and_one_overlap)\nAssertionError: services/ingest/main.py sets CHUNK_CHARS, CHUNK_OVERLAP = 400, 50 and shared/documind_corpus.py sets 2000, 200: a chunker change edits both lines\nFAIL: test_the_corpus_at_the_kits_pair (commands.tests.test_twin_chunker.TheTwinsAgree.test_the_corpus_at_the_kits_pair)\nAssertionError: acme/cgst_act_2017.md: 1536 chunks from services/ingest/main.py, 390 from shared/documind_corpus.py\nFAIL: test_the_two_differences_the_kit_keeps (commands.tests.test_twin_chunker.TheTwinsAgree.test_the_two_differences_the_kit_keeps)\nAssertionError: the invoice: services/ingest/main.py gives [('w0', None), ('w1', None), ('w2', None)], shared/documind_corpus.py [('p1-0', 1)]; the kit keeps w<k> with no page against p1-<k> on page 1\nRan 11 tests in ...s\nFAILED (failures=3)",
-          "adaptations": [],
+          "adaptations": [
+            "Read the twin test's red as the cell's answer: with the worker alone edited it must fail, and its exit 1 under pipefail stopped the demo with services/ingest/main.py edited and the put-back step never run (22 October 2026). The step now fails only if the test passes."
+          ],
           "id": "source_15",
           "function": "step_01_definition",
           "window": 15,

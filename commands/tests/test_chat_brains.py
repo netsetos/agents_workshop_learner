@@ -91,6 +91,16 @@ class SummaryIsPerTurn(unittest.TestCase):
         with self.assertRaises(ValueError):
             summary_fn()(self.thread(), "turn9")
 
+    def test_an_agent_turn_counts_in_the_sidebar_cost(self):
+        """The agent branch returns before the stream's tally, so it adds the turn's cost_inr and redraws the sidebar
+        itself: under an agent brain the sidebar stayed at Rs 0.00 (22 October 2026)."""
+        branch = next(n for n in ast.walk(ast.parse(UI_SRC)) if isinstance(n, ast.If)
+                      and ast.get_source_segment(UI_SRC, n.test) == 'brain != "direct"')
+        src = ast.get_source_segment(UI_SRC, branch)
+        self.assertIn('ss.last_turn_cost = lim["cost_inr"] / USD_INR', src)
+        self.assertIn("ss.session_cost_usd = ss.get(\"session_cost_usd\", 0) + ss.last_turn_cost", src)
+        self.assertLess(src.index("show_cost(cost_slot)"), src.rindex("return"))     # before the branch's last return
+
     def test_the_ui_draws_an_agent_answer_with_pills_and_escapes_it(self):
         """_as_source() maps the chat service's citations to citations.py's shape, and the answer is escaped
         before render_with_citations(), which draws with unsafe_allow_html."""

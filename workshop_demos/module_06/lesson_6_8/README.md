@@ -81,6 +81,10 @@ Do it: your thread
 
 Operation: bash — run in the operator shell, in the kit (your threads, then the newest decoded; reads only).
 
+Manual action: In the deployed UI's Chat page, signed in as yourself, set Brain to langgraph and ask: After how many years of continuous service is gratuity payable? When the answer is in, ask: Is it payable to a contract employee? Type done to read your thread back from the checkpointer: without the two questions there is no thread, and every later step of this lesson has nothing to read.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 Expected shape, not a promised result:
 
 ```text
@@ -272,6 +276,8 @@ Expected shape, not a promised result:
 The system prompt tells the model to search for every document question, "a follow-up too". Take that clause out of your clone's brains.py and replay the same turn: the replay asks your follow-up again with the edited prompt and the same history. The lane's prompt does not change, since the replay runs the brain from your clone, on your machine.
 
 Operation: bash — run in the operator shell, in the kit (edits one line of your clone's brains.py).
+
+IDE adaptation: Read grep's count, not its status: once the sed has taken the clause out, grep -c prints the 0 the page reads and exits 1, which stopped the demo with brains.py still edited and its restore not run (22 October 2026). The sed still fails the step if it fails.
 
 Expected shape, not a promised result:
 

@@ -185,6 +185,13 @@ def chat_page(user):
             scrubbed = _scrubbed_line(body)          # AGENT_SCRUB on documind-chat (workshop lesson 10.8)
             if scrubbed:
                 st.caption(scrubbed)
+        if lim.get("cost_inr") is not None:
+            # The turn's whole bill, its model calls and rag-api's searches, counted in the sidebar too: it stayed at
+            # Rs 0.00 under an agent brain (22 October 2026). The response carries no token counts, so Tokens does not move.
+            ss = st.session_state
+            ss.last_turn_cost = lim["cost_inr"] / USD_INR
+            ss.session_cost_usd = ss.get("session_cost_usd", 0) + ss.last_turn_cost
+            show_cost(cost_slot)
         st.session_state.messages.append({"role": "assistant", "content": answer})
         return
 

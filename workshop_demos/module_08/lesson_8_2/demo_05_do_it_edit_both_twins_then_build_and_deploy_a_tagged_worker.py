@@ -29,7 +29,8 @@ RETRY_FAILED_STEP = False
 # Original CLI workflow for step_01_definition.
 COMMANDS_01 = """sed -i 's/^CHUNK_CHARS, CHUNK_OVERLAP = 2000, 200/CHUNK_CHARS, CHUNK_OVERLAP = 400, 50/' services/ingest/main.py
 grep -n "^CHUNK_CHARS" services/ingest/main.py shared/documind_corpus.py
-python -m unittest commands/tests/test_twin_chunker.py 2>&1 | grep -E "^(FAIL:|AssertionError|Ran |OK|FAILED)"
+{ python -m unittest commands/tests/test_twin_chunker.py 2>&1 || true; } | grep -E "^(FAIL:|AssertionError|Ran |OK|FAILED)" | tee /tmp/twin82.txt
+grep -q "^FAILED" /tmp/twin82.txt   # one twin edited: the test must fail, naming both lines
 
 """
 

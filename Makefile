@@ -21,7 +21,7 @@
 #     make retire / restore SOURCE=                 withdraw a document (a tombstone the nightly walk honours), bring it back
 #     make batch / queued / batch-job            the batch lane (13 September 2026): drain the queue now, list it, declare the job
 #     make graph TENANT=acme                     build the tenant's knowledge graph (4.6) for RETRIEVAL_GRAPH=on|auto
-#     make managed-status / rag-corpus TENANT=   the managed mirror (P9, 4.3 + 4.4): the stores against the ledger; a tenant's RAG Engine corpus
+#     make managed-status / rag-corpus TENANT=   the managed mirror (P9, 4.3 + 4.4): the stores against the ledger; a tenant's RAG Engine corpus; managed-sync repairs drift
 #     make candidate RETRIEVAL_BACKEND=rag_engine  4.3's corpus as the API's retrieval stage (P9.4), judged on a candidate; make ablate ABLATE_ARGS="--arms all" first
 #     make rag-engine-enable                     once per project: RAG Engine in serverless mode + vectorsearch (4.3's one-time prep)
 #     make down  PROJECT=...                        the services, then terraform destroy; names what only project deletion removes
@@ -193,7 +193,7 @@ SCRIPTS    = commands/lesson-12.5.sh commands/lesson-12.2.sh commands/lesson-12.
         gpu-quota gpu-cap gpu-cap-off off off-now \
         release-candidate record-candidate promote rollback smoke-all usage ingest-one poison dlq down-services \
         reindex retire restore reconcile reconcile-job backfill-current sources purge smoke-reindex \
-        batch queued batch-job graph managed-status rag-corpus rag-engine-enable tenant-policy tenant-backend \
+        batch queued batch-job graph managed-status managed-sync rag-corpus rag-engine-enable tenant-policy tenant-backend \
         managed-stores managed-stores-down vector-status wait-vectors backfill-vectors desk-check route-probe doc-types limits limits-check limits-drill desk roles desk-queues cases cases-overdue smoke-cases desk-job desk-operators route-index route-calibrate smoke-desk route-eval desk-views deploy-gchat smoke-gchat decide bench exemplars label-sheet judge-agree judge-frozen prompt-version agent-turn agent-eval agent-tests approval-check thread replay ci-vars keys-check triage attack-offline attack-eval context-sources window-check gate promote-gated smoke-deployed incident gotchas gotcha-drill gotcha-detect remediate incident-drill managed-peer-up managed-peer-ask managed-peer-trace managed-peer-smoke managed-peer-sessions managed-peer-down ralph-image ralph ralph-workspace ralph-check ralph-probe review-diff review-eval improve prompt-candidate route-compare arms-combine capstone-check handover agent-drill handoff smoke-handoff check-callers pin-tools evil-mcp mcp-local attack-agents agent-shapes agent-actions withdraw-run smoke-approval
 
 # ---------- the module files (22 September 2026): one .mk per lane; the Makefile keeps the variables and the core ----------

@@ -1,4 +1,4 @@
-import hashlib, json, logging, re
+import hashlib, html, json, logging, re
 from functools import lru_cache
 from google.cloud import aiplatform
 from google.cloud.aiplatform.matching_engine.matching_engine_index_endpoint import Namespace
@@ -254,6 +254,19 @@ def _search():
     (managed.tf), so no region is chosen here; the client's default endpoint serves them."""
     return discoveryengine.SearchServiceClient()
 
+# Whether the stores serve extractive segments. A standard-edition store refuses the request outright - 400
+# FailedPrecondition, "Cannot use enterprise edition features ... extractive answers/segments" - so every zeta query
+# fell back to the Firestore rung (22 October 2026). After the first refusal the process asks for snippets alone.
+_SEGMENTS = {"refused": False}
+
+def _search_spec():
+    """Snippets always; extractive segments too, until a store has refused them (_SEGMENTS)."""
+    css = discoveryengine.SearchRequest.ContentSearchSpec
+    kw = {"snippet_spec": css.SnippetSpec(return_snippet=True)}
+    if not _SEGMENTS["refused"]:
+        kw["extractive_content_spec"] = css.ExtractiveContentSpec(max_extractive_segment_count=settings.search_segments)
+    return css(**kw)
+
 def _search_serving_config(tenant_id: str) -> str:
     """The tenant's data store, by the mirror's id (documind-{tenant}: services/ingest/managed.py's store_id, the same
     regex), searched through its default serving config the way 4.4's notebook searches it - no engine needed."""
@@ -281,7 +294,7 @@ def _search_texts(doc) -> list[tuple[str, str]]:
             out.append((text, str(seg.get("pageNumber") or "")))
     if not out:
         for snip in dd.get("snippets") or []:
-            text = re.sub(r"<[^>]+>", "", str(snip.get("snippet") or "")).strip()
+            text = html.unescape(re.sub(r"<[^>]+>", "", str(snip.get("snippet") or ""))).strip()   # &#39; is an apostrophe
             if text:
                 out.append((text, ""))
     return out
@@ -305,14 +318,20 @@ def _search_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | Non
     kind = (filters or {}).get("kind")
     if kind and kind != "text":                        # figures or segments only: the store has none, the index has them
         return _media_rows(vec, tenant_id, settings.top_k_retrieve, filters)
-    try:
-        spec = discoveryengine.SearchRequest.ContentSearchSpec(
-            snippet_spec=discoveryengine.SearchRequest.ContentSearchSpec.SnippetSpec(return_snippet=True),
-            extractive_content_spec=discoveryengine.SearchRequest.ContentSearchSpec.ExtractiveContentSpec(
-                max_extractive_segment_count=settings.search_segments))
-        results = list(_search().search(request=discoveryengine.SearchRequest(
+    def ask():
+        return list(_search().search(request=discoveryengine.SearchRequest(
             serving_config=_search_serving_config(tenant_id), query=query, page_size=settings.top_k_retrieve,
-            filter=_search_filter(filters), content_search_spec=spec)))
+            filter=_search_filter(filters), content_search_spec=_search_spec())))
+    try:
+        try:
+            results = ask()
+        except Exception as e:
+            if _SEGMENTS["refused"] or "enterprise edition" not in str(e):
+                raise
+            _SEGMENTS["refused"] = True                # a standard-edition store: snippets from now on
+            logging.warning(json.dumps({"event": "vertex_search_snippets", "tenant": tenant_id, "error": str(e)[:160],
+                                        "note": "the store refused extractive segments; asking for snippets alone"}))
+            results = ask()
     except Exception as e:
         logging.warning(json.dumps({"event": "vertex_search_fallback", "tenant": tenant_id, "error": str(e)[:200],
                                     "hint": "no data store for the tenant (MANAGED_SEARCH=true make up declares one per `any` tenant), or the store did not answer"}))
