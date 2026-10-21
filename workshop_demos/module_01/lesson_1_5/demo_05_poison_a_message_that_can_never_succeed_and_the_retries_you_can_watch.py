@@ -25,12 +25,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_start_the_drill_then_watch_the_first_retri.
-COMMANDS_01 = """export POISON_SINCE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-make poison PROJECT=$PROJECT TENANT=acme
-
-"""
-
 def step_01_start_the_drill_then_watch_the_first_retri(session):
     """Run Do it: start the drill, then watch the first retries at this checkpoint.
 
@@ -48,8 +42,8 @@ def step_01_start_the_drill_then_watch_the_first_retri(session):
       Input should be greater than or equal to 1 [type=greater_than_equal, input_value='0', input_type=str]
     >> Pub/Sub retries a non-2xx with backoff (10 s to 600 s, twelve attempts: eventarc.tf), then ingest-dlq: make dlq about an hour after this line
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    from workshop_helpers.poison import create_drill
+    create_drill(session)
 
 # Original CLI workflow for step_02_start_the_drill_then_watch_the_first_retri.
 COMMANDS_02 = """gcloud logging read "resource.type=\\"cloud_run_revision\\" AND resource.labels.service_name=\\"documind-ingest\\" AND logName=\\"projects/$PROJECT/logs/run.googleapis.com%2Frequests\\" AND httpRequest.status=400 AND timestamp>=\\"$POISON_SINCE\\"" \\

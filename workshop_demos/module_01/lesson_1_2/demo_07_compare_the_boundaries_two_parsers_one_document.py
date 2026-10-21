@@ -39,8 +39,8 @@ def step_01_see_it_page_by_page(session):
     pages with a different number of windows: [(7, 3, 2), (23, 3, 2)]
     p2-0 on the lane: 2000 chars, hash 4c19e0b7a2d8
     p2-0 in the mirror: 2000 chars, hash 6a3f7e9c01b5
-    lane text starts: 'THE CODE ON WAGES, 2019\\nCHAPTER I\\nPRELIMINARY\\n1. (1) This Code may be called ...'
-    mirror text starts: 'THE CODE ON WAGES, 2019 CHAPTER I PRELIMINARY 1. (1) This Code may be called ...'
+    lane text starts: 'Definitions.\\n2\\nTHE GAZETTE OF INDIA EXTRAORDINARY\\n[PART II-\\n2. In this Code, unl'
+    mirror text starts: '2 THE GAZETTE OF INDIA EXTRAORDINARY [P ART II—\\n2. In this Code, unless the cont'
     """
     import os, sys, warnings
     warnings.filterwarnings("ignore", category=UserWarning)

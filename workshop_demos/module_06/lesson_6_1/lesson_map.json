@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html",
-  "source_sha": "c0806f267e1ee0a96894843654d25b90b5c7fe8b",
+  "source_sha": "272457217222d6e81f3450e0a57382c64f84b1d3",
   "shared_setup_windows": [
     1
   ],
@@ -375,10 +375,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
-        853,
-        856,
-        904,
-        909
+        864,
+        867,
+        915,
+        920
       ],
       "offline": false,
       "live_verified": false,
@@ -394,7 +394,7 @@
           "id": "source_37",
           "function": "step_01_offline_the_two_records_side_by_side",
           "window": 37,
-          "source_line": 853,
+          "source_line": 864,
           "manual_checkpoint": null
         },
         {
@@ -407,7 +407,7 @@
           "id": "source_38",
           "function": "step_02_offline_the_two_records_side_by_side",
           "window": 38,
-          "source_line": 856,
+          "source_line": 867,
           "manual_checkpoint": null
         },
         {
@@ -420,7 +420,7 @@
           "id": "source_40",
           "function": "step_03_on_your_lane_a_chat_brain_and_the_desk",
           "window": 40,
-          "source_line": 904,
+          "source_line": 915,
           "manual_checkpoint": null
         },
         {
@@ -433,7 +433,7 @@
           "id": "source_42",
           "function": "step_04_on_your_lane_a_chat_brain_and_the_desk",
           "window": 42,
-          "source_line": 909,
+          "source_line": 920,
           "manual_checkpoint": null
         }
       ],
@@ -460,8 +460,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_06/lesson_6_1/GUIDE.md",
       "source_lines": [
-        944,
-        998
+        955,
+        1009
       ],
       "offline": false,
       "live_verified": false,
@@ -477,7 +477,7 @@
           "id": "source_46",
           "function": "step_01_offline",
           "window": 46,
-          "source_line": 944,
+          "source_line": 955,
           "manual_checkpoint": null
         },
         {
@@ -490,7 +490,7 @@
           "id": "source_48",
           "function": "step_02_on_your_lane",
           "window": 48,
-          "source_line": 998,
+          "source_line": 1009,
           "manual_checkpoint": null
         }
       ],
@@ -768,56 +768,56 @@
       "label": "commands/tests/test_context_sources.py - offline, TOP_K=3 moves the tool results and nothing else",
       "heading": "Change it: TOP_K, and which part of the bill moves",
       "anchor": "s8",
-      "line": 833
+      "line": 844
     },
     {
       "window": 39,
       "label": "expected (the cell, run on the two records the command wrote when this page was built)",
       "heading": "Change it: TOP_K, and which part of the bill moves",
       "anchor": "s8",
-      "line": 888
+      "line": 899
     },
     {
       "window": 41,
       "label": "expected (the author's lane: your tokens, rupees and answers are yours)",
       "heading": "Change it: TOP_K, and which part of the bill moves",
       "anchor": "s8",
-      "line": 906
+      "line": 917
     },
     {
       "window": 43,
       "label": "expected (the author's lane: your tokens, rupees and answers are yours)",
       "heading": "Change it: TOP_K, and which part of the bill moves",
       "anchor": "s8",
-      "line": 911
+      "line": 922
     },
     {
       "window": 44,
       "label": "commands/context_sources.py - TURNS: the earlier questions, asked first on one local thread",
       "heading": "The thread rides every call too",
       "anchor": "s9",
-      "line": 925
+      "line": 936
     },
     {
       "window": 45,
       "label": "services/rag-api/context_budget.py - TokenBudget's history line: the chat brains resend the whole thread",
       "heading": "The thread rides every call too",
       "anchor": "s9",
-      "line": 940
+      "line": 951
     },
     {
       "window": 47,
       "label": "expected (the command, run on the kit when this page was built: a scripted model, Rs 0; your offline run prints the same)",
       "heading": "The thread rides every call too",
       "anchor": "s9",
-      "line": 946
+      "line": 957
     },
     {
       "window": 49,
       "label": "expected (the author's lane: your tokens, rupees and answers are yours)",
       "heading": "The thread rides every call too",
       "anchor": "s9",
-      "line": 1000
+      "line": 1011
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

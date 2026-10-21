@@ -617,7 +617,8 @@ class KitAssumptionsTest(unittest.TestCase):
         gen, schemas = self.read("services/rag-api/generator.py"), self.read("shared/documind_schemas.py")
         self.assertIn('c["quote"] = c["quote"][: limit - 3].rstrip() + "..."', gen)      # what repaired() reproduces
         self.assertIn('quote: str = Field(max_length=200, description="Exact words from that source")', schemas)
-        self.assertIn('quote=(d.quote or c.get("text", ""))[:500],', schemas)            # what resolved() reproduces
+        self.assertIn('quote=(quote or c.get("text", ""))[:500],', schemas)              # what resolved() reproduces
+        self.assertIn('cite(n, "")', schemas)                         # a source cited only in the prose: substituted too
         self.assertIn("ans = resolve(draft, packed)", gen)
 
     def test_the_route_and_its_reply(self):

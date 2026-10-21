@@ -842,8 +842,9 @@ def quote_check(citation: dict, pool: list[dict] | None) -> str:
         own          the quoted words are in the passage the citation names (its chunk_id)
         elsewhere    not there, but in another passage of the pool: real words under the wrong [Source N]
         absent       in no passage of the pool: words the model wrote, not words it read
-        substituted  the model gave no quote, so resolve() (shared/documind_schemas.py, which rag-api's generator
-                     calls) put the chunk's first 500 characters in its place: nothing was quoted, nothing is supported
+        substituted  the model gave no quote, or cited the source only as an [N] in its prose, so resolve()
+                     (shared/documind_schemas.py, which rag-api's generator calls) put the chunk's first 500 characters
+                     in its place: nothing was quoted, nothing is supported
         unread       the passage the citation names is not in the pool read back, or no pool was read: not judged
 
     The match is judge_citations()'s - whitespace collapsed, case folded, a substring - against one passage instead of

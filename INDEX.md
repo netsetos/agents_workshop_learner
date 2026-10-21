@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1649 files; 235 quoted by a lesson, 349 shown or named by one.
+1651 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -142,6 +142,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_release_repair.py` | code | - | 11.3 |
 | `commands/tests/test_remediate.py` | code | 10.11 | - |
 | `commands/tests/test_review_diff.py` | code | - | - |
+| `commands/tests/test_search_mirror.py` | code | - | - |
 | `commands/tests/test_session_restart.py` | code | - | - |
 | `commands/tests/test_smoke_agent_expectations.py` | code | - | - |
 | `commands/tests/test_smoke_chat_markers.py` | code | - | - |
@@ -277,6 +278,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/tests/test_prompt_bench.py` | code | - | 3.1 |
 | `evals/tests/test_prompt_rules.py` | code | - | - |
 | `evals/tests/test_query_rewrite.py` | code | - | 2.5 |
+| `evals/tests/test_resolve_citations.py` | code | - | - |
 | `evals/tests/test_route_arms.py` | code | - | 10.5 |
 | `evals/tests/test_route_eval.py` | code | - | - |
 | `evals/tests/test_route_exemplars.py` | code | - | - |

@@ -24,14 +24,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_when_it_has_landed.
-COMMANDS_01 = """make dlq PROJECT=$PROJECT
-
-gcloud pubsub subscriptions pull ingest-dlq-sub --project "$PROJECT" --limit 1 --format='value(message.data)' \\
-  | base64 -d | python -c "import json,sys; r=json.load(sys.stdin); print({k: r.get(k) for k in ('name','size','contentType','generation','timeCreated')})"
-
-"""
-
 def step_01_when_it_has_landed(session):
     """Run Read it, when it has landed at this checkpoint.
 
@@ -48,8 +40,8 @@ def step_01_when_it_has_landed(session):
     {'name': 'acme/poison-1758542871.pdf', 'size': '0', 'contentType': 'application/pdf', 'generation': '1758542872123456', 'timeCreated': '2026-09-22T12:17:52.101Z'}
     """
     manual_checkpoint("Dead-letter delivery can take about an hour. Inspect the drill's dead letter only once it has landed. Stop here and rerun this demo later; the steps already completed will not run again.")
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    from workshop_helpers.poison import inspect_dead_letter
+    inspect_dead_letter(session)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

@@ -562,3 +562,14 @@ for a lane made before them), lesson 0.4's the third.
 | `commands/build-access.sh` | **0.3** | The recovery box's three grants to the default compute account, each skipped when present; the `_cloudbuild` bucket made first so it can carry its grant; 120 s for IAM only when a grant is new. |
 | `commands/bq-views-when-ready.sh` | **0.3** | `make bq-views` when `documind_observability.run_googleapis_com_stdout` exists, otherwise one line saying to run it after `make smoke`. |
 | `commands/down-region.sh` | **0.4** | STOP (exit 2) when the saved inputs name PROJECT in another region than REGION; passes when there are no saved inputs for PROJECT. |
+
+## Citations reconciled with the answer, and the search mirror's own bucket (21 October 2026)
+
+Tests for two kit changes from the end-to-end run: `resolve()` keeps one citation per chunk and adds one for every
+source the answer cites only in its prose; the Vertex AI Search mirror stages its text in `<project>-search`
+(`terraform/managed.tf`), not the audit bucket, and `stamp()` replaces `mirrored`. Pages 3.5 and 3.6 own the first.
+
+| File | Owning lesson | Notes for whoever adopts it |
+|---|---|---|
+| `evals/tests/test_resolve_citations.py` | **3.5** | The two live failure shapes ([1, 2] with one entry; one chunk three times), out-of-range numbers and every marker form. |
+| `commands/tests/test_search_mirror.py` | **7.4** | `Mirror.from_env` stages in `<project>-search` or `SEARCH_BUCKET`, never `AUDIT_BUCKET`; `stamp()` writes `mirrored` as field paths. |

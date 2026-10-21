@@ -82,28 +82,28 @@
     {
       "lesson": "1.2",
       "title": "Parse documents and compare chunk boundaries",
-      "source_sha": "81377701a6c00ffd961946301ab13592d0df1175",
+      "source_sha": "cf4de0e8fa5dceea659c2bb63e9b469613c35756",
       "source_kind": "main_html",
       "demos": 8
     },
     {
       "lesson": "1.3",
       "title": "Create and validate compatible embeddings",
-      "source_sha": "331d4265a5226c685ed912284b8c7d6c03da65df",
+      "source_sha": "91794cb6f727b4b8fc4a76fc59be7b03f06fbaf5",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "1.4",
       "title": "Write, inspect and verify indexed records",
-      "source_sha": "35d1ef6100104783e218b88c6bfee2bd2d24772a",
+      "source_sha": "2f5efe45e2ad0f47f4e30cf4cb9f732e3bf58f91",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "1.5",
       "title": "Follow upload events, retries, dead-letter handling and the batch lane",
-      "source_sha": "a5ee48f2f82139bc413b1ee30bf237ab416fbd18",
+      "source_sha": "cce593fcc124d2a84e5a64db2f1576d32935ae14",
       "source_kind": "main_html",
       "demos": 10
     },
@@ -124,7 +124,7 @@
     {
       "lesson": "1.8",
       "title": "Restore documents and reconcile index differences",
-      "source_sha": "d7611c7142d85f09b46976f186e320a40d9eb8f4",
+      "source_sha": "1071cdd21108fa3390a4d88102c100d4069b8275",
       "source_kind": "main_html",
       "demos": 14
     },
@@ -187,7 +187,7 @@
     {
       "lesson": "3.3",
       "title": "Recognise prompt failure modes and fix them in the prompt",
-      "source_sha": "523eb4aabab7176b822bdbb3e076fa4145b54e9e",
+      "source_sha": "b3f889315ee1f9c262406bb0296fabb0ffb10766",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -201,14 +201,14 @@
     {
       "lesson": "3.5",
       "title": "Generate structured answers, citations and refusals",
-      "source_sha": "596350478947bf3dadebf0550651b8ee6c217c31",
+      "source_sha": "eb6124feb253004aaa24d1ce8f670f9d237c30ec",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.6",
       "title": "Check quotes and version prompts",
-      "source_sha": "af6ebe96dfa40ecb8375d62953ce2d347032a3e7",
+      "source_sha": "57e9f5eb63ef41d359c4f7a586351df4a6732eb6",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -229,7 +229,7 @@
     {
       "lesson": "3.9",
       "title": "System design: a fact-checking system built from DocuMind's parts",
-      "source_sha": "8de19e87acd8749661dd854cc4882ed967b5bbb7",
+      "source_sha": "af82fe1d1e35eabd754b6aec0d095c10bf085032",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -355,7 +355,7 @@
     {
       "lesson": "6.1",
       "title": "Assemble the context: what rides every model call",
-      "source_sha": "c0806f267e1ee0a96894843654d25b90b5c7fe8b",
+      "source_sha": "272457217222d6e81f3450e0a57382c64f84b1d3",
       "source_kind": "main_html",
       "demos": 8
     },

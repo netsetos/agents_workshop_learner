@@ -5,8 +5,10 @@
 # reindex re-issues ONE document under an object name (NAME= overrides the basename: the shape-A demo re-uploads
 # evals/demo/hr_policy_2026_v2.md AS hr_policy_2026.md) and waits for the worker's line - ingest_ok with the
 # retired count, or ingest_reactivated when the bytes are a version the ledger had retired (the undo).
+# NAME counts only from make's command line: WSL's Ubuntu exports NAME as the machine's name, and on 20 October 2026
+# a reindex without NAME= uploaded the handbook as acme/<hostname>, a second current copy beside the real one.
 reindex: guard-project
-	@PROJECT=$(PROJECT) TENANT=$(TENANT) FILE="$(FILE)" NAME="$(NAME)" PY="$(PY)" bash commands/reindex.sh
+	@PROJECT=$(PROJECT) TENANT=$(TENANT) FILE="$(FILE)" NAME="$(if $(filter command line,$(origin NAME)),$(NAME))" PY="$(PY)" bash commands/reindex.sh
 
 # withdraw a source by hand (SOURCE=acme/old.pdf or a gs:// URI): every current chunk of it is flagged with an
 # expire_at and the ledger row says WITHDRAWN (12 September 2026) - a tombstone, not `retired`. The object stays in

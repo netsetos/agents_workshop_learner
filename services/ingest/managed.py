@@ -172,9 +172,11 @@ class RagEngineStore:
 
 
 class VertexSearchStore:
-    """A Vertex AI Search data store per tenant (4.4, managed.tf): the version's text as an object in the audit bucket
-    (which has no notification, so nothing ingests it; Document.content.raw_bytes has a 1 MB ceiling, an object has
-    none) imported inline as one Document whose id is the doc_key and whose structData is the schema's fields.
+    """A Vertex AI Search data store per tenant (4.4, managed.tf): the version's text as an object in the search bucket
+    (SEARCH_BUCKET, <project>-search: no notification, so nothing ingests it; Document.content.raw_bytes has a 1 MB
+    ceiling, an object has none) imported inline as one Document whose id is the doc_key and whose structData is the
+    schema's fields. Its own bucket, not the audit bucket (21 October 2026): the audit bucket's retention refuses the
+    overwrite a re-mirror is and the delete a retire is, so a restored document never came back to the store.
     `clients` (de, docs, ds, gcs) is injectable for the gate."""
     name = "vertex_search"
 
@@ -224,7 +226,7 @@ class VertexSearchStore:
         c = self.clients()
         self.ensure(tenant_id)
         if not self.bucket:
-            raise RuntimeError("AUDIT_BUCKET is not set: the mirror keeps the version's text there")
+            raise RuntimeError("SEARCH_BUCKET is not set: the mirror stages the version's text there")
         obj = self.object_name(tenant_id, doc_key)
         c.gcs.bucket(self.bucket).blob(obj).upload_from_string(text, content_type="text/plain; charset=utf-8")
         struct = {"tenant_id": tenant_id, "doc_key": doc_key, "source_uri": source_uri, "kind": "text",
@@ -284,8 +286,9 @@ class Mirror:
             stores.append(RagEngineStore(os.environ.get("GOOGLE_CLOUD_PROJECT", ""), os.environ.get("RAG_LOCATION", "us-central1"),
                                          os.environ.get("EMBEDDING_MODEL", "text-embedding-005")))
         if mode in ("vertex_search", "both"):
-            stores.append(VertexSearchStore(os.environ.get("GOOGLE_CLOUD_PROJECT", ""), os.environ.get("SEARCH_LOCATION", "global"),
-                                            os.environ.get("AUDIT_BUCKET", "")))
+            project = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
+            stores.append(VertexSearchStore(project, os.environ.get("SEARCH_LOCATION", "global"),
+                                            os.environ.get("SEARCH_BUCKET") or (f"{project}-search" if project else "")))
         return cls(db, stores, mode, policy_for=policy_for, audit=audit)
 
     @property
@@ -383,13 +386,15 @@ class Mirror:
         confirmed this version and the region each holds it in, the policy it was judged under, and when; so GET
         /v1/sources and the UI's Documents page say where a document is held. An empty dict is a real answer (a
         policy of `in`, or no store confirming): the row reads "the kit's rows only". Merged, so record_source() and
-        this land in either order; best-effort like every line here."""
+        this land in either order; best-effort like every line here. `mirrored` is replaced, not merged into (21 October
+        2026): merged, a store that failed this version stayed listed from an earlier one, claiming a copy it no longer had."""
         if not name:
             return
         try:
             from google.cloud import firestore
             self.db.collection("sources").document(name.replace("/", "~")).set(
-                {"mirrored": dict(held), "data_region": self.policy(tenant_id), "mirrored_at": firestore.SERVER_TIMESTAMP}, merge=True)
+                {"mirrored": dict(held), "data_region": self.policy(tenant_id), "mirrored_at": firestore.SERVER_TIMESTAMP},
+                merge=["mirrored", "data_region", "mirrored_at"])
         except Exception as e:  # noqa: BLE001
             log.warning(json.dumps({"event": "mirror_stamp_failed", "tenant": tenant_id, "doc_key": doc_key,
                                     "error": f"{type(e).__name__}: {e}"[:200]}))

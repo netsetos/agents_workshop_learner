@@ -310,7 +310,8 @@ class LessonCloud:
     def fixture(self, tenant, filename, data, *, upload):
         """Use exact bytes and a generation guard; never overwrite a different file.
         
-        UI mode only verifies the existing object. Operator mode creates a missing
+        UI mode verifies the existing object, pausing for the learner's upload when it
+        is missing. Operator mode creates a missing
         fixture and reuses an identical existing object, avoiding duplicate-upload
         events whose content claim may already have been completed.
         
@@ -323,9 +324,18 @@ class LessonCloud:
         try:
             blob.reload(retry=None, timeout=15)
         except NotFound:
-            require(upload, f"Upload evals/demo/{filename} in the ACME UI (Documents -> Upload -> Index documents), then rerun demo 2. Or explicitly choose ACME_UPLOAD='operator' in that file.")
-            blob.upload_from_string(data, content_type="text/markdown", if_generation_match=0, timeout=60)
-            print("Operator uploaded:", name)
+            if upload:
+                blob.upload_from_string(data, content_type="text/markdown", if_generation_match=0, timeout=60)
+                print("Operator uploaded:", name)
+            else:
+                # The UI path: pause for the learner's upload (a manual checkpoint), then read the object again,
+                # instead of failing the demo before the learner had the chance (20 October 2026's run).
+                from .steps import manual_checkpoint
+                manual_checkpoint(f"Upload evals/demo/{filename} in the {tenant.upper()} UI (Documents -> Upload -> Index documents).")
+                try:
+                    blob.reload(retry=None, timeout=15)
+                except NotFound:
+                    require(False, f"{name} is still not in the uploads bucket. Upload it in the {tenant.upper()} UI, then rerun demo 05, or choose ACME_UPLOAD='operator' in that file.")
         require(blob.size == len(data), f"{name} has different bytes. Use the exact kit fixture; this demo will not overwrite it.")
         remote = blob.download_as_bytes(if_generation_match=blob.generation, retry=None, timeout=30)
         require(remote == data, f"{name} differs from the local fixture (including line endings). Inspect it before continuing.")

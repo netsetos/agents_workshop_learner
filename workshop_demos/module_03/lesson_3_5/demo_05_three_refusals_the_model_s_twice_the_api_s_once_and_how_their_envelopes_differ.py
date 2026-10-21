@@ -3,7 +3,7 @@
 Do it: three questions, three envelopes, three rows
 
 Run order inside this file:
-1. Do it: three questions, three envelopes, three rows (source window 21)
+1. Do it: three questions, three envelopes, three rows (source window 22)
 
 Prerequisites: demo_04_one_answer_from_the_lane_field_by_field_with_every_quote_checked_against_its_row.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -63,7 +63,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_21', step_01_three_questions_three_envelopes_three_rows),
+        ('source_22', step_01_three_questions_three_envelopes_three_rows),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

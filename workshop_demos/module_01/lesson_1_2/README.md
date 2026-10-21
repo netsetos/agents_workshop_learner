@@ -211,8 +211,8 @@ lane 67 windows, mirror 65 windows
 pages with a different number of windows: [(7, 3, 2), (23, 3, 2)]
 p2-0 on the lane: 2000 chars, hash 4c19e0b7a2d8
 p2-0 in the mirror: 2000 chars, hash 6a3f7e9c01b5
-lane text starts: 'THE CODE ON WAGES, 2019\nCHAPTER I\nPRELIMINARY\n1. (1) This Code may be called ...'
-mirror text starts: 'THE CODE ON WAGES, 2019 CHAPTER I PRELIMINARY 1. (1) This Code may be called ...'
+lane text starts: 'Definitions.\n2\nTHE GAZETTE OF INDIA EXTRAORDINARY\n[PART II-\n2. In this Code, unl'
+mirror text starts: '2 THE GAZETTE OF INDIA EXTRAORDINARY [P ART II—\n2. In this Code, unless the cont'
 ```
 
 ### setup/restore_settings.py
@@ -233,6 +233,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `81377701a6c00ffd961946301ab13592d0df1175`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `cf4de0e8fa5dceea659c2bb63e9b469613c35756`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

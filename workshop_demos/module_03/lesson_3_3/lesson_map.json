@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.3_Prompt_Failures_WIX.html",
-  "source_sha": "523eb4aabab7176b822bdbb3e076fa4145b54e9e",
+  "source_sha": "b3f889315ee1f9c262406bb0296fabb0ffb10766",
   "shared_setup_windows": [
     1
   ],
@@ -254,7 +254,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
-        633
+        634
       ],
       "offline": true,
       "live_verified": false,
@@ -270,7 +270,7 @@
           "id": "source_16",
           "function": "step_01_system_s_rules_as_the_bench_will_number_th",
           "window": 16,
-          "source_line": 633,
+          "source_line": 634,
           "manual_checkpoint": null
         }
       ],
@@ -296,7 +296,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
-        684
+        685
       ],
       "offline": false,
       "live_verified": false,
@@ -312,7 +312,7 @@
           "id": "source_19",
           "function": "step_01_the_eval_with_the_switch_on",
           "window": 19,
-          "source_line": 684,
+          "source_line": 685,
           "manual_checkpoint": null
         }
       ],
@@ -338,7 +338,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
-        700
+        701
       ],
       "offline": false,
       "live_verified": false,
@@ -354,7 +354,7 @@
           "id": "source_21",
           "function": "step_01_the_failing_rows",
           "window": 21,
-          "source_line": 700,
+          "source_line": 701,
           "manual_checkpoint": null
         }
       ],
@@ -384,11 +384,11 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
-        922,
-        954,
-        960,
-        966,
-        972
+        923,
+        955,
+        961,
+        967,
+        973
       ],
       "offline": false,
       "live_verified": false,
@@ -404,7 +404,7 @@
           "id": "source_29",
           "function": "step_01_the_three_rules_applied_in_memory_first",
           "window": 29,
-          "source_line": 922,
+          "source_line": 923,
           "manual_checkpoint": null
         },
         {
@@ -417,7 +417,7 @@
           "id": "source_31",
           "function": "step_02_fix1_the_refused_row",
           "window": 31,
-          "source_line": 954,
+          "source_line": 955,
           "manual_checkpoint": null
         },
         {
@@ -430,7 +430,7 @@
           "id": "source_33",
           "function": "step_03_fix2_the_half_answered_join",
           "window": 33,
-          "source_line": 960,
+          "source_line": 961,
           "manual_checkpoint": null
         },
         {
@@ -443,7 +443,7 @@
           "id": "source_35",
           "function": "step_04_fix3_the_answer_without_its_figure",
           "window": 35,
-          "source_line": 966,
+          "source_line": 967,
           "manual_checkpoint": null
         },
         {
@@ -456,7 +456,7 @@
           "id": "source_37",
           "function": "step_05_fix3_the_answer_without_its_figure",
           "window": 37,
-          "source_line": 972,
+          "source_line": 973,
           "manual_checkpoint": null
         }
       ],
@@ -482,7 +482,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_3/GUIDE.md",
       "source_lines": [
-        1054
+        1055
       ],
       "offline": false,
       "live_verified": false,
@@ -498,7 +498,7 @@
           "id": "source_41",
           "function": "step_01_the_two_copies_and_the_kit_s_own_test",
           "window": 41,
-          "source_line": 1054,
+          "source_line": 1055,
           "manual_checkpoint": null
         }
       ],
@@ -650,133 +650,133 @@
       "label": "evals/run_eval.py - anchors_found(): each must_retrieve anchor looked for in the pool",
       "heading": "The prompt and the gate's rule in the kit: SYSTEM, the prompt line, row_verdict() and the passage checks",
       "anchor": "s4",
-      "line": 620
+      "line": 621
     },
     {
       "window": 17,
       "label": "expected (the cell, run on the kit when this page was built)",
       "heading": "The prompt and the gate's rule in the kit: SYSTEM, the prompt line, row_verdict() and the passage checks",
       "anchor": "s4",
-      "line": 651
+      "line": 652
     },
     {
       "window": 18,
       "label": "Makefile - eval-live: REPORT= keeps every row's record; the environment passes straight through",
       "heading": "The live eval, with every answerable row's pool read again",
       "anchor": "s5",
-      "line": 672
+      "line": 673
     },
     {
       "window": 20,
       "label": "expected (the author's lane: your rates, rows and times are yours)",
       "heading": "The live eval, with every answerable row's pool read again",
       "anchor": "s5",
-      "line": 686
+      "line": 687
     },
     {
       "window": 22,
       "label": "expected (the author's lane: your rows, answers and figures are yours)",
       "heading": "The failing rows, read with their passages, and where each fix lives",
       "anchor": "s6",
-      "line": 787
+      "line": 788
     },
     {
       "window": 23,
       "label": "mk/generation.mk - bench: your lane's pools, your shell's generator, the gate's rule",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 811
+      "line": 812
     },
     {
       "window": 24,
       "label": "evals/prompt_bench.py - the docstring: SYSTEM, in memory",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 827
+      "line": 828
     },
     {
       "window": 25,
       "label": "evals/prompt_bench.py - rules_of() and edit_system(): a rule appended, the rules renumbered",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 832
+      "line": 833
     },
     {
       "window": 26,
       "label": "evals/prompt_bench.py - arms(): the kit's prompt, and one arm carrying every change",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 863
+      "line": 864
     },
     {
       "window": 27,
       "label": "evals/prompt_bench.py - bench(): one pool a row, every arm on it, and the kit's SYSTEM put back",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 873
+      "line": 874
     },
     {
       "window": 28,
       "label": "evals/prompt_bench.py - main(): the file's bytes, before and after the run",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 911
+      "line": 912
     },
     {
       "window": 30,
       "label": "expected (the cell, run on the kit when this page was built)",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 943
+      "line": 944
     },
     {
       "window": 32,
       "label": "expected (the author's lane: your rows, answers and figures are yours)",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 956
+      "line": 957
     },
     {
       "window": 34,
       "label": "expected (the author's lane: your rows, answers and figures are yours)",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 962
+      "line": 963
     },
     {
       "window": 36,
       "label": "expected (the author's lane: your rows, answers and figures are yours)",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 968
+      "line": 969
     },
     {
       "window": 38,
       "label": "expected (the author's lane: your rows, answers and figures are yours)",
       "heading": "One rule per row in the bench, with the refusal rows beside it",
       "anchor": "s7",
-      "line": 1023
+      "line": 1024
     },
     {
       "window": 39,
       "label": "evals/make_trainset.py - the tuning set's copy of SYSTEM",
       "heading": "Why the fix stays in memory: the served prompt is the trained prompt",
       "anchor": "s8",
-      "line": 1038
+      "line": 1039
     },
     {
       "window": 40,
       "label": "commands/tests/test_prompt_versions.py - the test that holds the two copies equal",
       "heading": "Why the fix stays in memory: the served prompt is the trained prompt",
       "anchor": "s8",
-      "line": 1047
+      "line": 1048
     },
     {
       "window": 42,
       "label": "expected (the cell and the test, run on the kit when this page was built)",
       "heading": "Why the fix stays in memory: the served prompt is the trained prompt",
       "anchor": "s8",
-      "line": 1071
+      "line": 1072
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

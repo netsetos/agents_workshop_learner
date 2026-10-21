@@ -103,6 +103,27 @@ resource "google_discovery_engine_data_store" "tenant" {
   # that destroys them. Do not work around the plan check with state rm.
 }
 
+# Where the mirror stages each version's text for the import (services/ingest/managed.py, SEARCH_BUCKET), 21 October
+# 2026. It was the audit bucket, whose retention policy refuses every delete and overwrite: a retire left the staged
+# copy (mirror_failed delete:retired, 403) and a restore could not rewrite it, so the document never came back to the
+# data store while the ledger still said it was there. A bucket of its own holds copies only - the record of every
+# copy is doc.mirror in the audit bucket - so the worker may replace and delete them, and make down may empty it.
+resource "google_storage_bucket" "search" {
+  count                       = var.managed_search ? 1 : 0
+  name                        = "${var.project_id}-search"
+  location                    = var.india_region
+  uniform_bucket_level_access = true
+  force_destroy               = true
+}
+
+# The worker and the batch and reconcile jobs (all documind-ingest-sa) write, replace and delete the staged text.
+resource "google_storage_bucket_iam_member" "ingest_search" {
+  count  = var.managed_search ? 1 : 0
+  bucket = google_storage_bucket.search[0].name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.ingest.email}"
+}
+
 resource "google_discovery_engine_schema" "tenant" {
   for_each      = local.managed_tenants
   location      = google_discovery_engine_data_store.tenant[each.key].location

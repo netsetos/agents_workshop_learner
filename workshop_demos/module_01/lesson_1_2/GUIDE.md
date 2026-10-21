@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`, reviewed at blob `81377701a6c00ffd961946301ab13592d0df1175`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`, reviewed at blob `cf4de0e8fa5dceea659c2bb63e9b469613c35756`. Learners read that page on the course site; this guide keeps its prose.
 
 Before a document can be searched it has to be read, and before it can be cited it has to be cut into pieces small enough to compare with a question. This lesson opens the two steps that do that in DocuMind: the parser that turns a PDF into pages of text through Document AI, and the chunker that turns text into addressed pieces. You will count pages, cut a handbook into clauses, cut an Act into page windows, and compare the pieces two different parsers make of the same document on your own lane.
 

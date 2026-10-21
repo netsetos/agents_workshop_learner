@@ -24,12 +24,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_decide_then_clean_up.
-COMMANDS_01 = """gcloud pubsub subscriptions pull ingest-dlq-sub --project "$PROJECT" --limit 1 --auto-ack --format='value(message.attributes.objectId)'
-gcloud storage rm "gs://$PROJECT-uploads/acme/poison-"*.pdf
-
-"""
-
 def step_01_decide_then_clean_up(session):
     """Run Decide, then clean up at this checkpoint.
 
@@ -44,8 +38,8 @@ def step_01_decide_then_clean_up(session):
     Observe: acme/poison-1758542871.pdf
     Removing gs://documind-ai-YOUR-ID-uploads/acme/poison-1758542871.pdf...
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    from workshop_helpers.poison import finish_drill
+    finish_drill(session)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

@@ -116,8 +116,11 @@ class IOTests(unittest.TestCase):
                 self.cloud.fixture("acme", "example.md", b"abc", upload=True)
             blob.upload_from_string.assert_not_called()
             blob.reload.side_effect = NotFound()
-            with self.assertRaisesRegex(RuntimeError, "Upload evals/demo"):
+            # UI mode pauses for the learner's upload, then fails only if the object is still missing.
+            with patch("workshop_helpers.steps.manual_checkpoint") as pause, \
+                    self.assertRaisesRegex(RuntimeError, "still not in the uploads bucket"):
                 self.cloud.fixture("acme", "example.md", b"abc", upload=False)
+            self.assertIn("Upload evals/demo/example.md in the ACME UI", pause.call_args.args[0])
             blob.upload_from_string.assert_not_called()
             blob.download_as_bytes.return_value = b"abc"
             self.cloud.fixture("zeta", "example.md", b"abc", upload=True)

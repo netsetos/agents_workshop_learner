@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.3_Prompt_Failures_WIX.html`, reviewed at blob `523eb4aabab7176b822bdbb3e076fa4145b54e9e`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.3_Prompt_Failures_WIX.html`, reviewed at blob `b3f889315ee1f9c262406bb0296fabb0ffb10766`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 3.1 and 3.2 changed how the model is asked. This lesson starts from what came back wrong. The eval gate judges every golden row by one rule, and a row that fails says why: refused, answered without its figure, answered when it should have refused, or no answer at all. Only some of those are the prompt's to fix. A clause that never reached the model cannot be answered by any instruction, and a reply that never came back was never read. You will run the live eval with each answerable row's passages read again, sort the failing rows by where their fix lives, and try one new rule per row in the kit's prompt bench: SYSTEM edited in memory, the row asked again on the same passages, and the 8 refusal rows asked beside it to show what the rule breaks. Nothing is committed: generator.py's SYSTEM stays byte for byte the tuning set's copy.
 

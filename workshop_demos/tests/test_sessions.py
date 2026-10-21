@@ -159,6 +159,15 @@ class PlannerTests(unittest.TestCase):
         self.assertTrue(secret_name("CHECKPOINT_DSN"))
         self.assertFalse(secret_name("MAX_CONTEXT_TOKENS"))
 
+    def test_evidence_keeps_a_firestore_vector_as_its_numbers(self):
+        class Vector:                                   # stands in for google.cloud.firestore_v1.vector.Vector
+            def __init__(self, values): self.values = values
+            def __iter__(self): return iter(self.values)
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder, "row.json")
+            write_json(path, {"embedding": Vector([0.5, 1.25])})
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8")), {"embedding": [0.5, 1.25]})
+
 
 if __name__ == "__main__":
     unittest.main()

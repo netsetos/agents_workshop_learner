@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.6_Quote_Checks_WIX.html",
-  "source_sha": "af6ebe96dfa40ecb8375d62953ce2d347032a3e7",
+  "source_sha": "57e9f5eb63ef41d359c4f7a586351df4a6732eb6",
   "shared_setup_windows": [
     1
   ],
@@ -272,8 +272,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        510,
-        567
+        525,
+        582
       ],
       "offline": true,
       "live_verified": false,
@@ -289,7 +289,7 @@
           "id": "source_10",
           "function": "step_01_nine_quotes_two_measures",
           "window": 10,
-          "source_line": 510,
+          "source_line": 525,
           "manual_checkpoint": null
         },
         {
@@ -302,7 +302,7 @@
           "id": "source_12",
           "function": "step_02_the_gate_s_own_lines_over_a_stand_in_api",
           "window": 12,
-          "source_line": 567,
+          "source_line": 582,
           "manual_checkpoint": null
         }
       ],
@@ -329,8 +329,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        713,
-        720
+        728,
+        735
       ],
       "offline": false,
       "live_verified": false,
@@ -346,7 +346,7 @@
           "id": "source_18",
           "function": "step_01_the_scoped_gate_the_switch_on",
           "window": 18,
-          "source_line": 713,
+          "source_line": 728,
           "manual_checkpoint": null
         },
         {
@@ -359,7 +359,7 @@
           "id": "source_20",
           "function": "step_02_every_citation_s_verdict",
           "window": 20,
-          "source_line": 720,
+          "source_line": 735,
           "manual_checkpoint": null
         }
       ],
@@ -385,7 +385,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        868
+        883
       ],
       "offline": false,
       "live_verified": false,
@@ -401,7 +401,7 @@
           "id": "source_31",
           "function": "step_01_the_check",
           "window": 31,
-          "source_line": 868,
+          "source_line": 883,
           "manual_checkpoint": null
         }
       ],
@@ -427,7 +427,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        911
+        926
       ],
       "offline": false,
       "live_verified": false,
@@ -443,7 +443,7 @@
           "id": "source_34",
           "function": "step_01_the_weakened_rule_on_the_same_rows",
           "window": 34,
-          "source_line": 911,
+          "source_line": 926,
           "manual_checkpoint": null
         }
       ],
@@ -476,14 +476,14 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        957,
-        980,
-        997,
-        1032,
-        1045,
-        1056,
-        1065,
-        1071
+        972,
+        995,
+        1012,
+        1047,
+        1060,
+        1071,
+        1080,
+        1086
       ],
       "offline": false,
       "live_verified": false,
@@ -499,7 +499,7 @@
           "id": "source_39",
           "function": "step_01_the_branch_and_rule_5_in_both_copies",
           "window": 39,
-          "source_line": 957,
+          "source_line": 972,
           "manual_checkpoint": null
         },
         {
@@ -512,7 +512,7 @@
           "id": "source_41",
           "function": "step_02_the_check_refuses_the_old_label",
           "window": 41,
-          "source_line": 980,
+          "source_line": 995,
           "manual_checkpoint": null
         },
         {
@@ -525,7 +525,7 @@
           "id": "source_43",
           "function": "step_03_name_it_v4_register_it_and_check_again",
           "window": 43,
-          "source_line": 997,
+          "source_line": 1012,
           "manual_checkpoint": null
         },
         {
@@ -538,7 +538,7 @@
           "id": "source_45",
           "function": "step_04_commit",
           "window": 45,
-          "source_line": 1032,
+          "source_line": 1047,
           "manual_checkpoint": null
         },
         {
@@ -551,7 +551,7 @@
           "id": "source_47",
           "function": "step_05_build_the_image_and_stage_the_candidate",
           "window": 47,
-          "source_line": 1045,
+          "source_line": 1060,
           "manual_checkpoint": null
         },
         {
@@ -564,7 +564,7 @@
           "id": "source_49",
           "function": "step_06_the_label_on_both_urls",
           "window": 49,
-          "source_line": 1056,
+          "source_line": 1071,
           "manual_checkpoint": null
         },
         {
@@ -577,7 +577,7 @@
           "id": "source_51",
           "function": "step_07_the_candidate_s_quotes",
           "window": 51,
-          "source_line": 1065,
+          "source_line": 1080,
           "manual_checkpoint": null
         },
         {
@@ -590,7 +590,7 @@
           "id": "source_53",
           "function": "step_08_v3_against_v4_quote_by_quote",
           "window": 53,
-          "source_line": 1071,
+          "source_line": 1086,
           "manual_checkpoint": null
         }
       ],
@@ -617,8 +617,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_6/GUIDE.md",
       "source_lines": [
-        1120,
-        1157
+        1135,
+        1172
       ],
       "offline": false,
       "live_verified": false,
@@ -634,7 +634,7 @@
           "id": "source_55",
           "function": "step_01_the_rows_by_revision_event_and_version",
           "window": 55,
-          "source_line": 1120,
+          "source_line": 1135,
           "manual_checkpoint": null
         },
         {
@@ -647,7 +647,7 @@
           "id": "source_57",
           "function": "step_02_take_the_candidate_down",
           "window": 57,
-          "source_line": 1157,
+          "source_line": 1172,
           "manual_checkpoint": null
         }
       ],
@@ -733,7 +733,7 @@
     },
     {
       "window": 6,
-      "label": "shared/documind_schemas.py - resolve(): the quote copied as the model wrote it, or the passage's first 500 characters",
+      "label": "shared/documind_schemas.py - resolve(): one citation a chunk, its quote the model's words or the passage's first 500 characters",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
       "line": 428
@@ -743,252 +743,252 @@
       "label": "services/rag-api/generator.py - _draft(): an over-long quote cut to the contract, and three dots added",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
-      "line": 438
+      "line": 452
     },
     {
       "window": 8,
       "label": "evals/run_eval.py - judge_citations(): quote support, the words looked for in the tenant's whole corpus",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
-      "line": 443
+      "line": 457
     },
     {
       "window": 9,
       "label": "evals/run_eval.py - quote_check(): one verdict a citation, against the passage it names",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
-      "line": 470
+      "line": 484
     },
     {
       "window": 11,
       "label": "expected (the cell, run on a copy of the kit's evals when this page was built; yours should match it)",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
-      "line": 548
+      "line": 563
     },
     {
       "window": 13,
       "label": "expected (the cell, run on a copy of the kit's evals when this page was built; yours should match it)",
       "heading": "Offline: nine quotes through both measures, and the gate's own lines over a stand-in API",
       "anchor": "s3",
-      "line": 619
+      "line": 634
     },
     {
       "window": 14,
       "label": "services/rag-api/main.py - /v1/stream: the citations sent before the first token, each quoting its passage's opening",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 656
+      "line": 671
     },
     {
       "window": 15,
       "label": "services/frontend/citations.py - render_with_citations(): the Sources list shows each one's first 200 characters",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 666
+      "line": 681
     },
     {
       "window": 16,
       "label": "evals/run_eval.py - live(): the switch, read once every row has been asked",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 672
+      "line": 687
     },
     {
       "window": 17,
       "label": "evals/run_eval.py - passage_checks(): each answered row's pool read again, each quote checked, each anchor looked for",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 676
+      "line": 691
     },
     {
       "window": 19,
       "label": "expected (the author's lane: the scoped gate on the live revision with the switch on; your rates and rows are yours)",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 715
+      "line": 730
     },
     {
       "window": 21,
       "label": "expected (the author's lane: your answers, quotes, tokens and times are yours)",
       "heading": "Your lane: what the UI shows as a quote, then a source's quotes held against their passages",
       "anchor": "s4",
-      "line": 746
+      "line": 761
     },
     {
       "window": 22,
       "label": "services/rag-api/config.py - the label: two fields, which everything that names a prompt reads",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 760
+      "line": 775
     },
     {
       "window": 23,
       "label": "services/rag-api/main.py - where the label goes: /version, every usage row, the stream's last event",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 763
+      "line": 778
     },
     {
       "window": 24,
       "label": "services/rag-api/semantic_cache.py - scope_of(): the answer cache's scope includes the version",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 780
+      "line": 795
     },
     {
       "window": 25,
       "label": "terraform/sql/tenant_daily.sql - the daily view: one row per version, among its other dimensions",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 787
+      "line": 802
     },
     {
       "window": 26,
       "label": "services/rag-api/generator.py - SYSTEM and DATED_RULE: the text the label names",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 798
+      "line": 813
     },
     {
       "window": 27,
       "label": "services/rag-api/generator.py - generate(): every prompt starts with that text, and generate_stream()'s the same",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 817
+      "line": 832
     },
     {
       "window": 28,
       "label": "commands/prompt_pin.py - check(): the label, the text's sha256, and the registry's verdict",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 819
+      "line": 834
     },
     {
       "window": 29,
       "label": "services/rag-api/prompt_versions.json - the registry: one label, one sha256",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 851
+      "line": 866
     },
     {
       "window": 30,
       "label": "mk/generation.mk - prompt-version: offline, no project, no guard",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 858
+      "line": 873
     },
     {
       "window": 32,
       "label": "expected (make prompt-version on the kit when this page was built: make's echo of the recipe, then prompt_pin.py's lines)",
       "heading": "The prompt's version: the label, the text, its sha256 and the check",
       "anchor": "s5",
-      "line": 870
+      "line": 885
     },
     {
       "window": 33,
       "label": "evals/prompt_bench.py - edit_system() and prompt_sha(): SYSTEM edited in memory, and hashed as a version's text is",
       "heading": "The change in memory: rule 5 weakened on the bench, and the sha256 it would register",
       "anchor": "s6",
-      "line": 889
+      "line": 904
     },
     {
       "window": 35,
       "label": "expected (the author's lane: the edit arm's prompt sha256 is the same on every lane; the answers and rupees are yours)",
       "heading": "The change in memory: rule 5 weakened on the bench, and the sha256 it would register",
       "anchor": "s6",
-      "line": 913
+      "line": 928
     },
     {
       "window": 36,
       "label": "commands/tests/test_prompt_versions.py - the tuning set's copy of SYSTEM, held equal to the served one",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 927
+      "line": 942
     },
     {
       "window": 37,
       "label": "Makefile - build: one Cloud Build per service, the image tagged with the commit",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 932
+      "line": 947
     },
     {
       "window": 38,
       "label": "Makefile - release-candidate: that image on a revision with no traffic, recorded by name",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 949
+      "line": 964
     },
     {
       "window": 40,
       "label": "expected (the cell, run on a copy of the four files when this page was built; git status prints nothing for a clean clone)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 971
+      "line": 986
     },
     {
       "window": 42,
       "label": "expected (the same copy: prompt_pin.py's lines, then make's, as GNU make prints them)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 982
+      "line": 997
     },
     {
       "window": 44,
       "label": "expected (the same copy; the test's time is yours)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1016
+      "line": 1031
     },
     {
       "window": 46,
       "label": "expected (the same copy; COMMIT is your commit's short sha, the tag make build gives the image)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1035
+      "line": 1050
     },
     {
       "window": 48,
       "label": "expected (the author's lane, Cloud Build's own log cut to its first and last lines; your revision names and times are yours)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1051
+      "line": 1066
     },
     {
       "window": 50,
       "label": "expected (the author's lane: COMMIT is each revision's short sha)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1061
+      "line": 1076
     },
     {
       "window": 52,
       "label": "expected (the author's lane: the same ten rows on the candidate; your rates and rows are yours)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1067
+      "line": 1082
     },
     {
       "window": 54,
       "label": "expected (the author's lane: your answers, quotes, tokens and times are yours)",
       "heading": "Ship it: v4 on a branch, checked, built, and answering on a candidate",
       "anchor": "s7",
-      "line": 1106
+      "line": 1121
     },
     {
       "window": 56,
       "label": "expected (the author's lane: your revision names and counts are yours)",
       "heading": "The rows name the prompt; the candidate taken down, and v4 spent",
       "anchor": "s8",
-      "line": 1152
+      "line": 1167
     },
     {
       "window": 58,
       "label": "expected shape (gcloud's traffic table first; git's two lines; then prompt_pin.py on main, as this page's build printed it on the kit)",
       "heading": "The rows name the prompt; the candidate taken down, and v4 spent",
       "anchor": "s8",
-      "line": 1164
+      "line": 1179
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

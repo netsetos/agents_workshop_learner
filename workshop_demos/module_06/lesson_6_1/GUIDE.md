@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`, reviewed at blob `c0806f267e1ee0a96894843654d25b90b5c7fe8b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_6.1_Context_Architecture_WIX.html`, reviewed at blob `272457217222d6e81f3450e0a57382c64f84b1d3`. Learners read that page on the course site; this guide keeps its prose.
 
 A model keeps nothing between calls. Each time a chat brain calls Gemini it sends the whole context again: the system prompt, the tool declarations, the thread so far and the question, and from the second call on the model's own calls and what the tools gave back. This lesson takes one turn apart, source by source, on each of DocuMind's five brains, and prices every source in rupees. Then it moves one setting, TOP_K, to see which part of the bill moves with it. You run it offline first, for Rs 0, then on your lane, where the model's own counter counts each source.
 
@@ -62,7 +62,7 @@ The search holds the biggest call. Inside the search, rag-api's own prompt is 1,
 
 TOP_K, offline. Set TOP_K to 3 and two things shrink. rag-api packs three chunks instead of five, 1,095 tokens in. The tool results drop from 761 to 435 tokens. The system prompt, the declarations and the question do not move. Offline, the search returns all of the top_k passages, as if rag-api had cited every one. On your lane it returns only the citations rag-api's answer chose, so there TOP_K mostly moves the grey bar, not the orange one. Step 8 measures the difference. The Desk's passages move on both.
 
-It is not your lane. The script does not think, so no call carries thinking tokens, and nothing was cached. Its tool results are the Rs 0 lane's citations: every one of the top_k passages, each quoted to up to 500 characters, where rag-api's are the clauses its answer chose, at most twenty-five words each. And every count is an estimate. Step 6 runs the same turn on your lane, where each call's tokens are its own usage and each source is counted by the model's `count_tokens`.
+It is not your lane. The script does not think, so no call carries thinking tokens, and nothing was cached. Its tool results are the Rs 0 lane's citations: every one of the top_k passages, each quoted to up to 500 characters, where rag-api's are the clauses its answer chose, at most twenty-five words each, or a passage's first 500 characters for a source the answer cited only in its prose. And every count is an estimate. Step 6 runs the same turn on your lane, where each call's tokens are its own usage and each source is counted by the model's `count_tokens`.
 
 ### The words: context, source, system prompt, tool declaration, thread, question, the model's calls, tool result, rag-api's own call, estimate, count_tokens, residual, TOP_K, list price
 
@@ -186,7 +186,7 @@ Read the five outputs side by side, a source at a time.
 
 The fixed parts. The system prompt and the declarations count the same on every call of a turn, and the same for langchain and langgraph. ADK's are larger: its system prompt carries the framework's line, and its declarations are JSON Schema with titles and defaults. Offline the estimate put ADK's at 120 and 341 tokens to LangChain's 106 and 240. Your counts are the model's own.
 
-The tool results. On the chat brains they are the clauses rag-api's answer cited, a short quote each, so they usually weigh less than offline, where every passage came back with up to 500 characters. On the Desk, when its search finds passages, they come back whole, and they are the largest source of any call that carries them.
+The tool results. On the chat brains they are the clauses rag-api's answer cited, a short quote each unless the answer cited a source only in its prose, so they usually weigh less than offline, where every passage came back with up to 500 characters. On the Desk, when its search finds passages, they come back whole, and they are the largest source of any call that carries them.
 
 The output. Thinking is output, billed at the output rate. The LangChain and LangGraph brains run their model with thinking low (`shared/profile.py`), and so does the Desk's agent. ADK's brain sets no thinking level, so its calls may think more.
 
@@ -202,7 +202,7 @@ Three passages instead of five, offline and on your lane, on a chat brain and on
 
 `TOP_K=K` makes the command send `top_k` K with every search of the run, whatever the model asked for. `retrieve`'s declaration, and its default of 5, do not change, so the request the model reads is the same. What moves depends on what a search returns. Offline, the Rs 0 lane's search returns every one of the top_k passages, so the tool results shrink with TOP_K, and rag-api's estimated prompt packs three chunks instead of five.
 
-On your lane, a chat brain's search is rag-api's `/v1/query`. rag-api packs top_k chunks into its own prompt and answers. `resolve()` then builds a citation for each source the answer cited, and for no other, with the quote the answer gave: rule 5 of rag-api's prompt keeps it to the clause that answers, at most twenty-five words. The chat model's tool result is those citations. So on your lane TOP_K moves rag-api's own prompt, and rag-api's share of the turn's bill. It moves the tool results only as far as the answer's choice of clauses changes. The Desk's `/v1/passages` returns all of its top_k passages, whole, so TOP_K moves the Desk's tool results on both lanes.
+On your lane, a chat brain's search is rag-api's `/v1/query`. rag-api packs top_k chunks into its own prompt and answers. `resolve()` then builds one citation for each source the answer cited, and for no other, with the quote the answer gave: rule 5 of rag-api's prompt keeps it to the clause that answers, at most twenty-five words. A source the answer cites only as an `[N]` in its prose comes with no quote, so its citation carries the passage's first 500 characters. The chat model's tool result is those citations. So on your lane TOP_K moves rag-api's own prompt, and rag-api's share of the turn's bill. It moves the tool results only as far as the answer's choice of clauses changes. The Desk's `/v1/passages` returns all of its top_k passages, whole, so TOP_K moves the Desk's tool results on both lanes.
 
 #### The code
 
