@@ -318,7 +318,9 @@
           "purpose": "Do it: the live revision, with its pools",
           "label": "bash — run in the operator shell, in the kit (every golden row to the live revision, each pool read again: about ten minutes)",
           "expected": "[awaiting the author's run: data/eval_live.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the eval through live_gate with the page's switch on: this lesson reads the failing rows of a live and a candidate report, so a red exit with a fresh report is its input, not an error (before lesson 7.5's video, mm-03 alone keeps the gate red). A missing report or an HTTP/auth failure still fails."
+          ],
           "id": "source_8",
           "function": "step_01_the_live_revision_with_its_pools",
           "window": 8,
@@ -344,7 +346,9 @@
           "purpose": "Do it: a candidate on the cheap model, the same rows, and the tag removed",
           "label": "bash — run in the operator shell, in the kit (the same rows to the candidate)",
           "expected": "[awaiting the author's run: data/eval_cand.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the eval through live_gate with the page's switch on: this lesson reads the failing rows of a live and a candidate report, so a red exit with a fresh report is its input, not an error (before lesson 7.5's video, mm-03 alone keeps the gate red). A missing report or an HTTP/auth failure still fails."
+          ],
           "id": "source_12",
           "function": "step_03_a_candidate_on_the_cheap_model_the_same_ro",
           "window": 12,

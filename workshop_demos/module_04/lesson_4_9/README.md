@@ -73,6 +73,8 @@ Do it: the live revision, with its pools
 
 Operation: bash — run in the operator shell, in the kit (every golden row to the live revision, each pool read again: about ten minutes).
 
+IDE adaptation: Run the eval through live_gate with the page's switch on: this lesson reads the failing rows of a live and a candidate report, so a red exit with a fresh report is its input, not an error (before lesson 7.5's video, mm-03 alone keeps the gate red). A missing report or an HTTP/auth failure still fails.
+
 Expected shape, not a promised result:
 
 ```text
@@ -101,6 +103,8 @@ CAND=https://candidate---documind-api-NUMBER.asia-south1.run.app
 Do it: a candidate on the cheap model, the same rows, and the tag removed
 
 Operation: bash — run in the operator shell, in the kit (the same rows to the candidate).
+
+IDE adaptation: Run the eval through live_gate with the page's switch on: this lesson reads the failing rows of a live and a candidate report, so a red exit with a fresh report is its input, not an error (before lesson 7.5's video, mm-03 alone keeps the gate red). A missing report or an HTTP/auth failure still fails.
 
 Expected shape, not a promised result:
 

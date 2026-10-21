@@ -363,7 +363,9 @@
           "purpose": "Do it: the gate on the candidate",
           "label": "bash — run in the operator shell, in the kit (every row as the member, every isolation row as the outsider: about ten minutes)",
           "expected": "[awaiting the author's run: data/candidate_gate.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the candidate's gate through live_gate: its exit is the release decision the page reads, 0 or a red 2, and the demo must go on to the next step and the cleanup that removes the candidate's tag. Before lesson 7.5's video, mm-03 keeps a full gate red (21 October 2026 the tag was left behind). A missing report or an HTTP/auth failure still fails."
+          ],
           "id": "source_22",
           "function": "step_03_the_gate_on_the_candidate",
           "window": 22,

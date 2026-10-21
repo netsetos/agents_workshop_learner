@@ -81,11 +81,6 @@ def step_02_does_the_candidate_answer_as_the_same_buil(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)
 
-# Original CLI workflow for step_03_the_gate_on_the_candidate.
-COMMANDS_03 = """make eval-live PROJECT="$PROJECT" API="$CAND" REPORT=evals/reports/cand43.json
-
-"""
-
 def step_03_the_gate_on_the_candidate(session):
     """Run Do it: the gate on the candidate at this checkpoint.
 
@@ -99,8 +94,9 @@ def step_03_the_gate_on_the_candidate(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/candidate_gate.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_03)
+    import os
+    from workshop_helpers.gates import live_gate
+    live_gate(session, report="evals/reports/cand43.json", api=os.environ["CAND"])
 
 def step_04_the_gate_on_the_candidate(session):
     """Run Do it: the gate on the candidate at this checkpoint.

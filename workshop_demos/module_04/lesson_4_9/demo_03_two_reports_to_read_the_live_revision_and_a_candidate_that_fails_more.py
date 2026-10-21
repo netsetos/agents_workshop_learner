@@ -27,11 +27,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_the_live_revision_with_its_pools.
-COMMANDS_01 = """DOCUMIND_EVAL_PASSAGES=1 make eval-live PROJECT="$PROJECT" REPORT=evals/reports/live49.json
-
-"""
-
 def step_01_the_live_revision_with_its_pools(session):
     """Run Do it: the live revision, with its pools at this checkpoint.
 
@@ -45,8 +40,13 @@ def step_01_the_live_revision_with_its_pools(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/eval_live.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    import os
+    from workshop_helpers.gates import live_gate
+    os.environ["DOCUMIND_EVAL_PASSAGES"] = "1"
+    try:
+        live_gate(session, report="evals/reports/live49.json")
+    finally:
+        os.environ.pop("DOCUMIND_EVAL_PASSAGES", None)
 
 # Original CLI workflow for step_02_a_candidate_on_the_cheap_model_the_same_ro.
 COMMANDS_02 = """make candidate PROJECT="$PROJECT" GENERATOR_MODEL=gemini-3.1-flash-lite RAG_MODEL_BASE=gemini-3.1-flash-lite
@@ -74,11 +74,6 @@ def step_02_a_candidate_on_the_cheap_model_the_same_ro(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)
 
-# Original CLI workflow for step_03_a_candidate_on_the_cheap_model_the_same_ro.
-COMMANDS_03 = """DOCUMIND_EVAL_PASSAGES=1 make eval-live PROJECT="$PROJECT" API="$CAND" REPORT=evals/reports/cand49.json
-
-"""
-
 def step_03_a_candidate_on_the_cheap_model_the_same_ro(session):
     """Run Do it: a candidate on the cheap model, the same rows, and the tag removed at this checkpoint.
 
@@ -92,8 +87,13 @@ def step_03_a_candidate_on_the_cheap_model_the_same_ro(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/eval_cand.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_03)
+    import os
+    from workshop_helpers.gates import live_gate
+    os.environ["DOCUMIND_EVAL_PASSAGES"] = "1"
+    try:
+        live_gate(session, report="evals/reports/cand49.json", api=os.environ["CAND"])
+    finally:
+        os.environ.pop("DOCUMIND_EVAL_PASSAGES", None)
 
 # Original CLI workflow for step_04_a_candidate_on_the_cheap_model_the_same_ro.
 COMMANDS_04 = """gcloud run services update-traffic documind-api --region "$REGION" --project "$PROJECT" --remove-tags candidate

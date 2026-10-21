@@ -165,6 +165,8 @@ Do it: the gate on the candidate
 
 Operation: bash — run in the operator shell, in the kit (every row as the member, every isolation row as the outsider: about ten minutes).
 
+IDE adaptation: Run the candidate's gate through live_gate: its exit is the release decision the page reads, 0 or a red 2, and the demo must go on to the next step and the cleanup that removes the candidate's tag. Before lesson 7.5's video, mm-03 keeps a full gate red (21 October 2026 the tag was left behind). A missing report or an HTTP/auth failure still fails.
+
 Expected shape, not a promised result:
 
 ```text
