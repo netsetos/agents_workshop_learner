@@ -648,5 +648,26 @@ class CorpusFilesTest(unittest.TestCase):
         self.assertIn("gratuity", demo)
 
 
+class AskRetries(unittest.TestCase):
+    """ask(): one retry for a 5xx (two seconds) and for a 429 (the API's Retry-After); no other 4xx is retried."""
+
+    def run_ask(self, answers):
+        calls, slept = iter(answers), []
+        with patch.object(rv, "_ask_once", lambda *a, **k: next(calls)), patch.object(rv.time, "sleep", slept.append):
+            return rv.ask("https://api.invalid", "q", "acme", "e@x", None), slept
+
+    def test_a_429_is_asked_again_after_the_retry_after(self):
+        (status, body, _), slept = self.run_ask([(429, {}, 5), (200, {"answer": "ok"}, 7)])
+        self.assertEqual((status, body, slept), (200, {"answer": "ok"}, [rv.RETRY_AFTER_429_S]))
+
+    def test_a_second_429_is_counted(self):
+        (status, _, _), slept = self.run_ask([(429, {}, 5), (429, {}, 6)])
+        self.assertEqual((status, slept), (429, [rv.RETRY_AFTER_429_S]))
+
+    def test_any_other_4xx_is_not_retried_and_a_5xx_waits_two_seconds(self):
+        self.assertEqual(self.run_ask([(404, {}, 3)])[1], [])
+        self.assertEqual(self.run_ask([(503, {}, 1), (200, {}, 2)])[1], [2])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -342,7 +342,7 @@
       "source_lines": [
         701
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
       "implementation": "mixed_python_and_kit_cli",
       "steps": [
@@ -352,7 +352,9 @@
           "purpose": "Do it: the failing rows",
           "label": "bash — run in the operator shell, in the kit (reads the report, and each failing row's pool from /v1/passages: no model, Rs 0)",
           "expected": "[awaiting the author's run: data/failing_rows.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Export the cell's FIX1-FIX3 as the page asks you to paste them: the cell prints the export line, which a Python cell cannot run in your shell, so step 7's bench stopped at ${FIX1:?} (21 October 2026). The session keeps them for the next file."
+          ],
           "id": "source_21",
           "function": "step_01_the_failing_rows",
           "window": 21,

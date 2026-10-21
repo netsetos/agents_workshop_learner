@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `2964048d379f1d911bd36318b2cf1e1611552e38`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html`, reviewed at blob `4c852e5d90652bfb191b5cfb76d484c4b62a2ef9`. Learners read that page on the course site; this guide keeps its prose.
 
 The DocuMind kit is 11 services and the Python that builds, tests and feeds them, and three habits run through all of it. Every service runs in an environment of its own with pinned libraries; data moves as JSON; and the parts talk to each other over HTTP. This page practises each habit on your laptop, with Python's standard library and the venv the setup block makes, and then shows you the kit's own lines doing the same. You will make a venv and delete it, write and read a file shaped like the kit's golden set, start a small web server and call it, make two calls at once, and give a call the timeout, the retry and the check the kit gives its own.
 
@@ -80,7 +80,7 @@ The block you ran in the setup section is six lines, and each one is a habit of 
 
 Inside a venv, `sys.prefix` is the venv's folder and `sys.base_prefix` is the Python it was made from; outside one, both name the same folder. Python's documentation says that comparing the two is enough to know whether you are in a venv. The cell below asks that, then asks where `python` and the two libraries come from, and what google-genai brought with it.
 
-The first five lines are the venv doing its job. The last two are the reason the kit pins. You asked pip for two libraries and pinned both. google-genai 2.22.0 brought 10 more, and its own metadata pins none of them: each comes with a range of versions it accepts, and sniffio with no limit at all. For `google-auth` the range is 2.56.0 or newer, but older than 3.0.0. pip took the newest version inside that range on the day the setup block ran: 2.60.0 when this page was built, perhaps a newer one on your laptop. That is fine for a scratch venv. It is not fine for a service, where "the newest on the day" means two builds a week apart can run different code. The kit pins `google-auth==2.57.1` in 7 of its 11 services, so each of those images gets exactly that version, whatever is newest.
+The first five lines are the venv doing its job. The last two are the reason the kit pins. You asked pip for two libraries and pinned both. google-genai 2.22.0 brought 10 more, and its own metadata pins none of them: each comes with a range of versions it accepts, and sniffio with no limit at all. For `google-auth` the range is 2.56.0 or newer, but older than 3.0.0. pip took the newest version inside that range on the day the setup block ran: 2.62.0 when this page was built, perhaps a newer one on your laptop. That is fine for a scratch venv. It is not fine for a service, where "the newest on the day" means two builds a week apart can run different code. The kit pins `google-auth==2.57.1` in 7 of its 11 services, so each of those images gets exactly that version, whatever is newest.
 
 #### A venv is a folder: make one, ask it, delete it
 
@@ -182,7 +182,7 @@ The blip cost one retry and the caller never saw it. The hang cost two timeouts 
 
 #### The kit's rules, in its own words
 
-The docstring gives the reason in a line: "one retry separates a blip from an outage, more would hide one." With three or five retries the hang above would have taken much longer and still failed, and a real outage would have looked like a slow day. A 4xx is not retried at all: it says the request itself was refused, and sending it again changes nothing.
+The docstring gives the reason in a line: "one retry separates a blip from an outage, more would hide one." With three or five retries the hang above would have taken much longer and still failed, and a real outage would have looked like a slow day. A 4xx is not retried: it says the request itself was refused, and sending it again changes nothing. The one exception is a 429, which says not now rather than no: the API sends a `Retry-After` with it, and the kit asks once more after that wait.
 
 The kit's shared tool layer, which every agent brain calls to search the documents, uses the `requests` library instead of urllib. It keeps the timeout (`RAG_TIMEOUT_S`, 20 seconds unless it is set) and, like the cell's `get()`, returns a failure as data, so the agent can explain it instead of the turn dying on an exception. It does not retry, and it mints a fresh ID token for every call, for a reason its docstring gives:
 

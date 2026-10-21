@@ -127,8 +127,14 @@ def step_01_the_failing_rows(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/failing_rows.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
+    import os, re
+    log = sorted(session.attempt.glob("command_*.log"))[-1].read_text(encoding="utf-8")
+    found = re.search(r"to bench, one rule each: export ((?:FIX[123]=\S+ ?)+)", log)
+    for pair in (found[1].split() if found else []):
+        key, _, value = pair.partition("=")
+        os.environ[key] = value
+    print("For step 7:", found[1] if found else "no row the prompt can fix")
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -147,7 +153,7 @@ def main():
     Example: use Run/Debug on this file with the rag-shell-venv interpreter.
     Project settings and completed prerequisites come from the shared setup.
     """
-    with DemoSession(__file__, live=True, repeat=REPEAT) as session:
+    with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 
 

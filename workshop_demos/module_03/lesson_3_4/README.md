@@ -145,9 +145,9 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one
 Expected shape, not a promised result:
 
 ```text
-the answer: tokens_in 1xxx | cached_tokens 0 | tokens_out 4xx | cost_usd 0.00xxxx | citations 3 | model gemini-3.6-flash
-cost.price(): $0.00xxxx = Rs 0.xxxx at 85.0 | in 1xxx out 4xx cached 0
-the estimate for the same packed set: fixed 168 + context 8xx = 1xxx | the model counted 1xxx | ratio 0.9x
+the answer: tokens_in 1xxx | cached_tokens 0 | tokens_out 1xx | cost_usd None | citations 1 | model gemini-3.6-flash
+cost.price(): $0.00xxxx = Rs 0.xxxx at 85.0 | in 1xxx out 1xx cached 0
+the estimate for the same packed set: fixed 168 + context 7xx = 8xx | with the answer's schema 2xx: 1xxx | the model counted 1xxx | ratio 1.0x
 ```
 
 ### demo_06_a_dated_document_on_the_lane_the_header_s_date_the_rule_in_the_prompt_the_citati.py
@@ -227,6 +227,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1d55caf6bb48f4b656f2d7a627ef88ae850cf99e`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `3a10feec360e9abe6110428ee8b4bc956a4b1ba5`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

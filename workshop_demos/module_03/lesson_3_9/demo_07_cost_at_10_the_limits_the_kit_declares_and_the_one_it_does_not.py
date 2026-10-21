@@ -73,6 +73,8 @@ EP=$(terraform -chdir=terraform output -raw vector_index_endpoint)
 gcloud ai index-endpoints describe "$(basename "$EP")" --region="$REGION" --project="$PROJECT" \\
   --format='value(deployedIndexes[0].dedicatedResources.machineSpec.machineType,deployedIndexes[0].dedicatedResources.minReplicaCount,deployedIndexes[0].dedicatedResources.maxReplicaCount)'
 terraform -chdir=terraform state list | grep -c gemini_rpm
+true                 # the cell's status is not grep's: its 0 is the answer
+
 
 """
 

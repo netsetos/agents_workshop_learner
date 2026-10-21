@@ -194,7 +194,7 @@ The first cell reads the four ceilings from the kit's files and does the arithme
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0: reads only, nothing changed).
 
-IDE adaptation: Run with the page's shell semantics: every line is a read. grep -c prints 0 and exits 1 on a lane without quota.tf's override, and that 0 is the answer the page reads, not a failure.
+IDE adaptation: Run with the page's shell semantics: every line is a read. grep -c prints 0 and exits 1 on a lane without quota.tf's override, and that 0 is the answer the page reads, not a failure; the cell ends on true so its last line's status is not taken for one.
 
 Expected shape, not a promised result:
 

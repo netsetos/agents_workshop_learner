@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_B/lesson_B_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_B.1_Python_Basics_WIX.html",
-  "source_sha": "2964048d379f1d911bd36318b2cf1e1611552e38",
+  "source_sha": "4c852e5d90652bfb191b5cfb76d484c4b62a2ef9",
   "shared_setup_windows": [
     1,
     3
@@ -146,7 +146,7 @@
           "subheading": "Where am I? The venv, asked from inside",
           "purpose": "Inside a venv, sys.prefix is the venv's folder and sys.base_prefix is the Python it was made from; outside one, both name the same folder. Python's documentation says that comparing the two is enough to know whether you are in a venv. The cell below asks that, then asks where python and the two libraries come from, and what google-genai brought with it.",
           "label": "bash — run on your laptop, in the shell where the setup block activated ~/basics-venv",
-          "expected": "python 3.12, running from a venv: True\n`python` on PATH is the venv's: True\nsite-packages is inside the venv: True\nnumpy 2.5.3, installed in that site-packages: True\ngoogle-genai 2.22.0, installed in that site-packages: True\ngoogle-genai brought 10 more: anyio, distro, google-auth, httpx, pydantic, requests, sniffio, tenacity, typing-extensions, websockets\nits rule for google-auth is google-auth[requests]<3.0.0,>=2.56.0; pip chose 2.60.0",
+          "expected": "python 3.12, running from a venv: True\n`python` on PATH is the venv's: True\nsite-packages is inside the venv: True\nnumpy 2.5.3, installed in that site-packages: True\ngoogle-genai 2.22.0, installed in that site-packages: True\ngoogle-genai brought 10 more: anyio, distro, google-auth, httpx, pydantic, requests, sniffio, tenacity, typing-extensions, websockets\nits rule for google-auth is google-auth[requests]<3.0.0,>=2.56.0; pip chose 2.62.0",
           "adaptations": [],
           "id": "source_5",
           "function": "step_01_where_am_i_the_venv_asked_from_inside",
@@ -505,7 +505,7 @@
     },
     {
       "window": 32,
-      "label": "evals/run_eval.py - ask(): one retry, and only for a 5xx or no answer",
+      "label": "evals/run_eval.py - ask(): one retry, for a 5xx, no answer or a 429",
       "heading": "A call the kit would trust: one retry, a timeout, a checked body",
       "anchor": "s7",
       "line": 984
@@ -515,21 +515,21 @@
       "label": "evals/run_eval.py - validate_body(): a 200 is checked before it counts",
       "heading": "A call the kit would trust: one retry, a timeout, a checked body",
       "anchor": "s7",
-      "line": 999
+      "line": 1002
     },
     {
       "window": 34,
       "label": "shared/documind_tools.py - retrieve()'s call: a fresh ID token, a timeout, a failure returned as data",
       "heading": "A call the kit would trust: one retry, a timeout, a checked body",
       "anchor": "s7",
-      "line": 1017
+      "line": 1020
     },
     {
       "window": 35,
       "label": "shared/documind_tools.py - _id_token(): why the token is minted on every call",
       "heading": "A call the kit would trust: one retry, a timeout, a checked body",
       "anchor": "s7",
-      "line": 1035
+      "line": 1039
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

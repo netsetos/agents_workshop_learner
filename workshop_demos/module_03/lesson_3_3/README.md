@@ -110,6 +110,8 @@ Do it: the failing rows
 
 Operation: bash — run in the operator shell, in the kit (reads the report, and each failing row's pool from /v1/passages: no model, Rs 0).
 
+IDE adaptation: Export the cell's FIX1-FIX3 as the page asks you to paste them: the cell prints the export line, which a Python cell cannot run in your shell, so step 7's bench stopped at ${FIX1:?} (21 October 2026). The session keeps them for the next file.
+
 Expected shape, not a promised result:
 
 ```text

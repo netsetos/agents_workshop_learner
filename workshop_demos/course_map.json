@@ -5,7 +5,7 @@
     {
       "lesson": "B.1",
       "title": "Run Python the way the kit does: venvs, JSON and HTTP calls",
-      "source_sha": "2964048d379f1d911bd36318b2cf1e1611552e38",
+      "source_sha": "4c852e5d90652bfb191b5cfb76d484c4b62a2ef9",
       "source_kind": "main_html",
       "demos": 5
     },
@@ -194,7 +194,7 @@
     {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
-      "source_sha": "1d55caf6bb48f4b656f2d7a627ef88ae850cf99e",
+      "source_sha": "3a10feec360e9abe6110428ee8b4bc956a4b1ba5",
       "source_kind": "main_html",
       "demos": 9
     },

@@ -396,15 +396,21 @@ def _ask_once(api_url: str, question: str, tenant: str, email: str, token: str |
         return 0, {"error": type(e).__name__}, int((time.time() - t0) * 1000)
 
 
+RETRY_AFTER_429_S = 30   # the Retry-After rag-api's main.py sends with a model 429
+
+
 def ask(api_url: str, question: str, tenant: str, email: str, token: str | None, retries: int = 1):
     """POST /v1/query. Returns (status, body, latency_ms). AUTH_MODE=dev accepts x-user-email; under IAP the
     identity comes from the assertion and the header is ignored. A 5xx, a timeout or a transport error is retried
-    ONCE after two seconds and then counted: one retry separates a blip from an outage, more would hide one."""
+    ONCE after two seconds and then counted: one retry separates a blip from an outage, more would hide one. A 429 is
+    the one 4xx retried, once, after the Retry-After the API sends with it: the model's shared capacity said "not
+    now", not "never". Before the API answered a model 429 as a 429 it arrived here as a 500 and got this same retry
+    (21 October 2026)."""
     status, body, ms = _ask_once(api_url, question, tenant, email, token)
     for _ in range(retries):
-        if status == 200 or 400 <= status < 500:
+        if status == 200 or (400 <= status < 500 and status != 429):
             break
-        time.sleep(2)
+        time.sleep(RETRY_AFTER_429_S if status == 429 else 2)
         status, body, ms = _ask_once(api_url, question, tenant, email, token)
     return status, body, ms
 
