@@ -190,7 +190,7 @@ Expected shape, not a promised result:
 
 ```text
 diff --git a/evals/golden.jsonl b/evals/golden.jsonl
-index 50b46d6..e2d97fb 100644
+index 6177059..8f889ca 100644
 --- a/evals/golden.jsonl
 +++ b/evals/golden.jsonl
 @@ -6 +6 @@
@@ -257,6 +257,6 @@ Expected shape, not a promised result:
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0073164967439b3e40a6f6955a23aea7128aa104`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`. All 39 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `594d2c7c68d214d7e4283d448fdeef74fd783ae4`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

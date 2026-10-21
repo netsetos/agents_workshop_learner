@@ -272,7 +272,9 @@
           "purpose": "A red row has two honest fixes: correct the system that answered, or correct the row against its clause. The quick, dishonest one is to edit the row until the build is green, and this check exists for that edit. The cell moves lk-06's figure from 60 to 120 days, a figure no acme document holds, then runs the line CI runs.",
           "label": "bash — run in the operator shell, in the kit (edits one line of your clone on purpose, then runs what CI runs)",
           "expected": "lk-06 now asks for ['120 days']\n evals/golden.jsonl | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [FAIL] falsifiable\n         lk-06: must_contain '120 days' is not in acme's corpus - the row can only fail\n  [PASS] anchors\n  [PASS] coverage\n\n  1 problem(s). The golden set cannot judge the model until it judges itself.\nexit 1",
-          "adaptations": [],
+          "adaptations": [
+            "The refusal is the observation: the offline gate must exit 1 with its own words for the broken lk-06. Under the demo's set -e the exit stopped the step before the page's echo, step 3's git checkout never ran, and the lane's golden set stayed broken for the next lesson (21 October 2026). Any other exit, or a 1 without those words, fails."
+          ],
           "id": "source_11",
           "function": "step_02_break_a_row_the_way_a_hand_edit_would",
           "window": 11,

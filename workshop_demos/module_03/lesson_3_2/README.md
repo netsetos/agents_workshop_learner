@@ -249,10 +249,10 @@ split dev
   authority_rate                not measured: the run carries no citations (a /v1/route run)
   correct_rate                  not measured: the run carries no answer text (a /v1/route run)
   methods: anchor 52, arbiter 48, model 78, single 9
-  acceptance rules: A 77, B 1, F 48
+  acceptance rules: A 76, B 1, C 1, F 48
   accepted without L2           139/139 = 100.0% [97.3%, 100.0%]
   sent to L2                    48/187 = 25.7% [19.9%, 32.4%]
-  router cost                   Rs 3.8461 in all, Rs 0.02057 a turn
+  router cost                   Rs 3.8411 in all, Rs 0.02054 a turn
   L1 alone                      106/126 = 84.1% [76.8%, 89.5%]  (L1's own route, before the vote and the arbiter, on the turns it was asked; 0 failed)
 the dev gates hold
 ```
@@ -270,7 +270,7 @@ python evals/route_eval.py --local --exemplars none
 ...
   exemplars: none - 0 in the L1 prompt; the rows of the kit's 8 stay out of the score in every arm
 ...
-  router cost                   Rs 3.4811 in all, Rs 0.01862 a turn
+  router cost                   Rs 3.4761 in all, Rs 0.01859 a turn
 ```
 
 ### demo_09_few_shot_measured_the_examples_taken_out_and_put_back_on_your_lane.py
@@ -339,6 +339,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`. All 52 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d44e0ec621b36bfc022c8547e695ede9968b6382`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`. All 52 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9d08b333f5364f71179e7d150f0b9463217dd55e`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

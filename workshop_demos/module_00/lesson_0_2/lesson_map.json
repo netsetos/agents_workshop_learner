@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html",
-  "source_sha": "0073164967439b3e40a6f6955a23aea7128aa104",
+  "source_sha": "594d2c7c68d214d7e4283d448fdeef74fd783ae4",
   "shared_setup_windows": [
     3
   ],
@@ -383,7 +383,7 @@
           "subheading": "Diagnose a first failure: one loosened row",
           "purpose": "Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled.",
           "label": "bash — run in the first terminal",
-          "expected": "diff --git a/evals/golden.jsonl b/evals/golden.jsonl\nindex 50b46d6..e2d97fb 100644\n--- a/evals/golden.jsonl\n+++ b/evals/golden.jsonl\n@@ -6 +6 @@\n-{\"id\": \"lk-06\", \"shape\": \"lookup\", \"question\": \"What is the notice period for a confirmed E3?\", \"tenant\": \"acme\", \"must_contain\": [\"60\"], \"must_retrieve\": [\"NP-03\", \"hr_policy_2026\"], \"answerable\": true}\n+{\"id\": \"lk-06\", \"shape\": \"lookup\", \"question\": \"What is the notice period for a confirmed E3?\", \"tenant\": \"acme\", \"must_contain\": [], \"must_retrieve\": [\"NP-03\", \"hr_policy_2026\"], \"answerable\": true}",
+          "expected": "diff --git a/evals/golden.jsonl b/evals/golden.jsonl\nindex 6177059..8f889ca 100644\n--- a/evals/golden.jsonl\n+++ b/evals/golden.jsonl\n@@ -6 +6 @@\n-{\"id\": \"lk-06\", \"shape\": \"lookup\", \"question\": \"What is the notice period for a confirmed E3?\", \"tenant\": \"acme\", \"must_contain\": [\"60\"], \"must_retrieve\": [\"NP-03\", \"hr_policy_2026\"], \"answerable\": true}\n+{\"id\": \"lk-06\", \"shape\": \"lookup\", \"question\": \"What is the notice period for a confirmed E3?\", \"tenant\": \"acme\", \"must_contain\": [], \"must_retrieve\": [\"NP-03\", \"hr_policy_2026\"], \"answerable\": true}",
           "adaptations": [],
           "id": "source_31",
           "function": "step_02_diagnose_a_first_failure_one_loosened_row",

@@ -90,6 +90,8 @@ A red row has two honest fixes: correct the system that answered, or correct the
 
 Operation: bash — run in the operator shell, in the kit (edits one line of your clone on purpose, then runs what CI runs).
 
+IDE adaptation: The refusal is the observation: the offline gate must exit 1 with its own words for the broken lk-06. Under the demo's set -e the exit stopped the step before the page's echo, step 3's git checkout never ran, and the lane's golden set stayed broken for the next lesson (21 October 2026). Any other exit, or a 1 without those words, fails.
+
 Expected shape, not a promised result:
 
 ```text

@@ -116,9 +116,10 @@ rf-01 (acme, refusal, answerable False): What is ACME's sabbatical policy?
    policy         idf  4.20   in the pool
    acme           idf  1.77   not in the pool
    share 0.30 against EVIDENCE_FLOOR 0.5: the rule says refuse
-rf-05 (acme, refusal, answerable False): Who is the CEO of ACME?
-   ceo            idf  6.99   in the pool
-   acme           idf  1.77   in the pool
+rf-02 (acme, refusal, answerable False): How many casual leave days do I get?
+   casual         idf  3.98   in the pool
+   leave          idf  3.49   in the pool
+   days           idf  1.19   in the pool
    share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer
 lk-01 (acme, lookup, answerable True): What is the per-trip cap on domestic travel reimbursement?
    trip           idf  6.99   in the pool
@@ -156,21 +157,21 @@ Expected shape, not a promised result:
   generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)
   jev        JEV_MODE=off: Jev not available, nothing sent
 
-  rule       65 decided (4 by code: an empty pool), 0 errors, 0 skipped
+  rule       65 decided (5 by code: an empty pool), 0 errors, 0 skipped
              answer rate     47/47 = 100.0% [92.4%, 100.0%]    of the answerable rows, answered
-             refusal recall  4/18 = 22.2% [9.0%, 45.2%]        of the unanswerable rows, refused
-             accuracy        51/65 = 78.5% [67.0%, 86.7%]      of the rows decided
-             confusion       answerable: 47 answered, 0 refused | unanswerable: 14 answered, 4 refused
-             false answers   14, * an isolation row:
-                             rf-02 rf-03 rf-05 iso-03* iso-05* rf-06 iso-06* iso-07* rf-07 iso-08*
-                             iso-09* iso-10* mm-04* mm-05
+             refusal recall  5/18 = 27.8% [12.5%, 50.9%]       of the unanswerable rows, refused
+             accuracy        52/65 = 80.0% [68.7%, 87.9%]      of the rows decided
+             confusion       answerable: 47 answered, 0 refused | unanswerable: 13 answered, 5 refused
+             false answers   13, * an isolation row:
+                             rf-02 rf-03 iso-03* iso-05* rf-06 iso-06* iso-07* rf-07 iso-08* iso-09*
+                             iso-10* mm-04* mm-05
   generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)
   jev        not available: JEV_MODE=off: Jev not available, nothing sent
 
   per shape    rows  rule        generator   jev         (right decisions / decided)
   lookup         34  34/34       -           -
   join           11  11/11       -           -
-  refusal         8  2/8         -           -
+  refusal         8  3/8         -           -
   isolation      11  3/11        -           -
   version         1  1/1         -           -
 
@@ -178,21 +179,21 @@ Expected shape, not a promised result:
   rows where the arms disagree: - (one arm decided)
 
   calibration (Brier: 0 is perfect; always 0.5 scores 0.25)
-    rule (the evidence share, not a probability): Brier 0.197 over 65 rows
+    rule (the evidence share, not a probability): Brier 0.182 over 65 rows
       score      rows  mean score  answerable
-      0.0-0.2       0           -     0/0
+      0.0-0.2       1        0.18     0/1
       0.2-0.4       3        0.35     0/3
       0.4-0.6       3        0.54     2/3
       0.6-0.8      11        0.69     6/11
-      0.8-1.0      48        0.99    39/48
+      0.8-1.0      47        0.99    39/47
     jev        no scores
 
   latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)
-    rule (in process)            0.0x      0.0x          61
+    rule (in process)            0.0x      0.0x          60
     generator (/v1/query)           -         -           0
     jev                             -         -           0
   rupees per decision (USD x 85)
-    rule       Rs 0 a decision, over 61 (code, no model)
+    rule       Rs 0 a decision, over 60 (code, no model)
     generator  -
     jev        -
 ```
@@ -220,20 +221,20 @@ Expected shape, not a promised result:
   generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)
   jev        JEV_MODE=off: Jev not available, nothing sent
 
-  rule       65 decided (13 by code: an empty pool), 0 errors, 0 skipped
+  rule       65 decided (14 by code: an empty pool), 0 errors, 0 skipped
              answer rate     42/47 = 89.4% [77.4%, 95.4%]      of the answerable rows, answered
-             refusal recall  8/18 = 44.4% [24.6%, 66.3%]       of the unanswerable rows, refused
-             accuracy        50/65 = 76.9% [65.4%, 85.5%]      of the rows decided
-             confusion       answerable: 42 answered, 5 refused | unanswerable: 10 answered, 8 refused
-             false answers   10, * an isolation row:
-                             rf-02 rf-03 rf-05 iso-03* iso-05* iso-06* rf-07 iso-08* iso-09* mm-05
+             refusal recall  9/18 = 50.0% [29.0%, 71.0%]       of the unanswerable rows, refused
+             accuracy        51/65 = 78.5% [67.0%, 86.7%]      of the rows decided
+             confusion       answerable: 42 answered, 5 refused | unanswerable: 9 answered, 9 refused
+             false answers   9, * an isolation row:
+                             rf-02 rf-03 iso-03* iso-05* iso-06* rf-07 iso-08* iso-09* mm-05
   generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)
   jev        not available: JEV_MODE=off: Jev not available, nothing sent
 
   per shape    rows  rule        generator   jev         (right decisions / decided)
   lookup         34  32/34       -           -
   join           11  8/11        -           -
-  refusal         8  3/8         -           -
+  refusal         8  4/8         -           -
   isolation      11  6/11        -           -
   version         1  1/1         -           -
 
@@ -241,21 +242,21 @@ Expected shape, not a promised result:
   rows where the arms disagree: - (one arm decided)
 
   calibration (Brier: 0 is perfect; always 0.5 scores 0.25)
-    rule (the evidence share, not a probability): Brier 0.197 over 65 rows
+    rule (the evidence share, not a probability): Brier 0.182 over 65 rows
       score      rows  mean score  answerable
-      0.0-0.2       0           -     0/0
+      0.0-0.2       1        0.18     0/1
       0.2-0.4       3        0.35     0/3
       0.4-0.6       3        0.54     2/3
       0.6-0.8      11        0.69     6/11
-      0.8-1.0      48        0.99    39/48
+      0.8-1.0      47        0.99    39/47
     jev        no scores
 
   latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)
-    rule (in process)            0.0x      0.0x          52
+    rule (in process)            0.0x      0.0x          51
     generator (/v1/query)           -         -           0
     jev                             -         -           0
   rupees per decision (USD x 85)
-    rule       Rs 0 a decision, over 52 (code, no model)
+    rule       Rs 0 a decision, over 51 (code, no model)
     generator  -
     jev        -
 ```
@@ -359,7 +360,7 @@ All 65 rows on the author's lane, each arm held against the gate's 0.90, the fal
 
 All 65 rows on the author's lane, each arm held against the gate's 0.90, the false answers by id, what refusing first would save and lose, and where Jev could sit after the cohort. The author ran all 65 rows on the author's lane and saved the run. Its report is below. Every figure in this step's tables that is not the Rs 0 lane's is computed from that saved file, when this page is built, by decide.py's own summarise(), calibration(), by_confidence() and latency(). The same command runs on your lane if you want your own.
 
-Operation: bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.60 of input and at most Rs 102.47 in all).
+Operation: bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.57 of input and at most Rs 102.43 in all).
 
 Expected shape, not a promised result:
 
@@ -385,6 +386,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6f80e3408ee4fb35964a833eae1de1849ec8d13c`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`. All 40 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `2c5ffaf4fdf36c282a1fd6ba68ee3e9c5728f9c4`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

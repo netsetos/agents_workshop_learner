@@ -57,7 +57,7 @@ def step_01_all_65_rows_rs_0(session):
       generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)
       jev        JEV_MODE=off: Jev not available, nothing sent
 
-      rule       65 decided (4 by code: an empty pool), 0 errors, 
+      rule       65 decided (5 by code: an empty pool), 0 errors, 
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
@@ -92,7 +92,7 @@ def step_02_change_it_a_higher_floor(session):
       generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)
       jev        JEV_MODE=off: Jev not available, nothing sent
 
-      rule       65 decided (13 by code: an empty pool), 0 errors,
+      rule       65 decided (14 by code: an empty pool), 0 errors,
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_02)

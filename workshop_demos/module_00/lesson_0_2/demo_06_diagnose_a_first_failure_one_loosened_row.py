@@ -78,7 +78,7 @@ def step_02_diagnose_a_first_failure_one_loosened_row(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: diff --git a/evals/golden.jsonl b/evals/golden.jsonl
-    index 50b46d6..e2d97fb 100644
+    index 6177059..8f889ca 100644
     --- a/evals/golden.jsonl
     +++ b/evals/golden.jsonl
     @@ -6 +6 @@

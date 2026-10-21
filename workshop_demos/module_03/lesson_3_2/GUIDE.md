@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`, reviewed at blob `d44e0ec621b36bfc022c8547e695ede9968b6382`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_3.2_CoT_Few_Shot_WIX.html`, reviewed at blob `9d08b333f5364f71179e7d150f0b9463217dd55e`. Learners read that page on the course site; this guide keeps its prose.
 
 Two ways to get a better answer from the same model. Chain of thought gives the model room to work before it answers. A Gemini 3 model does that natively: it writes thought tokens before its reply, which the kit never asks to see and pays for at the output rate, and the generator asks for little of it, thinking level LOW. A prompt can also ask for the working in writing, and under DocuMind's answer schema the working has one place to go: the answer the person reads. Few-shot puts solved examples in the prompt: the router's first classifier, `gemini-3.1-flash-lite` with a thinking budget of 0, reads eight questions, each labelled with its desk. You will take a join apart in the page, see what the Chat page shows of the thinking and what it bills, read where each technique lives in the kit, then measure both on your lane: the 11 join rows at LOW, MEDIUM and HIGH, one prompted-reasoning rule against native thinking, and the router's examples taken out and put back over 187 scored questions, every rate with its interval.
 
@@ -226,7 +226,7 @@ The eight triples, the prompt that reads them, the classifier that does not thin
 
 `LOCAL=1` runs the same eval with `route_eval.py`'s scripted classifier and offline embeddings: no project and no cost. The scripted L1 gives each row its own label, deliberately wrong on about one row in eight, and reads no example. So offline the two arms must agree on every route. What differs is the prompt's length, and so the router's cost.
 
-The swap took the eight lines out and put them back, and the scored rows did not move. Offline the arms agree: L1 alone 106/126 = 84.1% [76.8%, 89.5%] in both, top-1 route 186/187 = 99.5% [97.0%, 99.9%]. Only the router's cost moved, from Rs 3.8461 to Rs 3.4811. That Rs 0.3650 a run is what the examples cost in prompt tokens at the scripted count: about 136 tokens on each of 126 calls to `gemini-3.1-flash-lite`. On your lane the classifier is a model, and the examples can change its answers. Step 9 measures whether they do.
+The swap took the eight lines out and put them back, and the scored rows did not move. Offline the arms agree: L1 alone 106/126 = 84.1% [76.8%, 89.5%] in both, top-1 route 186/187 = 99.5% [97.0%, 99.9%]. Only the router's cost moved, from Rs 3.8411 to Rs 3.4761. That Rs 0.3650 a run is what the examples cost in prompt tokens at the scripted count: about 136 tokens on each of 126 calls to `gemini-3.1-flash-lite`. On your lane the classifier is a model, and the examples can change its answers. Step 9 measures whether they do.
 
 ### Few-shot, measured: the examples taken out and put back on your lane
 
@@ -272,7 +272,7 @@ What the measurements cost at list price, then eleven checks, each with the valu
 
 Each run prints its own rupees; these are estimates from `shared/prices.py`: `gemini-3.6-flash` at USD 1.50 in and 7.50 out a million tokens, `gemini-3.1-flash-lite` at 0.25 and 1.50, Rs 85 to the dollar. A LOW answer is priced as the course's typical answer, 2,000 tokens in and 300 out (Rs 0.45). An answer asked to think or write more, at MEDIUM, at HIGH or under the rule, is priced with its whole 2,048-token cap once (Rs 1.56); a retry after a cut-off adds at most Rs 4.17. Each pool read is one Ranking API request at the rate lesson 2.3 states, Rs 0.085.
 
-In all, about Rs 34.39 if every answer is the typical one, and about Rs 71.16 if every answer that thinks or writes more fills its cap once, plus the arbiter's thinking in step 9. The bench's and the router's own last lines print the real figures.
+In all, about Rs 34.38 if every answer is the typical one, and about Rs 71.15 if every answer that thinks or writes more fills its cap once, plus the arbiter's thinking in step 9. The bench's and the router's own last lines print the real figures.
 
 #### The checklist
 

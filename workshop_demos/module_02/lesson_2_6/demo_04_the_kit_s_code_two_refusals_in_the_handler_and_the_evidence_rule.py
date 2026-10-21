@@ -40,14 +40,14 @@ def step_01_the_rule_s_arithmetic_on_three_rows(session):
        policy         idf  4.20   in the pool
        acme           idf  1.77   not in the pool
        share 0.30 against EVIDENCE_FLOOR 0.5: the rule says refuse
-    rf-05 (acme, refusal, answerable False): Who is the CEO of ACME?
-       ceo            idf  6.99   in the pool
-       acme           idf  1.77   in the pool
+    rf-02 (acme, refusal, answerable False): How many casual leave days do I get?
+       casual         idf  3.98   in the pool
+       leave          idf  3.49   in the pool
+       days           idf  1.19   in the pool
        share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer
     lk-01 (acme, lookup, answerable True): What is the per-trip cap on domestic travel reimbursement?
        trip           idf  6.99   in the pool
-       domestic       idf  5.14   in the pool
-       reimbursement  idf  4.48   in t
+       domestic       idf
     """
     import json, sys, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -77,7 +77,7 @@ def step_01_the_rule_s_arithmetic_on_three_rows(session):
         print(f"   share {share:.2f} against EVIDENCE_FLOOR {dt.EVIDENCE_FLOOR}: the rule says {verdict}")
     
     
-    for rid in ("rf-01", "rf-05", "lk-01"):
+    for rid in ("rf-01", "rf-02", "lk-01"):
         explain(rid)
 
 def demonstrate(session):

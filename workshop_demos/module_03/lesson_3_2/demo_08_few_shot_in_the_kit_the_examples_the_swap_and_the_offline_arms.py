@@ -124,7 +124,7 @@ def step_03_offline_both_arms_on_the_scripted_classifi(session):
     ...
       exemplars: none - 0 in the L1 prompt; the rows of the kit's 8 stay out of the score in every arm
     ...
-      router cost                   Rs 3.4811 in all, Rs 0.01862 a turn
+      router cost                   Rs 3.4761 in all, Rs 0.01859 a turn
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_03)

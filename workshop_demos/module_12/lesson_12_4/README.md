@@ -275,7 +275,7 @@ Operation: bash — run in the operator shell, in the kit (the paste, the builde
 Expected shape, not a promised result:
 
 ```text
-evals/build_golden.py: the golden row is line 298, before the ] that closes GOLDEN
+evals/build_golden.py: the golden row is line 300, before the ] that closes GOLDEN
 golden.jsonl
   rows : 66
   shape: isolation=11, join=11, lookup=35, refusal=8, version=1
@@ -471,6 +471,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `44e9604ac1d956bad95a45a31b9fb03d6504a13a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `50e5e737453273ce3360d815b254975430048a1b`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

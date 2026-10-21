@@ -47,7 +47,7 @@
     {
       "lesson": "0.2",
       "title": "Reproduce the local environment, read the master diagram and prove a first success",
-      "source_sha": "0073164967439b3e40a6f6955a23aea7128aa104",
+      "source_sha": "594d2c7c68d214d7e4283d448fdeef74fd783ae4",
       "source_kind": "main_html",
       "demos": 4
     },
@@ -166,7 +166,7 @@
     {
       "lesson": "2.6",
       "title": "Decide answer-or-refuse with a System One model (Jev)",
-      "source_sha": "6f80e3408ee4fb35964a833eae1de1849ec8d13c",
+      "source_sha": "2c5ffaf4fdf36c282a1fd6ba68ee3e9c5728f9c4",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -180,14 +180,14 @@
     {
       "lesson": "3.2",
       "title": "Prompt with chain of thought and few-shot exemplars",
-      "source_sha": "d44e0ec621b36bfc022c8547e695ede9968b6382",
+      "source_sha": "9d08b333f5364f71179e7d150f0b9463217dd55e",
       "source_kind": "main_html",
       "demos": 11
     },
     {
       "lesson": "3.3",
       "title": "Recognise prompt failure modes and fix them in the prompt",
-      "source_sha": "b3f889315ee1f9c262406bb0296fabb0ffb10766",
+      "source_sha": "2234cf3cb8c2625c7b3c783425458e19c04d13ec",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -243,7 +243,7 @@
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "c26b42747346c206dc04138c93891585f612ae8f",
+      "source_sha": "2ae38b2bc6ac08caaf597cdf51944df72962061d",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -600,7 +600,7 @@
     {
       "lesson": "11.2",
       "title": "Evaluate and gate the exact candidate revision",
-      "source_sha": "91a2b4ee6826abcde69482aa2e073e661f0c1f22",
+      "source_sha": "30a41431a2a4f56a2d2018ce0c61de41b75ee82b",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -649,7 +649,7 @@
     {
       "lesson": "12.1",
       "title": "Decide whether tuning is justified and prepare data",
-      "source_sha": "32d9b972ba8f5516cabc6503cf2ac37a9af23e34",
+      "source_sha": "9eed5a17f5d61821ddf78f70787434a3fb702c47",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -670,7 +670,7 @@
     {
       "lesson": "12.4",
       "title": "Improve the agent safely: eval-gated self-improvement",
-      "source_sha": "44e9604ac1d956bad95a45a31b9fb03d6504a13a",
+      "source_sha": "50e5e737453273ce3360d815b254975430048a1b",
       "source_kind": "main_html",
       "demos": 12
     }

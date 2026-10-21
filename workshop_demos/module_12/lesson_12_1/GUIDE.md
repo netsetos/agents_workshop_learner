@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.1_Tuning_Decision_WIX.html`, reviewed at blob `32d9b972ba8f5516cabc6503cf2ac37a9af23e34`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.1_Tuning_Decision_WIX.html`, reviewed at blob `9eed5a17f5d61821ddf78f70787434a3fb702c47`. Learners read that page on the course site; this guide keeps its prose.
 
 Tuning teaches a model a habit, not facts. Before you pay for it, your lane's own numbers must show answers that are wrong in a way a habit fixes: a missing citation, a missing refusal, JSON that breaks. The fix must also be one that a prompt, a cache or better retrieval cannot make more cheaply. The kit has no tool that makes this call. This page gives you a rubric that reads numbers the kit already produces.
 

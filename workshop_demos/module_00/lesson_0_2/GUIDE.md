@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`, reviewed at blob `0073164967439b3e40a6f6955a23aea7128aa104`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.2_Local_Environment_WIX.html`, reviewed at blob `594d2c7c68d214d7e4283d448fdeef74fd783ae4`. Learners read that page on the course site; this guide keeps its prose.
 
 Every later lesson starts from the same place: a terminal on your machine, the kit cloned into ~/deploy_module_rag, and its Python in ~/rag-shell-venv. This lesson builds that place and then uses it. You will read the master diagram of DocuMind's two workflows, run the chat service on your laptop with a local model and no cloud at all, and ask it the notice-period question: the answer comes back with citations, for Rs 0. Then you will run the kit's offline gate, watch it pass, loosen one row of the golden set the way a hurried engineer would, read the failure it prints, and repair it.
 

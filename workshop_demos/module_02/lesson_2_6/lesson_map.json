@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.6_System_One_WIX.html",
-  "source_sha": "6f80e3408ee4fb35964a833eae1de1849ec8d13c",
+  "source_sha": "2c5ffaf4fdf36c282a1fd6ba68ee3e9c5728f9c4",
   "shared_setup_windows": [
     1
   ],
@@ -177,7 +177,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        467
+        468
       ],
       "offline": false,
       "live_verified": false,
@@ -195,7 +195,7 @@
           "id": "source_3",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 3,
-          "source_line": 467,
+          "source_line": 468,
           "manual_checkpoint": null
         }
       ],
@@ -222,8 +222,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        496,
-        510
+        497,
+        511
       ],
       "offline": false,
       "live_verified": false,
@@ -239,7 +239,7 @@
           "id": "source_6",
           "function": "step_01_the_golden_row_and_the_same_question_from",
           "window": 6,
-          "source_line": 496,
+          "source_line": 497,
           "manual_checkpoint": null
         },
         {
@@ -252,7 +252,7 @@
           "id": "source_8",
           "function": "step_02_the_golden_row_and_the_same_question_from",
           "window": 8,
-          "source_line": 510,
+          "source_line": 511,
           "manual_checkpoint": null
         }
       ],
@@ -278,7 +278,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        683
+        684
       ],
       "offline": true,
       "live_verified": false,
@@ -289,12 +289,12 @@
           "subheading": "Do it: the rule's arithmetic on three rows",
           "purpose": "Do it: the rule's arithmetic on three rows",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; Rs 0: nothing leaves the machine)",
-          "expected": "rf-01 (acme, refusal, answerable False): What is ACME's sabbatical policy?\n   sabbatical     idf  8.09   not in the pool\n   policy         idf  4.20   in the pool\n   acme           idf  1.77   not in the pool\n   share 0.30 against EVIDENCE_FLOOR 0.5: the rule says refuse\nrf-05 (acme, refusal, answerable False): Who is the CEO of ACME?\n   ceo            idf  6.99   in the pool\n   acme           idf  1.77   in the pool\n   share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer\nlk-01 (acme, lookup, answerable True): What is the per-trip cap on domestic travel reimbursement?\n   trip           idf  6.99   in the pool\n   domestic       idf  5.14   in the pool\n   reimbursement  idf  4.48   in the pool\n   travel         idf  4.24   in the pool\n   cap            idf  2.89   in the pool\n   share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer",
+          "expected": "rf-01 (acme, refusal, answerable False): What is ACME's sabbatical policy?\n   sabbatical     idf  8.09   not in the pool\n   policy         idf  4.20   in the pool\n   acme           idf  1.77   not in the pool\n   share 0.30 against EVIDENCE_FLOOR 0.5: the rule says refuse\nrf-02 (acme, refusal, answerable False): How many casual leave days do I get?\n   casual         idf  3.98   in the pool\n   leave          idf  3.49   in the pool\n   days           idf  1.19   in the pool\n   share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer\nlk-01 (acme, lookup, answerable True): What is the per-trip cap on domestic travel reimbursement?\n   trip           idf  6.99   in the pool\n   domestic       idf  5.14   in the pool\n   reimbursement  idf  4.48   in the pool\n   travel         idf  4.24   in the pool\n   cap            idf  2.89   in the pool\n   share 1.00 against EVIDENCE_FLOOR 0.5: the rule says answer",
           "adaptations": [],
           "id": "source_16",
           "function": "step_01_the_rule_s_arithmetic_on_three_rows",
           "window": 16,
-          "source_line": 683,
+          "source_line": 684,
           "manual_checkpoint": null
         }
       ],
@@ -323,10 +323,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        798,
-        860,
-        1014,
-        1060
+        800,
+        862,
+        1016,
+        1062
       ],
       "offline": false,
       "live_verified": false,
@@ -337,12 +337,12 @@
           "subheading": "Do it: all 65 rows, Rs 0",
           "purpose": "Do it: all 65 rows, Rs 0",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (Rs 0: no lane and no model; a few minutes, because it ranks the tenant's whole corpus for every row)",
-          "expected": "... 10/65 rows\n  ... 20/65 rows\n  ... 30/65 rows\n  ... 40/65 rows\n  ... 50/65 rows\n  ... 60/65 rows\n== answer or refuse: the decision eval (lesson 2.6) ==\n  rows       65 golden rows: 47 answerable, 18 not\n  pool       the Rs 0 lane, top 5: documind_tools.retrieve(passages=True) on the local profile over the kit's\n             corpus (2757 chunks), its gate the evidence rule at 0.50\n  rule       an empty pool, or evidence under 0.50 of the question's information, is refused (Rs 0)\n  generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        JEV_MODE=off: Jev not available, nothing sent\n\n  rule       65 decided (4 by code: an empty pool), 0 errors, 0 skipped\n             answer rate     47/47 = 100.0% [92.4%, 100.0%]    of the answerable rows, answered\n             refusal recall  4/18 = 22.2% [9.0%, 45.2%]        of the unanswerable rows, refused\n             accuracy        51/65 = 78.5% [67.0%, 86.7%]      of the rows decided\n             confusion       answerable: 47 answered, 0 refused | unanswerable: 14 answered, 4 refused\n             false answers   14, * an isolation row:\n                             rf-02 rf-03 rf-05 iso-03* iso-05* rf-06 iso-06* iso-07* rf-07 iso-08*\n                             iso-09* iso-10* mm-04* mm-05\n  generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        not available: JEV_MODE=off: Jev not available, nothing sent\n\n  per shape    rows  rule        generator   jev         (right decisions / decided)\n  lookup         34  34/34       -           -\n  join           11  11/11       -           -\n  refusal         8  2/8         -           -\n  isolation      11  3/11        -           -\n  version         1  1/1         -           -\n\n  kappa against the generator: - (the generator did not run)\n  rows where the arms disagree: - (one arm decided)\n\n  calibration (Brier: 0 is perfect; always 0.5 scores 0.25)\n    rule (the evidence share, not a probability): Brier 0.197 over 65 rows\n      score      rows  mean score  answerable\n      0.0-0.2       0           -     0/0\n      0.2-0.4       3        0.35     0/3\n      0.4-0.6       3        0.54     2/3\n      0.6-0.8      11        0.69     6/11\n      0.8-1.0      48        0.99    39/48\n    jev        no scores\n\n  latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)\n    rule (in process)            0.0x      0.0x          61\n    generator (/v1/query)           -         -           0\n    jev                             -         -           0\n  rupees per decision (USD x 85)\n    rule       Rs 0 a decision, over 61 (code, no model)\n    generator  -\n    jev        -",
+          "expected": "... 10/65 rows\n  ... 20/65 rows\n  ... 30/65 rows\n  ... 40/65 rows\n  ... 50/65 rows\n  ... 60/65 rows\n== answer or refuse: the decision eval (lesson 2.6) ==\n  rows       65 golden rows: 47 answerable, 18 not\n  pool       the Rs 0 lane, top 5: documind_tools.retrieve(passages=True) on the local profile over the kit's\n             corpus (2757 chunks), its gate the evidence rule at 0.50\n  rule       an empty pool, or evidence under 0.50 of the question's information, is refused (Rs 0)\n  generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        JEV_MODE=off: Jev not available, nothing sent\n\n  rule       65 decided (5 by code: an empty pool), 0 errors, 0 skipped\n             answer rate     47/47 = 100.0% [92.4%, 100.0%]    of the answerable rows, answered\n             refusal recall  5/18 = 27.8% [12.5%, 50.9%]       of the unanswerable rows, refused\n             accuracy        52/65 = 80.0% [68.7%, 87.9%]      of the rows decided\n             confusion       answerable: 47 answered, 0 refused | unanswerable: 13 answered, 5 refused\n             false answers   13, * an isolation row:\n                             rf-02 rf-03 iso-03* iso-05* rf-06 iso-06* iso-07* rf-07 iso-08* iso-09*\n                             iso-10* mm-04* mm-05\n  generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        not available: JEV_MODE=off: Jev not available, nothing sent\n\n  per shape    rows  rule        generator   jev         (right decisions / decided)\n  lookup         34  34/34       -           -\n  join           11  11/11       -           -\n  refusal         8  3/8         -           -\n  isolation      11  3/11        -           -\n  version         1  1/1         -           -\n\n  kappa against the generator: - (the generator did not run)\n  rows where the arms disagree: - (one arm decided)\n\n  calibration (Brier: 0 is perfect; always 0.5 scores 0.25)\n    rule (the evidence share, not a probability): Brier 0.182 over 65 rows\n      score      rows  mean score  answerable\n      0.0-0.2       1        0.18     0/1\n      0.2-0.4       3        0.35     0/3\n      0.4-0.6       3        0.54     2/3\n      0.6-0.8      11        0.69     6/11\n      0.8-1.0      47        0.99    39/47\n    jev        no scores\n\n  latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)\n    rule (in process)            0.0x      0.0x          60\n    generator (/v1/query)           -         -           0\n    jev                             -         -           0\n  rupees per decision (USD x 85)\n    rule       Rs 0 a decision, over 60 (code, no model)\n    generator  -\n    jev        -",
           "adaptations": [],
           "id": "source_20",
           "function": "step_01_all_65_rows_rs_0",
           "window": 20,
-          "source_line": 798,
+          "source_line": 800,
           "manual_checkpoint": null
         },
         {
@@ -350,12 +350,12 @@
           "subheading": "Change it: a higher floor",
           "purpose": "Raise the floor and the rule buys refusals with answers. The same run at 0.70:",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the Change-it: the same Rs 0 run with a higher floor)",
-          "expected": "... 10/65 rows\n  ... 20/65 rows\n  ... 30/65 rows\n  ... 40/65 rows\n  ... 50/65 rows\n  ... 60/65 rows\n== answer or refuse: the decision eval (lesson 2.6) ==\n  rows       65 golden rows: 47 answerable, 18 not\n  pool       the Rs 0 lane, top 5: documind_tools.retrieve(passages=True) on the local profile over the kit's\n             corpus (2757 chunks), its gate the evidence rule at 0.70\n  rule       an empty pool, or evidence under 0.70 of the question's information, is refused (Rs 0)\n  generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        JEV_MODE=off: Jev not available, nothing sent\n\n  rule       65 decided (13 by code: an empty pool), 0 errors, 0 skipped\n             answer rate     42/47 = 89.4% [77.4%, 95.4%]      of the answerable rows, answered\n             refusal recall  8/18 = 44.4% [24.6%, 66.3%]       of the unanswerable rows, refused\n             accuracy        50/65 = 76.9% [65.4%, 85.5%]      of the rows decided\n             confusion       answerable: 42 answered, 5 refused | unanswerable: 10 answered, 8 refused\n             false answers   10, * an isolation row:\n                             rf-02 rf-03 rf-05 iso-03* iso-05* iso-06* rf-07 iso-08* iso-09* mm-05\n  generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        not available: JEV_MODE=off: Jev not available, nothing sent\n\n  per shape    rows  rule        generator   jev         (right decisions / decided)\n  lookup         34  32/34       -           -\n  join           11  8/11        -           -\n  refusal         8  3/8         -           -\n  isolation      11  6/11        -           -\n  version         1  1/1         -           -\n\n  kappa against the generator: - (the generator did not run)\n  rows where the arms disagree: - (one arm decided)\n\n  calibration (Brier: 0 is perfect; always 0.5 scores 0.25)\n    rule (the evidence share, not a probability): Brier 0.197 over 65 rows\n      score      rows  mean score  answerable\n      0.0-0.2       0           -     0/0\n      0.2-0.4       3        0.35     0/3\n      0.4-0.6       3        0.54     2/3\n      0.6-0.8      11        0.69     6/11\n      0.8-1.0      48        0.99    39/48\n    jev        no scores\n\n  latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)\n    rule (in process)            0.0x      0.0x          52\n    generator (/v1/query)           -         -           0\n    jev                             -         -           0\n  rupees per decision (USD x 85)\n    rule       Rs 0 a decision, over 52 (code, no model)\n    generator  -\n    jev        -",
+          "expected": "... 10/65 rows\n  ... 20/65 rows\n  ... 30/65 rows\n  ... 40/65 rows\n  ... 50/65 rows\n  ... 60/65 rows\n== answer or refuse: the decision eval (lesson 2.6) ==\n  rows       65 golden rows: 47 answerable, 18 not\n  pool       the Rs 0 lane, top 5: documind_tools.retrieve(passages=True) on the local profile over the kit's\n             corpus (2757 chunks), its gate the evidence rule at 0.70\n  rule       an empty pool, or evidence under 0.70 of the question's information, is refused (Rs 0)\n  generator  --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        JEV_MODE=off: Jev not available, nothing sent\n\n  rule       65 decided (14 by code: an empty pool), 0 errors, 0 skipped\n             answer rate     42/47 = 89.4% [77.4%, 95.4%]      of the answerable rows, answered\n             refusal recall  9/18 = 50.0% [29.0%, 71.0%]       of the unanswerable rows, refused\n             accuracy        51/65 = 78.5% [67.0%, 86.7%]      of the rows decided\n             confusion       answerable: 42 answered, 5 refused | unanswerable: 9 answered, 9 refused\n             false answers   9, * an isolation row:\n                             rf-02 rf-03 iso-03* iso-05* iso-06* rf-07 iso-08* iso-09* mm-05\n  generator  not available: --local has no lane: the generator needs one (replay a saved run: --from FILE)\n  jev        not available: JEV_MODE=off: Jev not available, nothing sent\n\n  per shape    rows  rule        generator   jev         (right decisions / decided)\n  lookup         34  32/34       -           -\n  join           11  8/11        -           -\n  refusal         8  4/8         -           -\n  isolation      11  6/11        -           -\n  version         1  1/1         -           -\n\n  kappa against the generator: - (the generator did not run)\n  rows where the arms disagree: - (one arm decided)\n\n  calibration (Brier: 0 is perfect; always 0.5 scores 0.25)\n    rule (the evidence share, not a probability): Brier 0.182 over 65 rows\n      score      rows  mean score  answerable\n      0.0-0.2       1        0.18     0/1\n      0.2-0.4       3        0.35     0/3\n      0.4-0.6       3        0.54     2/3\n      0.6-0.8      11        0.69     6/11\n      0.8-1.0      47        0.99    39/47\n    jev        no scores\n\n  latency per decision, ms      p50       p95   decisions (an empty pool's refusal took none)\n    rule (in process)            0.0x      0.0x          51\n    generator (/v1/query)           -         -           0\n    jev                             -         -           0\n  rupees per decision (USD x 85)\n    rule       Rs 0 a decision, over 51 (code, no model)\n    generator  -\n    jev        -",
           "adaptations": [],
           "id": "source_22",
           "function": "step_02_change_it_a_higher_floor",
           "window": 22,
-          "source_line": 860,
+          "source_line": 862,
           "manual_checkpoint": null
         },
         {
@@ -368,7 +368,7 @@
           "id": "source_29",
           "function": "step_03_jev_s_switch_called_by_hand",
           "window": 29,
-          "source_line": 1014,
+          "source_line": 1016,
           "manual_checkpoint": null
         },
         {
@@ -381,7 +381,7 @@
           "id": "source_31",
           "function": "step_04_jev_s_switch_called_by_hand",
           "window": 31,
-          "source_line": 1060,
+          "source_line": 1062,
           "manual_checkpoint": null
         }
       ],
@@ -407,7 +407,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1164
+        1166
       ],
       "offline": false,
       "live_verified": false,
@@ -423,7 +423,7 @@
           "id": "source_35",
           "function": "step_01_zeta_s_rows_on_your_lane",
           "window": 35,
-          "source_line": 1164,
+          "source_line": 1166,
           "manual_checkpoint": null
         }
       ],
@@ -449,7 +449,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        1176
+        1178
       ],
       "offline": false,
       "live_verified": false,
@@ -459,13 +459,13 @@
           "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
           "subheading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
           "purpose": "All 65 rows on the author's lane, each arm held against the gate's 0.90, the false answers by id, what refusing first would save and lose, and where Jev could sit after the cohort. The author ran all 65 rows on the author's lane and saved the run. Its report is below. Every figure in this step's tables that is not the Rs 0 lane's is computed from that saved file, when this page is built, by decide.py's own summarise(), calibration(), by_confidence() and latency(). The same command runs on your lane if you want your own.",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.60 of input and at most Rs 102.47 in all)",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.57 of input and at most Rs 102.43 in all)",
           "expected": "[awaiting the author's run: data/decide_live.txt]",
           "adaptations": [],
           "id": "source_37",
           "function": "step_01_against_the_gate_refusal_recall_false_answ",
           "window": 37,
-          "source_line": 1176,
+          "source_line": 1178,
           "manual_checkpoint": null
         }
       ],
@@ -489,7 +489,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_6/GUIDE.md",
       "source_lines": [
-        473
+        474
       ],
       "offline": false,
       "live_verified": false,
@@ -507,7 +507,7 @@
           "id": "source_5",
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
-          "source_line": 473,
+          "source_line": 474,
           "manual_checkpoint": null
         }
       ],
@@ -540,196 +540,196 @@
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 437
+      "line": 438
     },
     {
       "window": 4,
       "label": "expected",
       "heading": "Before you run anything: set up the shell",
       "anchor": "setup",
-      "line": 469
+      "line": 470
     },
     {
       "window": 7,
       "label": "expected (evals/golden.jsonl, read when this page was built)",
       "heading": "A refusal in the UI, and what it paid for",
       "anchor": "s3",
-      "line": 498
+      "line": 499
     },
     {
       "window": 9,
       "label": "expected (the author's lane: your tokens, times and words are yours)",
       "heading": "A refusal in the UI, and what it paid for",
       "anchor": "s3",
-      "line": 544
+      "line": 545
     },
     {
       "window": 10,
       "label": "services/rag-api/main.py - query(): the empty pool refused by code, else rerank, then generate",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 559
+      "line": 560
     },
     {
       "window": 11,
       "label": "services/rag-api/main.py - empty_pool_answer(): the first refusal, no model, Rs 0",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 572
+      "line": 573
     },
     {
       "window": 12,
       "label": "services/rag-api/generator.py - SYSTEM: rule 3 is the model's refusal",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 583
+      "line": 584
     },
     {
       "window": 13,
       "label": "services/rag-api/main.py - /v1/passages: the pool, and nothing after it",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 592
+      "line": 593
     },
     {
       "window": 14,
       "label": "shared/documind_tools.py - EVIDENCE_FLOOR, _lexical_rank() and the local lane's gate",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 601
+      "line": 602
     },
     {
       "window": 15,
       "label": "evals/decide.py - evidence_share() and rule_arm(): the rule, on any pool",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 655
+      "line": 656
     },
     {
       "window": 17,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it)",
       "heading": "The kit's code: two refusals in the handler, and the evidence rule",
       "anchor": "s4",
-      "line": 713
+      "line": 714
     },
     {
       "window": 18,
       "label": "evals/decide.py - decide_row(): every arm on one row's pool; an empty pool asks no model",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 741
+      "line": 743
     },
     {
       "window": 19,
       "label": "evals/decide.py - summarise(): the confusion matrix, the three rates, errors and skips apart",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 765
+      "line": 767
     },
     {
       "window": 21,
       "label": "expected (the kit's own output, produced when this page was built; the rule's two latency figures are your machine's)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 800
+      "line": 802
     },
     {
       "window": 23,
       "label": "expected (the kit's own output at 0.70, produced when this page was built)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 862
+      "line": 864
     },
     {
       "window": 24,
       "label": "shared/system_one.py - the three modes, from the module's docstring",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 921
+      "line": 923
     },
     {
       "window": 25,
       "label": "shared/system_one.py - decide(): the one entry point, which never raises",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 925
+      "line": 927
     },
     {
       "window": 26,
       "label": "shared/system_one.py - _live(): the tenant's policy first, then the masked payload, then the transport",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 946
+      "line": 948
     },
     {
       "window": 27,
       "label": "shared/system_one.py - the adapter seam PR 2.6-C fills: headers, request, parse",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 969
+      "line": 971
     },
     {
       "window": 28,
       "label": "shared/system_one.py - _payload() and _policy(): what may leave, and for whom",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 991
+      "line": 993
     },
     {
       "window": 30,
       "label": "expected (the kit's own output, produced when this page was built)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 1016
+      "line": 1018
     },
     {
       "window": 32,
       "label": "expected (the kit's own output, produced when this page was built; yours should match it)",
       "heading": "The decision eval for Rs 0, a higher floor, and Jev's switch",
       "anchor": "s5",
-      "line": 1088
+      "line": 1090
     },
     {
       "window": 33,
       "label": "mk/retrieval.mk - JEV_MODE and make decide",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1112
+      "line": 1114
     },
     {
       "window": 34,
       "label": "evals/decide.py - list_usd() and generator_live(): /v1/query's own answerable, and its price",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1127
+      "line": 1129
     },
     {
       "window": 36,
       "label": "expected (the author's lane, with make's echo of the recipe: your ids, times and verdicts are yours)",
       "heading": "The rule and the generator on your lane's pools",
       "anchor": "s6",
-      "line": 1166
+      "line": 1168
     },
     {
       "window": 38,
       "label": "expected (the author's full run, 65 rows: the figures below are computed from its saved file)",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1178
+      "line": 1180
     },
     {
       "window": 39,
       "label": "evals/run_eval.py - THRESHOLDS: the gate's refusal rate",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1183
+      "line": 1185
     },
     {
       "window": 40,
       "label": "evals/decide.py - calibration() and rupees()",
       "heading": "Against the gate: refusal recall, false answers, calibration, latency and rupees",
       "anchor": "s7",
-      "line": 1209
+      "line": 1211
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

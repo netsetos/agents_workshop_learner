@@ -84,7 +84,7 @@ def step_02_a_person_accepts_it_v4_and_its_golden_row(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: evals/build_golden.py: the golden row is line 298, before the ] that closes GOLDEN
+    Observe: evals/build_golden.py: the golden row is line 300, before the ] that closes GOLDEN
     golden.jsonl
       rows : 66
       shape: isolation=11, join=11, lookup=35, refusal=8, version=1

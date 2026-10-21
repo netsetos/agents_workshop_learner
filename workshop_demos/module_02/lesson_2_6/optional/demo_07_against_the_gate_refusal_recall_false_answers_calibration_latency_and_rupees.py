@@ -35,7 +35,7 @@ def step_01_against_the_gate_refusal_recall_false_answ(session):
     All 65 rows on the author's lane, each arm held against the gate's 0.90, the false answers by id, what refusing first would save and lose, and where Jev could sit after the cohort. The author ran all 65 rows on the author's lane and saved the run. Its report is below. Every figure in this step's tables that is not the Rs 0 lane's is computed from that saved file, when this page is built, by decide.py's own summarise(), calibration(), by_confidence() and latency(). The same command runs on your lane if you want your own.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.60 of input and at most Rs 102.47 in all).
+    Operations: bash — run in the operator shell, in $DEMO_ROOT (optional: all 65 rows, about Rs 17.57 of input and at most Rs 102.43 in all).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 

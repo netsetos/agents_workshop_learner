@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`, reviewed at blob `6f80e3408ee4fb35964a833eae1de1849ec8d13c`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.6_System_One_WIX.html`, reviewed at blob `2c5ffaf4fdf36c282a1fd6ba68ee3e9c5728f9c4`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.5 rewrote the question before retrieval. This lesson decides what happens to the pool that retrieval hands back: answer from it, or refuse. The kit decides twice today. Code refuses an empty pool before any model runs, for nothing. Otherwise the generator reads the passages and may refuse by setting `answerable` to false, a refusal that has already paid for a full generator call. A decision could sit between rerank and generate instead: a System One model, which returns a typed decision with a calibrated probability rather than text. TypeSafe AI describes its Jev as one. It is the kit's first model that is not Google's, so it sits behind `JEV_MODE`, off by default, and in this course it is not on the request path at all. `evals/decide.py` asks three arms to decide every golden row from the same pool: the kit's evidence rule at Rs 0, the generator's own `answerable`, and Jev. It scores each against the golden set's truth, with Wilson intervals, calibration, latency and rupees. You will move the rule's floor across the 65 rows, ask a refusal row in the UI and see what it paid for, read the two refusals and the seam Jev would plug into, run the eval for Rs 0 and on your lane, and hold every arm against the gate's 0.90.
 
@@ -32,7 +32,7 @@ You will learn what an answer-or-refuse decision is, why the kit refuses twice t
 
 A pool is not an answer, the kit's second refusal is its expensive one, three deciders can be held to one truth, and the third of them is not on the request path in this course.
 
-Retrieval hands over a pool, and something must decide what to do with it. The golden set says what the right decision is for every row. Of its 65 rows, 47 are questions the tenant's documents answer and 18 are not. The 8 refusal rows ask for something no document of the tenant holds: ACME's sabbatical policy, its revenue in FY2024, the name of its CEO. The 10 isolation rows ask one tenant what only another tenant's documents say. A system that answers one of those 18 has written a false answer, and an isolation row answered is the worse kind, because the words came from somewhere the tenant's documents are not. A system that refuses one of the 47 has lost an answer someone needed. That makes the decision a classifier with a confusion matrix, and `evals/decide.py` scores it as one.
+Retrieval hands over a pool, and something must decide what to do with it. The golden set says what the right decision is for every row. Of its 65 rows, 47 are questions the tenant's documents answer and 18 are not. The 8 refusal rows ask for something no document of the tenant holds: ACME's sabbatical policy, its revenue in FY2024, the name of its CTO. The 10 isolation rows ask one tenant what only another tenant's documents say. A system that answers one of those 18 has written a false answer, and an isolation row answered is the worse kind, because the words came from somewhere the tenant's documents are not. A system that refuses one of the 47 has lost an answer someone needed. That makes the decision a classifier with a confusion matrix, and `evals/decide.py` scores it as one.
 
 The kit decides twice today, and the second decision is the expensive one. When retrieval finds nothing, `empty_pool_answer()` writes the refusal in code: `answerable` false, backend `none`, no reranker, no model, Rs 0. When retrieval finds something, the reranker orders the pool and the generator reads it, and rule 3 of its system prompt lets it set `answerable` to false when the context does not contain the answer. A dense retriever always finds something: it returns the nearest neighbours of the question whether or not they answer it. So on your lane nearly every refusal is the model's, and the model's refusal is billed as a full call. For the sabbatical question, packed from the Rs 0 lane's five passages and counted the way the kit's packer counts, the prompt alone is about 1,822 tokens, before the model has thought about it. Lesson 3.5 compared the two refusals' envelopes. This lesson asks whether a cheaper decision could come first, and what it would cost in lost answers.
 
@@ -56,7 +56,9 @@ The rule is the one arm that runs without a lane, so the bench below runs it on 
 
 answer rate -refusal recall -accuracy -false answers (* an isolation row) -
 
-The 19 rows the floor can move: their top 5 passages carry less than all of the question's information. Teal is a right decision at the current floor and orange a wrong one; the dark line in each bar is the floor.
+The 20 rows the floor can move: their top 5 passages carry less than all of the question's information. Teal is a right decision at the current floor and orange a wrong one; the dark line in each bar is the floor.
+
+- rf-05refusal, not answerable0.179
 
 - rf-01refusal, not answerable0.299
 
@@ -96,7 +98,7 @@ The 19 rows the floor can move: their top 5 passages carry less than all of the 
 
 - mm-03lookup, answerable0.872
 
-The other 46 rows carry all of it, a share of 1.00: 37 answerable, and 9 that are not (rf-02, rf-03, rf-05, iso-03*, iso-05*, iso-06*, iso-08*, iso-09*, mm-05; * an isolation row). The rule answers every one of them at every floor below 1, so on this lane no floor takes the rule past 9/18 = 50.0% [29.0%, 71.0%] refusal recall; from 0.80 upwards it holds that figure while answering 39/47 = 83.0% [69.9%, 91.1%] of the answerable rows.
+The other 45 rows carry all of it, a share of 1.00: 37 answerable, and 8 that are not (rf-02, rf-03, iso-03*, iso-05*, iso-06*, iso-08*, iso-09*, mm-05; * an isolation row). The rule answers every one of them at every floor below 1, so on this lane no floor takes the rule past 10/18 = 55.6% [33.7%, 75.4%] refusal recall; from 0.80 upwards it holds that figure while answering 39/47 = 83.0% [69.9%, 91.1%] of the answerable rows.
 
 Shares, verdicts and counts are `decide.py`'s, computed when this page was built, and the rates are printed by the kit's own `route_eval.rate()`. At 0.50 and 0.70 they equal the two runs in step 5, which the build checks. On your lane the pool comes from dense retrieval and the reranker, so its shares differ, and step 6 measures them.
 
@@ -172,7 +174,7 @@ The rule is older than this lesson. `shared/documind_tools.py`'s Rs 0 lane gates
 
 #### Do it: the rule's arithmetic on three rows
 
-rf-01's heaviest word, sabbatical, is in no chunk of acme's, so it carries the most weight in the question, and the pool holds only policy: a share of 0.30, under the floor. The rule refuses before any model is asked, as the generator refused after reading. rf-05 is the warning. Both of its content words are in the pool, the share is 1.00, and the rule answers a question the corpus cannot answer: a passage that mentions a CEO is not a passage that names ACME's. The rule measures whether the question's words are present, never whether they answer it. lk-01 carries all five of its words and is answered, rightly. A floor can move a row like rf-01 across the line; no floor can move rf-05, which is why a decision model is worth measuring at all.
+rf-01's heaviest word, sabbatical, is in no chunk of acme's, so it carries the most weight in the question, and the pool holds only policy: a share of 0.30, under the floor. The rule refuses before any model is asked, as the generator refused after reading. rf-02 is the warning. All three of its content words are in the pool, the share is 1.00, and the rule answers a question the corpus cannot answer: casual is there only as the CGST Act's casual taxable person and leave as the handbook's earned leave, and the handbook grants no casual leave. The rule measures whether the question's words are present, never whether they answer it. lk-01 carries all five of its words and is answered, rightly. A floor can move a row like rf-01 across the line; no floor can move rf-02, which is why a decision model is worth measuring at all.
 
 ### The decision eval for Rs 0, a higher floor, and Jev's switch
 
@@ -186,13 +188,13 @@ The whole eval with the lane taken away, the same run at 0.70, and every mode of
 
 #### Do it: all 65 rows, Rs 0
 
-At 0.50 the rule answered every answerable row, 47/47 = 100.0% [92.4%, 100.0%], and refused 4 of the 18 it should have: refusal recall 4/18 = 22.2% [9.0%, 45.2%], under the gate's 0.90 with the whole interval. All 4 refusals were empty pools at the lane's gate, which is why the report counts them as decided by code. The 14 false answers (rf-02, rf-03, rf-05, iso-03*, iso-05*, rf-06, iso-06*, iso-07*, rf-07, iso-08*, iso-09*, iso-10*, mm-04*, mm-05) are rows whose top passages carry at least half of the question's information, 9 of them all of it, rf-05's CEO among them. The Brier score of 0.197 grades the share as if it were a probability, which it is not; the bins say the same more plainly, with 48 rows in the top bin and 9 of them not answerable. Every rate is the rule's alone: the other two arms said why they did not decide, and decided nothing.
+At 0.50 the rule answered every answerable row, 47/47 = 100.0% [92.4%, 100.0%], and refused 5 of the 18 it should have: refusal recall 5/18 = 27.8% [12.5%, 50.9%], under the gate's 0.90 with the whole interval. All 5 refusals were empty pools at the lane's gate, which is why the report counts them as decided by code. The 13 false answers (rf-02, rf-03, iso-03*, iso-05*, rf-06, iso-06*, iso-07*, rf-07, iso-08*, iso-09*, iso-10*, mm-04*, mm-05) are rows whose top passages carry at least half of the question's information, 8 of them all of it, rf-02's casual leave among them. The Brier score of 0.182 grades the share as if it were a probability, which it is not; the bins say the same more plainly, with 47 rows in the top bin and 8 of them not answerable. Every rate is the rule's alone: the other two arms said why they did not decide, and decided nothing.
 
 #### Change it: a higher floor
 
 Raise the floor and the rule buys refusals with answers. The same run at 0.70:
 
-Refusal recall rose to 8/18 = 44.4% [24.6%, 66.3%] and the answer rate fell to 42/47 = 89.4% [77.4%, 95.4%]: 5 answerable rows are now refused (jn-04, jn-07, jn-08, lk-24, lk-29), most of them joins, whose answer is spread across passages that each carry only part of the question's words. Accuracy went from 51/65 = 78.5% [67.0%, 86.7%] to 50/65 = 76.9% [65.4%, 85.5%]. The bench in step 1 shows the rest of the trade: from 0.80 upwards nothing more is refused, because the 9 unanswerable rows at a share of 1.00 carry every word they ask with, and the rule's best on this lane is 9/18 = 50.0% [29.0%, 71.0%].
+Refusal recall rose to 9/18 = 50.0% [29.0%, 71.0%] and the answer rate fell to 42/47 = 89.4% [77.4%, 95.4%]: 5 answerable rows are now refused (jn-04, jn-07, jn-08, lk-24, lk-29), most of them joins, whose answer is spread across passages that each carry only part of the question's words. Accuracy went from 52/65 = 80.0% [68.7%, 87.9%] to 51/65 = 78.5% [67.0%, 86.7%]. The bench in step 1 shows the rest of the trade: from 0.80 upwards nothing more is refused, because the 8 unanswerable rows at a share of 1.00 carry every word they ask with, and the rule's best on this lane is 10/18 = 55.6% [33.7%, 75.4%].
 
 #### Jev's switch, called by hand
 
@@ -238,7 +240,7 @@ An isolation row in that list is the one to read first: a tenant was asked about
 
 #### Calibration, latency and rupees
 
-The generator's rupees are its tokens at `shared/prices.py`'s list price, as `decide.py`'s own line prices them (step 6): gemini-3.6-flash at USD 1.50 in and USD 7.50 out per million tokens, and 85 rupees to the dollar. Jev's are priced at TypeSafe's page rate, USD 42 per billion input tokens, and never at `shared/prices.py`'s, which would bill an unknown model at flash's rate; a decision that reports output tokens is left unpriced, because the page names no output price. On the Rs 0 lane's pools, the 57 rows Jev could be sent come to about 90,914 tokens by the kit's own count, about Rs 0.32 at that rate for all of them: the price is not what decides whether Jev belongs on the path.
+The generator's rupees are its tokens at `shared/prices.py`'s list price, as `decide.py`'s own line prices them (step 6): gemini-3.6-flash at USD 1.50 in and USD 7.50 out per million tokens, and 85 rupees to the dollar. Jev's are priced at TypeSafe's page rate, USD 42 per billion input tokens, and never at `shared/prices.py`'s, which would bill an unknown model at flash's rate; a decision that reports output tokens is left unpriced, because the page names no output price. On the Rs 0 lane's pools, the 57 rows Jev could be sent come to about 90,629 tokens by the kit's own count, about Rs 0.32 at that rate for all of them: the price is not what decides whether Jev belongs on the path.
 
 #### Refusing first: what it would save, and what it would lose
 

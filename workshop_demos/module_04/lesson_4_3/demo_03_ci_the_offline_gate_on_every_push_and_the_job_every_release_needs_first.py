@@ -102,7 +102,9 @@ open(path, "w", encoding="utf-8", newline="\\n").write("\\n".join(lines))
 print("lk-06 now asks for", json.loads(lines[i])["must_contain"])
 PY
 git diff --stat evals/golden.jsonl
-python evals/run_eval.py; echo "exit $?"
+python evals/run_eval.py > /tmp/gate43.txt 2>&1 && s=0 || s=$?; cat /tmp/gate43.txt; echo "exit $s"
+[ "$s" -eq 1 ] && grep -q "lk-06: must_contain '120 days' is not in acme's corpus" /tmp/gate43.txt
+
 
 """
 
