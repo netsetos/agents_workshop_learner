@@ -68,17 +68,23 @@ def _firestore_fallback(vec: list[float], tenant_id: str, top_k: int, filters: d
     combination. Without it Firestore does not degrade, it refuses.
     """
     query = _fs().collection(settings.chunks_collection).where("tenant_id", "==", tenant_id)
-    if settings.retrieval_current_only == "on":
+    current_only = settings.retrieval_current_only == "on"
+    if current_only:
         # The ledger's promise (12.5): one current version per document. The pre-filter needs the second
         # vector index in firestore_indexes.tf (tenant_id, current, embedding).
         query = query.where("current", "==", True)
     for k, v in (filters or {}).items():
         query = query.where(k, "in", v) if isinstance(v, list) else query.where(k, "==", v)   # doc_type, kind: the keys schemas.FILTER_KEYS allows, main.py checked
+    # Without the pre-filter, retired versions hold places among the nearest rows (the index never does: it keeps
+    # current rows only) and prefer_current() drops them after, so a re-issued corpus answered from here with half a
+    # pool (11 of 20 on 21 October 2026). Ask for four times as many and keep the first top_k current ones.
     hits = (query
             .find_nearest("embedding", Vector(vec),
                           distance_measure=DistanceMeasure.COSINE,
-                          limit=top_k,
+                          limit=top_k if current_only else min(4 * top_k, 1000),
                           distance_result_field="d").get())
+    if not current_only:
+        hits = [h for h in hits if h.to_dict().get("current") is not False][:top_k]
     out = []
     for h in hits:
         d = h.to_dict()

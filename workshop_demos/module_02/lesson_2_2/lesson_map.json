@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.2_Hybrid_WIX.html",
-  "source_sha": "32d9480609fc98d218f514f9ccb9f2cb09b076b6",
+  "source_sha": "8d99d2528071436f02857a4b2d4c68af267d27d9",
   "shared_setup_windows": [
     1
   ],
@@ -452,7 +452,7 @@
           "subheading": "Do it: hybrid on a candidate, the same two questions to both revisions, then undo",
           "purpose": "Do it: hybrid on a candidate, the same two questions to both revisions, then undo",
           "label": "bash — run in the operator shell (four questions, one or two rupees)",
-          "expected": "What is the total payable on invoice INV-2026-0412?\n   documind-  ['  0 inv_2026_0412.md', ' 36 cgst_act_2017.pdf', ...] | retrieve_ms 6xx | pool 20 | vector_chunks 20\n   candidate  ['  0 inv_2026_0412.md', ' 36 cgst_act_2017.pdf', ...] | retrieve_ms 7xx | pool 20 | vector_chunks 20\nWhat is the notice period for a confirmed E3?\n   documind-  ['  1 hr_policy_2026.md', '  4 hr_policy_2026.md', '  2 hr_policy_2026.md'] | retrieve_ms 6xx | pool 20 | vector_chunks 20\n   candidate  ['  1 hr_policy_2026.md', '  4 hr_policy_2026.md', '  2 hr_policy_2026.md'] | retrieve_ms 7xx | pool 20 | vector_chunks 20",
+          "expected": "What is the total payable on invoice INV-2026-0412?\n   documind-  ['  0 inv_2026_0412.md', ' 36 cgst_act_2017.pdf', ...] | retrieve_ms xxxx | pool 20 | vector_chunks 20\n   candidate  ['  0 inv_2026_0412.md', ' 36 cgst_act_2017.pdf', ...] | retrieve_ms xxxx | pool 20 | vector_chunks 20\nWhat is the notice period for a confirmed E3?\n   documind-  ['  1 hr_policy_2026.md', '  4 hr_policy_2026.md', '  2 hr_policy_2026.md'] | retrieve_ms xxxx | pool 20 | vector_chunks 20\n   candidate  ['  1 hr_policy_2026.md', '  4 hr_policy_2026.md', '  2 hr_policy_2026.md'] | retrieve_ms xxxx | pool 20 | vector_chunks 20",
           "adaptations": [],
           "id": "source_33",
           "function": "step_02_hybrid_on_a_candidate_the_same_two_questio",
@@ -465,7 +465,7 @@
           "subheading": "Do it: hybrid on a candidate, the same two questions to both revisions, then undo",
           "purpose": "Do it: hybrid on a candidate, the same two questions to both revisions, then undo",
           "label": "bash — run in the operator shell (the undo: the variable removed, the tag dropped, the live mode read again)",
-          "expected": "live mode: dense\n100;documind-api-00042-xyz",
+          "expected": "live mode: dense\n100\tdocumind-api-00042-xyz",
           "adaptations": [],
           "id": "source_35",
           "function": "step_03_hybrid_on_a_candidate_the_same_two_questio",
@@ -634,7 +634,7 @@
     },
     {
       "window": 13,
-      "label": "expected (your counts and ranks differ; the shape is the point: hundreds against 1)",
+      "label": "expected (your counts and ranks differ; the shape is the point: hundreds or more against 1)",
       "heading": "The lane runs dense, and two sparse rulers over its own rows",
       "anchor": "s3",
       "line": 618
@@ -655,7 +655,7 @@
     },
     {
       "window": 17,
-      "label": "expected (your ids and orders differ; the two anchor ranks and the two overlaps are the point)",
+      "label": "expected (your ids and orders differ; the anchor ranks and the two overlaps are the point: in this sample the legs shared no chunk, and where yours share some, those move up and the fused anchor can drop a few places)",
       "heading": "Three ways through the index: dense, sparse only, fused",
       "anchor": "s4",
       "line": 729
@@ -746,14 +746,14 @@
     },
     {
       "window": 34,
-      "label": "expected (your ids and milliseconds differ; the citations agreeing or not is the measurement)",
+      "label": "expected (your ids, citation counts and milliseconds differ; on an asia-south1 lane retrieve_ms can be about 2 s on the live revision and 3 s or more on the hybrid candidate; the citations agreeing or not is the measurement)",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
       "line": 944
     },
     {
       "window": 36,
-      "label": "expected",
+      "label": "expected (your revision name differs; gcloud's value() puts a tab between the percent and the name)",
       "heading": "The knob: hybrid on a candidate that takes no traffic, compared, then removed",
       "anchor": "s7",
       "line": 957

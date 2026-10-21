@@ -34,9 +34,11 @@ export CAND="https://candidate---documind-api-$NUMBER.$REGION.run.app"
 ask() { curl -s -X POST "$1/v1/query" -H "Authorization: Bearer $(tok "$API")" -H "Content-Type: application/json" \\
   -d "{\\"query\\":\\"$2\\",\\"tenant_id\\":\\"acme\\",\\"stream\\":false,\\"top_k\\":3}" | python -c "
 import sys, json
+sys.path.insert(0, '.'); from shared import prices
 j = json.load(sys.stdin); s = j['stages']
+usd = j.get('cost_usd') or prices.usd(j.get('model'), j.get('tokens_in') or 0, j.get('tokens_out') or 0, j.get('cached_tokens') or 0)   # cost_usd is empty on the vertex backend
 print('rewrite', s.get('rewrite', '-'), '| rewrite_ms', s.get('rewrite_ms', '-'), '| retrieve_ms', s['retrieve_ms'], '| pool', s['pool'],
-      '| answerable', j['answerable'], '| Rs %.2f' % (85 * (j.get('cost_usd') or 0)))
+      '| answerable', j['answerable'], '| Rs %.2f' % prices.inr(usd))
 print('   searched:', s.get('search_query', '(no stage: the question)'))
 for c in j['citations']:
     print('   cited:', c['source_uri'].split('/')[-1], '#' + c['chunk_id'].rsplit('#', 1)[1], c['quote'][:60])"; }

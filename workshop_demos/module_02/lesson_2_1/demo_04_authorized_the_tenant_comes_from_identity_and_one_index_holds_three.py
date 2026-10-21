@@ -1,4 +1,4 @@
-"""Lesson 2.1: Authorized: the tenant comes from identity, and one index serves three
+"""Lesson 2.1: Authorized: the tenant comes from identity, and one index holds three
 
 The UI's service account, which your tok() impersonates, sits on all three rosters. The first two calls send it the same question against acme and zeta; the third sends the outsider's token; the fourth sends the UI's token with a header that claims to be someone else. Each line shows the HTTP status. A request turned away for a reason that passes, a model quota hit, a Cloud Run scale-up or a dropped connection, is asked once more after five seconds; anything else prints the reason the service gave instead of a traceback.
 

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.5_Query_Rewrite_WIX.html",
-  "source_sha": "55dbd64e0bb1f0dea650430df968280eb5b457f8",
+  "source_sha": "76838552527ab66dd3a37a38b8adae680c3864df",
   "shared_setup_windows": [
     1
   ],
@@ -299,12 +299,14 @@
           "purpose": "In the Chat page, signed in as yourself, ask: How much can I claim per trip for domestic travel? It is a paraphrase of golden row lk-01, whose answer must contain 40,000. Then read the API's log for the last ten minutes.",
           "label": "bash — run in the operator shell, after the question in the Chat page (reads the API's log; changes nothing)",
           "expected": "[awaiting the author's run: data/ui.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_10",
           "function": "step_01_a_paraphrase_in_the_chat_page_then_the_log",
           "window": 10,
           "source_line": 445,
-          "manual_checkpoint": null
+          "manual_checkpoint": "In the deployed UI's Chat page, signed in as yourself, ask: How much can I claim per trip for domestic travel? Wait for the cited answer, then type done to read the API's log for the minutes since."
         }
       ],
       "next": "demo_04_the_stage_in_the_kit_the_call_the_guard_one_line_in_v1_query_and_two_lines_that.py"
@@ -432,9 +434,9 @@
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_5/GUIDE.md",
       "source_lines": [
         799,
-        818,
-        826,
-        834
+        820,
+        828,
+        836
       ],
       "offline": false,
       "live_verified": false,
@@ -463,7 +465,7 @@
           "id": "source_33",
           "function": "step_02_a_model_that_does_not_exist_the_same_quest",
           "window": 33,
-          "source_line": 818,
+          "source_line": 820,
           "manual_checkpoint": null
         },
         {
@@ -476,7 +478,7 @@
           "id": "source_35",
           "function": "step_03_the_two_lines_the_two_questions_wrote",
           "window": 35,
-          "source_line": 826,
+          "source_line": 828,
           "manual_checkpoint": null
         },
         {
@@ -489,7 +491,7 @@
           "id": "source_37",
           "function": "step_04_the_undo",
           "window": 37,
-          "source_line": 834,
+          "source_line": 836,
           "manual_checkpoint": null
         }
       ],
@@ -517,9 +519,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_5/GUIDE.md",
       "source_lines": [
-        935,
-        940,
-        944
+        937,
+        942,
+        946
       ],
       "offline": false,
       "live_verified": false,
@@ -535,7 +537,7 @@
           "id": "source_46",
           "function": "step_01_a_wiring_check_then_the_golden_rows_then_t",
           "window": 46,
-          "source_line": 935,
+          "source_line": 937,
           "manual_checkpoint": null
         },
         {
@@ -548,7 +550,7 @@
           "id": "source_48",
           "function": "step_02_a_wiring_check_then_the_golden_rows_then_t",
           "window": 48,
-          "source_line": 940,
+          "source_line": 942,
           "manual_checkpoint": null
         },
         {
@@ -561,7 +563,7 @@
           "id": "source_50",
           "function": "step_03_a_wiring_check_then_the_golden_rows_then_t",
           "window": 50,
-          "source_line": 944,
+          "source_line": 946,
           "manual_checkpoint": null
         }
       ],
@@ -590,10 +592,10 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_5/GUIDE.md",
       "source_lines": [
-        992,
-        1023,
-        1048,
-        1057
+        994,
+        1025,
+        1050,
+        1059
       ],
       "offline": false,
       "live_verified": false,
@@ -609,7 +611,7 @@
           "id": "source_55",
           "function": "step_01_the_rows_the_guard_can_refuse_rs_0",
           "window": 55,
-          "source_line": 992,
+          "source_line": 994,
           "manual_checkpoint": null
         },
         {
@@ -622,7 +624,7 @@
           "id": "source_57",
           "function": "step_02_delete_the_rule",
           "window": 57,
-          "source_line": 1023,
+          "source_line": 1025,
           "manual_checkpoint": null
         },
         {
@@ -635,7 +637,7 @@
           "id": "source_59",
           "function": "step_03_the_same_arm_the_edited_prompt_those_rows",
           "window": 59,
-          "source_line": 1048,
+          "source_line": 1050,
           "manual_checkpoint": null
         },
         {
@@ -648,7 +650,7 @@
           "id": "source_61",
           "function": "step_04_put_the_kit_back",
           "window": 61,
-          "source_line": 1057,
+          "source_line": 1059,
           "manual_checkpoint": null
         }
       ],
@@ -877,147 +879,147 @@
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The stage on a candidate: QUERY_REWRITE=on, a forced failure, and the undo",
       "anchor": "s6",
-      "line": 813
+      "line": 815
     },
     {
       "window": 34,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The stage on a candidate: QUERY_REWRITE=on, a forced failure, and the undo",
       "anchor": "s6",
-      "line": 822
+      "line": 824
     },
     {
       "window": 36,
       "label": "expected (the author's lane, newest first: no line carries a question, a rewrite or a literal)",
       "heading": "The stage on a candidate: QUERY_REWRITE=on, a forced failure, and the undo",
       "anchor": "s6",
-      "line": 829
+      "line": 831
     },
     {
       "window": 38,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The stage on a candidate: QUERY_REWRITE=on, a forced failure, and the undo",
       "anchor": "s6",
-      "line": 840
+      "line": 842
     },
     {
       "window": 39,
       "label": "Makefile - the ablate target",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 853
+      "line": 855
     },
     {
       "window": 40,
       "label": "evals/ablate.py - the two flags",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 856
+      "line": 858
     },
     {
       "window": 41,
       "label": "evals/ablate.py - main(): the golden rows, the paraphrases added after them, --limit last",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 862
+      "line": 864
     },
     {
       "window": 42,
       "label": "evals/ablate.py - rewrite_arm(): the rewrite searched, one kept call per question",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 868
+      "line": 870
     },
     {
       "window": 43,
       "label": "evals/ablate.py - paraphrase_rows(): same:true rows only, on their originals' anchors",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 898
+      "line": 900
     },
     {
       "window": 44,
       "label": "evals/ablate.py - main(): the golden rows and the paraphrases apart, then the tally",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 913
+      "line": 915
     },
     {
       "window": 45,
       "label": "evals/ablate.py - rewrite_summary(): the tally line",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 922
+      "line": 924
     },
     {
       "window": 47,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 938
+      "line": 940
     },
     {
       "window": 49,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 942
+      "line": 944
     },
     {
       "window": 51,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 946
+      "line": 948
     },
     {
       "window": 52,
       "label": "evals/ablate.py - how the harness tells you to read the rewrite row",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 950
+      "line": 952
     },
     {
       "window": 53,
       "label": "evals/ablate.py - the docstring's measurement of 8 September",
       "heading": "The measurement: the rewrite arm against the lane, on the golden rows and the paraphrases",
       "anchor": "s7",
-      "line": 954
+      "line": 956
     },
     {
       "window": 54,
       "label": "shared/query_rewrite.py - the rule step 8 deletes",
       "heading": "Change it: delete the prompt's literal rule and measure the guard; where the stage cannot go",
       "anchor": "s8",
-      "line": 987
+      "line": 989
     },
     {
       "window": 56,
       "label": "expected (the kit's own output, produced when this page was built)",
       "heading": "Change it: delete the prompt's literal rule and measure the guard; where the stage cannot go",
       "anchor": "s8",
-      "line": 1006
+      "line": 1008
     },
     {
       "window": 58,
       "label": "expected (the cell's own output, produced when this page was built on a copy of the two files)",
       "heading": "Change it: delete the prompt's literal rule and measure the guard; where the stage cannot go",
       "anchor": "s8",
-      "line": 1039
+      "line": 1041
     },
     {
       "window": 60,
       "label": "expected (the author's lane: your ids, times and numbers are yours)",
       "heading": "Change it: delete the prompt's literal rule and measure the guard; where the stage cannot go",
       "anchor": "s8",
-      "line": 1050
+      "line": 1052
     },
     {
       "window": 62,
       "label": "expected (the kit's own output after the checkout, produced when this page was built)",
       "heading": "Change it: delete the prompt's literal rule and measure the guard; where the stage cannot go",
       "anchor": "s8",
-      "line": 1061
+      "line": 1063
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

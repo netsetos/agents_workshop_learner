@@ -83,6 +83,10 @@ In the Chat page, signed in as yourself, ask: How much can I claim per trip for 
 
 Operation: bash — run in the operator shell, after the question in the Chat page (reads the API's log; changes nothing).
 
+Manual action: In the deployed UI's Chat page, signed in as yourself, ask: How much can I claim per trip for domestic travel? Wait for the cited answer, then type done to read the API's log for the minutes since.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 Expected shape, not a promised result:
 
 ```text
@@ -319,6 +323,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_2.5_Query_Rewrite_WIX.html`. All 62 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `55dbd64e0bb1f0dea650430df968280eb5b457f8`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_2.5_Query_Rewrite_WIX.html`. All 62 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `76838552527ab66dd3a37a38b8adae680c3864df`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

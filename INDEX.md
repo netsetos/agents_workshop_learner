@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1651 files; 235 quoted by a lesson, 349 shown or named by one.
+1652 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -133,6 +133,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_lane.py` | code | - | - |
 | `commands/tests/test_local_lane.py` | code | - | - |
 | `commands/tests/test_managed_peer.py` | code | - | - |
+| `commands/tests/test_model_quota.py` | code | - | - |
 | `commands/tests/test_pins.py` | code | - | 10.8 |
 | `commands/tests/test_prompt_versions.py` | code | 3.3, 3.6 | 12.1 |
 | `commands/tests/test_ralph.py` | code | - | 10.10 |
@@ -677,7 +678,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_02/lesson_2_1/README.md` | doc | - | - |
 | `workshop_demos/module_02/lesson_2_1/cleanup/demo_09_verify_it_yourself_the_checklist.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_1/demo_03_the_question_s_vector_direct_candidates_and_api_citations.py` | code | - | - |
-| `workshop_demos/module_02/lesson_2_1/demo_04_authorized_the_tenant_comes_from_identity_and_one_index_serves_three.py` | code | - | - |
+| `workshop_demos/module_02/lesson_2_1/demo_04_authorized_the_tenant_comes_from_identity_and_one_index_holds_three.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_1/demo_05_filters_two_keys_a_400_for_everything_else.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_1/demo_06_the_restricts_the_per_request_backend_and_the_stages_block.py` | code | - | - |
 | `workshop_demos/module_02/lesson_2_1/demo_07_current_is_the_ledger_s_filter_never_the_caller_s.py` | code | - | - |

@@ -50,6 +50,7 @@ def step_01_a_paraphrase_in_the_chat_page_then_the_log(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/ui.txt]
     """
+    manual_checkpoint("In the deployed UI's Chat page, signed in as yourself, ask: How much can I claim per trip for domestic travel? Wait for the cited answer, then type done to read the API's log for the minutes since.")
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 

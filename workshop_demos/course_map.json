@@ -12,7 +12,7 @@
     {
       "lesson": "B.2",
       "title": "Turn text into tokens and embeddings",
-      "source_sha": "d39a03fcaf60336b4630bbb10cf49763b2c2c47d",
+      "source_sha": "fb775486b8dc9dcea9744341eb3de5626e11017f",
       "source_kind": "main_html",
       "demos": 6
     },
@@ -33,7 +33,7 @@
     {
       "lesson": "B.5",
       "title": "Generate with GPT-style models: decoding and run-to-run variance",
-      "source_sha": "2772b14ece742c5d88e2edbbee55631b86886009",
+      "source_sha": "4e158840272cef0e6d365f2359970974eb2c8656",
       "source_kind": "main_html",
       "demos": 5
     },
@@ -131,14 +131,14 @@
     {
       "lesson": "2.1",
       "title": "Apply query embeddings and authorized filters",
-      "source_sha": "dd8de670cec9841b93e3e81812fe3f30d9d32a51",
+      "source_sha": "6b560a3bcea4a2983aed9a84ab4fe1a800c3faf7",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.2",
       "title": "Compare dense and hybrid retrieval",
-      "source_sha": "32d9480609fc98d218f514f9ccb9f2cb09b076b6",
+      "source_sha": "8d99d2528071436f02857a4b2d4c68af267d27d9",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -152,14 +152,14 @@
     {
       "lesson": "2.4",
       "title": "Test fallback without losing tenant or metadata filters",
-      "source_sha": "0af2e5b2b8878df30d9e340f23624b318199fe41",
+      "source_sha": "2000fe0ff4fbd82eeb07904063f9c4800a401941",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "2.5",
       "title": "Rewrite the query before retrieval, and measure it",
-      "source_sha": "55dbd64e0bb1f0dea650430df968280eb5b457f8",
+      "source_sha": "76838552527ab66dd3a37a38b8adae680c3864df",
       "source_kind": "main_html",
       "demos": 9
     },

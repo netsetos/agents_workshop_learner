@@ -66,7 +66,7 @@ CHUNKS = chunker.chunk_document({"slug": "hr_policy_2026", "doc_type": "policy",
 SETTINGS = {"project_id": "documind-ai-YOUR-ID", "region": "us-central1", "generator_model": "gemini-3.6-flash",
             "model_backend": "vertex", "max_context_tokens": 8000, "max_answer_tokens": 2048, "generator_location": "",
             "litellm_url": "", "gateway_timeout_s": 90.0}
-ASSIGNS = ("SYSTEM", "DATED_RULE", "GATEWAY_JSON_RULE", "GATEWAY_ROUTES", "_gateway_token", "_client", "log")
+ASSIGNS = ("SYSTEM", "DATED_RULE", "GATEWAY_JSON_RULE", "GATEWAY_ROUTES", "_gateway_token", "RETRY", "_client", "log")
 API_URL = "http://lane.invalid"
 
 
