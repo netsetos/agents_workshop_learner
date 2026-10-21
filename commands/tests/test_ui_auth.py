@@ -1,7 +1,8 @@
 """The UI's and the admin console's IAP check (21 October 2026): a Streamlit tab carries the assertion IAP signed when
-it opened, good for ten minutes, so verifying it again on every rerun refused every click after that ("Signature has
-expired"). Each verifies a token once, keeps the identity for the session, and verifies any other token afresh; the
-UI's expired token asks for a reload, and the admin list is still read on every rerun.
+it opened, good for ten minutes. The UI verifies it on every rerun, because the API verifies the same forwarded
+assertion on every call, and an expired one asks for a reload instead of "Contact admin". The admin console forwards
+it to nothing, so it verifies a token once, keeps the identity for the session, verifies any other token afresh, and
+reads the admin list on every rerun.
 
 Both auth.py files are loaded against a stand-in streamlit module; the signature check itself is replaced, so no key
 or network is needed. Skipped where PyJWT or google-auth is not installed; DOCUMIND_REQUIRE_LIBS=1 turns the skip
@@ -59,14 +60,13 @@ class FrontendTests(unittest.TestCase):
         self.calls.append(token)
         return {"email": "asha@acme.example", "sub": "123"}
 
-    def test_a_token_is_verified_once_a_session_and_a_new_one_again(self):
+    def test_the_token_is_verified_on_every_rerun(self):
+        # the API checks the same forwarded assertion on every call: a UI that kept the email answered with 401s
         with mock.patch.object(self.auth, "_verify_iap_jwt", self.verify):
             first, second = self.auth.current_user(), self.auth.current_user()
-            self.st.context.headers["x-goog-iap-jwt-assertion"] = "tok-2"
-            self.auth.current_user()
         self.assertEqual(first, second)
         self.assertEqual(first["email"], "asha@acme.example")
-        self.assertEqual(self.calls, ["tok-1", "tok-2"])
+        self.assertEqual(self.calls, ["tok-1", "tok-1"])
 
     def test_an_expired_token_asks_for_a_reload_not_an_admin(self):
         def expired(token, audience):
@@ -75,7 +75,6 @@ class FrontendTests(unittest.TestCase):
             with self.assertRaises(Stop):
                 self.auth.login_gate()
         self.assertEqual(self.st.errors, ["This tab's sign-in has expired: reload the page to sign in again."])
-        self.assertNotIn("_iap_verified", self.st.session_state)
 
     def test_a_forged_token_is_still_refused(self):
         def bad(token, audience):

@@ -212,6 +212,8 @@ Do it: the check refuses the old label
 
 Operation: bash — run in the operator shell, in the kit (the check, which should fail).
 
+IDE adaptation: The refusal is the observation: make prompt-version must exit 2 with the registry's own words for the edited text under the old label. Under the demo's set -e it stopped the step before the page's echo, and the kit was left on prompt-v4 with rule 5 edited (21 October 2026). Any other exit, or a 2 without those words, fails.
+
 Expected shape, not a promised result:
 
 ```text

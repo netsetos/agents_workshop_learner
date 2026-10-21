@@ -69,11 +69,6 @@ def step_01_the_branch_and_rule_5_in_both_copies(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 
-# Original CLI workflow for step_02_the_check_refuses_the_old_label.
-COMMANDS_02 = """make prompt-version; echo "exit $?"
-
-"""
-
 def step_02_the_check_refuses_the_old_label(session):
     """Run Do it: the check refuses the old label at this checkpoint.
 
@@ -94,8 +89,9 @@ def step_02_the_check_refuses_the_old_label(session):
         "documind-rag@v4": "269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8"
     to "versions" in servic
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
+    from workshop_helpers.gates import expect_failure
+    expect_failure(session, ["make", "prompt-version"], status=2, messages=["has another sha256", "A changed prompt needs a new version"])
+    print("exit 2")
 
 # Original CLI workflow for step_03_name_it_v4_register_it_and_check_again.
 COMMANDS_03 = """python - <<'PY'

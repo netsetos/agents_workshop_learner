@@ -508,7 +508,9 @@
           "purpose": "Do it: the check refuses the old label",
           "label": "bash — run in the operator shell, in the kit (the check, which should fail)",
           "expected": "python commands/prompt_pin.py\nprompt:   documind-rag@v3 (services/rag-api/config.py: prompt_id@prompt_version, as /version reports it)\ntext:     SYSTEM + DATED_RULE, 601 characters, as generate() joins them (services/rag-api/generator.py)\nsha256:   269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\nregistry: documind-rag@v3 has another sha256, 543ed8060f1b177cc26159b1af609d16dabeeafa88097945f5a74e884aca4e1e: SYSTEM or DATED_RULE changed and prompt_version did not\nA changed prompt needs a new version. Set prompt_version to \"v4\" in services/rag-api/config.py, then add\n    \"documind-rag@v4\": \"269dec90134e07beb3449813e1eb156c803568aa370bb52baa3a87aab8b2f6e8\"\nto \"versions\" in services/rag-api/prompt_versions.json, keeping the lines already there.\nmake: *** [mk/generation.mk:27: prompt-version] Error 1\nexit 2",
-          "adaptations": [],
+          "adaptations": [
+            "The refusal is the observation: make prompt-version must exit 2 with the registry's own words for the edited text under the old label. Under the demo's set -e it stopped the step before the page's echo, and the kit was left on prompt-v4 with rule 5 edited (21 October 2026). Any other exit, or a 2 without those words, fails."
+          ],
           "id": "source_41",
           "function": "step_02_the_check_refuses_the_old_label",
           "window": 41,

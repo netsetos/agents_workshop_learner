@@ -20,12 +20,9 @@ def current_user():
         if not token:
             return {"is_logged_in": False}
         # st.context.headers are the headers of the request that opened this tab's connection, and IAP signs that
-        # assertion for ten minutes: verified again on every rerun, a tab left open longer refused every click with
-        # "Signature has expired" (21 October 2026). It is verified once, while fresh, and the email kept for this
-        # session; what the person may do is still read on every rerun (tenant_for: the roster).
-        seen = st.session_state.get("_iap_verified")
-        if seen and seen["token"] == token:
-            return seen["user"]
+        # assertion for ten minutes. Verified on every rerun, because the API verifies the same assertion on every
+        # call (chat.py forwards it): a tab that kept the email past ten minutes answered every question with a 401
+        # (21 October 2026). An expired one says reload, which is how a tab gets a fresh one, not "Contact admin".
         try:
             claims = _verify_iap_jwt(token, IAP_AUDIENCE)
         except jwt.ExpiredSignatureError:
@@ -34,9 +31,7 @@ def current_user():
         except Exception as e:
             st.error(f"IAP JWT verification failed: {e}")
             return {"is_logged_in": False}
-        user = {"email": claims["email"], "sub": claims["sub"], "is_logged_in": True}
-        st.session_state["_iap_verified"] = {"token": token, "user": user}
-        return user
+        return {"email": claims["email"], "sub": claims["sub"], "is_logged_in": True}
     if st.user.is_logged_in:
         return {"email": st.user.email, "sub": st.user.sub,
                 "name": getattr(st.user, "name", ""), "is_logged_in": True}

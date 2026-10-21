@@ -65,7 +65,8 @@ def step_01_the_ceilings_from_the_kit_s_files_then_you(session):
               f" {rpm / avg:>8,.1f} x the average; the slots, at {timeout} s a claim, at {slots * 60 / timeout / avg:>8,.1f} x")
 
 # Original CLI workflow for step_02_the_ceilings_from_the_kit_s_files_then_you.
-COMMANDS_02 = """gcloud run services describe documind-api --region "$REGION" --project "$PROJECT" \\
+COMMANDS_02 = """set +e +o pipefail   # as the page runs it: grep -c prints 0 and exits 1 when the override is not in the state
+gcloud run services describe documind-api --region "$REGION" --project "$PROJECT" \\
   --format='yaml(spec.template.spec.timeoutSeconds,spec.template.spec.containerConcurrency,spec.template.metadata.annotations)' \\
   | grep -E 'maxScale|containerConcurrency|timeoutSeconds'
 EP=$(terraform -chdir=terraform output -raw vector_index_endpoint)

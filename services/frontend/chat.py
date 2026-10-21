@@ -221,7 +221,11 @@ def chat_page(user):
                     return
         except (requests.RequestException, ValueError, KeyError) as exc:
             slot.empty()
-            st.error(f"The answer stream failed: {type(exc).__name__}. Retry after checking the API.")
+            if getattr(getattr(exc, "response", None), "status_code", None) == 401:
+                # The API refused the person's IAP assertion, the one this tab opened with: past its ten minutes
+                st.error("This tab's sign-in has expired: reload the page to sign in again.")
+            else:
+                st.error(f"The answer stream failed: {type(exc).__name__}. Retry after checking the API.")
             return
         if not saw_done or not answer.strip():
             slot.empty()
