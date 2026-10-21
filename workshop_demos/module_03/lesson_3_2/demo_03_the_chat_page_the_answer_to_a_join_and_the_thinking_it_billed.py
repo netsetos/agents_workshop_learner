@@ -49,6 +49,7 @@ def step_01_jn_03_in_the_chat_page_then_its_row(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/ui_stream.txt]
     """
+    manual_checkpoint("In the deployed UI's Chat page, signed in as yourself, ask exactly: I am an E3 leaving with 50 days of earned leave. How much is encashed and what notice do I serve? Wait for the cited answer, then type done to read its stream row from the API's log.")
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 

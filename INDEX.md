@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1652 files; 235 quoted by a lesson, 349 shown or named by one.
+1653 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -153,6 +153,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_terraform_reapply.sh` | code | - | - |
 | `commands/tests/test_thread_read.py` | code | - | - |
 | `commands/tests/test_twin_chunker.py` | code | 8.2 | - |
+| `commands/tests/test_ui_auth.py` | code | - | - |
 | `commands/tests/test_verify_vector_index.py` | code | - | - |
 | `commands/thread_read.py` | code | 6.8 | - |
 | `commands/thread_replay.py` | code | 6.8 | - |

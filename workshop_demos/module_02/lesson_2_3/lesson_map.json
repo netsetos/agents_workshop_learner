@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_2.3_Rerank_WIX.html",
-  "source_sha": "8a84797a1c88a0c31e8991f49d2ca6bd8fa4a3af",
+  "source_sha": "6ea6bccc9d84443d85de0ff2d91c6334d71f6e2a",
   "shared_setup_windows": [
     1
   ],
@@ -16,6 +16,7 @@
     "CAND",
     "DOCUMIND_IMPERSONATE_SA",
     "DOCUMIND_PROJECT",
+    "LINE",
     "ME",
     "N",
     "NUMBER",
@@ -279,7 +280,7 @@
           "subheading": "Do it: the same question at top_k 5 and top_k 20",
           "purpose": "The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.",
           "label": "bash — run in the operator shell (a Python cell; two questions, the second with twenty chunks: a few rupees)",
-          "expected": "top_k 5: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 17xx ms of 28xx | rerank_fallback 0 | cache_hit none\n   3 citations: the sources the model used, in the order it used them; [N] in the answer is the packed position\n   [1] score 0.9xxx  #  1  hr_policy_2026.md          p.-  'NP-03 ...'\n   [2] score 0.8xxx  #  4  hr_policy_2026.md          p.-  '...'\n   [3] score 0.6xxx  #  2  hr_policy_2026.md          p.-  '...'\n   sorted by score, the ranker's order among them: ['#1', '#4', '#2']\n\ntop_k 20: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 3xxx ms of 4xxx | rerank_fallback 0 | cache_hit none\n   4 citations: ...\n   sorted by score, the ranker's order among them: ['#1', '#4', '#2', '#7']\n\nsaved /tmp/ans53_5.json and /tmp/ans53_20.json for steps 4, 7 and 8",
+          "expected": "top_k 5: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 2xxx ms of 4xxx | tokens_in 1xxx | rerank_fallback 0 | cache_hit none\n   1 citations: the sources the model used, in the order it used them; [N] in the answer is the packed position\n   [1] score 0.9xxx  #  1  hr_policy_2026.md          p.-  'A confirmed employee at grade E3 or above se'\n   sorted by score, the ranker's order among them: ['#1']\n\ntop_k 20: pool 20 | from the index 20 | retrieve 6xx + rerank 3xx + generate 2xxx ms of 4xxx | tokens_in 5xxx | rerank_fallback 0 | cache_hit none\n   1 citations: the sources the model used, in the order it used them; [N] in the answer is the packed position\n   [1] score 0.9xxx  #  1  hr_policy_2026.md          p.-  'A confirmed employee at grade E3 or above se'\n   sorted by score, the ranker's order among them: ['#1']\n\nsaved /tmp/ans53_5.json and /tmp/ans53_20.json for steps 4, 7 and 8",
           "adaptations": [
             "Reject semantic-cache hits or a fallback-only pool before comparing top_k/reranker behavior."
           ],
@@ -312,7 +313,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/GUIDE.md",
       "source_lines": [
-        569
+        568
       ],
       "offline": false,
       "live_verified": false,
@@ -323,12 +324,12 @@
           "subheading": "Do it: embed, pool, rank, compare",
           "purpose": "Do it: embed, pool, rank, compare",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one paid embedding and one rank request, well under a rupee)",
-          "expected": "pool: 20 current ids from the index in 9xx ms, every one found_by vector\nranker: 20 of 20 back in 2xx ms, 20 records sent, model semantic-ranker-fast-004\n   rank 1  score 0.9xxx  pool # 1  NP-03     hr_policy_2026.md\n   rank 2  score 0.xxxx  pool # x  ...       hr_policy_2026.md\n   ...\nthe API's cited ids, by score: ['#1', '#4', '#2'] | by hand, first 5: ['#1', '#4', '#2', '#7', '#3']\nevery citation is in the by-hand top 5: True | in the same relative order: True\nsaved /tmp/pool53.json for steps 5, 7 and 8",
+          "expected": "pool: 20 current ids from the index in 9xx ms, every one found_by vector\nranker: 20 of 20 back in 2xx ms, 20 records sent, model semantic-ranker-fast-004\n   rank 1  score 0.9xxx  pool # 1  NP-03     hr_policy_2026.md\n   rank 2  score 0.xxxx  pool # x  ...       ...\n   ...\nthe API's citations, by score: ['pool #1'] | by hand, first 5: ['pool #1', 'pool #3', 'pool #10', 'pool #6', 'pool #18']\nevery citation is in the by-hand top 5: True | in the same relative order: True\nsaved /tmp/pool53.json for steps 5, 7 and 8",
           "adaptations": [],
           "id": "source_13",
           "function": "step_01_embed_pool_rank_compare",
           "window": 13,
-          "source_line": 569,
+          "source_line": 568,
           "manual_checkpoint": null
         }
       ],
@@ -358,7 +359,7 @@
       "source_lines": [
         664,
         694,
-        709
+        711
       ],
       "offline": false,
       "live_verified": false,
@@ -382,7 +383,7 @@
           "subheading": "Do it, on a candidate: a deadline no call can meet",
           "purpose": "Do it, on a candidate: a deadline no call can meet",
           "label": "bash — run in the operator shell (one new revision, no traffic; one question to it; one log read)",
-          "expected": "candidate: rerank_fallback 1 | rerank_ms 1x | pool 20 | answerable True\n   score 0.7xxx  #1  hr_policy_2026.md\n   score 0.7xxx  #4  hr_policy_2026.md\n   score 0.6xxx  #2  hr_policy_2026.md\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme\tDeadlineExceeded",
+          "expected": "candidate: rerank_fallback 1 | rerank_ms 1x | pool 20 | answerable True\n   score 0.6xxx  #1  hr_policy_2026.md\n2026-09-2xT1x:xx:xx.xxxxxxZ\tacme\tDeadlineExceeded",
           "adaptations": [],
           "id": "source_19",
           "function": "step_02_on_a_candidate_a_deadline_no_call_can_meet",
@@ -400,7 +401,7 @@
           "id": "source_21",
           "function": "step_03_on_a_candidate_a_deadline_no_call_can_meet",
           "window": 21,
-          "source_line": 709,
+          "source_line": 711,
           "manual_checkpoint": null
         }
       ],
@@ -427,8 +428,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/GUIDE.md",
       "source_lines": [
-        756,
-        781
+        758,
+        783
       ],
       "offline": false,
       "live_verified": false,
@@ -444,7 +445,7 @@
           "id": "source_27",
           "function": "step_01_the_selftest_then_the_lane_s_last_day_then",
           "window": 27,
-          "source_line": 756,
+          "source_line": 758,
           "manual_checkpoint": null
         },
         {
@@ -457,7 +458,7 @@
           "id": "source_30",
           "function": "step_02_the_selftest_then_the_lane_s_last_day_then",
           "window": 30,
-          "source_line": 781,
+          "source_line": 783,
           "manual_checkpoint": null
         }
       ],
@@ -485,9 +486,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/GUIDE.md",
       "source_lines": [
-        837,
-        854,
-        871
+        839,
+        856,
+        873
       ],
       "offline": false,
       "live_verified": false,
@@ -503,7 +504,7 @@
           "id": "source_35",
           "function": "step_01_the_join_then_the_kit_s_own_retrieval_in_y",
           "window": 35,
-          "source_line": 837,
+          "source_line": 839,
           "manual_checkpoint": null
         },
         {
@@ -516,7 +517,7 @@
           "id": "source_37",
           "function": "step_02_the_join_then_the_kit_s_own_retrieval_in_y",
           "window": 37,
-          "source_line": 854,
+          "source_line": 856,
           "manual_checkpoint": null
         },
         {
@@ -531,7 +532,7 @@
           "id": "source_39",
           "function": "step_03_the_join_then_the_kit_s_own_retrieval_in_y",
           "window": 39,
-          "source_line": 871,
+          "source_line": 873,
           "manual_checkpoint": null
         }
       ],
@@ -558,8 +559,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_02/lesson_2_3/GUIDE.md",
       "source_lines": [
-        927,
-        955
+        929,
+        957
       ],
       "offline": false,
       "live_verified": false,
@@ -575,7 +576,7 @@
           "id": "source_43",
           "function": "step_01_the_api_s_packer_offline_then_a_pool_of_ac",
           "window": 43,
-          "source_line": 927,
+          "source_line": 929,
           "manual_checkpoint": null
         },
         {
@@ -588,7 +589,7 @@
           "id": "source_45",
           "function": "step_02_the_api_s_packer_offline_then_a_pool_of_ac",
           "window": 45,
-          "source_line": 955,
+          "source_line": 957,
           "manual_checkpoint": null
         }
       ],
@@ -696,7 +697,7 @@
     },
     {
       "window": 11,
-      "label": "expected (your milliseconds, positions and quotes differ; the scores falling and the pool staying 20 are the point)",
+      "label": "expected (your milliseconds, positions, quotes and number of citations differ; the pool staying 20 and tokens_in growing about fourfold are the point)",
       "heading": "One answer, read end to end: the citations, their scores, the stages",
       "anchor": "s3",
       "line": 516
@@ -706,7 +707,7 @@
       "label": "services/rag-api/retriever.py - rerank(): the request, the deadline, the fallback, the scores written back",
       "heading": "The Ranking API by hand: the API's pool, the API's request, the API's order",
       "anchor": "s4",
-      "line": 539
+      "line": 538
     },
     {
       "window": 14,
@@ -741,133 +742,133 @@
       "label": "expected (your scores are the pool's; a RetryError names the same deadline through a retry)",
       "heading": "The fallback: the pool by retrieval score, flagged on the row, forced on a candidate",
       "anchor": "s5",
-      "line": 703
+      "line": 707
     },
     {
       "window": 22,
       "label": "expected",
       "heading": "The fallback: the pool by retrieval score, flagged on the row, forced on a candidate",
       "anchor": "s5",
-      "line": 717
+      "line": 719
     },
     {
       "window": 23,
       "label": "Makefile - the usage target",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 730
+      "line": 732
     },
     {
       "window": 24,
       "label": "services/rag-api/main.py - usage_row(): the three clocks, the pool and the fallback flag on every row",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 735
+      "line": 737
     },
     {
       "window": 25,
       "label": "evals/usage_rows.py - p95(): the 95th position of the sorted list",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 741
+      "line": 743
     },
     {
       "window": 26,
       "label": "terraform/sql/tenant_daily.sql - the stage columns and the fallback count in the warehouse view",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 747
+      "line": 749
     },
     {
       "window": 28,
       "label": "expected, the selftest (the kit's own output, byte for byte)",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 759
+      "line": 761
     },
     {
       "window": 29,
       "label": "expected, the lane (your counts and milliseconds; the rerank column is the p95 of the rerank_ms clock; four tables come before the last)",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 773
+      "line": 775
     },
     {
       "window": 31,
       "label": "expected (the fallback row is step 5's doing)",
       "heading": "make usage: where the time went, p95 per stage, and the view behind it",
       "anchor": "s6",
-      "line": 787
+      "line": 789
     },
     {
       "window": 32,
       "label": "services/rag-api/retriever.py - the three stamps: firestore on the fallback rung, vector on the index's ids, graph on a walk",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 802
+      "line": 804
     },
     {
       "window": 33,
       "label": "shared/documind_schemas.py - Citation: the fields a caller receives",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 811
+      "line": 813
     },
     {
       "window": 34,
       "label": "smoke/smoke.py - check 3a: the index's share of the pool, asserted only when this request ran on vector",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 826
+      "line": 828
     },
     {
       "window": 36,
       "label": "expected",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 848
+      "line": 850
     },
     {
       "window": 38,
       "label": "expected (your locators and scores; the count and the stamp are the point)",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 868
+      "line": 870
     },
     {
       "window": 40,
       "label": "expected (the vector-tier line is this step's; the rest are lesson 0.4's checks and the optional ones)",
       "heading": "found_by: stamped on every chunk, counted on the answer, absent from the citation",
       "anchor": "s7",
-      "line": 874
+      "line": 876
     },
     {
       "window": 41,
       "label": "services/rag-api/generator.py - _pack(): the packed set, and a drop is a log line",
       "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
       "anchor": "s8",
-      "line": 906
+      "line": 908
     },
     {
       "window": 42,
       "label": "services/rag-api/generator.py - generate(): resolve against the packed list, never the pool",
       "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
       "anchor": "s8",
-      "line": 919
+      "line": 921
     },
     {
       "window": 44,
       "label": "expected (the first two lines are your pool's; the third is computed from the kit's files and is the same on every lane)",
       "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
       "anchor": "s8",
-      "line": 949
+      "line": 951
     },
     {
       "window": 46,
       "label": "expected (your counts; a lane whose twenty pages fit prints no drop line, and the budget was simply not reached)",
       "heading": "What the funnel costs, its knobs, and the packed set the citations come from",
       "anchor": "s8",
-      "line": 961
+      "line": 963
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_2.3_Rerank_WIX.html`, reviewed at blob `8a84797a1c88a0c31e8991f49d2ca6bd8fa4a3af`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_2.3_Rerank_WIX.html`, reviewed at blob `6ea6bccc9d84443d85de0ff2d91c6334d71f6e2a`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 2.2 measured the pool. This lesson follows it the rest of the way: to the ranking model that reads the question beside each of the twenty candidates and orders them, to the cut at the request's `top_k`, to the packer that fits what is left into the prompt, and to the citations, each carrying the ranker's score. You will read one answer end to end, send the API's own pool to the Ranking API with the API's own request and match its order, force the fallback on a candidate revision that takes no traffic, run `make usage` for p95 per stage, and find where `found_by` lives and how far it travels.
 
@@ -116,7 +116,7 @@ The handler does its work in a fixed order: the roster, the filter keys, the bac
 
 The cell asks the notice-period question twice and prints, for each answer, the stages block on one line and every citation with its score, its chunk position, its source and the start of its quote. The second answer offers the model twenty chunks instead of five.
 
-Two answers came back with the same pool, twenty candidates from the index, and the same first stage, because retrieval does not read `top_k`. The reranker read all twenty both times and returned five, then twenty; the model cited three or four either way, and each citation's score was the ranker's, so a citation at 0.9 sat above one at 0.6 whatever order the model mentioned them in. The generate clock grew with the second request because the model read four times the context: that is the cost of a wider `top_k`, not in the ranker, which is priced per request, but in the tokens. Nothing says `rerank_fallback` because the ranker answered; step 5 shows the row when it does not.
+Two answers came back with the same pool, twenty candidates from the index, and the same first stage, because retrieval does not read `top_k`. The reranker read all twenty both times and returned five, then twenty; the model cited only the passages its answer used, for a notice period usually NP-03 alone, either way, and each citation's score is the ranker's, so when an answer cites several, one at 0.9 sits above one at 0.6 whatever order the model mentioned them in. What grew with the second request is `tokens_in`, about four times: the model was handed four times the context, and that is the cost of a wider `top_k`, not in the ranker, which is priced per request, but in the tokens. The generate clock need not grow with it, because the model's thinking and the answer's length weigh more on it than the prompt does. Nothing says `rerank_fallback` because the ranker answered; step 5 shows the row when it does not.
 
 ### The Ranking API by hand: the API's pool, the API's request, the API's order
 
@@ -130,7 +130,7 @@ The lines that build a rank request, and a cell that reproduces the API's citati
 
 #### Do it: embed, pool, rank, compare
 
-You made the API's two calls with the API's own inputs and got the API's order. The pool came from the same endpoint under the same restrict, in the index's order with the index's scores, with the ledger's retired versions dropped as the reranker never sees them. The rank request was the kit's, record for record, and what came back was the citations' order from step 3: the model was handed those five in that order and cited three of them. Your milliseconds are the row's stages measured from a workstation instead of a container: yours to compare with the clocks, not to match. If the last line says False, the pool changed between the two calls, which a reindex in between will do; run the cell again.
+You made the API's two calls with the API's own inputs and got the API's order. The pool came from the same endpoint under the same restrict, in the index's order with the index's scores, with the ledger's retired versions dropped as the reranker never sees them. The rank request was the kit's, record for record, and what came back was the citations' order from step 3: the model was handed those five in that order and cited the ones its answer used. The positions are the pool's, because acme's pool mixes documents and a chunk's own number, the `#1` in its id, repeats from one document to the next. Your milliseconds are the row's stages measured from a workstation instead of a container: yours to compare with the clocks, not to match. If the last line says False, the pool changed between the two calls, which a reindex in between will do; run the cell again.
 
 ### The fallback: the pool by retrieval score, flagged on the row, forced on a candidate
 

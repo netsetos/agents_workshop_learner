@@ -145,7 +145,7 @@
     {
       "lesson": "2.3",
       "title": "Rerank and inspect retrieved candidates",
-      "source_sha": "8a84797a1c88a0c31e8991f49d2ca6bd8fa4a3af",
+      "source_sha": "6ea6bccc9d84443d85de0ff2d91c6334d71f6e2a",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -222,7 +222,7 @@
     {
       "lesson": "3.8",
       "title": "Complete the Streamlit upload-to-answer journey",
-      "source_sha": "134adede44a6fced0c0df061886485798dd577e0",
+      "source_sha": "857539014c52dec9c4e6e482c46e0f3c9dcdad72",
       "source_kind": "main_html",
       "demos": 8
     },

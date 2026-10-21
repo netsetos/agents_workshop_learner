@@ -127,12 +127,8 @@ def chat_page(user):
                                                 help="Chirp 3 HD (en-IN) via voice.cached_tts; free on a cache hit")
         st.divider()
         st.subheader("Cost this session")
-        ss = st.session_state
-        st.metric("USD", f"${ss.get('session_cost_usd', 0):.4f}",
-                  delta=f"+${ss.get('last_turn_cost', 0):.4f} last turn")
-        st.metric("INR", f"Rs {ss.get('session_cost_usd', 0) * USD_INR:.2f}")
-        st.metric("Tokens", f"{ss.get('tokens_in', 0)} in / "
-                            f"{ss.get('tokens_out', 0)} out")
+        cost_slot = st.empty()
+        show_cost(cost_slot)
 
     st.title("DocuMind Chat")
     if "messages" not in st.session_state:
@@ -243,7 +239,21 @@ def chat_page(user):
     ss.last_turn_cost = cost
     ss.tokens_in = ss.get("tokens_in", 0) + done.get("tokens_in", 0)
     ss.tokens_out = ss.get("tokens_out", 0) + done.get("tokens_out", 0)
+    show_cost(cost_slot)
     st.session_state.messages.append({"role": "assistant", "content": answer})
+
+
+def show_cost(slot) -> None:
+    """The sidebar's running cost, drawn into its placeholder. Streamlit draws the sidebar before the answer streams,
+    so the totals are drawn again once the turn has added to them: drawn only at the top, the sidebar showed the
+    turn before, Rs 0.00 after a first answer (21 October 2026)."""
+    ss = st.session_state
+    with slot.container():
+        st.metric("USD", f"${ss.get('session_cost_usd', 0):.4f}",
+                  delta=f"+${ss.get('last_turn_cost', 0):.4f} last turn")
+        st.metric("INR", f"Rs {ss.get('session_cost_usd', 0) * USD_INR:.2f}")
+        st.metric("Tokens", f"{ss.get('tokens_in', 0)} in / "
+                            f"{ss.get('tokens_out', 0)} out")
 
 
 def transcribe_from_mic() -> str:

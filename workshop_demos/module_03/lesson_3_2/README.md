@@ -71,6 +71,10 @@ In the Chat page, signed in as yourself, ask exactly: I am an E3 leaving with 50
 
 Operation: bash — run in the operator shell, after the question in the Chat page (reads the API's log; changes nothing).
 
+Manual action: In the deployed UI's Chat page, signed in as yourself, ask exactly: I am an E3 leaving with 50 days of earned leave. How much is encashed and what notice do I serve? Wait for the cited answer, then type done to read its stream row from the API's log.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 Expected shape, not a promised result:
 
 ```text

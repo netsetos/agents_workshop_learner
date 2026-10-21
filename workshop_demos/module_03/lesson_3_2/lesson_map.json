@@ -270,12 +270,14 @@
           "purpose": "In the Chat page, signed in as yourself, ask exactly: I am an E3 leaving with 50 days of earned leave. How much is encashed and what notice do I serve? Read the answer: the eval gate would want 45 and 60 in it. Then read the API's log for the last ten minutes.",
           "label": "bash — run in the operator shell, after the question in the Chat page (reads the API's log; changes nothing)",
           "expected": "[awaiting the author's run: data/ui_stream.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_6",
           "function": "step_01_jn_03_in_the_chat_page_then_its_row",
           "window": 6,
           "source_line": 448,
-          "manual_checkpoint": null
+          "manual_checkpoint": "In the deployed UI's Chat page, signed in as yourself, ask exactly: I am an E3 leaving with 50 days of earned leave. How much is encashed and what notice do I serve? Wait for the cited answer, then type done to read its stream row from the API's log."
         }
       ],
       "next": "demo_04_chain_of_thought_in_the_kit_the_level_the_schema_the_zero_shot_prompt_and_the_be.py"

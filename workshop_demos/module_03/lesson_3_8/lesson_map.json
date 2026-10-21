@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.8_UI_Journey_WIX.html",
-  "source_sha": "134adede44a6fced0c0df061886485798dd577e0",
+  "source_sha": "857539014c52dec9c4e6e482c46e0f3c9dcdad72",
   "shared_setup_windows": [
     1
   ],
@@ -244,7 +244,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        471
+        482
       ],
       "offline": false,
       "live_verified": false,
@@ -262,7 +262,7 @@
           "id": "source_11",
           "function": "step_01_the_service_s_account_iap_s_flag_who_may_s",
           "window": 11,
-          "source_line": 471,
+          "source_line": 482,
           "manual_checkpoint": null
         }
       ],
@@ -289,8 +289,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        527,
-        545
+        538,
+        556
       ],
       "offline": false,
       "live_verified": false,
@@ -306,7 +306,7 @@
           "id": "source_16",
           "function": "step_01_write_the_note_upload_it_in_the_browser_fo",
           "window": 16,
-          "source_line": 527,
+          "source_line": 538,
           "manual_checkpoint": null
         },
         {
@@ -322,7 +322,7 @@
           "id": "source_17",
           "function": "step_02_write_the_note_upload_it_in_the_browser_fo",
           "window": 17,
-          "source_line": 545,
+          "source_line": 556,
           "manual_checkpoint": "In the ACME UI, Documents -> Upload: choose the exact ~/pune_visitor_rules.md created in the previous step, then Index documents. Refresh until indexed. If your browser runs elsewhere, download this exact file from the workstation first. Type done after the UI checkpoint."
         }
       ],
@@ -348,7 +348,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        609
+        620
       ],
       "offline": false,
       "live_verified": false,
@@ -366,7 +366,7 @@
           "id": "source_23",
           "function": "step_01_ask_in_the_browser_ask_from_the_shell_read",
           "window": 23,
-          "source_line": 609,
+          "source_line": 620,
           "manual_checkpoint": "In the deployed UI Chat, ask the visitor-badge question from this lesson and wait for the cited answer. Type done to compare the browser and operator API records."
         }
       ],
@@ -392,7 +392,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        678
+        689
       ],
       "offline": false,
       "live_verified": false,
@@ -410,7 +410,7 @@
           "id": "source_28",
           "function": "step_01_open_the_source_then_render_your_own_trans",
           "window": 28,
-          "source_line": 678,
+          "source_line": 689,
           "manual_checkpoint": "Open the answer's citation/source in the UI and inspect the signed link. Type done to render and inspect the transcript from Python."
         }
       ],
@@ -436,7 +436,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        731
+        742
       ],
       "offline": false,
       "live_verified": false,
@@ -452,7 +452,7 @@
           "id": "source_33",
           "function": "step_01_read_the_account_s_grants_rs_0",
           "window": 33,
-          "source_line": 731,
+          "source_line": 742,
           "manual_checkpoint": null
         }
       ],
@@ -562,140 +562,140 @@
       "label": "services/frontend/auth.py - tenant_for(): the roster, one query, never cached",
       "heading": "The front door: IAP, the UI's settings, and who may sign in",
       "anchor": "s3",
-      "line": 460
+      "line": 471
     },
     {
       "window": 12,
       "label": "expected (your accounts; the redirect is to Google's sign-in, and the container never saw the request)",
       "heading": "The front door: IAP, the UI's settings, and who may sign in",
       "anchor": "s3",
-      "line": 477
+      "line": 488
     },
     {
       "window": 13,
       "label": "services/frontend/documents.py - upload_document(): the checks, then one object under the tenant's folder",
       "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
       "anchor": "s4",
-      "line": 494
+      "line": 505
     },
     {
       "window": 14,
       "label": "services/frontend/documents.py - documents_page(): the upload is not the indexing, and the page says so",
       "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
       "anchor": "s4",
-      "line": 513
+      "line": 524
     },
     {
       "window": 15,
       "label": "services/frontend/documents.py - versions_section(): the ledger, read through the API with the page's two credentials",
       "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
       "anchor": "s4",
-      "line": 522
+      "line": 533
     },
     {
       "window": 18,
       "label": "expected (your size, generation and hash; the key's hash is your file's)",
       "heading": "The upload: a note you write, uploaded in the browser, followed to the ledger",
       "anchor": "s4",
-      "line": 552
+      "line": 563
     },
     {
       "window": 19,
       "label": "services/frontend/chat.py - _headers(): the UI's own token, and the person's assertion forwarded",
       "heading": "The answer: asked in Chat, streamed, and the row that names you",
       "anchor": "s5",
-      "line": 568
+      "line": 579
     },
     {
       "window": 20,
       "label": "services/frontend/chat.py - stream_answer(): the question, labelled ui, and the events as they come",
       "heading": "The answer: asked in Chat, streamed, and the row that names you",
       "anchor": "s5",
-      "line": 576
+      "line": 587
     },
     {
       "window": 21,
       "label": "shared/iap.py - identity(): the assertion first, the bearer token second, never a header",
       "heading": "The answer: asked in Chat, streamed, and the row that names you",
       "anchor": "s5",
-      "line": 593
+      "line": 604
     },
     {
       "window": 22,
       "label": "services/rag-api/main.py - usage_row(): who asked, and a brain that defaults to ui",
       "heading": "The answer: asked in Chat, streamed, and the row that names you",
       "anchor": "s5",
-      "line": 602
+      "line": 613
     },
     {
       "window": 24,
       "label": "expected (newest row first; your email and wording)",
       "heading": "The answer: asked in Chat, streamed, and the row that names you",
       "anchor": "s5",
-      "line": 615
+      "line": 626
     },
     {
       "window": 25,
       "label": "services/frontend/citations.py - the pattern and the labels: [3], [Fig 3, p.12], [Clip 3, 03:20]",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 629
+      "line": 640
     },
     {
       "window": 26,
       "label": "services/frontend/citations.py - render_with_citations(): the pills, drawn as HTML",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 643
+      "line": 654
     },
     {
       "window": 27,
       "label": "services/frontend/citations.py - signing on Cloud Run: the account's email and token, and IAM signs",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 658
+      "line": 669
     },
     {
       "window": 29,
       "label": "expected (your ids and counts; the whole transcript follows, ready to copy)",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 685
+      "line": 696
     },
     {
       "window": 30,
       "label": "terraform/sa.tf - the UI's project roles, and the two it pointedly lacks",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 699
+      "line": 710
     },
     {
       "window": 31,
       "label": "terraform/storage.tf - object admin on the uploads bucket",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 718
+      "line": 729
     },
     {
       "window": 32,
       "label": "commands/lesson-12.4.sh - the account may sign as itself",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 723
+      "line": 734
     },
     {
       "window": 34,
       "label": "expected (your lane may carry a role more; the absent ones are the point: no BigQuery, no call to the worker)",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 738
+      "line": 749
     },
     {
       "window": 35,
       "label": "services/frontend/chat.py - the page's own rates, and the arithmetic the sidebar shows",
       "heading": "What the journey costs, the sidebar's own price table, and what nothing records",
       "anchor": "s8",
-      "line": 770
+      "line": 781
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
