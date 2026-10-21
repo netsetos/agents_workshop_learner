@@ -25,12 +25,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_with_the_kit_s_examples_then_with_none.
-COMMANDS_01 = """# make exemplars PROJECT=$PROJECT REPORT="$HOME/exemplars_kit.json" runs this line
-python evals/route_eval.py --live-l1 --project "$PROJECT" --exemplars kit --report "$HOME/exemplars_kit.json"
-
-"""
-
 def step_01_with_the_kit_s_examples_then_with_none(session):
     """Run Do it: with the kit's examples, then with none at this checkpoint.
 
@@ -44,14 +38,9 @@ def step_01_with_the_kit_s_examples_then_with_none(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/exemplars_kit.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
-
-# Original CLI workflow for step_02_with_the_kit_s_examples_then_with_none.
-COMMANDS_02 = """# make exemplars PROJECT=$PROJECT EXEMPLARS=none REPORT="$HOME/exemplars_none.json" runs this line
-python evals/route_eval.py --live-l1 --project "$PROJECT" --exemplars none --report "$HOME/exemplars_none.json"
-
-"""
+    from pathlib import Path
+    from workshop_helpers.gates import route_gate
+    route_gate(session, exemplars="kit", report=Path.home() / "exemplars_kit.json")
 
 def step_02_with_the_kit_s_examples_then_with_none(session):
     """Run Do it: with the kit's examples, then with none at this checkpoint.
@@ -66,8 +55,9 @@ def step_02_with_the_kit_s_examples_then_with_none(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/exemplars_none.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
+    from pathlib import Path
+    from workshop_helpers.gates import route_gate
+    route_gate(session, exemplars="none", report=Path.home() / "exemplars_none.json")
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -87,7 +77,7 @@ def main():
     Example: use Run/Debug on this file with the rag-shell-venv interpreter.
     Project settings and completed prerequisites come from the shared setup.
     """
-    with DemoSession(__file__, live=True, repeat=REPEAT) as session:
+    with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 
 

@@ -35,12 +35,10 @@ def step_01_one_question_two_halves_three_rows(session):
     Failures propagate to the session; inspect its failed attempt before continuing.
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: the contract: {"answer": "A confirmed employee in grade E3 must serve a notice period of ... [1]...", "citations": "3 citations", "confidence": "high", "answerable": true}
-    the envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 1xxx, 'tokens_out': 4xx, 'cached_tokens': 0, 'cost_usd': 0.00xxxx, 'latency_ms': 2xxx, 'cache_hit': 'none'}
-    [N] marks in the answer: [1, 2, 3] | citations returned: 3
+    Observe: the contract: {"answer": "A confirmed employee at grade E3 or above is required to serve a notice period of 60 days....", "citations": "1 citations", "confidence": "high", "answerable": true}
+    the envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 6xx, 'tokens_out': xx, 'cached_tokens': 0, 'cost_usd': None, 'latency_ms': xxxx, 'cache_hit': 'none'}
+    [N] marks in the answer: [] | citations returned: 1
        [1] #  1 hr_policy_2026.md        page None score 0.9xxx kind text | row found True | quote in the row True | 1x words
-       [2] #  4 hr_policy_2026.md        page None score 0.8xxx kind text | row found True | quote in the row True | 1x words
-       [3] #  2 hr_policy_2026.md        pa
     """
     import os, sys, json, subprocess, urllib.request, warnings
     warnings.filterwarnings("ignore", category=UserWarning)

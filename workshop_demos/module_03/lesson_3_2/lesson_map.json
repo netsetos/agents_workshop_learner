@@ -576,9 +576,9 @@
         1027,
         1032
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "Few-shot, measured: the examples taken out and put back on your lane",
@@ -586,7 +586,9 @@
           "purpose": "Do it: with the kit's examples, then with none",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the kit's examples: 126 gemini-3.1-flash-lite calls, the arbiter's, and embeddings)",
           "expected": "[awaiting the author's run: data/exemplars_kit.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the arm through route_gate: the dev gates' FAIL lines and exit 1 are a reading this lesson compares, as the page says, so the next arm still runs; a run that writes no fresh report with its decisions still fails."
+          ],
           "id": "source_46",
           "function": "step_01_with_the_kit_s_examples_then_with_none",
           "window": 46,
@@ -599,7 +601,9 @@
           "purpose": "Do it: with the kit's examples, then with none",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (the same rows, no example)",
           "expected": "[awaiting the author's run: data/exemplars_none.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the arm through route_gate: the dev gates' FAIL lines and exit 1 are a reading this lesson compares, as the page says, so the next arm still runs; a run that writes no fresh report with its decisions still fails."
+          ],
           "id": "source_48",
           "function": "step_02_with_the_kit_s_examples_then_with_none",
           "window": 48,

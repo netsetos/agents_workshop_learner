@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_5/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.5_Structured_Answers_WIX.html",
-  "source_sha": "eb6124feb253004aaa24d1ce8f670f9d237c30ec",
+  "source_sha": "0594f4587f9232a4105c35a5f352547bdd3cc1b3",
   "shared_setup_windows": [
     1
   ],
@@ -298,7 +298,7 @@
           "subheading": "Do it: one question, two halves, three rows",
           "purpose": "Do it: one question, two halves, three rows",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; one question and three Firestore reads, a rupee)",
-          "expected": "the contract: {\"answer\": \"A confirmed employee in grade E3 must serve a notice period of ... [1]...\", \"citations\": \"3 citations\", \"confidence\": \"high\", \"answerable\": true}\nthe envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 1xxx, 'tokens_out': 4xx, 'cached_tokens': 0, 'cost_usd': 0.00xxxx, 'latency_ms': 2xxx, 'cache_hit': 'none'}\n[N] marks in the answer: [1, 2, 3] | citations returned: 3\n   [1] #  1 hr_policy_2026.md        page None score 0.9xxx kind text | row found True | quote in the row True | 1x words\n   [2] #  4 hr_policy_2026.md        page None score 0.8xxx kind text | row found True | quote in the row True | 1x words\n   [3] #  2 hr_policy_2026.md        page None score 0.6xxx kind text | row found True | quote in the row True | 1x words",
+          "expected": "the contract: {\"answer\": \"A confirmed employee at grade E3 or above is required to serve a notice period of 60 days....\", \"citations\": \"1 citations\", \"confidence\": \"high\", \"answerable\": true}\nthe envelope: {'model': 'gemini-3.6-flash', 'backend': 'vertex', 'tokens_in': 6xx, 'tokens_out': xx, 'cached_tokens': 0, 'cost_usd': None, 'latency_ms': xxxx, 'cache_hit': 'none'}\n[N] marks in the answer: [] | citations returned: 1\n   [1] #  1 hr_policy_2026.md        page None score 0.9xxx kind text | row found True | quote in the row True | 1x words",
           "adaptations": [],
           "id": "source_17",
           "function": "step_01_one_question_two_halves_three_rows",
@@ -329,7 +329,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_5/GUIDE.md",
       "source_lines": [
-        651
+        649
       ],
       "offline": false,
       "live_verified": false,
@@ -340,12 +340,12 @@
           "subheading": "Do it: three questions, three envelopes, three rows",
           "purpose": "Do it: three questions, three envelopes, three rows",
           "label": "bash — run in the operator shell (three questions, two of them model calls: a rupee; one log read)",
-          "expected": "answerable False | confidence low | citations 0 | backend vertex | tokens 1xxx + 1xx | cost_usd 0.00xxxx | pool 20 | The provided context does not contain information about Globex's not\nanswerable False | confidence low | citations 0 | backend vertex | tokens 1xxx + 1xx | cost_usd 0.00xxxx | pool 20 | The context covers FY2025 and FY2026; it does not state the revenue f\nanswerable False | confidence low | citations 0 | backend none | tokens 0 + 0 | cost_usd 0.0 | pool 0 | The corpus holds nothing near this question: no passage of this tena\nacme\tFalse\tnone\t0\t0.0\nacme\tFalse\tvertex\t1xxx\t0.00xxxx\nglobex\tFalse\tvertex\t1xxx\t0.00xxxx",
+          "expected": "answerable False | confidence low | citations 0 | backend vertex | tokens xxxx + xx | cost_usd None | pool 20 | The provided context does not contain information about Globex's not\nanswerable False | confidence low | citations 0 | backend vertex | tokens xxxx + xx | cost_usd None | pool 20 | The context covers FY2025 and FY2026; it does not state the revenue f\nanswerable False | confidence low | citations 0 | backend none | tokens 0 + 0 | cost_usd 0.0 | pool 0 | The corpus holds nothing near this question: no passage of this tena\nacme\tFalse\tnone\t0\t0.0\nacme\tFalse\tvertex\t1xxx\t0.00xxxx\nglobex\tFalse\tvertex\t1xxx\t0.00xxxx",
           "adaptations": [],
           "id": "source_22",
           "function": "step_01_three_questions_three_envelopes_three_rows",
           "window": 22,
-          "source_line": 651,
+          "source_line": 649,
           "manual_checkpoint": null
         }
       ],
@@ -371,7 +371,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_5/GUIDE.md",
       "source_lines": [
-        741
+        739
       ],
       "offline": false,
       "live_verified": false,
@@ -387,7 +387,7 @@
           "id": "source_27",
           "function": "step_01_the_same_call_from_the_shell",
           "window": 27,
-          "source_line": 741,
+          "source_line": 739,
           "manual_checkpoint": null
         }
       ],
@@ -413,7 +413,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_5/GUIDE.md",
       "source_lines": [
-        840
+        838
       ],
       "offline": false,
       "live_verified": false,
@@ -429,7 +429,7 @@
           "id": "source_33",
           "function": "step_01_read_the_lane_rs_0",
           "window": 33,
-          "source_line": 840,
+          "source_line": 838,
           "manual_checkpoint": null
         }
       ],
@@ -455,7 +455,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_5/GUIDE.md",
       "source_lines": [
-        898
+        896
       ],
       "offline": false,
       "live_verified": false,
@@ -471,7 +471,7 @@
           "id": "source_37",
           "function": "step_01_the_code",
           "window": 37,
-          "source_line": 898,
+          "source_line": 896,
           "manual_checkpoint": null
         }
       ],
@@ -621,7 +621,7 @@
     },
     {
       "window": 18,
-      "label": "expected (your words, tokens and scores; the marks matching the citations and the quotes found in the rows are the point)",
+      "label": "expected (your words, tokens and scores, and whether the text carries marks at all; every row found and every quote in its row are the point)",
       "heading": "One answer from the lane, field by field, with every quote checked against its row",
       "anchor": "s4",
       "line": 614
@@ -631,112 +631,112 @@
       "label": "services/rag-api/generator.py - the system prompt's five rules",
       "heading": "Three refusals: the model's twice, the API's once, and how their envelopes differ",
       "anchor": "s5",
-      "line": 631
+      "line": 629
     },
     {
       "window": 20,
       "label": "services/rag-api/main.py - empty_pool_answer(): the same shape, no model, the clocks at 0",
       "heading": "Three refusals: the model's twice, the API's once, and how their envelopes differ",
       "anchor": "s5",
-      "line": 640
+      "line": 638
     },
     {
       "window": 21,
       "label": "services/rag-api/main.py - usage_row(): the flag the alert counts, beside the backend that tells the refusals apart",
       "heading": "Three refusals: the model's twice, the API's once, and how their envelopes differ",
       "anchor": "s5",
-      "line": 646
+      "line": 644
     },
     {
       "window": 23,
-      "label": "expected (your words and tokens; the three backends and the three costs are the point)",
+      "label": "expected (your words and tokens; the three backends and the three costs are the point: the envelope says None on the vertex backend, and the rows below price its tokens)",
       "heading": "Three refusals: the model's twice, the API's once, and how their envelopes differ",
       "anchor": "s5",
-      "line": 659
+      "line": 657
     },
     {
       "window": 24,
       "label": "services/rag-api/generator.py - _call(): one generate_content with the structured-answer config",
       "heading": "The model call by hand: the schema, the thinking, the usage, the price",
       "anchor": "s6",
-      "line": 676
+      "line": 674
     },
     {
       "window": 25,
       "label": "services/rag-api/generator.py - _usage(): what one attempt billed, the thoughts counted as output",
       "heading": "The model call by hand: the schema, the thinking, the usage, the price",
       "anchor": "s6",
-      "line": 698
+      "line": 696
     },
     {
       "window": 26,
       "label": "services/rag-api/generator.py - _draft(): the parsed class, or the text read and validated, one violation repaired",
       "heading": "The model call by hand: the schema, the thinking, the usage, the price",
       "anchor": "s6",
-      "line": 709
+      "line": 707
     },
     {
       "window": 28,
       "label": "expected (the model's words and counts are its own; the draft's shape, the resolved ids and the priced line are the point)",
       "heading": "The model call by hand: the schema, the thinking, the usage, the price",
       "anchor": "s6",
-      "line": 776
+      "line": 774
     },
     {
       "window": 29,
       "label": "services/rag-api/generator.py - _client_for(): a name on global, a tuned endpoint on its own location",
       "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
       "anchor": "s7",
-      "line": 791
+      "line": 789
     },
     {
       "window": 30,
       "label": "services/rag-api/generator.py - _endpoint_location(): the setting, else the path, else the region",
       "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
       "anchor": "s7",
-      "line": 799
+      "line": 797
     },
     {
       "window": 31,
       "label": "services/rag-api/main.py - choose_model_for(): the router when ROUTING is on, else the generator model",
       "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
       "anchor": "s7",
-      "line": 809
+      "line": 807
     },
     {
       "window": 32,
       "label": "services/rag-api/generator.py - a 429 from a routed tier is answered by the default model, with a line",
       "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
       "anchor": "s7",
-      "line": 827
+      "line": 825
     },
     {
       "window": 34,
       "label": "expected (no model pin and no routing on this lane, so the generator model serves everything and the log has neither event)",
       "heading": "The model as a setting: the global client, a tuned endpoint, a pin and a router",
       "anchor": "s7",
-      "line": 851
+      "line": 849
     },
     {
       "window": 35,
       "label": "services/rag-api/generator.py - cut off is not refused: once more with three times the room",
       "heading": "What an answer costs, and the failure that is not a refusal",
       "anchor": "s8",
-      "line": 876
+      "line": 874
     },
     {
       "window": 36,
       "label": "services/rag-api/generator.py - no draft after the retry: a 502 that names the finish reason, never a refusal",
       "heading": "What an answer costs, and the failure that is not a refusal",
       "anchor": "s8",
-      "line": 886
+      "line": 884
     },
     {
       "window": 38,
       "label": "expected (newest log line first)",
       "heading": "What an answer costs, and the failure that is not a refusal",
       "anchor": "s8",
-      "line": 909
+      "line": 907
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

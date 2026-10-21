@@ -81,7 +81,7 @@ documind-parser LAYOUT_PARSER_PROCESSOR ENABLED
 
 ### demo_04_count_pages_first_slices_and_the_250_page_line.py
 
-The same count, on the PDFs in your kit folder, with the same library. The cell prints pages and slices per PDF, then the totals and what one parse of the whole corpus would cost at each processor's list price - the rates as the course reads them on the pricing page, to re-verify before quoting. The amendment Act is four pages and globex does not hold it, so ingesting it there is a fresh source, one Document AI request, and a few paise. Then read the worker's line for it, which carries the page count as pages.
+The same count, on the PDFs in your kit folder, with the same library. The cell prints pages and slices per PDF, then the totals and what one parse of the whole corpus would cost at each processor's list price - the rates as the course reads them on the pricing page, to re-verify before quoting. The amendment Act is four pages and globex does not hold it, so ingesting it there is a fresh source, one Document AI request, and a few paise. Then read the worker's line for it, which carries the page count as pages. Four pages, five chunks: the count is pypdf's, the chunks are Document AI's text cut per page. Your chunk count may differ by one, because the two readers do not always agree on where a line ends, which is exactly what step 7 is about. Then take it out of globex again. Globex is the tenant that holds no maternity law: golden row iso-06 asks it for the longest maternity benefit and must be refused, and a copy left here answers it from this Act, which fails that row in every live eval from Module 3 on. make retire withdraws a source: its chunks leave the pool and the index, and the object stays in the bucket. Lesson 1.7 reads what it writes.
 
 **`step_01_count_the_corpus_rs_0(session)` — Count pages first: slices, and the 250-page line / Do it: count the corpus, Rs 0**
 
@@ -114,6 +114,18 @@ Expected shape, not a promised result:
 
 ```text
 globex_e7a1c0...    4    5    5
+```
+
+**`step_03_prove_it_on_the_lane_one_small_pdf_four_pa(session)` — Count pages first: slices, and the 250-page line / Prove it on the lane: one small PDF, four pages**
+
+Four pages, five chunks: the count is pypdf's, the chunks are Document AI's text cut per page. Your chunk count may differ by one, because the two readers do not always agree on where a line ends, which is exactly what step 7 is about. Then take it out of globex again. Globex is the tenant that holds no maternity law: golden row iso-06 asks it for the longest maternity benefit and must be refused, and a copy left here answers it from this Act, which fails that row in every live eval from Module 3 on. make retire withdraws a source: its chunks leave the pool and the index, and the object stays in the bucket. Lesson 1.7 reads what it writes.
+
+Operation: bash — run in the operator shell, in $DEMO_ROOT (Rs 0: rows flagged and five datapoints removed).
+
+Expected shape, not a promised result:
+
+```text
+"event": "reconcile_withdrawn", "gcs_uri": "gs://documind-ai-YOUR-ID-uploads/globex/maternity_benefit_amendment_act_2017.pdf"
 ```
 
 ### demo_05_chunk_by_section_the_handbook_becomes_283_clauses.py
@@ -233,6 +245,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`. All 29 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `cf4de0e8fa5dceea659c2bb63e9b469613c35756`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_1.2_Parse_Chunk_WIX.html`. All 31 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `89efcf7cb5d1c6fd37ffa133add6ec2be9423059`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

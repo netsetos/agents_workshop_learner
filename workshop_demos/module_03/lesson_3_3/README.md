@@ -92,6 +92,8 @@ Do it: the eval, with the switch on
 
 Operation: bash — run in the operator shell, in the kit (every golden row, each answerable pool read again: ten minutes or more).
 
+IDE adaptation: Run the eval through live_gate with the page's switch on: the rates and the required rows decide its exit, and a red exit with a fresh report is the reading step 6 starts from, as the page says. Before lesson 7.5 builds the town hall video, mm-03 cannot cite a segment and blocks the gate on its own. A missing report or an HTTP/auth failure still fails.
+
 Expected shape, not a promised result:
 
 ```text

@@ -298,9 +298,9 @@
       "source_lines": [
         685
       ],
-      "offline": false,
+      "offline": true,
       "live_verified": false,
-      "implementation": "mixed_python_and_kit_cli",
+      "implementation": "native_python",
       "steps": [
         {
           "heading": "The live eval, with every answerable row's pool read again",
@@ -308,7 +308,9 @@
           "purpose": "Do it: the eval, with the switch on",
           "label": "bash — run in the operator shell, in the kit (every golden row, each answerable pool read again: ten minutes or more)",
           "expected": "[awaiting the author's run: data/eval_live.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run the eval through live_gate with the page's switch on: the rates and the required rows decide its exit, and a red exit with a fresh report is the reading step 6 starts from, as the page says. Before lesson 7.5 builds the town hall video, mm-03 cannot cite a segment and blocks the gate on its own. A missing report or an HTTP/auth failure still fails."
+          ],
           "id": "source_19",
           "function": "step_01_the_eval_with_the_switch_on",
           "window": 19,

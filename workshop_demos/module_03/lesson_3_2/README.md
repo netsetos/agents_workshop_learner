@@ -283,6 +283,8 @@ Do it: with the kit's examples, then with none
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (the kit's examples: 126 gemini-3.1-flash-lite calls, the arbiter's, and embeddings).
 
+IDE adaptation: Run the arm through route_gate: the dev gates' FAIL lines and exit 1 are a reading this lesson compares, as the page says, so the next arm still runs; a run that writes no fresh report with its decisions still fails.
+
 Expected shape, not a promised result:
 
 ```text
@@ -294,6 +296,8 @@ Expected shape, not a promised result:
 Do it: with the kit's examples, then with none
 
 Operation: bash — run in the operator shell, in $DEMO_ROOT (the same rows, no example).
+
+IDE adaptation: Run the arm through route_gate: the dev gates' FAIL lines and exit 1 are a reading this lesson compares, as the page says, so the next arm still runs; a run that writes no fresh report with its decisions still fails.
 
 Expected shape, not a promised result:
 

@@ -24,11 +24,6 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_the_eval_with_the_switch_on.
-COMMANDS_01 = """DOCUMIND_EVAL_PASSAGES=1 make eval-live PROJECT="$PROJECT" REPORT=evals/reports/lesson33.json
-
-"""
-
 def step_01_the_eval_with_the_switch_on(session):
     """Run Do it: the eval, with the switch on at this checkpoint.
 
@@ -42,8 +37,13 @@ def step_01_the_eval_with_the_switch_on(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/eval_live.txt]
     """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_01)
+    import os
+    from workshop_helpers.gates import live_gate
+    os.environ["DOCUMIND_EVAL_PASSAGES"] = "1"
+    try:
+        live_gate(session, report="evals/reports/lesson33.json")
+    finally:
+        os.environ.pop("DOCUMIND_EVAL_PASSAGES", None)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -62,7 +62,7 @@ def main():
     Example: use Run/Debug on this file with the rag-shell-venv interpreter.
     Project settings and completed prerequisites come from the shared setup.
     """
-    with DemoSession(__file__, live=True, repeat=REPEAT) as session:
+    with DemoSession(__file__, live=False, repeat=REPEAT) as session:
         demonstrate(session)
 
 

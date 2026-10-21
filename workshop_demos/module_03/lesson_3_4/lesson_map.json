@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html",
-  "source_sha": "141455183347be8ca6a2dd9008ba15857f52eb67",
+  "source_sha": "1d55caf6bb48f4b656f2d7a627ef88ae850cf99e",
   "shared_setup_windows": [
     1
   ],
@@ -298,7 +298,7 @@
           "subheading": "Do it: three texts, two counters, one pool twice",
           "purpose": "Do it: three texts, two counters, one pool twice",
           "label": "bash — run in the operator shell, in $DEMO_ROOT (a Python cell; a handful of count_tokens calls)",
-          "expected": "NP-03, English     chars   234  estimate  58  counted  1xx  ratio x.xx  (near one)\na clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (well above one)\none Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)\ntwenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter\ntwenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter",
+          "expected": "NP-03, English     chars   234  estimate  58  counted   5x  ratio x.xx  (near one)\na clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (near one on gemini-3.6-flash)\none Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)\ntwenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter\ntwenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter",
           "adaptations": [],
           "id": "source_17",
           "function": "step_01_three_texts_two_counters_one_pool_twice",

@@ -24,9 +24,10 @@ def _caches() -> TenantCacheManager:
 log = logging.getLogger("documind-api")   # same logger main.py writes usage rows on
 # Gemini 3.x on global serves from shared capacity, and a 429 there is "try again shortly", not a fault: on a new
 # project's quota one call in a lesson's run of them came back RESOURCE_EXHAUSTED and the answer was lost (21 October
-# 2026). The client retries a 429 or 5xx up to three more times, 1, 2 and 4 seconds apart, before _call_or_fallback
-# sees the error; a routed tier's 429 still falls back to the default model after that.
-RETRY = {"retry_options": {"attempts": 4, "initial_delay": 1.0, "exp_base": 2.0, "max_delay": 8.0,
+# 2026). The client retries a 429 or 5xx up to five more times, 1, 2, 4, 8 and 16 seconds apart, before
+# _call_or_fallback sees the error; a routed tier's 429 still falls back to the default model after that. Three more
+# times over 7 seconds still let one answer in thirty through as a 429 during a lesson's burst of calls (3.3, 3.4).
+RETRY = {"retry_options": {"attempts": 6, "initial_delay": 1.0, "exp_base": 2.0, "max_delay": 16.0,
                            "http_status_codes": [429, 500, 502, 503, 504]}}   # a dict, as desk_recall.py and query_rewrite.py pass theirs
 _client = genai.Client(enterprise=True, project=settings.project_id, location="global", http_options=RETRY)  # generation runs on the global endpoint (Gemini 3.x)
 

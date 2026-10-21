@@ -82,7 +82,7 @@
     {
       "lesson": "1.2",
       "title": "Parse documents and compare chunk boundaries",
-      "source_sha": "cf4de0e8fa5dceea659c2bb63e9b469613c35756",
+      "source_sha": "89efcf7cb5d1c6fd37ffa133add6ec2be9423059",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -194,14 +194,14 @@
     {
       "lesson": "3.4",
       "title": "Pack evidence within the context budget",
-      "source_sha": "141455183347be8ca6a2dd9008ba15857f52eb67",
+      "source_sha": "1d55caf6bb48f4b656f2d7a627ef88ae850cf99e",
       "source_kind": "main_html",
       "demos": 9
     },
     {
       "lesson": "3.5",
       "title": "Generate structured answers, citations and refusals",
-      "source_sha": "eb6124feb253004aaa24d1ce8f670f9d237c30ec",
+      "source_sha": "0594f4587f9232a4105c35a5f352547bdd3cc1b3",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -222,7 +222,7 @@
     {
       "lesson": "3.8",
       "title": "Complete the Streamlit upload-to-answer journey",
-      "source_sha": "857539014c52dec9c4e6e482c46e0f3c9dcdad72",
+      "source_sha": "a8853422215fdfc1ded1a90e66d483b17a827293",
       "source_kind": "main_html",
       "demos": 8
     },

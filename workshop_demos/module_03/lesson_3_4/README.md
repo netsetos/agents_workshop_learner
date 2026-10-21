@@ -125,8 +125,8 @@ Operation: bash — run in the operator shell, in $DEMO_ROOT (a Python cell; a h
 Expected shape, not a promised result:
 
 ```text
-NP-03, English     chars   234  estimate  58  counted  1xx  ratio x.xx  (near one)
-a clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (well above one)
+NP-03, English     chars   234  estimate  58  counted   5x  ratio x.xx  (near one)
+a clause in Hindi  chars    72  estimate   18  counted   xx  ratio x.xx  (near one on gemini-3.6-flash)
 one Act page       chars  2000  estimate  500  counted  4xx  ratio x.xx  (near one)
 twenty Act pages under the estimate     : packed 15, dropped 5, context 7633 tokens by that counter
 twenty Act pages under the model's count: packed 1x, dropped x, context 7xxx tokens by that counter
@@ -227,6 +227,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `141455183347be8ca6a2dd9008ba15857f52eb67`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_3.4_Context_Budget_WIX.html`. All 35 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `1d55caf6bb48f4b656f2d7a627ef88ae850cf99e`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

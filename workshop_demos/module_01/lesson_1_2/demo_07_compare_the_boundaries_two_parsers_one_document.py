@@ -3,7 +3,7 @@
 See it, page by page
 
 Run order inside this file:
-1. See it, page by page (source window 27)
+1. See it, page by page (source window 29)
 
 Prerequisites: demo_06_chunk_by_window_an_act_becomes_page_windows.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -76,7 +76,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_27', step_01_see_it_page_by_page),
+        ('source_29', step_01_see_it_page_by_page),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -270,6 +270,21 @@ class GroupedTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "HTTP/auth/schema"):
                     live_gate(s, report=report, expect_red=True)
 
+    def test_route_gate_reads_a_red_gate_and_fails_a_crash(self):
+        from workshop_helpers.gates import route_gate
+        with self.open() as s:
+            report = self.kit / "exemplars_kit.json"
+            write_json(report, {"decisions": [{"id": "old"}]})                 # an earlier run's report is moved aside
+            def red(args, **kw):
+                write_json(report, {"decisions": [{"id": "r1"}]})
+                return 1                                                       # the dev gates' FAIL lines: a reading
+            with patch.object(s, "command", side_effect=red):
+                self.assertEqual(route_gate(s, exemplars="kit", report=report), 1)
+            self.assertTrue((s.attempt / "exemplars_kit.json.previous").exists())
+            with patch.object(s, "command", return_value=1):                  # a crash: exit 1 and no fresh report
+                with self.assertRaisesRegex(RuntimeError, "without a fresh report"):
+                    route_gate(s, exemplars="none", report=self.kit / "exemplars_none.json")
+
 
 class NativeContextTests(unittest.TestCase):
     """A kit module a cell loaded is gone for the next cell, from sys.modules and from its package's attributes."""

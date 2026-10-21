@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_3.8_UI_Journey_WIX.html",
-  "source_sha": "857539014c52dec9c4e6e482c46e0f3c9dcdad72",
+  "source_sha": "a8853422215fdfc1ded1a90e66d483b17a827293",
   "shared_setup_windows": [
     1
   ],
@@ -392,7 +392,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        689
+        691
       ],
       "offline": false,
       "live_verified": false,
@@ -410,7 +410,7 @@
           "id": "source_28",
           "function": "step_01_open_the_source_then_render_your_own_trans",
           "window": 28,
-          "source_line": 689,
+          "source_line": 691,
           "manual_checkpoint": "Open the answer's citation/source in the UI and inspect the signed link. Type done to render and inspect the transcript from Python."
         }
       ],
@@ -436,7 +436,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_03/lesson_3_8/GUIDE.md",
       "source_lines": [
-        742
+        744
       ],
       "offline": false,
       "live_verified": false,
@@ -452,7 +452,7 @@
           "id": "source_33",
           "function": "step_01_read_the_account_s_grants_rs_0",
           "window": 33,
-          "source_line": 742,
+          "source_line": 744,
           "manual_checkpoint": null
         }
       ],
@@ -653,49 +653,49 @@
       "label": "services/frontend/citations.py - signing on Cloud Run: the account's email and token, and IAM signs",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 669
+      "line": 671
     },
     {
       "window": 29,
       "label": "expected (your ids and counts; the whole transcript follows, ready to copy)",
       "heading": "Citations: the pills, the sources, and the link signed through IAM",
       "anchor": "s6",
-      "line": 696
+      "line": 698
     },
     {
       "window": 30,
       "label": "terraform/sa.tf - the UI's project roles, and the two it pointedly lacks",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 710
+      "line": 712
     },
     {
       "window": 31,
       "label": "terraform/storage.tf - object admin on the uploads bucket",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 729
+      "line": 731
     },
     {
       "window": 32,
       "label": "commands/lesson-12.4.sh - the account may sign as itself",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 734
+      "line": 736
     },
     {
       "window": 34,
       "label": "expected (your lane may carry a role more; the absent ones are the point: no BigQuery, no call to the worker)",
       "heading": "The UI's account: what it may do, and the checks the page makes first",
       "anchor": "s7",
-      "line": 749
+      "line": 751
     },
     {
       "window": 35,
       "label": "services/frontend/chat.py - the page's own rates, and the arithmetic the sidebar shows",
       "heading": "What the journey costs, the sidebar's own price table, and what nothing records",
       "anchor": "s8",
-      "line": 781
+      "line": 783
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",
