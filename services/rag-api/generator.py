@@ -476,9 +476,14 @@ def _vertex_stream(prompt: str, packed: list[dict], tenant_id: str | None, model
     usage = {"tokens_in": 0, "tokens_out": 0}
     yielded = 0
     try:
+        # The last part asks for prose. No schema here, but SYSTEM's rules name the structured answer's fields ("set
+        # answerable=false"), and given some pools the model wrote the whole answer as JSON, which the Chat page drew as a
+        # raw code block: 5 of 20 streams on 21 October 2026, 0 of 10 with this line. A part of its own, after the prompt,
+        # so SYSTEM, prompt_versions.json, the budget's fixed text and /v1/query are as before, and a tenant cache still fits.
         for part in _client_for(model).models.generate_content_stream(
             model=model,
-            contents=_contents(prompt, packed),   # + the figures being cited (9.6, gap G7)
+            contents=_contents(prompt, packed)    # + the figures being cited (9.6, gap G7)
+            + ["Write the answer for a person to read, in plain prose or Markdown with the [N] marks; never JSON."],
             config=types.GenerateContentConfig(
                 max_output_tokens=settings.max_answer_tokens,
                 thinking_config=types.ThinkingConfig(thinking_level="LOW"),
