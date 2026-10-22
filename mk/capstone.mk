@@ -14,12 +14,14 @@
 # (a 403), documind-ui's IAP, the services deployed and documind-api's revisions. Exit 1 when a component fails: an
 # incomplete submission, which the defence does not run. The four documents start from capstone/templates/ (13 October
 # 2026): copied as they ship they still fail, until their {{...}} placeholders are replaced.
+# PROJECT counts only from make's command line, in both recipes: every lesson's shell exports one, and on 22 October 2026
+# the offline check of the canned fork read the lane instead, and failed components 1, 2, 4 and 8.
 capstone-check:
-	@$(PY) commands/capstone_check.py check --fork "$(or $(FORK),.)" $(if $(PROJECT),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)
+	@$(PY) commands/capstone_check.py check --fork "$(or $(FORK),.)" $(if $(filter command line,$(origin PROJECT)),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)
 
 # HANDOVER.md, written into the fork whole: the alert policies, the night job, the floors, the revisions, the CI trust,
 # the budget and the state bucket, as this checkout states them and, with PROJECT, as the lane shows them. On the lane
 # it only reads (gcloud's describe and list calls, and the Monitoring API's alert policies); a read that fails is
 # listed under Not read, the rest is written, and the exit is 1.
 handover:
-	@$(PY) commands/capstone_check.py handover --fork "$(or $(FORK),.)" $(if $(PROJECT),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)
+	@$(PY) commands/capstone_check.py handover --fork "$(or $(FORK),.)" $(if $(filter command line,$(origin PROJECT)),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)

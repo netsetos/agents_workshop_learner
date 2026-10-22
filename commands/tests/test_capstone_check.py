@@ -212,6 +212,15 @@ class ForkTests(ForkCase):
                      "gemini-3.6-flsh", "complete: every one of the eight components PASSes"):
             self.assertIn(line, " ".join(out.split()), line)
 
+    def test_an_exported_project_is_not_the_lane(self):
+        """Every lesson's shell exports PROJECT, REGION and SLM_REGION: on 22 October 2026 that made this fork's
+        offline check read the lane. Without --project it stays offline, and passes as above."""
+        self.without_make_eval()
+        os.environ.update(PROJECT="documind-ai-YOUR-ID", REGION="us-central1", SLM_REGION="us-central1")
+        code, found, out = self.check()
+        self.assertTrue(out.startswith(f">> capstone-check: the fork at {self.fork}, offline: "), out[:200])
+        self.assertEqual((code, found), (0, {n: "PASS" for n in range(1, 9)}), out)
+
     def test_change_it_one_failure_modes_command_deleted_fails_that_component_only(self):
         break_7(self.fork)
         code, found, out = self.check()
@@ -617,7 +626,8 @@ class WiringTests(unittest.TestCase):
         mk, capstone_mk, readme = self.read("Makefile"), self.read("mk", "capstone.mk"), self.read("mk", "README.md")
         self.assertEqual(len(mk.splitlines()), 888)                       # workshop lesson 9.3 counts it
         phony = mk[mk.index(".PHONY:"):mk.index("# ---------- the module files")].replace("\\", " ").split()
-        lane = "$(if $(PROJECT),--project $(PROJECT) --region $(REGION) --slm-region $(SLM_REGION),)"
+        lane = ("$(if $(filter command line,$(origin PROJECT)),--project $(PROJECT) --region $(REGION) "
+                "--slm-region $(SLM_REGION),)")                          # an exported PROJECT does not count
         for target, sub in (("capstone-check", "check"), ("handover", "handover")):
             self.assertIn(target, phony)
             self.assertIn(f"`{target}`", readme)

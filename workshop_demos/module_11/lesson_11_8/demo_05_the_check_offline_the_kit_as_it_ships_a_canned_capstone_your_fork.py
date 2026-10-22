@@ -171,7 +171,11 @@ def step_04_your_four_documents_from_the_templates(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_your_fork.
-COMMANDS_05 = """make capstone-check                 # in the fork, offline: its files, its records, and make eval
+COMMANDS_05 = """# in the fork, offline: its files, its records, and make eval
+make capstone-check 2>&1 | tee /tmp/capstone-check.out && status=0 || status=$?
+grep -qE '^>> (complete|incomplete): ' /tmp/capstone-check.out   # the check gave its verdict
+[ "$status" -eq 0 ] || grep -q 'capstone-check\\] Error 1$' /tmp/capstone-check.out   # Error 1: incomplete, work on the fork
+
 
 """
 

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_8/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html",
-  "source_sha": "6ed0a2ace12842f32da028404faaaa655da0d6a7",
+  "source_sha": "755bf433e9168d8a73ccf0f5d43bcd6c529eb3a6",
   "shared_setup_windows": [
     1
   ],
@@ -257,7 +257,7 @@
         "setup_prepare"
       ],
       "heading": "The lines the check rests on",
-      "purpose": "The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.",
+      "purpose": "The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 31 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.",
       "anchor": "s4",
       "anchors": [
         "s4"
@@ -277,7 +277,7 @@
         {
           "heading": "The lines the check rests on",
           "subheading": "Do it: the rules on hand-made input",
-          "purpose": "The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.",
+          "purpose": "The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 31 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.",
           "label": "bash — run in the operator shell, in the kit (the rules on hand-made input; no fork, no lane, Rs 0)",
           "expected": "capstone_check selftest: ARCHITECTURE.md's rejected options (list, table, sub-section; a bare name is not argued), COST-MODEL.md's volumes, amounts, date and rate, FAILURE-MODES.md's entries and every way a command resolves or does not, pages from text and from a PDF's page tree (plain and packed), a rollback told from a promote, the lane smokes and the outsider's 403, each on hand-made input",
           "adaptations": [],
@@ -386,7 +386,9 @@
           "purpose": "In the fork you will defend, offline. The recording is the author's reference fork, built the way yours will be: a tenant of its own, make ingest-corpus, make roster, golden rows, make gate, lesson 11.3's rollback with a smoke run before and after, and the four documents, written from the templates.",
           "label": "bash — run in the operator shell, in your fork (offline; Rs 0)",
           "expected": "[awaiting the author's run: data/capstone_check.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Read the check's verdict as the cell's answer: incomplete (exit 1) is work on your fork, and on a checkout that is still the kit it is what the check says, which stopped the demo before the lane's reads and the handover (22 October 2026). The step fails if the check stopped (make's Error 2) or printed no verdict."
+          ],
           "id": "source_26",
           "function": "step_05_your_fork",
           "window": 26,
@@ -487,7 +489,9 @@
           "purpose": "Every offline line again, and a lane: line under components 1, 2, 4 and 8. Reads only; Rs 0.",
           "label": "bash — run in the operator shell, in your fork (gcloud reads from an allow-list of 11, two tokens, three GETs; Rs 0)",
           "expected": "[awaiting the author's run: data/capstone_live.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Read the check's verdict as the cell's answer: incomplete (exit 1) is work on your fork, and on a checkout that is still the kit it is what the check says, which stopped the demo before the lane's reads and the handover (22 October 2026). The step fails if the check stopped (make's Error 2) or printed no verdict."
+          ],
           "id": "source_32",
           "function": "step_02_the_check_with_your_lane",
           "window": 32,

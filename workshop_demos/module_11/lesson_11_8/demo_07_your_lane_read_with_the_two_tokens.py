@@ -51,7 +51,10 @@ def step_01_the_reads_by_hand(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_the_check_with_your_lane.
-COMMANDS_02 = """make capstone-check PROJECT="$PROJECT" REGION="$REGION"
+COMMANDS_02 = """make capstone-check PROJECT="$PROJECT" REGION="$REGION" 2>&1 | tee /tmp/capstone-check.out && status=0 || status=$?
+grep -qE '^>> (complete|incomplete): ' /tmp/capstone-check.out   # the check gave its verdict
+[ "$status" -eq 0 ] || grep -q 'capstone-check\\] Error 1$' /tmp/capstone-check.out   # Error 1: incomplete, work on the fork
+
 
 """
 

@@ -60,11 +60,11 @@ acme: retrieval_backend=vector
 
 ### demo_04_the_lines_the_check_rests_on.py
 
-The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
+The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 31 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
 
 **`step_01_the_rules_on_hand_made_input(session)` — The lines the check rests on / Do it: the rules on hand-made input**
 
-The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 30 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
+The selftest runs every rule on documents, records and PDFs it makes up, with no fork and no lane: the rejected options as a list, a table and sub-sections, the cost model's volumes and date, every way a FAILURE-MODES command resolves or does not, pages from text and from a PDF's page tree, plain and packed, a rollback told from a promote, and the outsider's 403. commands/tests/test_capstone_check.py holds 31 more tests, on the canned fork and on a stand-in lane, and commands/tests/test_capstone_templates.py 13 on the templates of step 5.
 
 Operation: bash — run in the operator shell, in the kit (the rules on hand-made input; no fork, no lane, Rs 0).
 
@@ -271,6 +271,8 @@ In the fork you will defend, offline. The recording is the author's reference fo
 
 Operation: bash — run in the operator shell, in your fork (offline; Rs 0).
 
+IDE adaptation: Read the check's verdict as the cell's answer: incomplete (exit 1) is work on your fork, and on a checkout that is still the kit it is what the check says, which stopped the demo before the lane's reads and the handover (22 October 2026). The step fails if the check stopped (make's Error 2) or printed no verdict.
+
 Expected shape, not a promised result:
 
 ```text
@@ -359,6 +361,8 @@ Expected shape, not a promised result:
 Every offline line again, and a lane: line under components 1, 2, 4 and 8. Reads only; Rs 0.
 
 Operation: bash — run in the operator shell, in your fork (gcloud reads from an allow-list of 11, two tokens, three GETs; Rs 0).
+
+IDE adaptation: Read the check's verdict as the cell's answer: incomplete (exit 1) is work on your fork, and on a checkout that is still the kit it is what the check says, which stopped the demo before the lane's reads and the handover (22 October 2026). The step fails if the check stopped (make's Error 2) or printed no verdict.
 
 Expected shape, not a promised result:
 
@@ -470,6 +474,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`. All 41 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6ed0a2ace12842f32da028404faaaa655da0d6a7`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.8_Capstone_Handover_WIX.html`. All 41 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `755bf433e9168d8a73ccf0f5d43bcd6c529eb3a6`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

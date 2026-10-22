@@ -1527,8 +1527,11 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--selftest", action="store_true", help="the rules on hand-made input, no fork and no lane")
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--fork", default="", help="the fork's checkout (default: the kit this file is in; make: FORK, .)")
-    common.add_argument("--project", default=os.environ.get("PROJECT") or "",
-                        help="the lane's project id (PROJECT): adds the lane's reads; none, the fork alone")
+    # The lane only when asked for: every lesson's shell exports PROJECT, and on 22 October 2026 that turned the offline
+    # check of the canned fork into a read of the lane, which failed components 1, 2, 4 and 8.
+    common.add_argument("--project", default="",
+                        help="the lane's project id (make: PROJECT= on its command line): adds the lane's reads; none, "
+                             "the fork alone, whatever PROJECT the shell exports")
     common.add_argument("--region", default=os.environ.get("REGION") or "", help="the region documind-api runs in")
     common.add_argument("--slm-region", default=os.environ.get("SLM_REGION") or "",
                         help=f"the region of the GPU services (SLM_REGION; default {release.SLM_REGION_DEFAULT})")
