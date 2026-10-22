@@ -285,8 +285,10 @@ def _search_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | Non
     segments are an Enterprise feature it refuses outright (400 FailedPrecondition), and a snippet stops short of the
     figure the question asks for (22 October 2026). The caller's doc_type goes to the store as a filter expression on
     its structData too; figures and segments join from the kit's own index (D4) unless the caller asked for text alone.
-    No documents is an empty pool - the store answered. A tenant with no data store, or a store that will not answer,
-    is the Firestore rung with the filters, logged vertex_search_fallback."""
+    A tenant with no data store, a store that will not answer, or a store that ranks no document is the Firestore rung
+    with the filters, logged vertex_search_fallback. A standard-edition store matches the question's words: asked
+    zeta's "What is the per-trip cap on travel reimbursement?", it ranked nothing, and the empty pool refused the
+    required row iso-01, which the tenant's own handbook answers (22 October 2026)."""
     kind = (filters or {}).get("kind")
     if kind and kind != "text":                        # figures or segments only: the store has none, the index has them
         return _media_rows(vec, tenant_id, settings.top_k_retrieve, filters)
@@ -303,14 +305,17 @@ def _search_retrieve(query: str, tenant_id: str, top_k: int, filters: dict | Non
         doc_key = getattr(getattr(r, "document", None), "id", "") or ""
         if doc_key:
             ranked.setdefault(doc_key, len(ranked) + 1)    # the store's order, first place 1
+    if not ranked:
+        logging.warning(json.dumps({"event": "vertex_search_fallback", "tenant": tenant_id, "error": "the store ranked no document",
+                                    "hint": "the store's search matches words; the kit's own rows answered the question"}))
+        return _firestore_fallback(vec, tenant_id, settings.top_k_retrieve, filters)
     out = []
-    if ranked:
-        for chunk in _firestore_fallback(vec, tenant_id, 3 * settings.top_k_retrieve, filters):
-            if chunk.get("doc_key") not in ranked or chunk.get("kind", "text") != "text" or not matches(chunk, filters):
-                continue
-            chunk["found_by"], chunk["store_rank"] = "vertex_search", ranked[chunk["doc_key"]]
-            out.append(chunk)
-        out = out[:settings.top_k_retrieve]
+    for chunk in _firestore_fallback(vec, tenant_id, 3 * settings.top_k_retrieve, filters):
+        if chunk.get("doc_key") not in ranked or chunk.get("kind", "text") != "text" or not matches(chunk, filters):
+            continue
+        chunk["found_by"], chunk["store_rank"] = "vertex_search", ranked[chunk["doc_key"]]
+        out.append(chunk)
+    out = out[:settings.top_k_retrieve]
     if kind != "text":
         out += _media_rows(vec, tenant_id, max(3, settings.top_k_retrieve // 4), filters)
     return sorted(out, key=lambda c: -c["score"])[:settings.top_k_retrieve]

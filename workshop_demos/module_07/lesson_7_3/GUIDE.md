@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.3_Managed_Mirrors_WIX.html`, reviewed at blob `9c402a9d490869dac3d2d7f8781505044a1a6c42`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.3_Managed_Mirrors_WIX.html`, reviewed at blob `3281212510aa6d9609fab245b5304486f6909ead`. Learners read that page on the course site; this guide keeps its prose.
 
 The kit's own index lives in Mumbai, asia-south1. Two Google-managed stores can hold a copy of a tenant's documents too: a Vertex AI RAG Engine corpus in us-central1 and a Vertex AI Search data store in `global`. The worker copies each version it makes current into them, but only for a tenant whose `data_region` says `any`. The API reads a store only for a tenant pinned to it, and holds that pin against the same policy.
 
@@ -64,7 +64,7 @@ A picture or a video has no text and is never copied. `MANAGED_MIRROR=both`, whi
 
 The read side: a pin, held against the policy. `tenant_settings/{tenant}.retrieval_backend` pins a tenant to a store (`make tenant-backend`). `make up` pinned acme to `rag_engine` and zeta to `vertex_search`. On every request, `retrieval_backend_for()` checks the policy. A pin to a store for an `in` tenant is served from the kit's own index instead, and the row says `policy_fallback 1`.
 
-A RAG Engine context becomes a chunk of the kit's contract through the version's own row. It gets the source, the doc_type, a fresh `current`, an id minted from its text (`#rag-...`), and `found_by`. Vertex AI Search gives the documents, in its own order, and nothing to read: on the lane's standard edition it refuses extractive segments, and its snippets stop short of the figure. So its passages are the kit's own rows of the versions it ranked, nearest the question first, with their own ids. The reranker, the packing, the answer and the citations stay the kit's.
+A RAG Engine context becomes a chunk of the kit's contract through the version's own row. It gets the source, the doc_type, a fresh `current`, an id minted from its text (`#rag-...`), and `found_by`. Vertex AI Search gives the documents, in its own order, and nothing to read: on the lane's standard edition it refuses extractive segments, and its snippets stop short of the figure. So its passages are the kit's own rows of the versions it ranked, nearest the question first, with their own ids. When it ranks no document, the kit's own index answers, and the API logs `vertex_search_fallback`. The reranker, the packing, the answer and the citations stay the kit's.
 
 A family's property papers and a lawyer in another city. The originals stay in the almirah at home in Mumbai. The lawyer's office may keep certified copies, but only of the files whose owner signed a consent letter. For each copy sent or recalled, the clerk writes a line in the register, and notes in the family's file index which offices hold one.
 

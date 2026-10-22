@@ -343,10 +343,11 @@ The API reads the corpus as `RETRIEVAL_BACKEND=rag_engine` (P9.4): the tenant's 
 context mapped to the kit's chunk contract through its version's row, the same reranker, packing and citations,
 figures and segments still from the kit's index, and the Firestore rung with the filters when a tenant has no
 corpus or the store will not answer (`rag_engine_fallback`). `RETRIEVAL_BACKEND=vertex_search` (R4, 13 September
-2026 evening) reads 4.4's data store the same way: the tenant's store searched by text through its default serving
-config as the lesson's notebook does, each extractive segment - or the snippet, when the store serves none - a chunk
-of the contract through its version's row, the caller's `doc_type` as a filter expression on the store's structData,
-media from the kit's index, the Firestore rung on no store or an error (`vertex_search_fallback`). `RETRIEVAL_BACKEND`
+2026 evening) reads 4.4's data store: the tenant's store searched by text through its default serving config as the
+lesson's notebook does, ranking the tenant's documents, and the passages the kit's own nearest rows of the versions it
+ranked (22 October 2026: a standard-edition store refuses extractive segments and its snippets stop short), the
+caller's `doc_type` as a filter expression on the store's structData, media from the kit's index, the Firestore rung
+on no store, an error or no document ranked (`vertex_search_fallback`). `RETRIEVAL_BACKEND`
 is the deployment's default: a
 tenant's `tenant_settings.retrieval_backend` pins its store, and its `data_region` decides whether a managed store
 may serve it at all - a managed backend for an `in` tenant is the kit's own index with `policy_fallback=1` on the

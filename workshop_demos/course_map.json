@@ -432,14 +432,14 @@
     {
       "lesson": "7.3",
       "title": "Configure and query managed retrieval mirrors",
-      "source_sha": "9c402a9d490869dac3d2d7f8781505044a1a6c42",
+      "source_sha": "3281212510aa6d9609fab245b5304486f6909ead",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "7.4",
       "title": "Compare quality and test update/withdrawal freshness",
-      "source_sha": "6d5a6f923daa2351fbb9a386b02e8aa9d2d31ea3",
+      "source_sha": "a125e44207864ba40330c6fc86173a9a6fb17712",
       "source_kind": "main_html",
       "demos": 7
     },

@@ -142,10 +142,10 @@ rag_engine 20 -> rerank 5  (4.3's corpus, P9.4)         0.96      0.91   0.76   
        lost: lk-05: IT-SEC-04, hr_policy_2026 - not retrieved at depth 1
        lost: jn-07: IT-SEC-04 - not retrieved at depth 2
        lost: jn-11: labour_codes_compliance_handbook - ranked out (in the candidates, not the five)
-vertex_search 20 -> rerank 5  (4.4's data store, R4)         0.98      0.91   0.78       41     ...   (2 rows failed)
+vertex_search 20 -> rerank 5  (4.4's data store, R4)         1.00      0.93   0.80       42     ...   (2 rows failed)
        jn-04: NotFound: 404 DataStore documind-globex not found
        lk-28: NotFound: 404 DataStore documind-globex not found
-       lost: lk-05: IT-SEC-04, hr_policy_2026 - not retrieved at depth 0
+       the store ranked no document for 1 of 45 rows: the kit's nearest rows answered them, as the API does
        lost: lk-19: payment_of_bonus_act_1965 - ranked out (in the candidates, not the five)
        lost: lk-21: code_on_wages_2019 - ranked out (in the candidates, not the five)
        lost: jn-11: labour_codes_compliance_handbook - ranked out (in the candidates, not the five)
@@ -281,6 +281,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6d5a6f923daa2351fbb9a386b02e8aa9d2d31ea3`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`. All 23 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a125e44207864ba40330c6fc86173a9a6fb17712`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

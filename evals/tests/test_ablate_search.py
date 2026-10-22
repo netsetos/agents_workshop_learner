@@ -62,6 +62,30 @@ class TheStoreRanksTheKitsRowsAnswer(unittest.TestCase):
                                                  "/dataStores/documind-zeta/servingConfigs/default_search")
         self.assertEqual(request.page_size, 2)
         self.assertFalse(hasattr(request, "content_search_spec"), "no text is asked of a standard-edition store")
+        self.assertFalse(hasattr(lane, "store_empty"), "the store ranked documents: no row is counted")
+
+    def test_a_store_that_ranks_nothing_is_the_kits_nearest_rows(self):
+        """iso-01 (22 October 2026): zeta's store ranked no document for "What is the per-trip cap on travel
+        reimbursement?". The API answers from the Firestore rung then, so the arm does too, and counts the row."""
+        ablate, asked = load_ablate(), []
+        google = sys.modules.get("google") or types.ModuleType("google")
+        cloud = sys.modules.get("google.cloud") or types.ModuleType("google.cloud")
+        google.cloud = cloud
+        de = fake_discoveryengine(asked, ["", ""])                   # results without an id are no document either
+        rows = [{"chunk_id": "zeta:hb#7", "text": "EXP-12: Rs 25,000 per trip", "doc_key": "zeta_hb"},
+                {"chunk_id": "zeta:law#2", "text": "travel allowance", "doc_key": "zeta_law"}]
+        dense_asked = []
+        with patch.dict(sys.modules, {"google": google, "google.cloud": cloud, "google.cloud.discoveryengine_v1": de}), \
+                patch.object(cloud, "discoveryengine_v1", de, create=True):
+            lane = ablate.Lane.__new__(ablate.Lane)
+            lane.project = "demo"
+            lane.dense = lambda question, tenant, k: dense_asked.append((question, tenant, k)) or list(rows)
+            q = "What is the per-trip cap on travel reimbursement?"
+            got = lane.vertex_search(q, "zeta", 2)
+            lane.vertex_search(q, "zeta", 2)                            # the harness's retry: one row, counted once
+        self.assertEqual([c["chunk_id"] for c in got], ["zeta:hb#7", "zeta:law#2"])
+        self.assertEqual(dense_asked[0], (q, "zeta", 2), "the kit's k nearest, as the API's Firestore rung serves them")
+        self.assertEqual(lane.store_empty, {("zeta", q)})
 
 
 if __name__ == "__main__":

@@ -23,7 +23,8 @@ One knob per arm, everything else held (lesson 4.8, Part 5):
                                   no corpus, and an arm that cannot run is a finding, not the harness's exit
     vertex_search 20 -> rerank 5  R4's backend from outside it: 4.4's data store ranks the tenant's documents and
                                   the kit's own rows of those versions are the passages (22 October 2026: a
-                                  standard-edition store refuses segments and its snippets stop short)
+                                  standard-edition store refuses segments and its snippets stop short); a store
+                                  that ranks nothing is the kit's nearest rows, counted on a line under the arm
     rewrite -> dense 20 -> rerank 5   workshop lesson 2.5's stage from outside rag-api, behind --rewrite (never an
                                   --arms key): shared/query_rewrite.py's rewrite is what the Firestore rung
                                   searches and the question as asked is what the reranker orders; a rewrite the
@@ -221,8 +222,9 @@ class Lane:
         managed.tf) ranks the tenant's documents by text through its default serving config, and the passages are the
         kit's own rows of those versions - the dense rung's nearest, three times k deep, kept when the store ranked
         their version. A standard-edition store's own text is a snippet that stops short of the figure, and its
-        extractive segments are refused (22 October 2026). A tenant with no data store raises (MANAGED_SEARCH=true make
-        up declares one per `any` tenant), like the corpus arm."""
+        extractive segments are refused (22 October 2026). A store that ranks no document is the dense rung's k
+        nearest, as the API serves it; the question is kept in store_empty, and the arm's line counts them. A tenant
+        with no data store raises (MANAGED_SEARCH=true make up declares one per `any` tenant), like the corpus arm."""
         from google.cloud import discoveryengine_v1 as discoveryengine
         client = discoveryengine.SearchServiceClient()
         store = "documind-" + re.sub(r"[^a-z0-9-]+", "-", tenant.lower()).strip("-")
@@ -230,6 +232,9 @@ class Lane:
                    f"/servingConfigs/default_search")
         ranked = {r.document.id for r in client.search(request=discoveryengine.SearchRequest(
             serving_config=serving, query=question, page_size=k)) if r.document.id}
+        if not ranked:
+            self.store_empty = getattr(self, "store_empty", set()) | {(tenant, question)}
+            return self.dense(question, tenant, k)
         return [c for c in self.dense(question, tenant, 3 * k) if c.get("doc_key") in ranked][:k]
 
     def rerank(self, question: str, chunks: list, top_n: int = 5) -> list:
@@ -438,6 +443,10 @@ def main() -> int:
             line["rewrite"] = dict(rw_tally)
         for e in errors[:3]:
             print("      ", e)
+        if name.startswith("vertex_search") and getattr(lane, "store_empty", None):
+            line["store_empty"] = len(lane.store_empty)    # the rows the kit's own rows answered: the store ranked nothing
+            print(f"       the store ranked no document for {len(lane.store_empty)} of {len(r5)} rows: the kit's nearest rows "
+                  f"answered them, as the API does")
         for m_ in misses:
             print("       lost:", m_)
         if a.ledger:
