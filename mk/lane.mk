@@ -5,7 +5,7 @@
 
 # The account Cloud Build runs as, given exactly what a build needs before make build (lesson 0.3's recovery grants).
 build-access: guard-project
-	@PROJECT=$(PROJECT) REGION=$(REGION) bash commands/build-access.sh
+	@PROJECT=$(PROJECT) REGION=$(REGION) SLM_REGION=$(SLM_REGION) bash commands/build-access.sh
 
 # The views make up applies, deferred until the log sink's table exists (it appears after the API's first answer).
 bq-views-when-ready: guard-project

@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html",
-  "source_sha": "252fb8c95b3bcba4e1a87341b65d24c85a48abb4",
+  "source_sha": "5f9b8657f9267cfd0eadf4ad11c49ae32067a69b",
   "shared_setup_windows": [
     1
   ],
@@ -108,7 +108,7 @@
     },
     {
       "level": 4,
-      "heading": "Five buckets"
+      "heading": "Six buckets"
     },
     {
       "level": 4,
@@ -120,7 +120,7 @@
     },
     {
       "level": 4,
-      "heading": "235 resource instances, file by file"
+      "heading": "237 resource instances, file by file"
     },
     {
       "level": 4,
@@ -300,8 +300,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        990,
-        998
+        991,
+        999
       ],
       "offline": false,
       "live_verified": false,
@@ -317,7 +317,7 @@
           "id": "source_34",
           "function": "step_01_make_plan_a_saved_plan_checked_before_you",
           "window": 34,
-          "source_line": 990,
+          "source_line": 991,
           "manual_checkpoint": null
         },
         {
@@ -330,7 +330,7 @@
           "id": "source_36",
           "function": "step_02_every_resource_counted_from_the_saved_plan",
           "window": 36,
-          "source_line": 998,
+          "source_line": 999,
           "manual_checkpoint": null
         }
       ],
@@ -356,7 +356,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1165
+        1166
       ],
       "offline": false,
       "live_verified": false,
@@ -372,7 +372,7 @@
           "id": "source_45",
           "function": "step_01_make_up_apply_that_plan_then_build_deploy",
           "window": 45,
-          "source_line": 1165,
+          "source_line": 1166,
           "manual_checkpoint": null
         }
       ],
@@ -396,7 +396,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1181
+        1182
       ],
       "offline": false,
       "live_verified": false,
@@ -412,7 +412,7 @@
           "id": "source_48",
           "function": "step_01_make_up_apply_that_plan_then_build_deploy",
           "window": 48,
-          "source_line": 1181,
+          "source_line": 1182,
           "manual_checkpoint": null
         }
       ],
@@ -439,8 +439,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1191,
-        1200
+        1192,
+        1201
       ],
       "offline": false,
       "live_verified": false,
@@ -456,7 +456,7 @@
           "id": "source_49",
           "function": "step_01_seven_services_and_the_account_each_runs_a",
           "window": 49,
-          "source_line": 1191,
+          "source_line": 1192,
           "manual_checkpoint": null
         },
         {
@@ -469,7 +469,7 @@
           "id": "source_51",
           "function": "step_02_the_shard_size_of_your_index",
           "window": 51,
-          "source_line": 1200,
+          "source_line": 1201,
           "manual_checkpoint": null
         }
       ],
@@ -497,9 +497,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_3/GUIDE.md",
       "source_lines": [
-        1254,
-        1262,
-        1284
+        1255,
+        1263,
+        1285
       ],
       "offline": false,
       "live_verified": false,
@@ -515,7 +515,7 @@
           "id": "source_56",
           "function": "step_01_the_ui_behind_iap_and_the_roster_behind_th",
           "window": 56,
-          "source_line": 1254,
+          "source_line": 1255,
           "manual_checkpoint": null
         },
         {
@@ -528,7 +528,7 @@
           "id": "source_59",
           "function": "step_02_the_ui_behind_iap_and_the_roster_behind_th",
           "window": 59,
-          "source_line": 1262,
+          "source_line": 1263,
           "manual_checkpoint": null
         },
         {
@@ -541,7 +541,7 @@
           "id": "source_63",
           "function": "step_03_the_roster_make_up_wrote",
           "window": 63,
-          "source_line": 1284,
+          "source_line": 1285,
           "manual_checkpoint": null
         }
       ],
@@ -666,273 +666,273 @@
       "label": "terraform/storage.tf - the audit bucket: five years, locked only on purpose",
       "heading": "The stores, and the switches that add more",
       "anchor": "s5",
-      "line": 708
+      "line": 709
     },
     {
       "window": 25,
       "label": "terraform/firestore_indexes.tf - a vector index on chunks",
       "heading": "The stores, and the switches that add more",
       "anchor": "s5",
-      "line": 738
+      "line": 739
     },
     {
       "window": 26,
       "label": "terraform/firestore_indexes.tf - two of the TTL fields",
       "heading": "The stores, and the switches that add more",
       "anchor": "s5",
-      "line": 761
+      "line": 762
     },
     {
       "window": 27,
       "label": "terraform/vector.tf - the deployed index, and the machine its shard size picks",
       "heading": "The stores, and the switches that add more",
       "anchor": "s5",
-      "line": 805
+      "line": 806
     },
     {
       "window": 28,
       "label": "commands/infrastructure.py - the switches a plan must keep",
       "heading": "The stores, and the switches that add more",
       "anchor": "s5",
-      "line": 876
+      "line": 877
     },
     {
       "window": 29,
       "label": "the kit's Makefile - the plan target",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 896
+      "line": 897
     },
     {
       "window": 30,
       "label": "the kit's Makefile - the Terraform variables make plan passes",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 903
+      "line": 904
     },
     {
       "window": 31,
       "label": "mk/agents.mk - the four switches it appends to that list",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 922
+      "line": 923
     },
     {
       "window": 32,
       "label": "commands/infrastructure.py - plan(): a unique saved plan, checked, then selected",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 929
+      "line": 930
     },
     {
       "window": 33,
       "label": "commands/infrastructure.py - inspect_plan(): what the check refuses",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 961
+      "line": 962
     },
     {
       "window": 35,
       "label": "output - make plan on a blank project, the summary lines (the author's run)",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 993
+      "line": 994
     },
     {
       "window": 37,
       "label": "output - the saved plan, counted by type (the author's run)",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 1011
+      "line": 1012
     },
     {
       "window": 38,
       "label": "text - the instances terraform/*.tf declares for a blank lane, by type (computed from the files at build time)",
       "heading": "make plan: a saved plan, checked before you apply it",
       "anchor": "s6",
-      "line": 1013
+      "line": 1014
     },
     {
       "window": 39,
       "label": "the kit's Makefile - the up target",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1076
+      "line": 1077
     },
     {
       "window": 40,
       "label": "commands/infrastructure.py - apply(): check twice, then apply exactly that file",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1084
+      "line": 1085
     },
     {
       "window": 41,
       "label": "the kit's Makefile - the build target",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1110
+      "line": 1111
     },
     {
       "window": 42,
       "label": "cloudbuild.yaml - one config, a Dockerfile named per service",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1127
+      "line": 1128
     },
     {
       "window": 43,
       "label": "the kit's Makefile - the seven services and the scripts that deploy them",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1141
+      "line": 1142
     },
     {
       "window": 44,
       "label": "the kit's Makefile - deploy-services: the DEPLOY block of each script, run as it is",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1152
+      "line": 1153
     },
     {
       "window": 46,
       "label": "output - the last lines of make up from a blank project, and how long it took (the author's run)",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1168
+      "line": 1169
     },
     {
       "window": 47,
       "label": "the kit's Makefile - the bq-views target",
       "heading": "make up: apply that plan, then build, deploy and seed",
       "anchor": "s7",
-      "line": 1173
+      "line": 1174
     },
     {
       "window": 50,
       "label": "output - the services, and the account each runs as (the author's run)",
       "heading": "Seven services, and the account each runs as",
       "anchor": "s8",
-      "line": 1194
+      "line": 1195
     },
     {
       "window": 52,
       "label": "output - the index's shard size, and the machine it deployed (the author's run)",
       "heading": "Seven services, and the account each runs as",
       "anchor": "s8",
-      "line": 1204
+      "line": 1205
     },
     {
       "window": 53,
       "label": "commands/lesson-12.4.sh - the UI: IAP on the service itself",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1211
+      "line": 1212
     },
     {
       "window": 54,
       "label": "commands/lesson-12.4.sh - who invokes it, and who may sign in",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1218
+      "line": 1219
     },
     {
       "window": 55,
       "label": "services/frontend/chat.py - what the UI shows a signed-in person",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1242
+      "line": 1243
     },
     {
       "window": 57,
       "label": "output - the UI without a sign-in (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1256
+      "line": 1257
     },
     {
       "window": 58,
       "label": "output - who may pass IAP on documind-ui (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1258
+      "line": 1259
     },
     {
       "window": 60,
       "label": "output - what each kind of visitor saw in the browser (the author's notes)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1263
+      "line": 1264
     },
     {
       "window": 61,
       "label": "mk/ingestion.mk - the roster target",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1269
+      "line": 1270
     },
     {
       "window": 62,
       "label": "commands/lane.py - roster_plan(): the memberships and policies make roster writes",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1275
+      "line": 1276
     },
     {
       "window": 64,
       "label": "expected - the dry run, computed from commands/lane.py at build time",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1286
+      "line": 1287
     },
     {
       "window": 65,
       "label": "output - make roster on the new lane (the author's run)",
       "heading": "The UI behind IAP, and the roster behind the UI",
       "anchor": "s9",
-      "line": 1301
+      "line": 1302
     },
     {
       "window": 66,
       "label": "README.md - the one shape, and what bills while it exists",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1308
+      "line": 1309
     },
     {
       "window": 67,
       "label": "terraform/spanner.tf - the Spanner instance: provisioned, and billed by the hour",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1312
+      "line": 1313
     },
     {
       "window": 68,
       "label": "terraform/cloudsql.tf - what the checkpointer's instance costs, by the kit's own account",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1327
+      "line": 1328
     },
     {
       "window": 69,
       "label": "terraform/gke.tf - the one node",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1333
+      "line": 1334
     },
     {
       "window": 70,
       "label": "terraform/network.tf - the connector",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1353
+      "line": 1354
     },
     {
       "window": 71,
       "label": "gke/README.md - the kit's own price table for the cluster fee",
       "heading": "What bills by the hour, in rupees",
       "anchor": "s10",
-      "line": 1362
+      "line": 1363
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

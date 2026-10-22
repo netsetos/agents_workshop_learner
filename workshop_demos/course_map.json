@@ -54,7 +54,7 @@
     {
       "lesson": "0.3",
       "title": "Understand the project, identities and resource map, and deploy the lane",
-      "source_sha": "252fb8c95b3bcba4e1a87341b65d24c85a48abb4",
+      "source_sha": "5f9b8657f9267cfd0eadf4ad11c49ae32067a69b",
       "source_kind": "main_html",
       "demos": 6
     },
@@ -495,7 +495,7 @@
     {
       "lesson": "9.2",
       "title": "Serve a supplied or stock model using Ollama",
-      "source_sha": "4de49ae3c5f77833a3e1fae36b44334b4ce3272a",
+      "source_sha": "ad03345b6479dc15fcf2f07ada5fbee81e098d28",
       "source_kind": "main_html",
       "demos": 8
     },

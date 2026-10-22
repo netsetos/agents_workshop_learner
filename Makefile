@@ -624,7 +624,7 @@ SLM_REGION ?= us-central1
 # may invoke it, and the caller's ID token is the door (no master key). Its token proxy fronts the SLM (and the vLLM
 # engine when built) with an ID token per call; its spend logs and tag budgets live in the Cloud SQL instance
 # gateway.tf declares, mounted here as DATABASE_URL through the connector (15 September 2026, with the one shape).
-deploy-gateway: guard-project tf-backend
+deploy-gateway: guard-project tf-backend build-access
 	@NUMBER=$$(gcloud projects describe $(PROJECT) --format='value(projectNumber)'); \
 	SLM=https://documind-slm-$$NUMBER.$(SLM_REGION).run.app; VLLM=$${GEMMA_VLLM_URL:-https://documind-vllm-$$NUMBER.$(SLM_REGION).run.app}; \
 	DB=$$(cd $(TF_DIR) && terraform output -raw gateway_database_url); \
@@ -654,7 +654,7 @@ smoke-gateway: guard-project
 # 10.5's GGUF and the Modelfile it generated from the tokenizer, from the datasets bucket - or, with SLM_STOCK set,
 # a stock model as the stand-in until that file lands (decision D2). The startup probe waits for the model, not
 # the process; the gateway's and the UI's accounts may invoke it.
-deploy-slm: guard-project
+deploy-slm: guard-project build-access
 	@mkdir -p services/slm/build; rm -f services/slm/build/documind-slm.gguf services/slm/build/Modelfile services/slm/build/STOCK; \
 	if [ -n "$(SLM_STOCK)" ]; then echo "$(SLM_STOCK)" > services/slm/build/STOCK; echo ">> stand-in: $(SLM_STOCK) will be served as documind-slm"; \
 	else gcloud storage cp gs://$(PROJECT)-datasets/sft/documind-slm.gguf services/slm/build/ && \
