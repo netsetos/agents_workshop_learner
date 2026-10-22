@@ -137,6 +137,10 @@ Now write the body that spec.md describes, in $WS/shared/desk_calc.py, by hand o
 
 Operation: bash — run in the operator shell, in the kit (after you write the body: the fast test, then the oracles).
 
+Manual action: Write the body spec.md describes in $WS/shared/desk_calc.py (the workspace the first cell printed), replacing the hurried one: by hand, or with Gemini CLI started in the workspace with no flags, which asks before every edit and command. Approve each edit to the function, and decline anything that reaches for gcloud, git or the network. Type done to run the fast test and both oracles: the strong one passes only for a body that does what spec.md says.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
+
 Expected shape, not a promised result:
 
 ```text

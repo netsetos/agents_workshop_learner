@@ -336,12 +336,14 @@
           "purpose": "Now write the body that spec.md describes, in $WS/shared/desk_calc.py, by hand or with a coding agent under your eye. Gemini CLI started in the workspace with no flags runs in its default approval mode: it asks before every edit and every command. Approve each edit to the function, and decline anything that reaches for gcloud, git or the network. It loads the workspace's GEMINI.md, the loop's notes, which carry that name only inside a workspace: a Gemini CLI session opened in the kit itself never loads them. How Gemini CLI signs in on your machine is your own setup, and nothing else on this page uses it. Then run the fast test and check again.",
           "label": "bash — run in the operator shell, in the kit (after you write the body: the fast test, then the oracles)",
           "expected": "every rule says what its corpus line says, and the figures hold\nralph-check: the oracles on statutory_deadline in a change of shared/desk_calc.py (offline, Rs 0)\n  the oracle runs the change's code on this machine, with the network and new processes refused inside Python: that is not a sandbox, so judge only a change you have read\n  the workspace's change: /tmp/ralph-hand/ralph-deadline-YYYYMMDD-HHMMSS-XXXXXXXX/by-hand.patch (make review-diff DIFF= reads it)\n  weak oracle (desk_calc's own selftest): PASS\n  strong oracle: PASS",
-          "adaptations": [],
+          "adaptations": [
+            "Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise."
+          ],
           "id": "source_11",
           "function": "step_03_iteration_1_done_properly",
           "window": 11,
           "source_line": 515,
-          "manual_checkpoint": null
+          "manual_checkpoint": "Write the body spec.md describes in $WS/shared/desk_calc.py (the workspace the first cell printed), replacing the hurried one: by hand, or with Gemini CLI started in the workspace with no flags, which asks before every edit and command. Approve each edit to the function, and decline anything that reaches for gcloud, git or the network. Type done to run the fast test and both oracles: the strong one passes only for a body that does what spec.md says."
         }
       ],
       "next": "demo_04_the_oracle_weak_and_strong.py"

@@ -121,6 +121,7 @@ def step_03_iteration_1_done_properly(session):
       weak oracle (desk_calc's own selftest): PASS
       strong oracle: PASS
     """
+    manual_checkpoint('Write the body spec.md describes in $WS/shared/desk_calc.py (the workspace the first cell printed), replacing the hurried one: by hand, or with Gemini CLI started in the workspace with no flags, which asks before every edit and command. Approve each edit to the function, and decline anything that reaches for gcloud, git or the network. Type done to run the fast test and both oracles: the strong one passes only for a body that does what spec.md says.')
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_03)
 

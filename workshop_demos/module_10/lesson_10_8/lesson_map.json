@@ -322,7 +322,9 @@
           "purpose": "make ingest-one puts one object under acme's prefix in the uploads bucket and waits for the worker's ingest_ok line. The note has no entry in acme's registry, so it ingests as doc_type unknown, as the next step's code says. make sources lists the ledger's current versions; the grep keeps the note's row. Then export the two agent addresses the rest of the page uses, and read the peer's switches: /health says tool_pins off and agent_fence false as lesson 10.6's deploy script leaves them.",
           "label": "bash — run in the operator shell, in the kit (the note into acme's bucket, the worker's line, the ledger row, the peer's switches)",
           "expected": "[awaiting the author's run: data/ingest.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Bring the note back the way a withdrawn version comes back: on a second run of the lesson its cleanup has withdrawn the note, and the worker keeps the same bytes uploaded again withdrawn (ingest_duplicate, then ingest_withdrawn), so make ingest-one waited five minutes for an ingest_ok that never came (22 October 2026). A first run uploads it as the page does."
+          ],
           "id": "source_7",
           "function": "step_01_the_note_into_acme_s_corpus",
           "window": 7,

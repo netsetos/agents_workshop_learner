@@ -26,7 +26,15 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_note_into_acme_s_corpus.
-COMMANDS_01 = """make ingest-one PROJECT="$PROJECT" TENANT=acme FILE=evals/adversarial/vendor_note_acme.md
+COMMANDS_01 = """if make -s sources PROJECT="$PROJECT" TENANT_ONLY=acme 2>/dev/null | grep -Eq "^acme/vendor_note_acme.md +withdrawn"; then
+  # a second run: the lesson's own cleanup withdrew the note, and the same bytes uploaded again stay withdrawn
+  make restore PROJECT="$PROJECT" SOURCE=acme/vendor_note_acme.md
+  for i in $(seq 1 30); do
+    make -s sources PROJECT="$PROJECT" TENANT_ONLY=acme 2>/dev/null | grep -Eq "^acme/vendor_note_acme.md +indexed" && break; sleep 10
+  done
+else
+  make ingest-one PROJECT="$PROJECT" TENANT=acme FILE=evals/adversarial/vendor_note_acme.md
+fi
 make sources PROJECT="$PROJECT" TENANT_ONLY=acme | grep -i vendor_note
 export CHAT="https://documind-chat-$NUMBER.$REGION.run.app" AGENT="https://documind-agent-$NUMBER.$REGION.run.app"
 curl -s -H "Authorization: Bearer $(tok "$AGENT")" "$AGENT/health"; echo

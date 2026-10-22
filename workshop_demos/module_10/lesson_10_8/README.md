@@ -71,6 +71,8 @@ make ingest-one puts one object under acme's prefix in the uploads bucket and wa
 
 Operation: bash — run in the operator shell, in the kit (the note into acme's bucket, the worker's line, the ledger row, the peer's switches).
 
+IDE adaptation: Bring the note back the way a withdrawn version comes back: on a second run of the lesson its cleanup has withdrawn the note, and the worker keeps the same bytes uploaded again withdrawn (ingest_duplicate, then ingest_withdrawn), so make ingest-one waited five minutes for an ingest_ok that never came (22 October 2026). A first run uploads it as the page does.
+
 Expected shape, not a promised result:
 
 ```text
