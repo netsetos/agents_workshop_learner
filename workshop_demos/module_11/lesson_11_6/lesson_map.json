@@ -370,7 +370,9 @@
           "purpose": "Do it: the floor, then the switch",
           "label": "bash — run in the operator shell, in the kit (a floor, then the switch, then the nightly job's entry)",
           "expected": "gcloud run services update documind-slm --region us-central1 --project documind-ai-YOUR-ID --min-instances 0 --quiet\nERROR: (gcloud.run.services.update) Service [documind-slm] could not be found.\nmake[1]: [Makefile:659: slm-off] Error 1 (ignored)\n...\ngcloud run services update documind-ui --region asia-south1 --project documind-ai-YOUR-ID --min-instances 0 --quiet\nDeploying...\n...\nDone.\n...\ndocumind-slm: min-instances absent\ndocumind-vllm: min-instances absent\ndocumind-gateway: min-instances absent\ndocumind-ui: min-instances 0\n0 23 * * *\tAsia/Kolkata\tENABLED\t2026-09-23T17:30:03.184Z",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_20",
           "function": "step_01_the_floor_then_the_switch",
           "window": 20,

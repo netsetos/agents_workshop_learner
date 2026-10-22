@@ -64,8 +64,10 @@ def step_01_a_loop_among_the_lane_s_own_services_refus(session):
 # Original CLI workflow for step_02_change_it_an_edge_back_from_the_peer_to_th.
 COMMANDS_02 = """sed -i 's/^for who in documind-ui-sa documind-outsider-sa/for who in documind-ui-sa documind-agent-sa documind-outsider-sa/' commands/lesson-12.8.sh
 git diff -U0 commands/lesson-12.8.sh | grep '^[-+]for'
-python commands/check_callers.py --graph; echo "exit $?"
+python commands/check_callers.py --graph && graph=0 || graph=$?; echo "exit $graph"
 git checkout -q commands/lesson-12.8.sh && python commands/check_callers.py --graph | tail -2
+[ "$graph" -ne 0 ]   # the edge back must be refused: the check names the cycle and exits 1
+
 
 """
 

@@ -204,6 +204,8 @@ Your four documents start from the kit's templates in capstone/templates/. Each 
 
 Operation: bash — run in the operator shell, in the kit (the templates over the canned fork's copy, then its four back; Rs 0).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -282,6 +284,8 @@ An entry of FAILURE-MODES.md without a command is a symptom nobody can reproduce
 An entry of FAILURE-MODES.md without a command is a symptom nobody can reproduce. The canned fork's first entry, "Pinned traffic hides a change", is proved by make gotcha-drill ID=pinned-traffic, lesson 11.7's offline drill. The cell deletes that one line with sed, runs the check, then copies the kit's canned file back and runs it once more, printing only the exit code.
 
 Operation: bash — run in the operator shell, in the kit (edits the canned fork's copy, then puts it back; Rs 0).
+
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
 
 Expected shape, not a promised result:
 

@@ -52,7 +52,8 @@ def step_01_the_release_no_gate_judged(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_change_it_a_gotcha_with_no_detector.
-COMMANDS_02 = """python - <<'PY'
+COMMANDS_02 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+python - <<'PY'
 import json, warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 path = "ops/gotchas.json"
@@ -70,6 +71,8 @@ print(f"{path}: {len(reg['gotchas'])} entries, the last one {made['id']}")
 PY
 python commands/gotchas.py list; echo "exit $?"   # the command make gotchas runs
 git checkout -- ops/gotchas.json && python commands/gotchas.py list | head -1
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

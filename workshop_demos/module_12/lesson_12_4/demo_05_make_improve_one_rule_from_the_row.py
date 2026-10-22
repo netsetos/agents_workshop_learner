@@ -80,7 +80,10 @@ def step_02_make_improve_one_rule_from_the_row(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_make_improve_one_rule_from_the_row.
-COMMANDS_03 = """make improve ROW="$HOME/row124.json" IMPROVE_ARGS="--rule 'Never refuse a question; give the closest answer the context allows.'"; echo "exit $?"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make improve ROW="$HOME/row124.json" IMPROVE_ARGS="--rule 'Never refuse a question; give the closest answer the context allows.'"; echo "exit $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

@@ -114,6 +114,8 @@ The second cell plays iteration 1 the way a hurried agent might. It writes the k
 
 Operation: bash — run in the operator shell, in the kit (iteration 1 in a hurry, then the oracles; Rs 0).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -275,6 +277,8 @@ Do it: a rupee cap
 
 Operation: bash — run in the operator shell, in the kit (the same script under a rupee cap; nothing is billed).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -302,6 +306,8 @@ make: *** [mk/coding.mk:31: ralph] Error 1
 The scripted agent can also misbehave on purpose: the kit's tests use that, and so does this page. Each row below is one iteration it played under the strong oracle when this page was built, and what summary.json recorded for it. Two rules cannot show in that table here. A symlink is undone: it is the first rule of inspect(), and the kit's tests make one where the system allows it. And only live, an agent's output that names github.com, githubusercontent.com or agents_workshop_learner undoes its iteration, because the oracle is public there and work that may have been copied is not kept. Then what the loop never does. It never writes inside the kit:
 
 Operation: bash — run in the operator shell, in the kit (where the loop will not write).
+
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
 
 Expected shape, not a promised result:
 
@@ -453,6 +459,8 @@ Without the author's cap and key, the live loop does not start. It has no defaul
 
 Operation: bash — run in the operator shell, in the kit (the live loop without the author's cap or key).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -560,6 +568,8 @@ kit.patch: identical to the kit's own, byte for byte
 The loop's last word is kit.patch: its function against the kit's own. Applying it is yours to decide. You apply it in your clone, run the fast test, put the file back, and ask the strong oracle about the same patch. The cell does this with the weak run's kit.patch from step 5.
 
 Operation: bash — run in the operator shell, in the kit (the human step, on the weak run's kit.patch).
+
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
 
 Expected shape, not a promised result:
 

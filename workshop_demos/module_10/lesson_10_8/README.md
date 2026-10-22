@@ -35,6 +35,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Finish and restore
 
+- [cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py](cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py) — At lesson end: make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
 - [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
@@ -177,6 +178,8 @@ Offline, the runner stands in for rag-api's doors with the kit's own door functi
 
 Operation: bash — run in the operator shell, in the kit (the agents' surfaces offline: refused, exit 2).
 
+IDE adaptation: Read the refusal as the cell's answer: --offline runs the api surface only, so run_attacks.py refuses chat, desk and peer and make exits 2, which stopped the demo before the page's exit-status line (22 October 2026). The step now fails only if the live surfaces are not refused.
+
 Expected shape, not a promised result:
 
 ```text
@@ -309,6 +312,8 @@ Do it: the poisoned server, and the pins against it
 
 Operation: bash — run in the first tab, in the kit (the pins against the poisoned server, over the wire).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -325,6 +330,8 @@ exit status: 1
 Do it: the rug pull
 
 Operation: bash — the second tab, then the first (the rug pull: the same four names, one changed description).
+
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
 
 Expected shape, not a promised result:
 
@@ -356,6 +363,8 @@ Edit the kit's own server as a well-meaning teammate might: one more sentence on
 
 Operation: bash — run in the operator shell, in the kit (one description edited, the check failing, the re-pin, and the kit restored).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -380,7 +389,7 @@ pinned 4 tools to /home/you/deploy_module_rag/services/agent/tool_pins.json: cal
 
 ### demo_12_verify_it_yourself_and_withdraw_the_note.py
 
-The kit's three test files, twelve checks each one block above, then make retire and the switches off. First, the kit's own tests for the three pieces. They run offline. Two of the files hold tests that need the chat image's or the peer image's libraries and skip without them, saying so (6 of test_spotlight.py's 21, "needs the chat image's pins: pip install -r services/chat/requirements.txt"; 3 of test_pins.py's 16, "needs google-adk (the peer image's pins)"); the kit's dry-run workflow installs those pins and runs every one with DOCUMIND_REQUIRE_LIBS=1. In step 10's venv, $PY -m unittest commands/tests/test_pins.py runs all 16. make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
+The kit's three test files, twelve checks each one block above, then make retire and the switches off. First, the kit's own tests for the three pieces. They run offline. Two of the files hold tests that need the chat image's or the peer image's libraries and skip without them, saying so (6 of test_spotlight.py's 21, "needs the chat image's pins: pip install -r services/chat/requirements.txt"; 3 of test_pins.py's 16, "needs google-adk (the peer image's pins)"); the kit's dry-run workflow installs those pins and runs every one with DOCUMIND_REQUIRE_LIBS=1. In step 10's venv, $PY -m unittest commands/tests/test_pins.py runs all 16.
 
 **`step_01_verify_it_yourself_and_withdraw_the_note(session)` — Verify it yourself, and withdraw the note / Verify it yourself, and withdraw the note**
 
@@ -402,7 +411,11 @@ Ran 39 tests
 OK
 ```
 
-**`step_02_clean_up_the_note_withdrawn_the_switches_o(session)` — Verify it yourself, and withdraw the note / Clean up: the note withdrawn, the switches off**
+### cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py
+
+At lesson end: make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
+
+**`step_01_clean_up_the_note_withdrawn_the_switches_o(session)` — Verify it yourself, and withdraw the note / Clean up: the note withdrawn, the switches off**
 
 make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
 

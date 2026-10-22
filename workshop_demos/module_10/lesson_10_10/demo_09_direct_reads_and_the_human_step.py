@@ -98,11 +98,14 @@ def step_02_the_record(session):
     print("kit.patch:", s["against_kit"])
 
 # Original CLI workflow for step_03_the_human_step.
-COMMANDS_03 = """export RUN="$(ls -dt /tmp/ralph-weak/ralph-* | head -n 1)"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+export RUN="$(ls -dt /tmp/ralph-weak/ralph-* | head -n 1)"
 cat "$RUN/kit.patch"
 git apply "$RUN/kit.patch" && python shared/desk_calc.py --selftest | tail -n 1
 git apply -R "$RUN/kit.patch"; git status --short     # your clone as it was: no line
 make ralph-check PATCH="$RUN/kit.patch"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1656 files; 235 quoted by a lesson, 349 shown or named by one.
+1658 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -1335,6 +1335,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_10/setup/restore_settings.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_11/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_10/lesson_10_11/README.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_11/cleanup/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_11/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_11/demo_04_architecture_the_path_an_incident_takes_read_by_read_and_rule_by_rule.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_11/demo_05_architecture_why_rules_and_not_a_model_and_two_more_designs_rejected.py` | code | - | - |
@@ -1429,6 +1430,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_7/setup/restore_settings.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_10/lesson_10_8/README.md` | doc | - | - |
+| `workshop_demos/module_10/lesson_10_8/cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/demo_03_your_lane_the_note_goes_in_and_the_switches.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/demo_05_the_fence_and_the_scrub_in_the_code_and_on_the_note_itself.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/demo_07_the_attack_set_six_rows_on_three_surfaces_judged_offline.py` | code | - | - |

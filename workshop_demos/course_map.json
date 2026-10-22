@@ -567,7 +567,7 @@
       "title": "Defend agents against injected documents and poisoned tools",
       "source_sha": "9dda413a7d859711b54c6c98302b7353f3f08b27",
       "source_kind": "main_html",
-      "demos": 10
+      "demos": 11
     },
     {
       "lesson": "10.9",
@@ -588,7 +588,7 @@
       "title": "System design: incident auto-remediation",
       "source_sha": "05a7640fa25b236c78e6696879fc67de8b6e8121",
       "source_kind": "main_html",
-      "demos": 10
+      "demos": 11
     },
     {
       "lesson": "11.1",

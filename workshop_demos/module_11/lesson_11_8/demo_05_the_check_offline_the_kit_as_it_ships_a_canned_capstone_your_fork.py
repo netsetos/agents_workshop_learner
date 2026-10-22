@@ -131,11 +131,14 @@ def step_03_the_records_with_the_kit_s_own_rules(session):
         print(f"FAILURE-MODES.md: {title!r}: Symptom {'yes' if symptom else 'no'}; " + "; ".join(f"`{c}` {w or 'runs in the fork'}" for c, w in zip(commands, why)))
 
 # Original CLI workflow for step_04_your_four_documents_from_the_templates.
-COMMANDS_04 = """cp capstone/templates/*.md /tmp/sahyadri/                 # the four templates over the canned four, as they ship
+COMMANDS_04 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+cp capstone/templates/*.md /tmp/sahyadri/                 # the four templates over the canned four, as they ship
 make capstone-check FORK=/tmp/sahyadri; echo "exit $?"
 grep -c '{{' /tmp/sahyadri/{ARCHITECTURE,COST-MODEL,FAILURE-MODES,RUNBOOK}.md   # lines with a placeholder left
 cp commands/tests/capstone_fork/*.md /tmp/sahyadri/      # the canned four back
 make capstone-check FORK=/tmp/sahyadri >/dev/null; echo "exit $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

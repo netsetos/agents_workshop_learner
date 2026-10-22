@@ -27,8 +27,11 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_v4_on_a_candidate_and_the_gate.
-COMMANDS_01 = """python evals/improve.py version v4
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+python evals/improve.py version v4
 python evals/improve.py version v5; echo "exit $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

@@ -93,7 +93,9 @@ def step_02_the_api_set_as_lesson_4_9_runs_it(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_api_set_as_lesson_4_9_runs_it.
-COMMANDS_03 = """make attack-offline SURFACES=chat,desk,peer; echo "exit status: $?"
+COMMANDS_03 = """make attack-offline SURFACES=chat,desk,peer && status=0 || status=$?; echo "exit status: $status"
+[ "$status" -eq 2 ]   # the live surfaces are refused offline: run_attacks.py exits 2, and make with it
+
 
 """
 

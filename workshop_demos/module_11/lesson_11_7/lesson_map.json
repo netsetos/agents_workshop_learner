@@ -606,7 +606,9 @@
           "purpose": "Add an entry whose drill and check commands/gotchas.py does not run, and the registry refuses to load: make gotchas, every drill and every detector stop with exit 2 and name the problems. commands/tests/test_gotchas.py holds the same rule, in test_a_detector_that_does_not_exist_is_refused, one of its 49 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.",
           "label": "bash — run in the operator shell, in the kit (edits ops/gotchas.json, then puts it back; no lane, no cost)",
           "expected": "ops/gotchas.json: 14 entries, the last one made-up-gotcha\nSTOP: gotchas.json breaks its rules: made-up-gotcha: drill.offline names a drill commands/gotchas.py does not run; made-up-gotcha: detector.kind is check, and commands/gotchas.py has no check for this id\nexit 2\n13 gotchas in ops/gotchas.json (workshop lesson 11.7). make gotchas ID=<id> shows one; make gotcha-drill runs every offline drill, Rs 0",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_42",
           "function": "step_02_change_it_a_gotcha_with_no_detector",
           "window": 42,

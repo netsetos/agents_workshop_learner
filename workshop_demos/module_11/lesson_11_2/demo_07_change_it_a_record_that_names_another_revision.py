@@ -25,7 +25,8 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_change_it_a_record_that_names_another_revi.
-COMMANDS_01 = """python - <<'PY'
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+python - <<'PY'
 import json, os, subprocess, warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 P, R = os.environ["PROJECT"], os.environ["REGION"]
@@ -42,6 +43,8 @@ PY
 make promote-gated PROJECT="$PROJECT" REGION="$REGION" GATE_FILE=evals/reports/scratch-gate.json; echo "exit $?"
 rm -f evals/reports/scratch-gate.json
 python commands/release.py gate-check --project "$PROJECT" --region "$REGION" > /dev/null; echo "your record: gate-check exit $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

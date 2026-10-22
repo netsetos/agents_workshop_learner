@@ -82,7 +82,10 @@ def step_02_the_strong_oracle_then_the_weak_one(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_a_rupee_cap.
-COMMANDS_03 = """make ralph OFFLINE=1 RALPH_BUDGET_INR=5 OUT=/tmp/ralph-cap
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make ralph OFFLINE=1 RALPH_BUDGET_INR=5 OUT=/tmp/ralph-cap
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 
@@ -108,7 +111,10 @@ def step_03_a_rupee_cap(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_the_guards_undone_flagged_never.
-COMMANDS_04 = """make ralph OFFLINE=1 OUT=.          # the kit itself, as the run's parent
+COMMANDS_04 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make ralph OFFLINE=1 OUT=.          # the kit itself, as the run's parent
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

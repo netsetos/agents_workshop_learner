@@ -25,10 +25,13 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_definition.
-COMMANDS_01 = """sed -i '/^Command: `make gotcha-drill ID=pinned-traffic`$/d' /tmp/sahyadri/FAILURE-MODES.md   # one command gone
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+sed -i '/^Command: `make gotcha-drill ID=pinned-traffic`$/d' /tmp/sahyadri/FAILURE-MODES.md   # one command gone
 make capstone-check FORK=/tmp/sahyadri; echo "exit $?"
 cp commands/tests/capstone_fork/FAILURE-MODES.md /tmp/sahyadri/      # the file back as it was
 make capstone-check FORK=/tmp/sahyadri >/dev/null; echo "exit $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

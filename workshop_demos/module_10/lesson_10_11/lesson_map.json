@@ -257,7 +257,7 @@
         "setup_prepare"
       ],
       "heading": "On your lane: hold a fault, read the plan, run it by hand",
-      "purpose": "make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> \"gemini-3.6-flsh\", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
+      "purpose": "make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> \"gemini-3.6-flsh\", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done.",
       "anchor": "s3",
       "anchors": [
         "s3"
@@ -269,9 +269,7 @@
         11,
         13,
         15,
-        17,
-        19,
-        21
+        17
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
       "source_lines": [
@@ -280,9 +278,7 @@
         486,
         493,
         501,
-        508,
-        515,
-        519
+        508
       ],
       "offline": false,
       "live_verified": false,
@@ -333,7 +329,9 @@
           "purpose": "Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%.",
           "label": "bash — run in the operator shell (the rollback your plan printed: traffic to the revision before, by name)",
           "expected": "[awaiting the author's run: data/rollback.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Fill in the page's placeholder from the plan itself: the saved plan replays offline at Rs 0, and its step 1 names the revision to roll back to. The literal REVISION was sent to gcloud, which refused it, and the fault stayed on the lane (22 October 2026)."
+          ],
           "id": "source_13",
           "function": "step_04_run_the_rollback_it_printed",
           "window": 13,
@@ -364,32 +362,6 @@
           "function": "step_06_read_the_lane_again",
           "window": 17,
           "source_line": 508,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "On your lane: hold a fault, read the plan, run it by hand",
-          "subheading": "Restore, and verify again",
-          "purpose": "RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT (the plan's restore, as the drill recorded it)",
-          "expected": "[awaiting the author's run: data/restore.txt]",
-          "adaptations": [],
-          "id": "source_19",
-          "function": "step_07_restore_and_verify_again",
-          "window": 19,
-          "source_line": 515,
-          "manual_checkpoint": null
-        },
-        {
-          "heading": "On your lane: hold a fault, read the plan, run it by hand",
-          "subheading": "Restore, and verify again",
-          "purpose": "RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
-          "label": "bash — run in the operator shell, in $DEMO_ROOT (the plan's verify again)",
-          "expected": "[awaiting the author's run: data/smoke_restored.txt]\n\n[awaiting the author's run: data/plan_restored.txt]",
-          "adaptations": [],
-          "id": "source_21",
-          "function": "step_08_restore_and_verify_again",
-          "window": 21,
-          "source_line": 519,
           "manual_checkpoint": null
         }
       ],
@@ -687,6 +659,63 @@
           "function": "step_01_the_kit_s_tests_offline",
           "window": 63,
           "source_line": 1402,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "cleanup_demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand",
+      "lesson": "10.11",
+      "file": "cleanup/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "On your lane: hold a fault, read the plan, run it by hand",
+      "purpose": "At lesson end: RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
+      "anchor": "s3",
+      "anchors": [
+        "s3"
+      ],
+      "section_number": 3,
+      "windows": [
+        19,
+        21
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_11/GUIDE.md",
+      "source_lines": [
+        515,
+        519
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "On your lane: hold a fault, read the plan, run it by hand",
+          "subheading": "Restore, and verify again",
+          "purpose": "RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (the plan's restore, as the drill recorded it)",
+          "expected": "[awaiting the author's run: data/restore.txt]",
+          "adaptations": [
+            "Restore only a fault this checkout holds: the restore is the lesson's cleanup, run after a failure too, and a run that stopped before the hold has nothing to put back."
+          ],
+          "id": "source_19",
+          "function": "step_01_restore_and_verify_again",
+          "window": 19,
+          "source_line": 515,
+          "manual_checkpoint": null
+        },
+        {
+          "heading": "On your lane: hold a fault, read the plan, run it by hand",
+          "subheading": "Restore, and verify again",
+          "purpose": "RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.",
+          "label": "bash — run in the operator shell, in $DEMO_ROOT (the plan's verify again)",
+          "expected": "[awaiting the author's run: data/smoke_restored.txt]\n\n[awaiting the author's run: data/plan_restored.txt]",
+          "adaptations": [],
+          "id": "source_21",
+          "function": "step_02_restore_and_verify_again",
+          "window": 21,
+          "source_line": 519,
           "manual_checkpoint": null
         }
       ],

@@ -464,7 +464,9 @@
           "purpose": "A copy of your record with one field changed, offered to make promote-gated through GATE_FILE. The cell copies your record to evals/reports/scratch-gate.json with one field changed: the revision, set to the one serving now. It offers the copy to make promote-gated through GATE_FILE, deletes it, and runs gate-check on your own record, which it never touched. The copy is green, fresh, judged by today's rules, and its report still hashes to its sha256: everything in it is true except the name.",
           "label": "bash — run in the operator shell, in the kit (a copy of your record, refused; it is deleted afterwards)",
           "expected": "evals/reports/scratch-gate.json: your record, with documind-api-00042-xyz replaced by documind-api-00041-kel, the revision serving now\nREFUSED: the gate record evals/reports/scratch-gate.json does not let make promote move traffic:\n  - another revision: the record names documind-api-00041-kel, and make promote would move traffic to documind-api-00042-xyz (.candidate-revision). The gate judged documind-api-00041-kel; make gate judges documind-api-00042-xyz\nmake: *** [mk/release.mk:46: promote-gated] Error 1\nexit 2\nyour record: gate-check exit 0",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_37",
           "function": "step_01_change_it_a_record_that_names_another_revi",
           "window": 37,

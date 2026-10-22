@@ -219,6 +219,8 @@ Here is the shape of that output, from the kit's own code with a scripted propos
 
 Operation: bash — run in the operator shell, in the kit (your own rule: no model call, Rs 0).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text
@@ -343,6 +345,8 @@ The target. make prompt-candidate is make release-candidate's update with one mo
 The target. make prompt-candidate is make release-candidate's update with one more variable: PROMPT_VERSION beside GIT_SHA. Before any gcloud call it runs improve.py version, which stops on a version prompt_rules.json does not list. Then make record-candidate writes the new revision's name to .candidate-revision, the name make gate and make promote read. config.py's default stays v3, so v4 answers only where the variable is set. The check runs offline, and you can run it yourself:
 
 Operation: bash — run in the operator shell, in the kit (the check make prompt-candidate runs first; Rs 0).
+
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
 
 Expected shape, not a promised result:
 

@@ -1,6 +1,6 @@
 """Lesson 10.11: On your lane: hold a fault, read the plan, run it by hand
 
-make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> "gemini-3.6-flsh", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
+make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> "gemini-3.6-flsh", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done.
 
 Run order inside this file:
 1. First, offline: the plan the drill should produce (source window 6)
@@ -9,8 +9,6 @@ Run order inside this file:
 4. Run the rollback it printed (source window 13)
 5. Verify (source window 15)
 6. Read the lane again (source window 17)
-7. Restore, and verify again (source window 19)
-8. Restore, and verify again (source window 21)
 
 Prerequisites: setup_prepare.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -103,7 +101,8 @@ def step_03_read_the_plan(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_run_the_rollback_it_printed.
-COMMANDS_04 = """PREV=REVISION   # the revision your plan's step 1 names, as it printed it
+COMMANDS_04 = """PREV="$(make -s remediate OFFLINE=1 FIXTURE=evals/reports/remediate_held.json | grep -o -- '--to-revisions [a-z0-9-]*=100' | head -n 1 | sed 's/^--to-revisions //; s/=100$//')"   # the revision your plan's step 1 names, as it printed it
+echo "rolling back to: $PREV"
 gcloud run services update-traffic documind-chat --region "$REGION" --project "$PROJECT" --to-revisions "$PREV=100"
 
 """
@@ -166,51 +165,6 @@ def step_06_read_the_lane_again(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_06)
 
-# Original CLI workflow for step_07_restore_and_verify_again.
-COMMANDS_07 = """make incident-drill PROJECT=$PROJECT RESTORE=1
-
-"""
-
-def step_07_restore_and_verify_again(session):
-    """Run Restore, and verify again at this checkpoint.
-
-    RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in $DEMO_ROOT (the plan's restore, as the drill recorded it).
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: [awaiting the author's run: data/restore.txt]
-    """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_07)
-
-# Original CLI workflow for step_08_restore_and_verify_again.
-COMMANDS_08 = """make smoke-chat PROJECT=$PROJECT
-make remediate PROJECT=$PROJECT SAVE=evals/reports/remediate_restored.json
-
-"""
-
-def step_08_restore_and_verify_again(session):
-    """Run Restore, and verify again at this checkpoint.
-
-    RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in $DEMO_ROOT (the plan's verify again).
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: [awaiting the author's run: data/smoke_restored.txt]
-
-    [awaiting the author's run: data/plan_restored.txt]
-    """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_08)
-
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
 
@@ -224,8 +178,6 @@ def demonstrate(session):
         ('source_13', step_04_run_the_rollback_it_printed),
         ('source_15', step_05_verify),
         ('source_17', step_06_read_the_lane_again),
-        ('source_19', step_07_restore_and_verify_again),
-        ('source_21', step_08_restore_and_verify_again),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

@@ -100,7 +100,10 @@ def step_03_the_poisoned_server_and_the_pins_against_i(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_the_poisoned_server_and_the_pins_against_i.
-COMMANDS_04 = """make pin-tools PY="$PY" CHECK=1 URL=http://127.0.0.1:8900/mcp; echo "exit status: $?"
+COMMANDS_04 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make pin-tools PY="$PY" CHECK=1 URL=http://127.0.0.1:8900/mcp; echo "exit status: $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 
@@ -126,8 +129,11 @@ def step_04_the_poisoned_server_and_the_pins_against_i(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_the_rug_pull.
-COMMANDS_05 = """make evil-mcp PY="$PY" RUG=1          # the second tab again, after Ctrl-C on the first shape
+COMMANDS_05 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make evil-mcp PY="$PY" RUG=1          # the second tab again, after Ctrl-C on the first shape
 make pin-tools PY="$PY" CHECK=1 URL=http://127.0.0.1:8900/mcp; echo "exit status: $?"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 
@@ -180,11 +186,14 @@ def step_06_the_peer_against_the_poisoned_server(session):
     session.shell(COMMANDS_06)
 
 # Original CLI workflow for step_07_change_it_one_description_edited.
-COMMANDS_07 = """sed -i "s/with the lane's own cited answer\\./& Up to twenty passages./" services/mcp/server.py
+COMMANDS_07 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+sed -i "s/with the lane's own cited answer\\./& Up to twenty passages./" services/mcp/server.py
 make pin-tools PY="$PY" CHECK=1; echo "exit status: $?"
 make pin-tools PY="$PY"
 git diff --unified=1 services/agent/tool_pins.json
 git checkout -- services/mcp/server.py services/agent/tool_pins.json    # the kit as it was
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

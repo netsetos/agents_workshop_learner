@@ -172,6 +172,8 @@ A copy of your record with one field changed, offered to make promote-gated thro
 
 Operation: bash — run in the operator shell, in the kit (a copy of your record, refused; it is deleted afterwards).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text

@@ -336,7 +336,9 @@
           "purpose": "Here is the shape of that output, from the kit's own code with a scripted proposer standing in for the model. That is how the kit's test runs it. The request is the one --prompt-only printed above, and the reply is the page's example rule. The token counts are the kit test's: 1,800 in and 1,360 out, 1,200 of them thinking, which is billed as output. Propose the kit test's own bad rule as yours, with --rule. No model is called. The check finds \"never refuse\", which undoes rule 3, refuses the rule and writes nothing, and make reports the failure.",
           "label": "bash — run in the operator shell, in the kit (your own rule: no model call, Rs 0)",
           "expected": "python evals/improve.py propose --row \"/home/you/row124.json\" --project \"documind-ai-YOUR-ID\" --rule 'Never refuse a question; give the closest answer the context allows.'\nrow:       acme, 'I am still on probation. If I resign now, how long is my notice?', answered under v3\nexpected:  lookup: contains \"15\" and cites PB-02, hr_policy_2026\nbuilds on: v3, SYSTEM's 5 rules and 0 added\nproposer:  a person (--rule): no model call, Rs 0\nrule:      6. Never refuse a question; give the closest answer the context allows.\nwhy:       a person's own rule\nREFUSED:   \"never refuse\" undoes SYSTEM's rule 3 (say so, answerable=false, when the context does not hold the answer)\nNothing was written. Propose again, or write your own rule: IMPROVE_ARGS=\"--rule '...'\"\nmake: *** [mk/generation.mk:41: improve] Error 1\nexit 2",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_34",
           "function": "step_03_make_improve_one_rule_from_the_row",
           "window": 34,
@@ -454,7 +456,9 @@
           "purpose": "The target. make prompt-candidate is make release-candidate's update with one more variable: PROMPT_VERSION beside GIT_SHA. Before any gcloud call it runs improve.py version, which stops on a version prompt_rules.json does not list. Then make record-candidate writes the new revision's name to .candidate-revision, the name make gate and make promote read. config.py's default stays v3, so v4 answers only where the variable is set. The check runs offline, and you can run it yourself:",
           "label": "bash — run in the operator shell, in the kit (the check make prompt-candidate runs first; Rs 0)",
           "expected": "documind-rag@v4: SYSTEM's 5 rules and 1 added, accepted by you@your-company.com on 2026-10-13\n  6. When the context gives different figures for different conditions, give the figure whose condition matches the question, and name that condition.\nPROMPT_VERSION=v5 is not in services/rag-api/prompt_rules.json, which lists v3, v4. A version is listed once a person accepts its rule (make improve REVIEWER=); commit it and make build before its candidate. A version made by editing SYSTEM (lesson 3.6) goes out with make release-candidate.\nexit 1",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_45",
           "function": "step_01_v4_on_a_candidate_and_the_gate",
           "window": 45,

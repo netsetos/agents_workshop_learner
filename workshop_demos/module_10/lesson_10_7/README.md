@@ -245,6 +245,8 @@ This loop in lesson-12.8.sh binds who may invoke documind-chat. Add documind-age
 
 Operation: bash — run in the operator shell, in the kit (Change-it: an edge back from the peer to the chat, then the kit put back).
 
+IDE adaptation: Read the check's refusal as the cell's answer: with the peer's account added to lesson-12.8.sh the check names the cycle and exits 1, which stopped the demo before the put-back line and left lesson-12.8.sh edited (22 October 2026). The file is put back first; the step fails only if the check let the edge through.
+
 Expected shape, not a promised result:
 
 ```text

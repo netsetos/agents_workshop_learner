@@ -109,6 +109,8 @@ No guard-project, and no variables passed: smoke.py reads everything from its en
 
 Operation: bash — run in the operator shell, in the kit (no network: smoke.py stops before its first call).
 
+IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+
 Expected shape, not a promised result:
 
 ```text

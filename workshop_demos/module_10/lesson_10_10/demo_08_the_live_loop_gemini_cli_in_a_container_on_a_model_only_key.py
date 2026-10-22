@@ -99,8 +99,11 @@ def step_03_the_egress_proxy_printed(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_the_live_loop_on_your_lane.
-COMMANDS_04 = """make ralph                        # live, with no cap
+COMMANDS_04 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make ralph                        # live, with no cap
 make ralph RALPH_BUDGET_INR=30    # live, with a cap and no key
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

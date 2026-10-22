@@ -55,7 +55,8 @@ def step_01_the_workspace(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_iteration_1_in_a_hurry.
-COMMANDS_02 = """python - <<'PY'
+COMMANDS_02 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+python - <<'PY'
 import os, sys, warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 sys.path.insert(0, "commands")
@@ -67,6 +68,8 @@ print("wrote the body, with:", next(line.strip() for line in hurried.splitlines(
 PY
 (cd "$WS" && python3 shared/desk_calc.py --selftest | tail -n 2)   # the fast test the prompt names
 make ralph-check WORKSPACE="$WS"
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

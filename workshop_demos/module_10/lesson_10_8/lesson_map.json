@@ -464,7 +464,9 @@
           "purpose": "Offline, the runner stands in for rag-api's doors with the kit's own door functions, and that part has not changed: the set still judges itself, every row holds with every control on, and every structural row opens with its control off. The agents' surfaces have no stand-in, because a chat brain or a Desk agent is a model with tools, not a door function to lift; ask for them offline and the runner says so and exits 2.",
           "label": "bash — run in the operator shell, in the kit (the agents' surfaces offline: refused, exit 2)",
           "expected": "python evals/run_attacks.py --offline --surfaces chat,desk,peer\noffline runs the api surface only; chat, desk and peer are live modes (--chat-url, --peer-local)\nmake: *** [mk/evaluation.mk:45: attack-offline] Error 2\nexit status: 2",
-          "adaptations": [],
+          "adaptations": [
+            "Read the refusal as the cell's answer: --offline runs the api surface only, so run_attacks.py refuses chat, desk and peer and make exits 2, which stopped the demo before the page's exit-status line (22 October 2026). The step now fails only if the live surfaces are not refused."
+          ],
           "id": "source_37",
           "function": "step_03_the_api_set_as_lesson_4_9_runs_it",
           "window": 37,
@@ -701,7 +703,9 @@
           "purpose": "Do it: the poisoned server, and the pins against it",
           "label": "bash — run in the first tab, in the kit (the pins against the poisoned server, over the wire)",
           "expected": "/home/you/pins-venv/bin/python commands/pin_tools.py --check --url http://127.0.0.1:8900/mcp\ntool pins are out of date (1):\n  - added, never pinned: summarise_inbox\nreview the change, then re-pin with make pin-tools (no CHECK).\nmake: *** [mk/agents.mk:368: pin-tools] Error 1\nexit status: 1",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_70",
           "function": "step_04_the_poisoned_server_and_the_pins_against_i",
           "window": 70,
@@ -714,7 +718,9 @@
           "purpose": "Do it: the rug pull",
           "label": "bash — the second tab, then the first (the rug pull: the same four names, one changed description)",
           "expected": "evil MCP (a fixture) on http://127.0.0.1:8900/mcp - RUG (retrieve's description poisoned); every host it names is .invalid\n/home/you/pins-venv/bin/python commands/pin_tools.py --check --url http://127.0.0.1:8900/mcp\ntool pins are out of date (1):\n  - changed since it was pinned: retrieve\nreview the change, then re-pin with make pin-tools (no CHECK).\nmake: *** [mk/agents.mk:368: pin-tools] Error 1\nexit status: 1",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_72",
           "function": "step_05_the_rug_pull",
           "window": 72,
@@ -740,7 +746,9 @@
           "purpose": "Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.",
           "label": "bash — run in the operator shell, in the kit (one description edited, the check failing, the re-pin, and the kit restored)",
           "expected": "/home/you/pins-venv/bin/python commands/pin_tools.py --check --server-local\ntool pins are out of date (1):\n  - changed since it was pinned: retrieve\nreview the change, then re-pin with make pin-tools (no CHECK).\nmake: *** [mk/agents.mk:368: pin-tools] Error 1\nexit status: 1\n/home/you/pins-venv/bin/python commands/pin_tools.py --server-local\npinned 4 tools to /home/you/deploy_module_rag/services/agent/tool_pins.json: calculate_processing_cost, corpus_stats, list_documents, retrieve\n--- a/services/agent/tool_pins.json\n+++ b/services/agent/tool_pins.json\n@@ -81,4 +81,4 @@\n     \"retrieve\": {\n-      \"fingerprint\": \"933d0e30aff203558aabf34b814410a33af606044a91b759aa7dbb1dc86ce11f\",\n-      \"description\": \"Retrieve grounded passages from DocuMind's corpus, with the lane's own cited answer.\",\n+      \"fingerprint\": \"2681f477b13a68e1ec0cb40c1338f03eaa9424aacd1e6c249d38688dee26a8bf\",\n+      \"description\": \"Retrieve grounded passages from DocuMind's corpus, with the lane's own cited answer. Up to twenty passages.\",\n       \"input_schema\": {",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_77",
           "function": "step_07_change_it_one_description_edited",
           "window": 77,
@@ -759,20 +767,18 @@
         "demo_10_poisoned_tools_on_your_machine_the_pins"
       ],
       "heading": "Verify it yourself, and withdraw the note",
-      "purpose": "The kit's three test files, twelve checks each one block above, then make retire and the switches off. First, the kit's own tests for the three pieces. They run offline. Two of the files hold tests that need the chat image's or the peer image's libraries and skip without them, saying so (6 of test_spotlight.py's 21, \"needs the chat image's pins: pip install -r services/chat/requirements.txt\"; 3 of test_pins.py's 16, \"needs google-adk (the peer image's pins)\"); the kit's dry-run workflow installs those pins and runs every one with DOCUMIND_REQUIRE_LIBS=1. In step 10's venv, $PY -m unittest commands/tests/test_pins.py runs all 16. make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.",
+      "purpose": "The kit's three test files, twelve checks each one block above, then make retire and the switches off. First, the kit's own tests for the three pieces. They run offline. Two of the files hold tests that need the chat image's or the peer image's libraries and skip without them, saying so (6 of test_spotlight.py's 21, \"needs the chat image's pins: pip install -r services/chat/requirements.txt\"; 3 of test_pins.py's 16, \"needs google-adk (the peer image's pins)\"); the kit's dry-run workflow installs those pins and runs every one with DOCUMIND_REQUIRE_LIBS=1. In step 10's venv, $PY -m unittest commands/tests/test_pins.py runs all 16.",
       "anchor": "s12",
       "anchors": [
         "s12"
       ],
       "section_number": 12,
       "windows": [
-        81,
-        83
+        81
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_8/GUIDE.md",
       "source_lines": [
-        1449,
-        1483
+        1449
       ],
       "offline": false,
       "live_verified": false,
@@ -790,7 +796,34 @@
           "window": 81,
           "source_line": 1449,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "cleanup_demo_12_verify_it_yourself_and_withdraw_the_note",
+      "lesson": "10.8",
+      "file": "cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "Verify it yourself, and withdraw the note",
+      "purpose": "At lesson end: make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.",
+      "anchor": "s12",
+      "anchors": [
+        "s12"
+      ],
+      "section_number": 12,
+      "windows": [
+        83
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_10/lesson_10_8/GUIDE.md",
+      "source_lines": [
+        1483
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Verify it yourself, and withdraw the note",
           "subheading": "Clean up: the note withdrawn, the switches off",
@@ -799,7 +832,7 @@
           "expected": "[awaiting the author's run: data/retire.txt]",
           "adaptations": [],
           "id": "source_83",
-          "function": "step_02_clean_up_the_note_withdrawn_the_switches_o",
+          "function": "step_01_clean_up_the_note_withdrawn_the_switches_o",
           "window": 83,
           "source_line": 1483,
           "manual_checkpoint": null

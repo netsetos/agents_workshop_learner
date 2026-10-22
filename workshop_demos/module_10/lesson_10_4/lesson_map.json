@@ -986,7 +986,9 @@
           "purpose": "Do it: the test split",
           "label": "bash — run in the operator shell, in the kit (the test split: it has no rows yet)",
           "expected": "live: https://documind-chat-NUMBER.asia-south1.run.app, arm B (the routed Desk), split test: 0 rows scored, 0 left out (the groups of the prompt's examples)\narm B (the routed Desk)\nsplit test\n  top-1 route accuracy          0/0 (no rows)\n    recall handbook             0/0 (no rows)\n    recall statute              0/0 (no rows)\n    recall case                 0/0 (no rows)\n    recall clarify              0/0 (no rows)\n    recall out_of_scope         0/0 (no rows)\n  confusion (rows: expected; columns: predicted)\n                       handbook      statute         case      clarify out_of_scope        other\n    handbook                  0            0            0            0            0            0\n    statute                   0            0            0            0            0            0\n    case                      0            0            0            0            0            0\n    clarify                   0            0            0            0            0            0\n    out_of_scope              0            0            0            0            0            0\n  escalation recall, pooled     0/0 (no rows)\n  authority_rate                not measured: the run carries no citations (a /v1/route run)\n  correct_rate                  not measured: the run carries no answer text (a /v1/route run)\n  router cost                   Rs 0.0000 in all, Rs 0.00000 a turn\nFAIL  route accuracy 0/0 (no rows) is under 95%\nmake: *** [mk/agents.mk:214: route-eval] Error 1",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_81",
           "function": "step_02_the_test_split",
           "window": 81,

@@ -35,6 +35,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Finish and restore
 
+- [cleanup/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py](cleanup/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py) — At lesson end: RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
 - [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
@@ -62,7 +63,7 @@ acme: retrieval_backend=vector
 
 ### demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py
 
-make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> "gemini-3.6-flsh", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
+make remediate OFFLINE=1 reads the kit's own recording of this drill, ops/incidents/held_model.json. It needs no PROJECT and no credential, and it prints the plan you should get on the lane, with your lane's revision names in place of these. HOLD=1 writes deploy/.fault-hold first, with the variable as it was and the revision serving, so that RESTORE=1 always has a record. Then it sets the fault, and the new revision takes the traffic. It runs the smoke once, so that the lane holds the fault's own turns for remediate to read, and it leaves the fault in place. remediate reads the lane three times and prints the plan. SAVE= keeps what it read, with the project id and number replaced, so the incident can be replayed later. Expect bad_revision, the change CHAT_MODEL: unset -> "gemini-3.6-flsh", and a rollback to the revision HOLD=1 recorded as serving before the fault. Paste step 1's command as your plan printed it, or set PREV to the revision it names. It moves traffic only: the fault's revision stays, at 0%. The plan's step 2. Every brain should answer, because the traffic is on the revision before the fault. Expect rolled_back. The plan starts again from the verify, and does not print the rollback a second time: its step 1 says the rollback is done.
 
 **`step_01_first_offline_the_plan_the_drill_should_pr(session)` — On your lane: hold a fault, read the plan, run it by hand / First, offline: the plan the drill should produce**
 
@@ -138,6 +139,8 @@ Paste step 1's command as your plan printed it, or set PREV to the revision it n
 
 Operation: bash — run in the operator shell (the rollback your plan printed: traffic to the revision before, by name).
 
+IDE adaptation: Fill in the page's placeholder from the plan itself: the saved plan replays offline at Rs 0, and its step 1 names the revision to roll back to. The literal REVISION was sent to gcloud, which refused it, and the fault stayed on the lane (22 October 2026).
+
 Expected shape, not a promised result:
 
 ```text
@@ -166,32 +169,6 @@ Expected shape, not a promised result:
 
 ```text
 [awaiting the author's run: data/plan_rolled_back.txt]
-```
-
-**`step_07_restore_and_verify_again(session)` — On your lane: hold a fault, read the plan, run it by hand / Restore, and verify again**
-
-RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the plan's restore, as the drill recorded it).
-
-Expected shape, not a promised result:
-
-```text
-[awaiting the author's run: data/restore.txt]
-```
-
-**`step_08_restore_and_verify_again(session)` — On your lane: hold a fault, read the plan, run it by hand / Restore, and verify again**
-
-RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
-
-Operation: bash — run in the operator shell, in $DEMO_ROOT (the plan's verify again).
-
-Expected shape, not a promised result:
-
-```text
-[awaiting the author's run: data/smoke_restored.txt]
-
-[awaiting the author's run: data/plan_restored.txt]
 ```
 
 ### demo_04_architecture_the_path_an_incident_takes_read_by_read_and_rule_by_rule.py
@@ -408,6 +385,38 @@ LiveReadTests (9)
   ok   the inputs it refuses
   ok   the log filter reads the requests and the policies events
   ok   the reads shape the state a fixture holds
+```
+
+### cleanup/demo_03_on_your_lane_hold_a_fault_read_the_plan_run_it_by_hand.py
+
+At lesson end: RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure. RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
+
+**`step_01_restore_and_verify_again(session)` — On your lane: hold a fault, read the plan, run it by hand / Restore, and verify again**
+
+RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
+
+Operation: bash — run in the operator shell, in $DEMO_ROOT (the plan's restore, as the drill recorded it).
+
+IDE adaptation: Restore only a fault this checkout holds: the restore is the lesson's cleanup, run after a failure too, and a run that stopped before the hold has nothing to put back.
+
+Expected shape, not a promised result:
+
+```text
+[awaiting the author's run: data/restore.txt]
+```
+
+**`step_02_restore_and_verify_again(session)` — On your lane: hold a fault, read the plan, run it by hand / Restore, and verify again**
+
+RESTORE=1 runs the plan's restore for the drill: the variable put back as .fault-hold recorded it, which makes a new revision, then the traffic sent to the latest revision. It checks that the latest revision takes all the traffic, and removes .fault-hold. Then the plan's last step: the smoke, and remediate, which should read no_failure.
+
+Operation: bash — run in the operator shell, in $DEMO_ROOT (the plan's verify again).
+
+Expected shape, not a promised result:
+
+```text
+[awaiting the author's run: data/smoke_restored.txt]
+
+[awaiting the author's run: data/plan_restored.txt]
 ```
 
 ### setup/restore_settings.py
