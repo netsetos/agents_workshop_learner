@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`, reviewed at blob `7e30ad1308612c121cb24f9d7194951403f114d4`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_7.4_Mirror_Freshness_WIX.html`, reviewed at blob `6d5a6f923daa2351fbb9a386b02e8aa9d2d31ea3`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 7.3 put a copy of acme's and zeta's documents into two Google-managed stores and read answers back from them. A copy raises two questions. Is it as good: does the store find the clause the kit's own index finds? Is it current: when the ledger changes, does every store change with it?
 
@@ -34,7 +34,7 @@ You will learn how the kit measures a store's quality: recall and MRR on the gol
 
 A measure of quality, four events that change the ledger, and one check after each.
 
-Is the copy as good? A store retrieves by its own rules. RAG Engine cuts a version into pieces of 512 tokens and keeps what falls inside a distance threshold. Vertex AI Search returns extractive segments of whole documents. `make ablate ABLATE_ARGS="--arms all"` runs `evals/ablate.py`. It takes the golden rows that carry anchors, the phrases a right answer must retrieve, through six arms with one knob changed in each:
+Is the copy as good? A store retrieves by its own rules. RAG Engine cuts a version into pieces of 512 tokens and keeps what falls inside a distance threshold. Vertex AI Search ranks whole documents, and on the lane's standard edition the passages are the kit's own rows of the versions it ranked: it refuses extractive segments, and its snippets stop short of the figure. `make ablate ABLATE_ARGS="--arms all"` runs `evals/ablate.py`. It takes the golden rows that carry anchors, the phrases a right answer must retrieve, through six arms with one knob changed in each:
 
 - The kit's four arms: dense 5 with no reranker; dense 20, then the reranker to 5, which is the lane's own path; dense 50, then the reranker; and 4.5's hybrid of dense and BM25, then the reranker.
 
@@ -160,7 +160,7 @@ The expected output comes from a stand-in whose retrieval is word overlap. The s
 
 - recall@depth is the reranker's ceiling. On the stand-in, dense 20, dense 50 and hybrid all reach 1.00 at their depth, and all score 0.94 recall@5. Depth is not the knob there, and their three misses are `ranked out`: the reranker's.
 
-- A store arm's depth is what the store returned, not 20. RAG Engine returns only the contexts inside distance 0.5, and Vertex AI Search returns up to three segments a document. `not retrieved at depth 0` is a row for which the store returned nothing at all.
+- A store arm's depth is what the store returned, not 20. RAG Engine returns only the contexts inside distance 0.5, and the Vertex AI Search arm keeps only the kit's nearest rows, three times 20 deep, of the documents the store ranked. `not retrieved at depth 0` is a row for which a store arm kept nothing: RAG Engine returned no context inside the threshold, or none of the kit's nearest rows came from a document Vertex AI Search ranked.
 
 - The two failed rows are globex's. globex has no corpus and no data store (lesson 7.3), so each store arm scores 45 rows. The harness prints the failures beside the line instead of scoring them as zeros.
 

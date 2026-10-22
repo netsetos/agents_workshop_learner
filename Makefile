@@ -852,7 +852,7 @@ managed-status: guard-project
 
 # The managed stores, all of them (13 September 2026, evening): make up runs this after the
 # roster (the policies are set) and before the first ingest - the mirror never creates a store, and a version
-# ingested before its corpus exists waits for the walk's repair (the plan's R6). RAG Engine in serverless mode
+# ingested before its corpus exists waits for make managed-sync (the walk only removes). RAG Engine in serverless mode
 # once, a corpus per `any` tenant (idempotent by name), the data stores already declared by managed.tf
 # (MANAGED_SEARCH=true); then the demo's pins, so one deployment answers from all three stores: acme from
 # 4.3's corpus, zeta from 4.4's data store, globex (data_region in) from the kit's own rows. Safe to re-run.

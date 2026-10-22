@@ -55,11 +55,10 @@ class Settings(BaseSettings):
     rag_location: str = Field("us-central1", alias="RAG_LOCATION")
     rag_distance_threshold: float = Field(0.5, alias="RAG_DISTANCE_THRESHOLD")
     # R4 (13 September 2026, evening): 4.4's data stores are global (managed.tf), searched through their default serving
-    # config as the lesson's notebook does; the extractive segments asked per result, which an Enterprise engine serves.
-    # A standard-edition store refuses that request outright (22 October 2026), and the retriever then asks for snippets
-    # alone (retriever._search_spec); _search_texts() takes whichever came.
+    # config as the lesson's notebook does. The store ranks the documents and the kit's own rows give the passages
+    # (retriever._search_retrieve, 22 October 2026): a standard-edition store refuses extractive segments, and its
+    # snippets stop short of the figure.
     search_location: str = Field("global", alias="SEARCH_LOCATION")
-    search_segments: int = Field(3, alias="SEARCH_SEGMENTS")
     # The ledger (12.5, 11 September 2026): `on` retrieves only chunks the ledger marks current - one
     # version per document. Off until the second vector index is built and the chunks written before
     # the ledger carry the field (make backfill-current); a switch, judged on a candidate like the others.

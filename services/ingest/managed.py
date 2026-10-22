@@ -14,7 +14,7 @@ after_undo() when the undo made an older version current again (its text read of
 Document AI call); retired() when versions leave (a retirement by the walk, a withdrawal by hand). The managed
 document id is the doc_key on both stores - a Vertex AI Search Document.id, a RagFile's display name - so every call
 is idempotent and a listing compares with the ledger. A tenant with no store is mirror_no_store (once), a call that
-fails is mirror_failed (with the error): one line each, never a failed ingest; the walk repairs the mirror (P9.3).
+fails is mirror_failed (with the error): one line each, never a failed ingest; make managed-sync uploads what is missing.
 MANAGED_MIRROR is off | rag_engine | vertex_search | both: the deployment's capability list, which stores exist to
 mirror into. Whether a TENANT's text may go there is the tenant's data_region policy (shared/tenancy.py; the plan's
 section 7, 13 September 2026 evening): `in` keeps it on the kit's rows in asia-south1, `any` permits a store outside

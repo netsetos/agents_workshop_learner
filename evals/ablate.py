@@ -21,6 +21,9 @@ One knob per arm, everything else held (lesson 4.8, Part 5):
                                   each context's doc_key resolved to its source through the kit's own rows.
                                   Behind --arms all (or --arms rag_engine): a lane without the mirror has
                                   no corpus, and an arm that cannot run is a finding, not the harness's exit
+    vertex_search 20 -> rerank 5  R4's backend from outside it: 4.4's data store ranks the tenant's documents and
+                                  the kit's own rows of those versions are the passages (22 October 2026: a
+                                  standard-edition store refuses segments and its snippets stop short)
     rewrite -> dense 20 -> rerank 5   workshop lesson 2.5's stage from outside rag-api, behind --rewrite (never an
                                   --arms key): shared/query_rewrite.py's rewrite is what the Firestore rung
                                   searches and the question as asked is what the reranker orders; a rewrite the
@@ -54,7 +57,6 @@ latency; hybrid 20 -> rerank 5 identical to the lane's row at alpha 0.5 and (ACM
 from __future__ import annotations
 
 import argparse
-import html
 import json
 import os
 import re
@@ -124,7 +126,6 @@ class Lane:
             project=project, location="global", ranking_config="default_ranking_config")
         self._tenant = {}
         self._rag_module, self._corpora, self._sources = None, {}, {}
-        self.segments_refused = False         # vertex_search(): a standard-edition store refuses extractive segments
 
     def embed_query(self, q: str) -> list:
         from google.genai import types
@@ -163,7 +164,7 @@ class Lane:
         out = []
         for d in docs:
             x = d.to_dict()
-            out.append({"chunk_id": d.id, "text": x.get("text", ""), "source_uri": x.get("source_uri", "")})
+            out.append({"chunk_id": d.id, "text": x.get("text", ""), "source_uri": x.get("source_uri", ""), "doc_key": x.get("doc_key")})
         return out
 
     def hybrid(self, question: str, tenant: str, k: int) -> list:
@@ -216,36 +217,20 @@ class Lane:
         return out
 
     def vertex_search(self, question: str, tenant: str, k: int) -> list:
-        """R4's backend from outside it: 4.4's data store (documind-{tenant}, managed.tf) searched by text through its
-        default serving config, each result's extractive segments - or its snippet - as chunks with the source the
-        ledger knows: what retriever._search_retrieve() serves, without the API. A tenant with no data store raises
-        (MANAGED_SEARCH=true make up declares one per `any` tenant), like the corpus arm."""
+        """R4's backend from outside it, as retriever._search_retrieve() serves it: 4.4's data store (documind-{tenant},
+        managed.tf) ranks the tenant's documents by text through its default serving config, and the passages are the
+        kit's own rows of those versions - the dense rung's nearest, three times k deep, kept when the store ranked
+        their version. A standard-edition store's own text is a snippet that stops short of the figure, and its
+        extractive segments are refused (22 October 2026). A tenant with no data store raises (MANAGED_SEARCH=true make
+        up declares one per `any` tenant), like the corpus arm."""
         from google.cloud import discoveryengine_v1 as discoveryengine
         client = discoveryengine.SearchServiceClient()
         store = "documind-" + re.sub(r"[^a-z0-9-]+", "-", tenant.lower()).strip("-")
         serving = (f"projects/{self.project}/locations/global/collections/default_collection/dataStores/{store}"
                    f"/servingConfigs/default_search")
-        spec = discoveryengine.SearchRequest.ContentSearchSpec(
-            snippet_spec=discoveryengine.SearchRequest.ContentSearchSpec.SnippetSpec(return_snippet=True))
-        if not self.segments_refused:          # a standard-edition store refuses segments (400): snippets, as the API asks
-            spec.extractive_content_spec = discoveryengine.SearchRequest.ContentSearchSpec.ExtractiveContentSpec(max_extractive_segment_count=3)
-        try:
-            results = list(client.search(request=discoveryengine.SearchRequest(serving_config=serving, query=question,
-                                                                               page_size=k, content_search_spec=spec)))
-        except Exception as e:
-            if self.segments_refused or "enterprise edition" not in str(e):
-                raise
-            self.segments_refused = True
-            return self.vertex_search(question, tenant, k)
-        out = []
-        for r in results:
-            dd = discoveryengine.Document.to_dict(r.document).get("derived_struct_data") or {}
-            texts = [str(s.get("content") or "") for s in (dd.get("extractive_segments") or [])] or \
-                    [html.unescape(re.sub(r"<[^>]+>", "", str(s.get("snippet") or ""))) for s in (dd.get("snippets") or [])]
-            for i, text in enumerate(t for t in texts if t.strip()):
-                out.append({"chunk_id": f"{tenant}:{r.document.id}#vs-{len(out)}", "text": text,
-                            "source_uri": self.source_of(tenant, r.document.id)})
-        return out[:k]
+        ranked = {r.document.id for r in client.search(request=discoveryengine.SearchRequest(
+            serving_config=serving, query=question, page_size=k)) if r.document.id}
+        return [c for c in self.dense(question, tenant, 3 * k) if c.get("doc_key") in ranked][:k]
 
     def rerank(self, question: str, chunks: list, top_n: int = 5) -> list:
         from google.cloud import discoveryengine_v1 as discoveryengine

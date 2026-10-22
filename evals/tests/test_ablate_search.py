@@ -1,9 +1,10 @@
 """Offline check for the vertex_search arm against a standard-edition data store (22 October 2026).
 
 The arm asked each search for extractive segments, an Enterprise feature. A standard-edition store refuses the whole
-request (400 FailedPrecondition, "Cannot use enterprise edition features"), so 7.4's arm failed on every row while the
-API, asking the same way, fell back to the Firestore rung on every zeta query. The arm now asks once, then for
-snippets alone, and unescapes them as text. discoveryengine is a stand-in here: no Google packages or network.
+request (400 FailedPrecondition, "Cannot use enterprise edition features"), and its snippets stop short of the figure a
+question asks for. So the store ranks the tenant's documents, and the passages are the kit's own rows of those
+versions: the dense rung's nearest, three times k deep, kept when the store ranked their version - as
+retriever._search_retrieve() serves them. discoveryengine is a stand-in here: no Google packages or network.
 """
 import importlib.util
 from pathlib import Path
@@ -13,8 +14,6 @@ import unittest
 from unittest.mock import patch
 
 EVALS = Path(__file__).resolve().parents[1]
-REFUSAL = ("400 Cannot use enterprise edition features (website search, multi-modal search, extractive "
-           "answers/segments, etc.) in a standard edition search engine.")
 
 
 def load_ablate():
@@ -24,53 +23,45 @@ def load_ablate():
     return module
 
 
-class Spec(types.SimpleNamespace):
-    """ContentSearchSpec and its parts: keyword fields, settable afterwards as the code sets extractive_content_spec."""
-
-
-def fake_discoveryengine(asked):
+def fake_discoveryengine(asked, ranked):
     class SearchServiceClient:
         def search(self, request):
-            asked.append(request.content_search_spec)
-            if getattr(request.content_search_spec, "extractive_content_spec", None) is not None:
-                raise RuntimeError(REFUSAL)
-            doc = types.SimpleNamespace(id="zeta_hb", derived={"snippets": [
-                {"snippet": "A <b>confirmed</b> employee&#39;s notice is 30 days."}]})
-            return [types.SimpleNamespace(document=doc)]
+            asked.append(request)
+            return [types.SimpleNamespace(document=types.SimpleNamespace(id=i)) for i in ranked]
 
-    class ContentSearchSpec(Spec):
-        SnippetSpec = ExtractiveContentSpec = Spec
-
-    class SearchRequest(Spec):
+    class SearchRequest(types.SimpleNamespace):
         pass
 
-    SearchRequest.ContentSearchSpec = ContentSearchSpec
     de = types.ModuleType("google.cloud.discoveryengine_v1")
     de.SearchServiceClient, de.SearchRequest = SearchServiceClient, SearchRequest
-    de.Document = types.SimpleNamespace(to_dict=lambda d: {"derived_struct_data": d.derived})
     return de
 
 
-class SnippetsAfterARefusal(unittest.TestCase):
-    def test_the_arm_asks_again_for_snippets_and_unescapes_them(self):
+class TheStoreRanksTheKitsRowsAnswer(unittest.TestCase):
+    def test_the_kits_nearest_rows_of_the_ranked_versions(self):
         ablate, asked = load_ablate(), []
         google = sys.modules.get("google") or types.ModuleType("google")
         cloud = sys.modules.get("google.cloud") or types.ModuleType("google.cloud")
         google.cloud = cloud
-        de = fake_discoveryengine(asked)
+        de = fake_discoveryengine(asked, ["zeta_hb", "zeta_law", ""])
+        rows = [{"chunk_id": "zeta:hb#3", "text": "NP-03: 30 days", "source_uri": "gs://u/zeta/hb.md", "doc_key": "zeta_hb"},
+                {"chunk_id": "zeta:old#1", "text": "NP-03: 45 days", "source_uri": "gs://u/zeta/old.md", "doc_key": "zeta_old"},
+                {"chunk_id": "zeta:law#9", "text": "one month's notice", "source_uri": "gs://u/zeta/law.md", "doc_key": "zeta_law"},
+                {"chunk_id": "zeta:hb#4", "text": "PB-02: 15 days", "source_uri": "gs://u/zeta/hb.md", "doc_key": "zeta_hb"}]
+        dense_asked = []
         with patch.dict(sys.modules, {"google": google, "google.cloud": cloud, "google.cloud.discoveryengine_v1": de}), \
                 patch.object(cloud, "discoveryengine_v1", de, create=True):
             lane = ablate.Lane.__new__(ablate.Lane)              # no clients: vertex_search makes its own
-            lane.project, lane.segments_refused = "demo", False
-            lane.source_of = lambda tenant, key: f"gs://demo-uploads/{tenant}/handbook.md"
-            first = lane.vertex_search("notice period for a confirmed employee?", "zeta", 5)
-            second = lane.vertex_search("earned leave?", "zeta", 5)
-        self.assertEqual(first, [{"chunk_id": "zeta:zeta_hb#vs-0", "text": "A confirmed employee's notice is 30 days.",
-                                  "source_uri": "gs://demo-uploads/zeta/handbook.md"}])
-        self.assertTrue(lane.segments_refused)
-        self.assertEqual(len(second), 1)
-        # one refused request with segments, then snippets alone for the retry and every later search
-        self.assertEqual([getattr(s, "extractive_content_spec", None) is not None for s in asked], [True, False, False])
+            lane.project = "demo"
+            lane.dense = lambda question, tenant, k: dense_asked.append((question, tenant, k)) or list(rows)
+            got = lane.vertex_search("notice period for a confirmed employee?", "zeta", 2)
+        self.assertEqual([c["chunk_id"] for c in got], ["zeta:hb#3", "zeta:law#9"])     # the old version is not ranked; cut to k
+        self.assertEqual(dense_asked, [("notice period for a confirmed employee?", "zeta", 6)])
+        request = asked[0]
+        self.assertEqual(request.serving_config, "projects/demo/locations/global/collections/default_collection"
+                                                 "/dataStores/documind-zeta/servingConfigs/default_search")
+        self.assertEqual(request.page_size, 2)
+        self.assertFalse(hasattr(request, "content_search_spec"), "no text is asked of a standard-edition store")
 
 
 if __name__ == "__main__":
