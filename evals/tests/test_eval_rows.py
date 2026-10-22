@@ -54,6 +54,12 @@ CUR, OLD = "c" * 64, "d" * 64          # a version the ledger lists as current, 
 ENV_KEYS = ("DOCUMIND_ID_TOKEN", "DOCUMIND_OUTSIDER_TOKEN", "DOCUMIND_USER_EMAIL", "DOCUMIND_OUTSIDER_EMAIL",
             "DOCUMIND_EVAL_PASSAGES")
 CITE_FIELDS = ("chunk_id", "source_uri", "page", "kind", "quote", "score")     # what a record keeps of a citation
+INDEXED = {}                           # every media file make ingest-corpus uploads, by kind: the lane after lesson 7.5
+for _t, _names in MANIFEST.items():
+    for _n in _names:
+        _kind = rv.MEDIA_KINDS.get(os.path.splitext(_n)[1].lower())
+        if _kind:
+            INDEXED.setdefault(_t, {}).setdefault(_kind, set()).add(_n.rsplit("/", 1)[-1])
 
 
 @functools.lru_cache(maxsize=None)
@@ -175,9 +181,11 @@ def forbid(*a, **k):
     raise AssertionError("passages() was called with DOCUMIND_EVAL_PASSAGES off")
 
 
-def run_live(pick, current=lambda tenant: {CUR}, passages=forbid, report=None, full=False, **env):
+def run_live(pick, current=lambda tenant: {CUR}, passages=forbid, report=None, full=False,
+             media=lambda tenant: INDEXED.get(tenant, {}), **env):
     """live() over the stub, every golden row. pick(i, row) names the outcome; current(tenant) is what the ledger
-    answers (a set of shas, or None when GET /v1/sources is down). Returns (rc, stdout, report, [(row, status, body)])."""
+    answers (a set of shas, or None when GET /v1/sources is down); media(tenant) the media files it lists as indexed,
+    by kind. Returns (rc, stdout, report, [(row, status, body)])."""
     sent = []
 
     def ask(api_url, question, tenant, email, token, retries=1):
@@ -195,6 +203,7 @@ def run_live(pick, current=lambda tenant: {CUR}, passages=forbid, report=None, f
         out = io.StringIO()
         with environ(**env), patch.object(rv, "ask", ask), patch.object(rv, "load_corpus", lambda: corpus), \
                 patch.object(rv, "fetch_current_shas", lambda api_url, tenant, token: current(tenant)), \
+                patch.object(rv, "fetch_media_names", lambda api_url, tenant, token: media(tenant)), \
                 patch.object(rv, "passages", passages), contextlib.redirect_stdout(out):
             rc = rv.live(API, report=path, golden=GOLDEN)
         with open(path, encoding="utf-8") as f:
@@ -295,6 +304,68 @@ class RowVerdictTest(unittest.TestCase):
                          (True, "", True, True, True, True, None))
         status, body = reply(row, "nofig")
         self.assertEqual(rv.row_verdict(row, status, body)["why"], "answered without ['60']")
+
+
+# ------------------------------------------------------------------ a media row asks for its kind once the media is indexed
+class MediaAsIndexedTest(unittest.TestCase):
+    """mm-03 asks for a segment of townhall_2026_q1.mp4, which lesson 7.5 builds. Before then every full live gate
+    failed on a required row no answer could pass (22 October 2026). Now a media row asks for its figure or segment
+    only while the tenant's ledger lists a current file of that kind named after the row's document; until then it is
+    judged as the text lookup it also is, and the gate says so on an [info] line."""
+    FIGURES = {"figure": INDEXED["acme"]["figure"]}           # the lane before lesson 7.5: the pictures, no video
+
+    def test_a_row_without_its_media_is_judged_on_its_words(self):
+        mm03 = BY_ID["mm-03"]
+        got = rv.as_media_stands(mm03, self.FIGURES)
+        self.assertNotIn("must_cite_kind", got)
+        self.assertEqual(got["media_absent"], "segment")
+        self.assertEqual({k: v for k, v in got.items() if k != "media_absent"},
+                         {k: v for k, v in mm03.items() if k != "must_cite_kind"})
+        self.assertEqual(mm03["must_cite_kind"], "segment", "the golden row itself is not changed")
+        for row in (BY_ID["mm-01"], BY_ID["mm-02"], BY_ID["lk-06"]):
+            self.assertIs(rv.as_media_stands(row, self.FIGURES), row)       # a figure that is there; no media asked
+        self.assertIs(rv.as_media_stands(mm03, INDEXED["acme"]), mm03)       # the video indexed: the segment is asked
+        self.assertIs(rv.as_media_stands(mm03, None), mm03)                  # the ledger unread: asked, as before
+        self.assertIn("media_absent", rv.as_media_stands(mm03, {"segment": {"standup_2026_q2.mp4"}}),
+                      "another document's video is not the town hall's")
+
+    def test_the_ledger_read_for_current_media(self):
+        rows = {"sources": [{"name": "acme/townhall_2026_q1.mp4", "status": "indexed"},
+                            {"name": "acme/annual_report_2026_fig3.png", "status": "superseded"},
+                            {"name": "acme/whiteboard_arch.PNG", "status": "indexed"},
+                            {"name": "acme/hr_policy_2026.md", "status": "indexed"},
+                            {"name": "acme/payment_of_bonus_act_1965_p30.png", "status": "failed"}]}
+        seen = []
+
+        def urlopen(req, timeout=None):
+            seen.append((req.full_url, req.get_header("Authorization")))
+            return FakeResponse(rows)
+        with patch.object(rv.urllib.request, "urlopen", urlopen):
+            got = rv.fetch_media_names(API + "/", "acme", "tok")
+        self.assertEqual(got, {"segment": {"townhall_2026_q1.mp4"}, "figure": {"whiteboard_arch.PNG"}})
+        self.assertEqual(seen, [(f"{API}/v1/sources?tenant_id=acme", "Bearer tok")])
+
+        def down(req, timeout=None):
+            raise urllib.error.URLError("no route")
+        with patch.object(rv.urllib.request, "urlopen", down):
+            self.assertIsNone(rv.fetch_media_names(API, "acme", None))
+
+    def test_the_gate_before_and_after_the_video(self):
+        pick = lambda i, row: "kind" if row["id"] == "mm-03" else "ok"     # a text citation: there is no segment to cite
+        rc, out, report, sent = run_live(pick, media=lambda tenant: self.FIGURES if tenant == "acme" else {})
+        self.assertEqual((rc, report["required_failed"]), (0, []), out)
+        self.assertIn("[info] mm-03: no segment file of townhall_2026_q1 indexed for acme yet", out)
+        self.assertEqual(out.count("[info] mm-0"), 1, "the figures are there, so mm-01 and mm-02 still ask for theirs")
+        self.assertEqual(report["scores"]["media_kind_rate"], 1.0)           # two figure rows, both cited a figure
+        for row, status, body in sent:
+            v = rv.row_verdict(rv.as_media_stands(row, self.FIGURES if row["tenant"] == "acme" else {}), status, body,
+                               {CUR}, MANIFEST, text_of(False).get(row["tenant"], ""))
+            self.assertTrue(v["pass"], (row["id"], v["why"]))
+        # The video indexed and the same text citation: the row is asked for its segment and holds the gate red.
+        rc, out, report, _ = run_live(pick)
+        self.assertNotEqual(rc, 0)
+        self.assertEqual(report["required_failed"], ["mm-03: cited no segment"])
+        self.assertNotIn("[info] mm-03", out)
 
 
 # ------------------------------------------------------------------ quote_check(): one verdict per citation

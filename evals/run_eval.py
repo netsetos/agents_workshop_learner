@@ -430,6 +430,43 @@ def fetch_current_shas(api_url: str, tenant: str, token: str | None) -> set[str]
     return {str(s.get("doc_key") or "").split("_", 1)[-1] for s in rows if s.get("status") == "indexed"}
 
 
+MEDIA_KINDS = {".png": "figure", ".jpg": "figure", ".jpeg": "figure", ".mp4": "segment", ".mp3": "segment"}   # the worker's MEDIA_TYPES
+
+
+def fetch_media_names(api_url: str, tenant: str, token: str | None) -> dict[str, set[str]] | None:
+    """{kind: {file names}} of the tenant's CURRENT media versions, from GET /v1/sources: a picture is a figure, a video
+    or an audio file is segments. None when the endpoint is unavailable - then every media row is asked for its kind."""
+    req = urllib.request.Request(f"{api_url.rstrip('/')}/v1/sources?tenant_id={tenant}")
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            rows = json.loads(r.read()).get("sources") or []
+    except Exception:  # noqa: BLE001
+        return None
+    out: dict[str, set[str]] = {}
+    for s in rows:
+        name = str(s.get("name") or "").rsplit("/", 1)[-1]
+        kind = MEDIA_KINDS.get(os.path.splitext(name)[1].lower())
+        if kind and s.get("status") == "indexed":
+            out.setdefault(kind, set()).add(name)
+    return out
+
+
+def as_media_stands(row: dict, media: dict[str, set[str]] | None) -> dict:
+    """The row as the live gate asks it today. A row that wants a figure or a segment keeps must_cite_kind only while
+    the tenant holds a current file of that kind named after one of its must_retrieve documents (annual_report_2026_
+    fig3.png for annual_report_2026, townhall_2026_q1.mp4 for townhall_2026_q1). Until then it is judged as the text
+    lookup it is - the words and the citations - and marked media_absent. Before lesson 7.5 builds the town hall's
+    video, mm-03 asked for a segment that could not exist yet and kept every full gate red (22 October 2026)."""
+    want = row.get("must_cite_kind")
+    if not want or media is None:
+        return row
+    if any(n.startswith(doc) for doc in row.get("must_retrieve", []) for n in media.get(want, ())):
+        return row
+    return {**{k: v for k, v in row.items() if k != "must_cite_kind"}, "media_absent": want}
+
+
 def load_manifest_objects() -> dict[str, set[str]]:
     """{tenant: {object names}} from manifest.json - the documents make ingest-corpus uploads for each tenant."""
     try:
@@ -535,6 +572,12 @@ def live(api_url: str, source: str | None = None, report: str | None = None, gol
     manifest = load_manifest_objects()
     text_of = {t: re.sub(r"\s+", " ", haystack(corpus, t)) for t in corpus}   # for quote support
     current: dict[str, set[str] | None] = {}
+    media = {t: fetch_media_names(api_url, t, token) for t in sorted({r["tenant"] for r in golden if r.get("must_cite_kind")})}
+    golden = [as_media_stands(r, media.get(r["tenant"])) for r in golden]
+    for r in golden:
+        if r.get("media_absent"):
+            print(f"  [info] {r['id']}: no {r['media_absent']} file of {', '.join(r['must_retrieve'])} indexed for {r['tenant']}"
+                  f" yet: judged as a text lookup, the {r['media_absent']} citation not asked (make media builds it)")
 
     # EVERY row is sent, not just the answerable ones.
     #

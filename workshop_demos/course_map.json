@@ -236,14 +236,14 @@
     {
       "lesson": "4.1",
       "title": "Build a useful evaluation dataset",
-      "source_sha": "fc581066160f6487d37a0babaa96bafe1edc34fb",
+      "source_sha": "b75b585cebbef16242deeea319b6b3dcac0e13f5",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "2ae38b2bc6ac08caaf597cdf51944df72962061d",
+      "source_sha": "a6462506b4e355f7814604f44edd8e40c1995e8f",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -446,7 +446,7 @@
     {
       "lesson": "7.5",
       "title": "Query a video clip and validate media citations",
-      "source_sha": "fd822b039e6b007712aa443f07198bd895fc3374",
+      "source_sha": "60b7023f7b4564bc393208bde3ca5340656b3802",
       "source_kind": "main_html",
       "demos": 7
     },
