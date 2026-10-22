@@ -1,7 +1,7 @@
 # The Ralph loop's image (workshop lesson 10.10): Gemini CLI at a pinned version, Python 3.12 for the task's fast test
 # and for the oracle, and nothing else - no gcloud, no credential, no kit file. make ralph-image builds it with this
 # directory as the whole build context, so no other kit file can enter it:
-#     make ralph-image GEMINI_CLI_VERSION=<x.y.z>      the version the batch-1 probe pinned (npm view @google/gemini-cli version)
+#     make ralph-image      Gemini CLI at GEMINI_CLI_VERSION, the kit's pin in mk/coding.mk (GEMINI_CLI_VERSION=<x.y.z> moves it)
 # commands/ralph.py runs two containers from it: the agent (the workspace mounted, a model-only credential in an
 # --env-file) and the oracle (no network at all, everything mounted read-only); with RALPH_EGRESS=proxy a third, the
 # proxy (commands/ralph/egress.py, mounted read-only), the agent's one way out, to the model endpoint alone.

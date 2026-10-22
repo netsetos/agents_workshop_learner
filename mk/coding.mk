@@ -7,13 +7,15 @@
 # for the run and deletes after it, read from your shell and never a make variable.
 
 # The image the live loop runs its containers from, the agent, the oracle and, with RALPH_EGRESS=proxy, the proxy
-# (commands/ralph/Dockerfile): Gemini CLI at GEMINI_CLI_VERSION, which the batch-1 probe pins (there is no default), and
-# Python 3.12; no gcloud, no credential. Built from commands/ralph/ alone, so no other kit file enters it. Cloud
-# Shell's docker storage does not outlive the session: build it again in each one.
+# (commands/ralph/Dockerfile): Gemini CLI at GEMINI_CLI_VERSION, pinned below (npm's latest release on 22 October 2026,
+# which the batch-1 probe confirms or moves), and Python 3.12; no gcloud, no credential. Built from commands/ralph/
+# alone, so no other kit file enters it. Cloud Shell's docker storage does not outlive the session: build it again in
+# each one.
 RALPH_IMAGE ?= documind-ralph
+GEMINI_CLI_VERSION ?= 0.65.0
 
 ralph-image:
-	@[ -n "$(GEMINI_CLI_VERSION)" ] || (echo "ERROR: set GEMINI_CLI_VERSION=<x.y.z>, the version the batch-1 probe pinned (npm view @google/gemini-cli version)"; exit 1)
+	@[ -n "$(GEMINI_CLI_VERSION)" ] || (echo "ERROR: GEMINI_CLI_VERSION is empty: leave it at the kit's pin, or set GEMINI_CLI_VERSION=<x.y.z> (npm view @google/gemini-cli version)"; exit 1)
 	docker build --build-arg GEMINI_CLI_VERSION=$(GEMINI_CLI_VERSION) -t $(RALPH_IMAGE) -t $(RALPH_IMAGE):$(GEMINI_CLI_VERSION) commands/ralph
 
 # The Ralph loop (commands/ralph.py loop, workshop lesson 10.10): statutory_deadline cut out of a copy of

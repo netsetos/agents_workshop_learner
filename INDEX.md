@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1658 files; 235 quoted by a lesson, 349 shown or named by one.
+1659 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -1329,6 +1329,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_10/demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_10/demo_09_direct_reads_and_the_human_step.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_10/lesson_map.json` | config | - | - |
+| `workshop_demos/module_10/lesson_10_10/optional/demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_10/optional/demo_11_verify_it_yourself_the_checklist.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_10/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_10/setup/prepare.py` | code | - | - |

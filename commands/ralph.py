@@ -1259,7 +1259,7 @@ def cmd_loop(a, say=print) -> int:
             if problem is None and not shutil.which("docker"):
                 problem = "docker is not on PATH: the live agent runs in a container (Cloud Shell has docker)"
             if problem is None and subprocess.run([docker, "image", "inspect", image], capture_output=True).returncode:
-                problem = f"no image {image}: make ralph-image GEMINI_CLI_VERSION=<the batch-1 probe's pin>"
+                problem = f"no image {image}: make ralph-image (Gemini CLI at the kit's pin, GEMINI_CLI_VERSION in mk/coding.mk)"
             if problem:
                 say(f"ERROR: {problem}")
                 return 2
@@ -1404,7 +1404,7 @@ def cmd_probe(a, say=print) -> int:
     label = subprocess.run([docker, "image", "inspect", "--format", '{{index .Config.Labels "documind.gemini-cli"}}',
                             image], capture_output=True, text=True)
     if label.returncode:
-        _probe_line(2, "the ralph image", "not tested", f"no image {image}: make ralph-image GEMINI_CLI_VERSION=<x>", say)
+        _probe_line(2, "the ralph image", "not tested", f"no image {image}: make ralph-image", say)
         return 0
     _probe_line(2, "the ralph image's Gemini CLI", "observed", f"version {label.stdout.strip()} (its label)", say)
     cmd = [docker, "run", "--rm", "--network", "none", image, "python3", "-c",

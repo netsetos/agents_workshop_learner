@@ -130,7 +130,7 @@ def step_04_the_guards_undone_flagged_never(session):
 
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: ERROR: /home/you/deploy_module_rag is inside the kit: the loop never writes there. Give OUT= a directory outside it
-    make: *** [mk/coding.mk:31: ralph] Error 2
+    make: *** [mk/coding.mk:33: ralph] Error 2
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_04)

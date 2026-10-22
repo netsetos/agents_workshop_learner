@@ -565,7 +565,7 @@
     {
       "lesson": "10.8",
       "title": "Defend agents against injected documents and poisoned tools",
-      "source_sha": "9dda413a7d859711b54c6c98302b7353f3f08b27",
+      "source_sha": "55e58670d1019cdffe4bfaf3c38e1214545fd893",
       "source_kind": "main_html",
       "demos": 11
     },
@@ -579,9 +579,9 @@
     {
       "lesson": "10.10",
       "title": "Coding agents: a Ralph loop, an AI code reviewer and paper-to-code",
-      "source_sha": "a1bd16fe4703dea8f9eed3f91673c0ae26b724c2",
+      "source_sha": "a2ff7a373b29baf3d62e995523935a1c8d9326ff",
       "source_kind": "main_html",
-      "demos": 11
+      "demos": 12
     },
     {
       "lesson": "10.11",

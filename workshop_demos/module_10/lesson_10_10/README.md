@@ -35,6 +35,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 ## Optional extensions
 
+- [optional/demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py](optional/demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py) — Optional, the author's run: the live loop on a model-only Gemini API key the author creates for the run and deletes after it, typed at the prompt and never echoed, under a rupee cap from the batch-1 dry run; then the reviewer on its patch. It bills that key's project. Without such a key, skip it: the page's recorded run shows what it does, and the required steps before it prove the loop refuses to start without one.
 - [optional/demo_11_verify_it_yourself_the_checklist.py](optional/demo_11_verify_it_yourself_the_checklist.py) — Fifteen checks, each one step above, each with the value that proves it. Nothing on your lane is configured. The offline runs wrote run directories under /tmp, and the last cell below removes them. Your only spend was the reviewer's calls on gemini-3.6-flash, seven for each repeat, billed to your lane as any model call you make. The human step left your clone as it was. The live loop is the author's: its model-only key was created for the run and deleted after it, so no credential of the loop's exists on any lane. Lesson 10.11 designs an agent that acts on the running lane itself.
 
 ## Finish and restore
@@ -128,7 +129,7 @@ ralph-check: the oracles on statutory_deadline in a change of shared/desk_calc.p
   weak oracle (desk_calc's own selftest): PASS
   strong oracle: FAIL
     FAIL  every day of 2026, for each event: the second working day after the last working day, Monday to Friday (1,448 of 1,460 wrong; the first: removal on 2026-01-01 (Thursday): 2026-01-05 due, '2026-10-06' given)
-make: *** [mk/coding.mk:45: ralph-check] Error 1
+make: *** [mk/coding.mk:47: ralph-check] Error 1
 ```
 
 **`step_03_iteration_1_done_properly(session)` — One iteration by hand / Do it: iteration 1, done properly**
@@ -302,7 +303,7 @@ stopped: Rs 4.2113 spent; one more iteration at the dearest so far (Rs 2.1123) w
   /tmp/ralph-cap/ralph-deadline-YYYYMMDD-HHMMSS-XXXXXXXX/kit.patch: its statutory_deadline against the kit's: 2 lines differ from the kit's own
   /tmp/ralph-cap/ralph-deadline-YYYYMMDD-HHMMSS-XXXXXXXX/summary.json; the commits: git --git-dir=/tmp/ralph-cap/ralph-deadline-YYYYMMDD-HHMMSS-XXXXXXXX/git --work-tree=/tmp/ralph-cap/ralph-deadline-YYYYMMDD-HHMMSS-XXXXXXXX/workspace log --oneline
   nothing was applied to your clone and nothing was pushed: applying kit.patch is yours to decide
-make: *** [mk/coding.mk:31: ralph] Error 1
+make: *** [mk/coding.mk:33: ralph] Error 1
 ```
 
 **`step_04_the_guards_undone_flagged_never(session)` — The loop offline: three runs, two caps and the guards / The guards: undone, flagged, never**
@@ -317,7 +318,7 @@ Expected shape, not a promised result:
 
 ```text
 ERROR: /home/you/deploy_module_rag is inside the kit: the loop never writes there. Give OUT= a directory outside it
-make: *** [mk/coding.mk:31: ralph] Error 2
+make: *** [mk/coding.mk:33: ralph] Error 2
 ```
 
 ### demo_06_paper_to_code_the_same_function_from_the_statute_alone.py
@@ -405,7 +406,7 @@ Expected shape, not a promised result:
 
 ### demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py
 
-DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:
+DRY_RUN=1 prints the two docker run lines an iteration would run, and starts nothing: no Docker, image or key is needed. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. By default the agent's container can reach whatever the machine it runs on can reach. RALPH_EGRESS=proxy holds it to the model endpoint. Each iteration gets an internal network of its own, which has no route out, and a third container from the same image: commands/ralph/egress.py, an allowlisting forward proxy, on that network and on Docker's default bridge. The agent's container joins the internal network alone, with HTTPS_PROXY naming the proxy. The proxy opens a tunnel to aiplatform.googleapis.com:443 and refuses every other host, port and plain request without dialling it. A tool that ignores the proxy has no route at all, because the internal network has none. The network and the proxy are made before each iteration and removed after it, and the proxy's log, a line a request, is kept in the run's iterations/. The agent's line is the one above with two flags added, --network and HTTPS_PROXY. The kit's tests run the proxy on your machine's loopback, with a stand-in in place of the model endpoint, and the loop against a stub Docker. A live Docker is the author's check. make ralph-probe RALPH_EGRESS=proxy needs no key and makes no model call. From inside the agent's container it tries example.com and 169.254.169.254, the metadata server's address, directly, then example.com and the model endpoint through the proxy. It also prints whether example.com's name resolved there: whether a name lookup leaves the internal network is Docker's to decide, not the proxy's. Without the author's cap and key, the live loop does not start. It has no default spend, and it runs only on a model-only key, never on your gcloud login or Application Default Credentials.
 
 **`step_01_the_two_containers_printed(session)` — The live loop: Gemini CLI in a container, on a model-only key / Do it: the two containers, printed**
 
@@ -469,12 +470,16 @@ Expected shape, not a promised result:
 
 ```text
 ERROR: the live loop has no default spend: give it RALPH_BUDGET_INR=<cap>, set from a dry run (make ralph RALPH_MAX_ITERS=1 RALPH_BUDGET_INR=<a small cap> reads one iteration's rupees)
-make: *** [mk/coding.mk:31: ralph] Error 2
+make: *** [mk/coding.mk:33: ralph] Error 2
 ERROR: RALPH_API_KEY is not set: the live loop runs only on a model-only credential the author creates for the run and deletes after it, never on your gcloud login or ADC
-make: *** [mk/coding.mk:31: ralph] Error 2
+make: *** [mk/coding.mk:33: ralph] Error 2
 ```
 
-**`step_05_the_author_s_run(session)` — The live loop: Gemini CLI in a container, on a model-only key / The author's run**
+### optional/demo_08_the_live_loop_gemini_cli_in_a_container_on_a_model_only_key.py
+
+Optional, the author's run: the live loop on a model-only Gemini API key the author creates for the run and deletes after it, typed at the prompt and never echoed, under a rupee cap from the batch-1 dry run; then the reviewer on its patch. It bills that key's project. Without such a key, skip it: the page's recorded run shows what it does, and the required steps before it prove the loop refuses to start without one.
+
+**`step_01_the_author_s_run(session)` — The live loop: Gemini CLI in a container, on a model-only key / The author's run**
 
 The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment.
 
@@ -486,7 +491,7 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/ralph_loop.txt]
 ```
 
-**`step_06_the_author_s_run(session)` — The live loop: Gemini CLI in a container, on a model-only key / The author's run**
+**`step_02_the_author_s_run(session)` — The live loop: Gemini CLI in a container, on a model-only key / The author's run**
 
 The author ran the loop in Cloud Shell, which has Docker, with the image built in the same session (Cloud Shell's Docker storage does not outlive it). The cap came from a one-iteration dry run in batch 1. If the probe finds the key needs a project, RALPH_PROJECT adds GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION=global to the agent's environment. Then the reviewer, on the loop's own work:
 
@@ -596,7 +601,7 @@ ralph-check: the oracles on statutory_deadline in a change of shared/desk_calc.p
   weak oracle (desk_calc's own selftest): PASS
   strong oracle: FAIL
     FAIL  every day of 2026, for each event: the second working day after the last working day, Monday to Friday (1,448 of 1,460 wrong; the first: removal on 2026-01-01 (Thursday): 2026-01-05 due, '2026-10-06' given)
-make: *** [mk/coding.mk:45: ralph-check] Error 1
+make: *** [mk/coding.mk:47: ralph-check] Error 1
 ```
 
 ### optional/demo_11_verify_it_yourself_the_checklist.py
@@ -627,6 +632,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.10_Coding_Agents_WIX.html`. All 82 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a1bd16fe4703dea8f9eed3f91673c0ae26b724c2`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_10.10_Coding_Agents_WIX.html`. All 82 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `a2ff7a373b29baf3d62e995523935a1c8d9326ff`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

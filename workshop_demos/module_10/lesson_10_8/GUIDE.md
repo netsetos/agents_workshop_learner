@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_10.8_Injection_WIX.html`, reviewed at blob `9dda413a7d859711b54c6c98302b7353f3f08b27`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_10.8_Injection_WIX.html`, reviewed at blob `55e58670d1019cdffe4bfaf3c38e1214545fd893`. Learners read that page on the course site; this guide keeps its prose.
 
 Every agent in the kit reads text it did not write. A chat brain reads quotes from acme's documents; a Desk agent reads whole passages; the A2A peer reads the descriptions of the tools its MCP server lists. Any member can upload a note whose words are aimed at the model that will read it later, and another team's server can change a tool under the peer. This lesson loads one such note and serves one such server, then runs three things against them: the controls the kit already had, a fence on what an agent reads and a scrub on what the chat service says, and the peer's tool pins. Lesson 4.9's attack runner gains the agents' doors and judges every reply. What code holds, fails a run when it opens; what a model is only asked to keep is measured, as a rate, and shown as the gap.
 
