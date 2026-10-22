@@ -1,13 +1,12 @@
 """Lesson 10.8: The runner on your lane: enforced rows, and the rate as the gap
 
-Do it: the proof's run Do it: the agents' surfaces, switches on The gcloud update makes another documind-chat revision, with neither switch set; the runner then sends the same five rows. The enforced rows cannot move: the tenant pin, the class filter and check_args know nothing of the switches. The measured rows can. Do it: the two runs side by side The peer row, at a local peer
+Do it: the proof's run Do it: the agents' surfaces, switches on The gcloud update makes another documind-chat revision, with neither switch set; the runner then sends the same five rows. The enforced rows cannot move: the tenant pin, the class filter and check_args know nothing of the switches. The measured rows can. Do it: the two runs side by side
 
 Run order inside this file:
 1. Do it: the proof's run (source window 45)
 2. Do it: the agents' surfaces, switches on (source window 47)
 3. Change it: the switches off, the same rows (source window 49)
 4. Do it: the two runs side by side (source window 51)
-5. The peer row, at a local peer (source window 53)
 
 Prerequisites: demo_08_the_doors_by_hand_two_brains_the_router_the_lane_s_peer.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -114,35 +113,6 @@ def step_04_the_two_runs_side_by_side(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_04)
 
-# Original CLI workflow for step_05_the_peer_row_at_a_local_peer.
-COMMANDS_05 = """python3 -m venv ~/mcp-venv           # once: the MCP server's pins and the local store's
-~/mcp-venv/bin/pip install -q -r services/mcp/requirements.txt \\
-  $(grep -E '^(langchain-chroma|chromadb)==' services/chat/requirements-local.txt)
-make mcp-local PY=~/mcp-venv/bin/python     # a second tab: acme's corpus, then the server on 127.0.0.1:8000
-# a third tab: the kit's peer against it, in step 10's venv, Gemini through your own credentials
-cd services/agent && MCP_URL=http://127.0.0.1:8000 MCP_AUTH=none SELF_URL= PORT=8080 \\
-  GOOGLE_CLOUD_PROJECT="$PROJECT" GOOGLE_GENAI_USE_VERTEXAI=1 GOOGLE_CLOUD_LOCATION=global ~/pins-venv/bin/python agent.py
-# back in the first tab: the peer's row, with no token and no gcloud
-make attack-agents SURFACES=peer REPORT=evals/reports/attacks108_peer.json LABEL="the local peer"
-
-"""
-
-def step_05_the_peer_row_at_a_local_peer(session):
-    """Run The peer row, at a local peer at this checkpoint.
-
-    The peer row, at a local peer
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — the author's shell (the MCP server in the local profile, the kit's peer beside it, then the peer's row: RUN_LIST.md).
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: [awaiting the author's run: data/attack_peer.txt]
-    """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_05)
-
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
 
@@ -154,7 +124,6 @@ def demonstrate(session):
         ('source_47', step_02_the_agents_surfaces_switches_on),
         ('source_49', step_03_change_it_the_switches_off_the_same_rows),
         ('source_51', step_04_the_two_runs_side_by_side),
-        ('source_53', step_05_the_peer_row_at_a_local_peer),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

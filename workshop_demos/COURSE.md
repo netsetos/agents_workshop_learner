@@ -82,7 +82,7 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [10.5: Run a desk as an agent with checked calculator arguments](module_10/lesson_10_5/README.md) — 10 files; main_html
 - [10.6: Trace the implemented A2A peer and its permissions](module_10/lesson_10_6/README.md) — 7 files; main_html
 - [10.7: Hand one question to the A2A peer, and stop loops and deadlocks](module_10/lesson_10_7/README.md) — 12 files; main_html
-- [10.8: Defend agents against injected documents and poisoned tools](module_10/lesson_10_8/README.md) — 11 files; main_html
+- [10.8: Defend agents against injected documents and poisoned tools](module_10/lesson_10_8/README.md) — 13 files; main_html
 - [10.9: Run the peer on Google's managed agent platform](module_10/lesson_10_9/README.md) — 9 files; main_html
 - [10.10: Coding agents: a Ralph loop, an AI code reviewer and paper-to-code](module_10/lesson_10_10/README.md) — 12 files; main_html
 - [10.11: System design: incident auto-remediation](module_10/lesson_10_11/README.md) — 11 files; main_html

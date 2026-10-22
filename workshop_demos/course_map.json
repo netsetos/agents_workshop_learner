@@ -567,7 +567,7 @@
       "title": "Defend agents against injected documents and poisoned tools",
       "source_sha": "55e58670d1019cdffe4bfaf3c38e1214545fd893",
       "source_kind": "main_html",
-      "demos": 11
+      "demos": 13
     },
     {
       "lesson": "10.9",

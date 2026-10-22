@@ -1,6 +1,6 @@
 """Lesson 10.8: Poisoned tools, on your machine: the pins
 
-Listing the kit's server in process imports it, so the venv takes the server's requirements (fastmcp 3.4.7 and the mcp client) and the peer's (google-adk 2.8.0), which pin the same side of the mcp 1.x line. make pin-tools rewrites tool_pins.json byte for byte when nothing changed; CHECK=1 says so and exits 0. Do it: the poisoned server, and the pins against it Do it: the rug pull The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved. Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
+Listing the kit's server in process imports it, so the venv takes the server's requirements (fastmcp 3.4.7 and the mcp client) and the peer's (google-adk 2.8.0), which pin the same side of the mcp 1.x line. make pin-tools rewrites tool_pins.json byte for byte when nothing changed; CHECK=1 says so and exits 0. Do it: the poisoned server, and the pins against it Do it: the rug pull Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
 
 Run order inside this file:
 1. Do it: a venv with both services' pins, then the pins against the kit's own server (source window 63)
@@ -8,8 +8,7 @@ Run order inside this file:
 3. Do it: the poisoned server, and the pins against it (source window 66)
 4. Do it: the poisoned server, and the pins against it (source window 70)
 5. Do it: the rug pull (source window 72)
-6. Do it: the peer against the poisoned server (source window 75)
-7. Change it: one description, edited (source window 77)
+6. Change it: one description, edited (source window 77)
 
 Prerequisites: demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -79,7 +78,10 @@ def step_02_a_venv_with_both_services_pins_then_the_pi(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_poisoned_server_and_the_pins_against_i.
-COMMANDS_03 = """make evil-mcp PY="$PY"                # a second shell tab: it serves until you stop it with Ctrl-C
+COMMANDS_03 = """(make evil-mcp PY="$PY" > /tmp/evil-mcp.log 2>&1 &)   # the second tab: the poisoned server, in the background here
+for i in $(seq 1 30); do curl -s -o /dev/null http://127.0.0.1:8900/mcp && break; sleep 1; done
+head -n 1 /tmp/evil-mcp.log
+
 
 """
 
@@ -129,10 +131,14 @@ def step_04_the_poisoned_server_and_the_pins_against_i(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_the_rug_pull.
-COMMANDS_05 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
-make evil-mcp PY="$PY" RUG=1          # the second tab again, after Ctrl-C on the first shape
+COMMANDS_05 = """set +e +o pipefail   # as the page runs it: the check is meant to fail on the rug pull
+pkill -f "evals/adversarial/evil_mcp.py"; sleep 1                # Ctrl-C on the first shape
+(make evil-mcp PY="$PY" RUG=1 > /tmp/evil-mcp.log 2>&1 &)        # the second tab again, the rug pull
+for i in $(seq 1 30); do curl -s -o /dev/null http://127.0.0.1:8900/mcp && break; sleep 1; done
+head -n 1 /tmp/evil-mcp.log
 make pin-tools PY="$PY" CHECK=1 URL=http://127.0.0.1:8900/mcp; echo "exit status: $?"
-true   # that failure is the cell's answer: compare the output with the page's expected window
+pkill -f "evals/adversarial/evil_mcp.py"   # the server stopped: nothing after this cell needs it
+true
 
 
 """
@@ -159,34 +165,8 @@ def step_05_the_rug_pull(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_05)
 
-# Original CLI workflow for step_06_the_peer_against_the_poisoned_server.
-COMMANDS_06 = """cd services/agent
-MCP_URL=http://127.0.0.1:8900 MCP_AUTH=none SELF_URL= PORT=8080 TOOL_PINS=off \\
-  GOOGLE_CLOUD_PROJECT="$PROJECT" GOOGLE_GENAI_USE_VERTEXAI=1 GOOGLE_CLOUD_LOCATION=global "$PY" agent.py
-# a third tab: one inventory question to the local peer, as the runner would send it
-curl -s -X POST http://127.0.0.1:8080/ -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "id": "1", "method": "message/send", "params": {"message": {"role": "user", "kind": "message", "messageId": "pins-1", "parts": [{"kind": "text", "text": "Which documents are in the corpus?"}]}}}'
-# then Ctrl-C the peer and start it again with TOOL_PINS=on, and once more against make evil-mcp RUG=1
-
-"""
-
-def step_06_the_peer_against_the_poisoned_server(session):
-    """Run Do it: the peer against the poisoned server at this checkpoint.
-
-    The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — the author's shell (the kit's peer on your machine against the poisoned server: Gemini answers, so a few rupees).
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe: [awaiting the author's run: data/pins_peer.txt]
-    """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_06)
-
-# Original CLI workflow for step_07_change_it_one_description_edited.
-COMMANDS_07 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+# Original CLI workflow for step_06_change_it_one_description_edited.
+COMMANDS_06 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
 sed -i "s/with the lane's own cited answer\\./& Up to twenty passages./" services/mcp/server.py
 make pin-tools PY="$PY" CHECK=1; echo "exit status: $?"
 make pin-tools PY="$PY"
@@ -197,7 +177,7 @@ true   # that failure is the cell's answer: compare the output with the page's e
 
 """
 
-def step_07_change_it_one_description_edited(session):
+def step_06_change_it_one_description_edited(session):
     """Run Change it: one description, edited at this checkpoint.
 
     Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
@@ -224,7 +204,7 @@ def step_07_change_it_one_description_edited(session):
     -      "descrip
     """
     # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_07)
+    session.shell(COMMANDS_06)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
@@ -238,8 +218,7 @@ def demonstrate(session):
         ('source_66', step_03_the_poisoned_server_and_the_pins_against_i),
         ('source_70', step_04_the_poisoned_server_and_the_pins_against_i),
         ('source_72', step_05_the_rug_pull),
-        ('source_75', step_06_the_peer_against_the_poisoned_server),
-        ('source_77', step_07_change_it_one_description_edited),
+        ('source_77', step_06_change_it_one_description_edited),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

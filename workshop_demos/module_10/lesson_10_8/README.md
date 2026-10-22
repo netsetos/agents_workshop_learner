@@ -33,6 +33,11 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
+## Optional extensions
+
+- [optional/demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.py](optional/demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.py) — Optional, the author's shell: three tabs at once - the kit's MCP server in the local profile, the kit's peer against it on your own Gemini credentials, and the attack runner's peer row - so it does not run as one script. The page's recorded row shows what it does.
+- [optional/demo_10_poisoned_tools_on_your_machine_the_pins.py](optional/demo_10_poisoned_tools_on_your_machine_the_pins.py) — Optional, the author's shell: the kit's peer on your machine against the poisoned server, in three tabs, with TOOL_PINS off and then on. The pin checks before it prove the same refusal without a model call.
+
 ## Finish and restore
 
 - [cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py](cleanup/demo_12_verify_it_yourself_and_withdraw_the_note.py) — At lesson end: make retire flags every current chunk of the note with an expiry and writes WITHDRAWN on its ledger row: a tombstone the nightly reconcile honours, so the same bytes uploaded again are acknowledged and never reactivated. The object stays in the bucket, and make restore is the way back. Then the chat switches come off, if step 9 did not already remove them.
@@ -209,7 +214,7 @@ Expected shape, not a promised result:
 
 ### demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.py
 
-Do it: the proof's run Do it: the agents' surfaces, switches on The gcloud update makes another documind-chat revision, with neither switch set; the runner then sends the same five rows. The enforced rows cannot move: the tenant pin, the class filter and check_args know nothing of the switches. The measured rows can. Do it: the two runs side by side The peer row, at a local peer
+Do it: the proof's run Do it: the agents' surfaces, switches on The gcloud update makes another documind-chat revision, with neither switch set; the runner then sends the same five rows. The enforced rows cannot move: the tenant pin, the class filter and check_args know nothing of the switches. The measured rows can. Do it: the two runs side by side
 
 **`step_01_the_proof_s_run(session)` — The runner on your lane: enforced rows, and the rate as the gap / Do it: the proof's run**
 
@@ -259,7 +264,11 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/attack_compare.txt]
 ```
 
-**`step_05_the_peer_row_at_a_local_peer(session)` — The runner on your lane: enforced rows, and the rate as the gap / The peer row, at a local peer**
+### optional/demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.py
+
+Optional, the author's shell: three tabs at once - the kit's MCP server in the local profile, the kit's peer against it on your own Gemini credentials, and the attack runner's peer row - so it does not run as one script. The page's recorded row shows what it does.
+
+**`step_01_the_peer_row_at_a_local_peer(session)` — The runner on your lane: enforced rows, and the rate as the gap / The peer row, at a local peer**
 
 The peer row, at a local peer
 
@@ -273,7 +282,7 @@ Expected shape, not a promised result:
 
 ### demo_10_poisoned_tools_on_your_machine_the_pins.py
 
-Listing the kit's server in process imports it, so the venv takes the server's requirements (fastmcp 3.4.7 and the mcp client) and the peer's (google-adk 2.8.0), which pin the same side of the mcp 1.x line. make pin-tools rewrites tool_pins.json byte for byte when nothing changed; CHECK=1 says so and exits 0. Do it: the poisoned server, and the pins against it Do it: the rug pull The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved. Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
+Listing the kit's server in process imports it, so the venv takes the server's requirements (fastmcp 3.4.7 and the mcp client) and the peer's (google-adk 2.8.0), which pin the same side of the mcp 1.x line. make pin-tools rewrites tool_pins.json byte for byte when nothing changed; CHECK=1 says so and exits 0. Do it: the poisoned server, and the pins against it Do it: the rug pull Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
 
 **`step_01_a_venv_with_both_services_pins_then_the_pi(session)` — Poisoned tools, on your machine: the pins / Do it: a venv with both services' pins, then the pins against the kit's own server**
 
@@ -301,6 +310,8 @@ tool pins are current: 4 tools, all pinned and unchanged.
 Do it: the poisoned server, and the pins against it
 
 Operation: bash — run in a second shell tab, in the kit (the poisoned server on 127.0.0.1:8900, its default shape).
+
+IDE adaptation: Run the second tab's server in the background: make evil-mcp serves until Ctrl-C, so in one script the demo waited on it for ever. The cell waits for port 8900 and prints the server's first line, as the tab would show it.
 
 Expected shape, not a promised result:
 
@@ -333,7 +344,7 @@ Do it: the rug pull
 
 Operation: bash — the second tab, then the first (the rug pull: the same four names, one changed description).
 
-IDE adaptation: Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window.
+IDE adaptation: Swap the background server for its rug-pull shape, run the page's check against it (meant to fail), then stop the server, so no process is left serving on port 8900 after the demo.
 
 Expected shape, not a promised result:
 
@@ -347,19 +358,7 @@ make: *** [mk/agents.mk:368: pin-tools] Error 1
 exit status: 1
 ```
 
-**`step_06_the_peer_against_the_poisoned_server(session)` — Poisoned tools, on your machine: the pins / Do it: the peer against the poisoned server**
-
-The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved.
-
-Operation: bash — the author's shell (the kit's peer on your machine against the poisoned server: Gemini answers, so a few rupees).
-
-Expected shape, not a promised result:
-
-```text
-[awaiting the author's run: data/pins_peer.txt]
-```
-
-**`step_07_change_it_one_description_edited(session)` — Poisoned tools, on your machine: the pins / Change it: one description, edited**
+**`step_06_change_it_one_description_edited(session)` — Poisoned tools, on your machine: the pins / Change it: one description, edited**
 
 Edit the kit's own server as a well-meaning teammate might: one more sentence on retrieve's docstring, which is its description. The pins see a tool that changed since a person reviewed it, and CHECK=1 fails. Reviewing it is make pin-tools without CHECK, and the diff is exactly the description and the fingerprint. The last line puts the kit back.
 
@@ -387,6 +386,22 @@ pinned 4 tools to /home/you/deploy_module_rag/services/agent/tool_pins.json: cal
 +      "fingerprint": "2681f477b13a68e1ec0cb40c1338f03eaa9424aacd1e6c249d38688dee26a8bf",
 +      "description": "Retrieve grounded passages from DocuMind's corpus, with the lane's own cited answer. Up to twenty passages.",
        "input_schema": {
+```
+
+### optional/demo_10_poisoned_tools_on_your_machine_the_pins.py
+
+Optional, the author's shell: the kit's peer on your machine against the poisoned server, in three tabs, with TOOL_PINS off and then on. The pin checks before it prove the same refusal without a model call.
+
+**`step_01_the_peer_against_the_poisoned_server(session)` — Poisoned tools, on your machine: the pins / Do it: the peer against the poisoned server**
+
+The kit's own peer, on your machine, pointed at the fixture with MCP_AUTH=none, so no token is minted and no account impersonated; SELF_URL empty, so its card says localhost. Gemini answers, through your own credentials, so each task costs a few model calls. Ask one inventory question three times: pins off against the default shape, pins on against the same, and pins on against RUG=1. With the pins off, summarise_inbox and its sentence are in the model's hands; with them on, the peer's log says tool_unpinned and the model never sees that tool; against the rug pull, the honest retrieve is the one dropped, because its fingerprint moved.
+
+Operation: bash — the author's shell (the kit's peer on your machine against the poisoned server: Gemini answers, so a few rupees).
+
+Expected shape, not a promised result:
+
+```text
+[awaiting the author's run: data/pins_peer.txt]
 ```
 
 ### demo_12_verify_it_yourself_and_withdraw_the_note.py

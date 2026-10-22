@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1659 files; 235 quoted by a lesson, 349 shown or named by one.
+1661 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -1440,6 +1440,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_10/lesson_10_8/demo_10_poisoned_tools_on_your_machine_the_pins.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/demo_12_verify_it_yourself_and_withdraw_the_note.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/lesson_map.json` | config | - | - |
+| `workshop_demos/module_10/lesson_10_8/optional/demo_09_the_runner_on_your_lane_enforced_rows_and_the_rate_as_the_gap.py` | code | - | - |
+| `workshop_demos/module_10/lesson_10_8/optional/demo_10_poisoned_tools_on_your_machine_the_pins.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/setup/finish.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_10/lesson_10_8/setup/restore_settings.py` | code | - | - |
