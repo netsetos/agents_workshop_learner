@@ -79,7 +79,10 @@ def step_02_a_reviewer_then_the_variables(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_change_it_the_makefile_s_region.
-COMMANDS_03 = """make ci-vars PROJECT="$PROJECT" REGION=us-central1     # what a shell left on the Makefile's default would send
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make ci-vars PROJECT="$PROJECT" REGION=us-central1     # what a shell left on the Makefile's default would send
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

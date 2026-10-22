@@ -8,9 +8,9 @@ test writes, and record every call, which the tests read back: what was asked, w
 and that nothing but terraform output, gcloud's describe and list calls, and one GET through gh was asked.
 
 Covered: ci-vars' four lines from terraform output and the lane's confirmed inputs, the workflow's variable names, the
-production environment's reviewer (present, missing, no environment, no gh), every refusal (another region, another
-project, another lane's state, no state, no outputs, no confirmed inputs, a workflow that reads other variables, no
-terraform); keys with none, with keys found and then deleted, an account that could not be read, the project's parent,
+production environment's reviewer (present, missing, no environment, a gh that cannot read it, no gh), every refusal
+(another region, another project, another lane's state, no state, no outputs, no confirmed inputs, a workflow that reads
+other variables, no terraform); keys with none, with keys found and then deleted, an account that could not be read, the project's parent,
 no gcloud; the exit codes (0, 1 keys found, 2 stopped); and the make targets, the .PHONY line and mk/README.md.
 """
 import copy
@@ -94,6 +94,8 @@ if tool == "terraform" and args == ["output", "-json"]:
     reply({name: {"sensitive": name == "gateway_database_url", "type": "string", "value": value}
            for name, value in tf["outputs"].items()})
 if tool == "gh" and len(args) == 2 and args[0] == "api":
+    if world.get("gh_error"):
+        reply(None, 4, world["gh_error"])
     if args[1] in world["gh"]:
         reply(world["gh"][args[1]])
     reply('{"message":"Not Found","documentation_url":"https://docs.github.com/rest","status":"404"}', 1,
@@ -233,6 +235,14 @@ class CiVarsTests(Stubbed):
         self.assertIn(f"WARNING: {REPO} has no production environment, or gh's account cannot see the repository. "
                       "GitHub creates the environment the first time a job names it, with no required reviewer", r.stderr)
         self.assertIn("Settings > Environments > production > Required reviewers", r.stderr)
+
+    def test_a_gh_that_cannot_read_it_is_a_warning(self):
+        self.world["gh_error"] = "To get started with GitHub CLI, please run:  gh auth login"     # gh not signed in
+        r = self.ci_vars()
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(len(self.gh_lines(r.stdout)), 4)
+        self.assertTrue(r.stderr.startswith(f"WARNING: could not read {REPO}'s production environment (To get started "
+                                            "with GitHub CLI, please run:  gh auth login): check by hand"), r.stderr)
 
     def test_without_gh_the_lines_print_and_say_what_was_not_read(self):
         self.uninstall("gh")

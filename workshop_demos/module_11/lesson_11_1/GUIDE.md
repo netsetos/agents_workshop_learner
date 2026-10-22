@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html`, reviewed at blob `0a16fdda4d80228bb8a9aa267df47270f00664a7`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html`, reviewed at blob `bfa3df51350edc25d742dc274feaf159498974b6`. Learners read that page on the course site; this guide keeps its prose.
 
 At lesson 0.3's step 3 your lane was told to trust one GitHub repository, on one branch. This lesson uses that trust. A run of `documind-cd.yml` on your fork asks GitHub for a signed token that names the repository, its id and the branch. Google checks those three against `terraform/wif.tf` and lets the run become `sa-documind-cicd` for about an hour: long enough to build the API's image and put it on a revision that takes no traffic. No key is made, stored or copied anywhere, so there is none to leak. You will set the workflow's four variables from your lane with `make ci-vars`, put a person in front of production, dispatch from `main` and watch it build and deploy, dispatch from a branch and watch it refused, then read the trust, the audit trail and the key count back from Google.
 

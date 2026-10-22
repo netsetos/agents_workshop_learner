@@ -29,7 +29,10 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_kit_as_it_ships.
-COMMANDS_01 = """make capstone-check                 # FORK=. : the checkout you are in, offline
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: its expected output shows a command here failing, as the cell means it to
+make capstone-check                 # FORK=. : the checkout you are in, offline
+true   # that failure is the cell's answer: compare the output with the page's expected window
+
 
 """
 

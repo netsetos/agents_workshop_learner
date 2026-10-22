@@ -237,8 +237,8 @@ def ci_values(project: str, region: str, tf_dir: Path) -> tuple[dict, dict]:
 
 
 def production_environment(repo: str) -> tuple[str, str]:
-    """('ok' | 'warn' | 'note', the line to print) for the repository's production environment, which promote names:
-    one GET through gh, when gh is installed."""
+    """('ok' | 'warn' | 'unread' | 'note', the line to print) for the repository's production environment, which
+    promote names: one GET through gh, when gh is installed. 'unread': gh ran and did not return the environment."""
     if not shutil.which("gh"):
         return "note", ("gh is not installed here, so the production environment was not read: check it has a "
                         "required reviewer, " + REVIEWERS)
@@ -249,12 +249,12 @@ def production_environment(repo: str) -> tuple[str, str]:
                             "creates the environment the first time a job names it, with no required reviewer, and "
                             "promote would then move traffic with nobody approving. Create it with a reviewer before "
                             "the first dispatch: " + REVIEWERS)
-        return "warn", (f"could not read {repo}'s production environment ({cause(r.stderr)}): check by hand that it "
-                        "has a required reviewer, " + REVIEWERS)
+        return "unread", (f"could not read {repo}'s production environment ({cause(r.stderr)}): check by hand that it "
+                          "has a required reviewer, " + REVIEWERS)
     try:
         rules = json.loads(r.stdout or "{}").get("protection_rules") or []
     except (ValueError, AttributeError):
-        return "warn", f"gh did not return {repo}'s production environment as JSON: check it by hand, " + REVIEWERS
+        return "unread", f"gh did not return {repo}'s production environment as JSON: check it by hand, " + REVIEWERS
     reviewers = sum(len(rule.get("reviewers") or []) for rule in rules
                     if isinstance(rule, dict) and rule.get("type") == "required_reviewers")
     if not reviewers:
@@ -281,7 +281,7 @@ def cmd_ci_vars(a) -> int:
     print(f"#   gh workflow run {workflow.name} --repo {q(repo)} --ref {q(ref.removeprefix('refs/heads/'))} "
           "-f path=candidate")
     level, line = production_environment(repo)
-    if level == "warn":
+    if level in ("warn", "unread"):
         sys.stdout.flush()
         print(f"WARNING: {line}", file=sys.stderr)
     else:

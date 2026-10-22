@@ -25,7 +25,10 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_every_detector.
-COMMANDS_01 = """make gotcha-detect PROJECT="$PROJECT" REGION="$REGION"
+COMMANDS_01 = """make gotcha-detect PROJECT="$PROJECT" REGION="$REGION" 2>&1 | tee /tmp/gotcha-detect.out && status=0 || status=$?
+grep -qE '^[0-9]+ detectors: [0-9]+ found, [0-9]+ could not read$' /tmp/gotcha-detect.out   # every detector ran
+[ "$status" -eq 0 ] || grep -q 'gotcha-detect\\] Error 1$' /tmp/gotcha-detect.out   # Error 1: something found, as the page expects
+
 
 """
 

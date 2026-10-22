@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html",
-  "source_sha": "0a16fdda4d80228bb8a9aa267df47270f00664a7",
+  "source_sha": "bfa3df51350edc25d742dc274feaf159498974b6",
   "shared_setup_windows": [
     1
   ],
@@ -356,7 +356,9 @@
           "purpose": "A shell that never exported REGION sends the Makefile's default. The kit refuses it before any tool runs:",
           "label": "bash — run in the operator shell, in the kit, if you want to see the refusal (nothing runs)",
           "expected": "STOP: REGION is us-central1, but lane documind-ai-YOUR-ID was planned in asia-south1 (runbook-project.auto.tfvars.json), where its image repository and services are: make ci-vars PROJECT=documind-ai-YOUR-ID REGION=asia-south1",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the page's expected output shows a command in this cell failing (a refusal, a red check, an oracle's FAIL), which is the cell's answer. Every line runs, a put-back line included, and the step ends green; compare the output with the expected window."
+          ],
           "id": "source_23",
           "function": "step_03_change_it_the_makefile_s_region",
           "window": 23,

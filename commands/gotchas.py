@@ -46,6 +46,7 @@ import asyncio
 import collections
 import contextvars
 import copy
+import hashlib
 import importlib.util
 import json
 import logging
@@ -544,6 +545,14 @@ def revision_template(rev: dict) -> dict:
     return {"image": c[0].get("image", ""), "env": c[0].get("env") or []}
 
 
+def template_image(lane, desc: dict) -> str:
+    """The template's image as the revision it made holds it. The template keeps the tag a deploy gave it, and each
+    revision the digest Cloud Run resolved that tag to, so a tag never equals a revision's image: on 22 October 2026
+    lesson 11.6's undone candidate read as a change no request reaches, tag against digest."""
+    latest = latest_created(desc)
+    return revision_template(revision(lane, latest))["image"] if latest else template(desc)["image"]
+
+
 def literal_env(env: list) -> dict[str, str]:
     """name -> value of the literal variables; a secret's reference (valueFrom) is --set-secrets', not ours."""
     return {e["name"]: e.get("value", "") for e in env if isinstance(e, dict) and "name" in e and "valueFrom" not in e}
@@ -682,10 +691,13 @@ class StandIn:
             raise Stop(f"gcloud run revisions describe {name} failed (exit 1): ERROR: (gcloud.run.revisions.describe) "
                        f"Revision [{name}] could not be found.")
         made = self.services[service]["revisions"][name]
+        # A revision holds the digest its image's tag named when it was made, as Cloud Run writes it; the template keeps
+        # the tag. The stand-in's digest is the reference's own sha256.
+        digest = made["image"].rpartition(":")[0] + "@sha256:" + hashlib.sha256(made["image"].encode()).hexdigest()
         return {"apiVersion": "serving.knative.dev/v1", "kind": "Revision",
                 "metadata": {"name": name, "labels": {"serving.knative.dev/service": service}},
-                "spec": {"containers": [{"image": made["image"], "env": copy.deepcopy(made["env"])}]},
-                "status": {"conditions": [{"type": "Ready", "status": "True"}]}}
+                "spec": {"containers": [{"image": digest, "env": copy.deepcopy(made["env"])}]},
+                "status": {"imageDigest": digest, "conditions": [{"type": "Ready", "status": "True"}]}}
 
     def _revision(self, name: str, image: str, env: list, no_traffic: bool = False, tag: str | None = None) -> str:
         s = self.services.setdefault(name, {"revisions": {}, "order": [], "n": 0,
@@ -966,7 +978,8 @@ def pinned_findings(service: str, desc: dict, lane) -> list[str]:
         same = False
         if answering:
             answers = revision_template(revision(lane, answering))
-            same = answers["image"] == made["image"] and literal_env(answers["env"]) == literal_env(made["env"])
+            same = (answers["image"] == template_image(lane, desc)
+                    and literal_env(answers["env"]) == literal_env(made["env"]))
         if not same:
             out.append(f"{service}: its newest revision {latest} takes 0% of the traffic and carries no tag: a change "
                        "no request reaches")
@@ -1191,7 +1204,7 @@ def template_findings(lane) -> tuple[bool | None, list[str]]:
         raise Stop(f"{API}'s traffic is split: no one revision serves")
     answering = revision_template(revision(lane, now))
     diff = env_diff(literal_env(answering["env"]), literal_env(template(desc)["env"]))
-    if template(desc)["image"] != answering["image"]:
+    if template_image(lane, desc) != answering["image"]:
         diff["(image)"] = (answering["image"], template(desc)["image"])
     if not diff:
         return False, [f"{API}'s template is what its serving revision {now} was made from"]
@@ -1577,6 +1590,8 @@ def detect_environment(lane, entry: dict, hours: int) -> tuple[bool | None, list
         level, line = release.production_environment(inputs["github_repository"])
     except Exception as e:
         raise Stop(f"make ci-vars' read of the production environment: {e}") from e
+    if level == "unread":                        # gh answered, and not with the environment: a read that failed
+        raise Stop(line)
     return (None if level == "note" else level == "warn"), [line]
 
 

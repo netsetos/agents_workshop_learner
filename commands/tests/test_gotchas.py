@@ -530,6 +530,16 @@ class DetectorTests(unittest.TestCase):
         self.assertIs(found, True)
         self.assertIn("  ROUTING: off on", "\n".join(lines))
 
+    def test_a_revision_holds_the_digest_and_the_template_the_tag(self):
+        """Cloud Run writes on each revision the digest its tag named, and keeps the tag on the template: on 22 October
+        2026 the two compared as a change on a live lane. The detectors compare the revision the template made."""
+        lane = full_lane()
+        desc = gotchas.describe(lane, API)
+        serves = gotchas.revision_template(gotchas.revision(lane, gotchas.serving_revision(desc)))["image"]
+        self.assertTrue(gotchas.template(desc)["image"].endswith("/api:c0ffee1"))
+        self.assertRegex(serves, r"/api@sha256:[0-9a-f]{64}$")
+        self.assertEqual(gotchas.template_image(lane, desc), serves)
+
     def test_an_undo_is_no_stranded_change(self):
         """Lessons 2.4's and 2.5's undo: a tagged candidate with a switch, the switch removed, the tag removed. The
         newest revision takes no traffic, carries no tag, and holds the serving revision's settings: nothing to find."""
@@ -619,6 +629,9 @@ class DetectorTests(unittest.TestCase):
                 found, lines = gotchas.detect_environment(None, ENTRIES["environment-without-reviewers"], 24)
             self.assertIs(found, want)
             self.assertEqual(lines, [f"example-learner/agents-workshop-fork: {level}"])
+        with mock.patch.object(gotchas, "_module", lambda path, name: Release("unread")):   # gh ran and could not read
+            with self.assertRaisesRegex(gotchas.Stop, "^example-learner/agents-workshop-fork: unread$"):
+                gotchas.detect_environment(None, ENTRIES["environment-without-reviewers"], 24)
         broken = Release("ok")
         broken.lane_inputs = mock.Mock(side_effect=RuntimeError("no runbook-project.auto.tfvars.json in terraform"))
         with mock.patch.object(gotchas, "_module", lambda path, name: broken):
@@ -781,8 +794,8 @@ sys.exit(99)
         calls = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((self.home / "calls").glob("*.json"))]
         services = [a for a in calls if a[:3] == ["run", "services", "describe"]]
         revisions = [a for a in calls if a[:3] == ["run", "revisions", "describe"]]
-        self.assertEqual((len(services), len(revisions), len(calls)), (14, 1, 15))   # seven services twice; the
-        for args in calls:                                                # chat's serving revision once; describes only
+        self.assertEqual((len(services), len(revisions), len(calls)), (14, 2, 16))   # seven services twice; the
+        for args in calls:                                # chat's serving and newest revisions once each; describes only
             self.assertIn("--format=json", args)
             self.assertIn(f"--project={PROJECT}", args)
             self.assertIn(f"--region={REGION}", args)

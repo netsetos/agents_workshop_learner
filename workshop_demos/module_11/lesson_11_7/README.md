@@ -326,6 +326,8 @@ Do it: every detector
 
 Operation: bash — run in the operator shell, in the kit (reads only).
 
+IDE adaptation: Read the detectors' exit as the page does: 1 when anything is found, which every lane shows (the admin address deploy-drops-hotfix reads), stopped the demo at its first cell (22 October 2026). The step fails if a detector's read failed with nothing found (make's Error 2) or the summary line never printed.
+
 Expected shape, not a promised result:
 
 ```text
@@ -334,7 +336,7 @@ Expected shape, not a promised result:
 
 ### demo_09_the_release_no_gate_judged_loud_against_silent_and_what_the_kit_does_not_do_yet.py
 
-This is the hazard in step 1's red box. make up runs make deploy-services, whose default SCRIPTS include lesson-12.2.sh, the API's deploy. After it the recipe moves documind-api's traffic to the revision it just made, by name (step 4). Lesson 11.2's gate runs on a candidate, and make deploy-services makes none. Add an entry whose drill and check commands/gotchas.py does not run, and the registry refuses to load: make gotchas, every drill and every detector stop with exit 2 and name the problems. commands/tests/test_gotchas.py holds the same rule, in test_a_detector_that_does_not_exist_is_refused, one of its 49 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
+This is the hazard in step 1's red box. make up runs make deploy-services, whose default SCRIPTS include lesson-12.2.sh, the API's deploy. After it the recipe moves documind-api's traffic to the revision it just made, by name (step 4). Lesson 11.2's gate runs on a candidate, and make deploy-services makes none. Add an entry whose drill and check commands/gotchas.py does not run, and the registry refuses to load: make gotchas, every drill and every detector stop with exit 2 and name the problems. commands/tests/test_gotchas.py holds the same rule, in test_a_detector_that_does_not_exist_is_refused, one of its 50 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
 
 **`step_01_the_release_no_gate_judged(session)` — The release no gate judged, loud against silent, and what the kit does not do yet / The release no gate judged**
 
@@ -361,7 +363,7 @@ CLEARED: make deploy-services without lesson-12.2.sh left documind-api on the ga
 
 **`step_02_change_it_a_gotcha_with_no_detector(session)` — The release no gate judged, loud against silent, and what the kit does not do yet / Change it: a gotcha with no detector**
 
-Add an entry whose drill and check commands/gotchas.py does not run, and the registry refuses to load: make gotchas, every drill and every detector stop with exit 2 and name the problems. commands/tests/test_gotchas.py holds the same rule, in test_a_detector_that_does_not_exist_is_refused, one of its 49 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
+Add an entry whose drill and check commands/gotchas.py does not run, and the registry refuses to load: make gotchas, every drill and every detector stop with exit 2 and name the problems. commands/tests/test_gotchas.py holds the same rule, in test_a_detector_that_does_not_exist_is_refused, one of its 50 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
 
 Operation: bash — run in the operator shell, in the kit (edits ops/gotchas.json, then puts it back; no lane, no cost).
 
@@ -394,6 +396,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`. All 43 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `93c57360c0966bd6aba58437527621d025e9de31`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`. All 43 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `3b7c21fe9698327c5c705df17b12bee0ccfc497a`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

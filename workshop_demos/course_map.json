@@ -593,7 +593,7 @@
     {
       "lesson": "11.1",
       "title": "Build and deploy using keyless identity",
-      "source_sha": "0a16fdda4d80228bb8a9aa267df47270f00664a7",
+      "source_sha": "bfa3df51350edc25d742dc274feaf159498974b6",
       "source_kind": "main_html",
       "demos": 9
     },
@@ -616,26 +616,26 @@
       "title": "Debug a wrong answer through the complete pipeline",
       "source_sha": "db37cce668e8bbbb0c8fab353b899ca540d5e0b2",
       "source_kind": "main_html",
-      "demos": 7
+      "demos": 8
     },
     {
       "lesson": "11.5",
       "title": "Reconcile usage events, reports and alerts",
-      "source_sha": "654b691b5244f7911ed115be66903ad6c203ce7c",
+      "source_sha": "1ca4b3cd1d316cd0e1bcfbf73c5d8280022ba298",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.6",
       "title": "Exercise model routing, budgets and shutdown controls",
-      "source_sha": "55c0b175d5563a305151ab5269454da9db8dba49",
+      "source_sha": "0ceda414e1b1dc286ff3eccbfe2bbc012a76d151",
       "source_kind": "main_html",
       "demos": 7
     },
     {
       "lesson": "11.7",
       "title": "Reproduce the agent failures production shows and no eval row does",
-      "source_sha": "93c57360c0966bd6aba58437527621d025e9de31",
+      "source_sha": "3b7c21fe9698327c5c705df17b12bee0ccfc497a",
       "source_kind": "main_html",
       "demos": 10
     },

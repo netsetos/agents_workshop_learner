@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`, reviewed at blob `93c57360c0966bd6aba58437527621d025e9de31`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.7_Production_Gotchas_WIX.html`, reviewed at blob `3b7c21fe9698327c5c705df17b12bee0ccfc497a`. Learners read that page on the course site; this guide keeps its prose.
 
 An eval row asks one question of whichever revision answers, and judges the answer. It cannot see the lane around the answer: which revision is answering, which settings it was made with, what the next routine deploy will put back, what the month's reports leave out, and what no alert reads. The kit keeps 13 such failures in one registry, `ops/gotchas.json`. Each comes with its symptom, why no eval row catches it, a drill that reproduces it, a detector that finds it on a lane, and the lever that fixes it.
 
@@ -350,7 +350,7 @@ One gotcha has an alert policy, and it pages only once 12 deliveries have failed
 
 #### Change it: a gotcha with no detector
 
-Add an entry whose drill and check `commands/gotchas.py` does not run, and the registry refuses to load: `make gotchas`, every drill and every detector stop with exit 2 and name the problems. `commands/tests/test_gotchas.py` holds the same rule, in `test_a_detector_that_does_not_exist_is_refused`, one of its 49 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
+Add an entry whose drill and check `commands/gotchas.py` does not run, and the registry refuses to load: `make gotchas`, every drill and every detector stop with exit 2 and name the problems. `commands/tests/test_gotchas.py` holds the same rule, in `test_a_detector_that_does_not_exist_is_refused`, one of its 50 tests. The kit's dry-run workflow runs that file on every push, so a pull request that adds such an entry goes red. The cell copies pinned-traffic as made-up-gotcha, runs the registry, and puts the file back.
 
 The two problems are the two halves of an entry the code does not back: an offline drill nobody wrote, and a check nobody wrote. A detector that names an alert policy terraform does not declare, or a log event no service writes, fails the same way in the kit's tests (`kit_problems()`). `git checkout` put the file back, and the registry lists 13 again.
 
