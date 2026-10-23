@@ -51,6 +51,8 @@ Open the Google Cloud console signed in as the account that owns your billing ac
 
 Operation: bash - Cloud Shell, once per session.
 
+IDE adaptation: Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same.
+
 ### demo_03_prepare_the_project_and_the_shell_the_project_the_sign_in_the_variables_the_tool.py
 
 The account every later command runs as. One set of variables, checked, then saved for new terminals. Change PROJECT to your project ID. The block stops at the first failed check. Ends with PASS: project <id> (<number>) is active, billed, operator <email>. Write the helper that saves your settings for new terminals, then save. It now also keeps GIT_SHA, the source snapshot your images are built from (pinned in Phase 3). Terraform 1.9 or newer, git, jq, make and file. Terraform v1.9.0 or newer and no MISSING lines: skip to S5. Otherwise run the matching install below. Install Terraform (only if missing or older than 1.9.0). First the utilities for HashiCorp's signed repository: Install Terraform (only if missing or older than 1.9.0). First the utilities for HashiCorp's signed repository: The fingerprint identifies HashiCorp's package-signing key. Do not continue if the download or conversion failed. The last command prints Terraform v1.9.0 or newer. Only if terraform still isn't found, or an older binary shadows it: Packages installed outside your home directory may need reinstalling after a Cloud Shell VM reset. Never loosen required_version or provider constraints, and never use insecure TLS or unsigned-package flags. Install git, jq, make or file (only if one is missing):
@@ -78,6 +80,8 @@ Operation: bash - Save settings.
 Terraform 1.9 or newer, git, jq, make and file.
 
 Operation: bash - Check tools.
+
+IDE adaptation: Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same.
 
 **`step_05_s4_check_terraform_and_command_line_tools(session)` — Prepare the project and the shell: the project, the sign-in, the variables, the tools / S4. Check Terraform and command-line tools**
 

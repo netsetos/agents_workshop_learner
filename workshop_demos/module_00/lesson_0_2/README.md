@@ -29,6 +29,11 @@ Manual browser actions and long asynchronous waits pause at a named checkpoint. 
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
 
+## Finish and restore
+
+- [cleanup/demo_06_diagnose_a_first_failure_one_loosened_row.py](cleanup/demo_06_diagnose_a_first_failure_one_loosened_row.py) — At lesson end: Repair it
+- [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
+
 ## Functions, observations and effects
 
 The numbered functions below correspond to the source examples. Numerical sample output is illustrative. These files have offline/source checks; live IAM, ingestion, model output and deployed resources must be verified in your workstation.
@@ -42,6 +47,8 @@ Install what is missing, open a new terminal so its PATH is fresh, and check. Ea
 Install what is missing, open a new terminal so its PATH is fresh, and check. Each tool should print a path; the versions below the paths are the second check, against the table.
 
 Operation: bash — run in a terminal on your laptop, after installing the tools.
+
+IDE adaptation: Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same.
 
 Expected shape, not a promised result:
 
@@ -165,7 +172,7 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
 
 ### demo_06_diagnose_a_first_failure_one_loosened_row.py
 
-The most common way an eval suite rots, made on purpose, caught, read and repaired. Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. One line changed: the row's must_contain went from ["60"] to []. Now run the gate. Repair it
+The most common way an eval suite rots, made on purpose, caught, read and repaired. Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. One line changed: the row's must_contain went from ["60"] to []. Now run the gate.
 
 **`step_01_diagnose_a_first_failure_one_loosened_row(session)` — Diagnose a first failure: one loosened row / Diagnose a first failure: one loosened row**
 
@@ -204,6 +211,8 @@ Git sees it. This is what the clone is for: every change you make to the kit is 
 
 Operation: bash — run in the first terminal.
 
+IDE adaptation: Read the gate's refusal as the cell's answer: with lk-06 loosened, make dryrun fails falsifiable and exits non-zero, which stopped the demo before Repair it and left evals/golden.jsonl loosened (23 October 2026). The step fails if the dryrun passes or fails for any other reason.
+
 Expected shape, not a promised result:
 
 ```text
@@ -236,7 +245,11 @@ kit-only checkout: no curriculum notebooks under Module */ - nothing to extract 
   1 problem(s). The golden set cannot judge the model until it judges itself.
 ```
 
-**`step_04_repair_it(session)` — Diagnose a first failure: one loosened row / Repair it**
+### cleanup/demo_06_diagnose_a_first_failure_one_loosened_row.py
+
+At lesson end: Repair it
+
+**`step_01_repair_it(session)` — Diagnose a first failure: one loosened row / Repair it**
 
 Repair it
 
@@ -254,6 +267,10 @@ Expected shape, not a promised result:
 
   The golden set is sound. It can go red, and it still contains the rows that would.
 ```
+
+### setup/finish.py
+
+Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Source and coverage
 

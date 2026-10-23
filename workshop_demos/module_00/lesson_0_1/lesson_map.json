@@ -186,7 +186,9 @@
           "purpose": "This lesson needs a Google account, a browser, and a shell where the gcloud CLI acts as you. Cloud Shell is the simplest: a terminal in the browser, on a Debian machine Google provisions for you, with the gcloud CLI already installed and 5 GB of free persistent disk as your home directory. Open the Google Cloud console at console.cloud.google.com, sign in with the Google account you will use for the whole course, and click Activate Cloud Shell, the terminal icon at the top right. A laptop works too, if the gcloud CLI is installed and signed in; lesson 0.2 sets a laptop up properly. Nothing on this page needs the kit: there is no clone yet, no Python environment and no lane, and every command here costs Rs 0. Run the block below once per session. It prints gcloud's version, the account it acts as, and its default project, which stays empty until step 4 sets it.",
           "label": "bash — run in Cloud Shell, once per session (or in a terminal where gcloud is signed in)",
           "expected": "[awaiting the author's run: data/setup_check.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same."
+          ],
           "id": "source_1",
           "function": "step_01_before_you_run_anything_open_cloud_shell",
           "window": 1,

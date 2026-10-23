@@ -329,7 +329,9 @@
           "purpose": "Open the Google Cloud console signed in as the account that owns your billing account, and click Activate Cloud Shell. Start a tmux session: builds and the Terraform apply run for a long time, and inside tmux they keep running if the browser drops.",
           "label": "bash - Cloud Shell, once per session",
           "expected": "",
-          "adaptations": [],
+          "adaptations": [
+            "Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same."
+          ],
           "id": "source_1",
           "function": "step_01_before_you_run_anything_open_cloud_shell_a",
           "window": 1,
@@ -428,7 +430,9 @@
           "purpose": "Terraform 1.9 or newer, git, jq, make and file.",
           "label": "bash - Check tools",
           "expected": "",
-          "adaptations": [],
+          "adaptations": [
+            "Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same."
+          ],
           "id": "source_5",
           "function": "step_04_s4_check_terraform_and_command_line_tools",
           "window": 5,

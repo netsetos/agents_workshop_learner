@@ -142,7 +142,7 @@ def step_03_s3_set_the_project_and_session_variables(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_s4_check_terraform_and_command_line_tools.
-COMMANDS_04 = """if command -v terraform >/dev/null; then terraform version | head -1; else echo "MISSING: terraform"; fi
+COMMANDS_04 = """if command -v terraform >/dev/null; then terraform version | sed -n 1p; else echo "MISSING: terraform"; fi
 for t in git jq file make; do command -v "$t" >/dev/null || echo "MISSING: $t"; done
 
 """

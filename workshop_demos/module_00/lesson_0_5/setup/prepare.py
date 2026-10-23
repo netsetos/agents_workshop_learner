@@ -26,7 +26,7 @@ RETRY_FAILED_STEP = False
 
 # Original CLI workflow for step_01_before_you_run_anything_open_cloud_shell_a.
 COMMANDS_01 = """tmux new -s documind            # later, after a disconnect: tmux attach -t documind
-gcloud --version | head -n 1
+gcloud --version | sed -n 1p
 gcloud config get-value account
 git --version
 python3 --version

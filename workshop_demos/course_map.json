@@ -49,7 +49,7 @@
       "title": "Reproduce the local environment, read the master diagram and prove a first success",
       "source_sha": "594d2c7c68d214d7e4283d448fdeef74fd783ae4",
       "source_kind": "main_html",
-      "demos": 4
+      "demos": 6
     },
     {
       "lesson": "0.3",

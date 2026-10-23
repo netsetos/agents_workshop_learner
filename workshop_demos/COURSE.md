@@ -8,7 +8,7 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [B.4: Encode with BERT-style models: embeddings and rankers](module_B/lesson_B_4/README.md) — 4 files; main_html
 - [B.5: Generate with GPT-style models: decoding and run-to-run variance](module_B/lesson_B_5/README.md) — 5 files; main_html
 - [0.1: Set up the Google Cloud billing account, budget and project](module_00/lesson_0_1/README.md) — 7 files; main_html
-- [0.2: Reproduce the local environment, read the master diagram and prove a first success](module_00/lesson_0_2/README.md) — 4 files; main_html
+- [0.2: Reproduce the local environment, read the master diagram and prove a first success](module_00/lesson_0_2/README.md) — 6 files; main_html
 - [0.3: Understand the project, identities and resource map, and deploy the lane](module_00/lesson_0_3/README.md) — 6 files; main_html
 - [0.4: Prove the lane, break it once, and switch it off](module_00/lesson_0_4/README.md) — 14 files; main_html
 - [0.5: Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI](module_00/lesson_0_5/README.md) — 12 files; main_html

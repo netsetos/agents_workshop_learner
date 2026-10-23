@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1662 files; 235 quoted by a lesson, 349 shown or named by one.
+1664 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -531,10 +531,12 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_00/lesson_0_1/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_00/lesson_0_2/README.md` | doc | - | - |
+| `workshop_demos/module_00/lesson_0_2/cleanup/demo_06_diagnose_a_first_failure_one_loosened_row.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/demo_04_the_rs_0_lane_the_notice_period_question_with_citations.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/demo_05_prove_a_first_success_make_dryrun.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/demo_06_diagnose_a_first_failure_one_loosened_row.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/lesson_map.json` | config | - | - |
+| `workshop_demos/module_00/lesson_0_2/setup/finish.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_2/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_3/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_00/lesson_0_3/README.md` | doc | - | - |

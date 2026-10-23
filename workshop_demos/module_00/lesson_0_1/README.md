@@ -46,6 +46,8 @@ This lesson needs a Google account, a browser, and a shell where the gcloud CLI 
 
 Operation: bash — run in Cloud Shell, once per session (or in a terminal where gcloud is signed in).
 
+IDE adaptation: Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same.
+
 Expected shape, not a promised result:
 
 ```text

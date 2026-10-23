@@ -175,7 +175,9 @@
           "purpose": "Install what is missing, open a new terminal so its PATH is fresh, and check. Each tool should print a path; the versions below the paths are the second check, against the table.",
           "label": "bash — run in a terminal on your laptop, after installing the tools",
           "expected": "[awaiting the author's run: data/tool_checks.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Print the version's first line with sed instead of head: gcloud and terraform go on writing after it, and under the demo shell's pipefail their SIGPIPE when head closed first failed the cell with exit 141, by chance (23 October 2026). The line printed is the same."
+          ],
           "id": "source_1",
           "function": "step_01_the_tools_and_why_the_kit_needs_each",
           "window": 1,
@@ -342,7 +344,7 @@
         "demo_05_prove_a_first_success_make_dryrun"
       ],
       "heading": "Diagnose a first failure: one loosened row",
-      "purpose": "The most common way an eval suite rots, made on purpose, caught, read and repaired. Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. One line changed: the row's must_contain went from [\"60\"] to []. Now run the gate. Repair it",
+      "purpose": "The most common way an eval suite rots, made on purpose, caught, read and repaired. Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Picture a red live run on lk-06 the night before a release. The fastest way to green is to loosen the row: empty its must_contain, and any answer at all passes. That edit is the commonest way an eval suite rots, because the row stays in the file looking like a test. The offline gate exists to refuse it. Make the edit in your clone: Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. One line changed: the row's must_contain went from [\"60\"] to []. Now run the gate.",
       "anchor": "s6",
       "anchors": [
         "s6"
@@ -351,15 +353,13 @@
       "windows": [
         29,
         31,
-        33,
-        36
+        33
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_2/GUIDE.md",
       "source_lines": [
         791,
         809,
-        820,
-        872
+        820
       ],
       "offline": false,
       "live_verified": false,
@@ -397,13 +397,42 @@
           "purpose": "Git sees it. This is what the clone is for: every change you make to the kit is visible, and reversible, against the commit you pulled. One line changed: the row's must_contain went from [\"60\"] to []. Now run the gate.",
           "label": "bash — run in the first terminal",
           "expected": "kit-only checkout: no curriculum notebooks under Module */ - nothing to extract or check; deploy/ here IS the extracted tree\n\n  DocuMind AI — Tier-A offline dry run\n  ------------------------------------------------------------\n  [SKIP] extract       kit-only checkout (the learner repo): deploy/ is the extracted tree, nothing to compare  (Ns)\n  [PASS] py_compile    150 python files parse  (Ns)\n  [PASS] imports       all local imports resolve  (Ns)\n  [PASS] shared-deps   every google.cloud client a shared module opens is pinned by its importers  (Ns)\n  [PASS] requirements  11 files, all deps pinned  (Ns)\n  [PASS] pins          30 shared packages agree across 12 files  (Ns)\n  [PASS] dockerfile    11 services have a Dockerfile  (Ns)\n  [WARN] copy-paths    10 of 11 Dockerfiles resolve; needs a later lesson's artefact: slm: build/ (11.4's make deploy-slm writes services/slm/build/ (the GGUF and the Modelfile the image copies); gitignored, so absent in a fresh checkout)  (Ns)\n  [SKIP] terraform     terraform not on PATH (CI runs it)  (Ns)\n  [SKIP] tflint        tflint not on PATH (optional)  (Ns)\n  [SKIP] docker        docker not on PATH (CI builds images)  (Ns)\n  ------------------------------------------------------------\n  6 pass · 1 warn · 0 fail · 4 skip · Ns\n\n== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [FAIL] falsifiable\n         lk-06: an answerable row with no must_contain accepts any answer at all\n  [PASS] anchors\n  [PASS] coverage\n\n  1 problem(s). The golden set cannot judge the model until it judges itself.",
-          "adaptations": [],
+          "adaptations": [
+            "Read the gate's refusal as the cell's answer: with lk-06 loosened, make dryrun fails falsifiable and exits non-zero, which stopped the demo before Repair it and left evals/golden.jsonl loosened (23 October 2026). The step fails if the dryrun passes or fails for any other reason."
+          ],
           "id": "source_33",
           "function": "step_03_diagnose_a_first_failure_one_loosened_row",
           "window": 33,
           "source_line": 820,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "cleanup_demo_06_diagnose_a_first_failure_one_loosened_row",
+      "lesson": "0.2",
+      "file": "cleanup/demo_06_diagnose_a_first_failure_one_loosened_row.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "Diagnose a first failure: one loosened row",
+      "purpose": "At lesson end: Repair it",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        36
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_2/GUIDE.md",
+      "source_lines": [
+        872
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Diagnose a first failure: one loosened row",
           "subheading": "Repair it",
@@ -412,13 +441,33 @@
           "expected": "== eval gate: OFFLINE (no credentials, no cost) ==\n  65 golden rows over 3 tenants, 27 documents\n\n  [PASS] falsifiable\n  [PASS] anchors\n  [PASS] coverage\n\n  The golden set is sound. It can go red, and it still contains the rows that would.",
           "adaptations": [],
           "id": "source_36",
-          "function": "step_04_repair_it",
+          "function": "step_01_repair_it",
           "window": 36,
           "source_line": 872,
           "manual_checkpoint": null
         }
       ],
       "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "setup_finish",
+      "lesson": "0.2",
+      "file": "setup/finish.py",
+      "category": "cleanup",
+      "orchestrator": true,
+      "requires": [],
+      "anchor": "finish",
+      "anchors": [],
+      "section_number": null,
+      "heading": "Finish and restore all lesson settings",
+      "purpose": "Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.",
+      "windows": [],
+      "source_lines": [],
+      "steps": [],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "native_python",
+      "next": "Lesson finished; use start_new_session.py for a deliberate replay."
     }
   ],
   "read_only_windows": [
