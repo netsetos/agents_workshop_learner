@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`, reviewed at blob `50e5e737453273ce3360d815b254975430048a1b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`, reviewed at blob `33839328fe7dfc18320b430204488184112bd359`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 12.1 to 12.3 changed the model behind DocuMind's answers. This lesson changes the words in front of it, starting from one answer that went wrong on your lane. A model may propose the change: one rule for the generator's prompt. A person accepts it, and the golden set gains the row that would have caught the answer. Then the gate judges the new prompt version on a revision that takes no traffic. Only then does traffic move. If the gate says no, the change goes back with git.
 
@@ -186,7 +186,7 @@ One commit, the image that carries it, a revision with no traffic that answers a
 
 The target. `make prompt-candidate` is `make release-candidate`'s update with one more variable: `PROMPT_VERSION` beside `GIT_SHA`. Before any gcloud call it runs `improve.py version`, which stops on a version `prompt_rules.json` does not list. Then `make record-candidate` writes the new revision's name to `.candidate-revision`, the name `make gate` and `make promote` read. `config.py`'s default stays v3, so v4 answers only where the variable is set.
 
-The check runs offline, and you can run it yourself:
+The check runs offline, and you can run it yourself. The cell reads the version accept wrote as `PV`, and every cell after it uses `$PV`. This page's run wrote v4. On a lane where lesson 3.6 committed its v4, accept writes v5, because it takes the version after the highest that any commit in your history has registered, so a label is never given a second meaning. The commits pass your name as `$ME`, as 3.6's did, so they work on a shell with no git identity of its own.
 
 A revision whose image does not carry its version does not start. If `PROMPT_VERSION` names a version that the image's `prompt_rules.json` does not list and lesson 3.6's registry does not hold, `generator.py`'s last line raises at import, and Cloud Run keeps the traffic where it was:
 

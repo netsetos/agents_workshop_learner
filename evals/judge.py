@@ -235,6 +235,10 @@ def evaluate(df, experiment: str, run_name: str, pairwise: bool, project: str, l
     result = EvalTask(dataset=df, metrics=metrics, experiment=experiment, **kwargs).evaluate(experiment_run_name=run_name)
     summary = dict(result.summary_metrics)
     summary["run_name"] = run_name             # what Experiments recorded, template hash included
+    try:
+        summary["ratings"] = ratings_count(result.metrics_table)
+    except Exception:  # noqa: BLE001 - a table this SDK shapes differently: the means still print
+        pass
     # By shape, from the per-row table: a refusal row has no context to be grounded in, so the overall mean
     # mixes what the judge can score with what it cannot. The answerable shapes are the number that means something.
     try:
@@ -250,6 +254,15 @@ def evaluate(df, experiment: str, run_name: str, pairwise: bool, project: str, l
         except Exception as e:  # noqa: BLE001 - the run is recorded; a file that cannot be written is said, not raised
             print(f"  per-row ratings: not written - {type(e).__name__}: {e}")
     return summary
+
+
+def ratings_count(table) -> tuple[int, int]:
+    """(ratings the Evaluation service returned, ratings asked for): every score and pairwise choice in the per-row
+    table. A request that failed leaves its cell empty, and a mean of nothing is NaN. On 23 October 2026, three days
+    after Gemini 2.5 retired on Vertex AI, the service's default judge answered 404 to all 195 requests of lesson
+    12.3's verdict, and the run printed NaN and exited 0."""
+    cols = [c for c in table.columns if str(c).endswith(("/score", "/pairwise_choice"))]
+    return sum(int(table[c].notna().sum()) for c in cols), len(cols) * len(table)
 
 
 def _plain(value, key: str):
@@ -316,9 +329,14 @@ def selftest() -> int:
     assert trajectory_metrics([{"tool_name": "calculate_cost"}, {"tool_name": "retrieve"}], ref) == {"exact": 0, "in_order": 1, "any_order": 1, "calls": 2}
     assert trajectory_metrics([], ref) == {"exact": 0, "in_order": 0, "any_order": 0, "calls": 0}
     assert normalise("Sixty days") == "60 days"
+    import pandas as pd
+    nan = float("nan")
+    table = pd.DataFrame({"id": ["lk-06", "rf-04"], "groundedness/score": [1.0, nan], "instruction_following/score": [nan, nan],
+                          "pairwise_question_answering_quality/pairwise_choice": ["CANDIDATE", nan]})
+    assert ratings_count(table) == (2, 6) and ratings_count(table[["id", "instruction_following/score"]]) == (0, 2)
     print("selftest: the cited chunk's text replaces its quote as the context and a miss keeps the quote; the prompt the "
           "judge reads carries the context then the question; the frame carries the six judge columns plus the baseline; "
-          "the trajectory maths is right on the three cases")
+          "the trajectory maths is right on the three cases; a failed request is a rating not returned")
     return 0
 
 
@@ -417,6 +435,13 @@ def main() -> int:
         if k.endswith("/mean") or "/mean[" in k or k.endswith("/std") or "win_rate" in k or k == "row_count":
             v = summary[k]
             print(f"    {k:48} {v:.3f}" if isinstance(v, (int, float)) else f"    {k:48} {v}")
+    got, asked = summary.get("ratings", (0, 0))
+    if asked and not got:
+        print(f"\n  the judge rated nothing: all {asked} requests to the Evaluation service failed (their errors are above), "
+              "so every mean is NaN and this run is no verdict. Run it again once the service answers.")
+        return 1
+    if got < asked:
+        print(f"\n  the judge rated {got} of {asked}: the means leave out the {asked - got} requests that failed (above)")
     print("\n  the gate (run_eval.py) still decides; this judge explains. Where they disagree, read the row.")
     return 0
 

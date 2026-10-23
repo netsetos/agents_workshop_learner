@@ -243,7 +243,7 @@
     {
       "lesson": "4.2",
       "title": "Separate offline checks, live scoring and LLM judgment",
-      "source_sha": "a6462506b4e355f7814604f44edd8e40c1995e8f",
+      "source_sha": "b9f33f7e16b7f44cd5dd37f48cac48545966665c",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -656,7 +656,7 @@
     {
       "lesson": "12.2",
       "title": "Validate sanitized datasets and run managed tuning",
-      "source_sha": "4b401eb32244b247df4be8c41d13ce757ac85c97",
+      "source_sha": "d1f41abcd3083351c2951ea8f156ac874787383a",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -670,7 +670,7 @@
     {
       "lesson": "12.4",
       "title": "Improve the agent safely: eval-gated self-improvement",
-      "source_sha": "50e5e737453273ce3360d815b254975430048a1b",
+      "source_sha": "33839328fe7dfc18320b430204488184112bd359",
       "source_kind": "main_html",
       "demos": 12
     }

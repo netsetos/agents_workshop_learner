@@ -272,6 +272,22 @@ class SaveRowsTest(Tmp):
         self.assertIn("  per-row ratings: not written - ", out)
         self.assertIn("  Experiments run documind-eval/api-fixture-20261008-0000-t", out)
 
+    def test_a_run_whose_requests_all_failed_is_no_verdict(self):
+        nan = float("nan")                  # what the service leaves in a cell whose request failed (23 October 2026)
+        with patch(f"{__name__}.rule", lambda context, response, reference: ((nan, "error"), (nan, "error"))):
+            code, out = run_judge(frozen_args(self.set, self.tmp / "rows.jsonl"))
+        self.assertEqual(code, 1, out)
+        self.assertIn(f"  the judge rated nothing: all {2 * len(self.frozen)} requests to the Evaluation service failed", out)
+        self.assertNotIn("still decides", out)
+
+    def test_a_run_with_some_requests_failed_says_how_many(self):
+        nan, real = float("nan"), rule
+        with patch(f"{__name__}.rule", lambda context, response, reference: ((nan, "error"), real(context, response, reference)[1])):
+            code, out = run_judge(frozen_args(self.set, self.tmp / "rows.jsonl"))
+        self.assertEqual(code, 0, out)
+        n = len(self.frozen)
+        self.assertIn(f"  the judge rated {n} of {2 * n}: the means leave out the {n} requests that failed (above)\n", out)
+
     def test_no_vertex_rates_nothing_and_says_so(self):
         code, out = run_judge(frozen_args(self.set, self.tmp / "rows.jsonl", "--no-vertex"))
         self.assertEqual(code, 0, out)

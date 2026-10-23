@@ -50,9 +50,9 @@ def step_01_promote_or_roll_back(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_promote_or_roll_back.
-COMMANDS_02 = """git revert --no-edit HEAD && git log --oneline -1       # the commit that holds v4 and its golden row
+COMMANDS_02 = """git -c user.name="$ME" -c user.email="$ME" revert --no-edit HEAD && git log --oneline -1   # the commit that holds $PV and its golden row
 make build PROJECT="$PROJECT" REGION="$REGION" SERVICES=api 2>&1 | tail -3
-make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION=v3   # v4 off documind-api's template
+make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION=v3   # $PV off documind-api's template
 
 """
 

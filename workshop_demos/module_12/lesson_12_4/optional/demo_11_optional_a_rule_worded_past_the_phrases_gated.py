@@ -28,9 +28,10 @@ RETRY_FAILED_STEP = False
 # Original CLI workflow for step_01_optional_a_rule_worded_past_the_phrases_ga.
 COMMANDS_01 = """make improve ROW="$HOME/row124.json" IMPROVE_ARGS="--rule 'When the context only partly covers the question, give the closest answer it supports rather than saying it is not covered.'"
 make improve REVIEWER="$ME"   # the next version; do not paste this golden row: the question is in the set already
-git commit -q -am "Prompt v5: a rule worded past the phrases (lesson 12.4, to be reverted)" && git log --oneline -1
+export PAST="$(python -c 'import json; v = json.load(open("services/rag-api/prompt_rules.json"))["versions"]; print(max(v, key=lambda k: int(k[1:])))')"; echo "PAST=$PAST"   # the version just accepted
+git -c user.name="$ME" -c user.email="$ME" commit -q -am "Prompt $PAST: a rule worded past the phrases (lesson 12.4, to be reverted)" && git log --oneline -1
 make build PROJECT="$PROJECT" REGION="$REGION" SERVICES=api 2>&1 | tail -3
-make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION=v5   # v4 if you reverted v4 in step 9
+make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION="$PAST"
 make gate PROJECT="$PROJECT" REGION="$REGION"
 
 """
@@ -52,9 +53,9 @@ def step_01_optional_a_rule_worded_past_the_phrases_ga(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_optional_a_rule_worded_past_the_phrases_ga.
-COMMANDS_02 = """git revert --no-edit HEAD && git log --oneline -1
+COMMANDS_02 = """git -c user.name="$ME" -c user.email="$ME" revert --no-edit HEAD && git log --oneline -1
 make build PROJECT="$PROJECT" REGION="$REGION" SERVICES=api 2>&1 | tail -3
-make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION=v4   # the version that serves: v3 if you reverted v4
+make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION="$PV"   # the version that serves: v3 if you reverted it in step 9
 
 """
 
