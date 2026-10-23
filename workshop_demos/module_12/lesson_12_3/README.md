@@ -486,6 +486,9 @@ Expected shape, not a promised result:
 ```text
 ...
 the candidate URL now: HTTP 404
+the template against documind-api-000NN-xxx: image another; put back ['GENERATOR_MODEL', 'GIT_SHA', 'RAG_MODEL_BASE']; remove []
+documind-api's template is what its serving revision documind-api-000NN-xxx was made from
+nothing found
 ```
 
 ### setup/restore_settings.py
@@ -506,6 +509,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`. All 41 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `c49db8249599749712b6018dfa45f61686eef074`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`. All 41 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0428e1fce6d71b2dd991357209b218b1e3272490`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

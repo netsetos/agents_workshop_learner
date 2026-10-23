@@ -1,10 +1,9 @@
 """Lesson 12.4: Promote, or roll back
 
-A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Red. No promote. No traffic reached v4, so you can drop it without changing any version that has served. Revert the commit that holds v4 and its golden row; the next rule you accept builds on v3 again. PROMPT_VERSION=v4 is still in documind-api's template, because an update with --no-traffic still writes it. Any later candidate made from an image without v4 would carry the variable and refuse to start. So build the reverted commit and put v3 back with make prompt-candidate, which makes a new candidate with no traffic.
+A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away.
 
 Run order inside this file:
 1. Promote, or roll back (source window 54)
-2. Promote, or roll back (source window 56)
 
 Prerequisites: demo_08_before_and_after_the_live_url_and_the_tag_url.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -49,29 +48,6 @@ def step_01_promote_or_roll_back(session):
     # Preserve the kit CLI's arguments, conditions and observation order.
     session.shell(COMMANDS_01)
 
-# Original CLI workflow for step_02_promote_or_roll_back.
-COMMANDS_02 = """git -c user.name="$ME" -c user.email="$ME" revert --no-edit HEAD && git log --oneline -1   # the commit that holds $PV and its golden row
-make build PROJECT="$PROJECT" REGION="$REGION" SERVICES=api 2>&1 | tail -3
-make prompt-candidate PROJECT="$PROJECT" REGION="$REGION" PROMPT_VERSION=v3   # $PV off documind-api's template
-
-"""
-
-def step_02_promote_or_roll_back(session):
-    """Run Promote, or roll back at this checkpoint.
-
-    Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Red. No promote. No traffic reached v4, so you can drop it without changing any version that has served. Revert the commit that holds v4 and its golden row; the next rule you accept builds on v3 again. PROMPT_VERSION=v4 is still in documind-api's template, because an update with --no-traffic still writes it. Any later candidate made from an image without v4 would carry the variable and refuse to start. So build the reverted commit and put v3 back with make prompt-candidate, which makes a new candidate with no traffic.
-
-    Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in the kit, only on a red gate (no traffic moves).
-    Returns: None; observations are printed or saved by the lesson code.
-    Failures propagate to the session; inspect its failed attempt before continuing.
-
-    Example: Run this file after its README prerequisites, or set a breakpoint in this function.
-    Observe the printed/saved evidence for this heading; a zero exit alone is not proof.
-    """
-    # Preserve the kit CLI's arguments, conditions and observation order.
-    session.shell(COMMANDS_02)
-
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.
 
@@ -80,7 +56,6 @@ def demonstrate(session):
     """
     run_steps(session, [
         ('source_54', step_01_promote_or_roll_back),
-        ('source_56', step_02_promote_or_roll_back),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

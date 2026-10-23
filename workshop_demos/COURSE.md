@@ -97,4 +97,4 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [12.1: Decide whether tuning is justified and prepare data](module_12/lesson_12_1/README.md) — 8 files; main_html
 - [12.2: Validate sanitized datasets and run managed tuning](module_12/lesson_12_2/README.md) — 8 files; main_html
 - [12.3: Compare the tuned candidate with an uncontaminated baseline](module_12/lesson_12_3/README.md) — 10 files; main_html
-- [12.4: Improve the agent safely: eval-gated self-improvement](module_12/lesson_12_4/README.md) — 12 files; main_html
+- [12.4: Improve the agent safely: eval-gated self-improvement](module_12/lesson_12_4/README.md) — 13 files; main_html

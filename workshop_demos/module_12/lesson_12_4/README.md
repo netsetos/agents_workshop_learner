@@ -38,6 +38,10 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 
 - [optional/demo_11_optional_a_rule_worded_past_the_phrases_gated.py](optional/demo_11_optional_a_rule_worded_past_the_phrases_gated.py) — A rule that asks for fewer refusals in words the check does not know, accepted, built, and sent to the gate. What the check cannot see. The rule below asks the assistant to give "the closest answer it supports" instead of saying the context does not cover the question. None of the 58 phrases is in it, so make improve accepts it, as the panel in step 1 does. Its meaning reaches only the gate. There, refusal_rate counts the 18 rows the documents cannot answer, and 2 of them answered turn it red. Do not paste the golden row accept prints this time: the question is in the set already. The commit holds the version alone, and the next cell takes it back off.
 
+## Conditional recovery
+
+- [recovery/demo_09_promote_or_roll_back.py](recovery/demo_09_promote_or_roll_back.py) — Only when make gate was red: no promote, the commit with the new version reverted, and documind-api's template back to v3. A green gate promotes in the file before, and nothing here runs.
+
 ## Finish and restore
 
 - [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson is about the kit's own rows, so point acme at them for the duration and put the pin back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
@@ -400,7 +404,7 @@ Expected shape, not a promised result:
 
 ### demo_09_promote_or_roll_back.py
 
-A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Red. No promote. No traffic reached v4, so you can drop it without changing any version that has served. Revert the commit that holds v4 and its golden row; the next rule you accept builds on v3 again. PROMPT_VERSION=v4 is still in documind-api's template, because an update with --no-traffic still writes it. Any later candidate made from an image without v4 would carry the variable and refuse to start. So build the reverted commit and put v3 back with make prompt-candidate, which makes a new candidate with no traffic.
+A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away.
 
 **`step_01_promote_or_roll_back(session)` — Promote, or roll back / Promote, or roll back**
 
@@ -414,7 +418,11 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/outcome.txt]
 ```
 
-**`step_02_promote_or_roll_back(session)` — Promote, or roll back / Promote, or roll back**
+### recovery/demo_09_promote_or_roll_back.py
+
+Only when make gate was red: no promote, the commit with the new version reverted, and documind-api's template back to v3. A green gate promotes in the file before, and nothing here runs.
+
+**`step_01_promote_or_roll_back(session)` — Promote, or roll back / Promote, or roll back**
 
 Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Red. No promote. No traffic reached v4, so you can drop it without changing any version that has served. Revert the commit that holds v4 and its golden row; the next rule you accept builds on v3 again. PROMPT_VERSION=v4 is still in documind-api's template, because an update with --no-traffic still writes it. Any later candidate made from an image without v4 would carry the variable and refuse to start. So build the reverted commit and put v3 back with make prompt-candidate, which makes a new candidate with no traffic.
 
@@ -476,6 +484,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `33839328fe7dfc18320b430204488184112bd359`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`. All 64 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `fcf9af549fca3593ee52b0f3b67f4f8ab8e6c593`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

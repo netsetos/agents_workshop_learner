@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`, reviewed at blob `33839328fe7dfc18320b430204488184112bd359`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html`, reviewed at blob `fcf9af549fca3593ee52b0f3b67f4f8ab8e6c593`. Learners read that page on the course site; this guide keeps its prose.
 
 Lessons 12.1 to 12.3 changed the model behind DocuMind's answers. This lesson changes the words in front of it, starting from one answer that went wrong on your lane. A model may propose the change: one rule for the generator's prompt. A person accepts it, and the golden set gains the row that would have caught the answer. Then the gate judges the new prompt version on a revision that takes no traffic. Only then does traffic move. If the gate says no, the change goes back with git.
 

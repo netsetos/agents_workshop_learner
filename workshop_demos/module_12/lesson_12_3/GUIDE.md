@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`, reviewed at blob `c49db8249599749712b6018dfa45f61686eef074`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html`, reviewed at blob `0428e1fce6d71b2dd991357209b218b1e3272490`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 12.2 left a tuned endpoint. This lesson puts it behind the API on a candidate revision that takes no traffic, and compares that revision with the live one on the same questions, in the same hour. The method is lesson 4.4's. What is new is what can contaminate the comparison when the candidate is a tuned model, and how the price of its answers is counted.
 
@@ -236,6 +236,8 @@ The decision is yours, and it reads the three results in order. The gate must pa
 
 The revision stays in the service's list, with no traffic and no URL. The tuned endpoint stays too, billed only when it answers.
 
+The cell's second half puts `documind-api`'s template back to what serves. Every update since step 4 wrote the template, the untuned base's last, and removing a tag moves no template. Lesson 12.4's `make prompt-candidate` changes only the prompt version and starts from the template. Without this half, its candidate would answer with the untuned model, and a promote would put that model live. Run it whichever way you go: after a promote, the template still holds the untuned base. The update moves no traffic, and lesson 11.7's detector checks the result.
+
 ### Optional: the v3 candidate, and the gate on it
 
 If you tuned v3 in lesson 12.2's step 7: its endpoint behind the candidate address, then every golden row on it.
@@ -314,7 +316,7 @@ Each point is checked in the kit's code, and the build asserts it, so this box c
 
 Eleven checks, each one block above, each with the value that proves it on your lane. The last two are for steps 7 and 8, if you ran them.
 
-`documind-api` has two more revisions, each with no traffic and no tag: the candidate, with the tuned endpoint as its model, and the untuned base, with `gemini-3.1-flash-lite`. `.candidate-revision` is gone. Your home folder has `base173.json`, `untuned173.json` and `cand173.json`, and Experiments has the pairwise run. Cloud Logging holds the usage rows of about 325 answers. The live revision still serves `gemini-3.6-flash`, and the tuned endpoint stays, billed only when it answers. If you ran steps 7 and 8, the candidate address pointed at v3's endpoint until you removed it again, and `~/cand173v3.json` holds v3's gate. Lesson 12.4 closes the loop: a production row becomes a candidate change, gated by eval-live before it is promoted or rolled back.
+`documind-api` has three more revisions, each with no traffic and no tag: the candidate, with the tuned endpoint as its model; the untuned base, with `gemini-3.1-flash-lite`; and the one that put the template back to what serves. `.candidate-revision` is gone. Your home folder has `base173.json`, `untuned173.json` and `cand173.json`, and Experiments has the pairwise run. Cloud Logging holds the usage rows of about 325 answers. The live revision still serves `gemini-3.6-flash`, and the tuned endpoint stays, billed only when it answers. If you ran steps 7 and 8, the candidate address pointed at v3's endpoint until you removed it again, and `~/cand173v3.json` holds v3's gate. Lesson 12.4 closes the loop: a production row becomes a candidate change, gated by eval-live before it is promoted or rolled back.
 
 Netsetos GenAI on GCP · Module 12 Tuning · Lesson 12.3 Compare the tuned candidate with an uncontaminated baseline · v5.0
 

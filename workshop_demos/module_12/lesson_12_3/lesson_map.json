@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_12.3_Tuned_Candidate_WIX.html",
-  "source_sha": "c49db8249599749712b6018dfa45f61686eef074",
+  "source_sha": "0428e1fce6d71b2dd991357209b218b1e3272490",
   "shared_setup_windows": [
     1
   ],
@@ -481,8 +481,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
-        898,
-        910
+        925,
+        937
       ],
       "offline": false,
       "live_verified": false,
@@ -498,7 +498,7 @@
           "id": "source_36",
           "function": "step_01_optional_the_v3_candidate_and_the_gate_on",
           "window": 36,
-          "source_line": 898,
+          "source_line": 925,
           "manual_checkpoint": null
         },
         {
@@ -511,7 +511,7 @@
           "id": "source_38",
           "function": "step_02_optional_the_v3_candidate_and_the_gate_on",
           "window": 38,
-          "source_line": 910,
+          "source_line": 937,
           "manual_checkpoint": null
         }
       ],
@@ -537,7 +537,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_3/GUIDE.md",
       "source_lines": [
-        965
+        992
       ],
       "offline": false,
       "live_verified": false,
@@ -553,7 +553,7 @@
           "id": "source_40",
           "function": "step_01_optional_one_question_two_models",
           "window": 40,
-          "source_line": 965,
+          "source_line": 992,
           "manual_checkpoint": null
         }
       ],
@@ -603,7 +603,7 @@
           "subheading": "The decision, and the candidate's tag",
           "purpose": "The decision is yours, and it reads the three results in order. The gate must pass. The judge says how often the tuned model gives the worse answer where the two differ. The delta says what that is worth at your volume. With a candidate that passes, there are three ways forward:",
           "label": "bash — run in the operator shell, in the kit (removes the candidate's address; the revision stays, with no traffic)",
-          "expected": "...\nthe candidate URL now: HTTP 404",
+          "expected": "...\nthe candidate URL now: HTTP 404\nthe template against documind-api-000NN-xxx: image another; put back ['GENERATOR_MODEL', 'GIT_SHA', 'RAG_MODEL_BASE']; remove []\ndocumind-api's template is what its serving revision documind-api-000NN-xxx was made from\nnothing found",
           "adaptations": [],
           "id": "source_34",
           "function": "step_02_the_decision_and_the_candidate_s_tag",
@@ -816,28 +816,28 @@
       "label": "expected (the removal's own output is left out)",
       "heading": "The verdict and the delta",
       "anchor": "s6",
-      "line": 887
+      "line": 910
     },
     {
       "window": 37,
       "label": "expected (the echo is the kit's recipe with lesson 12.2's step 7 endpoint; gcloud's progress lines are left out, and your revision's name differs)",
       "heading": "Optional: the v3 candidate, and the gate on it",
       "anchor": "s7",
-      "line": 902
+      "line": 929
     },
     {
       "window": 39,
       "label": "expected (run_eval.py's own code over the stand-in v3 candidate: the house style, and the v2 candidate's misses; your rows are your lane's)",
       "heading": "Optional: the v3 candidate, and the gate on it",
       "anchor": "s7",
-      "line": 912
+      "line": 939
     },
     {
       "window": 41,
       "label": "expected (this cell over the stand-in revisions: the live answers as gemini-3.6-flash writes them, the candidate's as v3's rows teach; your answers are the models' own)",
       "heading": "Optional: one question, two models",
       "anchor": "s8",
-      "line": 1001
+      "line": 1028
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

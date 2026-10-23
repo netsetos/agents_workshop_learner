@@ -49,11 +49,12 @@ def step_01_the_version_on_every_usage_row(session):
         newest.setdefault(r.get("prompt_version"), r)
     for v in sorted(newest):
         print(f"newest {v} row: tokens_in {newest[v].get('tokens_in')}, tokens_out {newest[v].get('tokens_out')}")
-    if {"v3", "v4"} <= set(newest):
-        print("tokens_in, v4 minus v3:", int(newest["v4"].get("tokens_in") or 0) - int(newest["v3"].get("tokens_in") or 0))
     versions = json.load(open("services/rag-api/prompt_rules.json", encoding="utf-8"))["versions"]
-    added = "".join(f"{6 + k}. {rule}\n" for k, rule in enumerate(versions.get("v4", {}).get("rules", [])))
-    print(f"v4's added lines: {len(added)} characters, about {len(added) // 4} tokens by the kit's estimate (len // 4)")
+    pv = max(versions, key=lambda v: int(v[1:]))        # the version accept wrote: v4, or v5 where lesson 3.6 spent v4
+    if pv != "v3" and {"v3", pv} <= set(newest):
+        print(f"tokens_in, {pv} minus v3:", int(newest[pv].get("tokens_in") or 0) - int(newest["v3"].get("tokens_in") or 0))
+    added = "".join(f"{6 + k}. {rule}\n" for k, rule in enumerate(versions[pv].get("rules", [])))
+    print(f"{pv}'s added lines: {len(added)} characters, about {len(added) // 4} tokens by the kit's estimate (len // 4)")
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

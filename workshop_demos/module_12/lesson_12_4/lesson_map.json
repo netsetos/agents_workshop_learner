@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_12.4_Self_Improving_WIX.html",
-  "source_sha": "33839328fe7dfc18320b430204488184112bd359",
+  "source_sha": "fcf9af549fca3593ee52b0f3b67f4f8ab8e6c593",
   "shared_setup_windows": [
     2
   ],
@@ -547,20 +547,18 @@
         "demo_08_before_and_after_the_live_url_and_the_tag_url"
       ],
       "heading": "Promote, or roll back",
-      "purpose": "A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away. Red. No promote. No traffic reached v4, so you can drop it without changing any version that has served. Revert the commit that holds v4 and its golden row; the next rule you accept builds on v3 again. PROMPT_VERSION=v4 is still in documind-api's template, because an update with --no-traffic still writes it. Any later candidate made from an image without v4 would carry the variable and refuse to start. So build the reverted commit and put v3 back with make prompt-candidate, which makes a new candidate with no traffic.",
+      "purpose": "A green record moves the traffic to the candidate. A red one moves nothing, and the version goes back with git. Green. make promote-gated runs lesson 11.2's gate-check on the record, then the unchanged make promote. That writes the revision serving now to .previous-revision, moves all the traffic to the candidate by name, and prints /version from the live URL. Ask the question on the UI again afterwards: the UI now reaches v4. The cell asks it once more from the shell. If anything looks wrong later, make rollback returns the traffic to the revision in .previous-revision, which never went away.",
       "anchor": "s9",
       "anchors": [
         "s9"
       ],
       "section_number": 9,
       "windows": [
-        54,
-        56
+        54
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_4/GUIDE.md",
       "source_lines": [
-        1019,
-        1028
+        1019
       ],
       "offline": false,
       "live_verified": false,
@@ -578,7 +576,34 @@
           "window": 54,
           "source_line": 1019,
           "manual_checkpoint": null
-        },
+        }
+      ],
+      "next": "demo_10_the_version_on_every_usage_row.py"
+    },
+    {
+      "id": "recovery_demo_09_promote_or_roll_back",
+      "lesson": "12.4",
+      "file": "recovery/demo_09_promote_or_roll_back.py",
+      "category": "recovery",
+      "requires": [],
+      "heading": "Promote, or roll back",
+      "purpose": "Only when make gate was red: no promote, the commit with the new version reverted, and documind-api's template back to v3. A green gate promotes in the file before, and nothing here runs.",
+      "anchor": "s9",
+      "anchors": [
+        "s9"
+      ],
+      "section_number": 9,
+      "windows": [
+        56
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_4/GUIDE.md",
+      "source_lines": [
+        1028
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
         {
           "heading": "Promote, or roll back",
           "subheading": "Promote, or roll back",
@@ -587,7 +612,7 @@
           "expected": "",
           "adaptations": [],
           "id": "source_56",
-          "function": "step_02_promote_or_roll_back",
+          "function": "step_01_promote_or_roll_back",
           "window": 56,
           "source_line": 1028,
           "manual_checkpoint": null
@@ -658,8 +683,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_12/lesson_12_4/GUIDE.md",
       "source_lines": [
-        1067,
-        1077
+        1068,
+        1078
       ],
       "offline": false,
       "live_verified": false,
@@ -675,7 +700,7 @@
           "id": "source_59",
           "function": "step_01_optional_a_rule_worded_past_the_phrases_ga",
           "window": 59,
-          "source_line": 1067,
+          "source_line": 1068,
           "manual_checkpoint": null
         },
         {
@@ -688,7 +713,7 @@
           "id": "source_61",
           "function": "step_02_optional_a_rule_worded_past_the_phrases_ga",
           "window": 61,
-          "source_line": 1077,
+          "source_line": 1078,
           "manual_checkpoint": null
         }
       ],
@@ -1022,35 +1047,35 @@
       "label": "expected (the author's lane: your question, answers, ids, times and counts are yours)",
       "heading": "The version on every usage row",
       "anchor": "s10",
-      "line": 1058
+      "line": 1059
     },
     {
       "window": 60,
       "label": "expected (the author's lane: your question, answers, ids, times and counts are yours)",
       "heading": "Optional: a rule worded past the phrases, gated",
       "anchor": "s11",
-      "line": 1075
+      "line": 1076
     },
     {
       "window": 62,
       "label": "expected (make prompt-version on that copy, v4 accepted: the same verdict as before)",
       "heading": "Why it works this way, what it costs, and what the kit does not do yet",
       "anchor": "s12",
-      "line": 1089
+      "line": 1090
     },
     {
       "window": 63,
       "label": "expected (the head of v4's prompt when a packed source carries an effective date: with_rules() and DATED_RULE, as generate() joins them, computed when the page was built)",
       "heading": "Why it works this way, what it costs, and what the kit does not do yet",
       "anchor": "s12",
-      "line": 1097
+      "line": 1098
     },
     {
       "window": 64,
       "label": "services/rag-api/semantic_cache.py - scope_of(): a cached answer belongs to the version it was answered under",
       "heading": "Why it works this way, what it costs, and what the kit does not do yet",
       "anchor": "s12",
-      "line": 1115
+      "line": 1116
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

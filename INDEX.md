@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1664 files; 235 quoted by a lesson, 349 shown or named by one.
+1665 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -1596,6 +1596,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_12/lesson_12_4/demo_10_the_version_on_every_usage_row.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_4/lesson_map.json` | config | - | - |
 | `workshop_demos/module_12/lesson_12_4/optional/demo_11_optional_a_rule_worded_past_the_phrases_gated.py` | code | - | - |
+| `workshop_demos/module_12/lesson_12_4/recovery/demo_09_promote_or_roll_back.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_4/setup/finish.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_4/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_12/lesson_12_4/setup/restore_settings.py` | code | - | - |

@@ -663,16 +663,16 @@
     {
       "lesson": "12.3",
       "title": "Compare the tuned candidate with an uncontaminated baseline",
-      "source_sha": "c49db8249599749712b6018dfa45f61686eef074",
+      "source_sha": "0428e1fce6d71b2dd991357209b218b1e3272490",
       "source_kind": "main_html",
       "demos": 10
     },
     {
       "lesson": "12.4",
       "title": "Improve the agent safely: eval-gated self-improvement",
-      "source_sha": "33839328fe7dfc18320b430204488184112bd359",
+      "source_sha": "fcf9af549fca3593ee52b0f3b67f4f8ab8e6c593",
       "source_kind": "main_html",
-      "demos": 12
+      "demos": 13
     }
   ]
 }
