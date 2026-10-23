@@ -28,20 +28,22 @@ keys lists every service account in the project with its user-managed keys, and 
 organization, org_policy.tf's enforce_no_sa_keys can forbid making keys; a personal account's project has no
 organization, nothing can forbid them, and this check is the control.
 
-gate judges the exact revision deploy/.candidate-revision names and records what it judged. Before any row is asked,
-the candidate tag must route to that revision (promote's own rule), the revision's image digest and GIT_SHA are read
-(gcloud run revisions describe), and the tag URL's GET /version must answer as that GIT_SHA (the CD workflow's check),
-as documind-ui-sa with a token for the service's canonical URL (F42). Then evals/run_eval.py asks every golden row of
-the tag URL, as make eval-live does, into evals/reports/gate-<revision>.json, and the gate record, by default
-evals/reports/gate.json (gitignored), names the revision, its digest and GIT_SHA, the report's sha256, the verdict and
-scores, the time, and the sha256 of each file the verdict was judged by. A red gate writes its record too. A gate
-refused before its rows start leaves the earlier record as it was; one that stops once they have started writes none,
-and the earlier record is gone with it, deleted as the rows start. It writes nothing to Google Cloud, so the target is
-its own switch: a lane that never runs it behaves as before. GATE_PROMPT=1 (off by default: it can refuse a release)
-also holds the candidate's prompt to lesson 3.6's registry where the rows would start: the label GET /version answers
-under, against generator.py, config.py, prompt_versions.json and prompt_rules.json as the commit its GIT_SHA names
-holds them (git show, in this checkout). A prompt that is not a registered version at that commit (prompt_reasons()
-says why) stops the gate before any row is asked, and leaves no record.
+gate judges the exact revision deploy/.candidate-revision names and records what it judged. Before any row is asked, the
+candidate tag must route to that revision (promote's own rule), the revision's image digest and GIT_SHA are read (gcloud
+run revisions describe), the tag its image was deployed by must be GIT_SHA (F43; read from the service's spec.template,
+which keeps the tag while the revision is the last it made), and the tag URL's GET /version must answer as that GIT_SHA
+(the CD workflow's check), as documind-ui-sa with a token for the service's canonical URL (F42). Then evals/run_eval.py
+asks every golden row of the tag URL, as make eval-live does, into evals/reports/gate-<revision>.json, and the gate
+record, by default evals/reports/gate.json (gitignored), names the revision, its image as deployed, its digest and
+GIT_SHA, the report's sha256, the verdict and scores, the time, and the sha256 of each file the verdict was judged by. A
+red gate writes its record too. A gate refused before its rows start leaves the earlier record as it was; one that stops
+once they have started writes none, and the earlier record is gone with it, deleted as the rows start. It writes nothing
+to Google Cloud, so the target is its own switch: a lane that never runs it behaves as before.
+GATE_PROMPT=1 (off by default: it can refuse a release) also holds the candidate's prompt to lesson 3.6's registry where
+the rows would start: the label GET /version answers under, against generator.py, config.py, prompt_versions.json and
+prompt_rules.json as the commit its GIT_SHA names holds them (git show, in this checkout). A prompt that is not a
+registered version at that commit (prompt_reasons() says why) stops the gate before any row is asked, and leaves no
+record.
 
 gate-check decides whether make promote may move traffic: only to the revision a green record names, while
 deploy/.candidate-revision still names it and the candidate tag is not on another, with the record's digest and
@@ -65,7 +67,9 @@ last --hours (24), with their image and GENERATOR_MODEL; the gate record and eac
 smoke-deployed run, with what served and what /version said; then the traffic table, .candidate-revision,
 .previous-revision and the service's spec.template as they are now. Last, whether the lane is in the gated state: the
 revision serving is one a gate judged green, spec.template is what serves, and .candidate-revision names no revision
-the gate judged red. make rollback moves traffic and leaves spec.template as the last update made it, and make
+the gate judged red. spec.template keeps the tag a deploy gave its image and a revision the digest that tag named, so
+the template's image is compared as the revision it made (status.latestCreatedRevisionName) holds it, as
+commands/gotchas.py reads it. make rollback moves traffic and leaves spec.template as the last update made it, and make
 candidate and make release-candidate start from the template (env vars merge across revisions, F43): after a forced
 promote of a bad candidate and a rollback, the next candidate would carry the bad setting until a candidate made from
 what serves puts it back. incident names that candidate's make line. It only reads.
@@ -487,8 +491,9 @@ def traffic_of(data) -> tuple[str, str]:
 
 
 def revision_facts(project: str, region: str, name: str) -> dict:
-    """What a revision is: its service, its image as deployed, the digest Cloud Run resolved that image to when it made
-    the revision (status.imageDigest; a revision never changes), its GIT_SHA, and whether it is Ready."""
+    """What a revision is: its service, the digest Cloud Run resolved its image to when it made the revision
+    (status.imageDigest; a revision never changes), its GIT_SHA, and whether it is Ready. The revision's own spec names
+    its image by that digest too, never by the tag the deploy gave: deployed_image() reads the tag."""
     data = read_json(["gcloud", "run", "revisions", "describe", name, f"--region={region}", f"--project={project}",
                       "--format=json"])
     if not isinstance(data, dict):
@@ -498,11 +503,21 @@ def revision_facts(project: str, region: str, name: str) -> dict:
     containers = [c for c in spec.get("containers") or [] if isinstance(c, dict)]
     env = {e.get("name"): e.get("value") for c in containers for e in c.get("env") or [] if isinstance(e, dict)}
     return {"service": (meta.get("labels") or {}).get("serving.knative.dev/service"),
-            "image": containers[0].get("image") if containers else None,
             "digest": status.get("imageDigest"),
             "git_sha": env.get("GIT_SHA"),
             "ready": any(isinstance(c, dict) and c.get("type") == "Ready" and c.get("status") == "True"
                          for c in status.get("conditions") or [])}
+
+
+def deployed_image(service, name: str) -> str:
+    """The image reference revision `name` was deployed by (.../documind/api:abc1234), from a describe of the service
+    already read; '' when it cannot be read. Cloud Run writes the digest the tag named on every revision, and only the
+    service's spec.template keeps the tag (22 October 2026), so the reference is the template's while the revision is
+    the one the template made, status.latestCreatedRevisionName, and unknown once a later update has made another."""
+    status = service.get("status") if isinstance(service, dict) else None
+    if not isinstance(status, dict) or status.get("latestCreatedRevisionName") != name:
+        return ""
+    return container_of(((service.get("spec") or {}).get("template") or {}).get("spec"))[0]
 
 
 def image_tag(image) -> str:
@@ -512,7 +527,7 @@ def image_tag(image) -> str:
 
 
 def unjudgeable(facts: dict) -> list[str]:
-    """Why a revision cannot be bound to a verdict, or []."""
+    """Why a revision cannot be bound to a verdict, or []: its revision_facts(), with its deployed_image() as image."""
     why = []
     if facts["service"] != SERVICE:
         why.append(f"it belongs to {facts['service'] or 'no service'}, not {SERVICE}")
@@ -524,6 +539,10 @@ def unjudgeable(facts: dict) -> list[str]:
     if not sha:
         why.append("it carries no GIT_SHA, so GET /version cannot say which build answers: make release-candidate "
                    "GIT_SHA=<tag> sets it")
+    elif not facts["image"]:
+        why.append(f"{SERVICE}'s spec.template has made a later revision (status.latestCreatedRevisionName), so the "
+                   "tag its image was deployed by cannot be read: a revision holds only the digest, and an image-only "
+                   "update (F43) cannot be ruled out. make release-candidate again")
     elif tag and tag != sha:
         why.append(f"it runs {str(facts['image']).rsplit('/', 1)[-1]} but its GIT_SHA says {sha}: env vars merge "
                    "across revisions, so an image-only update keeps the old GIT_SHA (F43). make release-candidate "
@@ -725,12 +744,13 @@ def cmd_gate(a) -> int:
     project, region = lane_of(a)
     gate_file, candidate_file = gate_paths(a)
     revision = recorded_candidate(candidate_file)
-    _, tagged = service_traffic(project, region)
+    service = describe_api(project, region)
+    _, tagged = traffic_of(service)
     if tagged != revision:
         raise Stop(f"the candidate tag is on {tagged or 'no revision'}, but {shown(candidate_file)} names {revision}: "
                    "the tag URL would answer from a revision make promote would not move traffic to. make "
                    "release-candidate (or make candidate) again, so the two name one revision")
-    facts = revision_facts(project, region, revision)
+    facts = dict(revision_facts(project, region, revision), image=deployed_image(service, revision))
     why = unjudgeable(facts)
     if why:
         raise Stop(f"{revision} cannot be gated: {'; '.join(why)}")
@@ -1113,8 +1133,17 @@ def container_of(spec) -> tuple[str, dict]:
     return str(first.get("image") or ""), env
 
 
+def image_shown(image) -> str:
+    """An image as incident prints it: the last part of its path, a digest cut to 12 hex digits as docker shows one
+    (.../documind/api@sha256:a471b9b8a0c3... -> api@sha256:a471b9b8a0c3), a tag as it is (api:66f47aa)."""
+    last = str(image or "").rsplit("/", 1)[-1]
+    name, at, digest = last.partition("@sha256:")
+    return f"{name}@sha256:{digest[:12]}" if at else last
+
+
 def api_revisions(project: str, region: str) -> dict:
-    """documind-api's revisions by name: when each was made, its image and its env."""
+    """documind-api's revisions by name: when each was made, its image (the digest Cloud Run resolved the deploy's tag
+    to: a revision never holds the tag) and its env."""
     data = read_json(["gcloud", "run", "revisions", "list", f"--service={SERVICE}", f"--region={region}",
                       f"--project={project}", "--format=json"])
     if not isinstance(data, list):
@@ -1229,6 +1258,10 @@ def cmd_incident(a) -> int:
     serving, tagged = traffic_of(service)
     template = container_of(((service.get("spec") or {}).get("template") or {}).get("spec"))
     revisions = api_revisions(project, region)
+    # The template keeps the tag a deploy gave it, and each revision the digest Cloud Run resolved that tag to, so a tag
+    # never equals what serves (22 October 2026): the template's image is compared as the revision it made holds it.
+    made = revisions.get(str((service.get("status") or {}).get("latestCreatedRevisionName") or ""))
+    held = (made["image"] if made else template[0], template[1])
     if not serving:
         raise Stop(f"no revision serves {SERVICE}: its traffic table sends no percent anywhere")
     if serving not in revisions:
@@ -1247,7 +1280,7 @@ def cmd_incident(a) -> int:
     events = []                          # (time, order, sequence, line)
     for rev in revisions.values():
         if rev["created"] and rev["created"] >= since:
-            events.append((rev["created"], 0, 0, f"revision  {rev['name']}  made: {rev['image'].rsplit('/', 1)[-1]}, "
+            events.append((rev["created"], 0, 0, f"revision  {rev['name']}  made: {image_shown(rev['image'])}, "
                            f"GENERATOR_MODEL={rev['env'].get('GENERATOR_MODEL', '(unset)')}  "
                            f"{judged_line(judged(rev['name'], record, gate_file))}"))
     finished = read_stamp(record["finished"]) if record else None
@@ -1298,9 +1331,11 @@ def cmd_incident(a) -> int:
                 if previous and previous != serving else f"gcloud run services update-traffic {SERVICE} --region "
                 f"{region} --project {project} --to-revisions <a revision the gate judged green>=100")
         steps = [back, "make incident again"]
-    diffs = drift(template, (revisions[serving]["image"], serving_env))
+    diffs = drift(held, (revisions[serving]["image"], serving_env))
     if diffs:
+        in_template = image_shown(template[0]) + (f" ({image_shown(held[0])})" if held[0] != template[0] else "")
         reasons.append("spec.template is not what serves: " + "; ".join(
+            f"image {in_template} in the template, {image_shown(new)} on {serving}" if name == "image" else
             f"{name} {old if old is not None else '(unset)'} in the template, {new if new is not None else '(unset)'} "
             f"on {serving}" for name, old, new in diffs) + ". make rollback moves traffic and leaves the template as "
             "the last update made it, and make candidate and make release-candidate start from the template (env vars "
@@ -1321,7 +1356,7 @@ def cmd_incident(a) -> int:
         steps = repair_steps(diffs, serving_env, settings, project, region)
         flight = revisions.get(candidate)
         if (diffs and flight and candidate != serving and not (candidate_verdict and candidate_verdict[0] == "fail")
-                and not drift(template, (flight["image"], flight["env"]))):
+                and not drift(held, (flight["image"], flight["env"]))):
             print(f"   If {candidate}, the recorded candidate and what spec.template holds, is the change you mean to "
                   "release: " + ("make promote-gated" if candidate_verdict else "make gate, then make promote-gated")
                   + ". Otherwise put the template back to what serves:")

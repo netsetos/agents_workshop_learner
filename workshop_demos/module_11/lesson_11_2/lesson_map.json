@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.2_Gated_Candidate_WIX.html",
-  "source_sha": "30a41431a2a4f56a2d2018ce0c61de41b75ee82b",
+  "source_sha": "213f9987f72054b35fe7a03511bfcd6540d6f02b",
   "shared_setup_windows": [
     1
   ],
@@ -281,7 +281,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
-        755
+        771
       ],
       "offline": false,
       "live_verified": false,
@@ -297,7 +297,7 @@
           "id": "source_16",
           "function": "step_01_the_kit_s_own_tests",
           "window": 16,
-          "source_line": 755,
+          "source_line": 771,
           "manual_checkpoint": null
         }
       ],
@@ -325,9 +325,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
-        966,
-        987,
-        1036
+        983,
+        1004,
+        1053
       ],
       "offline": false,
       "live_verified": false,
@@ -343,7 +343,7 @@
           "id": "source_27",
           "function": "step_01_name_the_candidate",
           "window": 27,
-          "source_line": 966,
+          "source_line": 983,
           "manual_checkpoint": null
         },
         {
@@ -356,7 +356,7 @@
           "id": "source_29",
           "function": "step_02_the_tag_url_and_the_audience",
           "window": 29,
-          "source_line": 987,
+          "source_line": 1004,
           "manual_checkpoint": null
         },
         {
@@ -369,7 +369,7 @@
           "id": "source_31",
           "function": "step_03_the_gate",
           "window": 31,
-          "source_line": 1036,
+          "source_line": 1053,
           "manual_checkpoint": null
         }
       ],
@@ -396,8 +396,8 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
-        1053,
-        1110
+        1070,
+        1127
       ],
       "offline": false,
       "live_verified": false,
@@ -413,7 +413,7 @@
           "id": "source_33",
           "function": "step_01_the_record_against_the_lane",
           "window": 33,
-          "source_line": 1053,
+          "source_line": 1070,
           "manual_checkpoint": null
         },
         {
@@ -426,7 +426,7 @@
           "id": "source_35",
           "function": "step_02_gate_check_and_nothing_after_it",
           "window": 35,
-          "source_line": 1110,
+          "source_line": 1127,
           "manual_checkpoint": null
         }
       ],
@@ -452,7 +452,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_2/GUIDE.md",
       "source_lines": [
-        1122
+        1139
       ],
       "offline": false,
       "live_verified": false,
@@ -470,7 +470,7 @@
           "id": "source_37",
           "function": "step_01_change_it_a_record_that_names_another_revi",
           "window": 37,
-          "source_line": 1122,
+          "source_line": 1139,
           "manual_checkpoint": null
         }
       ],
@@ -587,161 +587,161 @@
       "label": "commands/release.py - cmd_gate(), first half: every refusal before a row is asked",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 550
+      "line": 565
     },
     {
       "window": 12,
       "label": "commands/release.py - cmd_gate(), second half: the rows, the tag read again, the record",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 576
+      "line": 592
     },
     {
       "window": 13,
       "label": "commands/release.py - report_blocked() and write_record(): the verdict from the report, the record whole",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 628
+      "line": 644
     },
     {
       "window": 14,
       "label": "commands/release.py - offline_reasons(): the files, every reason at once",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 661
+      "line": 677
     },
     {
       "window": 15,
       "label": "commands/release.py - live_reasons() and cmd_gate_check(): the lane, read only when the files agree",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 713
+      "line": 729
     },
     {
       "window": 17,
       "label": "expected shape (the kit's own tests on your machine: the time is yours)",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 757
+      "line": 773
     },
     {
       "window": 18,
       "label": "expected (release.py run when this page was built, against the kit test's stand-in lane: the names, commit and hashes are the stand-in's; on your lane run_eval.py prints its rows between the two >> blocks)",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 766
+      "line": 782
     },
     {
       "window": 19,
       "label": "expected (evals/reports/gate.json as the stand-in gate wrote it: 21 fields, indent 1)",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 776
+      "line": 792
     },
     {
       "window": 20,
       "label": "expected (release.py run when this page was built, against the kit test's stand-in lane, with a stand-in report that misses one threshold)",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 831
+      "line": 847
     },
     {
       "window": 21,
       "label": "expected (release.py run when this page was built, against the kit test's stand-in lane, two hours after the gate)",
       "heading": "make gate and make promote-gated, line by line",
       "anchor": "s4",
-      "line": 841
+      "line": 857
     },
     {
       "window": 22,
       "label": "Makefile - release-candidate and record-candidate: the image on a no-traffic revision, its name in a file",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 901
+      "line": 918
     },
     {
       "window": 23,
       "label": "services/rag-api/auth.py - SELF_URL: the one audience a bearer token is checked against",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 914
+      "line": 931
     },
     {
       "window": 24,
       "label": "services/rag-api/main.py - /version asks for no identity; /v1/sources goes through verify_iap",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 925
+      "line": 942
     },
     {
       "window": 25,
       "label": "Makefile - eval-live's comment: the audience does not move with the URL (F42)",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 931
+      "line": 948
     },
     {
       "window": 26,
       "label": "commands/release.py - get_version(): GET /version on the tag URL, twice for a cold start",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 936
+      "line": 953
     },
     {
       "window": 28,
       "label": "expected (the author's lane: your revision names, commit, digests, hashes and times are yours)",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 982
+      "line": 999
     },
     {
       "window": 30,
       "label": "expected (the author's lane: your revision names, commit, digests, hashes and times are yours)",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 1030
+      "line": 1047
     },
     {
       "window": 32,
       "label": "expected (the author's lane: the full gate on lesson 11.1's candidate; your rates, rows, names and times are yours)",
       "heading": "On your lane: the candidate named, the token's audience, and the gate",
       "anchor": "s5",
-      "line": 1038
+      "line": 1055
     },
     {
       "window": 34,
       "label": "expected (the author's lane: your revision names, commit, digests, hashes and times are yours)",
       "heading": "The record read back against Cloud Run, and gate-check alone",
       "anchor": "s6",
-      "line": 1106
+      "line": 1123
     },
     {
       "window": 36,
       "label": "expected (the author's lane: your revision names, commit, digests, hashes and times are yours)",
       "heading": "The record read back against Cloud Run, and gate-check alone",
       "anchor": "s6",
-      "line": 1112
+      "line": 1129
     },
     {
       "window": 38,
       "label": "expected (the cell's lines and release.py's, run when this page was built against the kit test's stand-in lane; make's line as GNU make 4 prints it; your names are yours)",
       "heading": "Change it: a record that names another revision",
       "anchor": "s7",
-      "line": 1140
+      "line": 1157
     },
     {
       "window": 39,
       "label": ".github/workflows/documind-cd.yml - CI's binding: a job output, a job dependency, plain make promote",
       "heading": "What the record does not hold, and what it costs",
       "anchor": "s8",
-      "line": 1156
+      "line": 1173
     },
     {
       "window": 40,
       "label": "Makefile - deploy-services ends by giving its own new revision all the traffic; make up runs it",
       "heading": "What the record does not hold, and what it costs",
       "anchor": "s8",
-      "line": 1182
+      "line": 1199
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

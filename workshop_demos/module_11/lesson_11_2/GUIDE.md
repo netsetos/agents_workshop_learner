@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Gated_Candidate_WIX.html`, reviewed at blob `30a41431a2a4f56a2d2018ce0c61de41b75ee82b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.2_Gated_Candidate_WIX.html`, reviewed at blob `213f9987f72054b35fe7a03511bfcd6540d6f02b`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.1's dispatch left a revision of `documind-api` that takes no traffic, and its live gate said green inside one GitHub run. Your lane does not remember that verdict, and `make promote` moves traffic to whichever revision a file names. This lesson ties the verdict to the revision. `make gate` judges exactly the revision `.candidate-revision` names, once the candidate tag routes to it and its tag URL answers as its own build, and writes a record: the revision, its image digest and `GIT_SHA`, the report's sha256, the verdict and the time. `make promote-gated` reads that record and stops any other revision, a red verdict, an edited report or an old record before `make promote` runs. You will name the candidate, see which token audience the API accepts, gate the candidate, read the record back against Cloud Run, and offer a record that names another revision.
 
@@ -120,9 +120,9 @@ The constants say what the gate binds: the service, the two accounts whose token
 
 #### Before any row: the revision, its facts, its build
 
-`revision_facts()` reads one revision with `gcloud run revisions describe`: the service it belongs to, its image as deployed, the digest Cloud Run resolved that image to when it made the revision, its `GIT_SHA`, and whether it is Ready. `unjudgeable()` turns those facts into refusals. The last one is F43: when the image's tag and `GIT_SHA` disagree, the revision is not the build its `/version` claims to be.
+`revision_facts()` reads one revision with `gcloud run revisions describe`: the service it belongs to, the digest Cloud Run resolved its image to when it made the revision, its `GIT_SHA`, and whether it is Ready. The revision names its image by that digest only. The tag the deploy gave, `api:COMMIT`, stays in the service's `spec.template`, and the template made one revision: the newest, `status.latestCreatedRevisionName`. So `deployed_image()` reads the tag from the template while the candidate is that revision, and reads nothing once a later update has made another. `unjudgeable()` turns those facts into refusals. The last two are about F43. When the tag and `GIT_SHA` disagree, the revision is not the build its `/version` claims to be. When the tag cannot be read, the gate cannot tell, so it refuses as well.
 
-`cmd_gate()`'s first half is all refusals. It stops if the candidate tag routes to any revision but the one the file names, because the tag URL would then answer from a revision `make promote` would not move traffic to. It mints the member's token for the service's canonical URL, the one audience the API accepts (step 5), and stops if the tag URL answers as another `GIT_SHA`. Every check runs before the first of 65 answers is paid for.
+`cmd_gate()`'s first half is all refusals. One describe of the service gives it the traffic table and the template. It stops if the candidate tag routes to any revision but the one the file names, because the tag URL would then answer from a revision `make promote` would not move traffic to. It mints the member's token for the service's canonical URL, the one audience the API accepts (step 5), and stops if the tag URL answers as another `GIT_SHA`. Every check runs before the first of 65 answers is paid for.
 
 #### The rows, then the record
 

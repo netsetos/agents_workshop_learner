@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `2acaf24d3e3c8c6c2055b23e813d1010af7a06ae`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `6ab3e082c26c3c672317ac1b3e3236c1095c4bd6`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.2 left one green verdict, bound to one revision. This lesson moves traffic with it, then breaks the API on purpose and brings it back. `make promote-gated` promotes lesson 11.2's candidate. A candidate with a mistyped model name is judged red by `make gate` and refused, and plain `make promote`, which reads no record, moves traffic to it anyway. `make smoke-deployed` runs the smokes of the services your lane has deployed, and they go red; `make incident` reads the lane and your records, and names the way back. `time make rollback` returns the traffic in seconds, because the old revision never went away. But a rollback moves traffic and nothing else: the service's template still holds the mistyped name, and the next release would start from it. The repair is a new candidate made with what serves, judged by `make gate` and promoted by `make promote-gated`, until `make incident` exits 0.
 
@@ -168,7 +168,7 @@ Then each chosen smoke runs as `make smoke-all` runs it: through make, with the 
 
 #### The timeline, and the three checks
 
-`cmd_incident()` reads the service once, for its traffic and its `spec.template`, lists the revisions, and loads the gate record, the smoke log and the two files. The timeline is every revision made in the window with its image, `GENERATOR_MODEL` and verdict, the gate record's finish, and every smoke run, with a traffic move inferred wherever two runs in a row saw different revisions serving. The events are sorted by time, not by the order they were read in.
+`cmd_incident()` reads the service once, for its traffic and its `spec.template`, lists the revisions, and loads the gate record, the smoke log and the two files. The template keeps the tag a deploy gave its image, `api:COMMIT`; a revision holds only the digest Cloud Run resolved that tag to when it made the revision, `api@sha256:` and 64 hex digits. A tag never equals a digest, so `drift()` is handed the template's image as the revision the template made last (`status.latestCreatedRevisionName`) holds it. The timeline is every revision made in the window with its image (its digest, cut to 12 hex digits), `GENERATOR_MODEL` and verdict, the gate record's finish, and every smoke run, with a traffic move inferred wherever two runs in a row saw different revisions serving. The events are sorted by time, not by the order they were read in.
 
 The second half prints the state now and checks the gated state. A red revision serving gets the rollback as its repair: `make rollback` when `.previous-revision` names another revision, or a traffic move by hand to a revision the gate judged green when it does not. Otherwise `repair_steps()` builds the line. When the template holds exactly the recorded candidate, and the gate has not judged that candidate red, it says so first: the candidate may be the change you mean to release, and the line it prints then is the gate and the gated promote.
 
@@ -178,7 +178,7 @@ The second half prints the state now and checks the gated state. A red revision 
 
 #### Read it: the controlled failure on the stand-in lane
 
-The same stand-in, driven by this page's build through the recipes, as the stepper in step 1 shows it. The mistyped revision is `documind-api-00042-qqq`, lesson 11.2's candidate `documind-api-00041-kel` and the repair `documind-api-00043-rrr`. All three run the image `api:COMMIT`; the revision `make up` released, `documind-api-00040-abc`, runs `api:PREVIOUS`. First the gate on the mistyped revision, red:
+The same stand-in, driven by this page's build through the recipes, as the stepper in step 1 shows it. The mistyped revision is `documind-api-00042-qqq`, lesson 11.2's candidate `documind-api-00041-kel` and the repair `documind-api-00043-rrr`. All three were made from the image `api:COMMIT`, so all three hold the one digest that tag named; the revision `make up` released, `documind-api-00040-abc`, holds `api:PREVIOUS`'s. First the gate on the mistyped revision, red:
 
 Then `make promote-gated`, refused from the record, and plain `make promote`, which moves the traffic anyway:
 
@@ -232,7 +232,7 @@ The smokes pass: the revision lesson 11.2 judged serves again, and `/version` na
 
 #### Read it: the template, from Cloud Run's API
 
-The cell reads `documind-api` and its revisions from the Cloud Run Admin API's v1 resources, the same JSON `gcloud run services describe --format=json` prints, without `release.py`: each recent revision's traffic, tag and model, then the template's, and whether the template is what serves. Run it now, before the repair, while they differ.
+The cell reads `documind-api` and its revisions from the Cloud Run Admin API's v1 resources, the same JSON `gcloud run services describe --format=json` prints, without `release.py`: each recent revision's traffic, tag, image and model, then the template's, and whether the template is what serves. Each revision's image is a digest and the template's a tag, so the cell compares the template through the revision it made last, as `make incident` does. Run it now, before the repair, while they differ.
 
 #### Read it: what make release-candidate would make now
 

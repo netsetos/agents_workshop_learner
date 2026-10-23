@@ -2,8 +2,10 @@
 stand-in gcloud and a stand-in gate. Nothing reaches Google Cloud.
 
 The stand-in gcloud (FAKE, below) keeps one lane's documind-api in a JSON file beside it: the traffic table with the
-candidate tag, and each revision's image, digest, GIT_SHA and what it answers on GET /version. update-traffic moves
-traffic as Cloud Run does, keeping the tags, and every call is logged. In-process, release.run (every gcloud call goes
+candidate tag, the latest revision, and each revision's image (the tag it was deployed by), digest, GIT_SHA and what it
+answers on GET /version. As on Cloud Run, a revision holds its digest and only the service's spec.template, which made
+the latest revision, keeps the tag. update-traffic moves traffic as Cloud Run does, keeping the tags, and every call is
+logged. In-process, release.run (every gcloud call goes
 through it) is replaced by a call into the stand-in, release.get_version by its /version, and release.live_gate by a
 stand-in gate that writes the report evals/run_eval.py --report would and returns its exit code. get_version itself is
 tried against a local HTTP server.
@@ -14,13 +16,13 @@ read from the Makefile and mk/*.mk, in a copy of the kit's release files: promot
 and stops any other before promote runs, and promote and rollback do what they did before. make is not needed: MiniMake
 runs the few make rules these recipes use, and fails on any other.
 
-Covered: the record's fields and files; a red record; a leak; a gate that stops (no report, the tag moved while the
-rows were asked, interrupted) and leaves no record; each refusal before a row is asked (no candidate file, the tag on
-another revision or on none, a revision not Ready, no digest, no GIT_SHA, an image-only update (F43), /version
-answering as another sha, a token that cannot be minted, gcloud missing); gate-check's pass and each refusal (no
-record, not a record, another lane, another revision, a red record, a missing or edited report, a record that says pass
-over a red report, stale by age, a time in the future, stale by rules, the tag moved, a revision that is not what was
-judged); and the wiring: the targets, .PHONY, GATE_FILE, mk/README.md and UNOWNED.md.
+Covered: the record's fields and files; a red record; a leak; a gate that stops (no report, the tag moved while the rows
+were asked, interrupted) and leaves no record; each refusal before a row is asked (no candidate file, the tag on another
+revision or on none, a revision not Ready, no digest, no GIT_SHA, an image-only update (F43), a later revision made from
+the template, /version answering as another sha, a token that cannot be minted, gcloud missing); gate-check's pass and
+each refusal (no record, not a record, another lane, another revision, a red record, a missing or edited report, a
+record that says pass over a red report, stale by age, a time in the future, stale by rules, the tag moved, a revision
+that is not what was judged); and the wiring: the targets, .PHONY, GATE_FILE, mk/README.md and UNOWNED.md.
 """
 import contextlib
 import copy
@@ -121,6 +123,14 @@ def version(world, base):
                  "git_sha": rev.get("git_sha") or "unknown"}, **rev.get("answers", {}))
 
 
+def container(world, rev, image):
+    """A revision's container as Cloud Run returns it: this image, and its env."""
+    env = [{"name": "GOOGLE_CLOUD_PROJECT", "value": world["project"]}]
+    env += [{"name": "GIT_SHA", "value": rev["git_sha"]}] if rev.get("git_sha") else []
+    env += [{"name": "CHECKPOINT_DSN", "valueFrom": {"secretKeyRef": {"key": "latest", "name": "dsn"}}}]
+    return {"image": image, "env": env}
+
+
 def answer(world, tool, args):
     flags, words = parse(args)
     project, region = world["project"], world["region"]
@@ -147,8 +157,12 @@ def answer(world, tool, args):
         if flags.get("--format") == "value(status.latestCreatedRevisionName)":
             return 0, world["latest"] + "\n", ""
         if flags.get("--format") == "json":
+            # spec.template made the latest revision, and keeps the image as that deploy named it: by its tag.
+            made = world["revisions"].get(world["latest"])
             return 0, json.dumps({"apiVersion": "serving.knative.dev/v1", "kind": "Service",
                                   "metadata": {"name": "documind-api"},
+                                  "spec": {"template": {"spec": {"containers": [
+                                      container(world, made, made["image"])] if made else []}}},
                                   "status": {"latestCreatedRevisionName": world["latest"],
                                              "traffic": world["traffic"]}}), ""
     if words[:4] == ["run", "services", "update-traffic", "documind-api"] and "--to-revisions" in flags:
@@ -162,13 +176,11 @@ def answer(world, tool, args):
         rev = world["revisions"].get(words[3])
         if rev is None:
             return 1, "", "ERROR: (gcloud.run.revisions.describe) Cannot find revision [%s].\n" % words[3]
-        env = [{"name": "GOOGLE_CLOUD_PROJECT", "value": project}]
-        env += [{"name": "GIT_SHA", "value": rev["git_sha"]}] if rev.get("git_sha") else []
-        env += [{"name": "CHECKPOINT_DSN", "valueFrom": {"secretKeyRef": {"key": "latest", "name": "dsn"}}}]
+        # A revision holds the digest its image's tag named when it was made, as Cloud Run writes it, never the tag.
         return 0, json.dumps({
             "apiVersion": "serving.knative.dev/v1", "kind": "Revision",
             "metadata": {"name": words[3], "labels": {"serving.knative.dev/service": rev["service"]}},
-            "spec": {"containers": [{"image": rev["image"], "env": env}]},
+            "spec": {"containers": [container(world, rev, rev["digest"])]},
             "status": {"imageDigest": rev["digest"],
                        "conditions": [{"type": "Ready", "status": "True" if rev["ready"] else "False"}]}}), ""
     return 99, "", "stand-in gcloud: unexpected call: " + " ".join([tool] + args) + "\n"
@@ -344,6 +356,7 @@ class GateTests(InProcess):
             args = call["args"]
             self.assertTrue(args[:2] == ["auth", "print-identity-token"] or "describe" in args[:3], call)
         self.assertIn(f">> gate: {CAND}, the revision .candidate-revision names and the candidate tag routes to", out)
+        self.assertIn(f"   image   {rev['image']}\n", out)                  # the tag, read from spec.template
         self.assertIn(f"   digest  {rev['digest']}\n", out)
         self.assertIn(f"   GET /version on {TAG_URL}: git_sha {SHA[CAND]}, gemini-3.6-flash, documind-rag@v3\n", out)
         self.assertIn(f"   {CAND}  PASS  65 rows, eval exit 0, report sha256 {record['report_sha256']}\n", out)
@@ -447,6 +460,13 @@ class GateTests(InProcess):
             code, out, err = self.gate()
             self.assertEqual((code, out), (2, ""), err)
             self.assertIn(f"STOP: {CAND} cannot be gated: {message}", err)
+        self.set_world({**copy.deepcopy(WORLD), "latest": NEWER})         # an update made a revision after the candidate
+        code, out, err = self.gate()
+        self.assertEqual((code, out), (2, ""), err)
+        self.assertIn(f"STOP: {CAND} cannot be gated: documind-api's spec.template has made a later revision "
+                      "(status.latestCreatedRevisionName), so the tag its image was deployed by cannot be read: a "
+                      "revision holds only the digest, and an image-only update (F43) cannot be ruled out. make "
+                      "release-candidate again", err)
         self.set_world(copy.deepcopy(WORLD))
         self.change_revision(CAND, answers={"git_sha": SHA[SERVING]})       # the tag URL answers as another build
         code, out, err = self.gate()

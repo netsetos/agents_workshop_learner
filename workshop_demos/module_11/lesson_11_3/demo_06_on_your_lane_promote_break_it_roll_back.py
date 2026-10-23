@@ -1,6 +1,6 @@
 """Lesson 11.3: On your lane: promote, break it, roll back
 
-gate-check reads lesson 11.2's record, the files first and then the lane; when every check passes, make promote moves the traffic and prints what /version now says. make candidate makes a revision from the template, with every setting it passes at the Makefile's default except the one you name. It takes no traffic, gets the candidate tag and goes into .candidate-revision. The same gate as lesson 11.2's, on the revision the file now names: about ten minutes of rows, and every row that reaches the model fails. run_eval.py's lines stream between the gate's two blocks. The verdict is recorded, red, and make reports release.py's exit 1 on its last line, Error 1, before exiting 2 itself. First make promote-gated, which the red record stops at its first recipe line, line 46 of mk/release.mk, so its make promote never starts. Then plain make promote, which reads no record and moves all the traffic to the mistyped revision. Go straight on to the next cell. make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane. time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Do it: the smokes and the incident, after the rollback The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag and model, then the template's, and whether the template is what serves. Run it now, before the repair, while they differ.
+gate-check reads lesson 11.2's record, the files first and then the lane; when every check passes, make promote moves the traffic and prints what /version now says. make candidate makes a revision from the template, with every setting it passes at the Makefile's default except the one you name. It takes no traffic, gets the candidate tag and goes into .candidate-revision. The same gate as lesson 11.2's, on the revision the file now names: about ten minutes of rows, and every row that reaches the model fails. run_eval.py's lines stream between the gate's two blocks. The verdict is recorded, red, and make reports release.py's exit 1 on its last line, Error 1, before exiting 2 itself. First make promote-gated, which the red record stops at its first recipe line, line 46 of mk/release.mk, so its make promote never starts. Then plain make promote, which reads no record and moves all the traffic to the mistyped revision. Go straight on to the next cell. make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane. time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Do it: the smokes and the incident, after the rollback The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag, image and model, then the template's, and whether the template is what serves. Each revision's image is a digest and the template's a tag, so the cell compares the template through the revision it made last, as make incident does. Run it now, before the repair, while they differ.
 
 Run order inside this file:
 1. Do it: promote lesson 11.2's candidate (source window 26)
@@ -184,7 +184,7 @@ def step_07_the_smokes_and_the_incident_after_the_roll(session):
 def step_08_the_template_from_cloud_run_s_api(session):
     """Run Read it: the template, from Cloud Run's API at this checkpoint.
 
-    The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag and model, then the template's, and whether the template is what serves. Run it now, before the repair, while they differ.
+    The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag, image and model, then the template's, and whether the template is what serves. Each revision's image is a digest and the template's a tag, so the cell compares the template through the revision it made last, as make incident does. Run it now, before the repair, while they differ.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
     Operations: bash — run in the operator shell, in the kit, before the repair (two Cloud Run Admin API reads; writes nothing).
@@ -217,7 +217,7 @@ def step_08_the_template_from_cloud_run_s_api(session):
     
     
     def settings(spec):
-        """(the image's tag, GENERATOR_MODEL) of a revision's spec, or of the service's spec.template.spec.
+        """(the image, GENERATOR_MODEL) of a spec: a revision holds a digest, spec.template the tag it was made from.
         
         Example: settings(svc['spec']['template']['spec'])
         """
@@ -227,28 +227,31 @@ def step_08_the_template_from_cloud_run_s_api(session):
     
     
     def short(image):
-        """An image's tag cut to what an eye compares.
+        """An image cut to what an eye compares: a digest to 12 hex digits, as docker shows one; a tag as it is.
         
         Example: short(template[0])
         """
-        return image if len(image) <= 16 else image[:16] + "..."
+        name, at, digest = image.partition("@sha256:")
+        return f"{name}@sha256:{digest[:12]}" if at else image
     
     
     svc = read("services/documind-api")
     traffic = svc["status"]["traffic"]
     revs = sorted(read("revisions", labelSelector="serving.knative.dev/service=documind-api")["items"],
                   key=lambda r: r["metadata"]["creationTimestamp"])
+    spec = {r["metadata"]["name"]: r["spec"] for r in revs}
     serving = max((t for t in traffic if t.get("percent")), key=lambda t: t["percent"])["revisionName"]
     for rev in revs[-4:]:
         name = rev["metadata"]["name"]
         pct = sum(t.get("percent", 0) for t in traffic if t.get("revisionName") == name)
         tag = ",".join(t["tag"] for t in traffic if t.get("revisionName") == name and t.get("tag")) or "-"
         image, model = settings(rev["spec"])
-        print(f"{name:26} {pct:>3}%  tag {tag:9}  {short(image):19}  GENERATOR_MODEL={model}")
+        print(f"{name:26} {pct:>3}%  tag {tag:9}  {short(image):23}  GENERATOR_MODEL={model}")
     template = settings(svc["spec"]["template"]["spec"])
-    print(f"{'spec.template':26} {'':4}  {'':13}  {short(template[0]):19}  GENERATOR_MODEL={template[1]}")
-    now = settings(next(r for r in revs if r["metadata"]["name"] == serving)["spec"])
-    if template == now:
+    print(f"{'spec.template':26} {'':4}  {'':13}  {short(template[0]):23}  GENERATOR_MODEL={template[1]}")
+    now = settings(spec[serving])
+    made = settings(spec[svc["status"]["latestCreatedRevisionName"]])[0]      # the digest the template's tag named
+    if (made, template[1]) == now:
         print(f"the template is what serves: {serving}")
     else:
         print(f"the template is NOT what serves: {serving} runs GENERATOR_MODEL={now[1]}.")

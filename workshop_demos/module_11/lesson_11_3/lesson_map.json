@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html",
-  "source_sha": "2acaf24d3e3c8c6c2055b23e813d1010af7a06ae",
+  "source_sha": "6ab3e082c26c3c672317ac1b3e3236c1095c4bd6",
   "shared_setup_windows": [
     1
   ],
@@ -305,7 +305,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        892
+        898
       ],
       "offline": false,
       "live_verified": false,
@@ -321,7 +321,7 @@
           "id": "source_19",
           "function": "step_01_the_kit_s_own_tests",
           "window": 19,
-          "source_line": 892,
+          "source_line": 898,
           "manual_checkpoint": null
         }
       ],
@@ -336,7 +336,7 @@
         "demo_05_make_smoke_deployed_and_make_incident_line_by_line"
       ],
       "heading": "On your lane: promote, break it, roll back",
-      "purpose": "gate-check reads lesson 11.2's record, the files first and then the lane; when every check passes, make promote moves the traffic and prints what /version now says. make candidate makes a revision from the template, with every setting it passes at the Makefile's default except the one you name. It takes no traffic, gets the candidate tag and goes into .candidate-revision. The same gate as lesson 11.2's, on the revision the file now names: about ten minutes of rows, and every row that reaches the model fails. run_eval.py's lines stream between the gate's two blocks. The verdict is recorded, red, and make reports release.py's exit 1 on its last line, Error 1, before exiting 2 itself. First make promote-gated, which the red record stops at its first recipe line, line 46 of mk/release.mk, so its make promote never starts. Then plain make promote, which reads no record and moves all the traffic to the mistyped revision. Go straight on to the next cell. make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane. time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Do it: the smokes and the incident, after the rollback The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag and model, then the template's, and whether the template is what serves. Run it now, before the repair, while they differ.",
+      "purpose": "gate-check reads lesson 11.2's record, the files first and then the lane; when every check passes, make promote moves the traffic and prints what /version now says. make candidate makes a revision from the template, with every setting it passes at the Makefile's default except the one you name. It takes no traffic, gets the candidate tag and goes into .candidate-revision. The same gate as lesson 11.2's, on the revision the file now names: about ten minutes of rows, and every row that reaches the model fails. run_eval.py's lines stream between the gate's two blocks. The verdict is recorded, red, and make reports release.py's exit 1 on its last line, Error 1, before exiting 2 itself. First make promote-gated, which the red record stops at its first recipe line, line 46 of mk/release.mk, so its make promote never starts. Then plain make promote, which reads no record and moves all the traffic to the mistyped revision. Go straight on to the next cell. make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane. time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Do it: the smokes and the incident, after the rollback The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag, image and model, then the template's, and whether the template is what serves. Each revision's image is a digest and the template's a tag, so the cell compares the template through the revision it made last, as make incident does. Run it now, before the repair, while they differ.",
       "anchor": "s6",
       "anchors": [
         "s6"
@@ -354,14 +354,14 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        1091,
-        1101,
-        1108,
-        1115,
-        1123,
-        1132,
+        1097,
+        1107,
+        1114,
+        1121,
+        1129,
         1138,
-        1147
+        1144,
+        1153
       ],
       "offline": false,
       "live_verified": false,
@@ -377,7 +377,7 @@
           "id": "source_26",
           "function": "step_01_promote_lesson_11_2_s_candidate",
           "window": 26,
-          "source_line": 1091,
+          "source_line": 1097,
           "manual_checkpoint": null
         },
         {
@@ -390,7 +390,7 @@
           "id": "source_28",
           "function": "step_02_the_mistyped_model_as_a_candidate",
           "window": 28,
-          "source_line": 1101,
+          "source_line": 1107,
           "manual_checkpoint": null
         },
         {
@@ -403,7 +403,7 @@
           "id": "source_30",
           "function": "step_03_the_gate_on_it",
           "window": 30,
-          "source_line": 1108,
+          "source_line": 1114,
           "manual_checkpoint": null
         },
         {
@@ -416,7 +416,7 @@
           "id": "source_32",
           "function": "step_04_refused_then_forced",
           "window": 32,
-          "source_line": 1115,
+          "source_line": 1121,
           "manual_checkpoint": null
         },
         {
@@ -429,7 +429,7 @@
           "id": "source_34",
           "function": "step_05_the_smokes_and_the_incident",
           "window": 34,
-          "source_line": 1123,
+          "source_line": 1129,
           "manual_checkpoint": null
         },
         {
@@ -442,7 +442,7 @@
           "id": "source_36",
           "function": "step_06_the_rollback_timed",
           "window": 36,
-          "source_line": 1132,
+          "source_line": 1138,
           "manual_checkpoint": null
         },
         {
@@ -455,20 +455,20 @@
           "id": "source_38",
           "function": "step_07_the_smokes_and_the_incident_after_the_roll",
           "window": 38,
-          "source_line": 1138,
+          "source_line": 1144,
           "manual_checkpoint": null
         },
         {
           "heading": "On your lane: promote, break it, roll back",
           "subheading": "Read it: the template, from Cloud Run's API",
-          "purpose": "The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag and model, then the template's, and whether the template is what serves. Run it now, before the repair, while they differ.",
+          "purpose": "The cell reads documind-api and its revisions from the Cloud Run Admin API's v1 resources, the same JSON gcloud run services describe --format=json prints, without release.py: each recent revision's traffic, tag, image and model, then the template's, and whether the template is what serves. Each revision's image is a digest and the template's a tag, so the cell compares the template through the revision it made last, as make incident does. Run it now, before the repair, while they differ.",
           "label": "bash — run in the operator shell, in the kit, before the repair (two Cloud Run Admin API reads; writes nothing)",
           "expected": "[awaiting the author's run: data/template_read.txt]",
           "adaptations": [],
           "id": "source_40",
           "function": "step_08_the_template_from_cloud_run_s_api",
           "window": 40,
-          "source_line": 1147,
+          "source_line": 1153,
           "manual_checkpoint": null
         }
       ],
@@ -496,9 +496,9 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        1223,
-        1230,
-        1237
+        1232,
+        1239,
+        1246
       ],
       "offline": false,
       "live_verified": false,
@@ -514,7 +514,7 @@
           "id": "source_43",
           "function": "step_01_the_repair_candidate_and_its_gate",
           "window": 43,
-          "source_line": 1223,
+          "source_line": 1232,
           "manual_checkpoint": null
         },
         {
@@ -527,7 +527,7 @@
           "id": "source_45",
           "function": "step_02_promote_it_through_the_gate",
           "window": 45,
-          "source_line": 1230,
+          "source_line": 1239,
           "manual_checkpoint": null
         },
         {
@@ -540,7 +540,7 @@
           "id": "source_47",
           "function": "step_03_the_proof",
           "window": 47,
-          "source_line": 1237,
+          "source_line": 1246,
           "manual_checkpoint": null
         }
       ],
@@ -566,7 +566,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        1253
+        1262
       ],
       "offline": false,
       "live_verified": false,
@@ -582,7 +582,7 @@
           "id": "source_49",
           "function": "step_01_the_requests_by_revision",
           "window": 49,
-          "source_line": 1253,
+          "source_line": 1262,
           "manual_checkpoint": null
         }
       ],
@@ -755,140 +755,140 @@
       "label": "commands/release.py - cmd_incident(), second half: now, and the three checks of the gated state",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 836
+      "line": 840
     },
     {
       "window": 20,
       "label": "expected shape (the kit's own tests on your machine: the time is yours)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 894
+      "line": 900
     },
     {
       "window": 21,
       "label": "expected (the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane: the stand-in's names, commit and digest; on your lane run_eval.py prints its rows between the two >> blocks; make's last line as GNU make 4 prints it)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 903
+      "line": 909
     },
     {
       "window": 22,
       "label": "expected (the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane: make promote's own lines, the stand-in gcloud's left out; yours prints its progress between them)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 915
+      "line": 921
     },
     {
       "window": 23,
       "label": "expected (the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane: each stand-in smoke prints two checks; yours print their own)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 925
+      "line": 931
     },
     {
       "window": 24,
       "label": "expected (the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane, after make rollback)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 980
+      "line": 986
     },
     {
       "window": 25,
       "label": "expected (the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane, after the repair)",
       "heading": "make smoke-deployed and make incident, line by line",
       "anchor": "s5",
-      "line": 1031
+      "line": 1037
     },
     {
       "window": 27,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1093
+      "line": 1099
     },
     {
       "window": 29,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1103
+      "line": 1109
     },
     {
       "window": 31,
       "label": "expected (the author's lane: the gate on the mistyped model; your rates, names and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1110
+      "line": 1116
     },
     {
       "window": 33,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1118
+      "line": 1124
     },
     {
       "window": 35,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1126
+      "line": 1132
     },
     {
       "window": 37,
       "label": "expected (the author's lane: your names and your real line are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1134
+      "line": 1140
     },
     {
       "window": 39,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1141
+      "line": 1147
     },
     {
       "window": 41,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1200
+      "line": 1209
     },
     {
       "window": 42,
       "label": "expected (make release-candidate and make gate, the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane in its state after the rollback, then put back as it was, so the repair's revision later takes the same name; the third line is this page's read of the revision it made)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1205
+      "line": 1214
     },
     {
       "window": 44,
       "label": "expected (the author's lane: the repair gated; your rates, names and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1226
+      "line": 1235
     },
     {
       "window": 46,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1232
+      "line": 1241
     },
     {
       "window": 48,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1240
+      "line": 1249
     },
     {
       "window": 50,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "Errors by revision, from the request logs",
       "anchor": "s8",
-      "line": 1303
+      "line": 1312
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

@@ -72,6 +72,11 @@ def revision(created: str, env: dict) -> dict:
             "digest": f"{REPO}@sha256:{hashlib.sha256(image.encode()).hexdigest()}"}
 
 
+def held(git_sha: str) -> str:
+    """What a revision of api:<git_sha> holds, as incident shows it: the digest the tag named, to 12 hex digits."""
+    return f"api@sha256:{hashlib.sha256(f'{REPO}:{git_sha}'.encode()).hexdigest()[:12]}"
+
+
 # The lane once lesson 11.2 has promoted GOOD through the gate: OLD, which make up released, more than a day old.
 WORLD = {"project": PROJECT, "number": NUMBER, "region": REGION, "latest": GOOD,
          "traffic": [{"revisionName": GOOD, "percent": 100}, {"revisionName": GOOD, "tag": "candidate"}],
@@ -119,11 +124,13 @@ def env_json(env):
 
 
 def revision_json(world, name):
+    """A revision as Cloud Run describes it: its spec holds the digest its image's tag named when it was made, never the
+    tag, which only the service's spec.template keeps (a live lane's revision, 22 October 2026)."""
     rev = world["revisions"][name]
     return {"apiVersion": "serving.knative.dev/v1", "kind": "Revision",
             "metadata": {"name": name, "creationTimestamp": rev["created"],
                          "labels": {"serving.knative.dev/service": rev["service"]}},
-            "spec": {"containers": [{"image": rev["image"], "env": env_json(rev["env"])}]},
+            "spec": {"containers": [{"image": rev["digest"], "env": env_json(rev["env"])}]},
             "status": {"imageDigest": rev["digest"],
                        "conditions": [{"type": "Ready", "status": "True" if rev["ready"] else "False"}]}}
 
@@ -287,15 +294,22 @@ class Repair(gate.InProcess):
     def incident(self, *extra: str) -> tuple:
         return self.main("incident", "--project", PROJECT, "--region", REGION, *extra)
 
-    def candidate_revision(self, name: str, **settings) -> None:
-        """What make candidate leaves: a no-traffic revision made from the template with these settings, the template
-        moved to it, the candidate tag on it, and its name in .candidate-revision."""
+    def updated(self, name: str, **settings) -> None:
+        """What gcloud run services update --no-traffic leaves: a revision made from the template with these settings
+        (GIT_SHA names the image's tag), the template moved to it, the traffic and the tags where they were."""
         world = self.world()
         world["revisions"][name] = revision(release.stamp(self.clock), {**world["template"]["env"], **settings})
         world["template"] = {"image": world["revisions"][name]["image"], "env": dict(world["revisions"][name]["env"])}
+        world["latest"] = name
+        self.set_world(world)
+
+    def candidate_revision(self, name: str, **settings) -> None:
+        """What make candidate leaves: the update above, the candidate tag on its revision, and its name in
+        .candidate-revision."""
+        self.updated(name, **settings)
+        world = self.world()
         untagged = [t for t in world["traffic"] if not t.get("tag")]
         world["traffic"] = untagged + [{"revisionName": name, "tag": "candidate"}]
-        world["latest"] = name
         self.set_world(world)
         self.candidate.write_text(name + "\n", encoding="utf-8")
 
@@ -488,7 +502,7 @@ class IncidentTests(Repair):
         self.assertEqual((code, err), (0, ""), out + err)
         self.assertEqual(out.splitlines(), [
             f">> documind-api in {PROJECT}, {REGION}: the last 24 hours, from the lane and this checkout's records",
-            f"   2026-11-16T09:40:00Z  revision  {GOOD}  made: api:abc1234, GENERATOR_MODEL=gemini-3.6-flash  gate: "
+            f"   2026-11-16T09:40:00Z  revision  {GOOD}  made: {held(SHA)}, GENERATOR_MODEL=gemini-3.6-flash  gate: "
             "pass, evals/reports/gate.json",                               # OLD, made 26 hours ago, is not listed
             f"   2026-11-16T10:12:11Z  gate      {GOOD}  PASS  (evals/reports/gate.json)",
             ">> now",
@@ -496,7 +510,7 @@ class IncidentTests(Repair):
             f"   the candidate tag    {GOOD}  gate: pass, evals/reports/gate.json",
             f"   .candidate-revision  {GOOD}",
             "   .previous-revision   none in this checkout",
-            "   spec.template        api:abc1234, GENERATOR_MODEL=gemini-3.6-flash",
+            "   spec.template        api:abc1234, GENERATOR_MODEL=gemini-3.6-flash",       # the tag; GOOD, its digest
             f">> the gated state: {GOOD} serves, judged green (evals/reports/gate.json); spec.template is what serves; "
             "no red candidate is recorded"])
         self.assertEqual(record["revision"], GOOD)
@@ -511,9 +525,9 @@ class IncidentTests(Repair):
         failed = ", ".join(THROUGH_THE_API)
         self.assertEqual(out.splitlines(), [
             f">> documind-api in {PROJECT}, {REGION}: the last 24 hours, from the lane and this checkout's records",
-            f"   2026-11-16T09:40:00Z  revision  {GOOD}  made: api:abc1234, GENERATOR_MODEL=gemini-3.6-flash  gate: "
+            f"   2026-11-16T09:40:00Z  revision  {GOOD}  made: {held(SHA)}, GENERATOR_MODEL=gemini-3.6-flash  gate: "
             f"pass, evals/reports/gate-{GOOD}.json",
-            f"   2026-11-16T10:17:11Z  revision  {BAD}  made: api:abc1234, GENERATOR_MODEL=gemini-3.6-flsh  gate: fail "
+            f"   2026-11-16T10:17:11Z  revision  {BAD}  made: {held(SHA)}, GENERATOR_MODEL=gemini-3.6-flsh  gate: fail "
             "(correct_rate: 0% < 68%; request_success_rate: 0% < 100%), evals/reports/gate.json",
             f"   2026-11-16T10:27:11Z  gate      {BAD}  FAIL  correct_rate: 0% < 68%; request_success_rate: 0% < 100%  "
             "(evals/reports/gate.json)",
@@ -545,7 +559,7 @@ class IncidentTests(Repair):
         self.assertEqual(code, 0, out + err)
         self.assertIn(f">> the gated state: {GOOD} serves, judged green (evals/reports/gate-{GOOD}.json); "
                       "spec.template is what serves; no red candidate is recorded\n", out)
-        self.assertIn(f"  revision  {FIX}  made: api:abc1234, GENERATOR_MODEL=gemini-3.6-flash  no gate in this "
+        self.assertIn(f"  revision  {FIX}  made: {held(SHA)}, GENERATOR_MODEL=gemini-3.6-flash  no gate in this "
                       "checkout judged it\n", out)
         self.assertEqual(self.gate()[0], 0)                                # the repair, gated and promoted
         self.promote_by_hand(FIX)
@@ -560,7 +574,7 @@ class IncidentTests(Repair):
         self.assertEqual(events, ["revision", "revision", "smoke", "traffic", "smoke", "revision", "gate", "traffic",
                                   "smoke"])                                # by time, not in the order they were read
         self.assertIn(f"   .previous-revision   {GOOD}\n", out)                # make rollback would return to GOOD
-        self.assertIn(f"  revision  {BAD}  made: api:abc1234, GENERATOR_MODEL=gemini-3.6-flsh  gate: fail "
+        self.assertIn(f"  revision  {BAD}  made: {held(SHA)}, GENERATOR_MODEL=gemini-3.6-flsh  gate: fail "
                       f"({RED_WHY}), evals/reports/gate-{BAD}.json\n", out)
         self.assertIn(f"  traffic   {GOOD} -> {FIX}: seen between the smoke runs of ", out)
 
@@ -602,19 +616,17 @@ class IncidentTests(Repair):
         self.candidate_revision(newer, GIT_SHA="def5678")                  # make release-candidate, not yet promoted
         code, out, err = self.incident()
         self.assertEqual(code, 1, out + err)
-        self.assertIn(f"   - spec.template is not what serves: image {REPO}:def5678 in the template, {REPO}:abc1234 "
-                      f"on {GOOD}; GIT_SHA def5678 in the template, abc1234 on {GOOD}. make rollback", out)
+        self.assertIn(f"   - spec.template is not what serves: image api:def5678 ({held('def5678')}) in the template, "
+                      f"{held(SHA)} on {GOOD}; GIT_SHA def5678 in the template, abc1234 on {GOOD}. make rollback", out)
         self.assertEqual(out.splitlines()[-2:], [
             f"   If {newer}, the recorded candidate and what spec.template holds, is the change you mean to release: "
             "make gate, then make promote-gated. Otherwise put the template back to what serves:",
             "   Repair: make release-candidate GIT_SHA=abc1234; then make gate; then make promote-gated"])
-        self.change(template={"image": f"{REPO}:{SHA}", "env": {**ENV, "DEMO_MODE": "0", "ROUTING": "on",
-                                                                  "RETRIEVAL_BACKEND": "rag_engine",
-                                                                  "GENERATOR_LOCATION": "us-central1"}})
         world = self.world()                       # GOOD serves ARMOR=on, which an older candidate set: not the default
         world["revisions"][GOOD]["env"]["ARMOR"] = "on"
-        world["template"]["env"]["ARMOR"] = "on"
         self.set_world(world)
+        self.updated("documind-api-00045-upd", GIT_SHA=SHA, ARMOR="on", DEMO_MODE="0", ROUTING="on",
+                     RETRIEVAL_BACKEND="rag_engine", GENERATOR_LOCATION="us-central1")    # by hand: GOOD's image again
         out = self.incident()[1]
         self.assertIn("   - spec.template is not what serves: DEMO_MODE 0 in the template, 1 on", out)
         self.assertIn("GENERATOR_LOCATION us-central1 in the template, (unset) on", out)
@@ -623,6 +635,7 @@ class IncidentTests(Repair):
             f"   Repair: gcloud run services update documind-api --region {REGION} --project {PROJECT} --no-traffic "
             "--update-env-vars DEMO_MODE=1; then make candidate ROUTING=off ARMOR=on RETRIEVAL_BACKEND=vector; "
             "then make gate; then make promote-gated"))                    # GENERATOR_LOCATION: make candidate drops it
+        world = self.world()
         world["revisions"][GOOD]["env"].pop("RETRIEVAL_BACKEND")           # set on the template, not on what serves
         self.set_world(world)
         self.assertIn("--update-env-vars DEMO_MODE=1 --remove-env-vars RETRIEVAL_BACKEND; then make candidate "
