@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `5f9b8657f9267cfd0eadf4ad11c49ae32067a69b`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.3_Deploy_Lane_WIX.html`, reviewed at blob `17f0725e414e34f01369f2c5e5156d893ad7cfdd`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 0.2 left you with an operator shell and a lane that runs on your laptop for nothing. This lesson builds the real one in your Google Cloud project, and reads it before it exists: the accounts the kit creates and what each of them may touch, the stores it declares, the switches that would add more, and the items that bill by the hour whether anyone uses them or not. Then you run one `make plan`, read it, let the kit's guard check it, and run one `make up` from a blank project: images built, every service deployed as its own account, the UI behind Google's sign-in, and your address on the roster.
 
@@ -138,7 +138,7 @@ The APIs, a state bucket of your own, the one repository you trust, and the sign
 
 #### 1. The APIs
 
-A Google Cloud API is off until a project turns it on, and Terraform cannot create a resource whose API is off. `make apis` turns on the 40 the lane uses, in two calls, because the Service Usage API takes at most twenty at a time. It is safe to run again; an API already on stays on.
+A Google Cloud API is off until a project turns it on, and Terraform cannot create a resource whose API is off. `make apis` turns on the 41 the lane uses, in three calls, because the Service Usage API takes at most twenty at a time. It is safe to run again; an API already on stays on.
 
 What it prints is gcloud's own report of the operations it waited for. Step 5's preflight is the check that matters: it names any of the APIs it looks for that is still off.
 
@@ -310,7 +310,7 @@ What is not in the table matters as much. The seven Cloud Run services cost noth
 
 Twelve checks, each one block above, each with the value that proves it on your lane.
 
-Everything: the project went from blank to a running lane. 40 APIs are on. The state bucket you made yourself holds Terraform's record of 237 resources: 19 accounts with their roles, six buckets, Firestore with 17 indexes and four TTL fields, Vector Search with its deployed index, two Cloud SQL instances, Spanner, `rag_data` and `documind_observability` in BigQuery, a GKE cluster, the network, the alerts and the budget. Artifact Registry holds seven images; Cloud Run runs seven services and two jobs. Firestore holds the roster's 11 memberships and three data-region policies; RAG Engine holds empty corpora for acme and zeta. On your machine, `terraform/` is connected to the state and holds the saved inputs and the applied plan file. From the end of the apply, the rows of step 10 bill every hour. Lesson 0.4 proves the lane end to end, breaks it once on purpose, and switches it off.
+Everything: the project went from blank to a running lane. 41 APIs are on. The state bucket you made yourself holds Terraform's record of 237 resources: 19 accounts with their roles, six buckets, Firestore with 17 indexes and four TTL fields, Vector Search with its deployed index, two Cloud SQL instances, Spanner, `rag_data` and `documind_observability` in BigQuery, a GKE cluster, the network, the alerts and the budget. Artifact Registry holds seven images; Cloud Run runs seven services and two jobs. Firestore holds the roster's 11 memberships and three data-region policies; RAG Engine holds empty corpora for acme and zeta. On your machine, `terraform/` is connected to the state and holds the saved inputs and the applied plan file. From the end of the apply, the rows of step 10 bill every hour. Lesson 0.4 proves the lane end to end, breaks it once on purpose, and switches it off.
 
 Netsetos GenAI on GCP · Module 0 Setup · Lesson 0.3 Understand the project, identities and resource map, and deploy the lane · v5.0
 

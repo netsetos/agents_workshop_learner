@@ -40,7 +40,7 @@
     {
       "lesson": "0.1",
       "title": "Set up the Google Cloud billing account, budget and project",
-      "source_sha": "c6a33964dd6af4f84535f1f0e94d05b167dea941",
+      "source_sha": "942926b9d8fb2dfb282e1f1cbd06c74ba68c2fdf",
       "source_kind": "main_html",
       "demos": 7
     },
@@ -54,7 +54,7 @@
     {
       "lesson": "0.3",
       "title": "Understand the project, identities and resource map, and deploy the lane",
-      "source_sha": "5f9b8657f9267cfd0eadf4ad11c49ae32067a69b",
+      "source_sha": "17f0725e414e34f01369f2c5e5156d893ad7cfdd",
       "source_kind": "main_html",
       "demos": 6
     },
@@ -250,7 +250,7 @@
     {
       "lesson": "4.3",
       "title": "Place evals in the pipeline: CI, the candidate gate and live traffic",
-      "source_sha": "58bef69de2d9e0f81fd613bc4b4801ccfb346ae7",
+      "source_sha": "67bf859b284dfdb4ca8a5cfa8db03e338447995e",
       "source_kind": "main_html",
       "demos": 8
     },
@@ -593,7 +593,7 @@
     {
       "lesson": "11.1",
       "title": "Build and deploy using keyless identity",
-      "source_sha": "bfa3df51350edc25d742dc274feaf159498974b6",
+      "source_sha": "b6503d98ae36784f66986f9b9ccf0d61b9e9b167",
       "source_kind": "main_html",
       "demos": 9
     },

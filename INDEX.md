@@ -523,7 +523,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_00/lesson_0_1/README.md` | doc | - | - |
 | `workshop_demos/module_00/lesson_0_1/demo_03_the_billing_account_free_trial_or_paid.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_1/demo_04_the_project_create_it_link_it_make_it_the_default.py` | code | - | - |
-| `workshop_demos/module_00/lesson_0_1/demo_05_the_apis_40_services_in_two_calls.py` | code | - | - |
+| `workshop_demos/module_00/lesson_0_1/demo_05_the_apis_41_services_in_three_calls.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_1/demo_06_the_budget_an_alert_on_the_billing_account.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_1/demo_08_the_standing_cost_what_bills_by_the_hour_per_day_and_per_weekend.py` | code | - | - |
 | `workshop_demos/module_00/lesson_0_1/demo_09_verify_it_yourself_the_checklist.py` | code | - | - |

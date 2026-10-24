@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html`, reviewed at blob `bfa3df51350edc25d742dc274feaf159498974b6`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html`, reviewed at blob `b6503d98ae36784f66986f9b9ccf0d61b9e9b167`. Learners read that page on the course site; this guide keeps its prose.
 
 At lesson 0.3's step 3 your lane was told to trust one GitHub repository, on one branch. This lesson uses that trust. A run of `documind-cd.yml` on your fork asks GitHub for a signed token that names the repository, its id and the branch. Google checks those three against `terraform/wif.tf` and lets the run become `sa-documind-cicd` for about an hour: long enough to build the API's image and put it on a revision that takes no traffic. No key is made, stored or copied anywhere, so there is none to leak. You will set the workflow's four variables from your lane with `make ci-vars`, put a person in front of production, dispatch from `main` and watch it build and deploy, dispatch from a branch and watch it refused, then read the trust, the audit trail and the key count back from Google.
 
@@ -190,7 +190,7 @@ A dispatch on `main` with `path=candidate` runs three jobs. `eval-gate` runs the
 
 The cell starts the run, finds its id, prints its page, waits until `release-candidate` has finished, and prints the run's summary. Open the page while it waits and watch the jobs and their steps. In the browser the same start is Actions > documind-cd > Run workflow, on `main`, with `candidate` as the path.
 
-A green `release-candidate` is the lesson's proof. Every Google call in it (the build, the new revision, the tokens for the gate) was made as `sa-documind-cicd`, which the run became through the auth step, with no key. `promote` waits for its reviewer. If `release-candidate` is red instead, read its failed step with `gh run view "$RUN" --repo "$GH_REPO" --log-failed | tail -n 30`; step 9 names the three things the first dispatch on a lane may meet.
+A green `release-candidate` is the lesson's proof. Every Google call in it (the build, the new revision, the tokens for the gate) was made as `sa-documind-cicd`, which the run became through the auth step, with no key. `promote` waits for its reviewer. If `release-candidate` is red instead, read its failed step with `gh run view "$RUN" --repo "$GH_REPO" --log-failed | tail -n 30`; step 9 names what the build asks of the account and where the kit grants it.
 
 #### Do it: say no at promote
 
@@ -254,15 +254,15 @@ Google holds the trust you declared, the run is on record as the account acting 
 
 ### What may stop the first dispatch, the trust that cannot move, and the path without GitHub
 
-Three unknowns only a run can settle, the author's first dispatch, the local operator path, and what each run costs.
+What the build asks of the pipeline's account and where the kit grants it, the author's first dispatch, the local operator path, and what each run costs.
 
 #### Each Google call the run makes, and what the kit grants for it
 
-Read the candidate path's calls against `sa-documind-cicd`'s roles and against the APIs `make apis` enables, and three of them are covered by nothing the kit declares:
+Read the candidate path's calls against `sa-documind-cicd`'s roles, the APIs `make apis` enables and the two grants `make build-access` adds:
 
-None of the five roles is a Cloud Storage role, and none reads logs. `gcloud builds submit` uploads the source to the project's Cloud Build bucket before the build starts, then streams the build's log back, and with the log in Cloud Logging only, streaming it means reading Cloud Logging. No file in the kit can say whether the roles the account holds carry enough for both, or whether the token service answers when `sts.googleapis.com` is not among the 40 APIs `make apis` enabled. The first dispatch on a real lane settles all three, so the author ran it before this lesson was taught:
+None of the five roles is a Cloud Storage role, and none reads logs, on purpose. `gcloud builds submit` uploads the source to the project's Cloud Build bucket before the build starts. Left to choose that bucket, it lists the project's buckets to check the bucket is the project's own, which needs a project-wide storage permission. The workflow names the bucket instead, and `make build-access`, which `make up` runs, gives the account the bucket's legacy writer role on that one bucket. Following the build's log would mean reading Cloud Logging, so the step submits the build `--async` and polls its status, printing a link to the log. Cloud Build runs the build as the project's default compute account, and with Google's default organization policy the account that submits a build must be able to act as that account: `make build-access` grants that too, and refuses on a project whose default account holds Editor or Owner, where acting as it would hand the pipeline the same. `sts.googleapis.com`, the token service, is among the 41 APIs `make apis` enables. A lane made up before these grants gets them from `make build-access PROJECT="$PROJECT"`. The first dispatch on a real lane proves them, so the author runs it before this lesson is taught:
 
-If a dispatch of yours stops at one of them, the failed step's last lines name the missing permission or API. The fix belongs in the kit, as a grant in `sa.tf` or an API in `make apis`, so report it to the course team rather than granting a broad role by hand. Meanwhile the local operator path below builds and deploys the same candidate.
+If a dispatch of yours still stops at a permission or an API, the failed step's last lines name it. The fix belongs in the kit, as a grant in `sa.tf` or `build-access.sh`, or an API in `make apis`, so report it to the course team rather than granting a broad role by hand. Meanwhile the local operator path below builds and deploys the same candidate.
 
 #### The trust you named at lesson 0.3 is the trust you have
 

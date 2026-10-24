@@ -1,6 +1,6 @@
-"""Lesson 0.1: The APIs: 40 services in two calls
+"""Lesson 0.1: The APIs: 41 services in three calls
 
-An API, in Google Cloud's sense, is a product switched on for one project: Cloud Run, Firestore, Vertex AI. Until it is enabled, every call to it from that project is refused, whoever makes it, with a message that names the API. Enabling costs nothing; using is what bills. The kit needs 40 of them before Terraform can create anything, and keeps the list in one block of commands/lesson-12.1.sh, the one marked ENABLE_APIS. It is two calls rather than one because the Service Usage API takes at most 20 services per request, as the block's own comment records. make apis runs that block unchanged: You have no clone yet, so you paste the same lines. They are the block exactly, taken from the kit when this page was built: the first sets gcloud's project, which step 4 already did, and the next two enable the list. A short loop compares the project's enabled services with the kit's list and names any that is missing. Run it now, and again whenever a later lesson's command complains that an API is disabled.
+An API, in Google Cloud's sense, is a product switched on for one project: Cloud Run, Firestore, Vertex AI. Until it is enabled, every call to it from that project is refused, whoever makes it, with a message that names the API. Enabling costs nothing; using is what bills. The kit needs 41 of them before Terraform can create anything, and keeps the list in one block of commands/lesson-12.1.sh, the one marked ENABLE_APIS. It is three calls rather than one because the Service Usage API takes at most 20 services per request, as the block's own comment records. make apis runs that block unchanged: You have no clone yet, so you paste the same lines. They are the block exactly, taken from the kit when this page was built: the first sets gcloud's project, which step 4 already did, and the next three enable the list. A short loop compares the project's enabled services with the kit's list and names any that is missing. Run it now, and again whenever a later lesson's command complains that an API is disabled.
 
 Run order inside this file:
 1. Definition (source window 9)
@@ -69,16 +69,18 @@ gcloud services enable \\
   spanner.googleapis.com \\
   container.googleapis.com \\
   clouddeploy.googleapis.com
+gcloud services enable \\
+  sts.googleapis.com
 
 """
 
 def step_01_definition(session):
     """Run Definition at this checkpoint.
 
-    An API, in Google Cloud's sense, is a product switched on for one project: Cloud Run, Firestore, Vertex AI. Until it is enabled, every call to it from that project is refused, whoever makes it, with a message that names the API. Enabling costs nothing; using is what bills. The kit needs 40 of them before Terraform can create anything, and keeps the list in one block of commands/lesson-12.1.sh, the one marked ENABLE_APIS. It is two calls rather than one because the Service Usage API takes at most 20 services per request, as the block's own comment records. make apis runs that block unchanged: You have no clone yet, so you paste the same lines. They are the block exactly, taken from the kit when this page was built: the first sets gcloud's project, which step 4 already did, and the next two enable the list.
+    An API, in Google Cloud's sense, is a product switched on for one project: Cloud Run, Firestore, Vertex AI. Until it is enabled, every call to it from that project is refused, whoever makes it, with a message that names the API. Enabling costs nothing; using is what bills. The kit needs 41 of them before Terraform can create anything, and keeps the list in one block of commands/lesson-12.1.sh, the one marked ENABLE_APIS. It is three calls rather than one because the Service Usage API takes at most 20 services per request, as the block's own comment records. make apis runs that block unchanged: You have no clone yet, so you paste the same lines. They are the block exactly, taken from the kit when this page was built: the first sets gcloud's project, which step 4 already did, and the next three enable the list.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in Cloud Shell, once (the kit's ENABLE_APIS block: 40 APIs in 2 calls).
+    Operations: bash — run in Cloud Shell, once (the kit's ENABLE_APIS block: 41 APIs in 3 calls).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
@@ -98,10 +100,11 @@ for api in run.googleapis.com compute.googleapis.com vpcaccess.googleapis.com pu
            cloudtrace.googleapis.com monitoring.googleapis.com logging.googleapis.com billingbudgets.googleapis.com bigquery.googleapis.com \\
            discoveryengine.googleapis.com dataplex.googleapis.com sqladmin.googleapis.com eventarc.googleapis.com workflows.googleapis.com \\
            cloudscheduler.googleapis.com cloudfunctions.googleapis.com modelarmor.googleapis.com cloudbilling.googleapis.com cloudresourcemanager.googleapis.com \\
-           serviceusage.googleapis.com vectorsearch.googleapis.com spanner.googleapis.com container.googleapis.com clouddeploy.googleapis.com; do
+           serviceusage.googleapis.com vectorsearch.googleapis.com spanner.googleapis.com container.googleapis.com clouddeploy.googleapis.com \\
+           sts.googleapis.com; do
   grep -qxF "$api" <<< "$enabled" || { echo "MISSING $api"; missing=$((missing + 1)); }
 done
-echo "the kit's 40: $((40 - missing)) enabled, $missing missing"
+echo "the kit's 41: $((41 - missing)) enabled, $missing missing"
 echo "enabled on the project in all: $(grep -c . <<< "$enabled")"
 
 """

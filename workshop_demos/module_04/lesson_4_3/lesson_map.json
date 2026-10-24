@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_04/lesson_4_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_4.3_Placing_Evals_WIX.html",
-  "source_sha": "58bef69de2d9e0f81fd613bc4b4801ccfb346ae7",
+  "source_sha": "67bf859b284dfdb4ca8a5cfa8db03e338447995e",
   "shared_setup_windows": [
     1
   ],
@@ -814,7 +814,7 @@
       "label": "terraform/desk_alerts.tf - the Desk's metric made the other choice: no service account counts",
       "heading": "The judge's place, the gaps the placements leave, and what each costs",
       "anchor": "s8",
-      "line": 1079
+      "line": 1086
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

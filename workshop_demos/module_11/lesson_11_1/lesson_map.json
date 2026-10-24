@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.1_Keyless_Deploy_WIX.html",
-  "source_sha": "bfa3df51350edc25d742dc274feaf159498974b6",
+  "source_sha": "b6503d98ae36784f66986f9b9ccf0d61b9e9b167",
   "shared_setup_windows": [
     1
   ],
@@ -576,7 +576,7 @@
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_1/GUIDE.md",
       "source_lines": [
-        1046
+        1047
       ],
       "offline": false,
       "live_verified": false,
@@ -592,7 +592,7 @@
           "id": "source_44",
           "function": "step_01_without_github_the_local_operator_path",
           "window": 44,
-          "source_line": 1046,
+          "source_line": 1047,
           "manual_checkpoint": null
         }
       ],
@@ -849,28 +849,28 @@
       "label": "the kit's Makefile - build: the gcloud builds submit the workflow's build step runs",
       "heading": "What may stop the first dispatch, the trust that cannot move, and the path without GitHub",
       "anchor": "s9",
-      "line": 1030
+      "line": 1031
     },
     {
       "window": 42,
       "label": "cloudbuild.yaml - where the build writes its log",
       "heading": "What may stop the first dispatch, the trust that cannot move, and the path without GitHub",
       "anchor": "s9",
-      "line": 1033
+      "line": 1034
     },
     {
       "window": 43,
       "label": "expected (the author's first keyless dispatch, batch 1's probe: what it stopped at, if it stopped)",
       "heading": "What may stop the first dispatch, the trust that cannot move, and the path without GitHub",
       "anchor": "s9",
-      "line": 1037
+      "line": 1038
     },
     {
       "window": 45,
       "label": "expected shape (make's own lines, from the Makefile; Cloud Build's log and gcloud's progress in between are yours)",
       "heading": "What may stop the first dispatch, the trust that cannot move, and the path without GitHub",
       "anchor": "s9",
-      "line": 1050
+      "line": 1051
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

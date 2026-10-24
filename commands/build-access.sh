@@ -58,6 +58,37 @@ for region in $(printf '%s\n' "$REGION" "$SLM_REGION" | sort -u); do
   fi
 done
 
+# The keyless pipeline (lesson 11.1, .github/workflows/documind-cd.yml) submits its build as sa-documind-cicd, which
+# terraform/sa.tf gives no storage role and no actAs beyond the services it deploys. A submit asks two things more of it:
+# - the source bucket: gcloud builds submit reads the bucket and writes the source object into it. The workflow names
+#   this bucket itself (--gcs-source-staging-dir), so gcloud skips its project-wide bucket listing, and the account
+#   gets the bucket's legacy writer role on this one bucket: storage.buckets.get and the object writes, nothing more.
+# - the build's own account: with the organization policy's defaults, "the user submitting the build must have the
+#   iam.serviceAccounts.actAs permission on the service account" the build runs as (Cloud Build's service account
+#   change). That account is $BUILDER. On a project old enough to have given it Editor, actAs on it would hand the
+#   pipeline Editor too: the grant is refused there, and the pipeline's builds stop until the build runs as an account
+#   of its own. Both are made only once sa-documind-cicd exists (make up's apply makes it before this runs).
+CICD_SA="sa-documind-cicd@$PROJECT.iam.gserviceaccount.com"
+if gcloud iam service-accounts describe "$CICD_SA" --project="$PROJECT" --format=none >/dev/null 2>&1; then
+  CICD="serviceAccount:$CICD_SA"
+  if ! gcloud storage buckets get-iam-policy "$BUCKET" --format=json | grep -q "$CICD"; then
+    gcloud storage buckets add-iam-policy-binding "$BUCKET" --member="$CICD" --role=roles/storage.legacyBucketWriter --format=none
+    NEW=1
+  fi
+  BROAD=
+  for role in roles/editor roles/owner; do
+    gcloud projects get-iam-policy "$PROJECT" --flatten=bindings --filter="bindings.role=$role" \
+      --format="value(bindings.members)" | grep -q "$BUILDER" && BROAD="$role"
+  done
+  if [ -n "$BROAD" ]; then
+    echo ">> build-access: $BUILDER holds $BROAD on $PROJECT: no actAs on it for sa-documind-cicd (it would be $BROAD too)"
+  elif ! gcloud iam service-accounts get-iam-policy "${BUILDER#serviceAccount:}" --project="$PROJECT" --format=json | grep -q "$CICD"; then
+    gcloud iam service-accounts add-iam-policy-binding "${BUILDER#serviceAccount:}" --project="$PROJECT" \
+      --member="$CICD" --role=roles/iam.serviceAccountUser --format=none
+    NEW=1
+  fi
+fi
+
 if [ -n "$NEW" ]; then
   echo ">> build-access: granted $BUILDER its build roles; waiting 120s for IAM to apply them"
   sleep 120
