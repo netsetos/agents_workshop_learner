@@ -99,7 +99,10 @@ def step_01_the_record_against_the_lane(session):
         print(f"  {'same' if same else 'DIFFERS':8}{what:31}{short(recorded)}" + ("" if same else f"  now {short(now)}"))
 
 # Original CLI workflow for step_02_gate_check_and_nothing_after_it.
-COMMANDS_02 = """python commands/release.py gate-check --project "$PROJECT" --region "$REGION"; echo "exit $?"
+COMMANDS_02 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+python commands/release.py gate-check --project "$PROJECT" --region "$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

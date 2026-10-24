@@ -25,7 +25,8 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_a_branch_a_run_a_refusal.
-COMMANDS_01 = """gh api -X POST "repos/$GH_REPO/git/refs" -f ref=refs/heads/try-a-branch \\
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+gh api -X POST "repos/$GH_REPO/git/refs" -f ref=refs/heads/try-a-branch \\
   -f sha="$(gh api "repos/$GH_REPO/commits/main" --jq .sha)" --jq '"branch \\(.ref) at \\(.object.sha[0:7])"'
 gh workflow run documind-cd.yml --repo "$GH_REPO" --ref try-a-branch -f path=candidate && sleep 20
 BR="$(gh run list --repo "$GH_REPO" --workflow documind-cd.yml --branch try-a-branch --limit 1 --json databaseId --jq '.[0].databaseId')"
@@ -33,6 +34,8 @@ gh run watch "$BR" --repo "$GH_REPO" --exit-status > /dev/null; echo "gh run wat
 gh run view "$BR" --repo "$GH_REPO"
 gh run view "$BR" --repo "$GH_REPO" --log-failed | grep -iE "error|attribute condition" | head -n 5
 gh api -X DELETE "repos/$GH_REPO/git/refs/heads/try-a-branch" && echo "branch try-a-branch deleted"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

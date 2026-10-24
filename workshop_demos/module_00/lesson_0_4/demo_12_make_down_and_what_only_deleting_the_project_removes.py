@@ -25,7 +25,10 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_make_down_and_what_only_deleting_the_proje.
-COMMANDS_01 = """make down PROJECT="$PROJECT" REGION="$REGION"
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make down PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

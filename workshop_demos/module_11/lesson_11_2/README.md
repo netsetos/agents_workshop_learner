@@ -128,6 +128,8 @@ About ten minutes: every golden row as the member, then the isolation rows again
 
 Operation: bash — run in the operator shell, in the kit (every golden row, about ten minutes).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -155,6 +157,8 @@ Expected shape, not a promised result:
 Do it: gate-check, and nothing after it
 
 Operation: bash — run in the operator shell, in the kit (the check alone: nothing moves).
+
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
 
 Expected shape, not a promised result:
 

@@ -172,6 +172,8 @@ The same smoke without DOCUMIND_TENANT: one check fails, and you follow it to th
 
 Operation: bash — run in the operator shell, in the kit (the same smoke without a tenant: one check fails, on purpose).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -333,6 +335,8 @@ So the six lines of step 10 stop billing with make down. What the destroy cannot
 
 Operation: bash — run in the operator shell, in the kit, when you are finished with the lane - not now: Module 1 starts on this lane.
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -357,6 +361,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`. All 76 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `4ec49486d2f461105fe000da223a7cff7062b553`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`. All 76 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `0925e73b92f0f407229bac5fab5f2a4694f0f5d0`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

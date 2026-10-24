@@ -87,6 +87,8 @@ gate-check reads lesson 11.2's record, the files first and then the lane; when e
 
 Operation: bash — run in the operator shell, in the kit (gate-check, then one traffic move).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -111,6 +113,8 @@ The same gate as lesson 11.2's, on the revision the file now names: about ten mi
 
 Operation: bash — run in the operator shell, in the kit (every golden row, about ten minutes; no model call succeeds).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -123,6 +127,8 @@ First make promote-gated, which the red record stops at its first recipe line, l
 
 Operation: bash — run in the operator shell, in the kit (the refusal, then the forced traffic move: your API answers 500 until the rollback).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -134,6 +140,8 @@ Expected shape, not a promised result:
 make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane.
 
 Operation: bash — run in the operator shell, in the kit, straight after (the smokes, then the incident read).
+
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
 
 Expected shape, not a promised result:
 
@@ -158,6 +166,8 @@ Expected shape, not a promised result:
 Do it: the smokes and the incident, after the rollback
 
 Operation: bash — run in the operator shell, in the kit, after the rollback (the smokes, then the incident read).
+
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
 
 Expected shape, not a promised result:
 
@@ -187,6 +197,8 @@ Run the Repair: line your make incident printed after the rollback. On a lane wh
 
 Operation: bash — run in the operator shell, in the kit (the Repair line make incident printed, then every golden row).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -199,6 +211,8 @@ Do it: promote it through the gate
 
 Operation: bash — run in the operator shell, in the kit (gate-check, then one traffic move).
 
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
+
 Expected shape, not a promised result:
 
 ```text
@@ -210,6 +224,8 @@ Expected shape, not a promised result:
 The smokes of your deployed services, then make incident on the lane as it is now. The proof is both: make smoke-deployed exits 0, and make incident exits 0 with the gated state.
 
 Operation: bash — run in the operator shell, in the kit (the proof: the smokes, then the incident read).
+
+IDE adaptation: Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo "exit $?"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page.
 
 Expected shape, not a promised result:
 

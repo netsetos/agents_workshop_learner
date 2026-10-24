@@ -5,7 +5,7 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_00/lesson_0_4/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html",
-  "source_sha": "4ec49486d2f461105fe000da223a7cff7062b553",
+  "source_sha": "0925e73b92f0f407229bac5fab5f2a4694f0f5d0",
   "shared_setup_windows": [
     1
   ],
@@ -345,7 +345,9 @@
           "purpose": "The same smoke without DOCUMIND_TENANT: one check fails, and you follow it to the code that printed it and the code that refused. Run the smoke again without the tenant, which the Makefile's header example leaves out too. Keep the URL and the project, so the smoke still has an identity to ask with. env -u makes sure no DOCUMIND_TENANT survives from an earlier shell, and the last command prints make's own exit status.",
           "label": "bash — run in the operator shell, in the kit (the same smoke without a tenant: one check fails, on purpose)",
           "expected": "[awaiting the author's run: data/smoke_broken.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_23",
           "function": "step_01_break_it_once_a_tenant_nobody_lists",
           "window": 23,
@@ -693,7 +695,9 @@
           "purpose": "So the six lines of step 10 stop billing with make down. What the destroy cannot delete is what the list names: Firestore, which keeps its delete protection, and every bucket that still holds objects, because no bucket in storage.tf sets force_destroy to true. A used lane's uploads bucket holds the corpus, so the destroy ends with an error for each such bucket, and the recipe prints its list and exits with that error. No bucket depends on any of the six lines, so the error holds none of them back. The recipe's last line is the one that ends the bill: delete the throwaway project. Shutting a project down stops all of its billing; for 30 days the project can still be restored, and then it and everything in it are deleted. The same page adds two cautions: charges already run up can still arrive until the current billing cycle ends, and it advises disabling billing on the project before you shut it down. One switch would block the deletion itself: AUDIT_LOCK=true locks the audit bucket's five-year retention and liens the project, which is why it is false for a lab.",
           "label": "bash — run in the operator shell, in the kit, when you are finished with the lane - not now: Module 1 starts on this lane",
           "expected": "[awaiting the author's run: data/down.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_75",
           "function": "step_01_make_down_and_what_only_deleting_the_proje",
           "window": 75,

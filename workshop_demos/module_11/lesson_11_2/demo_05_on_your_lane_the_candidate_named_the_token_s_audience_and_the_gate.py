@@ -122,7 +122,10 @@ def step_02_the_tag_url_and_the_audience(session):
             print(f"  GET {path:27} HTTP {status}  {said}")
 
 # Original CLI workflow for step_03_the_gate.
-COMMANDS_03 = """make gate PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make gate PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

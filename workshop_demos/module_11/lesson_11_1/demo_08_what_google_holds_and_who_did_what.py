@@ -110,7 +110,10 @@ def step_02_the_audit_trail_of_step_6_s_run(session):
         print("   on behalf of", behind[0] if behind else "(no delegation recorded)")
 
 # Original CLI workflow for step_03_zero_user_managed_keys.
-COMMANDS_03 = """make keys-check PROJECT="$PROJECT"; echo "exit $?"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make keys-check PROJECT="$PROJECT"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

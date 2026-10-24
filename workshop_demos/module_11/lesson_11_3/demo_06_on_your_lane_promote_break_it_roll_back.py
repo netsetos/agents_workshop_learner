@@ -32,7 +32,10 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_promote_lesson_11_2_s_candidate.
-COMMANDS_01 = """make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -74,7 +77,10 @@ def step_02_the_mistyped_model_as_a_candidate(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_gate_on_it.
-COMMANDS_03 = """make gate PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make gate PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -95,8 +101,11 @@ def step_03_the_gate_on_it(session):
     session.shell(COMMANDS_03)
 
 # Original CLI workflow for step_04_refused_then_forced.
-COMMANDS_04 = """make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_04 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
 make promote PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -117,8 +126,11 @@ def step_04_refused_then_forced(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_the_smokes_and_the_incident.
-COMMANDS_05 = """make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_05 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
 make incident PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -160,8 +172,11 @@ def step_06_the_rollback_timed(session):
     session.shell(COMMANDS_06)
 
 # Original CLI workflow for step_07_the_smokes_and_the_incident_after_the_roll.
-COMMANDS_07 = """make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_07 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
 make incident PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

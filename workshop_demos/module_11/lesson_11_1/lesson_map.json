@@ -472,7 +472,9 @@
           "purpose": "The cell makes a branch at main's commit through GitHub's REST API, dispatches the workflow on it, waits for the run to finish, prints its summary and the error lines of the failed step, and deletes the branch. In the browser: the branch menu on your fork's code page, then Run workflow with that branch chosen.",
           "label": "bash — run in the operator shell (a branch, a run that fails on purpose, the branch deleted)",
           "expected": "[awaiting the author's run: data/run_branch.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_31",
           "function": "step_01_a_branch_a_run_a_refusal",
           "window": 31,
@@ -544,7 +546,9 @@
           "purpose": "Do it: zero user-managed keys",
           "label": "bash — run in the operator shell, in the kit (gcloud describe and list calls; writes nothing)",
           "expected": "[awaiting the author's run: data/keys.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_38",
           "function": "step_03_zero_user_managed_keys",
           "window": 38,

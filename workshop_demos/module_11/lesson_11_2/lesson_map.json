@@ -365,7 +365,9 @@
           "purpose": "About ten minutes: every golden row as the member, then the isolation rows again as the outsider. run_eval.py's own lines stream between the gate's two blocks; lesson 4.3 reads them.",
           "label": "bash — run in the operator shell, in the kit (every golden row, about ten minutes)",
           "expected": "[awaiting the author's run: data/gate.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_31",
           "function": "step_03_the_gate",
           "window": 31,
@@ -422,7 +424,9 @@
           "purpose": "Do it: gate-check, and nothing after it",
           "label": "bash — run in the operator shell, in the kit (the check alone: nothing moves)",
           "expected": "[awaiting the author's run: data/gate_check.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_35",
           "function": "step_02_gate_check_and_nothing_after_it",
           "window": 35,

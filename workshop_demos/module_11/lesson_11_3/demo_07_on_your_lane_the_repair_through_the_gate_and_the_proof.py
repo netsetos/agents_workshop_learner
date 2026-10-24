@@ -27,8 +27,11 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_repair_candidate_and_its_gate.
-COMMANDS_01 = """make candidate PROJECT="$PROJECT" REGION="$REGION" GENERATOR_MODEL=gemini-3.6-flash
+COMMANDS_01 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make candidate PROJECT="$PROJECT" REGION="$REGION" GENERATOR_MODEL=gemini-3.6-flash
 make gate PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -49,7 +52,10 @@ def step_01_the_repair_candidate_and_its_gate(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_promote_it_through_the_gate.
-COMMANDS_02 = """make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_02 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make promote-gated PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 
@@ -70,8 +76,11 @@ def step_02_promote_it_through_the_gate(session):
     session.shell(COMMANDS_02)
 
 # Original CLI workflow for step_03_the_proof.
-COMMANDS_03 = """make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+COMMANDS_03 = """set +e +o pipefail   # as the page runs it: the cell prints its own exit status, which a failure must reach
+make smoke-deployed PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
 make incident PROJECT="$PROJECT" REGION="$REGION"; echo "exit $?"
+true   # the status it printed is the cell's answer: compare it with the page's prose
+
 
 """
 

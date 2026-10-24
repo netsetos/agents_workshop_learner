@@ -373,7 +373,9 @@
           "purpose": "gate-check reads lesson 11.2's record, the files first and then the lane; when every check passes, make promote moves the traffic and prints what /version now says.",
           "label": "bash — run in the operator shell, in the kit (gate-check, then one traffic move)",
           "expected": "[awaiting the author's run: data/promote_gated.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_26",
           "function": "step_01_promote_lesson_11_2_s_candidate",
           "window": 26,
@@ -399,7 +401,9 @@
           "purpose": "The same gate as lesson 11.2's, on the revision the file now names: about ten minutes of rows, and every row that reaches the model fails. run_eval.py's lines stream between the gate's two blocks. The verdict is recorded, red, and make reports release.py's exit 1 on its last line, Error 1, before exiting 2 itself.",
           "label": "bash — run in the operator shell, in the kit (every golden row, about ten minutes; no model call succeeds)",
           "expected": "[awaiting the author's run: data/gate_typo.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_30",
           "function": "step_03_the_gate_on_it",
           "window": 30,
@@ -412,7 +416,9 @@
           "purpose": "First make promote-gated, which the red record stops at its first recipe line, line 46 of mk/release.mk, so its make promote never starts. Then plain make promote, which reads no record and moves all the traffic to the mistyped revision. Go straight on to the next cell.",
           "label": "bash — run in the operator shell, in the kit (the refusal, then the forced traffic move: your API answers 500 until the rollback)",
           "expected": "[awaiting the author's run: data/promote_refused_forced.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_32",
           "function": "step_04_refused_then_forced",
           "window": 32,
@@ -425,7 +431,9 @@
           "purpose": "make smoke-deployed names the smokes it skips and runs the rest; make incident reads what the smokes logged, with the gate record and the lane.",
           "label": "bash — run in the operator shell, in the kit, straight after (the smokes, then the incident read)",
           "expected": "[awaiting the author's run: data/smoke_incident_red.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_34",
           "function": "step_05_the_smokes_and_the_incident",
           "window": 34,
@@ -451,7 +459,9 @@
           "purpose": "Do it: the smokes and the incident, after the rollback",
           "label": "bash — run in the operator shell, in the kit, after the rollback (the smokes, then the incident read)",
           "expected": "[awaiting the author's run: data/smoke_incident_after.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_38",
           "function": "step_07_the_smokes_and_the_incident_after_the_roll",
           "window": 38,
@@ -510,7 +520,9 @@
           "purpose": "Run the Repair: line your make incident printed after the rollback. On a lane whose serving revision runs the Makefile's defaults it is the first line below; if yours names more settings, use yours. Then the gate: about ten minutes and about Rs 29.",
           "label": "bash — run in the operator shell, in the kit (the Repair line make incident printed, then every golden row)",
           "expected": "[awaiting the author's run: data/candidate_gate_repair.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_43",
           "function": "step_01_the_repair_candidate_and_its_gate",
           "window": 43,
@@ -523,7 +535,9 @@
           "purpose": "Do it: promote it through the gate",
           "label": "bash — run in the operator shell, in the kit (gate-check, then one traffic move)",
           "expected": "[awaiting the author's run: data/promote_repair.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_45",
           "function": "step_02_promote_it_through_the_gate",
           "window": 45,
@@ -536,7 +550,9 @@
           "purpose": "The smokes of your deployed services, then make incident on the lane as it is now. The proof is both: make smoke-deployed exits 0, and make incident exits 0 with the gated state.",
           "label": "bash — run in the operator shell, in the kit (the proof: the smokes, then the incident read)",
           "expected": "[awaiting the author's run: data/smoke_incident_proof.txt]",
-          "adaptations": [],
+          "adaptations": [
+            "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
+          ],
           "id": "source_47",
           "function": "step_03_the_proof",
           "window": 47,
