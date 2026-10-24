@@ -289,6 +289,9 @@ def recorder(thinking: str | None = None, model: str | None = None):
                 if isinstance(m, AIMessage):
                     calls.append(call_record(len(calls) + 1, m.usage_metadata, self._level(request), priced,
                                              m.tool_calls, da._text(m.content), m.id))
+                    finish = finish_of(m)
+                    if finish:                           # only a call that did not end normally says how it ended
+                        calls[-1]["finish"] = finish
             return response
 
         def _failed(self, request, exc: BaseException) -> None:
@@ -906,14 +909,33 @@ def _ask(runtime, state, llm, system: str, text: str, wrappers, role: str, tools
 
     calls = runtime.context["bench_calls"]
     before = len(calls)
-    request = ModelRequest(model=llm, system_message=SystemMessage(content=system), messages=[HumanMessage(content=text)],
-                           tools=list(tools or ()), state=state, runtime=runtime)
-    out = turn_limits_.wrap_model_call(request, lambda r: recorder_.wrap_model_call(r, call))
-    for c in calls[before:]:
-        c["role"] = role
-    if isinstance(out, AIMessage):           # the turn's limits refused the call: the stop, as the loop's
-        return None, None
-    return out.result[0], (calls[-1]["n"] if len(calls) > before else None)
+    for asked in (text, text + "\n\n" + NO_TOOL_HERE):
+        request = ModelRequest(model=llm, system_message=SystemMessage(content=system),
+                               messages=[HumanMessage(content=asked)], tools=list(tools or ()), state=state, runtime=runtime)
+        out = turn_limits_.wrap_model_call(request, lambda r: recorder_.wrap_model_call(r, call))
+        for c in calls[before:]:
+            c["role"] = role
+        if isinstance(out, AIMessage):       # the turn's limits refused the call: the stop, as the loop's
+            return None, None
+        reply = out.result[0]
+        # A call with no tool bound came back with no text and no call: Gemini 3 sometimes tries to call one of the
+        # tools the prompt lists as text, and then the reply holds no part at all (finish UNEXPECTED_TOOL_CALL), its
+        # tokens billed. Lesson 10.2's live bench lost every first plan to it (22 October 2026). Ask once more.
+        if tools or reply.tool_calls or _da()._text(reply.content).strip():
+            break
+    return reply, (calls[-1]["n"] if len(calls) > before else None)
+
+
+NO_TOOL_HERE = ("Write your reply as text. No tool can run in this call, so a tool call here returns nothing: name the "
+                "tool in your text instead.")
+
+
+def finish_of(message) -> str | None:
+    """How a model call ended, when that was not a normal stop: Gemini's finish reason from the reply's metadata
+    (UNEXPECTED_TOOL_CALL, MALFORMED_FUNCTION_CALL, MAX_TOKENS, SAFETY...), or None for STOP or none given."""
+    reason = str((getattr(message, "response_metadata", None) or {}).get("finish_reason") or "")
+    reason = reason.rsplit(".", 1)[-1]                   # an enum's str() is FinishReason.STOP
+    return reason if reason and reason != "STOP" else None
 
 
 def _logged(name: str, args, status: str, content, held) -> dict:

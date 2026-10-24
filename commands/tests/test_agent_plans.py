@@ -72,6 +72,14 @@ def ok(**extra) -> dict:
 
 # ================================================================== the standard-library half
 class Plans(unittest.TestCase):
+    def test_how_a_call_ended_is_kept_when_it_was_not_a_stop(self):
+        from types import SimpleNamespace as Reply
+        self.assertEqual(ap.finish_of(Reply(response_metadata={"finish_reason": "UNEXPECTED_TOOL_CALL"})), "UNEXPECTED_TOOL_CALL")
+        self.assertEqual(ap.finish_of(Reply(response_metadata={"finish_reason": "FinishReason.MALFORMED_FUNCTION_CALL"})),
+                         "MALFORMED_FUNCTION_CALL")
+        for metadata in ({"finish_reason": "STOP"}, {}, None):
+            self.assertIsNone(ap.finish_of(Reply(response_metadata=metadata)))
+
     def test_a_numbered_plan(self):
         text = ("Here is the plan.\n1. Search for NP-03: retrieve {\"query\": \"notice\"}\n2) Work out the date\n"
                 "   (it needs step 1)\n**3.** Answer from them\n- 4. Last\nThe 60 days. Done.")
@@ -415,6 +423,17 @@ class PlanExecute(_Pinned):
         self.assertEqual(llm.roles, ["plan", "replan", "solve"])
         self.assertIn("The plan could not be read: it has no numbered step.", llm.sent[1])
         self.assertEqual((turn["plan"]["plans"], turn["tool_calls"], turn["answer"]), ([[], []], [], "Nothing to say."))
+
+    def test_an_empty_reply_to_a_planning_call_is_asked_once_more(self):
+        # Gemini 3 sometimes calls a tool the planner's prompt lists as text: the reply holds nothing (finish
+        # UNEXPECTED_TOOL_CALL), as every first plan of the live bench did on 22 October 2026. Asked again, it plans.
+        llm = self.model(["", "No steps here.", "No steps either.", "Nothing to say."])
+        turn, _ = self.turn(row="calc-gratuity-7y8m", llm=llm)
+        self.assertEqual(llm.roles, ["plan", "plan", "replan", "solve"])
+        self.assertNotIn(ap.NO_TOOL_HERE, llm.sent[0])
+        self.assertIn(ap.NO_TOOL_HERE, llm.sent[1])
+        self.assertEqual([c["role"] for c in turn["calls"]], ["plan", "plan", "replan", "solve"])
+        self.assertEqual(turn["plan"]["plans"], [[], []])                     # the second plan's reply had no step either
 
     def test_the_call_cap_stops_a_long_plan(self):
         search = {"calls": [{"name": "retrieve", "args": {"query": GRATUITY}}]}
