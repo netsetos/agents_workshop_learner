@@ -511,7 +511,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `terraform/storage.tf` | code | 0.3, 3.8, 4.8 | 0.2, 5.6 |
 | `terraform/variables.tf` | code | 1.3, 8.4 | 0.3 |
 | `terraform/vector.tf` | code | B.2, B.4, 0.1, 0.3, 0.4, 1.3, 3.9, 8.3, 8.4 | 2.1 |
-| `terraform/wif.tf` | code | 11.1 | 0.3 |
+| `terraform/wif.tf` | code | 11.1 | 0.3, 0.5 |
 | `validate.py` | code | B.1, 0.2 | 0.4 |
 | `workshop_demos/.gitignore` | config | - | - |
 | `workshop_demos/COURSE.md` | doc | - | - |

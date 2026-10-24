@@ -1,6 +1,6 @@
 """Lesson 0.5: Prepare Terraform: the APIs and the state bucket, its sign-in, the billing account, the inputs
 
-40 APIs, the service agents, the versioned state bucket. Before you start, finish Phase 1 (S1 to S6) in this terminal with the Python environment active. The API list is the block make apis runs; this step adds the service agents and the state bucket. Application Default Credentials and the quota project. Run this alone, open the URL and sign in with your operator account: The billing account Terraform's budget needs, verified and saved. Every Terraform input, exported and saved. Every input the kit's make plan would pass, and the CI trust of the repository you cloned, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
+40 APIs, the service agents, the versioned state bucket. Before you start, finish Phase 1 (S1 to S6) in this terminal with the Python environment active. The API list is the block make apis runs; this step adds the service agents and the state bucket. Application Default Credentials and the quota project. Run this alone, open the URL and sign in with your operator account: The billing account Terraform's budget needs, verified and saved. Every input the kit's make plan would pass, and the CI trust, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off. The CI trust (terraform/wif.tf) lets GitHub Actions workflows from one repository, on one branch, become sa-documind-cicd in your project with no key file. That account can deploy code that runs as your services, so the repository must be one you own. It is never the repository you cloned: netsetos/agents_workshop_learner is the course author's, and trusting it would let the author's workflows deploy into your lane. On GitHub, open that repository and choose Fork; your fork is YOUR-GITHUB-USER/agents_workshop_learner. Lesson 11.1 builds and deploys through this trust. Name your fork in GH_REPO; the block looks up its numeric id, the value the trust is really keyed on, and stops on the author's repository or an empty answer.
 
 Run order inside this file:
 1. T1. Enable APIs, service agents and the state bucket (source window 17)
@@ -214,7 +214,22 @@ def step_04_t3_save_the_billing_account_for_terraform(session):
     session.shell(COMMANDS_04)
 
 # Original CLI workflow for step_05_t4_set_the_terraform_inputs.
-COMMANDS_05 = """rag_configure_terraform_inputs() {
+COMMANDS_05 = """export GH_REPO=YOUR-GITHUB-USER/agents_workshop_learner   # your fork: a repository you own
+rag_configure_terraform_inputs() {
+  [[ "${GH_REPO:-}" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ && "$GH_REPO" != YOUR-GITHUB-USER/* ]] || {
+    printf 'STOP: export GH_REPO=OWNER/REPO, your fork of the kit, before this block.\\n' >&2
+    return 1
+  }
+  [[ "${GH_REPO,,}" != "netsetos/agents_workshop_learner" ]] || {
+    printf 'STOP: %s is the course author'"'"'s repository; trusting it would let its workflows deploy into your project. Fork it and name your fork.\\n' "$GH_REPO" >&2
+    return 1
+  }
+  [[ "${GH_REPO_ID:-}" =~ ^[1-9][0-9]*$ ]] ||
+    GH_REPO_ID="$(curl -s "https://api.github.com/repos/$GH_REPO" | python -c 'import json,sys; print(json.load(sys.stdin).get("id", ""))')"
+  [[ "$GH_REPO_ID" =~ ^[1-9][0-9]*$ ]] || {
+    printf 'STOP: GitHub returned no numeric id for %s. Check the name; for a private repository, export GH_REPO_ID from: gh api repos/%s --jq .id\\n' "$GH_REPO" "$GH_REPO" >&2
+    return 1
+  }
   [[ "${BILLING_ACCOUNT_ID:-}" =~ ^[0-9A-Za-z]{6}-[0-9A-Za-z]{6}-[0-9A-Za-z]{6}$ && "$BILLING_ACCOUNT_ID" != "000000-000000-000000" ]] || {
     printf 'STOP: complete the verified project-billing lookup (T3) first.\\n' >&2
     return 1
@@ -224,8 +239,8 @@ COMMANDS_05 = """rag_configure_terraform_inputs() {
     return 1
   }
   export TF_VAR_project_id="$PROJECT"
-  export TF_VAR_github_repository='netsetos/agents_workshop_learner'
-  export TF_VAR_github_repository_id='1381902596'
+  export TF_VAR_github_repository="$GH_REPO"
+  export TF_VAR_github_repository_id="$GH_REPO_ID"
   export TF_VAR_billing_account_id="$BILLING_ACCOUNT_ID"
   export TF_VAR_pagerduty_key='unset-in-dryrun'
   export TF_VAR_region="$REGION"
@@ -270,10 +285,10 @@ source "$HOME/rag-save-env.sh"
 def step_05_t4_set_the_terraform_inputs(session):
     """Run T4. Set the Terraform inputs at this checkpoint.
 
-    Every Terraform input, exported and saved. Every input the kit's make plan would pass, and the CI trust of the repository you cloned, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
+    Every input the kit's make plan would pass, and the CI trust, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off. The CI trust (terraform/wif.tf) lets GitHub Actions workflows from one repository, on one branch, become sa-documind-cicd in your project with no key file. That account can deploy code that runs as your services, so the repository must be one you own. It is never the repository you cloned: netsetos/agents_workshop_learner is the course author's, and trusting it would let the author's workflows deploy into your lane. On GitHub, open that repository and choose Fork; your fork is YOUR-GITHUB-USER/agents_workshop_learner. Lesson 11.1 builds and deploys through this trust. Name your fork in GH_REPO; the block looks up its numeric id, the value the trust is really keyed on, and stops on the author's repository or an empty answer.
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash - Inputs.
+    Operations: bash - Inputs (your fork, not the example's).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 

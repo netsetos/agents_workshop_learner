@@ -61,14 +61,14 @@
     {
       "lesson": "0.4",
       "title": "Prove the lane, break it once, and switch it off",
-      "source_sha": "3c635a7db2a88324d23dc85d00df7abed31f8152",
+      "source_sha": "4ec49486d2f461105fe000da223a7cff7062b553",
       "source_kind": "main_html",
       "demos": 14
     },
     {
       "lesson": "0.5",
       "title": "Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI",
-      "source_sha": "702f331617bdae6f99233b0a7c19d68b511271da",
+      "source_sha": "d125af97fa93a38ec6b6abb8e4706f9be0d783fa",
       "source_kind": "main_html",
       "demos": 12
     },

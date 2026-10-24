@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`, reviewed at blob `702f331617bdae6f99233b0a7c19d68b511271da`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`, reviewed at blob `d125af97fa93a38ec6b6abb8e4706f9be0d783fa`. Learners read that page on the course site; this guide keeps its prose.
 
 One runbook, in order, from an empty browser tab to a working DocuMind in your own Google Cloud project. Phase 1 prepares Cloud Shell: the project, the tools, Python 3.12 and the kit from `main`. Phase 2 creates the infrastructure with one reviewed Terraform plan. Phase 3 pins the commit you build from, builds 7 images, deploys every service and the UI behind Google sign-in, and puts you and the services on the tenant rosters so the UI answers.
 
@@ -41,6 +41,8 @@ One runbook, in order, from an empty browser tab to a working DocuMind in your o
 You stand up the whole DocuMind lane from Cloud Shell, block by block, stopping at every checkpoint that fails: set up the shell, apply the infrastructure with Terraform, pin the commit you build from, build and deploy 7 services, put people on the tenant rosters so the UI answers with citations, and close with the kit's own finishing targets, so the lane is the one `make up` would have built.
 
 From the end of the Terraform apply, a handful of resources bill every hour whether anyone uses them or not: Rs 44.05 an hour if Vector Search picks a SMALL shard, Rs 111.10 if it picks MEDIUM (about Rs 1,057 to Rs 2,666 a day), at Mumbai list prices. Cloud Build minutes, Gemini calls and Document AI pages come on top. Use a project made for the course and delete it when you are done.
+
+This lesson builds the same lane as lesson 0.3, by hand in Cloud Shell, block by block, where 0.3 runs `make plan` and `make up` from your own terminal. Choose one. Run this lesson instead of 0.3, then go on to lesson 0.4 with the lane it builds. If 0.3 already built your lane, read this lesson to see what `make up` does, but do not run it: S1 creates a second project, and the lane in it bills another Rs 1,057 to Rs 2,666 a day until you delete it.
 
 ### The three phases: setup, Terraform, build and deploy
 
@@ -200,9 +202,11 @@ Prints PASS with your billing account ID.
 
 Every Terraform input, exported and saved.
 
-Every input the kit's `make plan` would pass, and the CI trust of the repository you cloned, saved into the same inputs file. Inputs not listed keep their `variables.tf` defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
+Every input the kit's `make plan` would pass, and the CI trust, saved into the same inputs file. Inputs not listed keep their `variables.tf` defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
 
-Prints `PASS: CI trust saved`, the inputs, including your alert email, then `PASS: settings saved`.
+The CI trust (`terraform/wif.tf`) lets GitHub Actions workflows from one repository, on one branch, become `sa-documind-cicd` in your project with no key file. That account can deploy code that runs as your services, so the repository must be one you own. It is never the repository you cloned: `netsetos/agents_workshop_learner` is the course author's, and trusting it would let the author's workflows deploy into your lane. On GitHub, open that repository and choose Fork; your fork is `YOUR-GITHUB-USER/agents_workshop_learner`. Lesson 11.1 builds and deploys through this trust. Name your fork in `GH_REPO`; the block looks up its numeric id, the value the trust is really keyed on, and stops on the author's repository or an empty answer.
+
+Prints `PASS: CI trust saved`, the inputs, including `GitHub repository:` your fork and its numeric id, and your alert email, then `PASS: settings saved`.
 
 ### Run Terraform: init, one saved plan, the apply, the vector index
 
@@ -324,7 +328,7 @@ This deployment creates `documind-admin`; Terraform and the image build do not. 
 
 If the project has no Google organization, or your operator is outside it, the first IAP setup may need the Console: Cloud Run → documind-admin → Security → Identity-Aware Proxy. Complete the OAuth setup there, then rerun the failed command. Do not disable authentication to make the page load.
 
-The admin Usage tab reads the BigQuery views `make bq-views` creates in the closing-targets step; they have data once the API has logged a real answer (the UI step).
+The admin Usage tab reads the BigQuery views `make bq-views` creates after the API's first answer (the UI step); the closing-targets step defers them until then.
 
 ### F6. Initialize the checkpoint schema, then deploy chat
 
@@ -380,9 +384,9 @@ Four make targets, so this lane is the one `make up` would have built.
 
 The kit's own `make up` does not stop at the deploy. Its recipe names what follows, and this runbook has done most of it by hand: the drift check in T7, the cookie secret in F2, the builds in F3, the deploys in F4 to F8 and the roster in the step before this one:
 
-Four remain, and they are the kit's targets, run as they are. `wait-index` blocks until Firestore's composite indexes leave CREATING. `managed-stores` switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to `rag_engine` and zeta to `vertex_search`, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (`managed_search=true`). `bq-views` creates the usage views the admin console reads. `vector-status` prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
+Four remain, and they are the kit's targets, run as they are. `wait-index` blocks until Firestore's composite indexes leave CREATING. `managed-stores` switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to `rag_engine` and zeta to `vertex_search`, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (`managed_search=true`). `bq-views-when-ready` creates the usage views the admin console reads, once the table they read exists: the log sink's table appears only after the API has answered a first request, so on a new lane it prints that the views are deferred and you create them after the first answer (step 13). `vector-status` prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
 
-`>> indexes READY`, then `>> managed stores ready: corpora for acme zeta; acme reads rag_engine, zeta vertex_search, globex the kit's rows`, the view statements' results, and the index's vector count, 0.
+`>> indexes READY`, then `>> managed stores ready: corpora for acme zeta; acme reads rag_engine, zeta vertex_search, globex the kit's rows`, then `>> bq-views deferred: the log sink's table appears after the API's first answer` on a new lane (or the view statements' results, once it has answered), and the index's vector count, 0.
 
 RAG Engine corpora are not Terraform's to destroy: `make down` runs `managed-stores-down` before its destroy, and so must you if you take the lane apart by hand.
 
@@ -406,7 +410,9 @@ Google asks you to sign in; that is IAP. The page then shows your tenant (acme f
 
 A 403 after you signed in means the roster, not IAP: rerun the tenants step and read the rosters back. A first-time IAP setup on a project without an organization may also ask for the OAuth consent screen in the console (Cloud Run, the service, Security, Identity-Aware Proxy); complete it there and retry the failed command. Never switch authentication off to make the page load.
 
-The admin console's Usage tab reads the views the closing-targets step created; they show data once the API has logged a real answer. A Ready service is an infrastructure checkpoint, not proof the usage query has data yet.
+That first answer is what the usage views were waiting for: the log sink has now exported the API's first rows, so BigQuery has the table the views read. Create them, from the kit root:
+
+The admin console's Usage tab reads them. If `bq` still says Not found: Table, the sink has not exported yet: wait a minute and run it again. A Ready service is an infrastructure checkpoint, not proof the usage query has data yet.
 
 ### Verify it yourself: the checklist
 

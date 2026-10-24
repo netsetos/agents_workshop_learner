@@ -155,7 +155,7 @@ Operation: bash - a new terminal: restore your settings.
 
 ### demo_05_prepare_terraform_the_apis_and_the_state_bucket_its_sign_in_the_billing_account.py
 
-40 APIs, the service agents, the versioned state bucket. Before you start, finish Phase 1 (S1 to S6) in this terminal with the Python environment active. The API list is the block make apis runs; this step adds the service agents and the state bucket. Application Default Credentials and the quota project. Run this alone, open the URL and sign in with your operator account: The billing account Terraform's budget needs, verified and saved. Every Terraform input, exported and saved. Every input the kit's make plan would pass, and the CI trust of the repository you cloned, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
+40 APIs, the service agents, the versioned state bucket. Before you start, finish Phase 1 (S1 to S6) in this terminal with the Python environment active. The API list is the block make apis runs; this step adds the service agents and the state bucket. Application Default Credentials and the quota project. Run this alone, open the URL and sign in with your operator account: The billing account Terraform's budget needs, verified and saved. Every input the kit's make plan would pass, and the CI trust, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off. The CI trust (terraform/wif.tf) lets GitHub Actions workflows from one repository, on one branch, become sa-documind-cicd in your project with no key file. That account can deploy code that runs as your services, so the repository must be one you own. It is never the repository you cloned: netsetos/agents_workshop_learner is the course author's, and trusting it would let the author's workflows deploy into your lane. On GitHub, open that repository and choose Fork; your fork is YOUR-GITHUB-USER/agents_workshop_learner. Lesson 11.1 builds and deploys through this trust. Name your fork in GH_REPO; the block looks up its numeric id, the value the trust is really keyed on, and stops on the author's repository or an empty answer.
 
 **`step_01_t1_enable_apis_service_agents_and_the_stat(session)` — Prepare Terraform: the APIs and the state bucket, its sign-in, the billing account, the inputs / T1. Enable APIs, service agents and the state bucket**
 
@@ -183,9 +183,9 @@ Operation: bash - Billing lookup.
 
 **`step_05_t4_set_the_terraform_inputs(session)` — Prepare Terraform: the APIs and the state bucket, its sign-in, the billing account, the inputs / T4. Set the Terraform inputs**
 
-Every Terraform input, exported and saved. Every input the kit's make plan would pass, and the CI trust of the repository you cloned, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off.
+Every input the kit's make plan would pass, and the CI trust, saved into the same inputs file. Inputs not listed keep their variables.tf defaults: the Google Chat door, the Desk job and GKE Autopilot stay off. The CI trust (terraform/wif.tf) lets GitHub Actions workflows from one repository, on one branch, become sa-documind-cicd in your project with no key file. That account can deploy code that runs as your services, so the repository must be one you own. It is never the repository you cloned: netsetos/agents_workshop_learner is the course author's, and trusting it would let the author's workflows deploy into your lane. On GitHub, open that repository and choose Fork; your fork is YOUR-GITHUB-USER/agents_workshop_learner. Lesson 11.1 builds and deploys through this trust. Name your fork in GH_REPO; the block looks up its numeric id, the value the trust is really keyed on, and stops on the author's repository or an empty answer.
 
-Operation: bash - Inputs.
+Operation: bash - Inputs (your fork, not the example's).
 
 ### demo_06_run_terraform_init_one_saved_plan_the_apply_the_vector_index.py
 
@@ -403,11 +403,11 @@ Operation: bash - a colleague: IAP access plus one roster.
 
 ### demo_11_finish_what_make_up_finishes_the_index_wait_the_managed_stores_and_the_bigquery.py
 
-The kit's own make up does not stop at the deploy. Its recipe names what follows, and this runbook has done most of it by hand: the drift check in T7, the cookie secret in F2, the builds in F3, the deploys in F4 to F8 and the roster in the step before this one: Four remain, and they are the kit's targets, run as they are. wait-index blocks until Firestore's composite indexes leave CREATING. managed-stores switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to rag_engine and zeta to vertex_search, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (managed_search=true). bq-views creates the usage views the admin console reads. vector-status prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
+The kit's own make up does not stop at the deploy. Its recipe names what follows, and this runbook has done most of it by hand: the drift check in T7, the cookie secret in F2, the builds in F3, the deploys in F4 to F8 and the roster in the step before this one: Four remain, and they are the kit's targets, run as they are. wait-index blocks until Firestore's composite indexes leave CREATING. managed-stores switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to rag_engine and zeta to vertex_search, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (managed_search=true). bq-views-when-ready creates the usage views the admin console reads, once the table they read exists: the log sink's table appears only after the API has answered a first request, so on a new lane it prints that the views are deferred and you create them after the first answer (step 13). vector-status prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
 
 **`step_01_finish_what_make_up_finishes_the_index_wai(session)` — Finish what make up finishes: the index wait, the managed stores and the BigQuery views / Finish what make up finishes: the index wait, the managed stores and the BigQuery views**
 
-The kit's own make up does not stop at the deploy. Its recipe names what follows, and this runbook has done most of it by hand: the drift check in T7, the cookie secret in F2, the builds in F3, the deploys in F4 to F8 and the roster in the step before this one: Four remain, and they are the kit's targets, run as they are. wait-index blocks until Firestore's composite indexes leave CREATING. managed-stores switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to rag_engine and zeta to vertex_search, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (managed_search=true). bq-views creates the usage views the admin console reads. vector-status prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
+The kit's own make up does not stop at the deploy. Its recipe names what follows, and this runbook has done most of it by hand: the drift check in T7, the cookie secret in F2, the builds in F3, the deploys in F4 to F8 and the roster in the step before this one: Four remain, and they are the kit's targets, run as they are. wait-index blocks until Firestore's composite indexes leave CREATING. managed-stores switches RAG Engine on once for the project, makes a corpus for each tenant whose text may travel (acme and zeta) and pins acme to rag_engine and zeta to vertex_search, so one deployment answers from all three stores; the data stores themselves were declared by Terraform (managed_search=true). bq-views-when-ready creates the usage views the admin console reads, once the table they read exists: the log sink's table appears only after the API has answered a first request, so on a new lane it prints that the views are deferred and you create them after the first answer (step 13). vector-status prints the index's own vector count, 0 until the first document is ingested. These targets read the state Phase 2 wrote, because the bucket and prefix are the kit's.
 
 Operation: bash - the four closing targets, from the kit root.
 
@@ -423,7 +423,7 @@ Operation: bash - Verify.
 
 ### demo_13_open_the_ui_and_ask_a_first_question.py
 
-The end-to-end check a person makes. Print the UI's address and open it in a browser signed in as your operator account:
+The end-to-end check a person makes. Print the UI's address and open it in a browser signed in as your operator account: A 403 after you signed in means the roster, not IAP: rerun the tenants step and read the rosters back. A first-time IAP setup on a project without an organization may also ask for the OAuth consent screen in the console (Cloud Run, the service, Security, Identity-Aware Proxy); complete it there and retry the failed command. Never switch authentication off to make the page load. That first answer is what the usage views were waiting for: the log sink has now exported the API's first rows, so BigQuery has the table the views read. Create them, from the kit root:
 
 **`step_01_open_the_ui_and_ask_a_first_question(session)` — Open the UI and ask a first question / Open the UI and ask a first question**
 
@@ -431,8 +431,14 @@ The end-to-end check a person makes. Print the UI's address and open it in a bro
 
 Operation: bash - the UI's address.
 
+**`step_02_open_the_ui_and_ask_a_first_question(session)` — Open the UI and ask a first question / Open the UI and ask a first question**
+
+A 403 after you signed in means the roster, not IAP: rerun the tenants step and read the rosters back. A first-time IAP setup on a project without an organization may also ask for the OAuth consent screen in the console (Cloud Run, the service, Security, Identity-Aware Proxy); complete it there and retry the failed command. Never switch authentication off to make the page load. That first answer is what the usage views were waiting for: the log sink has now exported the API's first rows, so BigQuery has the table the views read. Create them, from the kit root:
+
+Operation: bash - the usage views, after the first answer.
+
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`. All 58 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `702f331617bdae6f99233b0a7c19d68b511271da`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_0.5_Setup_Cloud_WIX.html`. All 59 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `d125af97fa93a38ec6b6abb8e4706f9be0d783fa`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

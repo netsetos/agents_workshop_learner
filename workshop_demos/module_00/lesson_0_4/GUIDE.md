@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`, reviewed at blob `3c635a7db2a88324d23dc85d00df7abed31f8152`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_0.4_Prove_Switch_Off_WIX.html`, reviewed at blob `4ec49486d2f461105fe000da223a7cff7062b553`. Learners read that page on the course site; this guide keeps its prose.
 
 Your lane has been up since lesson 0.3. This lesson proves it works from the outside, the way a caller meets it: the kit's preflight, its smoke test, and the three URLs the API answers without a question. Then you break the smoke once, on purpose, and follow the failure to the line of code that printed it and the line that refused. You save the session so the next one starts with one command, switch the lane off, and prove it is off from the instance count Google keeps.
 
@@ -314,4 +314,4 @@ Nothing new bills. `documind-ui`'s floor is 0, now set by `make off` itself; acm
 
 Netsetos GenAI on GCP · Module 0 Setup · Lesson 0.4 Prove the lane, break it once, and switch it off · v5.0
 
-Next: Module 1 RAG foundation, Lesson 1.1 Understand source, tenant, page and chunk contracts.
+Next: Lesson 0.5 Set up the cloud lane end to end: clone in Cloud Shell, create the infrastructure with Terraform, deploy every service and the UI, the same lane built by hand in Cloud Shell: read it, but run it only if you did not build your lane in 0.3. Then Module 1 RAG foundation, Lesson 1.1 Understand source, tenant, page and chunk contracts.
