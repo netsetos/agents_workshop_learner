@@ -1,9 +1,9 @@
-"""Lesson 4.5: Your lane's judge on the frozen rows (optional)
+"""Lesson 4.5: Your lane's judge on the frozen rows: the ratings step 5 reads until the author's ship
 
 Do it
 
 Run order inside this file:
-1. Do it (source window 35)
+1. Do it (source window 38)
 
 Prerequisites: demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -24,19 +24,19 @@ REPEAT = False
 RETRY_FAILED_STEP = False
 
 
-# Original CLI workflow for step_01_your_lane_s_judge_on_the_frozen_rows_optio.
+# Original CLI workflow for step_01_your_lane_s_judge_on_the_frozen_rows_the_r.
 COMMANDS_01 = """make judge-frozen PROJECT="$PROJECT" PY="$HOME/judge-venv/bin/python"
 make judge-agree RUN=evals/reports/judge_set.ratings.jsonl      # your lane's judge against your sheet
 
 """
 
-def step_01_your_lane_s_judge_on_the_frozen_rows_optio(session):
+def step_01_your_lane_s_judge_on_the_frozen_rows_the_r(session):
     """Run Do it at this checkpoint.
 
     Do it
 
     Args: session is the active lesson run, with validated settings and saved prerequisites.
-    Operations: bash — run in the operator shell, in the kit (optional: 40 Vertex AI Evaluation requests, two a row; nothing asked of the API).
+    Operations: bash — run in the operator shell, in the kit (while the kit has no author's ratings: 40 Vertex AI Evaluation requests, two a row; nothing asked of the API).
     Returns: None; observations are printed or saved by the lesson code.
     Failures propagate to the session; inspect its failed attempt before continuing.
 
@@ -53,7 +53,7 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_35', step_01_your_lane_s_judge_on_the_frozen_rows_optio),
+        ('source_38', step_01_your_lane_s_judge_on_the_frozen_rows_the_r),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

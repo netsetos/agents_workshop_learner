@@ -60,8 +60,9 @@ def read_ratings(path: str, frozen: list[dict]) -> dict:
     name), "scores" ({rubric: {id: score}}), "other" (ids whose rating is of another answer), "extra" (rated rows not
     in the frozen set)}. A score outside its metric's scale stops the comparison."""
     if not os.path.isfile(path):
-        raise FileNotFoundError(f"{bjs.shown(path)}: not found. judge.py --save-rows writes it (make judge-frozen); lesson "
-                                "4.5's capture arrives with the author's run")
+        raise FileNotFoundError(f"{bjs.shown(path)}: not found. judge.py --save-rows writes it: make judge-frozen rates "
+                                "the frozen rows on your lane, then RUN=evals/reports/judge_set.ratings.jsonl (lesson 4.5, "
+                                "step 6); the author's ratings ship with the kit once recorded")
     with open(path, encoding="utf-8") as f:
         lines = [json.loads(x) for x in f if x.strip()]
     if not lines or not all(isinstance(x, dict) and "id" in x and isinstance(x.get("ratings"), dict) for x in lines):

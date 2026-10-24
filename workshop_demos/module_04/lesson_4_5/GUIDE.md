@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`, reviewed at blob `8dc666fbda93dd549d36b34d5c666c603e8a9e7a`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`, reviewed at blob `9373ee0af8b4ac195348e64bb5d42699871468d3`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 4.2 ran the judge and ended on its own advice: where the gate and the judge disagree, read the row. This lesson measures how often the judge reads a row the way people do. About 20 of a lane's answers are frozen with the full text of the chunks they cite. You label every row on two questions, grounded and answers the question, yes or no. Then the kit sets your labels beside a second reader's and beside the judge's ratings of the same rows: the 2x2, raw agreement, Cohen's kappa, and the bad answers the judge would let through. Once you have labelled, everything runs on files, at Rs 0.
 
@@ -20,7 +20,7 @@ Lesson 4.2 ran the judge and ended on its own advice: where the gate and the jud
 
 - The judge on the same rows: true-pass, false-pass and the cut
 
-- Your lane's judge on the frozen rows (optional)
+- Your lane's judge on the frozen rows: the ratings step 5 reads until the author's ship
 
 - Kappa by hand, and the judge's own reasons
 
@@ -98,7 +98,7 @@ How to tell which store answered any call: read `stages.retrieval_backend` on th
 
 Calls from the shell impersonate `documind-ui-sa`, the UI's own account, which `make roster` put on the three golden tenants (acme, zeta, globex). That is why a shell call can name any of the three. `otok` mints a token for `documind-outsider-sa`, an account IAM admits into the service and no roster lists. Tokens last about an hour; the functions mint a fresh one on every call. Your browser session is different: IAP signs you in as yourself, and the roster maps your email to exactly one tenant. Keep the two apart in your head; step 3 makes the difference visible.
 
-The shell, in the kit's folder. The UI is not used, and nothing on this page asks the API, so the setup's pin of acme to the kit's index changes nothing here. Every step except step 6 reads files and costs nothing; step 6 is optional, needs lesson 4.2's `~/judge-venv`, and asks Vertex AI Evaluation for 40 ratings. Your kit must hold the frozen set and the three files that come with it: `evals/judge_set.json`, the author's `evals/judge_labels.L1.csv`, a peer's `evals/judge_labels.L2.csv` and the judge's `evals/judge_set.ratings.jsonl`. The setup block's `git pull` brings them. Labelling takes the longest: allow time to read every row's context in full.
+The shell, in the kit's folder. The UI is not used, and nothing on this page asks the API, so the setup's pin of acme to the kit's index changes nothing here. Every step except step 6 reads files and costs nothing; step 6 needs lesson 4.2's `~/judge-venv` and asks Vertex AI Evaluation for 40 ratings. The lesson reads four files: the frozen set `evals/judge_set.json`, the author's labels `evals/judge_labels.L1.csv`, a peer's `evals/judge_labels.L2.csv` and the judge's ratings `evals/judge_set.ratings.jsonl`. They are recorded from the author's run and are not in the kit yet; once they are, the setup block's `git pull` brings them. Until then you build each one yourself, and every step says how: you freeze your own set (step 3, one judge run over lesson 4.2's saved answers), a colleague labels it as your second reader (step 4), and your lane's judge rates it (step 6, which step 5 then reads). Labelling takes the longest: allow time to read every row's context in full.
 
 ### Label the frozen rows yourself, blind
 
@@ -112,13 +112,17 @@ A blank sheet of the frozen rows, filled in a spreadsheet, then checked against 
 
 Steps 4 to 8 print the author's labels, a peer's and the judge's ratings of these very rows, and steps 5 and 8 mark the constructed ones. Read any of them first and your labels are no longer your own. Fill your sheet, check it, then go on.
 
+#### Do it first: a frozen set, your own while the kit has none
+
+While your kit has no `evals/judge_set.json`, freeze your own. `make judge` with `--save-rows` rates lesson 4.2's saved answers, `evals/reports/judge72.json`, and writes every rated row beside its question, context and answer. If that file is gone, `--reuse` collects the answers afresh, 65 questions to your API, about Rs 29.01. Each row gets two Evaluation requests either way. `--freeze` then picks 20 of the rated rows by the rules in step 8 and writes them to `evals/reports/judge_set.json`. Git ignores that folder, so the author's set can arrive later without a clash. The kit's targets read your set while the kit has none, and the author's once it ships. Skip the block if the first line says a set is there.
+
 #### Do it: your sheet
 
 Open `evals/reports/judge_labels.csv` in a spreadsheet or a text editor. For each row, read the context first, then the answer, then the question again, and write `yes` or `no` under both label columns. Write a note on any row you hesitate over, now: step 4 prints it beside the other reader's. Here is one filled row of the kit's fixture, as a sheet holds it:
 
 The answer refuses, so it claims nothing: grounded, yes. But the context holds the cap, so a refusal does not answer the question: no. The reader's note says why: "the cap is in the context". Save the sheet as CSV with every column kept and in the same order. A spreadsheet may add a byte-order mark, Windows line endings or a capitalised YES; the check reads all three. Then check it:
 
-`exists and may hold labels: nothing written` from `make label-sheet` means you made the sheet before, and your labels are in it; delete it only to start again. `evals/judge_set.json: not found` means your kit predates the frozen set: run the setup block again, which pulls the kit. `N problem(s) against the frozen set` from `--check` lists each row and what is wrong with it: a blank, a word other than yes or no, a row missing or there twice, two reader ids, or `labelled on another answer`, which means the sheet was made from another freeze.
+`exists and may hold labels: nothing written` from `make label-sheet` means you made the sheet before, and your labels are in it; delete it only to start again. `evals/judge_set.json: not found` means there is no frozen set yet, the kit's or yours: run the block before the sheet, which freezes your own. `N problem(s) against the frozen set` from `--check` lists each row and what is wrong with it: a blank, a word other than yes or no, a row missing or there twice, two reader ids, or `labelled on another answer`, which means the sheet was made from another freeze.
 
 `make label-sheet` wrote one row for each frozen answer, with the guide printed above it, and `--check` counted your yes and no for each rubric. Those counts already matter. A reader who says yes to nearly every row leaves little room for agreement beyond chance, as step 4 shows. The author's line is the same check on the sheet the kit ships. Your sheet sits in `evals/reports/`, which git ignores, so the kit stays clean.
 
@@ -136,6 +140,10 @@ The author's sheet is your second reader; the kit counts your agreement with it,
 
 #### Do it: you against the author, then the author against the peer
 
+#### Do it, while the kit has no author's sheet: a colleague as your second reader
+
+Until the author's sheet ships, kappa needs a second person. Make a colleague a sheet of the same rows under their own pseudonym. They label it blind, from the guide alone, without seeing yours. Then check their sheet and count your agreement with it. The author-against-peer line above waits for the recorded pair.
+
 Read kappa before agree. On a rubric where both readers say yes to most rows, agreement can look high while kappa stays low, because chance alone would supply most of it. Then read the rows the two of you differ on, with both notes: each is a slip, a place where the guide is unclear, or a real judgement call. The author and the peer are the recorded pair: two people who labelled the same rows blind, once each. Where careful readers split often on a rubric, the rubric is the problem, not the readers, and the judge's agreement with either of them on it is worth little until the guide is sharper. One row moves kappa a long way at this size: on the board, flipping one of nine rows took it from 0.73 to 0.53.
 
 ### The judge on the same rows: true-pass, false-pass and the cut
@@ -144,7 +152,7 @@ The judge's ratings of the frozen rows, held to your labels and to the author's,
 
 #### Definition
 
-Lesson 4.2's judge kept only means. `judge.py --save-rows` writes every row it rated beside its question, context and answer, with each metric's score and the judge's explanation, and the author's run of it rated the frozen rows once: `evals/judge_set.ratings.jsonl`, in your kit. `make judge-agree`, without `PEOPLE`, sets those ratings against one sheet, yours by default, and your labels are the reference. Groundedness is the judge's own 0 or 1. Its second metric is whichever of FULFILLMENT, INSTRUCTION_FOLLOWING or QUESTION_ANSWERING_QUALITY the SDK names, scored 1 to 5, and it passes at `CUT` or more, 4 unless you say otherwise. For each rubric the kit prints the 2x2, the true-pass and false-pass rates with their intervals, raw agreement and kappa, the false-pass rate on constructed and natural rows apart, and the rows you and the judge differ on. A rating counts only where the judge rated the very answer you labelled, the same `row_sha`. The command exits 0 whatever the agreement: it measures the judge and gates nothing.
+Lesson 4.2's judge kept only means. `judge.py --save-rows` writes every row it rated beside its question, context and answer, with each metric's score and the judge's explanation, and the author's run of it rated the frozen rows once: `evals/judge_set.ratings.jsonl`, which ships with the kit once it is recorded. Until then the ratings are your lane's own: run step 6 first, whose second line is this step's comparison against your sheet, and read `RUN=evals/reports/judge_set.ratings.jsonl` into every `make judge-agree` here. `make judge-agree`, without `PEOPLE`, sets those ratings against one sheet, yours by default, and your labels are the reference. Groundedness is the judge's own 0 or 1. Its second metric is whichever of FULFILLMENT, INSTRUCTION_FOLLOWING or QUESTION_ANSWERING_QUALITY the SDK names, scored 1 to 5, and it passes at `CUT` or more, 4 unless you say otherwise. For each rubric the kit prints the 2x2, the true-pass and false-pass rates with their intervals, raw agreement and kappa, the false-pass rate on constructed and natural rows apart, and the rows you and the judge differ on. A rating counts only where the judge rated the very answer you labelled, the same `row_sha`. The command exits 0 whatever the agreement: it measures the judge and gates nothing.
 
 #### The code
 
@@ -162,19 +170,19 @@ The same board as step 1, on the frozen set, with the author as the first reader
 
 They join this board when the frozen set, the two sheets and the judge's ratings are recorded: [awaiting the author's run: data/judge_set.json]
 
-### Your lane's judge on the frozen rows (optional)
+### Your lane's judge on the frozen rows: the ratings step 5 reads until the author's ship
 
 The same rows through Vertex AI Evaluation on your project, then your judge's ratings against your labels.
 
 #### Definition
 
-The ratings in your kit are one judge: the author's run of the Evaluation service, at one time, with one template. Yours may rate differently, because a judge is its template and its model, and both move. `make judge-frozen` sends the frozen rows, as frozen, to Vertex AI Evaluation from lesson 4.2's venv. `--reuse` loads them from `evals/judge_set.json`, so nothing asks the API, and `--no-enrich` keeps each row's context as the readers saw it instead of reading the cited chunks again from Firestore. It costs two Evaluation requests a row, 40 in all, in `us-central1`, and writes one Experiments run in `documind-eval` whose name starts `api-frozen-` and ends with the templates' hash, as in lesson 4.2. Your ratings go to `evals/reports/judge_set.ratings.jsonl`, so the author's file stays as it was.
+While the kit has no ratings, this step is how the judge's ratings reach you, and step 5 reads them. Once the author's ship, they are one judge: the author's run of the Evaluation service, at one time, with one template. Yours may rate differently, because a judge is its template and its model, and both move. `make judge-frozen` sends the frozen rows, as frozen, to Vertex AI Evaluation from lesson 4.2's venv. `--reuse` loads them from the frozen set, the kit's `evals/judge_set.json` or your own `evals/reports/judge_set.json`, so nothing asks the API, and `--no-enrich` keeps each row's context as the readers saw it instead of reading the cited chunks again from Firestore. It costs two Evaluation requests a row, 40 in all, in `us-central1`, and writes one Experiments run in `documind-eval` whose name starts `api-frozen-` and ends with the templates' hash, as in lesson 4.2. Your ratings go to `evals/reports/judge_set.ratings.jsonl`, so the author's file stays as it was.
 
 #### The code
 
 #### Do it
 
-Two judges have now rated the same frozen rows: the author's run and yours. If the template hashes in the two run names differ, they are different judges, and their agreement with you can differ for that reason alone. Set your run's false-pass rate beside the author's capture's, both against your own sheet. A judge whose agreement moves with its template has to be measured again each time the SDK changes, which is why the hash rides in every run name.
+Once the author's ratings ship, two judges have rated the same frozen rows: the author's run and yours. If the template hashes in the two run names differ, they are different judges, and their agreement with you can differ for that reason alone. Set your run's false-pass rate beside the author's capture's, both against your own sheet. A judge whose agreement moves with its template has to be measured again each time the SDK changes, which is why the hash rides in every run name.
 
 ### Kappa by hand, and the judge's own reasons
 

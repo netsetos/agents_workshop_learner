@@ -3,8 +3,8 @@
 Do it: the judge against you, then against the author CUT=3 passes the second metric at 3 or more, and SWEEP=1 adds every cut from 1 to 5 under the two blocks, the current one marked. There is nothing to restore: a run without CUT is back at 4.
 
 Run order inside this file:
-1. Do it: the judge against you, then against the author (source window 29)
-2. Change it: move the cut (source window 31)
+1. Do it: the judge against you, then against the author (source window 32)
+2. Change it: move the cut (source window 34)
 
 Prerequisites: demo_04_two_people_on_the_same_rows_cohen_s_kappa.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -26,8 +26,11 @@ RETRY_FAILED_STEP = False
 
 
 # Original CLI workflow for step_01_the_judge_against_you_then_against_the_aut.
-COMMANDS_01 = """make judge-agree                                 # the judge against your sheet, cut at 4
-make judge-agree LABELS=evals/judge_labels.L1.csv   # the judge against the author
+COMMANDS_01 = """if [ -f evals/judge_set.ratings.jsonl ]; then make judge-agree                                 # the judge against your sheet, cut at 4
+else echo "waits for the author's judge_set.ratings.jsonl: not in your kit yet"; fi
+if [ -f evals/judge_labels.L1.csv ] && [ -f evals/judge_set.ratings.jsonl ]; then make judge-agree LABELS=evals/judge_labels.L1.csv   # the judge against the author
+else echo "waits for the author's judge_labels.L1.csv and judge_set.ratings.jsonl: not in your kit yet"; fi
+
 
 """
 
@@ -48,8 +51,11 @@ def step_01_the_judge_against_you_then_against_the_aut(session):
     session.shell(COMMANDS_01)
 
 # Original CLI workflow for step_02_change_it_move_the_cut.
-COMMANDS_02 = """make judge-agree CUT=3 SWEEP=1                   # your sheet: a looser cut, and every cut beside it
-make judge-agree LABELS=evals/judge_labels.L1.csv CUT=3 SWEEP=1   # the author's
+COMMANDS_02 = """if [ -f evals/judge_set.ratings.jsonl ]; then make judge-agree CUT=3 SWEEP=1                   # your sheet: a looser cut, and every cut beside it
+else echo "waits for the author's judge_set.ratings.jsonl: not in your kit yet"; fi
+if [ -f evals/judge_labels.L1.csv ] && [ -f evals/judge_set.ratings.jsonl ]; then make judge-agree LABELS=evals/judge_labels.L1.csv CUT=3 SWEEP=1   # the author's
+else echo "waits for the author's judge_labels.L1.csv and judge_set.ratings.jsonl: not in your kit yet"; fi
+
 
 """
 
@@ -76,8 +82,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_29', step_01_the_judge_against_you_then_against_the_aut),
-        ('source_31', step_02_change_it_move_the_cut),
+        ('source_32', step_01_the_judge_against_you_then_against_the_aut),
+        ('source_34', step_02_change_it_move_the_cut),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

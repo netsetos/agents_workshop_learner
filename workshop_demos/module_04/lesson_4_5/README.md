@@ -12,6 +12,7 @@ The number after `demo_` is the visible HTML section number, not the demo count 
 | 3 | [demo_03_label_the_frozen_rows_yourself_blind.py](demo_03_label_the_frozen_rows_yourself_blind.py) | Label the frozen rows yourself, blind |
 | 4 | [demo_04_two_people_on_the_same_rows_cohen_s_kappa.py](demo_04_two_people_on_the_same_rows_cohen_s_kappa.py) | Two people on the same rows: Cohen's kappa |
 | 5 | [demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.py](demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.py) | The judge on the same rows: true-pass, false-pass and the cut |
+| 6 | [demo_06_your_lane_s_judge_on_the_frozen_rows_the_ratings_step_5_reads_until_the_author_s.py](demo_06_your_lane_s_judge_on_the_frozen_rows_the_ratings_step_5_reads_until_the_author_s.py) | Your lane's judge on the frozen rows: the ratings step 5 reads until the author's ship |
 | 7 | [demo_07_kappa_by_hand_and_the_judge_s_own_reasons.py](demo_07_kappa_by_hand_and_the_judge_s_own_reasons.py) | Kappa by hand, and the judge's own reasons |
 
 ## Before starting
@@ -29,10 +30,6 @@ Completed functions are saved and skipped when an unfinished demo is run again. 
 Manual browser actions and long asynchronous waits pause at a named checkpoint. Type `done` only after performing the action. Stopping there retains completed steps so they are not repeated on resume. This acknowledgement alone is not proof that indexing/monitoring succeeded; inspect the following read.
 
 After upgrading from a previous layout, run the lesson's finish file first, then set this lesson number in `workshop_demos/setup/start_new_session.py` and run it. It archives evidence; it does not delete your fixtures. Old progress is never silently treated as completion of the new section files.
-
-## Optional extensions
-
-- [optional/demo_06_your_lane_s_judge_on_the_frozen_rows_optional.py](optional/demo_06_your_lane_s_judge_on_the_frozen_rows_optional.py) — Do it
 
 ## Finish and restore
 
@@ -63,9 +60,15 @@ acme: retrieval_backend=vector
 
 ### demo_03_label_the_frozen_rows_yourself_blind.py
 
-Do it: your sheet Open evals/reports/judge_labels.csv in a spreadsheet or a text editor. For each row, read the context first, then the answer, then the question again, and write yes or no under both label columns. Write a note on any row you hesitate over, now: step 4 prints it beside the other reader's. Here is one filled row of the kit's fixture, as a sheet holds it: The answer refuses, so it claims nothing: grounded, yes. But the context holds the cap, so a refusal does not answer the question: no. The reader's note says why: "the cap is in the context". Save the sheet as CSV with every column kept and in the same order. A spreadsheet may add a byte-order mark, Windows line endings or a capitalised YES; the check reads all three. Then check it:
+While your kit has no evals/judge_set.json, freeze your own. make judge with --save-rows rates lesson 4.2's saved answers, evals/reports/judge72.json, and writes every rated row beside its question, context and answer. If that file is gone, --reuse collects the answers afresh, 65 questions to your API, about Rs 29.01. Each row gets two Evaluation requests either way. --freeze then picks 20 of the rated rows by the rules in step 8 and writes them to evals/reports/judge_set.json. Git ignores that folder, so the author's set can arrive later without a clash. The kit's targets read your set while the kit has none, and the author's once it ships. Skip the block if the first line says a set is there. Do it: your sheet Open evals/reports/judge_labels.csv in a spreadsheet or a text editor. For each row, read the context first, then the answer, then the question again, and write yes or no under both label columns. Write a note on any row you hesitate over, now: step 4 prints it beside the other reader's. Here is one filled row of the kit's fixture, as a sheet holds it: The answer refuses, so it claims nothing: grounded, yes. But the context holds the cap, so a refusal does not answer the question: no. The reader's note says why: "the cap is in the context". Save the sheet as CSV with every column kept and in the same order. A spreadsheet may add a byte-order mark, Windows line endings or a capitalised YES; the check reads all three. Then check it:
 
-**`step_01_your_sheet(session)` — Label the frozen rows yourself, blind / Do it: your sheet**
+**`step_01_first_a_frozen_set_your_own_while_the_kit(session)` — Label the frozen rows yourself, blind / Do it first: a frozen set, your own while the kit has none**
+
+While your kit has no evals/judge_set.json, freeze your own. make judge with --save-rows rates lesson 4.2's saved answers, evals/reports/judge72.json, and writes every rated row beside its question, context and answer. If that file is gone, --reuse collects the answers afresh, 65 questions to your API, about Rs 29.01. Each row gets two Evaluation requests either way. --freeze then picks 20 of the rated rows by the rules in step 8 and writes them to evals/reports/judge_set.json. Git ignores that folder, so the author's set can arrive later without a clash. The kit's targets read your set while the kit has none, and the author's once it ships. Skip the block if the first line says a set is there.
+
+Operation: bash — run in the operator shell, in the kit, in lesson 4.2's judge venv (only while there is no frozen set: 130 Evaluation requests over lesson 4.2's saved answers, or 65 fresh answers first if they are gone).
+
+**`step_02_your_sheet(session)` — Label the frozen rows yourself, blind / Do it: your sheet**
 
 Do it: your sheet
 
@@ -77,11 +80,15 @@ Expected shape, not a promised result:
 [awaiting the author's run: data/judge_set.json]
 ```
 
-**`step_02_your_sheet(session)` — Label the frozen rows yourself, blind / Do it: your sheet**
+**`step_03_your_sheet(session)` — Label the frozen rows yourself, blind / Do it: your sheet**
 
 Open evals/reports/judge_labels.csv in a spreadsheet or a text editor. For each row, read the context first, then the answer, then the question again, and write yes or no under both label columns. Write a note on any row you hesitate over, now: step 4 prints it beside the other reader's. Here is one filled row of the kit's fixture, as a sheet holds it: The answer refuses, so it claims nothing: grounded, yes. But the context holds the cap, so a refusal does not answer the question: no. The reader's note says why: "the cap is in the context". Save the sheet as CSV with every column kept and in the same order. A spreadsheet may add a byte-order mark, Windows line endings or a capitalised YES; the check reads all three. Then check it:
 
 Operation: bash — run in the operator shell, in the kit (Rs 0: holds a filled sheet to the frozen set).
+
+Manual action: Open evals/reports/judge_labels.csv in a spreadsheet or editor. For every row read the context, then the answer, then the question, and write yes or no under both groundedness and answers_the_question, blind: before reading any other reader's labels. Save it as CSV with every column kept. Type done to check it against the frozen set.
+
+IDE adaptation: Run each line that reads the author's recorded files (judge_labels.L1.csv, judge_labels.L2.csv, judge_set.ratings.jsonl) only once they are in your kit; until then it prints which file it waits for. Your own path's cells run instead: your frozen set, your colleague's sheet, your lane's ratings (24 October 2026). Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 Expected shape, not a promised result:
 
@@ -91,7 +98,7 @@ Expected shape, not a promised result:
 
 ### demo_04_two_people_on_the_same_rows_cohen_s_kappa.py
 
-Do it: the worked table, and the kit's own tests Do it: you against the author, then the author against the peer
+Do it: the worked table, and the kit's own tests Do it: you against the author, then the author against the peer Until the author's sheet ships, kappa needs a second person. Make a colleague a sheet of the same rows under their own pseudonym. They label it blind, from the guide alone, without seeing yours. Then check their sheet and count your agreement with it. The author-against-peer line above waits for the recorded pair.
 
 **`step_01_the_worked_table_and_the_kit_s_own_tests(session)` — Two people on the same rows: Cohen's kappa / Do it: the worked table, and the kit's own tests**
 
@@ -114,11 +121,29 @@ Do it: you against the author, then the author against the peer
 
 Operation: bash — run in the operator shell, in the kit (Rs 0: two sheets, kappa per rubric).
 
+IDE adaptation: Run each line that reads the author's recorded files (judge_labels.L1.csv, judge_labels.L2.csv, judge_set.ratings.jsonl) only once they are in your kit; until then it prints which file it waits for. Your own path's cells run instead: your frozen set, your colleague's sheet, your lane's ratings (24 October 2026).
+
 Expected shape, not a promised result:
 
 ```text
 [awaiting the author's run: data/judge_set.json]
 ```
+
+**`step_03_while_the_kit_has_no_author_s_sheet_a_coll(session)` — Two people on the same rows: Cohen's kappa / Do it, while the kit has no author's sheet: a colleague as your second reader**
+
+Until the author's sheet ships, kappa needs a second person. Make a colleague a sheet of the same rows under their own pseudonym. They label it blind, from the guide alone, without seeing yours. Then check their sheet and count your agreement with it. The author-against-peer line above waits for the recorded pair.
+
+Operation: bash — run in the operator shell, in the kit (Rs 0: only while the kit has no author's sheet; a blank sheet for your colleague).
+
+**`step_04_while_the_kit_has_no_author_s_sheet_a_coll(session)` — Two people on the same rows: Cohen's kappa / Do it, while the kit has no author's sheet: a colleague as your second reader**
+
+Until the author's sheet ships, kappa needs a second person. Make a colleague a sheet of the same rows under their own pseudonym. They label it blind, from the guide alone, without seeing yours. Then check their sheet and count your agreement with it. The author-against-peer line above waits for the recorded pair.
+
+Operation: bash — run in the operator shell, in the kit (Rs 0: once your colleague has filled their sheet, blind).
+
+Manual action: Only while the kit has no author's sheet: your colleague fills evals/reports/judge_labels.peer.csv the same way, blind, from the guide alone and without seeing yours. Type done to check their sheet and count your agreement with it.
+
+IDE adaptation: Pause before this cell for the page's manual step, a browser action or a wait (the README's Manual action). Type done to continue, or stop and rerun later. The cell then runs as the page gives it, unless another adaptation here says otherwise.
 
 ### demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.py
 
@@ -129,6 +154,8 @@ Do it: the judge against you, then against the author CUT=3 passes the second me
 Do it: the judge against you, then against the author
 
 Operation: bash — run in the operator shell, in the kit (Rs 0: the judge's ratings of the same rows against one sheet).
+
+IDE adaptation: Run each line that reads the author's recorded files (judge_labels.L1.csv, judge_labels.L2.csv, judge_set.ratings.jsonl) only once they are in your kit; until then it prints which file it waits for. Your own path's cells run instead: your frozen set, your colleague's sheet, your lane's ratings (24 October 2026).
 
 Expected shape, not a promised result:
 
@@ -142,21 +169,23 @@ CUT=3 passes the second metric at 3 or more, and SWEEP=1 adds every cut from 1 t
 
 Operation: bash — run in the operator shell, in the kit (Rs 0: the Change-it; nothing to restore, because CUT is not a setting).
 
+IDE adaptation: Run each line that reads the author's recorded files (judge_labels.L1.csv, judge_labels.L2.csv, judge_set.ratings.jsonl) only once they are in your kit; until then it prints which file it waits for. Your own path's cells run instead: your frozen set, your colleague's sheet, your lane's ratings (24 October 2026).
+
 Expected shape, not a promised result:
 
 ```text
 [awaiting the author's run: data/judge_set.json]
 ```
 
-### optional/demo_06_your_lane_s_judge_on_the_frozen_rows_optional.py
+### demo_06_your_lane_s_judge_on_the_frozen_rows_the_ratings_step_5_reads_until_the_author_s.py
 
 Do it
 
-**`step_01_your_lane_s_judge_on_the_frozen_rows_optio(session)` — Your lane's judge on the frozen rows (optional) / Do it**
+**`step_01_your_lane_s_judge_on_the_frozen_rows_the_r(session)` — Your lane's judge on the frozen rows: the ratings step 5 reads until the author's ship / Do it**
 
 Do it
 
-Operation: bash — run in the operator shell, in the kit (optional: 40 Vertex AI Evaluation requests, two a row; nothing asked of the API).
+Operation: bash — run in the operator shell, in the kit (while the kit has no author's ratings: 40 Vertex AI Evaluation requests, two a row; nothing asked of the API).
 
 Expected shape, not a promised result:
 
@@ -210,6 +239,6 @@ Run the listed cleanup sections in order, even after a failure; retain evidence 
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`. All 44 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `8dc666fbda93dd549d36b34d5c666c603e8a9e7a`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_4.5_Judge_Vs_People_WIX.html`. All 47 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `9373ee0af8b4ac195348e64bb5d42699871468d3`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

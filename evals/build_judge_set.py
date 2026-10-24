@@ -54,7 +54,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from run_eval import contains  # noqa: E402  - the gate's own matcher: a figure on its own boundaries
 
-JUDGE_SET = os.path.join(HERE, "judge_set.json")
+KIT_SET = os.path.join(HERE, "judge_set.json")              # the author's frozen set, once it ships with the kit
+OWN_SET = os.path.join(HERE, "reports", "judge_set.json")    # a learner's own freeze (lesson 4.5, step 3): git ignores it,
+# so a later git pull that brings the author's set never collides with it. The kit's set wins once it is there.
+JUDGE_SET = OWN_SET if os.path.isfile(OWN_SET) and not os.path.isfile(KIT_SET) else KIT_SET
 ROWS = 20
 RUBRICS = ("groundedness", "answers_the_question")
 SHEET_FIELDS = ("id", "reader", "groundedness", "answers_the_question", "note", "question", "answer", "context", "row_sha")
@@ -278,8 +281,9 @@ def write_set(rows: list[dict], path: str) -> None:
 
 def load_set(path: str = JUDGE_SET) -> list[dict]:
     if not os.path.isfile(path):
-        raise FileNotFoundError(f"{shown(path)}: not found. It is frozen from a judge capture (build_judge_set.py "
-                                "--freeze); lesson 4.5's arrives with the author's capture")
+        raise FileNotFoundError(f"{shown(path)}: not found. It is frozen from a judge capture: freeze your own with "
+                                "--freeze CAPTURE --set evals/reports/judge_set.json (lesson 4.5, step 3); the "
+                                "author's evals/judge_set.json ships with the kit once recorded")
     with open(path, encoding="utf-8") as f:
         rows = json.load(f)
     if not isinstance(rows, list) or not rows or not all(isinstance(r, dict) and r.get("id") for r in rows):

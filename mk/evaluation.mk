@@ -20,13 +20,13 @@ label-sheet:
 judge-agree:
 	$(PY) evals/judge_agree.py $(if $(PEOPLE),people $(or $(LABELS),evals/reports/judge_labels.csv) $(or $(AGAINST),evals/judge_labels.L1.csv),judge $(or $(RUN),evals/judge_set.ratings.jsonl) $(or $(LABELS),evals/reports/judge_labels.csv) --cut $(or $(CUT),4) $(if $(SWEEP),--sweep,))
 
-# Your lane's judge on the frozen rows (lesson 4.5): judge.py rates evals/judge_set.json as it stands (--reuse, and
-# --no-enrich so the context is the one people labelled), two Vertex AI Evaluation requests a row in us-central1, and
-# nothing asked of the API. The per-row ratings go to RUN= (default evals/reports/judge_set.ratings.jsonl). In the
-# judge's venv, as make judge: PY="$HOME/judge-venv/bin/python". JUDGE_ARGS passes more (--judge-model ...).
+# Your lane's judge on the frozen rows (lesson 4.5): judge.py rates the frozen set as it stands - the kit's
+# evals/judge_set.json, or your own evals/reports/judge_set.json (4.5's step 3) while the kit has none - with --reuse and
+# --no-enrich (the context people labelled), two Vertex AI Evaluation requests a row, nothing asked of the API. Ratings go
+# to RUN= (default evals/reports/judge_set.ratings.jsonl). In the judge's venv: PY="$HOME/judge-venv/bin/python".
 judge-frozen: guard-project
-	@test -f evals/judge_set.json || { echo "evals/judge_set.json is not in this kit yet: lesson 4.5's frozen rows arrive with the author's capture" >&2; exit 2; }
-	$(PY) evals/judge.py --api-url frozen:evals/judge_set.json --project $(PROJECT) --reuse evals/judge_set.json --no-enrich --label frozen --save-rows $(or $(RUN),evals/reports/judge_set.ratings.jsonl) $(JUDGE_ARGS)
+	@test -n "$(wildcard evals/judge_set.json evals/reports/judge_set.json)" || { echo "no frozen set yet: freeze your own into evals/reports/judge_set.json (lesson 4.5, step 3); the author's evals/judge_set.json ships once recorded" >&2; exit 2; }
+	$(PY) evals/judge.py --api-url frozen:$(firstword $(wildcard evals/judge_set.json evals/reports/judge_set.json)) --project $(PROJECT) --reuse $(firstword $(wildcard evals/judge_set.json evals/reports/judge_set.json)) --no-enrich --label frozen --save-rows $(or $(RUN),evals/reports/judge_set.ratings.jsonl) $(JUDGE_ARGS)
 
 # Read the failures first (lesson 4.9): the failing rows of a saved live eval as the gate saw them - the question, the
 # verdict, the answer it kept, the citations and, from a run with DOCUMIND_EVAL_PASSAGES=1, the pool - and no cause

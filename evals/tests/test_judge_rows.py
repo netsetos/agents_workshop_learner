@@ -614,10 +614,37 @@ class WiringTest(unittest.TestCase):
         self.assertIn("people $(or $(LABELS),evals/reports/judge_labels.csv) $(or $(AGAINST),evals/judge_labels.L1.csv)", ev)
         self.assertIn("judge $(or $(RUN),evals/judge_set.ratings.jsonl) $(or $(LABELS),evals/reports/judge_labels.csv) "
                       "--cut $(or $(CUT),4)", ev)
-        self.assertIn("test -f evals/judge_set.json ||", ev)
-        self.assertIn("--reuse evals/judge_set.json --no-enrich", ev)
+        # the kit's set, or a learner's own freeze in evals/reports/ while the kit has none (lesson 4.5, step 3)
+        frozen = "$(firstword $(wildcard evals/judge_set.json evals/reports/judge_set.json))"
+        self.assertIn('test -n "$(wildcard evals/judge_set.json evals/reports/judge_set.json)" ||', ev)
+        self.assertIn(f"--reuse {frozen} --no-enrich", ev)
         self.assertIn("--save-rows $(or $(RUN),evals/reports/judge_set.ratings.jsonl)", ev)
         self.assertIn("evaluation.mk", readme)
+
+    def test_a_learners_own_freeze_is_read_while_the_kit_has_none(self):
+        # The author's set ships as evals/judge_set.json; until then a learner freezes into evals/reports/, which git
+        # ignores, so a later pull of the author's set never collides with it. The kit's set wins once it is there.
+        import importlib
+        with tempfile.TemporaryDirectory() as d:
+            evals = Path(d) / "evals"
+            (evals / "reports").mkdir(parents=True)
+            for name in ("build_judge_set.py", "run_eval.py"):
+                shutil.copy2(KIT / "evals" / name, evals / name)
+            sys.path.insert(0, str(evals))
+            try:
+                def resolve():
+                    for mod in ("build_judge_set", "run_eval"):
+                        sys.modules.pop(mod, None)
+                    return importlib.import_module("build_judge_set")
+                self.assertEqual(resolve().JUDGE_SET, str(evals / "judge_set.json"))     # neither: the kit's path
+                (evals / "reports" / "judge_set.json").write_text("[]")
+                self.assertEqual(resolve().JUDGE_SET, str(evals / "reports" / "judge_set.json"))
+                (evals / "judge_set.json").write_text("[]")
+                self.assertEqual(resolve().JUDGE_SET, str(evals / "judge_set.json"))     # the kit's wins
+            finally:
+                sys.path.remove(str(evals))
+                for mod in ("build_judge_set", "run_eval"):
+                    sys.modules.pop(mod, None)
 
 
 if __name__ == "__main__":

@@ -3,10 +3,10 @@
 Two standard-library cells over the files themselves, with no kit function between you and the count. The first cell reads your sheet and the author's with Python's csv module, counts p_o and p_e by hand, and checks the result against the kit's cohen_kappa(). It is this lesson's arithmetic in a screenful, and it runs anywhere Python does. The first cell reads your sheet and the author's with Python's csv module, counts p_o and p_e by hand, and checks the result against the kit's cohen_kappa(). It is this lesson's arithmetic in a screenful, and it runs anywhere Python does. The second reads the judge's ratings file directly and prints each row where the judge and you disagree, with the judge's score and its own explanation. It is lesson 4.2's advice made concrete: where they disagree, read the row. It skips judge_agree.py's row_sha check, because both files come from the same frozen set.
 
 Run order inside this file:
-1. Kappa by hand, and the judge's own reasons (source window 37)
-2. Kappa by hand, and the judge's own reasons (source window 39)
+1. Kappa by hand, and the judge's own reasons (source window 40)
+2. Kappa by hand, and the judge's own reasons (source window 42)
 
-Prerequisites: demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.
+Prerequisites: demo_06_your_lane_s_judge_on_the_frozen_rows_the_ratings_step_5_reads_until_the_author_s.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
 The functions below contain the lesson examples in source order. Helpers
 supply configuration, authentication, state and CLI execution. See README.md
@@ -38,12 +38,14 @@ def step_01_kappa_by_hand_and_the_judge_s_own_reasons(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/judge_labels.L1.csv]
     """
-    import collections, csv, io, sys, warnings
+    import collections, csv, io, os, sys, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
     sys.path.insert(0, "evals")
     from agreement import cohen_kappa            # the kit's, only to check the count by hand below
     
     MINE, THEIRS = "evals/reports/judge_labels.csv", "evals/judge_labels.L1.csv"
+    if not os.path.exists(THEIRS):                # no author's sheet in the kit yet: your colleague's (step 4)
+        THEIRS = "evals/reports/judge_labels.peer.csv"
     
     
     def sheet(path):
@@ -99,10 +101,12 @@ def step_02_kappa_by_hand_and_the_judge_s_own_reasons(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/judge_set.ratings.jsonl]
     """
-    import csv, io, json, warnings
+    import csv, io, json, os, warnings
     warnings.filterwarnings("ignore", category=UserWarning)
     
     MINE, RATINGS, CUT = "evals/reports/judge_labels.csv", "evals/judge_set.ratings.jsonl", 4
+    if not os.path.exists(RATINGS):               # no author's ratings in the kit yet: your lane's (step 6)
+        RATINGS = "evals/reports/judge_set.ratings.jsonl"
     SECOND = ("fulfillment", "instruction_following", "question_answering_quality")   # judge.py's names, in its order
     
     
@@ -142,8 +146,8 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_37', step_01_kappa_by_hand_and_the_judge_s_own_reasons),
-        ('source_39', step_02_kappa_by_hand_and_the_judge_s_own_reasons),
+        ('source_40', step_01_kappa_by_hand_and_the_judge_s_own_reasons),
+        ('source_42', step_02_kappa_by_hand_and_the_judge_s_own_reasons),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

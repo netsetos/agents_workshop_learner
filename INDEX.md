@@ -911,9 +911,9 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_04/lesson_4_5/demo_03_label_the_frozen_rows_yourself_blind.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/demo_04_two_people_on_the_same_rows_cohen_s_kappa.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/demo_05_the_judge_on_the_same_rows_true_pass_false_pass_and_the_cut.py` | code | - | - |
+| `workshop_demos/module_04/lesson_4_5/demo_06_your_lane_s_judge_on_the_frozen_rows_the_ratings_step_5_reads_until_the_author_s.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/demo_07_kappa_by_hand_and_the_judge_s_own_reasons.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/lesson_map.json` | config | - | - |
-| `workshop_demos/module_04/lesson_4_5/optional/demo_06_your_lane_s_judge_on_the_frozen_rows_optional.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/setup/finish.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/setup/prepare.py` | code | - | - |
 | `workshop_demos/module_04/lesson_4_5/setup/restore_settings.py` | code | - | - |
