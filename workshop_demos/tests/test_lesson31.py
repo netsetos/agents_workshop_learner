@@ -126,6 +126,25 @@ class IOTests(unittest.TestCase):
             self.cloud.fixture("zeta", "example.md", b"abc", upload=True)
             self.assertEqual(blob.upload_from_string.call_args.kwargs["if_generation_match"], 0)
 
+    def test_fixture_follow_upload_takes_the_uploaded_version(self):
+        # Lesson 3.8: a pasted note whose line endings differ is its own version; the demo follows it, never refuses it.
+        class NotFound(Exception):
+            pass
+        fake = {"google.api_core.exceptions": SimpleNamespace(NotFound=NotFound)}
+        blob = Mock(size=4, generation=7)
+        blob.download_as_bytes.return_value = b"a\r\nb"
+        self.cloud.bucket = SimpleNamespace(name="example", blob=Mock(return_value=blob))
+        with patch.dict(sys.modules, fake), patch.object(sys, "path", [str(KIT), *sys.path]):
+            from services.ingest.contracts import sha256_of
+            row = self.cloud.fixture("acme", "note.md", b"a\nb", upload=False, follow_upload=True)
+            self.assertEqual((row["sha256"], row["generation"]), (sha256_of(b"a\r\nb"), "7"))
+            blob.upload_from_string.assert_not_called()
+            blob.reload.side_effect = NotFound()
+            with patch("workshop_helpers.steps.manual_checkpoint") as pause, \
+                    self.assertRaisesRegex(RuntimeError, "not in the uploads bucket yet"):
+                self.cloud.fixture("acme", "note.md", b"a\nb", upload=False, follow_upload=True)
+            pause.assert_not_called()                                    # the step itself paused before
+
     def test_log_filter_uses_all_three_exact_identifiers(self):
         expected = {"tenant": "zeta", "doc_key": "zeta_abc", "generation": "42"}
         with patch("workshop_helpers.lesson31.gcloud", return_value="[]") as command:
