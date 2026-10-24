@@ -218,7 +218,7 @@ Step 1's panel and the last point of step 7 are about doc_type filters, and a fi
 
 Operation: bash — run in the operator shell when you finish the lesson, not now.
 
-IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs: the cell's own commands, which put back what the lesson changed.
 
 Expected shape, not a promised result:
 

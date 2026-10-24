@@ -410,7 +410,9 @@
           "purpose": "Do it",
           "label": "bash — run in the operator shell, in the kit (one question with and without a doc_type filter, then rag-api's rows)",
           "expected": "doc_type None     5 citations | answerable True | The total payable on invoice INV-2026-0412 is Rs 1,84,500 \n  doc_type invoice  0 citations | answerable False | The corpus holds nothing near this question: no passage of\n  pool 20  answerable True   backend vertex  Rs 0.2831\n  pool  0  answerable False  backend none    Rs 0.0000",
-          "adaptations": [],
+          "adaptations": [
+            "Before the filter, count the rows lesson 5.2's reset would still change (its plan only, nothing written): the step expects every acme text row unknown, and stops with the fix when 5.2's finish cell has not put them back, instead of passing on a filter that found classed rows."
+          ],
           "id": "source_28",
           "function": "step_01_an_argument_the_corpus_cannot_honour",
           "window": 28,

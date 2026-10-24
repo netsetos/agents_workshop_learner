@@ -40,6 +40,14 @@ def step_01_which_store_answers_acme_pin_it_to_the_kit(session):
     """
     session.restore_backend()
 
+# Original CLI workflow for step_02_which_store_answers_acme_pin_it_to_the_kit.
+COMMANDS_02 = """# when you finish the lesson: acme's rows back to what the worker wrote, as lesson 5.5 expects; the registry stays
+export VECTOR_INDEX_NAME="$(gcloud ai indexes list --region="$REGION" --project="$PROJECT" \\
+  --filter='displayName=documind-chunks' --format='value(name)')"
+make doc-types PROJECT="$PROJECT" TENANT=acme RESET=1 APPLY=1
+
+"""
+
 def step_02_which_store_answers_acme_pin_it_to_the_kit(session):
     """Run Which store answers acme? Pin it to the kit's own index for this lesson at this checkpoint.
 
@@ -53,7 +61,8 @@ def step_02_which_store_answers_acme_pin_it_to_the_kit(session):
     Example: Run this file after its README prerequisites, or set a breakpoint in this function.
     Observe: [awaiting the author's run: data/doc_types_reset.txt]
     """
-    session.restore_backend()
+    # Preserve the kit CLI's arguments, conditions and observation order.
+    session.shell(COMMANDS_02)
 
 def demonstrate(session):
     """Run this section in source order, saving each function's outcome.

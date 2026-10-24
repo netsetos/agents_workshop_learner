@@ -272,6 +272,8 @@ Do it
 
 Operation: bash — run in the operator shell, in the kit (one question with and without a doc_type filter, then rag-api's rows).
 
+IDE adaptation: Before the filter, count the rows lesson 5.2's reset would still change (its plan only, nothing written): the step expects every acme text row unknown, and stops with the fix when 5.2's finish cell has not put them back, instead of passing on a filter that found classed rows.
+
 Expected shape, not a promised result:
 
 ```text
