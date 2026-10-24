@@ -3,9 +3,9 @@
 Run the Repair: line your make incident printed after the rollback. On a lane whose serving revision runs the Makefile's defaults it is the first line below; if yours names more settings, use yours. Then the gate: about ten minutes and about Rs 29. Do it: promote it through the gate The smokes of your deployed services, then make incident on the lane as it is now. The proof is both: make smoke-deployed exits 0, and make incident exits 0 with the gated state.
 
 Run order inside this file:
-1. Do it: the repair candidate, and its gate (source window 43)
-2. Do it: promote it through the gate (source window 45)
-3. Do it: the proof (source window 47)
+1. Do it: the repair candidate, and its gate (source window 44)
+2. Do it: promote it through the gate (source window 46)
+3. Do it: the proof (source window 48)
 
 Prerequisites: demo_06_on_your_lane_promote_break_it_roll_back.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -107,9 +107,9 @@ def demonstrate(session):
     A failed step stops this sequence; inspect its evidence before an explicit retry.
     """
     run_steps(session, [
-        ('source_43', step_01_the_repair_candidate_and_its_gate),
-        ('source_45', step_02_promote_it_through_the_gate),
-        ('source_47', step_03_the_proof),
+        ('source_44', step_01_the_repair_candidate_and_its_gate),
+        ('source_46', step_02_promote_it_through_the_gate),
+        ('source_48', step_03_the_proof),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

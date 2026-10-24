@@ -88,7 +88,7 @@ The sequence comes from each main HTML; the 0 lessons whose main HTML is not wri
 - [10.11: System design: incident auto-remediation](module_10/lesson_10_11/README.md) — 11 files; main_html
 - [11.1: Build and deploy using keyless identity](module_11/lesson_11_1/README.md) — 9 files; main_html
 - [11.2: Evaluate and gate the exact candidate revision](module_11/lesson_11_2/README.md) — 8 files; main_html
-- [11.3: Promote, roll back and repair a controlled failure](module_11/lesson_11_3/README.md) — 7 files; main_html
+- [11.3: Promote, roll back and repair a controlled failure](module_11/lesson_11_3/README.md) — 8 files; main_html
 - [11.4: Debug a wrong answer through the complete pipeline](module_11/lesson_11_4/README.md) — 8 files; main_html
 - [11.5: Reconcile usage events, reports and alerts](module_11/lesson_11_5/README.md) — 7 files; main_html
 - [11.6: Exercise model routing, budgets and shutdown controls](module_11/lesson_11_6/README.md) — 7 files; main_html

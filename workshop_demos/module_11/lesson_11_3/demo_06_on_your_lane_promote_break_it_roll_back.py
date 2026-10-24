@@ -9,8 +9,8 @@ Run order inside this file:
 4. Do it: refused, then forced (source window 32)
 5. Do it: the smokes, and the incident (source window 34)
 6. Do it: the rollback, timed (source window 36)
-7. Do it: the smokes and the incident, after the rollback (source window 38)
-8. Read it: the template, from Cloud Run's API (source window 40)
+7. Do it: the smokes and the incident, after the rollback (source window 39)
+8. Read it: the template, from Cloud Run's API (source window 41)
 
 Prerequisites: demo_05_make_smoke_deployed_and_make_incident_line_by_line.
 Use the existing rag-shell-venv interpreter; Run or Debug this file.
@@ -285,8 +285,8 @@ def demonstrate(session):
         ('source_32', step_04_refused_then_forced),
         ('source_34', step_05_the_smokes_and_the_incident),
         ('source_36', step_06_the_rollback_timed),
-        ('source_38', step_07_the_smokes_and_the_incident_after_the_roll),
-        ('source_40', step_08_the_template_from_cloud_run_s_api),
+        ('source_39', step_07_the_smokes_and_the_incident_after_the_roll),
+        ('source_41', step_08_the_template_from_cloud_run_s_api),
     ], retry_failed=RETRY_FAILED_STEP, cleanup=False, finalize=False)
 
 

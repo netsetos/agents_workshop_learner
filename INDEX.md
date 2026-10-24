@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1665 files; 235 quoted by a lesson, 349 shown or named by one.
+1666 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -1485,6 +1485,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `workshop_demos/module_11/lesson_11_2/setup/restore_settings.py` | code | - | - |
 | `workshop_demos/module_11/lesson_11_3/GUIDE.md` | doc | - | - |
 | `workshop_demos/module_11/lesson_11_3/README.md` | doc | - | - |
+| `workshop_demos/module_11/lesson_11_3/cleanup/demo_06_on_your_lane_promote_break_it_roll_back.py` | code | - | - |
 | `workshop_demos/module_11/lesson_11_3/demo_05_make_smoke_deployed_and_make_incident_line_by_line.py` | code | - | - |
 | `workshop_demos/module_11/lesson_11_3/demo_06_on_your_lane_promote_break_it_roll_back.py` | code | - | - |
 | `workshop_demos/module_11/lesson_11_3/demo_07_on_your_lane_the_repair_through_the_gate_and_the_proof.py` | code | - | - |

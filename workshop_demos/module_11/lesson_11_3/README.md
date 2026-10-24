@@ -33,6 +33,7 @@ After upgrading from a previous layout, run the lesson's finish file first, then
 ## Finish and restore
 
 - [setup/restore_settings.py](setup/restore_settings.py) — At lesson end: DocuMind can answer a tenant's questions from four stores: its own Vector Search index (the ANN tier), the Firestore rung beneath it, or two managed mirrors, Vertex AI RAG Engine and Vertex AI Search. make up pins acme to RAG Engine and zeta to Vertex AI Search so every store the course teaches is exercised. A managed store holds the text of every current version, but not the kit's addresses: its citations come back with ids like acme:acme_497809ff...#rag-532341da71fe, a page of null even for a PDF, and stages.retrieval_backend: rag_engine. This lesson's two gates ask acme's golden rows, as lesson 11.2's gate did, and that gate judged its candidate with acme on the kit's own index: keep the pin for the duration, so every verdict on this page is about one lane, and put it back at the end. Module 2 compares the four stores; Module 7 studies the mirrors. The pin back is a separate window on purpose: pasted together with the line above, it would put acme straight back on RAG Engine before the lesson began. Leave it until the lesson's last step is done.
+- [cleanup/demo_06_on_your_lane_promote_break_it_roll_back.py](cleanup/demo_06_on_your_lane_promote_break_it_roll_back.py) — At lesson end: time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of documind-api's traffic and the model that revision runs, and runs make rollback only while that model is gemini-3.6-flsh. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names gemini-3.6-flsh until step 7's repair deploys a good revision.
 - [setup/finish.py](setup/finish.py) — Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Functions, observations and effects
@@ -261,12 +262,24 @@ Operation: bash — run in the operator shell when you finish the lesson, not no
 
 IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs.
 
+### cleanup/demo_06_on_your_lane_promote_break_it_roll_back.py
+
+At lesson end: time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of documind-api's traffic and the model that revision runs, and runs make rollback only while that model is gemini-3.6-flsh. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names gemini-3.6-flsh until step 7's repair deploys a good revision.
+
+**`step_01_the_rollback_timed(session)` — On your lane: promote, break it, roll back / Do it: the rollback, timed**
+
+time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of documind-api's traffic and the model that revision runs, and runs make rollback only while that model is gemini-3.6-flsh. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names gemini-3.6-flsh until step 7's repair deploys a good revision.
+
+Operation: bash — run in the operator shell, in the kit, when you finish the lesson, not now (a traffic move only while the mistyped model serves).
+
+IDE adaptation: Run at lesson end despite its early HTML position, as the source label explicitly instructs: the cell's own commands, which put back what the lesson changed.
+
 ### setup/finish.py
 
 Run the listed cleanup sections in order, even after a failure; retain evidence and restore saved settings.
 
 ## Source and coverage
 
-[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`. All 50 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `6ab3e082c26c3c672317ac1b3e3236c1095c4bd6`.
+[Reading guide](GUIDE.md) retains explanatory prose and UI instructions from the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`. All 51 original windows are accounted for in `lesson_map.json`: executable steps, shared setup, or read-only examples. Reviewed source: `ebc973c7ecc9467df73d5fb1e4b5daf99da5814c`.
 
 Source line numbers refer to the teaching HTML before generated IDE-link blocks. Use the numbered section anchor/heading to find the example in the rendered page; its link opens this same learner file.

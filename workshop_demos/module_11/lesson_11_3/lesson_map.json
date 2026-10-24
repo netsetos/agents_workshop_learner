@@ -5,19 +5,21 @@
   "source_kind": "main_html",
   "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
   "source_page": "Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html",
-  "source_sha": "6ab3e082c26c3c672317ac1b3e3236c1095c4bd6",
+  "source_sha": "ebc973c7ecc9467df73d5fb1e4b5daf99da5814c",
   "shared_setup_windows": [
     1
   ],
-  "source_window_count": 50,
+  "source_window_count": 51,
   "persist_variables": [
     "API",
     "API_URL",
     "HOURS",
     "ME",
+    "MODEL",
     "NUMBER",
     "PROJECT",
     "REGION",
+    "SERVING",
     "TENANT"
   ],
   "headings": [
@@ -349,8 +351,8 @@
         32,
         34,
         36,
-        38,
-        40
+        39,
+        41
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
@@ -360,8 +362,8 @@
         1121,
         1129,
         1138,
-        1144,
-        1153
+        1154,
+        1163
       ],
       "offline": false,
       "live_verified": false,
@@ -462,10 +464,10 @@
           "adaptations": [
             "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
           ],
-          "id": "source_38",
+          "id": "source_39",
           "function": "step_07_the_smokes_and_the_incident_after_the_roll",
-          "window": 38,
-          "source_line": 1144,
+          "window": 39,
+          "source_line": 1154,
           "manual_checkpoint": null
         },
         {
@@ -475,10 +477,10 @@
           "label": "bash — run in the operator shell, in the kit, before the repair (two Cloud Run Admin API reads; writes nothing)",
           "expected": "[awaiting the author's run: data/template_read.txt]",
           "adaptations": [],
-          "id": "source_40",
+          "id": "source_41",
           "function": "step_08_the_template_from_cloud_run_s_api",
-          "window": 40,
-          "source_line": 1153,
+          "window": 41,
+          "source_line": 1163,
           "manual_checkpoint": null
         }
       ],
@@ -500,15 +502,15 @@
       ],
       "section_number": 7,
       "windows": [
-        43,
-        45,
-        47
+        44,
+        46,
+        48
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        1232,
-        1239,
-        1246
+        1242,
+        1249,
+        1256
       ],
       "offline": false,
       "live_verified": false,
@@ -523,10 +525,10 @@
           "adaptations": [
             "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
           ],
-          "id": "source_43",
+          "id": "source_44",
           "function": "step_01_the_repair_candidate_and_its_gate",
-          "window": 43,
-          "source_line": 1232,
+          "window": 44,
+          "source_line": 1242,
           "manual_checkpoint": null
         },
         {
@@ -538,10 +540,10 @@
           "adaptations": [
             "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
           ],
-          "id": "source_45",
+          "id": "source_46",
           "function": "step_02_promote_it_through_the_gate",
-          "window": 45,
-          "source_line": 1239,
+          "window": 46,
+          "source_line": 1249,
           "manual_checkpoint": null
         },
         {
@@ -553,10 +555,10 @@
           "adaptations": [
             "Run with the page's shell semantics: the cell prints its own exit status after a command (cmd; echo \"exit $?\"), and the page's prose says which commands here fail on purpose. Its expected output is not recorded yet, so the demo cannot read the failure from it. Every line runs, a put-back line included, and the step ends green; compare the printed status with the page."
           ],
-          "id": "source_47",
+          "id": "source_48",
           "function": "step_03_the_proof",
-          "window": 47,
-          "source_line": 1246,
+          "window": 48,
+          "source_line": 1256,
           "manual_checkpoint": null
         }
       ],
@@ -578,11 +580,11 @@
       ],
       "section_number": 8,
       "windows": [
-        49
+        50
       ],
       "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
       "source_lines": [
-        1262
+        1272
       ],
       "offline": false,
       "live_verified": false,
@@ -595,10 +597,10 @@
           "label": "bash — run in the operator shell, in the kit, after the proof (Cloud Logging reads; writes nothing)",
           "expected": "[awaiting the author's run: data/errors_by_revision.txt]",
           "adaptations": [],
-          "id": "source_49",
+          "id": "source_50",
           "function": "step_01_the_requests_by_revision",
-          "window": 49,
-          "source_line": 1262,
+          "window": 50,
+          "source_line": 1272,
           "manual_checkpoint": null
         }
       ],
@@ -641,6 +643,48 @@
           "function": "step_01_which_store_answers_acme_pin_it_to_the_kit",
           "window": 5,
           "source_line": 390,
+          "manual_checkpoint": null
+        }
+      ],
+      "next": "See README: optional choices, then setup/finish.py if listed."
+    },
+    {
+      "id": "cleanup_demo_06_on_your_lane_promote_break_it_roll_back",
+      "lesson": "11.3",
+      "file": "cleanup/demo_06_on_your_lane_promote_break_it_roll_back.py",
+      "category": "cleanup",
+      "requires": [],
+      "heading": "On your lane: promote, break it, roll back",
+      "purpose": "At lesson end: time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of documind-api's traffic and the model that revision runs, and runs make rollback only while that model is gemini-3.6-flsh. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names gemini-3.6-flsh until step 7's repair deploys a good revision.",
+      "anchor": "s6",
+      "anchors": [
+        "s6"
+      ],
+      "section_number": 6,
+      "windows": [
+        38
+      ],
+      "source": "https://github.com/netsetos/agents_workshop_learner/blob/main/workshop_demos/module_11/lesson_11_3/GUIDE.md",
+      "source_lines": [
+        1145
+      ],
+      "offline": false,
+      "live_verified": false,
+      "implementation": "mixed_python_and_kit_cli",
+      "steps": [
+        {
+          "heading": "On your lane: promote, break it, roll back",
+          "subheading": "Do it: the rollback, timed",
+          "purpose": "time is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes. Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of documind-api's traffic and the model that revision runs, and runs make rollback only while that model is gemini-3.6-flsh. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names gemini-3.6-flsh until step 7's repair deploys a good revision.",
+          "label": "bash — run in the operator shell, in the kit, when you finish the lesson, not now (a traffic move only while the mistyped model serves)",
+          "expected": "",
+          "adaptations": [
+            "Run at lesson end despite its early HTML position, as the source label explicitly instructs: the cell's own commands, which put back what the lesson changed."
+          ],
+          "id": "source_38",
+          "function": "step_01_the_rollback_timed",
+          "window": 38,
+          "source_line": 1145,
           "manual_checkpoint": null
         }
       ],
@@ -858,53 +902,53 @@
       "line": 1140
     },
     {
-      "window": 39,
+      "window": 40,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1147
-    },
-    {
-      "window": 41,
-      "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
-      "heading": "On your lane: promote, break it, roll back",
-      "anchor": "s6",
-      "line": 1209
+      "line": 1157
     },
     {
       "window": 42,
+      "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
+      "heading": "On your lane: promote, break it, roll back",
+      "anchor": "s6",
+      "line": 1219
+    },
+    {
+      "window": 43,
       "label": "expected (make release-candidate and make gate, the Makefile's recipes and release.py, run when this page was built against the kit test's stand-in lane in its state after the rollback, then put back as it was, so the repair's revision later takes the same name; the third line is this page's read of the revision it made)",
       "heading": "On your lane: promote, break it, roll back",
       "anchor": "s6",
-      "line": 1214
+      "line": 1224
     },
     {
-      "window": 44,
+      "window": 45,
       "label": "expected (the author's lane: the repair gated; your rates, names and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1235
+      "line": 1245
     },
     {
-      "window": 46,
+      "window": 47,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1241
+      "line": 1251
     },
     {
-      "window": 48,
+      "window": 49,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "On your lane: the repair through the gate, and the proof",
       "anchor": "s7",
-      "line": 1249
+      "line": 1259
     },
     {
-      "window": 50,
+      "window": 51,
       "label": "expected (the author's lane: your revision names, commit, digests and times are yours)",
       "heading": "Errors by revision, from the request logs",
       "anchor": "s8",
-      "line": 1312
+      "line": 1322
     }
   ],
   "live_verification": "Not run by the generator; validate on the intended workstation/lane.",

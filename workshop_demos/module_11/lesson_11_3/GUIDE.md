@@ -4,7 +4,7 @@ Read this beside the section-numbered demo files. The prose below follows the ma
 its terminal setup is replaced by the documented Python setup. Read-only code
 and sample output are not executable steps. Sample values are not live results.
 
-Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `6ab3e082c26c3c672317ac1b3e3236c1095c4bd6`. Learners read that page on the course site; this guide keeps its prose.
+Source: the lesson's main page, `Netsetos_GCP_Capstone_11.3_Promote_Rollback_WIX.html`, reviewed at blob `ebc973c7ecc9467df73d5fb1e4b5daf99da5814c`. Learners read that page on the course site; this guide keeps its prose.
 
 Lesson 11.2 left one green verdict, bound to one revision. This lesson moves traffic with it, then breaks the API on purpose and brings it back. `make promote-gated` promotes lesson 11.2's candidate. A candidate with a mistyped model name is judged red by `make gate` and refused, and plain `make promote`, which reads no record, moves traffic to it anyway. `make smoke-deployed` runs the smokes of the services your lane has deployed, and they go red; `make incident` reads the lane and your records, and names the way back. `time make rollback` returns the traffic in seconds, because the old revision never went away. But a rollback moves traffic and nothing else: the service's template still holds the mistyped name, and the next release would start from it. The repair is a new candidate made with what serves, judged by `make gate` and promoted by `make promote-gated`, until `make incident` exits 0.
 
@@ -225,6 +225,8 @@ The smokes fail wherever their question reaches the model, and `make incident` f
 #### Do it: the rollback, timed
 
 `time` is the shell's own: when the command ends, it prints how long it took. The manifest's proof for this lesson asks for under two minutes.
+
+Between those two cells, every answer from your API is a 500. If you have to stop there, or a cell fails, run the cell below before you leave: it reads which revision serves all of `documind-api`'s traffic and the model that revision runs, and runs `make rollback` only while that model is `gemini-3.6-flsh`. Otherwise it changes nothing and says so. The lesson's finish runs it as well. The template still names `gemini-3.6-flsh` until step 7's repair deploys a good revision.
 
 #### Do it: the smokes and the incident, after the rollback
 

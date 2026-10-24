@@ -607,9 +607,9 @@
     {
       "lesson": "11.3",
       "title": "Promote, roll back and repair a controlled failure",
-      "source_sha": "6ab3e082c26c3c672317ac1b3e3236c1095c4bd6",
+      "source_sha": "ebc973c7ecc9467df73d5fb1e4b5daf99da5814c",
       "source_kind": "main_html",
-      "demos": 7
+      "demos": 8
     },
     {
       "lesson": "11.4",
