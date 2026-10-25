@@ -6,7 +6,7 @@ tree on every pull request. **Named in**: a lesson page names the file (a comman
 Lesson numbers are the Agents Workshop's (course-manifest.json). A file with neither is not yet explained
 by a lesson; its own docstring, README.md and UNOWNED.md are where it is described.
 
-1666 files; 235 quoted by a lesson, 349 shown or named by one.
+1674 files; 235 quoted by a lesson, 349 shown or named by one.
 
 | File | Kind | Quoted in | Named in |
 |---|---|---|---|
@@ -35,6 +35,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/bq-views-when-ready.sh` | code | - | - |
 | `commands/build-access.sh` | code | - | - |
 | `commands/capstone_check.py` | code | 11.8 | - |
+| `commands/case_room.py` | code | - | - |
 | `commands/check-firestore-fallback.py` | code | 2.4, 11.4 | 1.4 |
 | `commands/check-hybrid-plumbing.sh` | code | - | - |
 | `commands/check_callers.py` | code | 10.7 | - |
@@ -108,6 +109,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `commands/tests/test_attack_agents.py` | code | - | - |
 | `commands/tests/test_capstone_check.py` | code | - | 11.8 |
 | `commands/tests/test_capstone_templates.py` | code | - | 11.8 |
+| `commands/tests/test_case_room.py` | code | - | - |
 | `commands/tests/test_cases.py` | code | - | 5.6 |
 | `commands/tests/test_chat_brains.py` | code | - | 5.4, 5.7 |
 | `commands/tests/test_chat_limits.py` | code | - | 5.5 |
@@ -177,6 +179,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/build_media.py` | code | - | 7.5 |
 | `evals/build_routes.py` | code | - | 10.4 |
 | `evals/cache_threshold.py` | code | 4.1, 6.4 | - |
+| `evals/case_eval.py` | code | - | - |
 | `evals/combine.py` | code | 10.5 | - |
 | `evals/corpus/acme/annual_report_2026.md` | data | - | - |
 | `evals/corpus/acme/annual_report_2026_fig3.png` | data | - | - |
@@ -240,6 +243,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/desk/queues.globex.json` | config | - | 10.4 |
 | `evals/desk/queues.zeta.json` | config | - | 10.4 |
 | `evals/fetch_real.py` | code | - | 0.2 |
+| `evals/ff_cases.jsonl` | data | - | - |
 | `evals/golden.jsonl` | data | B.5, 0.2, 3.1 | B.1, 0.4, 1.6, 2.5, 2.6, 3.2, 4.1, 4.2, 4.3, 6.4, 9.4, 11.2, 11.3, 11.8, 12.1, 12.2, 12.3, 12.4 |
 | `evals/improve.py` | code | 12.4 | - |
 | `evals/judge.py` | code | 3.9, 4.2, 4.3, 4.4, 4.5, 12.3 | - |
@@ -275,6 +279,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `evals/tests/test_decide.py` | code | - | - |
 | `evals/tests/test_eval_rows.py` | code | - | - |
 | `evals/tests/test_fetch_real.py` | code | - | - |
+| `evals/tests/test_ff_cases.py` | code | - | - |
 | `evals/tests/test_improve.py` | code | - | - |
 | `evals/tests/test_judge_rows.py` | code | 4.5 | - |
 | `evals/tests/test_make_trainset_helpdesk.py` | code | - | - |
@@ -299,6 +304,7 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `mk/README.md` | doc | - | - |
 | `mk/agents.mk` | code | 0.3, 3.2, 5.8, 10.1, 10.2, 10.3, 10.5, 10.8 | 10.4 |
 | `mk/capstone.mk` | code | 11.8 | - |
+| `mk/casework.mk` | code | - | - |
 | `mk/coding.mk` | code | - | 10.10 |
 | `mk/evaluation.mk` | code | 4.5, 4.9 | 10.8 |
 | `mk/generation.mk` | code | 3.1, 3.2, 3.3, 3.6, 12.4 | - |
@@ -450,6 +456,8 @@ by a lesson; its own docstring, README.md and UNOWNED.md are where it is describ
 | `shared/documind_graph.py` | code | 7.2 | 0.5 |
 | `shared/documind_schemas.py` | code | B.5, 2.3, 3.2, 3.5, 3.6, 3.9, 6.1, 7.5 | 0.5, 3.1, 3.3, 6.2, 12.1 |
 | `shared/documind_tools.py` | code | B.1, 0.2, 2.6, 3.9, 5.1, 5.5, 9.4 | B.2, B.5 |
+| `shared/ff_case.py` | code | - | - |
+| `shared/ff_floor.py` | code | - | - |
 | `shared/iap.py` | code | 3.8, 4.6 | 0.4, 0.5, 5.5, 11.7 |
 | `shared/identifiers.py` | code | - | 5.6 |
 | `shared/local_corpus.py` | code | 0.2 | - |

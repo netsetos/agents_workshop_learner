@@ -573,3 +573,34 @@ source the answer cites only in its prose; the Vertex AI Search mirror stages it
 |---|---|---|
 | `evals/tests/test_resolve_citations.py` | **3.5** | The two live failure shapes ([1, 2] with one entry; one chunk three times), out-of-range numbers and every marker form. |
 | `commands/tests/test_search_mirror.py` | **7.4** | `Mirror.from_env` stages in `<project>-search` or `SEARCH_BUCKET`, never `AUDIT_BUCKET`; `stamp()` writes `mirrored` as field paths. |
+
+## The Case Room, Phase 0: the full and final cases and the statutory floor (after Module 10, 25 October 2026)
+
+Kit files the Case Room report's Phase 0 adds: a case set of thirty full and final settlements and the statutory floor
+under them, drafted by a model for the author's review (`drafted_by: model`, `reviewed_by: null` on every case; nothing
+in the floor is `checked`). No page quotes them yet: a read-ahead design page after lesson 10.11 adopts them, and Phase 1
+(the offline Case Room, `commands/case_room.py`) builds on them. Nothing that exists changes, except one target name on
+the Makefile's `.PHONY` line and a row in `mk/README.md`.
+
+| File | Owning lesson | Notes for whoever adopts it |
+|---|---|---|
+| `shared/ff_floor.py` | **after 10.11** | The statutory floor: 26 entries, 20 quoted from the corpus and held to their lines by `--selftest`, 5 resting on secondary sources by URL and 1 contested between them; the handbook bars by tenant; the dates the Codes and their Central Rules are reported to apply from (`desk_law.IN_FORCE` stays `None` until a person checks one); the states with final rules as of 1 October 2026. `--table` prints it for review. |
+| `shared/ff_case.py` | **after 10.11** | A case's facts, its fact sheet (the "message" every calculator's `check_args` reads), the binding of each argument to the fact it stands for, the lines a case's facts call for and their statuses, the points a person decides and what is forbidden. |
+| `evals/ff_cases.jsonl` | **after 10.11** | Thirty cases: twenty handed over, three that wait for a fact, two gate pauses, two refused openers, one rejection, one withdrawal and one company whose documents cover nothing. Every figure is recomputed by `make case-check`. |
+| `evals/case_eval.py` | **after 10.11** | `--check` (Rs 0, standard library) and `--review` (the set and the floor as markdown). |
+| `mk/casework.mk` | **after 10.11** | `make case-check`, `REVIEW=1` for the markdown. |
+| `evals/tests/test_ff_cases.py` | **after 10.11** | Standard library: the set passes `--check` and counts its reviews; the sheet, the binding, the lines, the statuses and the opener rule; `--check` refusing a doctored figure, a status, a gated note, a point, a proposal, a set-off and an opener's own sign-off; the floor's selftest and table; the target, the `.PHONY` entry and the 888 lines, the `mk/README.md` row and this section. |
+
+## The Case Room, Phase 1: the offline Case Room (after Module 10, 25 October 2026)
+
+Kit files the Case Room report's Phase 1 adds on Phase 0's case set: one full and final case carried by a team of agents
+on a typed board, from the facts a payroll person confirms to a signed hand-over to the payroll queue, offline and at
+Rs 0, beside the same workflow with one agent (L+) and that agent alone (A*). No page quotes them yet: the design page
+after lesson 10.11 adopts them, and Phase 2 runs them live. `evals/case_eval.py` (Phase 0's row) gains `--offline`,
+`--replay` and `--compare`; `mk/casework.mk` gains `case-eval` and `case-tests`; `shared/ff_case.py`'s binding compares a
+number by its value (a calculator tool's float 50.0 is the fact's 50).
+
+| File | Owning lesson | Notes for whoever adopts it |
+|---|---|---|
+| `commands/case_room.py` | **after 10.11** | The roster (five model roles, five code agents), the board's zones and their one kind of writer, the registrar's rules, the treasurer's slices of an 80-call, Rs 40, 900 s budget, the lead's plan checked against the template, the scouts side by side and a deferred gather, the reckoner on the calculators alone, the clock keeper, the auditor's statuses, points and findings, the composer's slots, the payroll approver's seat as an interrupt, the hand-over; L+ and A*; the scripted model every role shares and the faults it plays by duty. `--offline --case <id> [--arm]` prints one run. |
+| `commands/tests/test_case_room.py` | **after 10.11** | Stdlib first: the roster and its writers, the treasurer, `check_plan()`'s refusals, the registrar's rules on evidence, derivations, the draft and a sign-off, the door, a paused case's clocks, the auditor on every case, the slots and the draft check, the bench's scoring, the targets, the `.PHONY` entries and the 888 lines, both CI lines and these rows. Then, in the chat image's pins (both chat-pins steps), the three arms on the scripted model: the baseline case to a signed hand-over in 13 calls, the scouts side by side (a barrier), each fault in each arm, four eyes, a rejection, a withdrawal, the gate's pause with its clocks, a refused opener, a company with no document, a derived date never fed to a calculator, a budget that stops a case whole, a composer's digit and the lock, and `case_eval.py --offline`, `--replay` and `--compare`. |
